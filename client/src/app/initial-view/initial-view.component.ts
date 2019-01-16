@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InitialViewService } from '../initial-view.service';
 
 @Component({
   selector: 'app-initial-view',
@@ -7,8 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InitialViewComponent implements OnInit {
 
-  constructor() { }
-  title = 'Spot the Differences'
+  constructor(public initialViewService : InitialViewService) { }
+  title = 'Spot the Differences';
+  button = 'Accept';
+  public verifyUsername(): void {
+    let username:string = (<HTMLInputElement>document.getElementById("usernameInput")).value;
+    this.initialViewService.verifyUsernameService(username);
+  }
   ngOnInit() {
   }
 
