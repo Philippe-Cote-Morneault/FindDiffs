@@ -1,4 +1,4 @@
-import { assert, expect } from "chai";
+/*import { assert, expect } from "chai";
 
 function getPromise() {
     return new Promise((resolve, reject) => {
@@ -66,4 +66,4 @@ it("should complete the ", (done) => {
 
  it('a rejected promise will not fail', () => {
     Promise.reject('Simply to test a wrong value')
- });
+ });*/
