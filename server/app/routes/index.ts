@@ -22,7 +22,7 @@ export module Route {
             res.send(JSON.stringify(message));
         }
         public postDifference(req: Request, res: Response, next: NextFunction): void{
-            res.send(this.controllerDifference.genDifference(req, res, next));
+            res.send(this.controllerDifference.genDifference(req));
         }
     }
 }

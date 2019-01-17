@@ -12,7 +12,7 @@ export class ControllerDifference {
         return JSON.stringify(message);
     }
 
-    public genDifference(req: Request, res: Response, next: NextFunction): string {   
+    public genDifference(req: Request): string {   
 
         if(!req.body.name){
             return this.printError("Le nom est manquant (name)");
