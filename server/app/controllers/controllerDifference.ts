@@ -4,7 +4,7 @@ import "reflect-metadata";
 
 export class ControllerDifference {
     
-    private printError(error: string): string{
+    public printError(error: string): string{
         const message: Message = {
             title: "Erreur",
             body: error
