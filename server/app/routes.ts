@@ -9,10 +9,10 @@ import { Route } from "./routes/index";
 export class Routes {
 
     public constructor(
-        @inject(Types.UsernameValidation)
-        @inject(Types.Index)
-         private usernameValidation: UsernameValidation,
-         private index: Route.Index
+        @inject(Types.UsernameValidation)private usernameValidation: UsernameValidation,
+        @inject(Types.Index)private index: Route.Index
+        
+        
          
          
          
