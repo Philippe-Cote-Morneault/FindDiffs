@@ -22,6 +22,10 @@ export class ControllerDifference {
             return this.printError("L'image originale est manquante (originalImage)");
         }
 
+        if(!req.body.modifiedImage){
+            return this.printError("L'image modifié est manquante (modifiedImage)");
+        }
+
         return JSON.stringify({"message":"it works"});
     }
 }
