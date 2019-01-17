@@ -2,7 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
-import { BasicService } from "./basic.service";
+import { InitialViewService } from "./initial-view.service";
 import { HttpClientModule } from "@angular/common/http";
 import { InitialViewComponent } from './initial-view/initial-view.component';
 
@@ -15,7 +15,7 @@ import { InitialViewComponent } from './initial-view/initial-view.component';
     BrowserModule,
     HttpClientModule
   ],
-  providers: [BasicService],
+  providers: [InitialViewService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
