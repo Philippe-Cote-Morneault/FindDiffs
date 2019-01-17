@@ -1,51 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
-@Injectable({
-  providedIn: 'root'
-})
+import { Observable, of } from "rxjs";
+import { catchError } from "rxjs/operators";
+
+import { Message } from "../../../common/communication/message";
+
+@Injectable()
 export class InitialViewService {
 
-  constructor() { }
+    private readonly BASE_URL: string = "http://localhost:3000/verifyUser/";
+    public constructor(private http: HttpClient) { }
 
-  verifyUsernameService(username: string){
-    
-    if (this.isNotEmpty(username)){
-      if (this.isAlphaNumeric(username) && this.isCorrectLength(username)){
-        console.log(username);
-      }
+    public getUsernameValidation(username:string): Observable<Message> {
+        return this.http.get<Message>(this.BASE_URL+username).pipe(
+            catchError(this.handleError<Message>("getUsernameValidation"))
+        );
     }
-  }
 
-  isNotEmpty(username:string){
-    let emptyString = "";
-    return (username != emptyString);
-  }
- 
-  isAlphaNumeric(username:string){
-    let lowerCaseUsername = username.toLowerCase();
-    for(let i=0; i<lowerCaseUsername.length; i++){
-      if (!this.isAlpha(lowerCaseUsername[i]) || !this.isNumeric(lowerCaseUsername[i])){
-        return false;
-      }
+    private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
+        return (error: Error): Observable<T> => {
+            return of(result as T);
+        };
     }
-    return true;
-  }
-
-  isAlpha(letter: string){
-    const MAX_VALUE = 123;
-    const MIN_VALUE = 96;
-    return (Number(letter)<MAX_VALUE && Number(letter)>MIN_VALUE)
-  }
-
-  isNumeric(letter: string){
-    const MAX_VALUE = 58;
-    const MIN_VALUE = 47;
-    return (Number(letter)<MAX_VALUE && Number(letter)>MIN_VALUE)
-  }
-
-  isCorrectLength(username:string){
-    const MAX_VALUE = 13;
-    const MIN_VALUE = 2;
-    return (username.length < MAX_VALUE && username.length < MIN_VALUE);
-  }
 }
