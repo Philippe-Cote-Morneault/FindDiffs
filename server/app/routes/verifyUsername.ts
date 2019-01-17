@@ -5,18 +5,40 @@ import { injectable, } from "inversify";
 
 @injectable()
 export class UsernameValidation {
+    private usernameArray : string[] = [];
     public verifyUsername(req: Request, res: Response, next: NextFunction): void {
         let username = req.params.username;
         let messageTitle = "VerifyUsername";
         if (!this.isEmpty(username)){
             if (this.isAlphaNumeric(username) && this.isCorrectLength(username)){
-                const message: Message = {
-                    title: messageTitle,
-                    body: username
-                }
-                res.send(JSON.stringify(message));
+                //if (this.isAvailable(username)){
+                    this.add(username);
+                    const message: Message = {
+                        title: messageTitle,
+                        body: username
+                    }
+                    res.send(JSON.stringify(message));
+                // }
             }
         }
+    }
+    public add(username:string): void{
+        /*TODO: add username to usernameArray*/
+    }
+    public isAvailable(username:string): boolean{
+        if (!this.isArrayEmpty()){
+            for(let i=0; i< this.usernameArray.length; i++){
+                if (this.usernameArray[i]==username){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public isArrayEmpty(): boolean{
+        let emptyLength = 0;
+        return (this.usernameArray.length==emptyLength);
     }
 
     public isEmpty(username:string): boolean{
