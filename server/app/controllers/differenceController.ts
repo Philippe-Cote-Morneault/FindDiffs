@@ -2,7 +2,7 @@ import { Request } from "express";
 import { Message } from "../../../common/communication/message";
 import "reflect-metadata";
 
-export class ControllerDifference {
+export class DifferenceController {
     
     public printError(error: string): string{
         const message: Message = {
