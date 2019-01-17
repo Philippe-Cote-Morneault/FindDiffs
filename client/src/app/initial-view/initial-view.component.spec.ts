@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+/*import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InitialViewComponent } from './initial-view.component';
+import { InitialViewComponent } from './initial-view.component';*/
 
 describe('InitialViewComponent', () => {
-  let component: InitialViewComponent;
+  /*let component: InitialViewComponent;
   let fixture: ComponentFixture<InitialViewComponent>;
 
   beforeEach(async(() => {
@@ -21,5 +21,5 @@ describe('InitialViewComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
+  });*/
 });
