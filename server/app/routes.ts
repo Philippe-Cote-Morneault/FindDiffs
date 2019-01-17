@@ -11,10 +11,10 @@ export class Routes {
 
     public get routes(): Router {
         const router: Router = Router();
-
         router.get("/",
                    (req: Request, res: Response, next: NextFunction) => this.index.helloWorld(req, res, next));
-
+        router.post("/differences",
+                    (req: Request, res: Response, next: NextFunction) => this.index.postDifference(req, res, next));
         return router;
     }
 }
