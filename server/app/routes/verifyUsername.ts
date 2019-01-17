@@ -11,24 +11,24 @@ export class UsernameValidation {
         let messageTitle = "VerifyUsername";
         if (!this.isEmpty(username)){
             if (this.isAlphaNumeric(username) && this.isCorrectLength(username)){
-                //if (this.isAvailable(username)){
-                    this.add(username);
+                if (this.isAvailable(username,this.usernameArray)){
+                    this.add(username,this.usernameArray);
                     const message: Message = {
                         title: messageTitle,
                         body: username
                     }
                     res.send(JSON.stringify(message));
-                // }
+                 }
             }
         }
     }
-    public add(username:string): void{
-        /*TODO: add username to usernameArray*/
+    public add(username:string, usernameArray:string[]): void{
+        usernameArray[usernameArray.length] = username;
     }
-    public isAvailable(username:string): boolean{
-        if (!this.isArrayEmpty()){
-            for(let i=0; i< this.usernameArray.length; i++){
-                if (this.usernameArray[i]==username){
+    public isAvailable(username:string, usernameArray:string[]): boolean{
+        if (!this.isArrayEmpty(usernameArray)){
+            for(let i=0; i< usernameArray.length; i++){
+                if (usernameArray[i]==username){
                     return false;
                 }
             }
@@ -36,9 +36,9 @@ export class UsernameValidation {
         return true;
     }
 
-    public isArrayEmpty(): boolean{
+    public isArrayEmpty(usernameArray:string[]): boolean{
         let emptyLength = 0;
-        return (this.usernameArray.length==emptyLength);
+        return (usernameArray.length==emptyLength);
     }
 
     public isEmpty(username:string): boolean{
