@@ -1,31 +1,32 @@
 import { Request } from "express";
-import { Message } from "../../../common/communication/message";
 import "reflect-metadata";
+import { Message } from "../../../common/communication/message";
 
 export class DifferenceController {
-    
-    public printError(error: string): string{
+
+    public printError(error: string): string {
         const message: Message = {
             title: "Erreur",
-            body: error
+            body: error,
         };
+
         return JSON.stringify(message);
     }
 
-    public genDifference(req: Request): string {   
+    public genDifference(req: Request): string {
 
-        if(!req.body.name){
+        if (!req.body.name) {
             return this.printError("Le nom est manquant (name)");
         }
 
-        if(!req.body.originalImage){
+        if (!req.body.originalImage) {
             return this.printError("L'image originale est manquante (originalImage)");
         }
 
-        if(!req.body.modifiedImage){
+        if (!req.body.modifiedImage) {
             return this.printError("L'image modifié est manquante (modifiedImage)");
         }
 
-        return JSON.stringify({"message":"it works"});
+        return JSON.stringify({"message": "it works"});
     }
 }
