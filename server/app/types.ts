@@ -3,5 +3,5 @@ export default  {
         Application: Symbol("Application"),
         Routes: Symbol("Routes"),
         Index: Symbol("Index"),
-        UsernameValidation: Symbol("UsernameValidation")
+        UsernameValidation: Symbol("UsernameValidation"),
 };
