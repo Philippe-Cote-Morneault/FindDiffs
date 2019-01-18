@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GamesListViewService } from '../games-list-view.service';
 
 @Component({
   selector: 'app-games-list-view',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GamesListViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(public GamesListView : GamesListViewService) { }
 
   ngOnInit() {
   }
