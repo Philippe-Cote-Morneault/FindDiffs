@@ -1,6 +1,6 @@
 export class GameCard {
     title: string;
-    image: string;
+    image: String;
     bestTimeSolo: number[];
     bestTimeOnline: number[];
   }

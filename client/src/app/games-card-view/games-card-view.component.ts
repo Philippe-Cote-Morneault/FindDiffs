@@ -8,6 +8,8 @@ import { GameCard } from '../gameCard';
   styleUrls: ['./games-card-view.component.css']
 })
 export class GamesCardViewComponent implements OnInit {
+  buttonSolo = 'Solo';
+  buttonOnline = '1 vs. 1';
 
   constructor(public GamesCardViewService : GamesCardViewService) { }
 
@@ -17,7 +19,7 @@ export class GamesCardViewComponent implements OnInit {
     bestTimeSolo: [1, 1, 1],
     bestTimeOnline: [1, 1, 1]
   }
-  
+
   ngOnInit() {
   }
 
