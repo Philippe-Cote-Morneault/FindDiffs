@@ -1,5 +1,4 @@
-import { throws } from "assert";
-import { timingSafeEqual } from "crypto";
+
 
 /**
  * Class that represents a BMP bitmap. Provides various methods to create files from a bitmap, create bitmaps from files, and more.
@@ -129,7 +128,7 @@ class InfoHeader {
     }
 }
 
-class Pixel {
+export class Pixel {
     public static PADDING_BYTE_VALUE = new Uint8Array(0);
     public static BYTES_ARRAY_OFFSET = 53;
     public red: Uint8Array;
@@ -143,6 +142,6 @@ class Pixel {
     }
 
     public equals(pixel: Pixel): boolean {
-        return this.red == pixel.red && this.blue == pixel.blue && this.green == pixel.green;
+        return (this.red[0] == pixel.red[0] && this.blue[0] == pixel.blue[0] && this.green[0] == pixel.green[0]);
     }
 }
