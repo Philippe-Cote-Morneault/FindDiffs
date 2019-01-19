@@ -1,14 +1,17 @@
 
 
+import {readFileSync} from 'fs';
+
 /**
  * Class that represents a BMP bitmap. Provides various methods to create files from a bitmap, create bitmaps from files, and more.
  */
 export class Bitmap {
-    private header: Header;
-    private infoHeader: InfoHeader;
+    public header: Header;
+    public infoHeader: InfoHeader;
     private pixelData: Pixel[];
 
     public constructor(data: ArrayBuffer) {
+        console.log(new DataView(data).getUint32(2, true));
         this.decodeData(data);
     }
 
@@ -25,10 +28,22 @@ export class Bitmap {
                 , new Uint8Array(rawPixelsArray.getUint8(index))));
             }
         }
+        console.log("JSON = " + JSON.stringify(this.header));
+    }
+
+    public static readBMP(): ArrayBuffer {
+        let path = require('path');
+        let data = readFileSync(path.resolve(__dirname,"../../test/testBitmaps/FLAG_B24_B64.txt"), "utf8");
+        var binary_string = Buffer.from(data, 'base64').toString();
+        var len = binary_string.length;
+        var bytes = new Uint8Array( len );
+        for (var i = 0; i < len; i++)        {
+            bytes[i] = binary_string.charCodeAt(i);
+        }
+        return bytes.buffer;
     }
 
     public toFile(name: string): File {
-
         return new File([this.encodeData()], name + ".bmp", {
             type: "image/bmp",
         });
@@ -69,10 +84,10 @@ class Header {
     private dataOffset: Uint32Array;
 
     public constructor(data: DataView) {
-        this.signature = new Int16Array(data.getUint16(0));
-        this.fileSize = new Uint32Array(data.getUint32(2));
-        this.reserved = new Int32Array(data.getInt32(6));
-        this.dataOffset = new Uint32Array(data.getUint32(10));
+        this.signature = new Int16Array([data.getUint16(0)]);
+        this.fileSize = new Uint32Array([data.getUint32(2, true)]);
+        this.reserved = new Int32Array([data.getInt32(6)]);
+        this.dataOffset = new Uint32Array([data.getUint32(10, true)]);
     }
 
     public encodeData(dataView: DataView) {
@@ -88,8 +103,8 @@ class InfoHeader {
     public static BYTES_ARRAY_LENGTH = 40;
 
     private size: Uint32Array;
-    public width: Uint32Array;
-    public height: Uint32Array;
+    public width: Int32Array;
+    public height: Int32Array;
     private planes: Uint16Array;
     private bitsPerPixel: Uint16Array;
     private compression: Uint32Array;
@@ -100,9 +115,9 @@ class InfoHeader {
     private importantColors: Uint32Array;
 
     public constructor(data: DataView) {
-        this.size = new Uint32Array(data.getUint32(0));
-        this.width = new Uint32Array(data.getUint32(4));
-        this.height = new Uint32Array(data.getUint32(8));
+        this.size = new Uint32Array([data.getUint32(0, true)]);
+        this.width = new Int32Array([data.getInt32(4, true)]);
+        this.height = new Int32Array([data.getInt32(8, true)]);
         this.planes = new Uint16Array(data.getUint16(12));
         this.bitsPerPixel = new Uint16Array(data.getUint16(14));
         this.compression = new Uint32Array(data.getUint32(16));
