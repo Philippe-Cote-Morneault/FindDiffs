@@ -18,6 +18,12 @@ export class InitialViewService {
         );
     }
 
+    public deleteUsername(username:string) : Observable<Message>{
+        return this.http.get<Message>(this.BASE_URL+username).pipe(
+            catchError(this.handleError<Message>("deleteUsername"))
+        );
+    }
+
     private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
         return (error: Error): Observable<T> => {
             return of(result as T);
