@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import { Pixel } from "./Bitmap";
+import { Pixel, Bitmap } from "./Bitmap";
 
 /* tslint:disable:no-magic-numbers */
 
@@ -9,9 +9,6 @@ describe("Bitmap", () => {
         expect(pixel.red[0]).to.equal(new Uint8Array([12])[0]);
         expect(pixel.green[0]).to.equal(new Uint8Array([44])[0]);
         expect(pixel.blue[0]).to.equal(new Uint8Array([0])[0]);
-
-        // expect(pixel.green).to.eql(new Uint8Array(44));
-
     });
 
     it("Should return true when comparing two different pixels with the same values", () => {
@@ -26,6 +23,12 @@ describe("Bitmap", () => {
         const pixel2: Pixel = new Pixel(new Uint8Array([17]), new Uint8Array([71]), new Uint8Array([22]));
 
         expect(pixel1.equals(pixel2)).to.equal(false);
+    });
+
+    it("read bmp", () => {
+        expect(Bitmap.readBMP().byteLength).to.equal(46182);
+       let bitmap = new Bitmap(Bitmap.readBMP());
+       expect(bitmap.header.fileSize).to.equal("");
     });
 
 });
