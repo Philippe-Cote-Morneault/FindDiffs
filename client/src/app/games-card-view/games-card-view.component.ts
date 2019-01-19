@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GamesCardViewService } from '../games-card-view.service';
+import { GameCard } from '../gameCard';
 
 @Component({
   selector: 'app-games-card-view',
@@ -9,10 +10,14 @@ import { GamesCardViewService } from '../games-card-view.service';
 export class GamesCardViewComponent implements OnInit {
 
   constructor(public GamesCardViewService : GamesCardViewService) { }
-  gameTitle = 'gameTitle';
-  image = 'image';
-  
 
+  game: GameCard = {
+    title: 'test',
+    image: 'test',
+    bestTimeSolo: [1, 1, 1],
+    bestTimeOnline: [1, 1, 1]
+  }
+  
   ngOnInit() {
   }
 
