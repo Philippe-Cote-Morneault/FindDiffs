@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import { Pixel, Bitmap } from "./Bitmap";
-
+import {readFileSync, writeFileSync, writeFile} from 'fs';
 /* tslint:disable:no-magic-numbers */
 
 describe("Bitmap", () => {
@@ -26,8 +26,16 @@ describe("Bitmap", () => {
     });
 
     it("read bmp", () => {
-        expect(Bitmap.readBMP().byteLength).to.equal(46182);
-       let bitmap = new Bitmap(Bitmap.readBMP());
+        let path = require('path');
+       // let bitmap = new Bitmap(new Buffer(readFileSync(path.resolve(__dirname,"../../test/testBitmaps/FLAG_B24.BMP"), "utf8")).buffer);
+       //let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../test/testBitmaps/FLAG_B24.BMP")).buffer);
+       let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../test/flame2.bmp")).buffer);
+       writeFile("boobaOopa.bmp", bitmap.asBuffer(), x => {
+
+       });
+       writeFileSync("booba.bmp", new Buffer(bitmap.asBuffer()));
+
+
        expect(bitmap.header.fileSize).to.equal("");
     });
 
