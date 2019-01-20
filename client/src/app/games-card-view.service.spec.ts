@@ -9,4 +9,10 @@ describe('GamesCardViewService', () => {
     const service: GamesCardViewService = TestBed.get(GamesCardViewService);
     expect(service).toBeTruthy();
   });
+
+  it('sorting [] should return []', () => {
+    let gameTest = new GamesCardViewService();
+    const result: number[]= gameTest.getBestTime([]);
+    expect(result).toEqual([]);
+  });
 });
