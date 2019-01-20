@@ -6,9 +6,11 @@ import {readFileSync} from 'fs';
  * Class that represents a BMP bitmap. Provides various methods to create files from a bitmap, create bitmaps from files, and more.
  */
 export class Bitmap {
+    public height: number;
+    public width: number;
     public header: Header;
     public infoHeader: InfoHeader;
-    private pixelData: Pixel[] = [];
+    public pixelData: Pixel[] = [];
 
     public constructor(data: ArrayBuffer) {
         this.decodeData(data);
@@ -158,6 +160,7 @@ class InfoHeader {
 export class Pixel {
     public static PADDING_BYTE_VALUE = new Uint8Array([0]);
     public static BYTES_PER_PIXEL = 3;
+
     public red: Uint8Array;
     public green: Uint8Array;
     public blue: Uint8Array;
@@ -168,7 +171,27 @@ export class Pixel {
         this.green = green;
     }
 
+    // TODO: Find a way to get multiple constructors
+    public static fromColor(color: COLOR): Pixel {
+        switch(color) {
+            case COLOR.WHITE: {
+                return new Pixel(new Uint8Array([255]), new Uint8Array([255]), new Uint8Array([255]));
+            }
+            case COLOR.BLACK: {
+                return new Pixel(new Uint8Array([0]), new Uint8Array([0]), new Uint8Array([0]));
+            }
+            default: {
+                return new Pixel(new Uint8Array([255]), new Uint8Array([255]), new Uint8Array([255]));
+            }
+
+        }
+    }
+
     public equals(pixel: Pixel): boolean {
         return (this.red[0] == pixel.red[0] && this.blue[0] == pixel.blue[0] && this.green[0] == pixel.green[0]);
     }
+}
+
+export enum COLOR {
+    WHITE, BLACK
 }
