@@ -12,7 +12,7 @@ describe('GamesCardViewService', () => {
 
   it('sorting [] should return []', () => {
     let gameTest = new GamesCardViewService();
-    const result: number[]= gameTest.getBestTime([]);
+    const result: number[]= gameTest.setBestTime([]);
     expect(result).toEqual([]);
   });
 });
