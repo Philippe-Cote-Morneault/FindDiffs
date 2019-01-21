@@ -1,8 +1,8 @@
-import { catchError } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { of, Observable } from "rxjs";
+import { catchError } from "rxjs/operators";
 import { Message } from "../../../common/communication/message";
-import { Observable, of } from "rxjs";
 
 @Injectable()
 export class InitialViewService {
@@ -13,6 +13,12 @@ export class InitialViewService {
     public getUsernameValidation(username: string): Observable<Message> {
         return this.http.get<Message>(this.BASE_URL + username).pipe(
             catchError(this.handleError<Message>("getUsernameValidation")),
+        );
+    }
+
+    public deleteUsername(username: string): Observable<Message> {
+        return this.http.get<Message>(this.BASE_URL + username).pipe(
+            catchError(this.handleError<Message>("deleteUsername")),
         );
     }
 
