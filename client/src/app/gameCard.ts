@@ -1,6 +1,7 @@
 export class GameCard {
-    title: string;
-    image: String;
-    bestTimeSolo: number[];
-    bestTimeOnline: number[];
-  }
+  constructor(
+    public title: string,
+    public image: string,
+    public bestTimeSolo: number[],
+    public bestTimeOnline: number[]) { }
+}

@@ -2,16 +2,24 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 </head>
 <body>
-  <div class="global-wrapper">
-    <h2>{{game.title}}</h2>
-      <div><span>image: </span>{{game.image}}</div>
-      <div><span>Best solo times: </span>{{game.bestTimeSolo}}</div>
-      <div><span>Best 1 vs 1 times: </span>{{game.bestTimeOnline}}</div>
-      <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button" id="button-addon2">{{buttonSolo}}</button>
-      </div>
-      <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" id="button-addon2">{{buttonOnline}}</button>
-      </div>  
-  </div>
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">{{game.title}}</h5>
+          <img src="pic_trulli.jpg">
+          <ol>
+            <li><span>{{game.bestTimeOnline}}</span></li>
+          </ol>
+          <ol>
+            <li><span>{{game.bestTimeOnline}}</span></li>
+          </ol>
+          <div class="row">
+            <div class=comlumn>
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="verifyUsername()">{{buttonSolo}}</button>
+            </div>
+            <div class="column">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="verifyUsername()">{{buttonOnline}}</button>
+            </div>
+          </div>
+        </div>
+    </div>
 </body>
