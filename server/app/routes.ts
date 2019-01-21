@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import { Route } from "./routes/index";
-import { UsernameValidation } from "./routes/verifyUsername";
+import { UsernameValidation } from "./routes/usernameRoutes";
 import Types from "./types";
 
 @injectable()
@@ -23,6 +23,9 @@ export class Routes {
 
         router.post("/differences",
                     (req: Request, res: Response, next: NextFunction) => this.index.postDifference(req, res, next));
+
+        router.get("/deleteUser/:username?", (req: Request, res: Response, next: NextFunction) =>
+        this.usernameValidation.deleteUsername(req, res, next));
 
         return router;
     }
