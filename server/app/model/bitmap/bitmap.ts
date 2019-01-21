@@ -76,9 +76,10 @@ export class Bitmap {
         return buffer;
     }
 
-    
+    /*
     private encodePixels(pixels: Pixel[], dataView: DataView) {
         
     }
+    */
     
 }

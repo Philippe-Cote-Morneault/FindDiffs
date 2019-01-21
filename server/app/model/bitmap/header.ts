@@ -3,8 +3,8 @@ import { Bitmap } from "./bitmap";
 export class Header {
     public static BYTES_OFFSET: number = 0;
     public static BYTES_LENGTH: number = 14;
-    private static SIGNATURE_DECIMAL_CODE: number = 16973;
-    private static RESERVED_DECIMAL_CODE: number = 0;
+    public static SIGNATURE_DECIMAL_CODE: number = 16973;
+    public static RESERVED_DECIMAL_CODE: number = 0;
 
     private signature: Int16Array;
     public fileSize: Uint32Array;
@@ -57,9 +57,9 @@ export class InfoHeader {
     private planes: Uint16Array;
     private bitsPerPixel: Uint16Array;
     private compression: Uint32Array;
-    private imageSize: Uint32Array;
-    private xPixelsPerM: Uint32Array;
-    private yPixelsPerM: Uint32Array;
+    public imageSize: Uint32Array;
+    public xPixelsPerM: Uint32Array;
+    public yPixelsPerM: Uint32Array;
     private colorsUsed: Uint32Array;
     private importantColors: Uint32Array;
 
