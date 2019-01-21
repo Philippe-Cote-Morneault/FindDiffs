@@ -1,6 +1,6 @@
 export class Pixel {
-    public static BLACK_PIXEL_VALUE: Uint8Array = new Uint8Array([0]);
-    public static WHITE_PIXEL_VALUE: Uint8Array = new Uint8Array([255])
+    public static BLACK_PIXEL_VALUE: number = 0;
+    public static WHITE_PIXEL_VALUE: number = 255;
     public static BYTES_PER_PIXEL: number = 3;
 
     public red: Uint8Array;
@@ -17,13 +17,19 @@ export class Pixel {
     public static fromColor(color: COLOR): Pixel {
         switch (color) {
             case COLOR.WHITE: {
-                return new Pixel(this.WHITE_PIXEL_VALUE, this.WHITE_PIXEL_VALUE, this.WHITE_PIXEL_VALUE);
+                return new Pixel(new Uint8Array([this.WHITE_PIXEL_VALUE])
+                ,                new Uint8Array([this.WHITE_PIXEL_VALUE])
+                ,                new Uint8Array([this.WHITE_PIXEL_VALUE]));
             }
             case COLOR.BLACK: {
-                return new Pixel(this.BLACK_PIXEL_VALUE, this.BLACK_PIXEL_VALUE, this.BLACK_PIXEL_VALUE);
+                return new Pixel(new Uint8Array([this.BLACK_PIXEL_VALUE])
+                ,                new Uint8Array([this.BLACK_PIXEL_VALUE])
+                ,                new Uint8Array([this.BLACK_PIXEL_VALUE]));
             }
             default: {
-                return new Pixel(this.WHITE_PIXEL_VALUE, this.WHITE_PIXEL_VALUE, this.WHITE_PIXEL_VALUE);
+                return new Pixel(new Uint8Array([this.WHITE_PIXEL_VALUE])
+                ,                new Uint8Array([this.WHITE_PIXEL_VALUE])
+                ,                new Uint8Array([this.WHITE_PIXEL_VALUE]));
             }
 
         }

@@ -3,33 +3,22 @@ import { Pixel, COLOR } from "../model/Pixel";
 
 export class DifferenceImageGenerator {
 
-    public static generateImage(originalImage: Bitmap, modifiedImage: Bitmap):Bitmap {
+    public static generateImage(originalImage: Bitmap, modifiedImage: Bitmap): Bitmap {
+        let differentPixelsArray: Pixel[] = this.findDifferentPixels(originalImage, modifiedImage);
 
         return new Bitmap(new ArrayBuffer(0));
     }
 
     private static findDifferentPixels(originalImage: Bitmap, modifiedImage: Bitmap): Pixel[] {
         let differencePixelArray: Pixel[] = new Array<Pixel>(originalImage.height * originalImage.width);
+        differencePixelArray.fill(Pixel.fromColor(COLOR.WHITE));
         for (let i: number = 0; i < differencePixelArray.length; ++i) {
-            differencePixelArray[i] = originalImage.pixelData[i].equals(modifiedImage.pixelData[i])
-            ? Pixel.fromColor(COLOR.WHITE)
-            : Pixel.fromColor(COLOR.WHITE);
-        }
-
-        return differencePixelArray;
-    }
-
-    private static enlargeDifferentPixels(pixels: Pixel[]): Pixel[] {
-        let enlargedPixelsArray = new Array<Pixel>(pixels.length);
-        enlargedPixelsArray.fill(Pixel.fromColor(COLOR.WHITE));
-
-        for (let i: number = 0; i < pixels.length; ++i) {
-            if (pixels[i].equals(Pixel.fromColor(COLOR.BLACK))) {
-                this.enlargeOnePixel(enlargedPixelsArray, i);
+            if (originalImage.pixelData[i].equals(modifiedImage.pixelData[i])) {
+                this.enlargeOnePixel(differencePixelArray, i);
             }
         }
 
-        return enlargedPixelsArray;
+        return differencePixelArray;
     }
 
     // TODO: Find an algorithm for this
