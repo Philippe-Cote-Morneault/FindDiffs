@@ -3,7 +3,6 @@ import { Component, OnInit } from "@angular/core";
 import { Message } from "../../../../common/communication/message";
 import { InitialViewService } from "../initial-view.service";
 
-
 @Component({
   selector: "app-initial-view",
   templateUrl: "./initial-view.component.html",
@@ -21,16 +20,13 @@ export class InitialViewComponent implements OnInit {
     this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername);
   }
 
-  public correctUsername(message: Message): void {
-    // TODO
-  }
   @HostListener("window:beforeunload") beforeUnloadHander() {
-    this.initialViewService.deleteUsername(this.user).subscribe();
+    
+    this.initialViewService.getDeleteUsername(this.user).subscribe();
   }
-  public correctUsername(message:Message): void {
-    this.user = message.body;
+  public correctUsername(message: Message): void {
+    // this.user = message.body;
+    console.log(message);
   }
-  ngOnInit() { }
-
-  public ngOnInit() { }
+  public ngOnInit(): void { }
 }
