@@ -29,7 +29,7 @@ describe("Bitmap", () => {
         let path = require('path');
        // let bitmap = new Bitmap(new Buffer(readFileSync(path.resolve(__dirname,"../../test/testBitmaps/FLAG_B24.BMP"), "utf8")).buffer);
        //let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../test/testBitmaps/VENUS.BMP")).buffer);
-       let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../test/maze.bmp")).buffer);
+       let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../../test/flame1.bmp")).buffer);
        writeFile("boobaOopa.bmp", bitmap.asBuffer(), x => {
 
        });

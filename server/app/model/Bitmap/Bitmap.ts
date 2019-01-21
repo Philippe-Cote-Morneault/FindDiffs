@@ -1,5 +1,3 @@
-
-
 import {readFileSync} from 'fs';
 
 /**
@@ -16,28 +14,7 @@ export class Bitmap {
         this.decodeData(data);
     }
 
-    private decodeData(data: ArrayBuffer) {
-        console.log(this.pixelData);
-        this.header = new Header(new DataView(data, Header.BYTES_ARRAY_OFFSET, Header.BYTES_ARRAY_LENGTH));
-        this.infoHeader = new InfoHeader(new DataView(data, InfoHeader.BYTES_ARRAY_OFFSET, InfoHeader.BYTES_ARRAY_LENGTH));
-
-        let rawPixelsArray = new DataView(data, this.header.dataOffset[0]);
-        this.pixelData = new Array<Pixel>(this.infoHeader.width[0] * this.infoHeader.height[0]);
-
-        let pos = 0;
-       for(let y = this.infoHeader.height[0] - 1; y >= 0; --y) {
-           for(let x = 0; x < this.infoHeader.width[0]; ++x) {
-               let index = y * this.infoHeader.width[0] + x;
-                this.pixelData[index] = new Pixel(new Uint8Array([rawPixelsArray.getUint8(pos + 2)]), 
-                new Uint8Array([rawPixelsArray.getUint8(pos + 1)]), 
-                new Uint8Array([rawPixelsArray.getUint8(pos)]));
-                pos += 3;
-           }
-           pos += (this.infoHeader.width[0] % 4);
-       }        
-    }
-
-    /**
+     /**
      * Will be removed, please ignore.
      */
     public static readBMP(): ArrayBuffer {
@@ -50,6 +27,27 @@ export class Bitmap {
             bytes[i] = binary_string.charCodeAt(i);
         }
         return bytes.buffer;
+    }
+
+    private decodeData(data: ArrayBuffer) {
+        console.log(this.pixelData);
+        this.header = new Header(new DataView(data, Header.BYTES_ARRAY_OFFSET, Header.BYTES_ARRAY_LENGTH));
+        this.infoHeader = new InfoHeader(new DataView(data, InfoHeader.BYTES_ARRAY_OFFSET, InfoHeader.BYTES_ARRAY_LENGTH));
+
+        let rawPixelsArray = new DataView(data, this.header.dataOffset[0]);
+        this.pixelData = new Array<Pixel>(this.infoHeader.width[0] * this.infoHeader.height[0]);
+
+        let pos = 0;
+        for(let y = this.infoHeader.height[0] - 1; y >= 0; --y) {
+           for(let x = 0; x < this.infoHeader.width[0]; ++x) {
+               let index = y * this.infoHeader.width[0] + x;
+               this.pixelData[index] = new Pixel(new Uint8Array([rawPixelsArray.getUint8(pos + 2)]), 
+                new Uint8Array([rawPixelsArray.getUint8(pos + 1)]), 
+                new Uint8Array([rawPixelsArray.getUint8(pos)]));
+                pos += 3;
+           }
+           pos += (this.infoHeader.width[0] % 4);
+       }        
     }
 
     public toFile(name: string): File {
