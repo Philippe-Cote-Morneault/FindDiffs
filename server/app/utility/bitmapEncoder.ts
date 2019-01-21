@@ -27,6 +27,7 @@ export class BitmapEncoder {
         dataView.setUint32(2, header.fileSize[0], true);
         dataView.setInt32(6, this.RESERVED_DECIMAL_CODE, true);
         dataView.setUint32(10, header.dataOffset[0], true);
+
     }
 
     private static encodeInfoHeader(infoHeader: InfoHeader, dataView: DataView): void {
