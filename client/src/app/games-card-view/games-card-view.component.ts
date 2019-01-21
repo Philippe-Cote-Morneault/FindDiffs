@@ -10,15 +10,9 @@ import { GameCard } from '../gameCard';
 export class GamesCardViewComponent implements OnInit {
   buttonSolo = 'Solo';
   buttonOnline = '1 vs. 1';
-
+  game = new GameCard('name', 'img', [1,1,1], [1,1,1]);
+  
   constructor(public GamesCardViewService : GamesCardViewService) { }
-
-  game: GameCard = {
-    title: 'test',
-    image: 'test',
-    bestTimeSolo: [1, 1, 1],
-    bestTimeOnline: [1, 1, 1]
-  }
 
   ngOnInit() {
   }
