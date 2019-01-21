@@ -1,6 +1,7 @@
 import {expect} from "chai";
-import { Pixel, Bitmap } from "./Bitmap";
-import {readFileSync, writeFileSync, writeFile} from 'fs';
+import { Bitmap } from "./Bitmap";
+import {readFileSync, writeFileSync} from 'fs';
+import { Pixel } from "../Pixel";
 /* tslint:disable:no-magic-numbers */
 
 describe("Bitmap", () => {
@@ -27,12 +28,13 @@ describe("Bitmap", () => {
 
     it("read bmp", () => {
         let path = require('path');
-       // let bitmap = new Bitmap(new Buffer(readFileSync(path.resolve(__dirname,"../../test/testBitmaps/FLAG_B24.BMP"), "utf8")).buffer);
-       //let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../test/testBitmaps/VENUS.BMP")).buffer);
-       let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../../test/flame1.bmp")).buffer);
-       writeFile("boobaOopa.bmp", bitmap.asBuffer(), x => {
+       //let bitmap = new Bitmap(new Buffer(readFileSync(path.resolve(__dirname,"../../../test/testBitmaps/FLAG_B24.BMP"), "utf8")).buffer);
+       let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../../test/testBitmaps/FLAG_B24.BMP")).buffer);
+       //let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../../test/flame1.bmp")).buffer);
+      /* writeFile("boobaOopa.bmp", bitmap.asBuffer(), x => {
 
        });
+       */
        writeFileSync("booba.bmp", new Buffer(bitmap.asBuffer()));
 
 
