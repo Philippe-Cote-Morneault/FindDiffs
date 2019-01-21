@@ -2,7 +2,7 @@ import { Request } from "express";
 //import fs = require("fs");
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
-//import { Bitmap } from "../model/Bitmap";
+//import { Bitmap } from "../model/bitmap";
 
 export class DifferenceController {
 
