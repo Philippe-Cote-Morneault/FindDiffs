@@ -4,6 +4,7 @@ import {readFileSync, writeFileSync} from 'fs';
 import { Pixel } from "../pixel";
 import { BitmapEncoder } from "../../utility/bitmapEncoder";
 import { BitmapDecoder } from "../../utility/bitmapDecoder";
+//import { DifferenceImageGenerator } from "../../services/differenceImageGenerator";
 /* tslint:disable:no-magic-numbers */
 
 describe("Bitmap", () => {
@@ -31,14 +32,19 @@ describe("Bitmap", () => {
     it("read bmp", () => {
         let path = require('path');
        //let bitmap = new Bitmap(new Buffer(readFileSync(path.resolve(__dirname,"../../../test/testBitmaps/FLAG_B24.BMP"), "utf8")).buffer);
+      // let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../../test/testBitmaps/FLAG_B24.BMP")).buffer);
       let bitmap: Bitmap = BitmapDecoder.decodeFromArrayBuffer(readFileSync(path.resolve(__dirname,"../../../test/testBitmaps/FLAG_B24.BMP")).buffer);
-      // let bitmap: Bitmap = BitmapDecoder.decodeFromArrayBuffer(readFileSync(path.resolve(__dirname,"../../../test/maze.bmp")).buffer);
+       //let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../../test/flame1.bmp")).buffer);
       /* writeFile("boobaOopa.bmp", bitmap.asBuffer(), x => {
 
        });
        */
-        writeFileSync("test.bmp", new Buffer(BitmapEncoder.encodeBitmap(bitmap)));
       // writeFileSync("booba.bmp", new Buffer(bitmap.asBuffer()));
+      //let generator: DifferenceImageGenerator = new DifferenceImageGenerator()
+      let newMap: Bitmap = BitmapDecoder.fromPixels(bitmap.pixelData, bitmap);
+      writeFileSync("testing123.bmp", new Buffer(BitmapEncoder.encodeBitmap(newMap)));
+
+
 
 
        expect(bitmap.header.fileSize).to.equal("");

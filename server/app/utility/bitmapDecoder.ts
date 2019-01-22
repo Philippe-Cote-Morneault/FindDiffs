@@ -12,22 +12,33 @@ export class BitmapDecoder {
 
     }
 
+    // TODO: Find a better name for this class or this method
+    public static fromPixels(pixels: Pixel[], sampleImage: Bitmap): Bitmap {
+        const fileSize: number = sampleImage.header.fileSize[0];
+        const offSet: number = Header.BYTES_LENGTH + InfoHeader.BYTES_LENGTH;
+
+        const header: Header = new Header(new Uint32Array([fileSize]), new Uint32Array([offSet]));
+
+        const infoHeader: InfoHeader = new InfoHeader(sampleImage.infoHeader.width, sampleImage.infoHeader.height
+        ,                                             sampleImage.infoHeader.xPixelsPerM
+        ,                                             sampleImage.infoHeader.yPixelsPerM);
+
+        return new Bitmap(header, infoHeader, pixels);
+    }
+
     private static decodeHeader(dataView: DataView): Header {
-        let fileSize: Uint32Array = new Uint32Array([dataView.getUint32(2, true)]);
-        let offset: Uint32Array = new Uint32Array([dataView.getUint32(10, true)]);
+        const fileSize: Uint32Array = new Uint32Array([dataView.getUint32(2, true)]);
+        const offset: Uint32Array = new Uint32Array([dataView.getUint32(10, true)]);
 
         return new Header(fileSize, offset);
     }
 
     private static decodeInfoHeader(dataView: DataView): InfoHeader {
-        //const size: Uint32Array = new Uint32Array([dataView.getUint32(0, true)]);
         const width: Int32Array = new Int32Array([dataView.getInt32(4, true)]);
         const height: Int32Array = new Int32Array([dataView.getInt32(8, true)]);
         const xPixelsPerM: Uint32Array = new Uint32Array([dataView.getUint32(24, true)]);
         const yPixelsPerM: Uint32Array = new Uint32Array([dataView.getUint32(28, true)]);
 
-
-        console.log("Height = " + height + ", width = " + width);
         return new InfoHeader(width, height, xPixelsPerM, yPixelsPerM);
     }
 
@@ -47,5 +58,5 @@ export class BitmapDecoder {
 
         return pixelData;
 
-    } 
+    }
 }

@@ -29,7 +29,6 @@ export class InfoHeader {
     public static BYTES_OFFSET: number = 14;
     public static BYTES_LENGTH: number = 40;
 
-   // private size: Uint32Array;
     public width: Int32Array;
     public height: Int32Array;
     public imageSize: Uint32Array;
