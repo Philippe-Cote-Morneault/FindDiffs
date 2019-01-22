@@ -1,4 +1,3 @@
-import { Bitmap } from "../../model/bitmap/bitmap";
 import { COLOR, Pixel, Position } from "../../model/bitmap/pixel";
 
 export class Painter {
@@ -12,15 +11,17 @@ export class Painter {
         [0, 0, 1, 1, 1, 0, 0],
     ];
 
-    private originalImage: Bitmap;
+    private width: number;
+    private height: number;
 
-    public constructor(originalImage: Bitmap) {
-        this.originalImage = originalImage;
+    public constructor(width: number, height: number) {
+        this.width = width;
+        this.height = height;
     }
 
     public enlargePixel(pixels: Pixel[], index: number): void {
 
-        const pos: Position = new Position(index % this.originalImage.width, Math.floor(index / this.originalImage.width));
+        const pos: Position = new Position(index % this.width, Math.floor(index / this.width));
 
         // tslint:disable-next-line:no-magic-numbers
         const brushSize: number = Math.floor(Painter.BRUSH.length / 2);
@@ -38,9 +39,9 @@ export class Painter {
     }
 
     public drawPixel(pixels: Pixel[], pos: Position): void {
-        if ( pos.x >= 0 && pos.x <= this.originalImage.width && pos.y >= 0 && pos.y <= this.originalImage.height ) {
+        if ( pos.x >= 0 && pos.x < this.width && pos.y >= 0 && pos.y < this.height ) {
             // Calculate the position of the pixel
-            const index: number = this.originalImage.width * pos.y + pos.x;
+            const index: number = this.width * pos.y + pos.x;
             pixels[index] = Pixel.fromColor(COLOR.BLACK);
         }
     }

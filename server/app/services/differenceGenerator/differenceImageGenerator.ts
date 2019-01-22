@@ -19,7 +19,7 @@ export class DifferenceImageGenerator {
 
     private findDifferentPixels(): Pixel[] {
         const differencePixelArray: Pixel[] = new Array<Pixel>(this.originalImage.height * this.originalImage.width);
-        const painter: Painter = new Painter(this.originalImage);
+        const painter: Painter = new Painter(this.originalImage.width, this.originalImage.height);
 
         differencePixelArray.fill(Pixel.fromColor(COLOR.WHITE));
 
