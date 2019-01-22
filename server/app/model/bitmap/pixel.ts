@@ -52,4 +52,7 @@ export class Position {
         this.x = x;
         this.y = y;
     }
+    public getIndex(width: number): number {
+        return width * this.y + this.x;
+    }
 }
