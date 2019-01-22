@@ -22,7 +22,7 @@ describe("DifferenceController", () => {
             },
         };
         const response: string = differenceController.genDifference(mockReq(request));
-        const errorMessage: string = "L'image originale est manquante (originalImage)";
+        const errorMessage: string = "Des fichiers doivent être téléversés, aucun fichier n'a été téléversé!";
         expect(response).to.equal(differenceController.printError(errorMessage));
     });
 
@@ -30,6 +30,8 @@ describe("DifferenceController", () => {
         const request = {
             body: {
                 name: "bob",
+            },
+            files: {
                 originalImage: "image",
             },
         };

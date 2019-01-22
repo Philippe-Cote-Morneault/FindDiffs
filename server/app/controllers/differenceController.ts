@@ -21,11 +21,15 @@ export class DifferenceController {
             return this.printError("Le nom est manquant (name)");
         }
 
-        if (!req.files["originalImage"][0]) {
+        if(!req.files){
+            return this.printError("Des fichiers doivent être téléversés, aucun fichier n'a été téléversé!");
+        }
+
+        if (!req.files["originalImage"] || req.files["originalImage"].length < 1) {
             return this.printError("L'image originale est manquante (originalImage)");
         }
 
-        if (!req.files["modifiedImage"][0]) {
+        if (!req.files["modifiedImage"] || req.files["modifiedImage"].length < 1) {
             return this.printError("L'image modifié est manquante (modifiedImage)");
         }
         //TODO add verifications for images if the size and the format is ok
