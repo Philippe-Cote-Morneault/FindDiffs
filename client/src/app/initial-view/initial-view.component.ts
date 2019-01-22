@@ -17,11 +17,13 @@ export class InitialViewComponent {
     this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername);
   }
 
-  @HostListener("window:beforeunload") public beforeUnloadHander(): void {
+  @HostListener("window:unload") public UnloadHander(): void {
     const user: string = JSON.parse(localStorage.getItem("user") || "{}");
     this.initialViewService.getDeleteUsername(user).subscribe();
   }
   public correctUsername(message: Message): void {
-    localStorage.setItem("user", message.body);
+    if (message != null) {
+      localStorage.setItem("user", message.body);
+    }
   }
 }
