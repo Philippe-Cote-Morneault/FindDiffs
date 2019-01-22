@@ -1,6 +1,6 @@
-import { Header, InfoHeader } from "../model/bitmap/Header";
-import { Bitmap } from "../model/bitmap/Bitmap";
-import { Pixel } from "../model/Pixel";
+import { Bitmap } from "../../model/bitmap/bitmap";
+import { Header, InfoHeader } from "../../model/bitmap/header";
+import { Pixel } from "../../model/bitmap/pixel";
 
 export class BitmapEncoder {
     private static SIGNATURE_DECIMAL_CODE: number = 16973;

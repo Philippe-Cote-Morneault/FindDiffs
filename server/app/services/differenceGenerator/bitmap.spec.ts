@@ -1,10 +1,10 @@
 import {expect} from "chai";
 import {readFileSync, writeFileSync} from "fs";
-import { DifferenceImageGenerator } from "../../services/differenceImageGenerator";
-import { BitmapDecoder } from "../../utility/bitmapDecoder";
-import { BitmapEncoder } from "../../utility/bitmapEncoder";
-import { Pixel } from "../pixel";
-import { Bitmap } from "./bitmap";
+import { Bitmap } from "../../model/bitmap/bitmap";
+import { Pixel } from "../../model/bitmap/pixel";
+import { BitmapDecoder } from "./bitmapDecoder";
+import { BitmapEncoder } from "./bitmapEncoder";
+import { DifferenceImageGenerator } from "./differenceImageGenerator";
 
 /* tslint:disable:no-magic-numbers */
 

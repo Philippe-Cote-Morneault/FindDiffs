@@ -1,5 +1,5 @@
-import { Pixel } from "../pixel";
 import { Header, InfoHeader } from "./header";
+import { Pixel } from "./pixel";
 
 /**
  * Class that represents a BMP bitmap. Provides various methods to create files from a bitmap, create bitmaps from files, and more.

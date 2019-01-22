@@ -1,6 +1,6 @@
-import { InfoHeader, Header } from "../model/bitmap/header";
-import { Bitmap } from "../model/bitmap/bitmap";
-import { Pixel } from "../model/pixel";
+import { Bitmap } from "../../model/bitmap/bitmap";
+import { Header, InfoHeader} from "../../model/bitmap/header";
+import { Pixel } from "../../model/bitmap/pixel";
 
 export class BitmapDecoder {
     public static decodeFromArrayBuffer(arrayBuffer: ArrayBuffer): Bitmap {

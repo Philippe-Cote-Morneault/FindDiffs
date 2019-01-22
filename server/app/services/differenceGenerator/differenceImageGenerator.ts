@@ -1,5 +1,5 @@
-import { Bitmap } from "../model/bitmap/bitmap";
-import { COLOR, Pixel, Position } from "../model/pixel";
+import { Bitmap } from "../../model/bitmap/bitmap";
+import { COLOR, Pixel, Position } from "../../model/bitmap/pixel";
 
 export class DifferenceImageGenerator {
 
