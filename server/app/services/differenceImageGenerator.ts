@@ -32,7 +32,8 @@ export class DifferenceImageGenerator {
 
         differencePixelArray.fill(Pixel.fromColor(COLOR.WHITE));
 
-        for (let i: number = 0; i < differencePixelArray.length; ++i) {
+        // TODO replace for
+        for (let i: number = 0; i < differencePixelArray.length; i++) {
             if (!this.originalImage.pixelData[i].equals(this.modifiedImage.pixelData[i])) {
                 this.enlargeOnePixel(differencePixelArray, i);
             }
@@ -50,13 +51,13 @@ export class DifferenceImageGenerator {
         pos.y -= brushSize;
 
         // DRAW the circle around the position
-        DifferenceImageGenerator.BRUSH.forEach((line: number[]) => {
-            line.forEach((pixelBrush: number) => {
-                if (pixelBrush === 1) {
-                    this.drawPixel(pixels, pos);
+        for(let i: number = 0; i < DifferenceImageGenerator.BRUSH.length; i++) {
+            for( let j: number = 0; j < DifferenceImageGenerator.BRUSH.length; j++){
+                if(DifferenceImageGenerator.BRUSH[i][j] === 1){
+                    this.drawPixel(pixels,new Position(pos.x+j,pos.y+i));
                 }
-            });
-        });
+            }
+        }
     }
 
     private drawPixel(pixels: Pixel[], pos: Position): void {
