@@ -24,7 +24,7 @@ export class Routes {
         router.post("/differences",
                     (req: Request, res: Response, next: NextFunction) => this.index.postDifference(req, res, next));
 
-        router.get("/deleteUser/:username?", (req: Request, res: Response, next: NextFunction) =>
+        router.get("/verifyUser/deleteUser/:username?", (req: Request, res: Response, next: NextFunction) =>
         this.usernameValidation.deleteUsername(req, res, next));
 
         return router;
