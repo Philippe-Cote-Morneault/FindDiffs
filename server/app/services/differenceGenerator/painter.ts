@@ -20,7 +20,7 @@ export class Painter {
 
     public enlargePixel(pixels: Pixel[], index: number): void {
 
-        const pos: Position =  new Position(index % this.originalImage.width, Math.floor(index / this.originalImage.width));
+        const pos: Position = new Position(index % this.originalImage.width, Math.floor(index / this.originalImage.width));
 
         // tslint:disable-next-line:no-magic-numbers
         const brushSize: number = Math.floor(Painter.BRUSH.length / 2);
