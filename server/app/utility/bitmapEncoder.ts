@@ -42,6 +42,7 @@ export class BitmapEncoder {
         dataView.setUint32(28, infoHeader.yPixelsPerM[0], true);
         dataView.setUint32(32, this.COLORS_USED, true);
         dataView.setUint32(36, this.IMPORTANT_COLORS, true);
+
     }
 
     private static encodePixels(pixels: Pixel[], dataView: DataView, infoHeader: InfoHeader): void {

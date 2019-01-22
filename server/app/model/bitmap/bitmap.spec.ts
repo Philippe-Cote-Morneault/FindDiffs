@@ -3,6 +3,7 @@ import { Bitmap } from "./bitmap";
 import {readFileSync, writeFileSync} from 'fs';
 import { Pixel } from "../pixel";
 import { BitmapEncoder } from "../../utility/bitmapEncoder";
+import { BitmapDecoder } from "../../utility/bitmapDecoder";
 /* tslint:disable:no-magic-numbers */
 
 describe("Bitmap", () => {
@@ -31,7 +32,7 @@ describe("Bitmap", () => {
         let path = require('path');
        //let bitmap = new Bitmap(new Buffer(readFileSync(path.resolve(__dirname,"../../../test/testBitmaps/FLAG_B24.BMP"), "utf8")).buffer);
       // let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../../test/testBitmaps/FLAG_B24.BMP")).buffer);
-       let bitmap = new Bitmap(readFileSync(path.resolve(__dirname,"../../../test/flame1.bmp")).buffer);
+       let bitmap: Bitmap = BitmapDecoder.decodeFromArrayBuffer(readFileSync(path.resolve(__dirname,"../../../test/maze.bmp")).buffer);
       /* writeFile("boobaOopa.bmp", bitmap.asBuffer(), x => {
 
        });
