@@ -41,7 +41,7 @@ export class Pixel {
 }
 
 export enum COLOR {
-    WHITE, BLACK,
+    WHITE, BLACK, RED,
 }
 
 export class Position {
