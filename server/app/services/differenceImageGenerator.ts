@@ -33,7 +33,7 @@ export class DifferenceImageGenerator {
         differencePixelArray.fill(Pixel.fromColor(COLOR.WHITE));
 
         for (let i: number = 0; i < differencePixelArray.length; ++i) {
-            if (this.originalImage.pixelData[i].equals(this.modifiedImage.pixelData[i])) {
+            if (!this.originalImage.pixelData[i].equals(this.modifiedImage.pixelData[i])) {
                 this.enlargeOnePixel(differencePixelArray, i);
             }
         }
