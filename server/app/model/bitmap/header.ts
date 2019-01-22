@@ -18,6 +18,8 @@ export class Header {
 export class InfoHeader {
     public static BYTES_OFFSET: number = 14;
     public static BYTES_LENGTH: number = 40;
+    public static EXPECTED_WIDTH: number = 640;
+    public static EXPECTED_HEIGHT: number = 480;
 
     public width: Int32Array;
     public height: Int32Array;
