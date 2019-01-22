@@ -20,8 +20,9 @@ export class DifferenceImageGenerator {
         this.modifiedImage = modifiedImage;
     }
 
-    public generateImage(): Bitmap {
-        const differentPixelsArray: Pixel[] = this.findDifferentPixels();
+    public generateImage(): Pixel[] {
+
+        return this.findDifferentPixels();
         // TODO insert bitmap
 
     }

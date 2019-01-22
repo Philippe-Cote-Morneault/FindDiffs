@@ -18,5 +18,7 @@ export class Bitmap {
         this.header = header;
         this.infoHeader = infoHeader;
         this.pixelData = pixels;
+        this.height = infoHeader.height[0];
+        this.width = infoHeader.width[0];
     }
 }
