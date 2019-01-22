@@ -1,9 +1,9 @@
 import {expect} from "chai";
-import { Position } from "./pixel";
+import { COLOR, Pixel, Position } from "./pixel";
 
 /*tslint:disable no-magic-numbers */
 
-describe("Pixel - Position", () => {
+describe("Position", () => {
     describe("getIndex()", () => {
         it("Should return 0 if position is 0 0", () => {
             const position: Position = new Position(0, 0);
@@ -15,6 +15,10 @@ describe("Pixel - Position", () => {
         });
         it("Should return 19 if the position is 4, 3 and a width of 5", () => {
             const position: Position = new Position(4, 3);
+            expect(position.getIndex(5)).to.equals(19);
+        });
+    });
+});
 describe("Pixel", () => {
     describe("constructor()", () => {
         it("Should return a pixel with RGB value of (12, 44, 0)", () => {
@@ -39,6 +43,18 @@ describe("Pixel", () => {
             expect(pixel1.equals(pixel2)).to.equal(false);
         });
     });
+    describe("fromColor()", () => {
+        it("Black should return a black pixel", () => {
+            const pixelBlack: Pixel = new Pixel(new Uint8Array([0]) , new Uint8Array([0]), new Uint8Array([0]));
+            expect(pixelBlack).to.eql(Pixel.fromColor(COLOR.BLACK));
+        });
+        it("White should return a white pixel", () => {
+            const pixelWhite: Pixel = new Pixel(new Uint8Array([255]) , new Uint8Array([255]), new Uint8Array([255]));
+            expect(pixelWhite).to.eql(Pixel.fromColor(COLOR.WHITE));
+        });
+        it("red should return a white pixel", () => {
+            const pixelWhite: Pixel = new Pixel(new Uint8Array([255]) , new Uint8Array([255]), new Uint8Array([255]));
+            expect(pixelWhite).to.eql(Pixel.fromColor(COLOR.RED));
         });
     });
 });
