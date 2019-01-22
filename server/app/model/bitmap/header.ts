@@ -13,16 +13,6 @@ export class Header {
         this.fileSize = fileSize;
         this.dataOffset = dataOffset;
     }
-
-    public static fromDataView(dataView: DataView): Header {
-        if (dataView.getInt16(0) !== Header.SIGNATURE_DECIMAL_CODE) {
-            // throw exception
-        }
-        const fileSize: Uint32Array = new Uint32Array([dataView.getUint32(2, true)]);
-        const dataOffset: Uint32Array = new Uint32Array([dataView.getUint32(10, true)]);
-
-        return new Header(fileSize, dataOffset);
-    }
 }
 
 export class InfoHeader {
@@ -45,12 +35,4 @@ export class InfoHeader {
         this.yPixelsPerM = yPixelsPerM;
     }
 
-    public static fromDataView(dataView: DataView): InfoHeader {
-        const width: Int32Array = new Int32Array([dataView.getInt32(4, true)]);
-        const height: Int32Array = new Int32Array([dataView.getInt32(8, true)]);
-        const xPixelsPerM: Uint32Array = new Uint32Array([dataView.getUint32(24, true)]);
-        const yPixelsPerM: Uint32Array = new Uint32Array([dataView.getUint32(28, true)]);
-
-        return new InfoHeader(width, height, xPixelsPerM, yPixelsPerM);
-    }
 }
