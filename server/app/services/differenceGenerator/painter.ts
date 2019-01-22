@@ -40,6 +40,7 @@ export class Painter {
 
     public drawPixel(pixels: Pixel[], pos: Position): void {
         if ( pos.x >= 0 && pos.x < this.width && pos.y >= 0 && pos.y < this.height ) {
+
             // Calculate the position of the pixel
             const index: number = this.width * pos.y + pos.x;
             pixels[index] = Pixel.fromColor(COLOR.BLACK);
