@@ -42,7 +42,7 @@ describe("Bitmap", () => {
         // Create generator
         const generator: DifferenceImageGenerator = new DifferenceImageGenerator(bitmap, bitmapEdited);
         // The bitmap created by the algorithm
-        const finalMap: Bitmap = BitmapDecoder.fromPixels(generator.generateImage(), bitmap);
+        const finalMap: Bitmap = generator.generateImage();
 
         // Write the new map made by algorithm
         writeFileSync("testing123.bmp", new Buffer(BitmapEncoder.encodeBitmap(finalMap)));
