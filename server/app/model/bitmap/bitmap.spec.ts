@@ -1,11 +1,11 @@
 import {expect} from "chai";
-import { Bitmap } from "./bitmap";
-import {readFileSync, writeFileSync} from 'fs';
-import { Pixel } from "../pixel";
-import { BitmapEncoder } from "../../utility/bitmapEncoder";
-import { BitmapDecoder } from "../../utility/bitmapDecoder";
+import {readFileSync, writeFileSync} from "fs";
 import { DifferenceImageGenerator } from "../../services/differenceImageGenerator";
-//import { DifferenceImageGenerator } from "../../services/differenceImageGenerator";
+import { BitmapDecoder } from "../../utility/bitmapDecoder";
+import { BitmapEncoder } from "../../utility/bitmapEncoder";
+import { Pixel } from "../pixel";
+import { Bitmap } from "./bitmap";
+
 /* tslint:disable:no-magic-numbers */
 
 describe("Bitmap", () => {
@@ -31,24 +31,21 @@ describe("Bitmap", () => {
     });
 
     it("read bmp", () => {
-        let path = require('path');
+        let path = require("path");
         // Original image
-        let bitmap: Bitmap = BitmapDecoder.decodeFromArrayBuffer(readFileSync(
-            path.resolve(__dirname,"../../../test/testBitmaps/FLAG_B24.BMP")).buffer);
+        const bitmap: Bitmap = BitmapDecoder.decodeFromArrayBuffer(readFileSync(
+            path.resolve(__dirname, "../../../test/testBitmaps/FLAG_B24.BMP")).buffer);
         // Edited image
-        let bitmapEdited: Bitmap = BitmapDecoder.decodeFromArrayBuffer(readFileSync(
-            path.resolve(__dirname,"../../../test/testBitmaps/FLAG_B24_EDITED.BMP")).buffer);
-     
+        const bitmapEdited: Bitmap = BitmapDecoder.decodeFromArrayBuffer(readFileSync(
+            path.resolve(__dirname, "../../../test/testBitmaps/FLAG_B24_EDITED.BMP")).buffer);
+
         // Create generator
-        let generator: DifferenceImageGenerator = new DifferenceImageGenerator(bitmap, bitmapEdited);
+        const generator: DifferenceImageGenerator = new DifferenceImageGenerator(bitmap, bitmapEdited);
         // The bitmap created by the algorithm
-        let finalMap: Bitmap = BitmapDecoder.fromPixels(generator.generateImage(), bitmap);
-     
+        const finalMap: Bitmap = BitmapDecoder.fromPixels(generator.generateImage(), bitmap);
+
         // Write the new map made by algorithm
         writeFileSync("testing123.bmp", new Buffer(BitmapEncoder.encodeBitmap(finalMap)));
-
-
-
 
         expect(bitmap.header.fileSize).to.equal("");
     });
