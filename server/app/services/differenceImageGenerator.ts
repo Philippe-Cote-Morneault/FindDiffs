@@ -62,7 +62,7 @@ export class DifferenceImageGenerator {
     private drawPixel(pixels: Pixel[], pos: Position): void {
         if ( pos.x >= 0 && pos.x <= this.originalImage.width && pos.y >= 0 && pos.y <= this.originalImage.height ) {
             // Calculate the position of the pixel
-            const index: number = pos.x * pos.y + pos.x;
+            const index: number = this.originalImage.width * pos.y + pos.x;
             pixels[index] = Pixel.fromColor(COLOR.BLACK);
         }
     }
