@@ -1,7 +1,6 @@
 import {expect} from "chai";
 import {readFileSync, writeFileSync} from "fs";
 import { Bitmap } from "../../model/bitmap/bitmap";
-import { Pixel } from "../../model/bitmap/pixel";
 import { BitmapDecoder } from "./bitmapDecoder";
 import { BitmapEncoder } from "./bitmapEncoder";
 import { DifferenceImageGenerator } from "./differenceImageGenerator";
