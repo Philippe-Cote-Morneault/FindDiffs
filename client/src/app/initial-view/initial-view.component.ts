@@ -12,17 +12,16 @@ export class InitialViewComponent {
   public constructor(public initialViewService: InitialViewService) { }
   public title: string = "Spot the Differences";
   public button: string = "Accept";
-  public user: string = "";
   public verifyUsername(): void {
     const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
     this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername);
   }
 
   @HostListener("window:beforeunload") public beforeUnloadHander(): void {
-    this.initialViewService.getDeleteUsername(this.user).subscribe();
+    const user: string = JSON.parse(localStorage.getItem("user") || "{}");
+    this.initialViewService.getDeleteUsername(user).subscribe();
   }
   public correctUsername(message: Message): void {
-    // this.user = message.body;
-    console.log(message);
+    localStorage.setItem("user", message.body);
   }
 }

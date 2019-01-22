@@ -2,7 +2,7 @@ import { Container } from "inversify";
 import { Application } from "./app";
 import { Routes } from "./routes";
 import { Route } from "./routes/index";
-import { UsernameValidation } from "./routes/verifyUsername";
+import { UsernameValidation } from "./routes/usernameRoutes";
 import { Server } from "./server";
 import Types from "./types";
 
