@@ -10,9 +10,9 @@ export class UsernameValidation {
         this.usernameController = new UsernameController();
     }
     public verifyUsername(req: Request, res: Response, next: NextFunction): void {
-        res.send(this.usernameController.verifyUsername(req, res, next));
+        res.send(this.usernameController.verifyUsername(req, res));
     }
     public deleteUsername(req: Request, res: Response, next: NextFunction): void {
-        res.send(this.usernameController.deleteUsername(req, res, next));
+        res.send(this.usernameController.deleteUsername(req));
     }
 }
