@@ -1,16 +1,16 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
 
 export class UsernameController {
-    private usernameArray: string[] = [];
-    public deleteUsername(req: Request, res: Response, next: NextFunction): void {
+    public usernameArray: string[] = [];
+    public deleteUsername(req: Request): void {
         const username: string = req.params.username;
         const index: number = this.usernameArray.indexOf(username);
         this.usernameArray.splice(index);
     }
 
-    public verifyUsername(req: Request, res: Response, next: NextFunction): void {
+    public verifyUsername(req: Request, res: Response): void {
         const username: string = req.params.username;
         const messageTitle: string = "VerifyUsername";
         if (!this.isEmpty(username)) {

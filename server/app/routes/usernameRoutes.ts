@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { injectable, } from "inversify";
 import "reflect-metadata";
 import { UsernameController } from "../controllers/usernameController";
@@ -9,10 +9,10 @@ export class UsernameValidation {
     public constructor() {
         this.usernameController = new UsernameController();
     }
-    public verifyUsername(req: Request, res: Response, next: NextFunction): void {
-        res.send(this.usernameController.verifyUsername(req, res, next));
+    public verifyUsername(req: Request, res: Response): void {
+        res.send(this.usernameController.verifyUsername(req, res));
     }
-    public deleteUsername(req: Request, res: Response, next: NextFunction): void {
-        res.send(this.usernameController.deleteUsername(req, res, next));
+    public deleteUsername(req: Request, res: Response): void {
+        res.send(this.usernameController.deleteUsername(req));
     }
 }
