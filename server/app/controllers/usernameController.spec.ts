@@ -1,4 +1,5 @@
 import {expect} from "chai";
+import { mockReq, mockRes } from "sinon-express-mock";
 import { UsernameController } from "./usernameController";
 
 /* tslint:disable:no-magic-numbers */
@@ -137,6 +138,112 @@ describe("InitialViewService", () => {
     usernameController.add("username3", notEmptyArray);
     expect(usernameController.isAvailable("username3", notEmptyArray)).to.equal(false);
   });
+  // verifyUsername
+  // tslint:disable:typedef
+  it("Should be true if the username (ALPHA) is corretly added when the array is empty", () => {
+    const user: string = "username";
+    const request = {
+      params: { username : "username", },
+    };
+    const response = {
+      body: { },
+    };
+    usernameController.verifyUsername(mockReq(request), mockRes(response));
+    expect(usernameController.usernameArray[0]).to.equal(user);
+    usernameController.deleteUsername(mockReq(request));
+  });
+  it("Should be true if the username (NUMERIC) is corretly added when the array is empty", () => {
+    const user: string = "1234";
+    const request = {
+      params: { username : "1234", },
+    };
+    const response = {
+      body: { },
+    };
+    usernameController.verifyUsername(mockReq(request), mockRes(response));
+    expect(usernameController.usernameArray[0]).to.equal(user);
+    usernameController.deleteUsername(mockReq(request));
+  });
+  it("Should be true if the username (ALPHANUMERIC) is corretly added when the array is empty", () => {
+    const user: string = "username12";
+    const request = {
+      params: { username : "username12", },
+    };
+    const response = {
+      body: { },
+    };
+    usernameController.verifyUsername(mockReq(request), mockRes(response));
+    expect(usernameController.usernameArray[0]).to.equal(user);
+    usernameController.deleteUsername(mockReq(request));
+  });
+  it("Should be true if the username is not added: name too short", () => {
+    const request = {
+      params: { username : "us", },
+    };
+    const response = {
+      body: { },
+    };
+    usernameController.verifyUsername(mockReq(request), mockRes(response));
+    expect(usernameController.usernameArray.length).to.equal(0);
+  });
+  it("Should be true if the username is not added: name too long", () => {
+    const request = {
+      params: { username : "username1234567", },
+    };
+    const response = {
+      body: { },
+    };
+    usernameController.verifyUsername(mockReq(request), mockRes(response));
+    expect(usernameController.usernameArray.length).to.equal(0);
+  });
+  it("Should be true if multiple differents usernames are added", () => {
+    const firstRequest = {
+      params: { username : "username1", },
+    };
+    const secondRequest = {
+      params: { username : "username2", },
+    };
+    const thirdRequest = {
+      params: { username : "username3", },
+    };
+    const response = {
+      body: { },
+    };
+    usernameController.verifyUsername(mockReq(firstRequest), mockRes(response));
+    usernameController.verifyUsername(mockReq(secondRequest), mockRes(response));
+    usernameController.verifyUsername(mockReq(thirdRequest), mockRes(response));
+    expect(usernameController.usernameArray.length).to.equal(3);
+    expect(usernameController.usernameArray[0]).to.equal("username1");
+    expect(usernameController.usernameArray[1]).to.equal("username2");
+    expect(usernameController.usernameArray[2]).to.equal("username3");
+    usernameController.deleteUsername(mockReq(firstRequest));
+    usernameController.deleteUsername(mockReq(secondRequest));
+    usernameController.deleteUsername(mockReq(thirdRequest));
+  });
+  it("Should be true if two identical usernames are added", () => {
+    const request = {
+      params: { username : "username", },
+    };
+    const response = {
+      body: { },
+    };
+    usernameController.verifyUsername(mockReq(request), mockRes(response));
+    usernameController.verifyUsername(mockReq(request), mockRes(response));
+    expect(usernameController.usernameArray.length).to.equal(1);
+    expect(usernameController.usernameArray[0]).to.equal("username");
+    usernameController.deleteUsername(mockReq(request));
+  });
   // deleteUsername
-// TODO
+  it("Should return true if the username is removed from the array", () => {
+    const request = {
+      params: { username: "bob", },
+    };
+    const response = {
+      body: { },
+    };
+    usernameController.verifyUsername(mockReq(request), mockRes(response));
+    expect(usernameController.usernameArray.length).to.equal(1);
+    usernameController.deleteUsername(mockReq(request));
+    expect(usernameController.usernameArray.length).to.equal(0);
+  });
 });
