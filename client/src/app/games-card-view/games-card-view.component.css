@@ -1,24 +1,23 @@
-body{
-    height: 100vh;
-    width: 100vw;
-    background-color: #41414E;
-    margin: -1px -1px;
-    padding: 1px 1px;
-    text-align: center;
-  }
+.item1 { grid-area: header; }
+.item2 { grid-area: menu; }
+.item3 { grid-area: main; }
+.item4 { grid-area: right; }
+.item5 { grid-area: footer; }
 
-  #button-addon2{
-    background-color: green;
-    color: white;
-  }
-  .card-body{
-    background-color: #33343D;
-    border-radius: 2%;
-    border: 1px black solid;
-    display: inline-block;
-  }
-  h5{
-    margin-top: 5%;
-    color:white;
-  }
-  
+.grid-container {
+  display: grid;
+  grid-template-areas:
+  'menu menu header header header header'
+  'menu menu main main right right'
+  'menu menu footer footer footer footer';
+  grid-gap: 10px;
+  background-color: #2196F3;
+  padding: 10px;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+}

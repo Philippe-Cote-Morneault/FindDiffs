@@ -10,7 +10,12 @@ import { GameCard } from '../gameCard';
 export class GamesCardViewComponent implements OnInit {
   buttonSolo = 'Solo';
   buttonOnline = '1 vs. 1';
-  game = new GameCard('name', 'img', [1,1,1], [1,1,1]);
+  games : GameCard[]
+
+  getGameCards() : void {
+    this.GamesCardViewService.getGameCards()
+      .subscribe(games => this.games = games);
+  }
   
   constructor(public GamesCardViewService : GamesCardViewService) { }
 
