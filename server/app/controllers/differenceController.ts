@@ -1,11 +1,9 @@
 import { Request } from "express";
-import { readFileSync } from "fs";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
 import { InvalidFormatException } from "../../../common/errors/invalidFormatException";
 import { Bitmap } from "../model/bitmap/bitmap";
 import { BitmapDecoder } from "../services/differenceGenerator/bitmapDecoder";
-import { BitmapEncoder } from "../services/differenceGenerator/bitmapEncoder";
 import { DifferenceImageGenerator } from "../services/differenceGenerator/differenceImageGenerator";
 
 export class DifferenceController {
