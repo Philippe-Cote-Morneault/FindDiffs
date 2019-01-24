@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { gameCard } from './gameCard';
+import { GameCard } from './gameCard';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -17,17 +17,15 @@ export class GamesCardViewService {
 
   private gamesUrl = 'api/games';
 
-  getGameCards() : Observable<GameCard[]> {
+  getGameCards(): Observable<GameCard[]> {
     return this.http.get<GameCard[]>(this.gamesUrl)
       .pipe(
-        //tap(_=> this.log("fetched games"))
-        catchError(this.handleError('getGames',[]))
+        catchError(this.handleError('getGameCards', []))
       );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(error);
       return of(result as T);
     };
   }
