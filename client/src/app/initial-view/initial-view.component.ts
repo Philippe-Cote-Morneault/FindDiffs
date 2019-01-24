@@ -1,25 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { InitialViewService } from '../initial-view.service';
-import { Message } from '../../../../common/communication/message';
-@Component({
-  selector: 'app-initial-view',
-  templateUrl: './initial-view.component.html',
-  styleUrls: ['./initial-view.component.css']
-})
-export class InitialViewComponent implements OnInit {
+import { Component, HostListener } from "@angular/core";
+import { Message } from "../../../../common/communication/message";
+import { InitialViewService } from "../initial-view.service";
 
-  constructor(public initialViewService : InitialViewService) { }
-  title = 'Spot the Differences';
-  button = 'Accept';
+@Component({
+  selector: "app-initial-view",
+  templateUrl: "./initial-view.component.html",
+  styleUrls: ["./initial-view.component.css"],
+})
+export class InitialViewComponent {
+
+  public constructor(public initialViewService: InitialViewService) { }
+  public title: string = "Spot the Differences";
+  public button: string = "Accept";
   public verifyUsername(): void {
-    let username:string = (<HTMLInputElement>document.getElementById("usernameInput")).value;
+    const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
     this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername);
   }
 
-  public correctUsername(message:Message): void{
-    console.log(message);
+  @HostListener("window:unload") public UnloadHander(): void {
+    const user: string = JSON.parse(localStorage.getItem("user") || "{}");
+    this.initialViewService.getDeleteUsername(user).subscribe();
   }
-  ngOnInit() {
+  public correctUsername(message: Message): void {
+    if (message != null) {
+      localStorage.setItem("user", message.body);
+    }
   }
-
 }

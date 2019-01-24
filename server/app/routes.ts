@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import multer = require("multer");
 import { Route } from "./routes/index";
-import { UsernameValidation } from "./routes/verifyUsername";
+import { UsernameValidation } from "./routes/usernameRoutes";
 import Types from "./types";
 @injectable()
 export class Routes {
@@ -24,12 +24,15 @@ export class Routes {
                    (req: Request, res: Response, next: NextFunction) => this.index.helloWorld(req, res, next));
 
         router.get("/verifyUser/:username?",
-                   (req: Request, res: Response, next: NextFunction) => this.usernameValidation.verifyUsername(req, res, next));
+                   (req: Request, res: Response) => this.usernameValidation.verifyUsername(req, res));
 
         router.post("/differences", Routes.upload.fields([
             {name: "originalImage", maxCount: 1},
             {name: "modifiedImage", maxCount: 1},
         ]),         (req: Request, res: Response, next: NextFunction) => this.index.postDifference(req, res, next));
+
+        router.get("/verifyUser/deleteUser/:username?", (req: Request, res: Response) =>
+        this.usernameValidation.deleteUsername(req, res));
 
         return router;
     }
