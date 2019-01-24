@@ -2,6 +2,7 @@ import { Bitmap } from "../../model/bitmap/bitmap";
 import { Header, InfoHeader } from "../../model/bitmap/header";
 import { Pixel } from "../../model/bitmap/pixel";
 
+/*tslint:disable no-magic-numbers */
 export class BitmapEncoder {
     private static SIGNATURE_DECIMAL_CODE: number = 16973;
     private static RESERVED_DECIMAL_CODE: number = 0;
@@ -13,7 +14,7 @@ export class BitmapEncoder {
     private static IMPORTANT_COLORS: number = 0;
 
     public static encodeBitmap(bitmap: Bitmap): ArrayBuffer {
-        let buffer = new ArrayBuffer(bitmap.header.fileSize[0]);
+        const buffer: ArrayBuffer = new ArrayBuffer(bitmap.header.fileSize[0]);
         BitmapEncoder.encodeHeader(bitmap.header, new DataView(buffer, Header.BYTES_OFFSET, Header.BYTES_LENGTH));
         BitmapEncoder.encodeInfoHeader(bitmap.infoHeader, new DataView(buffer, InfoHeader.BYTES_OFFSET, InfoHeader.BYTES_LENGTH));
         BitmapEncoder.encodePixels(bitmap.pixelData, new DataView(buffer, bitmap.header.dataOffset[0]), bitmap.infoHeader);
