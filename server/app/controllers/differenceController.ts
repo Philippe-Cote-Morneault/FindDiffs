@@ -4,6 +4,7 @@ import { Message } from "../../../common/communication/message";
 import { InvalidFormatException } from "../../../common/errors/invalidFormatException";
 import { Bitmap } from "../model/bitmap/bitmap";
 import { BitmapDecoder } from "../services/differenceGenerator/bitmapDecoder";
+import { BitmapEncoder } from "../services/differenceGenerator/bitmapEncoder";
 import { DifferenceImageGenerator } from "../services/differenceGenerator/differenceImageGenerator";
 import { Storage } from "../utils/storage";
 
@@ -20,19 +21,19 @@ export class DifferenceController {
 
     private validate(req: Request): void {
         if (!req.body.name) {
-            throw new InvalidFormatException("Le nom est manquant (name)");
+            throw new InvalidFormatException("The field name is missing");
         }
 
         if (!req.files) {
-            throw new InvalidFormatException("Des fichiers doivent être téléversés, aucun fichier n'a été téléversé!");
+            throw new InvalidFormatException("Files needs to be uploaded, no files were uploaded.");
         }
 
         if (!req.files["originalImage"] || req.files["originalImage"].length < 1) {
-            throw new InvalidFormatException("L'image originale est manquante (originalImage)");
+            throw new InvalidFormatException("Original image is missing.");
         }
 
         if (!req.files["modifiedImage"] || req.files["modifiedImage"].length < 1) {
-            throw new InvalidFormatException("L'image modifié est manquante (modifiedImage)");
+            throw new InvalidFormatException("Modified image is missing.");
         }
     }
 
