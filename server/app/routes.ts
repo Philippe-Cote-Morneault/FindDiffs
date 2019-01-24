@@ -31,7 +31,7 @@ export class Routes {
             {name: "modifiedImage", maxCount: 1},
         ]),         (req: Request, res: Response, next: NextFunction) => this.index.postDifference(req, res, next));
 
-        router.get("/user/deletion/:username?", (req: Request, res: Response) =>
+        router.get("/user/disconnect/:username?", (req: Request, res: Response) =>
         this.usernameValidation.deleteUsername(req, res));
 
         return router;
