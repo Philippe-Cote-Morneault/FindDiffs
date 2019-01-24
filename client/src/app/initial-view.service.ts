@@ -7,7 +7,8 @@ import { Message } from "../../../common/communication/message";
 @Injectable()
 export class InitialViewService {
 
-    private readonly BASE_URL: string = "http://localhost:3000/verifyUser/";
+    private readonly BASE_URL: string = "http://localhost:3000/user/";
+    private readonly DELETE_URL: string = "/deletion/";
     public constructor(private http: HttpClient) { }
 
     public getUsernameValidation(username: string): Observable<Message> {
@@ -17,7 +18,7 @@ export class InitialViewService {
     }
 
     public getDeleteUsername(username: string): Observable<Message> {
-        return this.http.get<Message>(this.BASE_URL + "deleteUser/" + username).pipe(
+        return this.http.get<Message>(this.BASE_URL + this.DELETE_URL + username).pipe(
             catchError(this.handleError<Message>("getDeleteUsername")),
         );
     }

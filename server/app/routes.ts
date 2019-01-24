@@ -23,7 +23,7 @@ export class Routes {
         router.get("/",
                    (req: Request, res: Response, next: NextFunction) => this.index.helloWorld(req, res, next));
 
-        router.get("/verifyUser/:username?",
+        router.get("/user/:username?",
                    (req: Request, res: Response) => this.usernameValidation.verifyUsername(req, res));
 
         router.post("/differences", Routes.upload.fields([
@@ -31,7 +31,7 @@ export class Routes {
             {name: "modifiedImage", maxCount: 1},
         ]),         (req: Request, res: Response, next: NextFunction) => this.index.postDifference(req, res, next));
 
-        router.get("/verifyUser/deleteUser/:username?", (req: Request, res: Response) =>
+        router.get("/user/deletion/:username?", (req: Request, res: Response) =>
         this.usernameValidation.deleteUsername(req, res));
 
         return router;
