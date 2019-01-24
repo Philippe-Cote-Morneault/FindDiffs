@@ -12,7 +12,7 @@ export class GamesCardViewComponent implements OnInit {
   buttonOnline = '1 vs. 1';
   games : GameCard[]
 
-  getGames() : void {
+  getGameCards() : void {
     this.GamesCardViewService.getGameCards()
       .subscribe(games => this.games = games);
   }
