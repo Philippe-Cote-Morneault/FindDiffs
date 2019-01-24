@@ -5,6 +5,7 @@ import { InvalidFormatException } from "../../../common/errors/invalidFormatExce
 import { Bitmap } from "../model/bitmap/bitmap";
 import { BitmapDecoder } from "../services/differenceGenerator/bitmapDecoder";
 import { DifferenceImageGenerator } from "../services/differenceGenerator/differenceImageGenerator";
+import { Storage } from "../utils/storage";
 
 export class DifferenceController {
 
@@ -53,6 +54,8 @@ export class DifferenceController {
         // We call the difference image generator and save the result with the help of multer.
         const differenceImageGenerator: DifferenceImageGenerator = new DifferenceImageGenerator(originalImage, modifiedImage);
         const differences: Bitmap = differenceImageGenerator.generateImage();
+
+        Storage.saveBuffer(BitmapEncoder.encodeBitmap(differences));
 
         return JSON.stringify({"message": "it works"});
     }
