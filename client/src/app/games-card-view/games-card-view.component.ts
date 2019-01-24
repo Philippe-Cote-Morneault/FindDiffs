@@ -11,13 +11,11 @@ export class GamesCardViewComponent implements OnInit {
   buttonSolo = 'Solo';
   buttonOnline = '1 vs. 1';
   games : GameCard[]
-  
+
   getGames() : void {
     this.GamesCardViewService.getGameCards()
       .subscribe(games => this.games = games);
   }
-
-  game = new GameCard('name', 'img', [1,1,1], [1,1,1]);
   
   constructor(public GamesCardViewService : GamesCardViewService) { }
 
