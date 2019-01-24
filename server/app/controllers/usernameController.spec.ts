@@ -4,7 +4,7 @@ import { UsernameController } from "./usernameController";
 
 /* tslint:disable:no-magic-numbers */
 
-describe("InitialViewService", () => {
+describe("UsernameController", () => {
   const usernameController: UsernameController = new UsernameController();
 
   // isEmpty
