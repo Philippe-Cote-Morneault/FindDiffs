@@ -1,8 +1,12 @@
 import { Request } from "express";
-//import fs = require("fs");
+import { readFileSync } from "fs";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
-//import { Bitmap } from "../model/bitmap";
+import { InvalidFormatException } from "../../../common/errors/invalidFormatException";
+import { Bitmap } from "../model/bitmap/bitmap";
+import { BitmapDecoder } from "../services/differenceGenerator/bitmapDecoder";
+import { BitmapEncoder } from "../services/differenceGenerator/bitmapEncoder";
+import { DifferenceImageGenerator } from "../services/differenceGenerator/differenceImageGenerator";
 
 export class DifferenceController {
 
@@ -15,27 +19,42 @@ export class DifferenceController {
         return JSON.stringify(message);
     }
 
-    public genDifference(req: Request): string {
-
+    private validate(req: Request): void {
         if (!req.body.name) {
-            return this.printError("Le nom est manquant (name)");
+            throw new InvalidFormatException("Le nom est manquant (name)");
         }
 
-        if(!req.files){
-            return this.printError("Des fichiers doivent être téléversés, aucun fichier n'a été téléversé!");
+        if (!req.files) {
+            throw new InvalidFormatException("Des fichiers doivent être téléversés, aucun fichier n'a été téléversé!");
         }
 
         if (!req.files["originalImage"] || req.files["originalImage"].length < 1) {
-            return this.printError("L'image originale est manquante (originalImage)");
+            throw new InvalidFormatException("L'image originale est manquante (originalImage)");
         }
 
         if (!req.files["modifiedImage"] || req.files["modifiedImage"].length < 1) {
-            return this.printError("L'image modifié est manquante (modifiedImage)");
+            throw new InvalidFormatException("L'image modifié est manquante (modifiedImage)");
         }
-        //TODO add verifications for images if the size and the format is ok
+    }
 
-       // const bitmap: Bitmap = new Bitmap(new Buffer(fs.readFileSync(req.files["originalImage"].path)));
-        //bitmap.toFile("test");
+    public genDifference(req: Request): string {
+
+        let originalImage: Bitmap;
+        let modifiedImage: Bitmap;
+        try {
+            this.validate(req);
+
+            // Read file and extract its bytes.
+            originalImage = BitmapDecoder.FromArrayBuffer(req.files["originalImage"][0].buffer);
+            modifiedImage = BitmapDecoder.FromArrayBuffer(req.files["modifiedImage"][0].buffer);
+
+        } catch (e) {
+            return this.printError(e.Message);
+        }
+
+        // We call the difference image generator and save the result with the help of multer.
+        const differenceImageGenerator: DifferenceImageGenerator = new DifferenceImageGenerator(originalImage, modifiedImage);
+        const differences: Bitmap = differenceImageGenerator.generateImage();
 
         return JSON.stringify({"message": "it works"});
     }
