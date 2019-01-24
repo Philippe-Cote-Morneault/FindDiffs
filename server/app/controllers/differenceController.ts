@@ -1,5 +1,6 @@
 import { Request } from "express";
 import "reflect-metadata";
+import { Difference } from "../../../common/communication/difference";
 import { Message } from "../../../common/communication/message";
 import { InvalidFormatException } from "../../../common/errors/invalidFormatException";
 import { Bitmap } from "../model/bitmap/bitmap";
@@ -56,8 +57,12 @@ export class DifferenceController {
         const differenceImageGenerator: DifferenceImageGenerator = new DifferenceImageGenerator(originalImage, modifiedImage);
         const differences: Bitmap = differenceImageGenerator.generateImage();
 
-        Storage.saveBuffer(BitmapEncoder.encodeBitmap(differences));
+        const guid: string = Storage.saveBuffer(BitmapEncoder.encodeBitmap(differences));
+        const difference: Difference = {
+            url: "http://localhost:3000/difference/" + guid,
+            guid: guid,
+        };
 
-        return JSON.stringify({"message": "it works"});
+        return JSON.stringify(difference);
     }
 }
