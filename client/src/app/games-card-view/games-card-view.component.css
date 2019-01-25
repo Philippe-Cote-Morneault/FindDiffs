@@ -1,22 +1,22 @@
-.item1 { grid-area: header; }
-.item2 { grid-area: menu; }
-.item3 { grid-area: main; }
-.item4 { grid-area: right; }
-.item5 { grid-area: footer; }
+.item1 { grid-area: title; }
+.item2 { grid-area: image; }
+.item3 { grid-area: soloTime; }
+.item4 { grid-area: onlineTime; }
+.item5 { grid-area: button; }
 
 .grid-container {
   display: grid;
   grid-template-areas:
-  'menu menu header header header header'
-  'menu menu main main right right'
-  'menu menu footer footer footer footer';
-  grid-gap: 10px;
-  background-color: #2196F3;
-  padding: 10px;
+  'image image title title title title'
+  'image image soloTime soloTime onlineTime onlineTime'
+  'image image button button button button';
+  grid-gap: 5px;
+  background-color: #33343D;
+  padding: 5px;
 }
 
 .grid-container > div {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: #41414E;
   text-align: center;
   padding: 20px 0;
   font-size: 30px;

@@ -10,7 +10,18 @@ import { GameCard } from '../gameCard';
 export class GamesCardViewComponent implements OnInit {
   buttonSolo = 'Solo';
   buttonOnline = '1 vs. 1';
-  games : GameCard[]
+
+  gameTest: GameCard = {
+    title: 'testtitle',
+    image: 'testimg',
+    bestTimeSolo: [111, 111, 111],
+    bestTimeOnline: [222, 222, 222]
+  };
+
+  games : GameCard[] = [
+    this.gameTest
+  ];
+  
 
   getGameCards() : void {
     this.GamesCardViewService.getGameCards()
