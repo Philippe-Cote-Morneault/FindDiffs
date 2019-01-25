@@ -4,6 +4,7 @@ import * as cors from "cors";
 import * as express from "express";
 import { inject, injectable } from "inversify";
 import * as logger from "morgan";
+import * as mongoose from "mongoose";
 import * as path from "path";
 import { Routes } from "./routes";
 import Types from "./types";
@@ -12,6 +13,7 @@ import Types from "./types";
 export class Application {
 
     private readonly internalError: number = 500;
+    private mongoUrl: string = "mongodb://localhost/CRMdb";
     public app: express.Application;
 
     public constructor(@inject(Types.Routes) private api: Routes) {
@@ -20,6 +22,8 @@ export class Application {
         this.config();
 
         this.routes();
+
+        this.mongoSetup();
     }
 
     private config(): void {
@@ -40,6 +44,11 @@ export class Application {
         this.app.use(router);
 
         this.errorHandeling();
+    }
+
+    private mongoSetup(): void{
+        mongoose.Promise = global.Promise;
+        mongoose.connect(this.mongoUrl);    
     }
 
     private errorHandeling(): void {
