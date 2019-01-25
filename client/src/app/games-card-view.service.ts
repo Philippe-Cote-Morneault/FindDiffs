@@ -1,12 +1,15 @@
 import { Injectable } from "@angular/core";
 import { GameCard } from './gameCard';
 import { Observable, of } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+//import { catchError, map, tap } from 'rxjs/operators';
+import { catchError} from 'rxjs/operators';
 
+/*
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
+*/
 
 @Injectable({
   providedIn: 'root'
