@@ -11,7 +11,7 @@ export class DatabaseConnectionHandler {
                                     DatabaseConnectionHandler.DB_PASSWORD + "@" + DatabaseConnectionHandler.DB_HOST + ":" +
                                     DatabaseConnectionHandler.DB_PORT + "/" + DatabaseConnectionHandler.DB_DB;
 
-    private database: Db;
+    public database: Db;
     public constructor() {
         this.connect();
     }

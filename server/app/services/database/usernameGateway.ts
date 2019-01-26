@@ -5,8 +5,8 @@ export class UsernameGateway {
     private database: Db;
     private collection: Collection;
 
-    public constructor(databse: Db) {
-        this.database = databse;
+    public constructor(database: Db) {
+        this.database = database;
         this.setup();
     }
 
@@ -37,7 +37,7 @@ export class UsernameGateway {
     }
 
     private createCollection(): void {
-        this.database.createCollection(UsernameGateway.collectionName, (err: Error, collection: Collection) =>{
+        this.database.createCollection(UsernameGateway.collectionName, (err: Error, collection: Collection) => {
             if (!err) {
                 this.collection = collection;
             }
