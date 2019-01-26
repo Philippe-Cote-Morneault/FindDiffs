@@ -1,8 +1,8 @@
-/*import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+/*import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { InitialViewComponent } from './initial-view.component';*/
+import { InitialViewComponent } from "./initial-view.component";*/
 
-describe('InitialViewComponent', () => {
+describe("InitialViewComponent", () => {
   /*let component: InitialViewComponent;
   let fixture: ComponentFixture<InitialViewComponent>;
 
@@ -19,7 +19,7 @@ describe('InitialViewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });*/
 });
