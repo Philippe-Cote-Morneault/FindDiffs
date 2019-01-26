@@ -11,7 +11,6 @@ export class GamesCardViewComponent implements OnInit {
   buttonSolo = 'Solo';
   buttonOnline = '1 vs. 1';
 
-
   public constructor() {}
 
   ngOnInit() {

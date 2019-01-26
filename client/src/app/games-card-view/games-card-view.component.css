@@ -2,17 +2,20 @@
 .item2 { grid-area: image; }
 .item3 { grid-area: soloTime; }
 .item4 { grid-area: onlineTime; }
-.item5 { grid-area: button; }
+.item5 { grid-area: buttonSolo; }
+.item6 { grid-area: buttonOnline; }
 
 .grid-container {
   display: grid;
   grid-template-areas:
-  'image image title title title title'
+  'title title title title title title'
   'image image soloTime soloTime onlineTime onlineTime'
-  'image image button button button button';
+  'image image buttonSolo buttonSolo buttonOnline buttonOnline';
   grid-gap: 5px;
   background-color: #33343D;
   padding: 5px;
+  border-radius: 10px;
+  margin: 10px;
 }
 
 .grid-container > div {
@@ -20,4 +23,12 @@
   text-align: center;
   padding: 20px 0;
   font-size: 30px;
+  border-radius: 5px;
+}
+
+.button {
+  background-color: green;
+  color: white;
+  border-radius: 10px;
+  border: #33343D;
 }
