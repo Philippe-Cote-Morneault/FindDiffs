@@ -14,7 +14,7 @@ import { GamesListViewComponent } from './games-list-view/games-list-view.compon
     AppComponent,
     InitialViewComponent,
     GamesListViewComponent,
-    GamesCardViewComponent
+    GamesCardViewComponent,
     AdminViewComponent,
   ],
   imports: [

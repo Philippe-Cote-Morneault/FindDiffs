@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { GameCard, POVType } from "../gameCard";
+import { GameCard, POVType } from "../../../../common/communication/gameCard";
 import { GameCardsService } from "../game-cards.service";
 
 @Component({

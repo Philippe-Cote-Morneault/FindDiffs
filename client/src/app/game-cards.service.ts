@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
-import { GameCard, POVType } from "./gameCard";
+import { GameCard, POVType } from "../../../common/communication/gameCard";
 import { catchError } from "rxjs/operators";
 
 @Injectable({

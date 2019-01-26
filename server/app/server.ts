@@ -4,6 +4,7 @@ import { AddressInfo } from "net";
 import * as SocketIO from "socket.io";
 import { Application } from "./app";
 import Types from "./types";
+import { GameCard } from "../../common/communication/gameCard";
 
 @injectable()
 export class Server {
@@ -31,6 +32,10 @@ export class Server {
             console.log(idUsernames);
 
             socket.on("newUsername", (data: any) => idUsernames.set(socket.id, data.name));
+
+            socket.on("gameCardCreated", (card: GameCard) => {
+                io.emit("gameCardCreated", card);
+            });
 
             console.log(idUsernames.get(socket.id));
             socket.on("disconnect", function() {
