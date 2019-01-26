@@ -8,12 +8,13 @@ import * as mongoose from "mongoose";
 import * as path from "path";
 import { Routes } from "./routes";
 import Types from "./types";
+import { DatabaseConnectionHandler } from "./services/database/databaseConnectionHandler";
 
 @injectable()
 export class Application {
 
     private readonly internalError: number = 500;
-    private mongoUrl: string = "mongodb://localhost/CRMdb";
+    private database: DatabaseConnectionHandler;
     public app: express.Application;
 
     public constructor(@inject(Types.Routes) private api: Routes) {
@@ -47,8 +48,8 @@ export class Application {
     }
 
     private mongoSetup(): void{
-        mongoose.Promise = global.Promise;
-        mongoose.connect(this.mongoUrl);    
+        this.database = new DatabaseConnectionHandler();
+        this.database.connect();
     }
 
     private errorHandeling(): void {
