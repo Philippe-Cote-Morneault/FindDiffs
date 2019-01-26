@@ -6,12 +6,14 @@ import { HttpClientModule } from "@angular/common/http";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 import { InitialViewService } from "./initial-view.service";
 import { NgModule } from "@angular/core";
+import { SoloGameCreatorComponent } from './solo-game-creator/solo-game-creator.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     InitialViewComponent,
     AdminViewComponent,
+    SoloGameCreatorComponent,
   ],
   imports: [
     BrowserModule,
