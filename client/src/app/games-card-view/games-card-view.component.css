@@ -1,9 +1,16 @@
-.item1 { grid-area: title; }
+.item1 { grid-area: title; 
+        color: white; 
+        font-size: 30px;}
 .item2 { grid-area: image; }
-.item3 { grid-area: soloTime; }
-.item4 { grid-area: onlineTime; }
-.item5 { grid-area: buttonSolo; }
-.item6 { grid-area: buttonOnline; }
+.item3 { grid-area: soloTime;
+        color: white; 
+        font-size: 15px; }
+.item4 { grid-area: onlineTime; 
+        color: white; }
+.item5 { grid-area: buttonSolo;
+        font-size: 25px; }
+.item6 { grid-area: buttonOnline;
+        font-size: 25px; }
 
 .grid-container {
   display: grid;
@@ -22,7 +29,6 @@
   background-color: #41414E;
   text-align: center;
   padding: 20px 0;
-  font-size: 30px;
   border-radius: 5px;
 }
 
