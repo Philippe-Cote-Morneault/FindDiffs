@@ -1,4 +1,5 @@
 import { Db, MongoClient } from "mongodb";
+import { UsernameGateway } from "./usernameGateway";
 
 export class DatabaseConnectionHandler {
     private static DB_USER: string = "jesus";
@@ -20,6 +21,7 @@ export class DatabaseConnectionHandler {
             if (!err) {
                 this.database = client.db(DatabaseConnectionHandler.DB_DB);
                 console.log("Nous sommes connectés à " + this.database.databaseName);
+                new UsernameGateway(this.database);
             }
             else {
                 console.log(err);
