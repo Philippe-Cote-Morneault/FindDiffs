@@ -1,6 +1,6 @@
 import { Request } from "express";
 import "reflect-metadata";
-import { Difference } from "../../../common/communication/difference";
+import { ImagePair } from "../../../common/communication/imagePair";
 import { Message } from "../../../common/communication/message";
 import { InvalidFormatException } from "../../../common/errors/invalidFormatException";
 import { Bitmap } from "../model/bitmap/bitmap";
