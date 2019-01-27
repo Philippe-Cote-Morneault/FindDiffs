@@ -26,6 +26,9 @@ export class Routes {
         router.get("/user/:username?",
                    (req: Request, res: Response) => this.usernameValidation.verifyUsername(req, res));
 
+        router.get("/gamecards/simplePOV",
+                   (req: Request, res: Response, next: NextFunction) => console.log("ITWORKED!"));
+
         router.post("/differences", Routes.upload.fields([
             {name: "originalImage", maxCount: 1},
             {name: "modifiedImage", maxCount: 1},
