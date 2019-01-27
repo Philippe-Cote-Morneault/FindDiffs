@@ -22,24 +22,22 @@ describe("BitmapDecoder", () => {
         path.resolve(__dirname, "../../../test/testBitmaps/boots.jpg")).buffer;
 
     describe("fromArrayBuffer()", () => {
+        const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
+
         it("Should create a bitmap with a height of 480 pixels", () => {
-            const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
             expect(bitmap.height).to.equal(480);
         });
     
         it("Should create a bitmap with a width of 640 pixels", () => {
-            const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
             expect(bitmap.width).to.equal(640);
         });
 
         describe("decodeHeader()", () => {
             it("Should create a bitmap with a file size of 921 738 bytes", () => {
-                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
                 expect(bitmap.header.fileSize[0]).to.equal(921738);
             });
 
             it("should create a bitmap with an offset of 138 bytes", () => {
-                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
                 expect(bitmap.header.dataOffset[0]).to.equal(138);
             });
 
@@ -50,22 +48,18 @@ describe("BitmapDecoder", () => {
 
         describe("decodeInfoHeader()", () => {
             it("Should create a bitmap with a height of 480 pixels", () => {
-                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
                 expect(bitmap.infoHeader.height[0]).to.equal(480);
             });
 
             it("Should create a bitmap with a width of 640 pixels", () => {
-                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
                 expect(bitmap.infoHeader.width[0]).to.equal(640);
             });
 
             it("Should create a bitmap with 0 xPixelsPerM", () => {
-                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
                 expect(bitmap.infoHeader.xPixelsPerM[0]).to.equal(0);
             });
 
             it("Should create a bitmap with 0 yPixelsPerM", () => {
-                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
                 expect(bitmap.infoHeader.yPixelsPerM[0]).to.equal(0);
             });
 
@@ -81,11 +75,16 @@ describe("BitmapDecoder", () => {
         });
 
         describe("decodePixels()", () => {
-            it("Should create a bitmap with pixels 307 200 pixels", () => {
-                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
+            it("Should create a bitmap with 307 200 pixels", () => {
                 expect(bitmap.pixelData.length).to.equal(640 * 480);
             });
+
+            // TODO: Figure out if you need to test if pixels array is correct.
+
+            
+
         });
+
             // Create generator
            // const generator: DifferenceImageGenerator = new DifferenceImageGenerator(bitmap, bitmapEdited);
             // The bitmap created by the algorithm
@@ -95,5 +94,45 @@ describe("BitmapDecoder", () => {
             //writeFileSync("testing123.bmp", new Buffer(BitmapEncoder.encodeBitmap(finalMap)));
     });
 
-    
+    describe("fromPixels()", () => {
+        // TODO: Find out where to get pixels from
+        const originalImage: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
+        const fromPixelsImage: Bitmap = BitmapDecoder.fromPixels(originalImage.pixelData, originalImage);
+
+        it("Should create a bitmap with a width of 640 pixels", () => {
+            expect(fromPixelsImage.width).to.equal(640);
+        });
+
+        it("Should create a bitmap with a height of 480 pixels", () => {
+            expect(fromPixelsImage.height).to.equal(480);
+        });
+
+        describe("Proper Header creation", () => {
+            it("Should create a bitmap with a file size of 921 738 bytes", () => {
+                expect(fromPixelsImage.header.fileSize[0]).to.equal(921738);
+            });
+
+            it("should create a bitmap with an offset of 54 bytes", () => {
+                expect(fromPixelsImage.header.dataOffset[0]).to.equal(54);
+            });
+        });
+
+        describe("Proper InfoHeader creation", () => {
+            it("Should create a bitmap with a height of 480 pixels", () => {
+                expect(fromPixelsImage.infoHeader.height[0]).to.equal(480);
+            });
+
+            it("Should create a bitmap with a width of 640 pixels", () => {
+                expect(fromPixelsImage.infoHeader.width[0]).to.equal(640);
+            });
+
+            it("Should create a bitmap with 0 xPixelsPerM", () => {
+                expect(fromPixelsImage.infoHeader.xPixelsPerM[0]).to.equal(0);
+            });
+
+            it("Should create a bitmap with 0 yPixelsPerM", () => {
+                expect(fromPixelsImage.infoHeader.yPixelsPerM[0]).to.equal(0);
+            });
+        });
+    });
 });
