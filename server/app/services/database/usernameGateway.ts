@@ -1,7 +1,7 @@
 import { Db, Collection } from "mongodb";
 
-export class UserGateway {
-    private static collectionName: string = "Users";
+export class UsernameGateway {
+    private static collectionName: string = "Usernames";
     private database: Db;
     private collection: Collection;
 
@@ -10,24 +10,24 @@ export class UserGateway {
         this.setup();
     }
 
-    public getUser(username: string): any {
+    public getUsername(username: string): any {
          this.collection.findOne({name: username, }, (err: Error, doc: any) => {
             return doc;
         });
     }
 
-    public addUser(username: string): void {
+    public addUsername(username: string): void {
         this.collection.insertOne({
             name: username,
         });
     }
 
     private setup(): void {
-        this.database.listCollections({name: UserGateway.collectionName})
+        this.database.listCollections({name: UsernameGateway.collectionName})
             .next((err: Error, collinfo: string) => {
                 if (collinfo) {
                     console.log("Collection exists");
-                    this.collection = this.database.collection(UserGateway.collectionName);
+                    this.collection = this.database.collection(UsernameGateway.collectionName);
                 }
                 else {
                     console.log("Collection does not exist");
@@ -37,7 +37,7 @@ export class UserGateway {
     }
 
     private createCollection(): void {
-        this.database.createCollection(UserGateway.collectionName, (err: Error, collection: Collection) => {
+        this.database.createCollection(UsernameGateway.collectionName, (err: Error, collection: Collection) => {
             if (!err) {
                 this.collection = collection;
             }

@@ -8,7 +8,7 @@ import { Message } from "../../../common/communication/message";
 export class InitialViewService {
 
     private readonly BASE_URL: string = "http://localhost:3000/user/";
-    private readonly DELETE_URL: string = "disconnect/";
+    private readonly DELETE_URL: string = "/deletion/";
     public constructor(private http: HttpClient) { }
 
     public getUsernameValidation(username: string): Observable<Message> {

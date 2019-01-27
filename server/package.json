@@ -17,8 +17,7 @@
     "check-coverage": true,
     "per-file": true,
     "include": [
-      "app/services/**/*.ts",
-      "app/controllers/**/*.ts"
+      "app/services/**/*.ts"
     ],
     "extension": [
       ".ts"
