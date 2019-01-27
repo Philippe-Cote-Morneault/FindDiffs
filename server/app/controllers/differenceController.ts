@@ -22,7 +22,7 @@ export class DifferenceController {
 
     private validate(req: Request): void {
         if (!req.body.name) {
-            throw new InvalidFormatException("The field name is missing");
+            throw new InvalidFormatException("The field name is missing.");
         }
 
         if (!req.files) {
