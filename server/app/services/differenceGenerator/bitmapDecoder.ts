@@ -4,6 +4,7 @@ import { Header, InfoHeader} from "../../model/bitmap/header";
 import { Pixel } from "../../model/bitmap/pixel";
 
 export class BitmapDecoder {
+
     public static FromArrayBuffer(arrayBuffer: ArrayBuffer): Bitmap {
         const header: Header = this.decodeHeader(new DataView(arrayBuffer, Header.BYTES_OFFSET, Header.BYTES_LENGTH));
         const infoHeader: InfoHeader = this.decodeInfoHeader(new DataView(arrayBuffer, InfoHeader.BYTES_OFFSET, InfoHeader.BYTES_LENGTH));
@@ -33,25 +34,25 @@ export class BitmapDecoder {
         if (dataView.getUint16(0) !== Header.SIGNATURE_DECIMAL_CODE) {
             throw new InvalidFormatException("Not a bmp file");
         }
-        const fileSize: Uint32Array = new Uint32Array([dataView.getUint32(2, true)]);
-        const offset: Uint32Array = new Uint32Array([dataView.getUint32(10, true)]);
+        const fileSize: Uint32Array = new Uint32Array([dataView.getUint32(Header.FILE_SIZE_OFFSET, true)]);
+        const offset: Uint32Array = new Uint32Array([dataView.getUint32(Header.PIXEL_OFFSET, true)]);
 
         return new Header(fileSize, offset);
     }
 
     private static decodeInfoHeader(dataView: DataView): InfoHeader {
-        const width: Int32Array = new Int32Array([dataView.getInt32(4, true)]);
+        const width: Int32Array = new Int32Array([dataView.getInt32(InfoHeader.WIDTH_OFFSET, true)]);
         if (width[0] !== InfoHeader.EXPECTED_WIDTH) {
             throw new InvalidFormatException("Width is " + width[0] + " pixels, should be " + InfoHeader.EXPECTED_WIDTH + " pixels");
         }
 
-        const height: Int32Array = new Int32Array([dataView.getInt32(8, true)]);
+        const height: Int32Array = new Int32Array([dataView.getInt32(InfoHeader.HEIGHT_OFFSET, true)]);
         if (height[0] !== InfoHeader.EXPECTED_HEIGHT) {
             throw new InvalidFormatException("Height is " + height[0] + " pixels, should be " + InfoHeader.EXPECTED_HEIGHT + " pixels");
         }
 
-        const xPixelsPerM: Uint32Array = new Uint32Array([dataView.getUint32(24, true)]);
-        const yPixelsPerM: Uint32Array = new Uint32Array([dataView.getUint32(28, true)]);
+        const xPixelsPerM: Uint32Array = new Uint32Array([dataView.getUint32(InfoHeader.X_PIXELS_PER_M_OFFSET, true)]);
+        const yPixelsPerM: Uint32Array = new Uint32Array([dataView.getUint32(InfoHeader.Y_PIXELS_PER_M_OFFSET, true)]);
 
         return new InfoHeader(width, height, xPixelsPerM, yPixelsPerM);
     }
