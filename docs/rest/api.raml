@@ -23,7 +23,7 @@ version: 1
           application/json:
             example: |
               {
-                "guid":"438943af323ed43",
+                "id":"438943af323ed43",
                 "url_differences":"http://localhost:3000/image-pair/438943af323ed43/difference",
                 "url_modified":"http://localhost:3000/image-pair/438943af323ed43/modified",
                 "url_original":"http://localhost:3000/image-pair/438943af323ed43/original",
@@ -66,7 +66,7 @@ version: 1
       multipart/form-data:
         properties: 
           name: string
-          image-pair-guid: string
+          image-pair-id: string
           pov:
             type: string
             enum: [Simple, Free]
