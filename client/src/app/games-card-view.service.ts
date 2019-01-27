@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { GameCard } from './gameCard';
+import { GameCard } from "../../../common/communication/gameCard";
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 //import { catchError, map, tap } from 'rxjs/operators';

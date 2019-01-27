@@ -1,6 +1,8 @@
 import { Request } from "express";
+//import fs = require("fs");
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
+//import { Bitmap } from "../model/bitmap";
 
 export class DifferenceController {
 
@@ -19,13 +21,21 @@ export class DifferenceController {
             return this.printError("Le nom est manquant (name)");
         }
 
-        if (!req.body.originalImage) {
+        if(!req.files){
+            return this.printError("Des fichiers doivent être téléversés, aucun fichier n'a été téléversé!");
+        }
+
+        if (!req.files["originalImage"] || req.files["originalImage"].length < 1) {
             return this.printError("L'image originale est manquante (originalImage)");
         }
 
-        if (!req.body.modifiedImage) {
+        if (!req.files["modifiedImage"] || req.files["modifiedImage"].length < 1) {
             return this.printError("L'image modifié est manquante (modifiedImage)");
         }
+        //TODO add verifications for images if the size and the format is ok
+
+       // const bitmap: Bitmap = new Bitmap(new Buffer(fs.readFileSync(req.files["originalImage"].path)));
+        //bitmap.toFile("test");
 
         return JSON.stringify({"message": "it works"});
     }

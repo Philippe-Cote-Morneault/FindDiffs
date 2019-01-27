@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
-import { GameCard } from "./gameCard";
+import { GameCard, POVType } from "../../../common/communication/gameCard";
 import { catchError } from "rxjs/operators";
 
 @Injectable({
@@ -9,15 +9,17 @@ import { catchError } from "rxjs/operators";
 })
 export class GameCardsService {
   private http: HttpClient;
-  private readonly BASE_URL: string = "http://localhost:3000//";
+  private readonly BASE_URL: string = "http://localhost:3000/";
 
   public constructor(http: HttpClient) {
     this.http = http;
   }
 
-  public getSimplePovGameCards(): Observable<GameCard[]> {
-    return this.http.get<GameCard[]>(this.BASE_URL + "gamecards").pipe(
-        catchError(this.handleError<GameCard[]>("getGameCards")),
+  public getGameCards(povType: POVType): Observable<GameCard[]> {
+    const cardType: string = povType === POVType.Simple ? "simple" : "free";
+
+    return this.http.get<GameCard[]>(this.BASE_URL + "gamecards/" + cardType + "POV").pipe(
+      catchError(this.handleError<GameCard[]>("getGameCards")),
     );
   }
 
