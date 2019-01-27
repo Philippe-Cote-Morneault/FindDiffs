@@ -18,7 +18,8 @@
     "per-file": true,
     "include": [
       "app/services/**/*.ts",
-      "app/utils/**/*.ts"
+      "app/utils/**/*.ts",
+      "app/model/**/*.ts"
     ],
     "extension": [
       ".ts"
