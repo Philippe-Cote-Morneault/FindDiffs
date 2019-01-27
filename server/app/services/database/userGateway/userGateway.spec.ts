@@ -1,6 +1,6 @@
 import {expect} from "chai";
-import { DatabaseConnectionHandler } from "./databaseConnectionHandler";
-import { UsernameGateway } from "./usernameGateway";
+import { DatabaseConnectionHandler } from "../databaseConnectionHandler";
+import { UsernameGateway } from "./userGateway";
 
 describe("Usernamegateway", () => {
 
