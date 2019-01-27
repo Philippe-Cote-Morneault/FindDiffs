@@ -1,0 +1,16 @@
+<div id="games_list_view_wrapper">
+  <p> Games List!</p>
+  <div id = "games_container_header">
+      <p> Simple point of view games: </p>
+      <p> Free point of view games: </p>
+  </div>
+  <div id = "games_container_wrapper">
+    <div id = "simple_pov_games_container">
+      <app-games-card-view *ngFor = "let gameCard of games; let i = index"
+        [gameCard] = "games[i]">
+          <p>Hello</p>
+      </app-games-card-view>
+    </div>
+    <div id = "free_pov_games_container"></div>
+  </div>
+</div>
