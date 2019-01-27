@@ -1,4 +1,5 @@
 export interface GameCard {
+    id: string;
     pov: POVType;
     title: string;
     image: string;
