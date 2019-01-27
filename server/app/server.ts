@@ -1,10 +1,8 @@
 import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
-import * as SocketIO from "socket.io";
 import { Application } from "./app";
 import Types from "./types";
-import { GameCard } from "../../common/communication/gameCard";
 
 @injectable()
 export class Server {
@@ -23,26 +21,6 @@ export class Server {
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());
-
-        const io: SocketIO.Server = SocketIO(this.server);
-        const idUsernames: Map<string, string> = new Map<string, string>();
-
-        io.on("connection", (socket: any) => {
-            idUsernames.set(socket.id, "");
-            console.log(idUsernames);
-
-            socket.on("newUsername", (data: any) => idUsernames.set(socket.id, data.name));
-
-            socket.on("gameCardCreated", (card: GameCard) => {
-                io.emit("gameCardCreated", card);
-            });
-
-            console.log(idUsernames.get(socket.id));
-            socket.on("disconnect", function() {
-                console.log("a user left the game! :'(");
-                idUsernames.delete(socket.id);
-            });
-        });
     }
 
     private normalizePort(val: number | string): number | string | boolean {

@@ -1,7 +1,6 @@
 import { Component, HostListener } from "@angular/core";
 import { Message } from "../../../../common/communication/message";
 import { InitialViewService } from "../initial-view.service";
-import { SocketService } from "../socket.service";
 
 @Component({
   selector: "app-initial-view",
@@ -10,7 +9,7 @@ import { SocketService } from "../socket.service";
 })
 export class InitialViewComponent {
 
-  public constructor(public initialViewService: InitialViewService, private socketService: SocketService) { }
+  public constructor(public initialViewService: InitialViewService) { }
   public title: string = "Spot the Differences";
   public button: string = "Accept";
   public verifyUsername(): void {
@@ -25,7 +24,6 @@ export class InitialViewComponent {
   public correctUsername(message: Message): void {
     if (message != null) {
       localStorage.setItem("user", message.body);
-      this.socketService.sendUsername(message.body);
     }
   }
 }
