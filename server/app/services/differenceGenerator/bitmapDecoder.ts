@@ -58,7 +58,7 @@ export class BitmapDecoder {
 
     // TODO: Find out if requires verification of data size to avoid out of bound access.
     private static decodePixels(dataView: DataView, infoHeader: InfoHeader): Pixel[] {
-        let pixelData: Pixel[] = new Array<Pixel>(infoHeader.width[0] * infoHeader.height[0]);
+        const pixelData: Pixel[] = new Array<Pixel>(infoHeader.width[0] * infoHeader.height[0]);
 
         let pos: number = 0;
         for (let y: number = infoHeader.height[0] - 1; y >= 0; --y) {
