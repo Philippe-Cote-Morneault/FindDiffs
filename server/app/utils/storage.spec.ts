@@ -1,8 +1,8 @@
 import {expect} from "chai";
 import * as del from "del";
 import * as fs from "fs";
-import {Storage} from "./storage";
 import { FileNotFoundException } from "../../../common/errors/fileNotFoundException";
+import {Storage} from "./storage";
 
 /*tslint:disable no-magic-numbers */
 
