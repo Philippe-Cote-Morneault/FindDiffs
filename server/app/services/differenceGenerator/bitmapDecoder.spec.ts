@@ -32,25 +32,60 @@ describe("BitmapDecoder", () => {
             expect(bitmap.width).to.equal(640);
         });
 
-        it("Should create a bitmap with a file size of 921 738 bytes", () => {
-            const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
-            expect(bitmap.header.fileSize[0]).to.equal(921738);
+        describe("decodeHeader()", () => {
+            it("Should create a bitmap with a file size of 921 738 bytes", () => {
+                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
+                expect(bitmap.header.fileSize[0]).to.equal(921738);
+            });
+
+            it("should create a bitmap with an offset of 138 bytes", () => {
+                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
+                expect(bitmap.header.dataOffset[0]).to.equal(138);
+            });
+
+            it("Should throw an exception if the image is not a bmp file", () => {
+                expect(() => BitmapDecoder.FromArrayBuffer(bootsBuffer)).to.throw("Not a bmp file");
+            });
         });
 
-        it("Should throw an exception if the image is not a bmp file", () => {
-            expect(() => BitmapDecoder.FromArrayBuffer(bootsBuffer)).to.throw("Not a bmp file");
-        });
-    
-        it("Should throw an exception if the height is bigger than 480 pixels", () => {
-            expect(() => BitmapDecoder.FromArrayBuffer(flame1Buffer)).to.throw(
-                "Height is 481 pixels, should be 480 pixels");
-        });
-    
-        it("Should throw an exception if the width is bigger than 640 pixels", () => {
-            expect(() => BitmapDecoder.FromArrayBuffer(flame2Buffer)).to.throw(
-                "Width is 641 pixels, should be 640 pixels");
+        describe("decodeInfoHeader()", () => {
+            it("Should create a bitmap with a height of 480 pixels", () => {
+                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
+                expect(bitmap.infoHeader.height[0]).to.equal(480);
+            });
+
+            it("Should create a bitmap with a width of 640 pixels", () => {
+                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
+                expect(bitmap.infoHeader.width[0]).to.equal(640);
+            });
+
+            it("Should create a bitmap with 0 xPixelsPerM", () => {
+                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
+                expect(bitmap.infoHeader.xPixelsPerM[0]).to.equal(0);
+            });
+
+            it("Should create a bitmap with 0 yPixelsPerM", () => {
+                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
+                expect(bitmap.infoHeader.yPixelsPerM[0]).to.equal(0);
+            });
+
+            it("Should throw an exception if the height is bigger than 480 pixels", () => {
+                expect(() => BitmapDecoder.FromArrayBuffer(flame1Buffer)).to.throw(
+                    "Height is 481 pixels, should be 480 pixels");
+            });
+
+            it("Should throw an exception if the width is bigger than 640 pixels", () => {
+                expect(() => BitmapDecoder.FromArrayBuffer(flame2Buffer)).to.throw(
+                    "Width is 641 pixels, should be 640 pixels");
+            });
         });
 
+        describe("decodePixels()", () => {
+            it("Should create a bitmap with pixels 307 200 pixels", () => {
+                const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
+                expect(bitmap.pixelData.length).to.equal(640 * 480);
+            });
+        });
             // Create generator
            // const generator: DifferenceImageGenerator = new DifferenceImageGenerator(bitmap, bitmapEdited);
             // The bitmap created by the algorithm
