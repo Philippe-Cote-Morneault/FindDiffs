@@ -30,7 +30,7 @@ export class Storage {
         this.createStorageDirectory();
 
         if (this.exists(guid)) {
-            return fs.readFileSync(this.makePath(guid));
+            return fs.readFileSync(this.makePath(guid)).buffer;
         } else {
             throw new FileNotFoundException(guid);
         }

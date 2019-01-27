@@ -12,10 +12,10 @@ describe("Bitmap", () => {
     it("read bmp", () => {
         let path = require("path");
         // Original image
-        const bitmap: Bitmap = BitmapDecoder.decodeFromArrayBuffer(readFileSync(
+        const bitmap: Bitmap = BitmapDecoder.FromArrayBuffer(readFileSync(
             path.resolve(__dirname, "../../../test/testBitmaps/FLAG_B24.BMP")).buffer);
         // Edited image
-        const bitmapEdited: Bitmap = BitmapDecoder.decodeFromArrayBuffer(readFileSync(
+        const bitmapEdited: Bitmap = BitmapDecoder.FromArrayBuffer(readFileSync(
             path.resolve(__dirname, "../../../test/testBitmaps/FLAG_B24_EDITED.BMP")).buffer);
 
         // Create generator
