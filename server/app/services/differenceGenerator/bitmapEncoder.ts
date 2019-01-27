@@ -10,6 +10,7 @@ export class BitmapEncoder {
     private static PLANES_NUMBER: number = 1;
     private static BITS_PER_PIXEL: number = 24;
     private static COMPRESSION: number = 0;
+    private static IMAGE_SIZE: number = 0;
     private static COLORS_USED: number = 0;
     private static IMPORTANT_COLORS: number = 0;
 
@@ -38,7 +39,7 @@ export class BitmapEncoder {
         dataView.setUint16(12, this.PLANES_NUMBER, true);
         dataView.setUint16(14, this.BITS_PER_PIXEL, true);
         dataView.setUint32(16, this.COMPRESSION, true);
-        dataView.setUint32(20, infoHeader.imageSize[0], true);
+        dataView.setUint32(20, this.IMAGE_SIZE, true);
         dataView.setUint32(24, infoHeader.xPixelsPerM[0], true);
         dataView.setUint32(28, infoHeader.yPixelsPerM[0], true);
         dataView.setUint32(32, this.COLORS_USED, true);
