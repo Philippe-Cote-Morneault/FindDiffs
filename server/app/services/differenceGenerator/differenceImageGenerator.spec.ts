@@ -5,6 +5,8 @@ import { COLOR, Pixel } from "../../model/bitmap/pixel";
 import { BitmapDecoder } from "./bitmapDecoder";
 import { DifferenceImageGenerator } from "./differenceImageGenerator";
 
+/*tslint:disable no-magic-numbers*/
+
 const isColor: Function = (pixels: Pixel[], color: COLOR) => {
 
     const whitePixel: Pixel = Pixel.fromColor(color);
