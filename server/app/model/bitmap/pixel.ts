@@ -13,7 +13,6 @@ export class Pixel {
         this.green = green;
     }
 
-    // TODO: Find a way to get multiple constructors
     public static fromColor(color: COLOR): Pixel {
         switch (color) {
             case COLOR.WHITE: {
