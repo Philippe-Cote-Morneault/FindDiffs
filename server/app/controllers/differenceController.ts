@@ -13,7 +13,7 @@ export class DifferenceController {
 
     public printError(error: string): string {
         const message: Message = {
-            title: "Erreur",
+            title: "Error",
             body: error,
         };
 
@@ -50,7 +50,7 @@ export class DifferenceController {
             modifiedImage = BitmapDecoder.FromArrayBuffer(req.files["modifiedImage"][0].buffer);
 
         } catch (e) {
-            return this.printError(e.Message);
+            return this.printError(e.message);
         }
 
         // We call the difference image generator and save the result with the help of multer.
