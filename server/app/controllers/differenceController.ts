@@ -58,9 +58,14 @@ export class DifferenceController {
         const differences: Bitmap = differenceImageGenerator.generateImage();
 
         const guid: string = Storage.saveBuffer(BitmapEncoder.encodeBitmap(differences));
-        const difference: Difference = {
-            url: "http://localhost:3000/difference/" + guid,
-            guid: guid,
+        const difference: ImagePair = {
+            id: guid,
+            name: req.body.name,
+            url_difference: "http://localhost:3000/image-pair/" + guid + "/difference",
+            url_modified: "http://localhost:3000/image-pair/" + guid + "/modified",
+            url_original: "http://localhost:3000/image-pair/" + guid + "/original",
+            creation_date: new Date(),
+            differences_count: 7,
         };
 
         return JSON.stringify(difference);
