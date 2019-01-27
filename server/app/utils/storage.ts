@@ -1,29 +1,29 @@
 import * as fs from "fs";
-import { v4 } from "uuid";
+import * as uuid from "uuid";
 import { FileNotFoundException } from "../../../common/errors/fileNotFoundException";
 
 export class Storage {
-    private static STORAGE: string = "../../uploads/storage";
+    public static STORAGE_PATH: string = "uploads/storage";
 
     private static createStorageDirectory(): void {
-        fs.mkdirSync(this.STORAGE, {recursive: true});
+        fs.mkdirSync(this.STORAGE_PATH, {recursive: true});
     }
 
     private static makePath(guid: string): string {
-        return this.STORAGE + "/" + guid;
+        return this.STORAGE_PATH + "/" + guid;
     }
 
     private static generateGUID(): string {
-        return v4.toString();
+        return uuid.v4();
     }
 
     public static saveBuffer(buffer: ArrayBuffer): string {
         this.createStorageDirectory();
 
-        const uuid: string = this.generateGUID();
-        fs.writeFileSync(this.makePath(uuid), buffer);
+        const guid: string = this.generateGUID();
+        fs.writeFileSync(this.makePath(guid), buffer);
 
-        return uuid;
+        return guid;
     }
 
     public static openBuffer(guid: string): ArrayBuffer {
@@ -37,7 +37,7 @@ export class Storage {
     }
 
     public static exists(guid: string): boolean {
-        const path: string = this.STORAGE + "/" + guid;
+        const path: string = this.STORAGE_PATH + "/" + guid;
 
         return fs.existsSync(path);
     }
