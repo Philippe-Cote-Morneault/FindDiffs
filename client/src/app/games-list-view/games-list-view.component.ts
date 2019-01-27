@@ -29,6 +29,8 @@ export class GamesListViewComponent implements OnInit {
 
   ngOnInit() {
     this.socketService.onGameCardAdded().subscribe((card) => this.addGameCard(card));
+    this.socketService.onGameCardDeleted().subscribe((card) => this.removeGameCard(card));
+    this.socketService.onGameCardUpdate().subscribe((card) => this.updateGameCard(card));
   }
 
   private addGameCard(gamecard: GameCard): void {
@@ -46,7 +48,19 @@ export class GamesListViewComponent implements OnInit {
       if (array[i].id === gameCard.id) {
          array.splice(i, 1);
       }
+    }
   }
+
+  private updateGameCard(gameCard: GameCard): void {
+    const array: GameCard[] = gameCard.pov === POVType.Simple
+    ? this.simplePOVgames
+    : this.freePOVgames;
+
+    for (let i: number = 0; i < array.length; --i) {
+      if (array[i].id === gameCard.id) {
+         array[i] = gameCard;
+      }
+    }
   }
 
 }
