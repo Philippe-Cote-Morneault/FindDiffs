@@ -2,7 +2,6 @@ import { Bitmap } from "../../model/bitmap/bitmap";
 import { Header, InfoHeader } from "../../model/bitmap/header";
 import { Pixel } from "../../model/bitmap/pixel";
 
-/*tslint:disable no-magic-numbers */
 export class BitmapEncoder {
     private static SIGNATURE_DECIMAL_CODE: number = 16973;
     private static RESERVED_DECIMAL_CODE: number = 0;
@@ -10,6 +9,7 @@ export class BitmapEncoder {
     private static PLANES_NUMBER: number = 1;
     private static BITS_PER_PIXEL: number = 24;
     private static COMPRESSION: number = 0;
+    private static IMAGE_SIZE: number = 0;
     private static COLORS_USED: number = 0;
     private static IMPORTANT_COLORS: number = 0;
 
@@ -24,25 +24,25 @@ export class BitmapEncoder {
     }
 
     private static encodeHeader(header: Header, dataView: DataView): void {
-        dataView.setInt16(0, this.SIGNATURE_DECIMAL_CODE);
-        dataView.setUint32(2, header.fileSize[0], true);
-        dataView.setInt32(6, this.RESERVED_DECIMAL_CODE, true);
-        dataView.setUint32(10, header.dataOffset[0], true);
+        dataView.setInt16(Header.SIGNATURE_OFFSET, this.SIGNATURE_DECIMAL_CODE);
+        dataView.setUint32(Header.FILE_SIZE_OFFSET, header.fileSize[0], true);
+        dataView.setInt32(Header.RESERVED_OFFSET, this.RESERVED_DECIMAL_CODE, true);
+        dataView.setUint32(Header.PIXEL_OFFSET, header.dataOffset[0], true);
 
     }
 
     private static encodeInfoHeader(infoHeader: InfoHeader, dataView: DataView): void {
-        dataView.setUint32(0, this.INFO_HEADER_SIZE, true);
-        dataView.setUint32(4, infoHeader.width[0], true);
-        dataView.setUint32(8, infoHeader.height[0], true);
-        dataView.setUint16(12, this.PLANES_NUMBER, true);
-        dataView.setUint16(14, this.BITS_PER_PIXEL, true);
-        dataView.setUint32(16, this.COMPRESSION, true);
-        dataView.setUint32(20, infoHeader.imageSize[0], true);
-        dataView.setUint32(24, infoHeader.xPixelsPerM[0], true);
-        dataView.setUint32(28, infoHeader.yPixelsPerM[0], true);
-        dataView.setUint32(32, this.COLORS_USED, true);
-        dataView.setUint32(36, this.IMPORTANT_COLORS, true);
+        dataView.setUint32(InfoHeader.INFO_HEADER_OFFSET, this.INFO_HEADER_SIZE, true);
+        dataView.setUint32(InfoHeader.WIDTH_OFFSET, infoHeader.width[0], true);
+        dataView.setUint32(InfoHeader.HEIGHT_OFFSET, infoHeader.height[0], true);
+        dataView.setUint16(InfoHeader.PLANES_OFFSET, this.PLANES_NUMBER, true);
+        dataView.setUint16(InfoHeader.BITS_PER_PIXEL_OFFSET, this.BITS_PER_PIXEL, true);
+        dataView.setUint32(InfoHeader.COMPRESSION_OFFSET, this.COMPRESSION, true);
+        dataView.setUint32(InfoHeader.IMAGE_SIZE_OFFSET, this.IMAGE_SIZE, true);
+        dataView.setUint32(InfoHeader.X_PIXELS_PER_M_OFFSET, infoHeader.xPixelsPerM[0], true);
+        dataView.setUint32(InfoHeader.Y_PIXELS_PER_M_OFFSET, infoHeader.yPixelsPerM[0], true);
+        dataView.setUint32(InfoHeader.COLORS_USED_OFFSET, this.COLORS_USED, true);
+        dataView.setUint32(InfoHeader.IMPORTANT_COLORS_OFFSET, this.IMPORTANT_COLORS, true);
 
     }
 
