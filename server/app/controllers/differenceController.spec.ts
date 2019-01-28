@@ -51,7 +51,7 @@ describe("DifferenceController", () => {
             },
         };
         const response: string = differenceController.genDifference(mockReq(request));
-        const errorMessage: string = "First argument to DataView constructor must be an ArrayBuffer";
+        const errorMessage: string = "Original image is not a file.";
         expect(response).to.equal(differenceController.printError(errorMessage));
     });
 });

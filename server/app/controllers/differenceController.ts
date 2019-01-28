@@ -1,4 +1,5 @@
 import { Request } from "express";
+import * as fs from "fs";
 import "reflect-metadata";
 import { ImagePair } from "../../../common/communication/imagePair";
 import { Message } from "../../../common/communication/message";
@@ -37,23 +38,31 @@ export class DifferenceController {
         if (!req.files["modifiedImage"] || req.files["modifiedImage"].length < 1) {
             throw new InvalidFormatException("Modified image is missing.");
         }
+
+        if (!req.files["originalImage"][0].path) {
+            throw new InvalidFormatException("Original image is not a file.");
+        }
+
+        if (!req.files["modifiedImage"][0].path) {
+            throw new InvalidFormatException("Modified image is not a file.");
+        }
     }
 
     public genDifference(req: Request): string {
-
         let originalImage: Bitmap;
         let modifiedImage: Bitmap;
         try {
             this.validate(req);
-
             // Read file and extract its bytes.
-            originalImage = BitmapDecoder.FromArrayBuffer(req.files["originalImage"][0].buffer);
-            modifiedImage = BitmapDecoder.FromArrayBuffer(req.files["modifiedImage"][0].buffer);
-
+            originalImage = BitmapDecoder.FromArrayBuffer(
+                fs.readFileSync(req.files["originalImage"][0].path).buffer,
+            );
+            modifiedImage = BitmapDecoder.FromArrayBuffer(
+                fs.readFileSync(req.files["modifiedImage"][0].path).buffer,
+            );
         } catch (e) {
             return this.printError(e.message);
         }
-
         // We call the difference image generator and save the result with the help of multer.
         const differenceImageGenerator: DifferenceImageGenerator = new DifferenceImageGenerator(originalImage, modifiedImage);
         const differences: Bitmap = differenceImageGenerator.generateImage();
