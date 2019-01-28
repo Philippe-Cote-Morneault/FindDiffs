@@ -1,6 +1,7 @@
 import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
+import * as SocketIO from "socket.io";
 import { Application } from "./app";
 import Types from "./types";
 
@@ -25,7 +26,7 @@ export class Server {
         const io: SocketIO.Server = SocketIO(this.server);
         const idUsernames: Map<string, string> = new Map<string, string>();
 
-        io.on("connection", (socket: any) => {
+        io.on("connection", (socket: SocketIO.Socket) => {
             idUsernames.set(socket.id, "");
             console.log(idUsernames);
 
