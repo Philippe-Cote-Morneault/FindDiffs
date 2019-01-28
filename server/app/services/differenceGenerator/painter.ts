@@ -21,7 +21,7 @@ export class Painter {
 
     public enlargePixel(pixels: Pixel[], index: number): void {
 
-        const pos: Position = new Position(index % this.width, Math.floor(index / this.width));
+        const pos: Position = Position.fromIndex(index, this.width);
 
         // tslint:disable-next-line:no-magic-numbers
         const brushSize: number = Math.floor(Painter.BRUSH.length / 2);
@@ -39,7 +39,7 @@ export class Painter {
     }
 
     public drawPixel(pixels: Pixel[], pos: Position): void {
-        if ( pos.x >= 0 && pos.x < this.width && pos.y >= 0 && pos.y < this.height ) {
+        if (pos.isInBound(this.width, this.height)) {
 
             // Calculate the position of the pixel
             const index: number = this.width * pos.y + pos.x;
