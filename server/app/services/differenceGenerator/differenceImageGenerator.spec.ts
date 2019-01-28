@@ -7,14 +7,6 @@ import { DifferenceImageGenerator } from "./differenceImageGenerator";
 
 /*tslint:disable no-magic-numbers*/
 
-const isColor: Function = (pixels: Pixel[], color: COLOR) => {
-
-    const whitePixel: Pixel = Pixel.fromColor(color);
-    const whitePixels: Pixel[] = pixels.filter((x: Pixel) => x.equals(whitePixel));
-
-    return whitePixels.length === pixels.length;
-};
-
 describe("DifferenceImageGenerator - Generator", () => {
     let bitmapA: Bitmap;
     let bitmapB: Bitmap;
@@ -30,16 +22,18 @@ describe("DifferenceImageGenerator - Generator", () => {
 
         it("Same images should produce a white image", () => {
             const newBitmap: Bitmap = new DifferenceImageGenerator(bitmapA, bitmapA).generateImage();
-
-            expect(isColor(newBitmap.pixelData, COLOR.WHITE)).to.equal(true);
+            const whitePixel: Pixel = Pixel.fromColor(COLOR.WHITE);
+            const whiteCount: number = newBitmap.pixelData.filter(
+                    (x: Pixel) => x.equals(whitePixel),
+                ).length;
+            expect(whiteCount).to.equal(newBitmap.height * newBitmap.width);
         });
 
         it("Diffrent images of one pixel should produce 37 black pixels", () => {
             const newBitmap: Bitmap = new DifferenceImageGenerator(bitmapA, bitmapB).generateImage();
+            const blackPixel: Pixel = Pixel.fromColor(COLOR.BLACK);
             const blackCount: number = newBitmap.pixelData.filter(
-                (x: Pixel) => x.equals(
-                    Pixel.fromColor(COLOR.BLACK),
-                    ),
+                    (x: Pixel) => x.equals(blackPixel),
                 ).length;
             expect(blackCount).to.equal(37);
         });
