@@ -10,7 +10,7 @@ import { SocketService } from "../socket.service";
 })
 export class InitialViewComponent {
 
-  public constructor(public initialViewService: InitialViewService) { }
+  public constructor(public initialViewService: InitialViewService, private socketService: SocketService) { }
   public title: string = "Spot the Differences";
   public button: string = "Accept";
 
