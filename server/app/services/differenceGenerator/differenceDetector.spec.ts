@@ -28,11 +28,6 @@ describe("DiffenceDetector", () => {
                 path: "test/testBitmaps/differenceCount/7.bmp",
                 differenceCount: 7,
             },
-            {
-                bitmap: undefined,
-                path: "test/testBitmaps/differenceCount/12.bmp",
-                differenceCount: 12,
-            },
         ];
 
         before(async () => {
