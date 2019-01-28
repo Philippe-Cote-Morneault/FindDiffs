@@ -5,6 +5,7 @@ export class DifferenceDetector {
 
     private image: Bitmap;
     private pixels: VisitedPixels[];
+    private blackPixel: Pixel;
 
     public constructor(image: Bitmap) {
         this.image = image;
@@ -16,11 +17,11 @@ export class DifferenceDetector {
                 visited: false,
             });
         });
+        this.blackPixel = Pixel.fromColor(COLOR.BLACK);
     }
     private canVisit(index: number): boolean {
-        const blackPixel: Pixel = Pixel.fromColor(COLOR.BLACK);
 
-        return this.pixels[index].pixel.equals(blackPixel) && !this.pixels[index].visited;
+        return this.pixels[index].pixel.equals(this.blackPixel) && !this.pixels[index].visited;
     }
     private visitNextTo(index: number): void {
         const toCheck: number[] = new Array<number>();
