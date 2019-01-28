@@ -4,17 +4,14 @@ import * as cors from "cors";
 import * as express from "express";
 import { inject, injectable } from "inversify";
 import * as logger from "morgan";
-import * as mongoose from "mongoose";
 import * as path from "path";
 import { Routes } from "./routes";
 import Types from "./types";
-import { DatabaseConnectionHandler } from "./services/database/databaseConnectionHandler";
 
 @injectable()
 export class Application {
 
     private readonly internalError: number = 500;
-    private database: DatabaseConnectionHandler;
     public app: express.Application;
 
     public constructor(@inject(Types.Routes) private api: Routes) {
@@ -23,8 +20,6 @@ export class Application {
         this.config();
 
         this.routes();
-
-        this.mongoSetup();
     }
 
     private config(): void {
@@ -45,11 +40,6 @@ export class Application {
         this.app.use(router);
 
         this.errorHandeling();
-    }
-
-    private mongoSetup(): void{
-        this.database = new DatabaseConnectionHandler();
-        this.database.connect();
     }
 
     private errorHandeling(): void {

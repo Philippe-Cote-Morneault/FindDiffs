@@ -21,6 +21,27 @@ export class Server {
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());
+
+        const io: SocketIO.Server = SocketIO(this.server);
+        const idUsernames: Map<string, string> = new Map<string, string>();
+
+        io.on("connection", (socket: SocketIO.Socket) => {
+            idUsernames.set(socket.id, "");
+            console.log(idUsernames);
+
+            socket.on("newUsername", (data: any) => {
+                idUsernames.set(socket.id, data.name);
+                socket.emit("UsernameValidation", {
+                    isAdded: true,
+                });
+            });
+
+            console.log(idUsernames.get(socket.id));
+            socket.on("disconnect", function() {
+                console.log("a user left the game! :'(");
+                idUsernames.delete(socket.id);
+            });
+        });
     }
 
     private normalizePort(val: number | string): number | string | boolean {

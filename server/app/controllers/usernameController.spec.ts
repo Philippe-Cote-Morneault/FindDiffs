@@ -140,7 +140,7 @@ describe("UsernameController", () => {
   });
   // verifyUsername
   // tslint:disable:typedef
-  it("Should be true if the username (ALPHA) is corretly added when the array is empty", () => {
+  it("Should be true if the username is empty", () => {
     const user: string = "username";
     const request = {
       params: { username : "username", },
@@ -151,6 +151,16 @@ describe("UsernameController", () => {
     usernameController.verifyUsername(mockReq(request), mockRes(response));
     expect(usernameController.usernameArray[0]).to.equal(user);
     usernameController.deleteUsername(mockReq(request));
+  });
+  it("Should be true if the username (ALPHA) is corretly added when the array is empty", () => {
+    const request = {
+      params: { username : "", },
+    };
+    const response = {
+      body: { },
+    };
+    usernameController.verifyUsername(mockReq(request), mockRes(response));
+    expect(usernameController.usernameArray.length).to.equal(0);
   });
   it("Should be true if the username (NUMERIC) is corretly added when the array is empty", () => {
     const user: string = "1234";

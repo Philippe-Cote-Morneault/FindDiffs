@@ -1,11 +1,11 @@
-import { AdminViewComponent } from "./admin-view/admin-view.component";
-import { AppComponent } from "./app.component";
-import { AppRoutingModule } from "./app-routing.module";
-import { BrowserModule } from "@angular/platform-browser";
 import { HttpClientModule } from "@angular/common/http";
-import { InitialViewComponent } from "./initial-view/initial-view.component";
-import { InitialViewService } from "./initial-view.service";
 import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { AdminViewComponent } from "./admin-view/admin-view.component";
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { InitialViewService } from "./initial-view.service";
+import { InitialViewComponent } from "./initial-view/initial-view.component";
 
 @NgModule({
   declarations: [
