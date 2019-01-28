@@ -6,6 +6,7 @@ import { InvalidFormatException } from "../../../common/errors/invalidFormatExce
 import { Bitmap } from "../model/bitmap/bitmap";
 import { BitmapDecoder } from "../services/differenceGenerator/bitmapDecoder";
 import { BitmapEncoder } from "../services/differenceGenerator/bitmapEncoder";
+import { DifferenceDetector } from "../services/differenceGenerator/differenceDetector";
 import { DifferenceImageGenerator } from "../services/differenceGenerator/differenceImageGenerator";
 import { Storage } from "../utils/storage";
 
@@ -65,7 +66,7 @@ export class DifferenceController {
             url_modified: "http://localhost:3000/image-pair/" + guid + "/modified",
             url_original: "http://localhost:3000/image-pair/" + guid + "/original",
             creation_date: new Date(),
-            differences_count: 7,
+            differences_count: new DifferenceDetector(differences).countDifferences(),
         };
 
         return JSON.stringify(difference);

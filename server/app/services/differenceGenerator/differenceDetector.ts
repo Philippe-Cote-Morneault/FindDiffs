@@ -1,7 +1,7 @@
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { COLOR, Pixel, Position } from "../../model/bitmap/pixel";
 
-export class DifferenceDector {
+export class DifferenceDetector {
 
     private image: Bitmap;
     private pixels: VisitedPixels[];
