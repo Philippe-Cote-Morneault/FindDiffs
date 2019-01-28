@@ -1,13 +1,13 @@
 import {expect} from "chai";
 import { DatabaseConnectionHandler } from "../databaseConnectionHandler";
-import { UsernameGateway } from "./userGateway";
+import { UserGateway } from "./userGateway";
 
-describe("Usernamegateway", () => {
+describe("Usergateway", () => {
 
     it("connect", () => {
         let db: DatabaseConnectionHandler = new DatabaseConnectionHandler();
-        let gateway: UsernameGateway = new UsernameGateway(db.database);
-        let doc: any = gateway.getUsername("booba");
+        let gateway: UserGateway = new UserGateway(db.database);
+        let doc: any = gateway.getUsername("test");
         //db.connect();
         expect(doc).to.equal("");
     });

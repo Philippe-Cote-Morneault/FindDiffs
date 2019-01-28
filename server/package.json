@@ -41,6 +41,7 @@
     "instrument": true
   },
   "dependencies": {
+    "@types/mongodb": "^3.1.19",
     "@types/uuid": "^3.4.4",
     "bitmap-ts": "^1.0.3",
     "body-parser": "^1.18.3",
@@ -51,6 +52,7 @@
     "file-saver": "^2.0.0",
     "files": "^0.8.2",
     "inversify": "^4.13.0",
+    "mongodb": "^3.1.13",
     "morgan": "^1.9.1",
     "multer": "^1.4.1",
     "nodemon": "^1.18.9",

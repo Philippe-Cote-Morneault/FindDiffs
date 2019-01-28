@@ -6,17 +6,15 @@ import { GameCardImages } from "../../../../../common/model/gameCard/gameCardIma
 export class GameCardGateway {
     private static collectionName: string = "GameCards";
     private database: Db;
-    private collection: Collection;
+    private collection: Collection<GameCard[]>;
 
     public constructor(database: Db) {
         this.database = database;
         this.setup();
     }
 
-    public getGameCard(username: string): any {
-         this.collection.findOne({name: username, }, (err: Error, doc: any) => {
-            return this.docToGameCard(doc);
-        });
+    public getGameCard(id: string): GameCard {
+        return this.collection.findOne({id: id});
     }
 
     public addGameCard(gameCard: GameCard): void {
@@ -30,13 +28,6 @@ export class GameCardGateway {
             bestTimesSolo: gameCard.bestTimesSolo,
             bestTimesOnline: gameCard.bestTimesOnline,
         });
-    }
-
-    private docToGameCard(doc: any): GameCard {
-        const gameCardInfo: GameCardInfo = new GameCardInfo(doc.id, doc.pov, doc.title);
-        const gameCardImages: GameCardImages = new GameCardImages(doc.originalImage, doc.modifiedImage, doc.differencesImage);
-
-        return new GameCard(gameCardInfo, gameCardImages, doc.bestTimesSolo, doc.bestTimesOnline);
     }
 
     private setup(): void {
