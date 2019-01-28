@@ -6,6 +6,6 @@ export class GameCardImages {
     public constructor(originalImage: string, modifiedImage: string, differencesImage: string) {
         this.originalImage = originalImage;
         this.modifiedImage = modifiedImage;
-        this.differencesImages = differencesImage;
+        this.differencesImage = differencesImage;
     }
 }

@@ -1,5 +1,7 @@
 import { Db, Collection } from "mongodb";
 import { GameCard } from "../../../../../common/model/gameCard/gameCard";
+import { GameCardInfo } from "../../../../../common/model/gameCard/gameCardInfo";
+import { GameCardImages } from "../../../../../common/model/gameCard/gameCardImages";
 
 export class GameCardGateway {
     private static collectionName: string = "GameCards";
@@ -13,21 +15,28 @@ export class GameCardGateway {
 
     public getGameCard(username: string): any {
          this.collection.findOne({name: username, }, (err: Error, doc: any) => {
-            return doc;
+            return this.docToGameCard(doc);
         });
     }
 
     public addGameCard(gameCard: GameCard): void {
         this.collection.insertOne({
-            id: gameCard.id,
-            pov: gameCard.pov,
-            title: gameCard.title,
-            originalImage: gameCard.originalImage,
-            modifiedImage: gameCard.modifiedImage,
-            differencesImage: gameCard.differencesImage,
-            bestTimesSolo: gameCard.bestTimeSolo,
-            bestTImesOnline: gameCard.bestTimeOnline,
+            id: gameCard.info.id,
+            pov: gameCard.info.pov,
+            title: gameCard.info.title,
+            originalImage: gameCard.images.originalImage,
+            modifiedImage: gameCard.images.modifiedImage,
+            differencesImage: gameCard.images.differencesImages,
+            bestTimesSolo: gameCard.bestTimesSolo,
+            bestTimesOnline: gameCard.bestTimesOnline,
         });
+    }
+
+    private docToGameCard(doc: any): GameCard {
+        const gameCardInfo: GameCardInfo = new GameCardInfo(doc.id, doc.pov, doc.title);
+        const gameCardImages: GameCardImages = new GameCardImages(doc.originalImage, doc.modifiedImage, doc.differencesImage);
+
+        return new GameCard(gameCardInfo, gameCardImages, doc.bestTimesSolo, doc.bestTimesOnline);
     }
 
     private setup(): void {
