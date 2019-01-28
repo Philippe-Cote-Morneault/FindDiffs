@@ -30,15 +30,15 @@ export class Server {
             idUsernames.set(socket.id, "");
             console.log(idUsernames);
 
-            socket.on("newUsername", (data: any) => {
-                idUsernames.set(socket.id, data.name);
+            socket.on("newUsername", (data: string) => {
+                idUsernames.set(socket.id, data);
                 socket.emit("UsernameValidation", {
                     isAdded: true,
                 });
             });
 
             console.log(idUsernames.get(socket.id));
-            socket.on("disconnect", function() {
+            socket.on("disconnect", () => {
                 console.log("a user left the game! :'(");
                 idUsernames.delete(socket.id);
             });
