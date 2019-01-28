@@ -21,7 +21,7 @@ export class Storage {
         this.createStorageDirectory();
 
         const guid: string = this.generateGUID();
-        fs.writeFileSync(this.makePath(guid), buffer);
+        fs.writeFileSync(this.makePath(guid), Buffer.from(buffer));
 
         return guid;
     }
