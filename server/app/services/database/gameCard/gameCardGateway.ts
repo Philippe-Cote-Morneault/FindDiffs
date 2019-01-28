@@ -13,10 +13,15 @@ export class GameCardGateway {
         this.setup();
     }
 
-    public getGameCard(id: string): GameCard {
-        return this.collection.findOne({id: id});
+    public async getGameCard(id: string): Promise<GameCard> {
+        let card: GameCard;
+        this.collection.findOne({id: id}, (err: Error, doc: GameCard) => {
+            card = doc;
+        });
+        return card;
     }
 
+    /*
     public addGameCard(gameCard: GameCard): void {
         this.collection.insertOne({
             id: gameCard.info.id,
@@ -29,6 +34,7 @@ export class GameCardGateway {
             bestTimesOnline: gameCard.bestTimesOnline,
         });
     }
+    */
 
     private setup(): void {
         this.database.listCollections({name: GameCardGateway.collectionName})

@@ -1,4 +1,5 @@
 import { Db, MongoClient } from "mongodb";
+import * as mongoose from "mongoose";
 import { UserGateway } from "./user/userGateway";
 
 export class DatabaseConnectionHandler {
@@ -17,6 +18,13 @@ export class DatabaseConnectionHandler {
     }
 
     private connect(): void {
+
+        mongoose.connect(DatabaseConnectionHandler.DB_URL, (err: Error) => {
+            if (err) {
+                throw new Error("Connection to database failed");
+            }
+        });
+
         MongoClient.connect(DatabaseConnectionHandler.DB_URL, {useNewUrlParser : true}, (err: Error, client: MongoClient) => {
             if (!err) {
                 this.database = client.db(DatabaseConnectionHandler.DB_DB);
