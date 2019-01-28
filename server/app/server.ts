@@ -1,7 +1,6 @@
 import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
-import * as SocketIO from "socket.io";
 import { Application } from "./app";
 import Types from "./types";
 

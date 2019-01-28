@@ -26,12 +26,12 @@ export class Routes {
         router.get("/user/:username?",
                    (req: Request, res: Response) => this.usernameValidation.verifyUsername(req, res));
 
-        router.post("/differences", Routes.upload.fields([
+        router.post("/image-pair/", Routes.upload.fields([
             {name: "originalImage", maxCount: 1},
             {name: "modifiedImage", maxCount: 1},
         ]),         (req: Request, res: Response, next: NextFunction) => this.index.postDifference(req, res, next));
 
-        router.get("/user/disconnect/:username?", (req: Request, res: Response) =>
+        router.get("/user/deletion/:username?", (req: Request, res: Response) =>
         this.usernameValidation.deleteUsername(req, res));
 
         return router;
