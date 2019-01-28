@@ -1,8 +1,7 @@
 import {expect} from "chai";
-import {readFileSync, writeFileSync} from "fs";
+import {readFileSync } from "fs";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { BitmapDecoder } from "./bitmapDecoder";
-import { BitmapEncoder } from "./bitmapEncoder";
 //import { DifferenceImageGenerator } from "./differenceImageGenerator";
 
 /* tslint:disable:no-magic-numbers */
@@ -131,7 +130,6 @@ describe("BitmapDecoder", () => {
             });
 
             it("Should create a bitmap with 0 yPixelsPerM", () => {
-                writeFileSync("testing123.bmp", new Buffer(BitmapEncoder.encodeBitmap(fromPixelsImage)));
                 expect(fromPixelsImage.infoHeader.yPixelsPerM[0]).to.equal(0);
             });
         });
