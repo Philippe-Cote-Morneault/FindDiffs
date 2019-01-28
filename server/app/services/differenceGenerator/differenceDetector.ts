@@ -1,0 +1,60 @@
+import { Bitmap } from "../../model/bitmap/bitmap";
+import { COLOR, Pixel, Position } from "../../model/bitmap/pixel";
+
+export class DifferenceDector {
+
+    private image: Bitmap;
+    private pixels: VisitedPixels[];
+
+    public constructor(image: Bitmap) {
+        this.image = image;
+        image.pixelData.forEach((pixel: Pixel) => {
+            this.pixels.push({
+                pixel: pixel,
+                visited: false,
+            });
+        });
+    }
+    private canVisit(index: number): boolean {
+        const blackPixel: Pixel = Pixel.fromColor(COLOR.BLACK);
+
+        return this.pixels[index].pixel.equals(blackPixel) && !this.pixels[index].visited;
+    }
+    private visitNextTo(index: number): void {
+        const pos: Position = Position.fromIndex(index, this.image.width);
+        const newPos: Position = pos.clone();
+
+        // Check all the pixels arround the pixel
+        for (let x: number = -1; x <= 1; x++) {
+            for (let y: number = -1; y <= 1; y++) {
+                newPos.x = pos.x + x;
+                newPos.y = pos.y + y;
+
+                if (newPos.isInBound(this.image.width, this.image.height)) {
+                    const i: number = newPos.getIndex(this.image.width);
+                    if (this.canVisit(i)) {
+                        this.pixels[i].visited = true;
+                        this.visitNextTo(i);
+                    }
+                }
+            }
+        }
+    }
+
+    public countDifferences(): number {
+        let differenceCount: number = 0;
+        for (let i: number = 0; i < this.pixels.length; i++) {
+            if (this.canVisit(i)) {
+                this.visitNextTo(i);
+                differenceCount++;
+            }
+        }
+
+        return differenceCount;
+    }
+}
+
+interface VisitedPixels {
+    pixel: Pixel;
+    visited: boolean;
+}
