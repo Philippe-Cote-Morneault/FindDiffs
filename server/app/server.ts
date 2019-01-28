@@ -30,8 +30,8 @@ export class Server {
             idUsernames.set(socket.id, "");
             console.log(idUsernames);
 
-            socket.on("newUsername", (data: any) => {
-                idUsernames.set(socket.id, data.name);
+            socket.on("newUsername", (username: string) => {
+                idUsernames.set(socket.id, username);
                 socket.emit("UsernameValidation", {
                     isAdded: true,
                 });
