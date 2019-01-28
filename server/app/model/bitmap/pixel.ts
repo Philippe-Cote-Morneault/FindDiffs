@@ -51,7 +51,16 @@ export class Position {
         this.x = x;
         this.y = y;
     }
+    public static fromIndex(index: number, width: number): Position {
+        return new Position(index % width, Math.floor(index / width));
+    }
     public getIndex(width: number): number {
         return width * this.y + this.x;
+    }
+    public isInBound(width: number, height: number): boolean {
+        return this.x >= 0 && this.x < width && this.y >= 0 && this.y < height;
+    }
+    public clone(): Position {
+        return new Position(this.x, this.y);
     }
 }
