@@ -34,7 +34,7 @@ describe("DifferenceGenerator - Painter", () => {
         whitePixels.fill(Pixel.fromColor(COLOR.WHITE));
         const whitePixelsRef: Pixel[] = whitePixels.slice();
 
-        it("The pixel should not be painted if out of bound min in x", () => {
+        it("The pixel should not be painted if not in bound", () => {
             whitePixels.fill(Pixel.fromColor(COLOR.WHITE));
 
             const painter: Painter = new Painter(width, height);
@@ -43,32 +43,6 @@ describe("DifferenceGenerator - Painter", () => {
             expect(whitePixels).to.eql(whitePixelsRef);
         });
 
-        it("The pixel should not be painted if out of bound min in y", () => {
-            whitePixels.fill(Pixel.fromColor(COLOR.WHITE));
-
-            const painter: Painter = new Painter(width, height);
-            painter.drawPixel(whitePixels, new Position(1, -1));
-
-            expect(whitePixels).to.eql(whitePixelsRef);
-        });
-
-        it("The pixel should not be painted if out of bound max in x", () => {
-            whitePixels.fill(Pixel.fromColor(COLOR.WHITE));
-
-            const painter: Painter = new Painter(width, height);
-            painter.drawPixel(whitePixels, new Position(width, 1));
-
-            expect(whitePixels).to.eql(whitePixelsRef);
-        });
-
-        it("The pixel should not be painted if out of bound max in y", () => {
-            whitePixels.fill(Pixel.fromColor(COLOR.WHITE));
-
-            const painter: Painter = new Painter(width, height);
-            painter.drawPixel(whitePixels, new Position(1, height));
-
-            expect(whitePixels).to.eql(whitePixelsRef);
-        });
     });
     describe("enlargePixel()", () => {
         it("Testing brush pattern 1", () => {
