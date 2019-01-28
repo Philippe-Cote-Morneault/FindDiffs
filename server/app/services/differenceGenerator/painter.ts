@@ -13,10 +13,12 @@ export class Painter {
 
     private width: number;
     private height: number;
+    private blackPixel: Pixel;
 
     public constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
+        this.blackPixel = Pixel.fromColor(COLOR.BLACK);
     }
 
     public enlargePixel(pixels: Pixel[], index: number): void {
@@ -40,10 +42,7 @@ export class Painter {
 
     public drawPixel(pixels: Pixel[], pos: Position): void {
         if (pos.isInBound(this.width, this.height)) {
-
-            // Calculate the position of the pixel
-            const index: number = this.width * pos.y + pos.x;
-            pixels[index] = Pixel.fromColor(COLOR.BLACK);
+            pixels[pos.getIndex(this.width)] = this.blackPixel;
         }
     }
 
