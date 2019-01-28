@@ -1,19 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { GameCard } from '../../../../common/communication/gameCard';
+import { Component, Input } from "@angular/core";
+import { GameCard } from "../../../../common/communication/gameCard";
 
 @Component({
-  selector: 'app-games-card-view',
-  templateUrl: './games-card-view.component.html',
-  styleUrls: ['./games-card-view.component.css']
+  selector: "app-games-card-view",
+  templateUrl: "./games-card-view.component.html",
+  styleUrls: ["./games-card-view.component.css"],
 })
-export class GamesCardViewComponent implements OnInit {
+export class GamesCardViewComponent {
   @Input() public gameCard: GameCard;
-  buttonSolo = 'Solo';
-  buttonOnline = '1 vs. 1';
-
-  public constructor() {}
-
-  ngOnInit() {
-  }
-
+  public buttonSolo: string = "Solo";
+  public buttonOnline: string = "1 vs. 1";
 }
