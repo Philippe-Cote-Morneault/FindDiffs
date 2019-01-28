@@ -2,7 +2,7 @@ import {expect} from "chai";
 import * as fs from "fs";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { BitmapDecoder } from "./bitmapDecoder";
-import { DifferenceDector } from "./differenceDetector";
+import { DifferenceDetector } from "./differenceDetector";
 
 interface BmpTests {
     bitmap?: Bitmap;
@@ -41,7 +41,7 @@ describe("DiffenceDetector", () => {
 
         bitmapTests.forEach((bmp: BmpTests) => {
             it("Should return " + bmp.differenceCount + " for " + bmp.path, () => {
-                const detector: DifferenceDector = new DifferenceDector(bmp.bitmap as Bitmap);
+                const detector: DifferenceDetector = new DifferenceDetector(bmp.bitmap as Bitmap);
                 expect(detector.countDifferences()).to.equal(bmp.differenceCount);
             });
         });
