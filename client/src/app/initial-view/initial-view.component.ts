@@ -12,9 +12,17 @@ export class InitialViewComponent {
   public constructor(public initialViewService: InitialViewService) { }
   public title: string = "Spot the Differences";
   public button: string = "Accept";
+
   public verifyUsername(): void {
     const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
-    this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername);
+
+    console.log("sending Username");
+    this.socketService.sendUsername(username);
+
+    console.log("waiting for the event................................................");
+    this.socketService.validationInfo();
+
+    // this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername);
   }
 
   @HostListener("window:unload") public UnloadHander(): void {
@@ -22,8 +30,13 @@ export class InitialViewComponent {
     this.initialViewService.getDeleteUsername(user).subscribe();
   }
   public correctUsername(message: Message): void {
+    console.log("============================================================");
+    console.log("tryin to enter correctUsername function!!!");
     if (message != null) {
-      localStorage.setItem("user", message.body);
+      console.log("entered in if of correctUsername!!");
+      // localStorage.setItem("user", message.body);
+      // this.socketService.sendUsername(message.body);
     }
+    console.log("=============================================================");
   }
 }
