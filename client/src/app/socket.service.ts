@@ -19,8 +19,16 @@ export class SocketService implements OnInit {
     }
 
     public sendUsername(username: string): void {
+        console.log("Calling event 'newUsername'!!! ");
         this.socket.emit("newUsername", {
             name : username,
+        });
+    }
+
+    public validationInfo(): void {
+        console.log("UsernameValidation event received!!!! =D");
+        this.socket.on("UsernameValidation", (truthValue: boolean) => {
+            console.log(truthValue);
         });
     }
 }
