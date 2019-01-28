@@ -1,0 +1,41 @@
+.item1 { grid-area: title; 
+        color: white; 
+        font-size: 30px;}
+.item2 { grid-area: image; }
+.item3 { grid-area: soloTime;
+        color: white; 
+        font-size: 15px; }
+.item4 { grid-area: onlineTime; 
+        color: white;
+        font-size: 15px; }
+.item5 { grid-area: buttonSolo;
+        font-size: 25px; }
+.item6 { grid-area: buttonOnline;
+        font-size: 25px; }
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+  'title title title title title title'
+  'image image soloTime soloTime onlineTime onlineTime'
+  'image image buttonSolo buttonSolo buttonOnline buttonOnline';
+  grid-gap: 5px;
+  background-color: #33343D;
+  padding: 5px;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+.grid-container > div {
+  background-color: #41414E;
+  text-align: center;
+  padding: 20px 0;
+  border-radius: 5px;
+}
+
+.button {
+  background-color: green;
+  color: white;
+  border-radius: 10px;
+  border: #33343D;
+}
