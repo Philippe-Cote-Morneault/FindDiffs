@@ -8,6 +8,8 @@ export class DifferenceDector {
 
     public constructor(image: Bitmap) {
         this.image = image;
+        this.pixels = new Array<VisitedPixels>();
+
         image.pixelData.forEach((pixel: Pixel) => {
             this.pixels.push({
                 pixel: pixel,
@@ -21,20 +23,27 @@ export class DifferenceDector {
         return this.pixels[index].pixel.equals(blackPixel) && !this.pixels[index].visited;
     }
     private visitNextTo(index: number): void {
-        const pos: Position = Position.fromIndex(index, this.image.width);
-        const newPos: Position = pos.clone();
+        const toCheck: number[] = new Array<number>();
+        toCheck.push(index);
 
         // Check all the pixels arround the pixel
-        for (let x: number = -1; x <= 1; x++) {
-            for (let y: number = -1; y <= 1; y++) {
-                newPos.x = pos.x + x;
-                newPos.y = pos.y + y;
+        while (toCheck.length !== 0) {
+            const indexToCheck: number = toCheck.pop() as number;
 
-                if (newPos.isInBound(this.image.width, this.image.height)) {
-                    const i: number = newPos.getIndex(this.image.width);
-                    if (this.canVisit(i)) {
-                        this.pixels[i].visited = true;
-                        this.visitNextTo(i);
+            const pos: Position = Position.fromIndex(indexToCheck, this.image.width);
+            const newPos: Position = pos.clone();
+
+            for (let x: number = -1; x <= 1; x++) {
+                for (let y: number = -1; y <= 1; y++) {
+                    newPos.x = pos.x + x;
+                    newPos.y = pos.y + y;
+
+                    if (newPos.isInBound(this.image.width, this.image.height)) {
+                        const i: number = newPos.getIndex(this.image.width);
+                        if (this.canVisit(i)) {
+                            this.pixels[i].visited = true;
+                            toCheck.push(i);
+                        }
                     }
                 }
             }
