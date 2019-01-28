@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import "reflect-metadata";
-import { Message } from "../../../common/communication/message";
+import { Message } from "../../../../common/communication/message";
 
-export class UsernameController {
+export class UsernameSocket {
     public usernameArray: string[] = [];
     public deleteUsername(req: Request): void {
         const username: string = req.params.username;

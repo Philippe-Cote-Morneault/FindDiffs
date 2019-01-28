@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
 import { injectable, } from "inversify";
 import "reflect-metadata";
-import { UsernameController } from "../controllers/usernameController";
+import { UsernameSocket } from "../services/socket/usernameSocket.service";
 
 @injectable()
 export class UsernameValidation {
-    private usernameController: UsernameController;
+    private usernameSocket: UsernameSocket;
     public constructor() {
-        this.usernameController = new UsernameController();
+        this.usernameSocket = new UsernameSocket();
     }
     public verifyUsername(req: Request, res: Response): void {
-        res.send(this.usernameController.verifyUsername(req, res));
+        res.send(this.usernameSocket.verifyUsername(req, res));
     }
     public deleteUsername(req: Request, res: Response): void {
-        res.send(this.usernameController.deleteUsername(req));
+        res.send(this.usernameSocket.deleteUsername(req));
     }
 }
