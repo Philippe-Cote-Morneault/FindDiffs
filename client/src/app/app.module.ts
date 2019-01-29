@@ -8,12 +8,14 @@ import { AppComponent } from "./app.component";
 // import { AuthGuard } from "./auth.guard";
 import { InitialViewService } from "./initial-view.service";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
+import { CreateGameSimpleViewComponent } from './create-game-simple-view/create-game-simple-view/create-game-simple-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     InitialViewComponent,
     AdminViewComponent,
+    CreateGameSimpleViewComponent,
   ],
   imports: [
     BrowserModule,
