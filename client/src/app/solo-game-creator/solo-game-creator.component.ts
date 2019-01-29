@@ -17,4 +17,22 @@ export class SoloGameCreatorComponent {
   public validateNumberDifferences(): void {
     this.soloGameCreatorService.getVerifyNumberDifferences().subscribe();
   }
+  public generateRandomBestTime(min: number, max: number): number {
+      return Math.floor(Math.random() * (max - min + 1) + 1);
+  }
+
+  public generateBestTimeTable(min: number, max: number): number[] {
+    const timeTable: number[] = [];
+
+    let currentBestTime: number = this.generateRandomBestTime(min, max);
+    timeTable.push(currentBestTime);
+
+    currentBestTime = this.generateRandomBestTime(min, currentBestTime);
+    timeTable.push(currentBestTime);
+
+    currentBestTime = this.generateRandomBestTime(min, currentBestTime);
+    timeTable.push(currentBestTime);
+
+    return timeTable;
+  }
 }
