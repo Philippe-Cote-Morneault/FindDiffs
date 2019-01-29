@@ -20,7 +20,7 @@ import { InitialViewComponent } from "./initial-view/initial-view.component";
     HttpClientModule,
     AppRoutingModule,
   ],
-  providers: [InitialViewService],
+  providers: [InitialViewService, InitialViewComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

@@ -7,12 +7,11 @@ import { InitialViewComponent } from "./initial-view/initial-view.component";
 
 const routes: Routes = [
   { path: "initialView", component: InitialViewComponent},
-  { path: "admin", component: AdminViewComponent, canActivate: [AuthGuard]},
   { path: "admin", component: AdminViewComponent},
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
   exports: [RouterModule],
 
 })

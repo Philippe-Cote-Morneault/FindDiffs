@@ -17,7 +17,7 @@ export class InitialViewComponent {
 
   public verifyUsername(): void {
     const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
-    this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername);
+    this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername.bind(this));
   }
 
   @HostListener("window:beforeunload", ["$event"])
@@ -30,9 +30,8 @@ export class InitialViewComponent {
     if (message != null) {
       this.isLogged = true;
       localStorage.setItem("user", message.body);
-      Object.assign(this, () => {
-        this.router.navigate(["admin"]);
-      });
+      this.router.navigateByUrl("/admin");
+
     } else {
       alert("Invalid username!");
     }
