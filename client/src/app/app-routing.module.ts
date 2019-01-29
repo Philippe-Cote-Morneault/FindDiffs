@@ -2,11 +2,12 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AdminViewComponent } from "./admin-view/admin-view.component";
+import { AuthGuard } from "./auth.guard";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 
 const routes: Routes = [
-  { path: "", component: InitialViewComponent},
-  { path: "initilView", component: InitialViewComponent},
+  { path: "initialView", component: InitialViewComponent},
+  { path: "admin", component: AdminViewComponent, canActivate: [AuthGuard]},
   { path: "admin", component: AdminViewComponent},
 ];
 
