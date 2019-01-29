@@ -1,7 +1,5 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import { of, Observable } from "rxjs";
-import { catchError } from "rxjs/operators";
 import { Message } from "../../../common/communication/message";
 
 @Injectable()
@@ -9,9 +7,22 @@ export class SoloGameCreatorService {
 
   private readonly BASE_URL: string = "http://localhost:3000/user/";
   private readonly SOLO_GAME_GENERATOR_URL: string = "differences/";
-  constructor(private http: HttpClient) { }
+  private const NUMBER_DIFFERENCES = 7;
+  public constructor() { }
 
   public getVerifyNumberDifferences(): Observable<Message> {
-      return this.http.post
+    /*
+    POST: /image-pair
+    body:
+    {
+      "name": ,
+      "originalImage": ,
+      "modifiedImage":
+    }
+    */
+  }
+
+  public verifyNumberDifferences(nbDifferences: number): boolean {
+    return nbDifferences === this.NUMBER_DIFFERENCES;
   }
 }
