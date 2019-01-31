@@ -1,4 +1,4 @@
-import { Document, model, Model, Schema } from "mongoose";
+import { model, Document, Model, Schema,  } from "mongoose";
 import {  GameCard } from "../../../../../common/model/gameCard/gameCard";
 
 export const gameCardSchema: Schema = new Schema ({

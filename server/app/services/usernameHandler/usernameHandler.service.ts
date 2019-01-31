@@ -53,7 +53,7 @@ export class UsernameHandler {
 
     public isAlphaNumeric(username: string): boolean {
         const lowerCaseUsername: string = username.toLowerCase();
-        for(let i = 0; i < lowerCaseUsername.length; i++){
+        for (let i = 0; i < lowerCaseUsername.length; i++) {
             if (!this.isAlpha(lowerCaseUsername[i]) && !this.isNumeric(lowerCaseUsername[i])) {
                 return false;
             }

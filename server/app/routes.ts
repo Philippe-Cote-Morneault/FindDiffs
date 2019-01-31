@@ -8,7 +8,7 @@ import Types from "./types";
 export class Routes {
 
     /* tslint:disable typedef */
-    //TODO ask
+    // TODO ask
     private static upload = multer({
         dest: "uploads/",
     });
