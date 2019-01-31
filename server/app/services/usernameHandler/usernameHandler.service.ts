@@ -3,7 +3,9 @@ import "reflect-metadata";
 import { Message } from "../../../../common/communication/message";
 
 export class UsernameHandler {
+
     public usernameArray: string[] = [];
+
     public deleteUsername(req: Request): void {
         const username: string = req.params.username;
         const index: number = this.usernameArray.indexOf(username);
@@ -12,13 +14,13 @@ export class UsernameHandler {
 
     public verifyUsername(req: Request, res: Response): void {
         const username: string = req.params.username;
-        const messageTitle: string = "VerifyUsername";
+        const title: string = "VerifyUsername";
         if (!this.isEmpty(username)) {
             if (this.isAlphaNumeric(username) && this.isCorrectLength(username)) {
                 if (this.isAvailable(username, this.usernameArray)) {
                     this.add(username, this.usernameArray);
                     const message: Message = {
-                        title: messageTitle,
+                        title: title,
                         body: username,
                     };
                     res.send(JSON.stringify(message));
@@ -31,12 +33,7 @@ export class UsernameHandler {
     }
     public isAvailable(username: string, usernameArray: string[]): boolean {
         if (!this.isArrayEmpty(usernameArray)) {
-            for (let i = 0; i < usernameArray.length; i++) {
-                if (usernameArray[i] === username) {
-
-                    return false;
-                }
-            }
+           return usernameArray.filter((x: string) => x === username).length === 0;
         }
 
         return true;
