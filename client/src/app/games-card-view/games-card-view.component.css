@@ -6,7 +6,8 @@
         color: white; 
         font-size: 15px; }
 .item4 { grid-area: onlineTime; 
-        color: white; }
+        color: white;
+        font-size: 15px; }
 .item5 { grid-area: buttonSolo;
         font-size: 25px; }
 .item6 { grid-area: buttonOnline;

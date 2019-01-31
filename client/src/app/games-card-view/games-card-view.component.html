@@ -6,7 +6,9 @@
 <body>
     <div class="grid-container">
         <div class="item1">{{gameCard.title}}</div>
-        <div class="item2">{{gameCard.image}}</div>
+        <div class="item2">
+            <img src="{{gameCard.image}}" width="150" height="150"/>
+        </div>
         <div class="item3">
             <span> Best solo times: </span>
             <ol *ngFor='let soloTime of gameCard.bestTimeSolo; let i = index'>

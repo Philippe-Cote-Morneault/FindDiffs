@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from "@angular/core";
 import * as io from "socket.io-client";
 import { GameCard } from "../../../common/communication/gameCard";
+
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -15,9 +16,7 @@ export class SocketService implements OnInit {
         this.id = this.socket.id;
      }
 
-    public ngOnInit(): void {
-
-    }
+    public ngOnInit(): void { }
 
     public onGameCardAdded(): Observable<GameCard> {
         return new Observable<GameCard>((observer) => {
