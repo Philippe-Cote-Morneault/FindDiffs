@@ -1,5 +1,4 @@
 import * as mongoose from "mongoose";
-import { gameCard } from "./schemas/gameCardSchema";
 
 export class DatabaseConnectionHandler {
     private static DB_USER: string = "jesus";
@@ -11,52 +10,15 @@ export class DatabaseConnectionHandler {
                                     DatabaseConnectionHandler.DB_PASSWORD + "@" + DatabaseConnectionHandler.DB_HOST + ":" +
                                     DatabaseConnectionHandler.DB_PORT + "/" + DatabaseConnectionHandler.DB_DB;
 
-    //public database: Db;
-    public constructor() {
-        this.connect();
-    }
+    //TODO: See if something needs to be here
+    public constructor() {}
 
-    private connect(): void {
-
+    public connect(onConnect: Function, onError: Function): void {
         mongoose.connect(DatabaseConnectionHandler.DB_URL, (err: Error) => {
             if (err) {
-               // throw new Error("Connection to database failed");
-                console.log("Could not connect to database");
+               onError();
             }
-            
-            let card = new gameCard({
-                guid: "123213fssf",
-                pov: "Simple",
-                title: "this is the title",
-                images: {
-                    id: "12fdsfds",
-                    url_difference: "urlDif",
-                    url_modified: "urlMod",
-                    url_original: "urlOg",
-                    name: "name",
-                    creation_date: new Date(),
-                    differences_count: 7,
-                },
-                bestTimesSolo: [1, 2, 3],
-                bestTimesOnline: [4, 5, 6],
-            });
-            card.save((err) => {
-                if (err) {
-                    console.error("error");
-                    console.log(err);
-                }
-              });
+            onConnect();
         });
-
-        /*
-        MongoClient.connect(DatabaseConnectionHandler.DB_URL, {useNewUrlParser : true}, (err: Error, client: MongoClient) => {
-            if (!err) {
-                this.database = client.db(DatabaseConnectionHandler.DB_DB);
-                console.log("Nous sommes connectés à " + this.database.databaseName);
-            } else {
-                console.log(err);
-            }
-        });
-        */
     }
 }
