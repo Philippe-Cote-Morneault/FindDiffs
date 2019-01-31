@@ -6,6 +6,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { InitialViewService } from "./initial-view.service";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
+import { SoloGameCreatorService } from "./solo-game-creator.service";
 import { SoloGameCreatorComponent } from "./solo-game-creator/solo-game-creator.component";
 
 @NgModule({
@@ -20,7 +21,7 @@ import { SoloGameCreatorComponent } from "./solo-game-creator/solo-game-creator.
     HttpClientModule,
     AppRoutingModule,
   ],
-  providers: [InitialViewService],
+  providers: [InitialViewService, SoloGameCreatorService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
