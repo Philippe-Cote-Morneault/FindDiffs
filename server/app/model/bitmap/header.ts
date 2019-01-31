@@ -1,4 +1,3 @@
-
 export class Header {
     public static BYTES_OFFSET: number = 0;
     public static BYTES_LENGTH: number = 14;
