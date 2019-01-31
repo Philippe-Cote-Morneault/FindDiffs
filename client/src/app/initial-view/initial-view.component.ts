@@ -1,4 +1,5 @@
 import { Component, HostListener } from "@angular/core";
+import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
 import { InitialViewService } from "../initial-view.service";
 
@@ -9,34 +10,27 @@ import { InitialViewService } from "../initial-view.service";
 })
 export class InitialViewComponent {
 
-  public constructor(public initialViewService: InitialViewService) { }
+  public constructor(public initialViewService: InitialViewService, private router: Router) { }
   public title: string = "Spot the Differences";
   public button: string = "Accept";
 
   public verifyUsername(): void {
     const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
-
-    console.log("sending Username");
-    this.socketService.sendUsername(username);
-
-    console.log("waiting for the event................................................");
-    this.socketService.validationInfo();
-
-    // this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername);
+    this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername.bind(this));
   }
 
-  @HostListener("window:unload") public UnloadHander(): void {
+  @HostListener("window:beforeunload", ["$event"])
+  public beforeUnload($event: Event): void  {
     const user: string = JSON.parse(localStorage.getItem("user") || "{}");
-    this.initialViewService.getDeleteUsername(user).subscribe();
+    this.initialViewService.getDeleteUsername(user).toPromise();
   }
   public correctUsername(message: Message): void {
-    console.log("============================================================");
-    console.log("tryin to enter correctUsername function!!!");
     if (message != null) {
-      console.log("entered in if of correctUsername!!");
-      // localStorage.setItem("user", message.body);
-      // this.socketService.sendUsername(message.body);
+      localStorage.setItem("user", message.body);
+      this.router.navigateByUrl("/admin");
+
+    } else {
+      alert("Invalid username!");
     }
-    console.log("=============================================================");
   }
 }
