@@ -6,12 +6,15 @@ import { UsernameHandler } from "../services/usernameHandler/usernameHandler.ser
 @injectable()
 export class UsernameValidation {
     private usernameHandler: UsernameHandler;
+
     public constructor() {
         this.usernameHandler = new UsernameHandler();
     }
+
     public verifyUsername(req: Request, res: Response): void {
         res.send(this.usernameHandler.verifyUsername(req, res));
     }
+
     public deleteUsername(req: Request, res: Response): void {
         res.send(this.usernameHandler.deleteUsername(req));
     }
