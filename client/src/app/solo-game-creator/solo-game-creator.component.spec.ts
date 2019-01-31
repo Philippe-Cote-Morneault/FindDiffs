@@ -8,7 +8,7 @@ describe("SoloGameCreatorComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SoloGameCreatorComponent ]
+      declarations: [ SoloGameCreatorComponent ],
     })
     .compileComponents();
   }));

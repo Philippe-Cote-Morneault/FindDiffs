@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { Bitmap } from "../../../../server/app/model/bitmap/bitmap";
 import { SoloGameCreatorService } from "../solo-game-creator.service";
 
 @Component({
@@ -8,16 +7,16 @@ import { SoloGameCreatorService } from "../solo-game-creator.service";
   styleUrls: ["./solo-game-creator.component.css"],
 })
 
-const ORIGINAL_IMAGE_POSITION: number = 1;
-const MODIFIED_IMAGE_POSITION: number = 2;
+// const ORIGINAL_IMAGE_POSITION: number = 1;
+// const MODIFIED_IMAGE_POSITION: number = 2;
 
 export class SoloGameCreatorComponent {
 
   public constructor(public soloGameCreatorService: SoloGameCreatorService) {}
   public validateNumberDifferences(): void {
-    this.soloGameCreatorService.getVerifyNumberDifferences().subscribe();
+    this.soloGameCreatorService.getVerifyNumberDifferences();
   }
-  public generateRandomBestTime(min: number, max: number): number {
+  private generateRandomBestTime(min: number, max: number): number {
       return Math.floor(Math.random() * (max - min + 1) + 1);
   }
 
@@ -34,5 +33,9 @@ export class SoloGameCreatorComponent {
     timeTable.push(currentBestTime);
 
     return timeTable;
+  }
+
+  public cancelCreation(): void {
+    window.alert("The game creation was cancelled, the modified image needs to have 7 differences");
   }
 }
