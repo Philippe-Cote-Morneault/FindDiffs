@@ -43,7 +43,7 @@ export class Application {
     }
 
     private errorHandeling(): void {
-        // Gestion des erreurs
+        // Error management
         this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
             const err: Error = new Error("Not Found");
             next(err);
