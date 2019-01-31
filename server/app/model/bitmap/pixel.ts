@@ -1,3 +1,6 @@
+export enum COLOR {
+    WHITE, BLACK, RED,
+}
 export class Pixel {
     public static BLACK_PIXEL_VALUE: number = 0;
     public static WHITE_PIXEL_VALUE: number = 255;
@@ -37,10 +40,6 @@ export class Pixel {
     public equals(pixel: Pixel): boolean {
         return (this.red[0] === pixel.red[0] && this.blue[0] === pixel.blue[0] && this.green[0] === pixel.green[0]);
     }
-}
-
-export enum COLOR {
-    WHITE, BLACK, RED,
 }
 
 export class Position {
