@@ -3,15 +3,15 @@ import { COLOR, Pixel, Position } from "../../model/bitmap/pixel";
 
 export class DifferenceDetector {
 
-    private image: Bitmap;
+    private differenceImage: Bitmap;
     private pixels: VisitedPixels[];
     private blackPixel: Pixel;
 
-    public constructor(image: Bitmap) {
-        this.image = image;
+    public constructor(differenceImage: Bitmap) {
+        this.differenceImage = differenceImage;
         this.pixels = new Array<VisitedPixels>();
 
-        image.pixelData.forEach((pixel: Pixel) => {
+        differenceImage.pixelData.forEach((pixel: Pixel) => {
             this.pixels.push({
                 pixel: pixel,
                 visited: false,
@@ -31,7 +31,7 @@ export class DifferenceDetector {
         while (toCheck.length !== 0) {
             const indexToCheck: number = toCheck.pop() as number;
 
-            const pos: Position = Position.fromIndex(indexToCheck, this.image.width);
+            const pos: Position = Position.fromIndex(indexToCheck, this.differenceImage.width);
             const newPos: Position = pos.clone();
 
             for (let x: number = -1; x <= 1; x++) {
@@ -39,8 +39,8 @@ export class DifferenceDetector {
                     newPos.x = pos.x + x;
                     newPos.y = pos.y + y;
 
-                    if (newPos.isInBound(this.image.width, this.image.height)) {
-                        const i: number = newPos.getIndex(this.image.width);
+                    if (newPos.isInBound(this.differenceImage.width, this.differenceImage.height)) {
+                        const i: number = newPos.getIndex(this.differenceImage.width);
                         if (this.canVisit(i)) {
                             this.pixels[i].visited = true;
                             toCheck.push(i);

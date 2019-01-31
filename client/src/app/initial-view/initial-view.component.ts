@@ -24,11 +24,11 @@ export class InitialViewComponent {
     const user: string = JSON.parse(localStorage.getItem("user") || "{}");
     this.initialViewService.getDeleteUsername(user).toPromise();
   }
+
   public correctUsername(message: Message): void {
-    if (message != null) {
+    if (message) {
       localStorage.setItem("user", message.body);
       this.router.navigateByUrl("/admin");
-
     } else {
       alert("Invalid username!");
     }

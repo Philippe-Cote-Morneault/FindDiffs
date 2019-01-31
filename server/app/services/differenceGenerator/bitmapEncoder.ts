@@ -20,7 +20,6 @@ export class BitmapEncoder {
         BitmapEncoder.encodePixels(bitmap.pixelData, new DataView(buffer, bitmap.header.dataOffset[0]), bitmap.infoHeader);
 
         return buffer;
-
     }
 
     private static encodeHeader(header: Header, dataView: DataView): void {
@@ -28,7 +27,6 @@ export class BitmapEncoder {
         dataView.setUint32(Header.FILE_SIZE_OFFSET, header.fileSize[0], true);
         dataView.setInt32(Header.RESERVED_OFFSET, this.RESERVED_DECIMAL_CODE, true);
         dataView.setUint32(Header.PIXEL_OFFSET, header.dataOffset[0], true);
-
     }
 
     private static encodeInfoHeader(infoHeader: InfoHeader, dataView: DataView): void {
@@ -43,7 +41,6 @@ export class BitmapEncoder {
         dataView.setUint32(InfoHeader.Y_PIXELS_PER_M_OFFSET, infoHeader.yPixelsPerM[0], true);
         dataView.setUint32(InfoHeader.COLORS_USED_OFFSET, this.COLORS_USED, true);
         dataView.setUint32(InfoHeader.IMPORTANT_COLORS_OFFSET, this.IMPORTANT_COLORS, true);
-
     }
 
     private static encodePixels(pixels: Pixel[], dataView: DataView, infoHeader: InfoHeader): void {
