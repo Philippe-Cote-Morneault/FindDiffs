@@ -4,7 +4,6 @@ import { AddressInfo } from "net";
 import * as SocketIO from "socket.io";
 import { Application } from "./app";
 import Types from "./types";
-import { GameCard } from "../../common/communication/gameCard";
 
 @injectable()
 export class Server {
@@ -27,14 +26,15 @@ export class Server {
         const io: SocketIO.Server = SocketIO(this.server);
         const idUsernames: Map<string, string> = new Map<string, string>();
 
-        io.on("connection", (socket: any) => {
+        io.on("connection", (socket: SocketIO.Socket) => {
             idUsernames.set(socket.id, "");
             console.log(idUsernames);
 
-            socket.on("newUsername", (data: any) => idUsernames.set(socket.id, data.name));
-
-            socket.on("gameCardCreated", (card: GameCard) => {
-                io.emit("gameCardCreated", card);
+            socket.on("newUsername", (data: any) => {
+                idUsernames.set(socket.id, data.name);
+                socket.emit("UsernameValidation", {
+                    isAdded: true,
+                });
             });
 
             console.log(idUsernames.get(socket.id));

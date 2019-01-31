@@ -9,7 +9,6 @@ const routes: Routes = [
   { path: "", component: InitialViewComponent},
   { path: "initilView", component: InitialViewComponent},
   { path: "admin", component: AdminViewComponent},
-  { path: "gamesList", component: GamesListViewComponent},
 ];
 
 @NgModule({

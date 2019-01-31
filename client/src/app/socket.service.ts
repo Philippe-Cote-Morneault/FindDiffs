@@ -8,11 +8,15 @@ import { Observable } from "rxjs";
     providedIn: "root",
 })
 export class SocketService implements OnInit {
-    public id: string;
-    private socket: SocketIOClient.Socket;
 
-    public constructor() {
+    public constructor() { }
+
+    public id: string;
+    public socket: SocketIOClient.Socket;
+
+    public ngOnInit(): void {
         this.socket = io("http://localhost:3000");
+        console.log("websocket created");
         this.id = this.socket.id;
      }
 
@@ -37,8 +41,16 @@ export class SocketService implements OnInit {
     }
 
     public sendUsername(username: string): void {
+        console.log("Calling event 'newUsername'!!! ");
         this.socket.emit("newUsername", {
             name : username,
+        });
+    }
+
+    public validationInfo(): void {
+        console.log("UsernameValidation event received!!!! =D");
+        this.socket.on("UsernameValidation", (truthValue: boolean) => {
+            console.log(truthValue);
         });
     }
 }
