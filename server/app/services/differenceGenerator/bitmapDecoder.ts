@@ -15,7 +15,6 @@ export class BitmapDecoder {
 
     }
 
-    // TODO: Find a better name for this class or this method
     public static fromPixels(pixels: Pixel[], sampleImage: Bitmap): Bitmap {
         const fileSize: number = sampleImage.header.fileSize[0];
         const offSet: number = Header.BYTES_LENGTH + InfoHeader.BYTES_LENGTH;
@@ -30,9 +29,8 @@ export class BitmapDecoder {
         return new Bitmap(header, infoHeader, pixels);
     }
 
-    // TODO: Find out if offsets magic numbers are fine, find out if filesize and data offset should be checked
     private static decodeHeader(dataView: DataView): Header {
-        if (dataView.getUint16(0) !== Header.SIGNATURE_DECIMAL_CODE) {
+        if (dataView.getUint16(Header.SIGNATURE_OFFSET) !== Header.SIGNATURE_DECIMAL_CODE) {
             throw new InvalidFormatException("Not a bmp file");
         }
         const fileSize: Uint32Array = new Uint32Array([dataView.getUint32(Header.FILE_SIZE_OFFSET, true)]);
@@ -58,7 +56,6 @@ export class BitmapDecoder {
         return new InfoHeader(width, height, xPixelsPerM, yPixelsPerM);
     }
 
-    // TODO: Find out if requires verification of data size to avoid out of bound access.
     private static decodePixels(dataView: DataView, infoHeader: InfoHeader): Pixel[] {
         const pixelData: Pixel[] = new Array<Pixel>(infoHeader.width[0] * infoHeader.height[0]);
 

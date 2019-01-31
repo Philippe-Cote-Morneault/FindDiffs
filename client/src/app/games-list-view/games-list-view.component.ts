@@ -13,24 +13,20 @@ export class GamesListViewComponent implements OnInit {
   public freePOVgames: GameCard[];
 
   public constructor(public gameCardsService: GameCardsService, public socketService: SocketService) { 
-    /*
-    this.games = [{title: "Hello", image: "image1", bestTimeSolo: [1, 2, 3], bestTimeOnline: [4, 5, 6]},
-             {title: "Hello2", image: "image2", bestTimeSolo: [11, 22, 33], bestTimeOnline: [44, 55, 66]}];
-*/
-    this.gameCardsService.getGameCards(POVType.Simple).subscribe((cards) => {
+    this.gameCardsService.getGameCards(POVType.Simple).subscribe((cards: GameCard) => {
       this.simplePOVgames = cards;
     });
 
-    this.gameCardsService.getGameCards(POVType.Free).subscribe((cards) => {
+    this.gameCardsService.getGameCards(POVType.Free).subscribe((cards: GameCard) => {
       this.freePOVgames = cards;
     });
 
   }
 
   public ngOnInit(): void {
-    this.socketService.onGameCardAdded().subscribe((card) => this.addGameCard(card));
-    this.socketService.onGameCardDeleted().subscribe((card) => this.removeGameCard(card));
-    this.socketService.onGameCardUpdate().subscribe((card) => this.updateGameCard(card));
+    this.socketService.onGameCardAdded().subscribe((card: GameCard) => this.addGameCard(card));
+    this.socketService.onGameCardDeleted().subscribe((card: GameCard) => this.removeGameCard(card));
+    this.socketService.onGameCardUpdate().subscribe((card: GameCard) => this.updateGameCard(card));
   }
 
   private addGameCard(gamecard: GameCard): void {

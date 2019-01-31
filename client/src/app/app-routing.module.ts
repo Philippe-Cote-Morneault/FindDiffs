@@ -6,8 +6,7 @@ import { GamesListViewComponent } from "./games-list-view/games-list-view.compon
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 
 const routes: Routes = [
-  { path: "", component: InitialViewComponent},
-  { path: "initilView", component: InitialViewComponent},
+  { path: "initialView", component: InitialViewComponent},
   { path: "admin", component: AdminViewComponent},
 ];
 

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
-import multer = require("multer");
+import * as multer from "multer";
 import { Route } from "./routes/index";
 import { UsernameValidation } from "./routes/usernameRoutes";
 import Types from "./types";
@@ -8,8 +8,9 @@ import Types from "./types";
 export class Routes {
 
     /* tslint:disable typedef */
+    // TODO ask
     private static upload = multer({
-        dest: "uploads/", // this saves your file into a directory called "uploads"
+        dest: "uploads/",
     });
 
     public constructor(

@@ -1,19 +1,16 @@
 import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
-import * as SocketIO from "socket.io";
 import { Application } from "./app";
 import Types from "./types";
 
 @injectable()
 export class Server {
-
     private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || "3000");
     private readonly baseDix: number = 10;
     private server: http.Server;
 
     public constructor(@inject(Types.Application) private application: Application) { }
-
     public init(): void {
         this.application.app.set("port", this.appPort);
 
@@ -22,27 +19,6 @@ export class Server {
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());
-
-        const io: SocketIO.Server = SocketIO(this.server);
-        const idUsernames: Map<string, string> = new Map<string, string>();
-
-        io.on("connection", (socket: SocketIO.Socket) => {
-            idUsernames.set(socket.id, "");
-            console.log(idUsernames);
-
-            socket.on("newUsername", (data: any) => {
-                idUsernames.set(socket.id, data.name);
-                socket.emit("UsernameValidation", {
-                    isAdded: true,
-                });
-            });
-
-            console.log(idUsernames.get(socket.id));
-            socket.on("disconnect", function() {
-                console.log("a user left the game! :'(");
-                idUsernames.delete(socket.id);
-            });
-        });
     }
 
     private normalizePort(val: number | string): number | string | boolean {
@@ -73,9 +49,6 @@ export class Server {
         }
     }
 
-    /**
-     * Se produit lorsque le serveur se met à écouter sur le port.
-     */
     private  onListening(): void {
         const addr: string | AddressInfo = this.server.address();
         const bind: string = (typeof addr === "string") ? `pipe ${addr}` : `port ${addr.port}`;

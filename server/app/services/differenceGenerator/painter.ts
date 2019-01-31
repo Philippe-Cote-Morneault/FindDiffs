@@ -1,7 +1,7 @@
 import { COLOR, Pixel, Position } from "../../model/bitmap/pixel";
 
 export class Painter {
-    private static BRUSH: number[][] = [
+    private static BRUSH_CIRCLE: number[][] = [
         [0, 0, 1, 1, 1, 0, 0],
         [0, 1, 1, 1, 1, 1, 0],
         [1, 1, 1, 1, 1, 1, 1],
@@ -26,15 +26,15 @@ export class Painter {
         const pos: Position = Position.fromIndex(index, this.width);
 
         // tslint:disable-next-line:no-magic-numbers
-        const brushSize: number = Math.floor(Painter.BRUSH.length / 2);
-        pos.x -= brushSize;
-        pos.y -= brushSize;
+        const brushRadius: number = Math.floor(Painter.BRUSH_CIRCLE.length / 2);
+        pos.x -= brushRadius;
+        pos.y -= brushRadius;
 
         // DRAW the circle around the position
-        for (let i: number = 0; i < Painter.BRUSH.length; i++) {
-            for (let j: number = 0; j < Painter.BRUSH.length; j++) {
-                if (Painter.BRUSH[i][j] === 1) {
-                    this.drawPixel(pixels, new Position(pos.x + j, pos.y + i));
+        for (let y: number = 0; y < Painter.BRUSH_CIRCLE.length; y++) {
+            for (let x: number = 0; x < Painter.BRUSH_CIRCLE.length; x++) {
+                if (Painter.BRUSH_CIRCLE[y][x] === 1) {
+                    this.drawPixel(pixels, new Position(pos.x + x, pos.y + y));
                 }
             }
         }
