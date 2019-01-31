@@ -6,10 +6,9 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./admin-view.component.css"],
 })
 export class AdminViewComponent implements OnInit {
-  public simpleMode = "Simple mode";
-  public freeMode = "Free mode";
-  public header = "Create a game in:";
-  public constructor() {}
-  public ngOnInit() {
-  }
+  public simpleMode: string = "Simple mode";
+  public freeMode: string = "Free mode";
+  public header: string = "Create a game in:";
+  public constructor() { }
+  public ngOnInit() { }
 }
