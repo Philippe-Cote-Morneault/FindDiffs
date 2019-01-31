@@ -5,20 +5,20 @@
 
 <body>
     <div class="grid-container">
-        <div class="item1">{{gameCard.title}}</div>
+        <div class="item1">{{imagePair.title}}</div>
         <div class="item2">
-            <img src="{{gameCard.image}}" width="150" height="150"/>
+            <img src="{{imagePair.image}}" width="150" height="150"/>
         </div>
         <div class="item3">
             <span> Best solo times: </span>
-            <ol *ngFor='let soloTime of gameCard.bestTimeSolo; let i = index'>
-                <span> {{i+1}}: </span> {{soloTime}}
+            <ol *ngFor='let soloTime of imagePair.bestTimeSolo; let i = index'>
+                <span> {{i+1}}: </span> {{imagePair.soloTime}}
             </ol> 
         </div>
         <div class="item4">
             <span> Best 1 vs. 1 times: </span>
-            <ol *ngFor='let onlineTime of gameCard.bestTimeOnline;let i = index'>
-                <span> {{i+1}}: </span> {{onlineTime}}
+            <ol *ngFor='let onlineTime of imagePair.bestTimeOnline;let i = index'>
+                <span> {{i+1}}: </span> {{imagePair.onlineTime}}
             </ol>  
         </div>
         <div class="item5">
