@@ -36,7 +36,7 @@
     </p>
     <div class="input-group mb-3">
         {{gameName}}
-        <input type="text" id="usernameInput" class="form-control" placeholder="Enter the name of the game">
+        <input type="text" id="gameInput" class="form-control" placeholder="Enter the name of the game">
       </div>
     <form action="/action_page.php" id="test">
       Original image : <input type="file" name="originalImage"><br><br>
@@ -47,11 +47,11 @@
    <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
 
     <div class="form-group">
-        <label class="col-md-4 control-label" for="submit"></label>
-        <div class="col-md-8">
-          <button id="submit" name="submit" class="btn btn-primary" value="1">Create Profile</button>
-          <button id="cancel" name="cancel" class="btn btn-default">Cancel</button>
-        </div>
+      <label class="col-md-4 control-label" for="submit"></label>
+      <div class="col-md-8">
+        <button id="submit" name="submit" class="btn btn-primary" value="1" (click)="verifyInfoGame()">Create Profile</button>
       </div>
+      <button id="cancel" name="cancel" class="btn btn-default">Cancel</button>
+    </div>
   </div>
 </body>
