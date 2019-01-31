@@ -23,7 +23,7 @@ export class Header {
 export class InfoHeader {
     public static BYTES_OFFSET: number = 14;
     public static BYTES_LENGTH: number = 40;
-    
+
     public static INFO_HEADER_OFFSET: number = 0;
     public static WIDTH_OFFSET: number = 4;
     public static HEIGHT_OFFSET: number = 8;

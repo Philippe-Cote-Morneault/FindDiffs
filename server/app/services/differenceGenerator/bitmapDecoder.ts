@@ -5,6 +5,7 @@ import { Pixel } from "../../model/bitmap/pixel";
 
 export class BitmapDecoder {
 
+    /*tslint:disable no-magic-numbers*/
     public static FromArrayBuffer(arrayBuffer: ArrayBuffer): Bitmap {
         const header: Header = this.decodeHeader(new DataView(arrayBuffer, Header.BYTES_OFFSET, Header.BYTES_LENGTH));
         const infoHeader: InfoHeader = this.decodeInfoHeader(new DataView(arrayBuffer, InfoHeader.BYTES_OFFSET, InfoHeader.BYTES_LENGTH));
