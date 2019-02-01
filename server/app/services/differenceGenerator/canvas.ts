@@ -1,16 +1,14 @@
 import { COLOR, Pixel, Position } from "../../model/bitmap/pixel";
-import { BRUSH } from "./brush";
+import { BLACK_PIXEL, BRUSH } from "./brush";
 
 export class Canvas {
 
     private width: number;
     private height: number;
-    private blackPixel: Pixel;
 
     public constructor(width: number, height: number) {
         this.width = width;
         this.height = height;
-        this.blackPixel = Pixel.fromColor(COLOR.BLACK);
     }
 
     private moveBrush(index: number): Position {
@@ -39,7 +37,7 @@ export class Canvas {
 
     public drawPixel(pixels: Pixel[], pos: Position): void {
         if (pos.isInBound(this.width, this.height)) {
-            pixels[pos.getIndex(this.width)] = this.blackPixel;
+            pixels[pos.getIndex(this.width)] = BLACK_PIXEL;
         }
     }
 
