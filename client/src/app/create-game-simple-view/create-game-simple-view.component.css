@@ -42,8 +42,9 @@ body{
     color:white;
     margin-left: 20px;
   }
-  #test{
-    text-align: left;
-    margin-left: 20%;
-    color:white;
+  #submitId{
+    margin-right: 50px;
+  }
+  #validationServer03{
+    width: auto%;
   }
