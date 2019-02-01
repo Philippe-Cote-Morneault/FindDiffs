@@ -1,4 +1,4 @@
-import { COLOR, Pixel, Position } from "../../model/bitmap/pixel";
+import { Pixel, Position } from "../../model/bitmap/pixel";
 import { BLACK_PIXEL, BRUSH } from "./brush";
 
 export class Canvas {
