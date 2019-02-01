@@ -2,11 +2,12 @@ import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
 import { Application } from "./app";
+import Config from "./config";
 import Types from "./types";
 
 @injectable()
 export class Server {
-    private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || "3000");
+    private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || Config.port);
     private readonly baseDix: number = 10;
     private server: http.Server;
 
