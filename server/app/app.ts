@@ -7,6 +7,7 @@ import * as logger from "morgan";
 import * as path from "path";
 import { Routes } from "./routes";
 import Types from "./types";
+import { DbConnectionHandler } from "./utils/dbConnectionHandler";
 
 @injectable()
 export class Application {
@@ -20,6 +21,18 @@ export class Application {
         this.config();
 
         this.routes();
+
+        // Db connection
+        // tslint:disable no-console
+        const database: DbConnectionHandler = new DbConnectionHandler();
+        database.connect(
+            () => {
+                console.log("Connected to database!");
+            },
+            (err: Error) => {
+                console.log("Error on database");
+                console.error(err);
+            });
     }
 
     private config(): void {
