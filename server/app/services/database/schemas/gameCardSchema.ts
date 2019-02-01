@@ -2,7 +2,7 @@ import { model, Document, Model, Schema,  } from "mongoose";
 import {  GameCard } from "../../../../../common/model/gameCard/gameCard";
 
 export const gameCardSchema: Schema = new Schema ({
-    guid: String,
+    id: String,
     pov: String,
     title: String,
     images: {
