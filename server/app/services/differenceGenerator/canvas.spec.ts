@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import { COLOR, Pixel, Position } from "../../model/bitmap/pixel";
-import { Painter } from "./painter";
+import { Canvas } from "./canvas";
 
 /* tslint:disable no-shadowed-variable no-magic-numbers */
 describe("DifferenceGenerator - Painter", () => {
@@ -9,7 +9,7 @@ describe("DifferenceGenerator - Painter", () => {
             const pixel: Pixel[] = new Array<Pixel>(1);
             pixel.fill(Pixel.fromColor(COLOR.WHITE));
 
-            const painter: Painter = new Painter(1, 1);
+            const painter: Canvas = new Canvas(1, 1);
             painter.drawPixel(pixel, new Position(0, 0));
 
             // Is the pixel black ?
@@ -21,7 +21,7 @@ describe("DifferenceGenerator - Painter", () => {
             const pixels: Pixel[] = new Array<Pixel>(width * height);
             pixels.fill(Pixel.fromColor(COLOR.WHITE));
 
-            const painter: Painter = new Painter(width, height);
+            const painter: Canvas = new Canvas(width, height);
             painter.drawPixel(pixels, new Position(width - 1, 0));
 
             const changedPixel: number = 4;
@@ -37,7 +37,7 @@ describe("DifferenceGenerator - Painter", () => {
         it("The pixel should not be painted if not in bound", () => {
             whitePixels.fill(Pixel.fromColor(COLOR.WHITE));
 
-            const painter: Painter = new Painter(width, height);
+            const painter: Canvas = new Canvas(width, height);
             painter.drawPixel(whitePixels, new Position(-1, 1));
 
             expect(whitePixels).to.eql(whitePixelsRef);
@@ -54,7 +54,7 @@ describe("DifferenceGenerator - Painter", () => {
             const pixelsRef: Pixel[] = pixels.slice();
             pixelsRef.fill(Pixel.fromColor(COLOR.BLACK));
 
-            const painter: Painter = new Painter(width, height);
+            const painter: Canvas = new Canvas(width, height);
             painter.enlargePixel(pixels, new Position(2, 2).getIndex(width));
 
             expect(pixels).to.eql(pixelsRef);
@@ -69,7 +69,7 @@ describe("DifferenceGenerator - Painter", () => {
             const pixelsRef: Pixel[] = pixels.slice();
             pixelsRef.fill(Pixel.fromColor(COLOR.BLACK));
 
-            const painter: Painter = new Painter(width, height);
+            const painter: Canvas = new Canvas(width, height);
             painter.enlargePixel(pixels, new Position(3, 3).getIndex(width));
 
             const whitePixels: number[] = [0, 1, 5, 6, 7, 13, 35, 41, 42, 43, 47, 48];

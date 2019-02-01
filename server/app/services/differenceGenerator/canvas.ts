@@ -1,15 +1,7 @@
 import { COLOR, Pixel, Position } from "../../model/bitmap/pixel";
+import { BRUSH } from "./brush";
 
-export class Painter {
-    private static BRUSH_CIRCLE: number[][] = [
-        [0, 0, 1, 1, 1, 0, 0],
-        [0, 1, 1, 1, 1, 1, 0],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [0, 1, 1, 1, 1, 1, 0],
-        [0, 0, 1, 1, 1, 0, 0],
-    ];
+export class Canvas {
 
     private width: number;
     private height: number;
@@ -21,19 +13,24 @@ export class Painter {
         this.blackPixel = Pixel.fromColor(COLOR.BLACK);
     }
 
-    public enlargePixel(pixels: Pixel[], index: number): void {
-
+    private moveBrush(index: number): Position {
         const pos: Position = Position.fromIndex(index, this.width);
 
         // tslint:disable-next-line:no-magic-numbers
-        const brushRadius: number = Math.floor(Painter.BRUSH_CIRCLE.length / 2);
+        const brushRadius: number = Math.floor(BRUSH.length / 2);
         pos.x -= brushRadius;
         pos.y -= brushRadius;
 
-        // DRAW the circle around the position
-        for (let y: number = 0; y < Painter.BRUSH_CIRCLE.length; y++) {
-            for (let x: number = 0; x < Painter.BRUSH_CIRCLE.length; x++) {
-                if (Painter.BRUSH_CIRCLE[y][x] === 1) {
+        return pos;
+    }
+
+    public enlargePixel(pixels: Pixel[], index: number): void {
+
+        const pos: Position = this.moveBrush(index);
+
+        for (let y: number = 0; y < BRUSH.length; y++) {
+            for (let x: number = 0; x < BRUSH.length; x++) {
+                if (BRUSH[y][x] === 1) {
                     this.drawPixel(pixels, new Position(pos.x + x, pos.y + y));
                 }
             }
