@@ -1,8 +1,8 @@
 import { Injectable, OnInit } from "@angular/core";
 import * as io from "socket.io-client";
-import { GameCard } from "../../../common/communication/gameCard";
+// import { GameCard } from "../../../common/communication/gameCard";
 
-import { Observable } from "rxjs";
+// import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: "root",
@@ -20,8 +20,7 @@ export class SocketService implements OnInit {
         this.id = this.socket.id;
      }
 
-    public ngOnInit(): void { }
-
+/*
     public onGameCardAdded(): Observable<GameCard> {
         return new Observable<GameCard>((observer) => {
             this.socket.on("gameCardAdded", (data: GameCard) => observer.next(data));
@@ -39,7 +38,7 @@ export class SocketService implements OnInit {
             this.socket.on("gameCardUpdated", (data: GameCard) => observer.next(data));
         });
     }
-
+*/
     public sendUsername(username: string): void {
         console.log("Calling event 'newUsername'!!! ");
         this.socket.emit("newUsername", {

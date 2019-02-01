@@ -1,6 +1,7 @@
 import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
+import * as SocketIO from "socket.io";
 import { Application } from "./app";
 import Types from "./types";
 
@@ -19,6 +20,18 @@ export class Server {
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());
+
+        const io: SocketIO.Server = SocketIO(this.server);
+        io.on("connection", (socket: any) => {
+            console.log("Le socket est  connecté!");
+            socket.on("newUsername", (username: string) => {
+                console.log(username);
+            });
+
+            socket.on("disconnect", () => {
+                console.log("Le socket est déconnecté!");
+            });
+        });
     }
 
     private normalizePort(val: number | string): number | string | boolean {
