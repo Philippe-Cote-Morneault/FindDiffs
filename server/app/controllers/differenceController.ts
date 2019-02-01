@@ -1,10 +1,10 @@
 import { Request } from "express";
 import * as fs from "fs";
 import "reflect-metadata";
-import { ImagePair } from "../../../common/communication/imagePair";
 import { Message } from "../../../common/communication/message";
 import { InvalidFormatException } from "../../../common/errors/invalidFormatException";
 import { Bitmap } from "../model/bitmap/bitmap";
+import { ImagePair, IImagePair } from "../model/schemas/imagePair";
 import { BitmapDecoder } from "../services/differenceGenerator/bitmapDecoder";
 import { BitmapEncoder } from "../services/differenceGenerator/bitmapEncoder";
 import { DifferenceDetector } from "../services/differenceGenerator/differenceDetector";
@@ -68,15 +68,13 @@ export class DifferenceController {
         const differences: Bitmap = differenceImageGenerator.generateImage();
 
         const guid: string = Storage.saveBuffer(BitmapEncoder.encodeBitmap(differences));
-        const difference: ImagePair = {
-            id: guid,
+        const difference: IImagePair = new ImagePair({
+            file_id: guid,
             name: req.body.name,
-            url_difference: "http://localhost:3000/image-pair/" + guid + "/difference",
-            url_modified: "http://localhost:3000/image-pair/" + guid + "/modified",
-            url_original: "http://localhost:3000/image-pair/" + guid + "/original",
             creation_date: new Date(),
             differences_count: new DifferenceDetector(differences).countDifferences(),
-        };
+        });
+        difference.save();
 
         return JSON.stringify(difference);
     }
