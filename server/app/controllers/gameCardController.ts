@@ -26,5 +26,6 @@ export class GameCardController {
         }
 
         // TODO database call
+        return "";
     }
 };
