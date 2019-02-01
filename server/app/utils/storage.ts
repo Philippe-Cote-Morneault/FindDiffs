@@ -14,7 +14,7 @@ export class Storage {
     }
 
     private static generateGUID(): string {
-        return uuid.v4();
+        return uuid.v4().replace(/-/g, "");
     }
 
     public static saveBuffer(buffer: ArrayBuffer): string {
