@@ -1,6 +1,7 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { Message } from "../../../../common/communication/message";
+import { ExistsAlreadyException } from "../../../../common/errors/existsAlreadyException";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { IUser, User } from "../../model/schemas/user";
@@ -54,7 +55,7 @@ export class UserService extends Service implements IUserService {
                     return JSON.stringify(user);
                 }
 
-                throw new InvalidFormatException("The username is already taken.");
+                throw new ExistsAlreadyException("The username is already taken.");
 
             }
 
