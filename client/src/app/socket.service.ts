@@ -1,6 +1,7 @@
+/*
 import { Injectable, OnInit } from "@angular/core";
 import * as io from "socket.io-client";
-import { GameCard } from "../../../common/communication/gameCard";
+import { GameCard } from "../../../common/model/gameCard/gameCard";
 
 import { Observable } from "rxjs";
 
@@ -8,8 +9,6 @@ import { Observable } from "rxjs";
     providedIn: "root",
 })
 export class SocketService implements OnInit {
-
-    public constructor() { }
 
     public id: string;
     public socket: SocketIOClient.Socket;
@@ -19,8 +18,6 @@ export class SocketService implements OnInit {
         console.log("websocket created");
         this.id = this.socket.id;
      }
-
-    public ngOnInit(): void { }
 
     public onGameCardAdded(): Observable<GameCard> {
         return new Observable<GameCard>((observer) => {
@@ -39,18 +36,5 @@ export class SocketService implements OnInit {
             this.socket.on("gameCardUpdated", (data: GameCard) => observer.next(data));
         });
     }
-
-    public sendUsername(username: string): void {
-        console.log("Calling event 'newUsername'!!! ");
-        this.socket.emit("newUsername", {
-            name : username,
-        });
-    }
-
-    public validationInfo(): void {
-        console.log("UsernameValidation event received!!!! =D");
-        this.socket.on("UsernameValidation", (truthValue: boolean) => {
-            console.log(truthValue);
-        });
-    }
 }
+*/
