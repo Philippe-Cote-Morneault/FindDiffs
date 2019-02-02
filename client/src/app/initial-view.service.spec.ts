@@ -36,7 +36,7 @@ describe("InitialViewService", () => {
         });
 
         it("should return expected message on deleteUsername request (HttpClient called once)", () => {
-            const expectedMessage: Message = { body: "UsernameDeleted", title: "user1" };
+            const expectedMessage: Message = { title: "UsernameDeleted", body: "user1" };
             const mockUserId: string = "user1";
             httpClientSpyDelete.delete.and.returnValue(TestHelper.asyncData(expectedMessage));
 
@@ -49,6 +49,18 @@ describe("InitialViewService", () => {
             );
 
             expect(httpClientSpyDelete.delete.calls.count()).toBe(1, "one call");
+        });
+
+        it("should return an error", () => {
+            const expectedMessageError: Message = { title: "Error", body: "There is already a user with the same username on the server" };
+            const mockUsername: string = "user1";
+            httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedMessageError));
+
+            initialViewServicePost.postUsernameValidation(mockUsername).subscribe();
+            initialViewServicePost.postUsernameValidation(mockUsername).subscribe((response: Message) => {
+                expect(response.title).toEqual(expectedMessageError.title, "TitleCheck");
+                expect(response.body).toEqual(expectedMessageError.body, "Body check");
+            });
         });
 
     });
