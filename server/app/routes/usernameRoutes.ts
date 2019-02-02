@@ -16,6 +16,6 @@ export class UsernameValidation {
     }
 
     public deleteUsername(req: Request, res: Response): void {
-        res.send(this.usernameHandler.deleteUsername(req));
+        res.send(this.usernameHandler.deleteUsername(req, res));
     }
 }

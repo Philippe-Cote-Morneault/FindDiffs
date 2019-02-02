@@ -6,10 +6,16 @@ export class UsernameHandler {
 
     public usernameArray: string[] = [];
 
-    public deleteUsername(req: Request): void {
+    public deleteUsername(req: Request, res: Response): void {
         const username: string = req.params.username;
+        const title: string = "UsernameDeleted";
         const index: number = this.usernameArray.indexOf(username);
         this.usernameArray.splice(index);
+        const message: Message = {
+            title: title,
+            body: username,
+        };
+        res.send(JSON.stringify(message));
     }
 
     public verifyUsername(req: Request, res: Response): void {
