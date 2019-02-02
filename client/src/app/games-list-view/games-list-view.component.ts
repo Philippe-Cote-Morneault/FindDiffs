@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { GameCard, POVType } from "../../../../common/model/gameCard/gameCard";
+import { CommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GamesCardViewService } from "../services/gamesCard.service";
 import { SocketService } from "../services/socket.service";
 
@@ -9,34 +9,34 @@ import { SocketService } from "../services/socket.service";
   styleUrls: ["./games-list-view.component.css"],
 })
 export class GamesListViewComponent implements OnInit {
-  public simplePOVgames: GameCard[];
-  public freePOVgames: GameCard[];
+  public simplePOVgames: CommonGameCard[];
+  public freePOVgames: CommonGameCard[];
 
   public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService) {
-    this.gameCardsService.getGameCards(POVType.Simple).subscribe((cards: GameCard[]) => {
+    this.gameCardsService.getGameCards(POVType.Simple).subscribe((cards: CommonGameCard[]) => {
       this.simplePOVgames = cards;
     });
 
-    this.gameCardsService.getGameCards(POVType.Free).subscribe((cards: GameCard[]) => {
+    this.gameCardsService.getGameCards(POVType.Free).subscribe((cards: CommonGameCard[]) => {
       this.freePOVgames = cards;
     });
 
   }
 
   public ngOnInit(): void {
-    this.gameCardsService.onGameCardAdded().subscribe((card: GameCard) => this.addGameCard(card));
-    this.gameCardsService.onGameCardDeleted().subscribe((card: GameCard) => this.removeGameCard(card));
-    this.gameCardsService.onGameCardUpdated().subscribe((card: GameCard) => this.updateGameCard(card));
+    this.gameCardsService.onGameCardAdded().subscribe((card: CommonGameCard) => this.addGameCard(card));
+    this.gameCardsService.onGameCardDeleted().subscribe((card: CommonGameCard) => this.removeGameCard(card));
+    this.gameCardsService.onGameCardUpdated().subscribe((card: CommonGameCard) => this.updateGameCard(card));
   }
 
-  private addGameCard(gamecard: GameCard): void {
+  private addGameCard(gamecard: CommonGameCard): void {
     gamecard.pov === POVType.Simple
     ? this.simplePOVgames.push(gamecard)
     : this.freePOVgames.push(gamecard);
   }
 
-  private removeGameCard(gameCard: GameCard): void {
-    const array: GameCard[] = gameCard.pov === POVType.Simple
+  private removeGameCard(gameCard: CommonGameCard): void {
+    const array: CommonGameCard[] = gameCard.pov === POVType.Simple
     ? this.simplePOVgames
     : this.freePOVgames;
 
@@ -47,8 +47,8 @@ export class GamesListViewComponent implements OnInit {
     }
   }
 
-  private updateGameCard(gameCard: GameCard): void {
-    const array: GameCard[] = gameCard.pov === POVType.Simple
+  private updateGameCard(gameCard: CommonGameCard): void {
+    const array: CommonGameCard[] = gameCard.pov === POVType.Simple
     ? this.simplePOVgames
     : this.freePOVgames;
 
