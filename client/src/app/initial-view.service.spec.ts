@@ -1,40 +1,46 @@
 import { Message } from "../../../common/communication/message";
+import { User } from "../../../common/communication/user";
 import { TestHelper } from "../test.helper";
 import { InitialViewService } from "./initial-view.service";
 
 // tslint:disable-next-line:no-any Used to mock the http call
-let httpClientSpy: any;
-let initialViewService: InitialViewService;
+let httpClientSpyPost: any;
+// tslint:disable-next-line:no-any Used to mock the http call
+let httpClientSpyDelete: any;
+let initialViewServicePost: InitialViewService;
+let initialViewServiceDelete: InitialViewService;
 
 describe("InitialViewService", () => {
 
         beforeEach(() => {
-            httpClientSpy = jasmine.createSpyObj("HttpClient", ["get"]);
-            initialViewService = new InitialViewService(httpClientSpy);
+            httpClientSpyPost = jasmine.createSpyObj("HttpClient", ["post"]);
+            httpClientSpyDelete = jasmine.createSpyObj("HttpClient", ["delete"]);
+            initialViewServicePost = new InitialViewService(httpClientSpyPost);
+            initialViewServiceDelete = new InitialViewService(httpClientSpyDelete);
         });
 
         it("should return expected message on verifyUsername request (HttpClient called once)", () => {
-            const expectedMessage: Message = { body: "VerifyUsername", title: "user1" };
-            const mockUser: string = "user1";
-            httpClientSpy.get.and.returnValue(TestHelper.asyncData(expectedMessage));
+            const expectedUser: User = { id: "1", username: "user1" };
+            const mockUsername: string = "user1";
+            httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedUser));
 
-            initialViewService.getUsernameValidation(mockUser).subscribe(
-                (response: Message) => {
-                    expect(response.title).toEqual(expectedMessage.title, "Title check");
-                    expect(response.body).toEqual(expectedMessage.body, "body check");
+            initialViewServicePost.postUsernameValidation(mockUsername).subscribe(
+                (response: User) => {
+                    expect(response.id).toEqual(expectedUser.id, "Id check");
+                    expect(response.username).toEqual(expectedUser.username, "Username check");
                 },
                 fail,
             );
 
-            expect(httpClientSpy.get.calls.count()).toBe(1, "one call");
+            expect(httpClientSpyPost.post.calls.count()).toBe(1, "one call");
         });
 
         it("should return expected message on deleteUsername request (HttpClient called once)", () => {
             const expectedMessage: Message = { body: "UsernameDeleted", title: "user1" };
-            const mockUser: string = "user1";
-            httpClientSpy.get.and.returnValue(TestHelper.asyncData(expectedMessage));
+            const mockUserId: string = "user1";
+            httpClientSpyDelete.delete.and.returnValue(TestHelper.asyncData(expectedMessage));
 
-            initialViewService.deleteUsername(mockUser).subscribe(
+            initialViewServiceDelete.deleteUsername(mockUserId).subscribe(
                 (response: Message) => {
                     expect(response.title).toEqual(expectedMessage.title, "Title check");
                     expect(response.body).toEqual(expectedMessage.body, "body check");
@@ -42,7 +48,7 @@ describe("InitialViewService", () => {
                 fail,
             );
 
-            expect(httpClientSpy.get.calls.count()).toBe(1, "one call");
+            expect(httpClientSpyDelete.delete.calls.count()).toBe(1, "one call");
         });
 
     });
