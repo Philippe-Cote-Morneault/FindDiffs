@@ -13,13 +13,17 @@ export class GamesListViewComponent implements OnInit {
   public freePOVgames: ICommonGameCard[];
 
   public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService) {
-    this.gameCardsService.getGameCards(POVType.Simple).subscribe((cards: ICommonGameCard[]) => {
-      this.simplePOVgames = cards;
+    this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
+      console.log(message);
+      //this.simplePOVgames = cards;
+      //console.log(cards);
     });
 
+    /*
     this.gameCardsService.getGameCards(POVType.Free).subscribe((cards: ICommonGameCard[]) => {
       this.freePOVgames = cards;
     });
+    */
 
   }
 
