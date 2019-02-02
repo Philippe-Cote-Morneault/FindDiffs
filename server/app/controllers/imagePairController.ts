@@ -11,7 +11,7 @@ import { DifferenceDetector } from "../services/differenceGenerator/differenceDe
 import { DifferenceImageGenerator } from "../services/differenceGenerator/differenceImageGenerator";
 import { Storage } from "../utils/storage";
 
-export class DifferenceController {
+export class ImagePairController {
 
     public printError(error: string): string {
         const message: Message = {
