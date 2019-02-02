@@ -2,20 +2,20 @@ import { Request } from "express";
 import * as fs from "fs";
 import { injectable } from "inversify";
 import "reflect-metadata";
-import { Message } from "../../../../common/communication/message";
 import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { ImagePair, IImagePair } from "../../model/schemas/imagePair";
 import { Storage } from "../../utils/storage";
 import { IImagePairService } from "../interfaces";
+import { Service } from "../service";
 import { BitmapDecoder } from "./bitmapDecoder";
 import { BitmapEncoder } from "./bitmapEncoder";
 import { DifferenceDetector } from "./differenceDetector";
 import { DifferenceImageGenerator } from "./differenceImageGenerator";
 
 @injectable()
-export class ImagePairService implements IImagePairService {
+export class ImagePairService extends Service implements IImagePairService {
 
     public async index(): Promise<string> {
         return ImagePair.find({})
@@ -71,15 +71,6 @@ export class ImagePairService implements IImagePairService {
                     throw new FileNotFoundException(fileId);
                 }
             });
-    }
-
-    public printError(error: string): string {
-        const message: Message = {
-            title: "Error",
-            body: error,
-        };
-
-        return JSON.stringify(message);
     }
 
     private validate(req: Request): void {
