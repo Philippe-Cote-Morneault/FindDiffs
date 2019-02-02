@@ -4,11 +4,11 @@ export class GameCardController {
 
     private validateGameCard(req: Request): void {
         if (!req.body.name || req.body.name.lenght === 0) {
-            throw new InvalidFormatException("You must put a name on the gamecard.");
+            throw new InvalidFormatException("You must put a name on the game card.");
         }
 
         if (!req.body.pov) {
-            throw new InvalidFormatException("You must put a pov on the gamecard.");
+            throw new InvalidFormatException("You must put a pov on the game card.");
         }
 
         if (!req.body["image-pair-id"]) {
@@ -28,4 +28,4 @@ export class GameCardController {
         // TODO database call
         return "";
     }
-};
+}

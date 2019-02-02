@@ -2,6 +2,93 @@
 title: Spot the differences API
 baseUri: http://localhost:3000
 version: 1
+/user:
+  description: Manages the user on the server
+  post:
+    description: Create a new user on the server
+    body:
+      multipart/form-data:
+        properties: 
+          username: string
+    responses: 
+      200:
+        description: The user was created successfully
+        body:
+          application/json:
+            example: |
+              {
+                "id":"438943af323ed43",
+                "username":"my user",
+                "creation_date":"2019-02-02 08:11:33.001Z"
+              }
+      409:
+        description: There is already a user with the same username on the server
+        body:
+          application/json:
+            example: |
+              {
+                "title":"Error",
+                "body":"There is already a user with the same username on the server"
+              }
+  get:
+    description: Return a list of all the users on the server
+    responses: 
+      200:
+        description: Returns a list of all users
+        body:
+          application/json:
+            example: |
+              [
+                {
+                  "id":"438943af323ed43",
+                  "username":"my user",
+                  "creation_date":"2019-02-02 08:11:33.001Z"
+                }
+              ]
+  /{id}:
+    delete:
+      description: Delete the user from a server
+      responses: 
+        200:
+          description: Deletes the user from the server
+          body:
+            application/json:
+              example: |
+                {
+                  "title":"Success",
+                  "body":"The user was deleted"
+                }
+        404:
+          description: The user could not be found
+          body:
+            application/json:
+              example: |
+                {
+                  "title":"Error",
+                  "body":"The user could not be found"
+                }
+    get:
+      description: Returns the information about the user
+      responses: 
+        200:
+          description: The user and its data
+          body:
+            application/json:
+              example: |
+                {
+                  "id":"438943af323ed43",
+                  "username":"my user",
+                  "creation_date":"2019-02-02 08:11:33.001Z"
+                }
+        404:
+          description: The user could not be found
+          body:
+            application/json:
+              example: |
+                {
+                  "title":"Error",
+                  "body":"The user could not be found"
+                }
 /image-pair:
   description: Pair of original and modified images
   post:
@@ -31,7 +118,16 @@ version: 1
                 "creation_date":"2019-01-27T19:50:48.036Z",
                 "differences_count":7
               }
-  /{id}/:
+      400:
+        description: "There is an error with the request"
+        body:
+          application/json:
+            example: |
+              {
+                "title":"Error",
+                "body":"The field originalImage is not present in the request"
+              }
+  /{id}:
     get:
       description: Returns a bunch of informations about the pair
       responses:
@@ -40,15 +136,22 @@ version: 1
             application/json:
               example: |
                 {
-                "id":"438943af323ed43",
-                "url_differences":"http://localhost:3000/image-pair/438943af323ed43/difference",
-                "url_modified":"http://localhost:3000/image-pair/438943af323ed43/modified",
-                "url_original":"http://localhost:3000/image-pair/438943af323ed43/original",
-                "name":"The name of the pair",
-                "creation_date":"2019-01-27T19:50:48.036Z",
-                "differences_count":7
+                  "id":"438943af323ed43",
+                  "url_differences":"http://localhost:3000/image-pair/438943af323ed43/difference",
+                  "url_modified":"http://localhost:3000/image-pair/438943af323ed43/modified",
+                  "url_original":"http://localhost:3000/image-pair/438943af323ed43/original",
+                  "name":"The name of the pair",
+                  "creation_date":"2019-01-27T19:50:48.036Z",
+                  "differences_count":7
                 }
-    
+        404:
+          body:
+            application/json:
+              example: |
+                {
+                  "title":"Error",
+                  "body": "The pair could not be found"
+                }
     /difference:
       get:
         description: Returns the bmp file with the differences highlighted
@@ -91,6 +194,14 @@ version: 1
                 },
               "best_time_solo":[1254512,1282445,544512],
               "best_time_online":[1254512,1282445,544512]
+              }
+      400:
+        body:
+          application/json:
+            example: |
+              {
+                "title":"Error",
+                "body":"The pov is not a Simple or free type"
               }
   get:
     description: Retrieve all the gamecards
@@ -152,5 +263,5 @@ version: 1
               example: |
                 {
                 "title":"success",
-                "message":"Gamecard was deleted successfully"
+                "body":"Gamecard was deleted successfully"
                 }

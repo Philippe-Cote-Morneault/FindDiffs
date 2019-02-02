@@ -1,8 +1,8 @@
 import { model, Document, Model, Schema,  } from "mongoose";
-import {  GameCard } from "../../../../../common/model/gameCard/gameCard";
+import {  CommonGameCard } from "../../../../../common/model/gameCard";
 
 export const gameCardSchema: Schema = new Schema ({
-    guid: String,
+    id: String,
     pov: String,
     title: String,
     images: {
@@ -18,6 +18,6 @@ export const gameCardSchema: Schema = new Schema ({
     bestTimesOnline: [Number],
   });
 
-export interface GameCardDocument extends GameCard, Document {}
+export interface GameCardDocument extends CommonGameCard, Document {}
 
 export const gameCard: Model<GameCardDocument> = model<GameCardDocument>("GameCard", gameCardSchema);
