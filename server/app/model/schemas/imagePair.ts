@@ -5,7 +5,9 @@ import Config from "../../config";
 export interface IImagePair extends CommonImagePair, Document {}
 
 export const imagePairSchema: Schema = new Schema({
-    file_id: {type: String, required: true},
+    file_difference_id: {type: String, required: true, select: false},
+    file_original_id: {type: String, required: true, select: false},
+    file_modified_id: {type: String, required: true, select: false},
     name: {type: String, required: true},
     creation_date: {type: Date, required: true},
     differences_count: {type: Number, required: true},
