@@ -2,12 +2,13 @@ import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import { GameCardService } from "../services/gameCard/gameCard.service";
 import TYPES from "../types";
+import { Controller } from "./controller";
 import { IGameCardController } from "./interfaces";
 
 @injectable()
-export class GameCardController implements IGameCardController {
+export class GameCardController extends Controller implements IGameCardController {
 
-    public constructor(@inject(TYPES.IGameCardService) private gameCardService: GameCardService) {}
+    public constructor(@inject(TYPES.IGameCardService) private gameCardService: GameCardService) { super(); }
 
     public get router(): Router {
         const router: Router = Router();
