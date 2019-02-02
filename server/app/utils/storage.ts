@@ -10,7 +10,7 @@ export class Storage {
         fs.mkdirSync(this.STORAGE_PATH, {recursive: true});
     }
 
-    private static makePath(guid: string): string {
+    public static getPath(guid: string): string {
         return this.STORAGE_PATH + "/" + guid;
     }
 
@@ -22,7 +22,7 @@ export class Storage {
         this.createStorageDirectory();
 
         const guid: string = this.generateGUID();
-        fs.writeFileSync(this.makePath(guid), Buffer.from(buffer));
+        fs.writeFileSync(this.getPath(guid), Buffer.from(buffer));
 
         return guid;
     }
@@ -31,7 +31,7 @@ export class Storage {
         this.createStorageDirectory();
 
         if (this.exists(guid)) {
-            return fs.readFileSync(this.makePath(guid)).buffer;
+            return fs.readFileSync(this.getPath(guid)).buffer;
         } else {
             throw new FileNotFoundException(guid);
         }
