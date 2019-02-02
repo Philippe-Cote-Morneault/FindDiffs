@@ -7,7 +7,7 @@ import { IGameCardController } from "./interfaces";
 @injectable()
 export class GameCardController implements IGameCardController {
 
-    public constructor(@inject(TYPES.IGameCardController) private gameCardService: GameCardService) {}
+    public constructor(@inject(TYPES.IGameCardService) private gameCardService: GameCardService) {}
 
     public get router(): Router {
         const router: Router = Router();
