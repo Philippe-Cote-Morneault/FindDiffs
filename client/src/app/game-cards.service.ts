@@ -3,8 +3,7 @@ import { Injectable } from "@angular/core";
 import { of, Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Message } from "../../../common/communication/message";
-import { GameCard } from "../../../common/model/gameCard/gameCard";
-import { POVType } from "../../../common/model/gameCard/gameCard";
+import { CommonGameCard, POVType } from "../../../common/model/gameCard";
 import { Event, SocketService } from "./socket.service";
 
 /*
@@ -22,7 +21,7 @@ export class GamesCardViewService {
 
   private gamesUrl: string = "api/games";
 
-  public getGameCards(povType: POVType): Observable<GameCard[]> {
+  public getGameCards(povType: ): Observable<GameCard[]> {
     return this.http.get<GameCard[]>(this.gamesUrl)
       .pipe(
         catchError(this.handleError("getGameCards", [])),
