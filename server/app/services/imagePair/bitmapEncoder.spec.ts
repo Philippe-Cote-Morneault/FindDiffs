@@ -1,11 +1,11 @@
 import {expect} from "chai";
 import {readFileSync } from "fs";
+import * as path from "path";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { BitmapDecoder } from "./bitmapDecoder";
 import { BitmapEncoder } from "./bitmapEncoder";
 
 describe("BitmapEncoder", () => {
-    let path = require("path");
     const flagBuffer: ArrayBuffer = readFileSync(
         path.resolve(__dirname, "../../../test/testBitmaps/FLAG_B24.bmp")).buffer;
     const bitmap1: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
