@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import "reflect-metadata";
 import { Message } from "../../../../common/communication/message";
 
-export class UsernameHandler {
+export class UserService {
 
     public usernameArray: string[] = [];
 
