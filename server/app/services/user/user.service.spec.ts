@@ -7,24 +7,32 @@ import { UserService } from "./user.service";
 // tslint:disable:typedef
 describe("UserService", () => {
   const userService: UserService = new UserService();
-  const notSetError: string = '{"title":"Error","body":"The field username is not set."}';
-  const notValidError: string = '{"title":"Error","body":"The field username is not valid."}';
-  const alreadyTakenError: string = '{"title":"Error","body":"The username is already taken."}';
+  const notSetError: string = "The field username is not set.";
+  const notValidError: string = "The field username is not valid.";
+  const alreadyTakenError: string = "The username is already taken.";
   const sucessDelete: string = '{"title":"Sucess","body":"The user was deleted."}';
   // IsUsernameValid
   it("Should return the correct error message if input empty", async () => {
     const request = {
       body: { username : "", },
     };
-    const data: string = await userService.post(mockReq(request));
-    expect(data).to.equal(notSetError);
+    try {
+      await userService.post(mockReq(request));
+      throw new Error("No error thrown by service");
+    } catch (err) {
+      expect(err.message).to.equal(notSetError);
+    }
   });
   it("Should return the correct error message if input length is under 3", async () => {
     const request = {
-      body: { username : "", },
+      body: { username : "ab", },
     };
-    const data: string = await userService.post(mockReq(request));
-    expect(data).to.equal(notValidError);
+    try {
+      await userService.post(mockReq(request));
+      throw new Error("No error thrown by service");
+    } catch (err) {
+      expect(err.message).to.equal(notValidError);
+    }
   });
   it("Should return the correct error message if input length is over 12", async () => {
     const request = {
