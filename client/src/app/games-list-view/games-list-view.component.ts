@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { GameCard, POVType } from "../../../../common/communication/gameCard";
-import { GameCardsService } from "../game-cards.service";
+import { GameCard, POVType } from "../../../../common/model/gameCard/gameCard";
+import { GamesCardViewService } from "../gamesCard.service";
 import { SocketService } from "../socket.service";
 
 @Component({
@@ -12,21 +12,21 @@ export class GamesListViewComponent implements OnInit {
   public simplePOVgames: GameCard[];
   public freePOVgames: GameCard[];
 
-  public constructor(public gameCardsService: GameCardsService, public socketService: SocketService) { 
-    this.gameCardsService.getGameCards(POVType.Simple).subscribe((cards: GameCard) => {
+  public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService) {
+    this.gameCardsService.getGameCards(POVType.Simple).subscribe((cards: GameCard[]) => {
       this.simplePOVgames = cards;
     });
 
-    this.gameCardsService.getGameCards(POVType.Free).subscribe((cards: GameCard) => {
+    this.gameCardsService.getGameCards(POVType.Free).subscribe((cards: GameCard[]) => {
       this.freePOVgames = cards;
     });
 
   }
 
   public ngOnInit(): void {
-    this.socketService.onGameCardAdded().subscribe((card: GameCard) => this.addGameCard(card));
-    this.socketService.onGameCardDeleted().subscribe((card: GameCard) => this.removeGameCard(card));
-    this.socketService.onGameCardUpdate().subscribe((card: GameCard) => this.updateGameCard(card));
+    this.gameCardsService.onGameCardAdded().subscribe((card: GameCard) => this.addGameCard(card));
+    this.gameCardsService.onGameCardDeleted().subscribe((card: GameCard) => this.removeGameCard(card));
+    this.gameCardsService.onGameCardUpdated().subscribe((card: GameCard) => this.updateGameCard(card));
   }
 
   private addGameCard(gamecard: GameCard): void {
@@ -41,7 +41,7 @@ export class GamesListViewComponent implements OnInit {
     : this.freePOVgames;
 
     for (let i: number = 0; i < array.length; --i) {
-      if (array[i].id === gameCard.id) {
+      if (array[i].guid === gameCard.guid) {
          array.splice(i, 1);
       }
     }
@@ -53,7 +53,7 @@ export class GamesListViewComponent implements OnInit {
     : this.freePOVgames;
 
     for (let i: number = 0; i < array.length; --i) {
-      if (array[i].id === gameCard.id) {
+      if (array[i].guid === gameCard.guid) {
          array[i] = gameCard;
       }
     }
