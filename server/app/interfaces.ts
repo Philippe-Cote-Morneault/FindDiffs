@@ -1,10 +1,10 @@
-import { Application, Router } from "express";
+import { Application } from "express";
 
-export interface ApplicationInterface {
+export interface IApplication {
     app: Application;
     bindRoutes(): void;
 }
 
-export interface ServerInterface {
+export interface IServer {
     init(): void;
 }
