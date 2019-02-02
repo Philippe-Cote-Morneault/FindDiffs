@@ -14,22 +14,39 @@ export class GameCardController extends Controller implements IGameCardControlle
         const router: Router = Router();
 
         router.post("/", async(req: Request, res: Response, next: NextFunction) => {
-                res.send(await this.gameCardService.post(req));
-            });
+            try {
+                const response: string = await this.gameCardService.post(req);
+                res.send(response);
+            } catch (err) {
+                this.handleError(res, err);
+            }
+        });
 
         router.get("/", async(req: Request, res: Response, next: NextFunction) => {
-            const response: string = await this.gameCardService.index();
-            res.send(response);
+            try {
+                const response: string = await this.gameCardService.index();
+                res.send(response);
+            } catch (err) {
+                this.handleError(res, err);
+            }
         });
 
         router.get("/:id", async(req: Request, res: Response, next: NextFunction) => {
-            const response: string = await this.gameCardService.single(req.params.id);
-            res.send(response);
+            try {
+                const response: string = await this.gameCardService.single(req.params.id);
+                res.send(response);
+            } catch (err) {
+                this.handleError(res, err);
+            }
         });
 
         router.delete("/:id", async(req: Request, res: Response, next: NextFunction) => {
-            const response: string = await this.gameCardService.delete(req.params.id);
-            res.send(response);
+            try {
+                const response: string = await this.gameCardService.delete(req.params.id);
+                res.send(response);
+            } catch (err) {
+                this.handleError(res, err);
+            }
         });
 
         return router;

@@ -33,19 +33,19 @@ export class GameCardService extends Service implements IGameCardService {
     }
 
     public async post(req: Request): Promise<string> {
-            this.validatePost(req);
-            const imagePair: ICommonImagePair = await this.getImagePairId(req.body["image-pair-id"]);
-            const gameCard: IGameCard = new GameCard({
-                pov: req.body.pov,
-                title: req.body.name,
-                imagePairId: imagePair.id,
-                best_time_solo: [0, 0, 0],
-                best_time_online: [0, 0, 0],
-                creation_date: new Date(),
-            });
-            await gameCard.save();
+        this.validatePost(req);
+        const imagePair: ICommonImagePair = await this.getImagePairId(req.body["image-pair-id"]);
+        const gameCard: IGameCard = new GameCard({
+            pov: req.body.pov,
+            title: req.body.name,
+            imagePairId: imagePair.id,
+            best_time_solo: [0, 0, 0],
+            best_time_online: [0, 0, 0],
+            creation_date: new Date(),
+        });
+        await gameCard.save();
 
-            return JSON.stringify(this.getCommonGameCard(gameCard, imagePair));
+        return JSON.stringify(this.getCommonGameCard(gameCard, imagePair));
     }
 
     public async index(): Promise<string> {
