@@ -6,8 +6,8 @@
     </div>
     <div id = "games_container_wrapper">
       <div id = "simple_pov_games_container">
-        <app-games-card-view *ngFor = "let gameCard of games; let i = index"
-          [gameCard] = "games[i]">
+        <app-games-card-view *ngFor = "let gameCard of simplePOVGames; let i = index"
+          [gameCard] = "gameCard">
             <p>Hello</p>
         </app-games-card-view>
       </div>

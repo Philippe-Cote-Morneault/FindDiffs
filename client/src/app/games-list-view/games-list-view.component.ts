@@ -9,12 +9,14 @@ import { SocketService } from "../services/socket.service";
   styleUrls: ["./games-list-view.component.css"],
 })
 export class GamesListViewComponent implements OnInit {
-  public simplePOVgames: ICommonGameCard[];
-  public freePOVgames: ICommonGameCard[];
+  public simplePOVgames: ICommonGameCard[] = [];
+  public freePOVgames: ICommonGameCard[] = [];
 
   public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService) {
     this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
       console.log(message);
+      //this.addGameCard(message[1]);
+      this.simplePOVgames = message;
     });
     /*
     this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
