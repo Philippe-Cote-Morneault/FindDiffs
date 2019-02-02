@@ -17,7 +17,13 @@ import { DifferenceImageGenerator } from "./differenceImageGenerator";
 export class ImagePairService implements IImagePairService {
 
     public async index(): Promise<string> {
-        throw new Error("Method not implemented.");
+        return ImagePair.find({})
+            .then((docs: IImagePair[]) => {
+                return JSON.stringify(docs);
+            }).catch((error: Error) => {
+                // TODO Catch exception and rethrow a diffrent error code
+                return JSON.stringify(this.printError(error.message));
+            });
     }
 
     public async single(id: string): Promise<string> {
