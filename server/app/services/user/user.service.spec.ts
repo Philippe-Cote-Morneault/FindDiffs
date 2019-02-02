@@ -1,6 +1,5 @@
 // import { doesNotReject } from "assert";
 import {expect} from "chai";
-import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
 import { UserService } from "./user.service";
 
@@ -12,6 +11,7 @@ describe("UserService", () => {
     const notValidError: string = "The field username is not valid.";
     const alreadyTakenError: string = "The username is already taken.";
     const sucessDelete: string = '{"title":"Sucess","body":"The user was deleted."}';
+
     // IsUsernameValid
     it("Should return the correct error message if input empty", async () => {
         const request = {
@@ -36,6 +36,7 @@ describe("UserService", () => {
             expect(err.message).to.equal(notValidError);
         }
     });
+
     it("Should return the correct error message if input length is over 12", async () => {
         const request = {
             body: { username : "", },
@@ -43,6 +44,7 @@ describe("UserService", () => {
         const data: string = await userService.post(mockReq(request));
         expect(data).to.equal(notValidError);
     });
+
     it("Should return the correct message if input length is between 3 and 12", async () => {
         const request = {
             body: { username : "", },
@@ -58,6 +60,7 @@ describe("UserService", () => {
         const data: string = await userService.post(mockReq(request));
         expect(data).to.equal(notValidError);
     });
+
     it("Should return the correct message if the input is alpha", async () => {
         const request = {
             body: { username : "", },
@@ -65,6 +68,7 @@ describe("UserService", () => {
         const data: string = await userService.post(mockReq(request));
         expect(data).to.equal("abcde");
     });
+
     it("Should return the correct message if the input is numeric", async () => {
         const request = {
             body: { username : "", },
@@ -91,6 +95,7 @@ describe("UserService", () => {
         const data: string = await userService.delete("");
         expect(data).to.equal(sucessDelete);
     });
+
     it("Should return true if the correct error message is shown during delete", async () => {
         const request = {
             body: { username : "", },
