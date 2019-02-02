@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as multer from "multer";
+import * as path from "path";
 import * as uuid from "uuid";
 import { FileNotFoundException } from "../../../common/errors/fileNotFoundException";
 
@@ -12,6 +13,10 @@ export class Storage {
 
     public static getPath(guid: string): string {
         return this.STORAGE_PATH + "/" + guid;
+    }
+
+    public static getFullPath(guid: string): string {
+        return path.resolve(this.getPath(guid));
     }
 
     private static generateGUID(): string {
@@ -38,9 +43,9 @@ export class Storage {
     }
 
     public static exists(guid: string): boolean {
-        const path: string = this.STORAGE_PATH + "/" + guid;
+        const filePath: string = this.STORAGE_PATH + "/" + guid;
 
-        return fs.existsSync(path);
+        return fs.existsSync(filePath);
     }
 
 }
