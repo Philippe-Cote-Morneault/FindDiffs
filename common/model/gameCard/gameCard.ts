@@ -9,4 +9,4 @@ export interface GameCard {
     bestTimesOnline: number[],
 }
 
-export enum POVType  {Simple = "Simple", Free = "Free"};
+export enum POVType {Simple = "Simple", Free = "Free"};
