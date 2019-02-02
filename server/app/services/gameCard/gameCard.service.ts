@@ -1,6 +1,7 @@
 import Axios, { AxiosResponse } from "axios";
 import { Request } from "express";
 import "reflect-metadata";
+import { Message } from "../../../../common/communication/message";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
@@ -10,7 +11,6 @@ import { GameCard, IGameCard } from "../../model/schemas/gameCard";
 import { EnumUtils } from "../../utils/EnumUtils";
 import { IGameCardService } from "../interfaces";
 import { Service } from "../service";
-import { Message } from "../../../../common/communication/message";
 
 export class GameCardService extends Service implements IGameCardService {
 
@@ -67,7 +67,7 @@ export class GameCardService extends Service implements IGameCardService {
         });
     }
 
-    public single(id: string): Promise<string> {
+    public async single(id: string): Promise<string> {
         return GameCard.findById(id).select("+imagePairId")
         .then(async(doc: IGameCard) => {
             const imagePair: ICommonImagePair = await this.getImagePairId(doc.imagePairId);
@@ -80,10 +80,10 @@ export class GameCardService extends Service implements IGameCardService {
         });
     }
 
-    public delete(id: string): Promise<string> {
+    public async delete(id: string): Promise<string> {
         return GameCard.findById(id)
-        .then((doc: IGameCard) => {
-            doc.remove();
+        .then(async (doc: IGameCard) => {
+            await doc.remove();
             const message: Message = {
                 title: "Success",
                 body: "The gamecard was deleted.",

@@ -99,7 +99,7 @@ export class ImagePairService extends Service implements IImagePairService {
         }
     }
 
-    public post(req: Request): string {
+    public async post(req: Request): Promise<string> {
         let originalImage: Bitmap;
         let modifiedImage: Bitmap;
         try {
@@ -127,7 +127,7 @@ export class ImagePairService extends Service implements IImagePairService {
             creation_date: new Date(),
             differences_count: new DifferenceDetector(differences).countDifferences(),
         });
-        difference.save();
+        await difference.save();
 
         return JSON.stringify(difference);
     }

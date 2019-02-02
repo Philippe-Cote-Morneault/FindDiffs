@@ -19,8 +19,8 @@ export class ImagePairController implements IImagePairController {
                 {name: "originalImage", maxCount: 1},
                 {name: "modifiedImage", maxCount: 1},
             ]),
-            (req: Request, res: Response, next: NextFunction) => {
-                res.send(this.imagePairService.post(req));
+            async (req: Request, res: Response, next: NextFunction) => {
+                res.send(await this.imagePairService.post(req));
             });
 
         router.get("/", async(req: Request, res: Response, next: NextFunction) => {

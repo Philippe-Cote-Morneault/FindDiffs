@@ -1,7 +1,7 @@
 import { Request } from "express";
 
 export interface IImagePairService {
-    post(req: Request): string;
+    post(req: Request): Promise<string>;
     index(): Promise<string>;
     single(id: string): Promise<string>;
     getDifference(id: string): Promise<string>;
