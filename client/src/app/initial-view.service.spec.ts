@@ -34,7 +34,7 @@ describe("InitialViewService", () => {
             const mockUser: string = "user1";
             httpClientSpy.get.and.returnValue(TestHelper.asyncData(expectedMessage));
 
-            initialViewService.getUsernameValidation(mockUser).subscribe(
+            initialViewService.getDeleteUsername(mockUser).subscribe(
                 (response: Message) => {
                     expect(response.title).toEqual(expectedMessage.title, "Title check");
                     expect(response.body).toEqual(expectedMessage.body, "body check");
@@ -44,4 +44,5 @@ describe("InitialViewService", () => {
 
             expect(httpClientSpy.get.calls.count()).toBe(1, "one call");
         });
+
     });
