@@ -1,17 +1,13 @@
 import { Container } from "inversify";
 import { Application } from "./app";
-import { Routes } from "./routes";
-import { Route } from "./routes/index";
-import { UsernameValidation } from "./routes/usernameRoutes";
 import { Server } from "./server";
-import Types from "./types";
+import TYPES from "./types";
+
+import {ApplicationInterface, ServerInterface } from "./interfaces";
 
 const container: Container = new Container();
 
-container.bind(Types.Server).to(Server);
-container.bind(Types.Application).to(Application);
-container.bind(Types.Routes).to(Routes);
+container.bind<ServerInterface>(TYPES.ServerInterface).to(Server);
+container.bind<ApplicationInterface>(TYPES.ApplicationInterface).to(Application);
 
-container.bind(Types.Index).to(Route.Index);
-container.bind(Types.UsernameValidation).to(UsernameValidation);
 export { container };

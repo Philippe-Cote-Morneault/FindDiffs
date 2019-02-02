@@ -1,7 +1,4 @@
 export default  {
-        Server: Symbol("Server"),
-        Application: Symbol("Application"),
-        Routes: Symbol("Routes"),
-        Index: Symbol("Index"),
-        UsernameValidation: Symbol("UsernameValidation"),
+        ServerInterface: Symbol.for("ServerInterface"),
+        ApplicationInterface: Symbol.for("ApplicationInterface"),
 };

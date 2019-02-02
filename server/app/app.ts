@@ -2,37 +2,22 @@ import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import * as cors from "cors";
 import * as express from "express";
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import * as logger from "morgan";
-import * as path from "path";
-import { Routes } from "./routes";
-import Types from "./types";
+import { ApplicationInterface } from "./interfaces";
 import { DbConnectionHandler } from "./utils/dbConnectionHandler";
 
 @injectable()
-export class Application {
+export class Application implements ApplicationInterface {
 
     private readonly internalError: number = 500;
     public app: express.Application;
 
-    public constructor(@inject(Types.Routes) private api: Routes) {
+    public constructor() {
         this.app = express();
-
         this.config();
-
-        this.routes();
-
-        // Db connection
-        // tslint:disable no-console
-        const database: DbConnectionHandler = new DbConnectionHandler();
-        database.connect(
-            () => {
-                console.log("Connected to database!");
-            },
-            (err: Error) => {
-                console.log("Error on database");
-                console.error(err);
-            });
+        this.bindRoutes();
+        this.databaseConnection();
     }
 
     private config(): void {
@@ -41,18 +26,26 @@ export class Application {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(cookieParser());
-        this.app.use(express.static(path.join(__dirname, "../client")));
         this.app.use(cors());
     }
 
-    public routes(): void {
-        const router: express.Router = express.Router();
-
-        router.use(this.api.routes);
-
-        this.app.use(router);
-
+    public bindRoutes(): void {
+        /*this.app.use("/api/index", this.indexController.router);
+        this.app.use("/api/date/", this.dateController.router);*/
         this.errorHandeling();
+    }
+
+    private databaseConnection(): void {
+        // tslint:disable no-console
+        const database: DbConnectionHandler = new DbConnectionHandler();
+        database.connect(
+            () => {
+                console.log("Connected to database!");
+            },
+            (err: Error) => {
+                console.log("Error with database");
+                console.error(err);
+            });
     }
 
     private errorHandeling(): void {
