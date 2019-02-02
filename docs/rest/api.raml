@@ -27,7 +27,7 @@ version: 1
             example: |
               {
                 "title":"Error",
-                "message":"There is already a user with the same username on the server"
+                "body":"There is already a user with the same username on the server"
               }
   get:
     description: Return a list of all the users on the server
@@ -54,7 +54,7 @@ version: 1
               example: |
                 {
                   "title":"Success",
-                  "message":"The user was deleted"
+                  "body":"The user was deleted"
                 }
         404:
           description: The user could not be found
@@ -63,7 +63,7 @@ version: 1
               example: |
                 {
                   "title":"Error",
-                  "message":"The user could not be found"
+                  "body":"The user could not be found"
                 }
 /image-pair:
   description: Pair of original and modified images
@@ -101,7 +101,7 @@ version: 1
             example: |
               {
                 "title":"Error",
-                "message":"The field originalImage is not present in the request"
+                "body":"The field originalImage is not present in the request"
               }
   /{id}:
     get:
@@ -126,7 +126,7 @@ version: 1
               example: |
                 {
                   "title":"Error",
-                  "message": "The pair could not be found"
+                  "body": "The pair could not be found"
                 }
     /difference:
       get:
@@ -177,7 +177,7 @@ version: 1
             example: |
               {
                 "title":"Error",
-                "message":"The pov is not a Simple or free type"
+                "body":"The pov is not a Simple or free type"
               }
   get:
     description: Retrieve all the gamecards
@@ -239,5 +239,5 @@ version: 1
               example: |
                 {
                 "title":"success",
-                "message":"Gamecard was deleted successfully"
+                "body":"Gamecard was deleted successfully"
                 }
