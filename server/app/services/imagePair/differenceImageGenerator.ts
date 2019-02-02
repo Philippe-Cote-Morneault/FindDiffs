@@ -1,7 +1,7 @@
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { COLOR, Pixel } from "../../model/bitmap/pixel";
 import { BitmapDecoder } from "./bitmapDecoder";
-import { Painter } from "./painter";
+import { Canvas } from "./canvas";
 
 export class DifferenceImageGenerator {
 
@@ -19,7 +19,7 @@ export class DifferenceImageGenerator {
 
     private findDifferentPixels(): Pixel[] {
         const differencePixelArray: Pixel[] = new Array<Pixel>(this.originalImage.height * this.originalImage.width);
-        const painter: Painter = new Painter(this.originalImage.width, this.originalImage.height);
+        const painter: Canvas = new Canvas(this.originalImage.width, this.originalImage.height);
 
         differencePixelArray.fill(Pixel.fromColor(COLOR.WHITE));
 

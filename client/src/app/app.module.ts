@@ -4,16 +4,18 @@ import { BrowserModule } from "@angular/platform-browser";
 import { AdminViewComponent } from "./admin-view/admin-view.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { GamesCardViewComponent } from "./games-card-view/games-card-view.component";
+import { GamesListViewComponent } from "./games-list-view/games-list-view.component";
 import { InitialViewService } from "./initial-view.service";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 
-import { GamesCardViewComponent } from "./games-card-view/games-card-view.component";
-import { GamesListViewComponent } from "./games-list-view/games-list-view.component";
 @NgModule({
   declarations: [
     AppComponent,
     InitialViewComponent,
     AdminViewComponent,
+    GamesCardViewComponent,
+    GamesListViewComponent,
   ],
   imports: [
     BrowserModule,

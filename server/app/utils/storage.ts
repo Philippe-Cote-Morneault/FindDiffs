@@ -1,4 +1,6 @@
 import * as fs from "fs";
+import * as multer from "multer";
+import * as path from "path";
 import * as uuid from "uuid";
 import { FileNotFoundException } from "../../../common/errors/fileNotFoundException";
 
@@ -9,19 +11,23 @@ export class Storage {
         fs.mkdirSync(this.STORAGE_PATH, {recursive: true});
     }
 
-    private static makePath(guid: string): string {
+    public static getPath(guid: string): string {
         return this.STORAGE_PATH + "/" + guid;
     }
 
+    public static getFullPath(guid: string): string {
+        return path.resolve(this.getPath(guid));
+    }
+
     private static generateGUID(): string {
-        return uuid.v4();
+        return uuid.v4().replace(/-/g, "");
     }
 
     public static saveBuffer(buffer: ArrayBuffer): string {
         this.createStorageDirectory();
 
         const guid: string = this.generateGUID();
-        fs.writeFileSync(this.makePath(guid), Buffer.from(buffer));
+        fs.writeFileSync(this.getPath(guid), Buffer.from(buffer));
 
         return guid;
     }
@@ -30,16 +36,20 @@ export class Storage {
         this.createStorageDirectory();
 
         if (this.exists(guid)) {
-            return fs.readFileSync(this.makePath(guid)).buffer;
+            return fs.readFileSync(this.getPath(guid)).buffer;
         } else {
             throw new FileNotFoundException(guid);
         }
     }
 
     public static exists(guid: string): boolean {
-        const path: string = this.STORAGE_PATH + "/" + guid;
+        const filePath: string = this.STORAGE_PATH + "/" + guid;
 
-        return fs.existsSync(path);
+        return fs.existsSync(filePath);
     }
 
 }
+
+export const uploads: multer.Instance = multer({
+    dest: Storage.STORAGE_PATH,
+});
