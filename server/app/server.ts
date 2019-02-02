@@ -1,6 +1,7 @@
 import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
+import * as SocketIO from "socket.io";
 import { Application } from "./app";
 import Config from "./config";
 import { IServer } from "./interfaces";
@@ -21,6 +22,16 @@ export class Server implements IServer {
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());
+
+        const io: SocketIO.Server = SocketIO(this.server);
+        // tslint:disable-next-line:max-func-body-length
+        io.on("connection", (socket: any) => {
+
+            socket.on("disconnect", () => {
+                console.log("Le socket est déconnecté!");
+            });
+        });
+
     }
 
     private normalizePort(val: number | string): number | string | boolean {
