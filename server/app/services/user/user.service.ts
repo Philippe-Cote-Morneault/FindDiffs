@@ -7,7 +7,7 @@ import { Service } from "../service";
 
 export class UserService extends Service implements IUserService {
 
-    public index(): Promise<string> {
+    public async index(): Promise<string> {
         return User.find({}).then((docs: IUser[]) => {
             return  JSON.stringify(docs);
         }).catch((error: Error) => {
@@ -15,7 +15,7 @@ export class UserService extends Service implements IUserService {
         });
     }
 
-    public single(id: string): Promise<string> {
+    public async single(id: string): Promise<string> {
         return User.findById(id)
             .then((doc: IUser) => {
                 return JSON.stringify(doc); })
@@ -25,10 +25,10 @@ export class UserService extends Service implements IUserService {
             });
     }
 
-    public delete(id: string): Promise<string> {
+    public async delete(id: string): Promise<string> {
         return User.findById(id)
-        .then((doc: IUser) => {
-            doc.remove();
+        .then(async (doc: IUser) => {
+            await doc.remove();
             const message: Message = {
                 title: "Success",
                 body: "The user was deleted.",
@@ -49,7 +49,7 @@ export class UserService extends Service implements IUserService {
                         username: req.body.username,
                         creation_date: new Date(),
                     });
-                    user.save();
+                    await user.save();
 
                     return JSON.stringify(user);
                 }
@@ -64,7 +64,7 @@ export class UserService extends Service implements IUserService {
         return this.printError("The field username is not set.");
     }
 
-    private isAvailable(username: string): Promise<boolean> {
+    private async isAvailable(username: string): Promise<boolean> {
         return User.countDocuments({username: username}).then((c: number) => {
             return c === 0;
         }).catch((err: Error) => {
