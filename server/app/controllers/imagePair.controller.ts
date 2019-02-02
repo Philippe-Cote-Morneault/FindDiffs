@@ -1,15 +1,15 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
-import { Message } from "../../../common/communication/message";
 import { ImagePairService } from "../services/imagePair/imagePair.service";
 import TYPES from "../types";
 import { uploads } from "../utils/storage";
+import { Controller } from "./controller";
 import { IImagePairController } from "./interfaces";
 
 @injectable()
-export class ImagePairController implements IImagePairController {
+export class ImagePairController extends Controller implements IImagePairController {
 
-    public constructor(@inject(TYPES.IImagePairService) private imagePairService: ImagePairService) {}
+    public constructor(@inject(TYPES.IImagePairService) private imagePairService: ImagePairService) { super(); }
 
     public get router(): Router {
         const router: Router = Router();
@@ -20,7 +20,12 @@ export class ImagePairController implements IImagePairController {
                 {name: "modifiedImage", maxCount: 1},
             ]),
             async (req: Request, res: Response, next: NextFunction) => {
-                res.send(await this.imagePairService.post(req));
+                try {
+                    const response: string = await this.imagePairService.post(req);
+                    res.send(response);
+                } catch (err) {
+                    this.handleError(res, err);
+                }
             });
 
         router.get("/", async(req: Request, res: Response, next: NextFunction) => {
@@ -29,8 +34,12 @@ export class ImagePairController implements IImagePairController {
         });
 
         router.get("/:id", async(req: Request, res: Response, next: NextFunction) => {
-            const response: string = await this.imagePairService.single(req.params.id);
-            res.send(response);
+            try {
+                const response: string = await this.imagePairService.single(req.params.id);
+                res.send(response);
+            } catch (err) {
+                this.handleError(res, err);
+            }
         });
 
         router.get("/:id/difference", async(req: Request, res: Response, next: NextFunction) => {
@@ -40,11 +49,7 @@ export class ImagePairController implements IImagePairController {
                 res.set("Content-Type", "image/bmp");
                 res.sendFile(filePath);
             } catch (err) {
-                const error: Message = {
-                    title: "Error",
-                    body: err.message,
-                };
-                res.json(error);
+                this.handleError(res, err);
             }
         });
 
@@ -55,11 +60,7 @@ export class ImagePairController implements IImagePairController {
                 res.set("Content-Type", "image/bmp");
                 res.sendFile(filePath);
             } catch (err) {
-                const error: Message = {
-                    title: "Error",
-                    body: err.message,
-                };
-                res.json(error);
+                this.handleError(res, err);
             }
         });
 
@@ -70,11 +71,7 @@ export class ImagePairController implements IImagePairController {
                 res.set("Content-Type", "image/bmp");
                 res.sendFile(filePath);
             } catch (err) {
-                const error: Message = {
-                    title: "Error",
-                    body: err.message,
-                };
-                res.json(error);
+                this.handleError(res, err);
             }
         });
 
