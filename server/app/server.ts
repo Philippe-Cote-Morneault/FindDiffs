@@ -6,8 +6,6 @@ import { Application } from "./app";
 import Config from "./config";
 import { IServer } from "./interfaces";
 import Types from "./types";
-import { Message } from "../../common/communication/message";
-import { GameCard, POVType } from "../../common/model/gameCard/gameCard";
 
 @injectable()
 export class Server implements IServer {

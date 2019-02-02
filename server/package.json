@@ -47,6 +47,7 @@
     "@types/uuid": "^3.4.4",
     "bitmap-ts": "^1.0.3",
     "body-parser": "^1.18.3",
+    "chai-bytes": "^0.1.2",
     "cookie-parser": "1.4.1",
     "cors": "2.8.4",
     "debug": "^4.1.1",

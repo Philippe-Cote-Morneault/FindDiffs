@@ -1,9 +1,8 @@
 import {expect} from "chai";
 import {readFileSync } from "fs";
+import { Bitmap } from "../../model/bitmap/bitmap";
 import { BitmapDecoder } from "./bitmapDecoder";
 import { BitmapEncoder } from "./bitmapEncoder";
-import { Bitmap } from "../../model/bitmap/bitmap";
-
 
 describe("BitmapEncoder", () => {
     let path = require("path");
@@ -14,8 +13,19 @@ describe("BitmapEncoder", () => {
     describe("encodeBitmap()", () => {
         const encodedBitmap1: ArrayBuffer = BitmapEncoder.encodeBitmap(bitmap1);
 
-        it("Should return an ArrayBuffer equal to the original file", () => {
+        it("Should return an ArrayBuffer the same length as the original file", () => {
             expect(encodedBitmap1.byteLength).to.equal(flagBuffer.byteLength);
+        });
+
+        it("Should return an ArrayBuffer matching the ArrayBuffer from the original bmp file", () => {
+            let isEquals: boolean = true;
+            for (let i: number = 0; i < encodedBitmap1.byteLength; ++i) {
+                if (encodedBitmap1[i] !== flagBuffer[i]) {
+                    isEquals = false;
+                    break;
+                }
+            }
+            expect(isEquals).to.equal(true);
         });
 
     });
