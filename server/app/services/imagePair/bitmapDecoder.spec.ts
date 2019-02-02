@@ -8,7 +8,7 @@ import { BitmapDecoder } from "./bitmapDecoder";
 
 describe("BitmapDecoder", () => {
     const flagBuffer: ArrayBuffer = readFileSync(
-        path.resolve(__dirname, "../../../test/testBitmaps/FLAG_B24.BMP")).buffer;
+        path.resolve(__dirname, "../../../test/testBitmaps/FLAG_B24.bmp")).buffer;
 
     const flame1Buffer: ArrayBuffer = readFileSync(
         path.resolve(__dirname, "../../../test/testBitmaps/flame1.bmp")).buffer;
