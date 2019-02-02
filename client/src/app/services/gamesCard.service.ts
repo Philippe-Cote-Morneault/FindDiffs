@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { of, Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { Message } from "../../../common/communication/message";
+import { Message } from "../../../../common/communication/message";
 import { GameCard } from "../../../common/model/gameCard/gameCard";
 import { POVType } from "../../../common/model/gameCard/gameCard";
 import { Event, SocketService } from "./socket.service";

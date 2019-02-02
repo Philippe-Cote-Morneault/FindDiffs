@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { GameCard, POVType } from "../../../../common/model/gameCard/gameCard";
-import { GamesCardViewService } from "../gamesCard.service";
-import { SocketService } from "../socket.service";
+import { GamesCardViewService } from "../services/gamesCard.service";
+import { SocketService } from "../services/socket.service";
 
 @Component({
   selector: "app-games-list-view",
