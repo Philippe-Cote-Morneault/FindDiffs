@@ -24,9 +24,9 @@ export class GamesListViewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.socketService.onGameCardAdded().subscribe((card: GameCard) => this.addGameCard(card));
-    this.socketService.onGameCardDeleted().subscribe((card: GameCard) => this.removeGameCard(card));
-    this.socketService.onGameCardUpdate().subscribe((card: GameCard) => this.updateGameCard(card));
+    this.gameCardsService.onGameCardAdded().subscribe((card: GameCard) => this.addGameCard(card));
+    this.gameCardsService.onGameCardDeleted().subscribe((card: GameCard) => this.removeGameCard(card));
+    this.gameCardsService.onGameCardUpdated().subscribe((card: GameCard) => this.updateGameCard(card));
   }
 
   private addGameCard(gamecard: GameCard): void {
