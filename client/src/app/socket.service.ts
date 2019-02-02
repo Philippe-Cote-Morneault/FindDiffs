@@ -1,6 +1,5 @@
 import { Injectable, OnInit } from "@angular/core";
 import * as io from "socket.io-client";
-import { GameCard } from "../../../common/model/gameCard/gameCard";
 
 import { Observable } from "rxjs";
 import { Message } from "../../../common/communication/message";

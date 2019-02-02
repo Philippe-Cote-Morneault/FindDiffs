@@ -1,11 +1,11 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { GameCard } from "../../../common/model/gameCard/gameCard";
-import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { POVType } from "../../../common/model/gameCard/gameCard";
-import { SocketService, Event } from "./socket.service";
+import { of, Observable } from "rxjs";
+import { catchError } from "rxjs/operators";
 import { Message } from "../../../common/communication/message";
+import { GameCard } from "../../../common/model/gameCard/gameCard";
+import { POVType } from "../../../common/model/gameCard/gameCard";
+import { Event, SocketService } from "./socket.service";
 
 /*
 const httpOptions = {
@@ -14,7 +14,7 @@ const httpOptions = {
 */
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class GamesCardViewService {
 

@@ -4,6 +4,8 @@ import { AddressInfo } from "net";
 import * as SocketIO from "socket.io";
 import { Application } from "./app";
 import Types from "./types";
+import { Message } from "../../common/communication/message";
+import { GameCard, POVType } from "../../common/model/gameCard/gameCard";
 
 @injectable()
 export class Server {
@@ -12,6 +14,7 @@ export class Server {
     private server: http.Server;
 
     public constructor(@inject(Types.Application) private application: Application) { }
+    // tslint:disable-next-line:max-func-body-length
     public init(): void {
         this.application.app.set("port", this.appPort);
 
@@ -22,16 +25,14 @@ export class Server {
         this.server.on("listening", () => this.onListening());
 
         const io: SocketIO.Server = SocketIO(this.server);
+        // tslint:disable-next-line:max-func-body-length
         io.on("connection", (socket: any) => {
-            console.log("Le socket est  connecté!");
-            socket.on("newUsername", (username: string) => {
-                console.log(username);
-            });
 
             socket.on("disconnect", () => {
                 console.log("Le socket est déconnecté!");
             });
         });
+
     }
 
     private normalizePort(val: number | string): number | string | boolean {
