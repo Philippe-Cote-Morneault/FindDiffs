@@ -20,8 +20,14 @@ export class ImagePairService implements IImagePairService {
         throw new Error("Method not implemented.");
     }
 
-    public single(id: string): string {
-        throw new Error("Method not implemented.");
+    public async single(id: string): Promise<string> {
+        // Mongoose return data
+        return ImagePair.findById(id)
+            .then((doc: IImagePair) => {
+                return JSON.stringify(doc); })
+            .catch((error: Error) => {
+                return JSON.stringify(this.printError(error.message));
+            });
     }
 
     public getDifference(id: string): string {
