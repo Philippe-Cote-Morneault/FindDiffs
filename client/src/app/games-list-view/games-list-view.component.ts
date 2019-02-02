@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonGameCard, POVType } from "../../../../common/model/gameCard";
-import { GamesCardViewService } from "../services/gamesCard.service";
+import { GamesCardViewService } from "../services/games-card.service";
 import { SocketService } from "../services/socket.service";
 
 @Component({

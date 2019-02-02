@@ -3,8 +3,7 @@ import { Injectable } from "@angular/core";
 import { of, Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
-import { GameCard } from "../../../common/model/gameCard/gameCard";
-import { POVType } from "../../../common/model/gameCard/gameCard";
+import { CommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { Event, SocketService } from "./socket.service";
 
 /*
@@ -22,35 +21,35 @@ export class GamesCardViewService {
 
   private gamesUrl: string = "api/games";
 
-  public getGameCards(povType: POVType): Observable<GameCard[]> {
-    return this.http.get<GameCard[]>(this.gamesUrl)
+  public getGameCards(povType: POVType): Observable<CommonGameCard[]> {
+    return this.http.get<CommonGameCard[]>(this.gamesUrl)
       .pipe(
         catchError(this.handleError("getGameCards", [])),
       );
   }
 
-  public onGameCardAdded(): Observable<GameCard> {
-    return new Observable<GameCard>((observer) => {
+  public onGameCardAdded(): Observable<CommonGameCard> {
+    return new Observable<CommonGameCard>((observer) => {
         this.socketService.onEvent(Event.GAME_CARD_ADDED).subscribe((gameCard: Message) => {
-          const card: GameCard = JSON.parse(gameCard.body);
+          const card: CommonGameCard = JSON.parse(gameCard.body);
           observer.next(card);
         });
     });
   }
 
-  public onGameCardDeleted(): Observable<GameCard> {
-    return new Observable<GameCard>((observer) => {
+  public onGameCardDeleted(): Observable<CommonGameCard> {
+    return new Observable<CommonGameCard>((observer) => {
         this.socketService.onEvent(Event.GAME_CARD_DELETED).subscribe((gameCard: Message) => {
-          const card: GameCard = JSON.parse(gameCard.body);
+          const card: CommonGameCard = JSON.parse(gameCard.body);
           observer.next(card);
       });
     });
   }
 
-  public onGameCardUpdated(): Observable<GameCard> {
-    return new Observable<GameCard>((observer) => {
+  public onGameCardUpdated(): Observable<CommonGameCard> {
+    return new Observable<CommonGameCard>((observer) => {
         this.socketService.onEvent(Event.GAME_CARD_UPDATED).subscribe((gameCard: Message) => {
-          const card: GameCard = JSON.parse(gameCard.body);
+          const card: CommonGameCard = JSON.parse(gameCard.body);
           observer.next(card);
       });
     });
