@@ -26,8 +26,9 @@ export class ImagePairController implements IController {
             res.send(this.imagePairService.index());
         });
 
-        router.get("/:id", (req: Request, res: Response, next: NextFunction) => {
-            res.send(this.imagePairService.single(req.params.id));
+        router.get("/:id", async(req: Request, res: Response, next: NextFunction) => {
+            const response: string = await this.imagePairService.single(req.params.id);
+            res.send(response);
         });
 
         router.get("/:id/difference", (req: Request, res: Response, next: NextFunction) => {
