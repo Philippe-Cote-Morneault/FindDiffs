@@ -17,7 +17,6 @@
     "check-coverage": true,
     "per-file": true,
     "include": [
-      "app/controllers/**/*.ts",
       "app/services/**/*.ts",
       "app/utils/**/*.ts",
       "app/model/**/*.ts"
