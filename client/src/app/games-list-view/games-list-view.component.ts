@@ -15,9 +15,14 @@ export class GamesListViewComponent implements OnInit {
   public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService) {
     this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
       console.log(message);
+    });
+    /*
+    this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
+      console.log(message);
       //this.simplePOVgames = cards;
       //console.log(cards);
     });
+    */
 
     /*
     this.gameCardsService.getGameCards(POVType.Free).subscribe((cards: ICommonGameCard[]) => {

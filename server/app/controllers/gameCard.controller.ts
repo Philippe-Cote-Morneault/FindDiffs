@@ -18,6 +18,7 @@ export class GameCardController implements IGameCardController {
 
         router.get("/", async(req: Request, res: Response, next: NextFunction) => {
             const response: string = await this.gameCardService.index();
+            console.log(response);
             res.send(response);
         });
 
