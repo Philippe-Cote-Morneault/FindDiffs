@@ -22,8 +22,9 @@ export class ImagePairController implements IController {
                 res.send(this.imagePairService.post(req));
             });
 
-        router.get("/", (req: Request, res: Response, next: NextFunction) => {
-            res.send(this.imagePairService.index());
+        router.get("/", async(req: Request, res: Response, next: NextFunction) => {
+            const response: string = await this.imagePairService.index();
+            res.send(response);
         });
 
         router.get("/:id", async(req: Request, res: Response, next: NextFunction) => {
@@ -31,19 +32,22 @@ export class ImagePairController implements IController {
             res.send(response);
         });
 
-        router.get("/:id/difference", (req: Request, res: Response, next: NextFunction) => {
+        router.get("/:id/difference", async(req: Request, res: Response, next: NextFunction) => {
             // Get the path of the file and send it to the client
-            res.sendFile(this.imagePairService.getDifference(req.params.id));
+            const filePath: string = await this.imagePairService.getDifference(req.params.id);
+            res.sendFile(filePath);
         });
 
-        router.get("/:id/modified", (req: Request, res: Response, next: NextFunction) => {
+        router.get("/:id/modified", async(req: Request, res: Response, next: NextFunction) => {
             // Get the path of the file and send it to the client
-            res.sendFile(this.imagePairService.getModified(req.params.id));
+            const filePath: string = await this.imagePairService.getModified(req.params.id);
+            res.sendFile(filePath);
         });
 
-        router.get("/:id/original", (req: Request, res: Response, next: NextFunction) => {
+        router.get("/:id/original", async(req: Request, res: Response, next: NextFunction) => {
             // Get the path of the file and send it to the client
-            res.sendFile(this.imagePairService.getOriginal(req.params.id));
+            const filePath: string = await this.imagePairService.getOriginal(req.params.id);
+            res.sendFile(filePath);
         });
 
         return router;

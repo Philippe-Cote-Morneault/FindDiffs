@@ -16,7 +16,7 @@ import { DifferenceImageGenerator } from "./differenceImageGenerator";
 @injectable()
 export class ImagePairService implements IImagePairService {
 
-    public index(): string {
+    public async index(): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
@@ -30,15 +30,15 @@ export class ImagePairService implements IImagePairService {
             });
     }
 
-    public getDifference(id: string): string {
+    public async getDifference(id: string): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
-    public getModified(id: string): string {
+    public async getModified(id: string): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
-    public getOriginal(id: string): string {
+    public async getOriginal(id: string): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
