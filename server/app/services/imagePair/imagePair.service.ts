@@ -26,6 +26,7 @@ export class ImagePairService implements IImagePairService {
             .then((doc: IImagePair) => {
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
+                // TODO Catch exception and rethrow a diffrent error code
                 return JSON.stringify(this.printError(error.message));
             });
     }
