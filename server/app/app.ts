@@ -2,8 +2,9 @@ import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import * as cors from "cors";
 import * as express from "express";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import * as logger from "morgan";
+import { ImagePairController } from "./controllers/imagePair.controller";
 import { IApplication } from "./interfaces";
 import Types from "./types";
 import { DbConnectionHandler } from "./utils/dbConnectionHandler";
@@ -14,7 +15,8 @@ export class Application implements IApplication {
     private readonly internalError: number = 500;
     public app: express.Application;
 
-    public constructor() {
+    public constructor(
+        @inject(Types.IController) private imagePairController: ImagePairController) {
         this.app = express();
         this.config();
         this.bindRoutes();
@@ -31,6 +33,7 @@ export class Application implements IApplication {
     }
 
     public bindRoutes(): void {
+        this.app.use("/image-pair", this.imagePairController.router);
         /*this.app.use("/api/index", this.indexController.router);
         this.app.use("/api/date/", this.dateController.router);*/
         this.errorHandeling();
