@@ -3,6 +3,7 @@ import * as fs from "fs";
 import { injectable } from "inversify";
 import "reflect-metadata";
 import { Message } from "../../../../common/communication/message";
+import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { ImagePair, IImagePair } from "../../model/schemas/imagePair";
@@ -27,7 +28,6 @@ export class ImagePairService implements IImagePairService {
     }
 
     public async single(id: string): Promise<string> {
-        // Mongoose return data
         return ImagePair.findById(id)
             .then((doc: IImagePair) => {
                 return JSON.stringify(doc); })
@@ -38,15 +38,39 @@ export class ImagePairService implements IImagePairService {
     }
 
     public async getDifference(id: string): Promise<string> {
-        throw new Error("Method not implemented.");
+        return ImagePair.findById(id).select("+file_difference_id")
+            .then((doc: IImagePair) => {
+                const fileId: string = doc.get("file_difference_id");
+                if (Storage.exists(fileId)) {
+                    return Storage.getFullPath(fileId);
+                } else {
+                    throw new FileNotFoundException(fileId);
+                }
+            });
     }
 
     public async getModified(id: string): Promise<string> {
-        throw new Error("Method not implemented.");
+        return ImagePair.findById(id).select("+file_modified_id")
+            .then((doc: IImagePair) => {
+                const fileId: string = doc.get("file_modified_id");
+                if (Storage.exists(fileId)) {
+                    return Storage.getFullPath(fileId);
+                } else {
+                    throw new FileNotFoundException(fileId);
+                }
+            });
     }
 
     public async getOriginal(id: string): Promise<string> {
-        throw new Error("Method not implemented.");
+        return ImagePair.findById(id).select("+file_original_id")
+            .then((doc: IImagePair) => {
+                const fileId: string = doc.get("file_original_id");
+                if (Storage.exists(fileId)) {
+                    return Storage.getFullPath(fileId);
+                } else {
+                    throw new FileNotFoundException(fileId);
+                }
+            });
     }
 
     public printError(error: string): string {
@@ -105,7 +129,9 @@ export class ImagePairService implements IImagePairService {
 
         const guid: string = Storage.saveBuffer(BitmapEncoder.encodeBitmap(differences));
         const difference: IImagePair = new ImagePair({
-            file_id: guid,
+            file_difference_id: guid,
+            file_modified_id: req.files["modifiedImage"][0].filename,
+            file_original_id: req.files["originalImage"][0].filename,
             name: req.body.name,
             creation_date: new Date(),
             differences_count: new DifferenceDetector(differences).countDifferences(),
