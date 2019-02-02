@@ -51,8 +51,19 @@ export class GameCardService extends Service implements IGameCardService {
         }
     }
 
-    public index(): Promise<string> {
-        throw new Error("Method not implemented.");
+    public async index(): Promise<string> {
+        return GameCard.find({}).select("+imagePairId").then(async (docs: IGameCard[]) => {
+            const gameCards: ICommonGameCard[] = new Array<ICommonGameCard>();
+
+            const promises: Promise<void>[] = docs.map(async(doc: IGameCard) => {
+                const imagePair: ICommonImagePair = await this.getImagePairId(doc.imagePairId);
+                gameCards.push(this.getCommonGameCard(doc, imagePair));
+            });
+            await Promise.all(promises);
+
+            return JSON.stringify(gameCards);
+
+        });
     }
 
     public single(id: string): Promise<string> {
