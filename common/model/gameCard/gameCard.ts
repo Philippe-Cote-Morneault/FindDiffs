@@ -2,11 +2,11 @@ import { ImagePair } from "../../communication/imagePair";
 
 export interface GameCard {
     guid: string,
-    pov: string,
+    pov: POVType,
     title: string,
     images: ImagePair,
     bestTimesSolo: number[],
     bestTimesOnline: number[],
 }
 
-export const POVType: String[] =  ["Simple",  "Free"];
+export enum POVType  {Simple = "Simple", Free = "Free"};
