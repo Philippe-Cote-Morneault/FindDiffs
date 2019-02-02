@@ -11,7 +11,7 @@ export const imagePairSchema: Schema = new Schema({
     differences_count: {type: Number, required: true},
 });
 
-imagePairSchema.plugin(require("meanie-mongoose-to-json"));
+imagePairSchema.plugin(require("@meanie/mongoose-to-json"));
 imagePairSchema.set("toJSON", { virtuals: true });
 
 imagePairSchema.virtual("url_difference").get(function(this: Document): string {
