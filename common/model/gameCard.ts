@@ -1,7 +1,7 @@
 import { ICommonImagePair } from "./imagePair";
 
 export interface ICommonGameCard {
-    guid: string,
+    id: string,
     pov: POVType,
     title: string,
     images: ICommonImagePair,
