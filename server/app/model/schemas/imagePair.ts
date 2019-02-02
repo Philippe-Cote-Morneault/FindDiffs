@@ -1,8 +1,14 @@
 import {model, Document, Model, Schema} from "mongoose";
-import { CommonImagePair } from "../../../../common/model/imagePair";
 import Config from "../../config";
 
-export interface IImagePair extends CommonImagePair, Document {}
+export interface IImagePair extends Document {
+    url_difference: string;
+    url_modified: string;
+    url_original: string;
+    name: string;
+    creation_date: Date;
+    differences_count: number;
+}
 
 export const imagePairSchema: Schema = new Schema({
     file_difference_id: {type: String, required: true, select: false},

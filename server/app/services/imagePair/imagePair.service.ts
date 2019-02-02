@@ -4,6 +4,7 @@ import { injectable } from "inversify";
 import "reflect-metadata";
 import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
+import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { ImagePair, IImagePair } from "../../model/schemas/imagePair";
 import { Storage } from "../../utils/storage";
@@ -22,8 +23,7 @@ export class ImagePairService extends Service implements IImagePairService {
             .then((docs: IImagePair[]) => {
                 return JSON.stringify(docs);
             }).catch((error: Error) => {
-                // TODO Catch exception and rethrow a diffrent error code
-                return JSON.stringify(this.printError(error.message));
+                throw new InvalidFormatException(error.message);
             });
     }
 
@@ -32,8 +32,7 @@ export class ImagePairService extends Service implements IImagePairService {
             .then((doc: IImagePair) => {
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
-                // TODO Catch exception and rethrow a diffrent error code
-                return JSON.stringify(this.printError(error.message));
+                throw new NotFoundException("The id could not be found.");
             });
     }
 
@@ -99,21 +98,19 @@ export class ImagePairService extends Service implements IImagePairService {
         }
     }
 
-    public post(req: Request): string {
+    public async post(req: Request): Promise<string> {
         let originalImage: Bitmap;
         let modifiedImage: Bitmap;
-        try {
-            this.validate(req);
-            // Read file and extract its bytes.
-            originalImage = BitmapDecoder.FromArrayBuffer(
-                fs.readFileSync(req.files["originalImage"][0].path).buffer,
-            );
-            modifiedImage = BitmapDecoder.FromArrayBuffer(
-                fs.readFileSync(req.files["modifiedImage"][0].path).buffer,
-            );
-        } catch (e) {
-            return this.printError(e.message);
-        }
+        this.validate(req);
+
+        // Read file and extract its bytes.
+        originalImage = BitmapDecoder.FromArrayBuffer(
+            fs.readFileSync(req.files["originalImage"][0].path).buffer,
+        );
+        modifiedImage = BitmapDecoder.FromArrayBuffer(
+            fs.readFileSync(req.files["modifiedImage"][0].path).buffer,
+        );
+
         // We call the difference image generator and save the result with the help of multer.
         const differenceImageGenerator: DifferenceImageGenerator = new DifferenceImageGenerator(originalImage, modifiedImage);
         const differences: Bitmap = differenceImageGenerator.generateImage();
@@ -127,7 +124,7 @@ export class ImagePairService extends Service implements IImagePairService {
             creation_date: new Date(),
             differences_count: new DifferenceDetector(differences).countDifferences(),
         });
-        difference.save();
+        await difference.save();
 
         return JSON.stringify(difference);
     }
