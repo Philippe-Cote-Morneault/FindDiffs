@@ -1,7 +1,7 @@
 import { Component, HostListener } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
-import { InitialViewService } from "../initial-view.service";
+import { InitialViewService } from "../services/initial-view.service";
 
 @Component({
   selector: "app-initial-view",
@@ -28,7 +28,7 @@ export class InitialViewComponent {
   public correctUsername(message: Message): void {
     if (message) {
       localStorage.setItem("user", message.body);
-      this.router.navigateByUrl("/admin");
+      this.router.navigateByUrl("/gamesList");
     } else {
       alert("Invalid username!");
     }

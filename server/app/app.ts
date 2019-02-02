@@ -4,6 +4,7 @@ import * as cors from "cors";
 import * as express from "express";
 import { inject, injectable } from "inversify";
 import * as logger from "morgan";
+import { GameCardController } from "./controllers/gameCard.controller";
 import { ImagePairController } from "./controllers/imagePair.controller";
 import { UserController } from "./controllers/user.controller";
 import { IApplication } from "./interfaces";
@@ -18,7 +19,8 @@ export class Application implements IApplication {
 
     public constructor(
         @inject(Types.IImagePairController) private imagePairController: ImagePairController,
-        @inject(Types.IUserController) private userController: UserController) {
+        @inject(Types.IUserController) private userController: UserController,
+        @inject(Types.IGameCardController) private gameCardController: GameCardController) {
         this.app = express();
         this.config();
         this.bindRoutes();
@@ -37,6 +39,7 @@ export class Application implements IApplication {
     public bindRoutes(): void {
         this.app.use("/image-pair", this.imagePairController.router);
         this.app.use("/user", this.userController.router);
+        this.app.use("/gamecard", this.gameCardController.router);
 
         this.errorHandeling();
     }

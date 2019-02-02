@@ -17,7 +17,6 @@
     "check-coverage": true,
     "per-file": true,
     "include": [
-      "app/controllers/**/*.ts",
       "app/services/**/*.ts",
       "app/utils/**/*.ts",
       "app/model/**/*.ts"
@@ -45,8 +44,10 @@
     "@types/mongodb": "^3.1.19",
     "@types/mongoose": "^5.3.10",
     "@types/uuid": "^3.4.4",
+    "axios": "^0.18.0",
     "bitmap-ts": "^1.0.3",
     "body-parser": "^1.18.3",
+    "chai-bytes": "^0.1.2",
     "cookie-parser": "1.4.1",
     "cors": "2.8.4",
     "debug": "^4.1.1",

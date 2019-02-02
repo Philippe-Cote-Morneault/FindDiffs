@@ -1,12 +1,12 @@
-import { CommonImagePair } from "./imagePair";
+import { ICommonImagePair } from "./imagePair";
 
-export interface CommonGameCard {
-    guid: string,
-    pov: string,
-    title: string,
-    images: CommonImagePair,
-    bestTimesSolo: number[],
-    bestTimesOnline: number[],
+export interface ICommonGameCard {
+    id: string;
+    pov: POVType;
+    title: string;
+    image_pair?: ICommonImagePair;
+    best_time_solo: number[];
+    best_time_online: number[];
 }
 
-export const POVType: string[] =  ["Simple",  "Free"];
+export enum POVType{Simple, Free};

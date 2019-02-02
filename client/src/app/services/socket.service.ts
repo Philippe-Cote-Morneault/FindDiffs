@@ -2,7 +2,7 @@ import { Injectable, OnInit } from "@angular/core";
 import * as io from "socket.io-client";
 
 import { Observable } from "rxjs";
-import { Message } from "../../../common/communication/message";
+import { Message } from "../../../../common/communication/message";
 
 // TODO: Find a better class to put this enum at
 export enum Event {GAME_CARD_UPDATED = "gameCardUpdated", GAME_CARD_ADDED = "gameCardAdded",

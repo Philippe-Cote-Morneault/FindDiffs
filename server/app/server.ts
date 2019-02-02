@@ -6,8 +6,6 @@ import { Application } from "./app";
 import Config from "./config";
 import { IServer } from "./interfaces";
 import Types from "./types";
-import { Message } from "../../common/communication/message";
-import { GameCard, POVType } from "../../common/model/gameCard/gameCard";
 
 @injectable()
 export class Server implements IServer {
@@ -26,11 +24,10 @@ export class Server implements IServer {
         this.server.on("listening", () => this.onListening());
 
         const io: SocketIO.Server = SocketIO(this.server);
-        // tslint:disable-next-line:max-func-body-length
-        io.on("connection", (socket: any) => {
+        io.on("connection", (socket: SocketIO.Socket) => {
 
             socket.on("disconnect", () => {
-                console.log("Le socket est déconnecté!");
+                // TODO include disconnect code
             });
         });
 
