@@ -3,11 +3,12 @@ import { Application } from "./app";
 import { Server } from "./server";
 import TYPES from "./types";
 
-import {ApplicationInterface, ServerInterface } from "./interfaces";
+import {IApplication, IServer } from "./interfaces";
+import { ImagePairService } from "./services/imagePair/imagePair.service";
 
 const container: Container = new Container();
 
-container.bind<ServerInterface>(TYPES.ServerInterface).to(Server);
-container.bind<ApplicationInterface>(TYPES.ApplicationInterface).to(Application);
+container.bind<IServer>(TYPES.IServer).to(Server);
+container.bind<IApplication>(TYPES.IApplication).to(Application);
 
 export { container };

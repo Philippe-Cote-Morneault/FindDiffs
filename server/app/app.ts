@@ -4,11 +4,12 @@ import * as cors from "cors";
 import * as express from "express";
 import { injectable } from "inversify";
 import * as logger from "morgan";
-import { ApplicationInterface } from "./interfaces";
+import { IApplication } from "./interfaces";
+import Types from "./types";
 import { DbConnectionHandler } from "./utils/dbConnectionHandler";
 
 @injectable()
-export class Application implements ApplicationInterface {
+export class Application implements IApplication {
 
     private readonly internalError: number = 500;
     public app: express.Application;

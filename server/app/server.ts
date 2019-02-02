@@ -3,16 +3,16 @@ import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
 import { Application } from "./app";
 import Config from "./config";
-import { ServerInterface } from "./interfaces";
+import { IServer } from "./interfaces";
 import Types from "./types";
 
 @injectable()
-export class Server implements ServerInterface {
+export class Server implements IServer {
     private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || Config.port);
     private readonly baseDix: number = 10;
     private server: http.Server;
 
-    public constructor(@inject(Types.ApplicationInterface) private application: Application) { }
+    public constructor(@inject(Types.IApplication) private application: Application) { }
     public init(): void {
         this.application.app.set("port", this.appPort);
 

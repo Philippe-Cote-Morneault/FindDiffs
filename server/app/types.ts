@@ -1,4 +1,4 @@
 export default  {
-        ServerInterface: Symbol.for("ServerInterface"),
-        ApplicationInterface: Symbol.for("ApplicationInterface"),
+        IServer: Symbol.for("IServer"),
+        IApplication: Symbol.for("IApplication"),
 };

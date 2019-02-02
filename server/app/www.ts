@@ -1,8 +1,8 @@
 import "reflect-metadata";
-import { ServerInterface } from "./interfaces";
+import { IServer } from "./interfaces";
 import { container } from "./inversify.config";
 import TYPES from "./types";
 
-const server: ServerInterface = container.get<ServerInterface>(TYPES.ServerInterface);
+const server: IServer = container.get<IServer>(TYPES.IServer);
 
 server.init();
