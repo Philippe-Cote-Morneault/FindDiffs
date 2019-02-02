@@ -21,12 +21,6 @@ export class GamesCardViewService {
 
   public constructor(private http: HttpClient, private socketService: SocketService) { }
 
-  /*
-  public getGameCards(povType: POVType): Observable<ICommonGameCard[]> {
-    return this.http.get<ICommonGameCard[]>(this.BASE_URL + this.GET_ALL_CARDS_URL);
-  }
-  */
-
   public getGameCards(povType: POVType): Observable<ICommonGameCard[]> {
     return this.http.get<ICommonGameCard[]>(this.BASE_URL + this.GET_ALL_CARDS_URL).pipe(
       map((res) => res),
