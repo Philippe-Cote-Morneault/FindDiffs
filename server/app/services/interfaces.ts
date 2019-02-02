@@ -8,3 +8,10 @@ export interface IImagePairService {
     getModified(id: string): Promise<string>;
     getOriginal(id: string): Promise<string>;
 }
+
+export interface IUserService {
+    post(req: Request): string;
+    index(): Promise<string>;
+    single(id: string): Promise<string>;
+    delete(id: string): Promise<string>;
+}
