@@ -1,4 +1,4 @@
-export interface CommonImagePair {
+export interface ICommonImagePair {
     id: string;
     url_difference: string;
     url_modified: string;
