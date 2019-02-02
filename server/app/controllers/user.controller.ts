@@ -2,10 +2,10 @@ import { NextFunction, Request, Response, Router } from "express";
 import {inject, injectable} from "inversify";
 import { UserService } from "../services/user/user.service";
 import TYPES from "../types";
-import { IController } from "./interfaces";
+import { IUserController } from "./interfaces";
 
 @injectable()
-export class UserController implements IController {
+export class UserController implements IUserController {
     public constructor(@inject(TYPES.IUserService) private userService: UserService) {}
 
     public get router(): Router {

@@ -17,8 +17,8 @@ export class Application implements IApplication {
     public app: express.Application;
 
     public constructor(
-        @inject(Types.IController) private imagePairController: ImagePairController,
-        @inject(Types.IController) private userController: UserController) {
+        @inject(Types.IImagePairController) private imagePairController: ImagePairController,
+        @inject(Types.IUserController) private userController: UserController) {
         this.app = express();
         this.config();
         this.bindRoutes();

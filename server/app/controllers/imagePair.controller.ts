@@ -4,10 +4,10 @@ import { Message } from "../../../common/communication/message";
 import { ImagePairService } from "../services/imagePair/imagePair.service";
 import TYPES from "../types";
 import { uploads } from "../utils/storage";
-import { IController } from "./interfaces";
+import { IImagePairController } from "./interfaces";
 
 @injectable()
-export class ImagePairController implements IController {
+export class ImagePairController implements IImagePairController {
 
     public constructor(@inject(TYPES.IImagePairService) private imagePairService: ImagePairService) {}
 

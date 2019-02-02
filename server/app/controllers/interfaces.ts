@@ -1,5 +1,9 @@
 import { Router } from "express";
 
-export interface IController {
+export interface IImagePairController {
+    router: Router;
+}
+
+export interface IUserController {
     router: Router;
 }
