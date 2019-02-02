@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as multer from "multer";
 import * as uuid from "uuid";
 import { FileNotFoundException } from "../../../common/errors/fileNotFoundException";
 
@@ -43,3 +44,7 @@ export class Storage {
     }
 
 }
+
+export const uploads: multer.Instance = multer({
+    dest: "uploads",
+});
