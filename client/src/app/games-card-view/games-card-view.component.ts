@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { CommonGameCard } from "../../../../common/model/gameCard";
+import { ICommonGameCard } from "../../../../common/model/gameCard";
 
 @Component({
   selector: "app-games-card-view",
@@ -7,7 +7,7 @@ import { CommonGameCard } from "../../../../common/model/gameCard";
   styleUrls: ["./games-card-view.component.css"],
 })
 export class GamesCardViewComponent {
-  @Input() public gameCard: CommonGameCard;
+  @Input() public gameCard: ICommonGameCard;
   public buttonSolo: string = "Solo";
   public buttonOnline: string = "1 vs. 1";
 }
