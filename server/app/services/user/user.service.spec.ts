@@ -39,10 +39,26 @@ describe("UserService", () => {
 
     it("Should return the correct error message if input length is over 12", async () => {
         const request = {
-            body: { username : "", },
+            body: { username : "aaaaaaaaaaaaa", },
         };
-        const data: string = await userService.post(mockReq(request));
-        expect(data).to.equal(notValidError);
+        try {
+            await userService.post(mockReq(request));
+            throw new Error("No error thrown by service");
+        } catch (err) {
+            expect(err.message).to.equal(notValidError);
+        }
+    });
+
+    it("Should return the correct error message if the input is not alphanumeric", async () => {
+        const request = {
+            body: { username : "-+-=", },
+        };
+        try {
+            await userService.post(mockReq(request));
+            throw new Error("No error thrown by service");
+        } catch (err) {
+            expect(err.message).to.equal(notValidError);
+        }
     });
 
     it("Should return the correct message if input length is between 3 and 12", async () => {
@@ -51,14 +67,6 @@ describe("UserService", () => {
         };
         const data: string = await userService.post(mockReq(request));
         expect(data).to.equal("abc2");
-    });
-
-    it("Should return the correct error message if the input is not alphanumeric", async () => {
-        const request = {
-            body: { username : "", },
-        };
-        const data: string = await userService.post(mockReq(request));
-        expect(data).to.equal(notValidError);
     });
 
     it("Should return the correct message if the input is alpha", async () => {
