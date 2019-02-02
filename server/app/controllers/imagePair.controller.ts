@@ -9,7 +9,7 @@ import { IController } from "./interfaces";
 @injectable()
 export class ImagePairController implements IController {
 
-    public constructor(@inject(TYPES.IImagePairService) private imagePairService: ImagePairService) { }
+    public constructor(@inject(TYPES.IImagePairService) private imagePairService: ImagePairService) {}
 
     public get router(): Router {
         const router: Router = Router();
