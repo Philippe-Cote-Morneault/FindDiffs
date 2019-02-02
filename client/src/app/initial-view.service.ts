@@ -7,19 +7,18 @@ import { Message } from "../../../common/communication/message";
 @Injectable()
 export class InitialViewService {
 
-    private readonly BASE_URL: string = "http://localhost:3000/user/";
-    private readonly DELETE_URL: string = "deletion/";
+    private readonly BASE_URL: string = "http://localhost:3000/user";
     public constructor(private http: HttpClient) { }
 
-    public getUsernameValidation(username: string): Observable<Message> {
-        return this.http.get<Message>(this.BASE_URL + username).pipe(
-            catchError(this.handleError<Message>("getUsernameValidation")),
+    public postUsernameValidation<User>(username: string): Observable<User> {
+        return this.http.post<User>(this.BASE_URL, {username: username}).pipe(
+            catchError(this.handleError<User>("postUsernameValidation")),
         );
     }
 
-    public getDeleteUsername(username: string): Observable<Message> {
-        return this.http.get<Message>(this.BASE_URL + this.DELETE_URL + username).pipe(
-            catchError(this.handleError<Message>("getDeleteUsername")),
+    public deleteUsername(userId: string): Observable<Message> {
+        return this.http.delete<Message>(this.BASE_URL + userId).pipe(
+            catchError(this.handleError<Message>("deleteUsername")),
         );
     }
 

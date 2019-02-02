@@ -8,7 +8,7 @@ import Types from "./types";
 export class Routes {
 
     /* tslint:disable typedef */
-    //TODO ask
+    // TODO ask
     private static upload = multer({
         dest: "uploads/",
     });
@@ -24,15 +24,15 @@ export class Routes {
         router.get("/",
                    (req: Request, res: Response, next: NextFunction) => this.index.helloWorld(req, res, next));
 
-        router.get("/user/:username?",
-                   (req: Request, res: Response) => this.usernameValidation.verifyUsername(req, res));
+        router.post("/user",
+                    (req: Request, res: Response) => this.usernameValidation.verifyUsername(req, res));
 
         router.post("/image-pair/", Routes.upload.fields([
             {name: "originalImage", maxCount: 1},
             {name: "modifiedImage", maxCount: 1},
         ]),         (req: Request, res: Response, next: NextFunction) => this.index.postDifference(req, res, next));
 
-        router.get("/user/deletion/:username?", (req: Request, res: Response) =>
+        router.delete("/user/:id?", (req: Request, res: Response) =>
         this.usernameValidation.deleteUsername(req, res));
 
         return router;

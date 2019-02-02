@@ -1,6 +1,6 @@
 import { Component, HostListener } from "@angular/core";
 import { Router } from "@angular/router";
-import { Message } from "../../../../common/communication/message";
+import { User } from "../../../../common/communication/user";
 import { InitialViewService } from "../initial-view.service";
 
 @Component({
@@ -16,18 +16,18 @@ export class InitialViewComponent {
 
   public verifyUsername(): void {
     const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
-    this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername.bind(this));
+    this.initialViewService.postUsernameValidation(username).subscribe(this.correctUsername.bind(this));
   }
 
   @HostListener("window:beforeunload", ["$event"])
   public beforeUnload($event: Event): void  {
-    const user: string = JSON.parse(localStorage.getItem("user") || "{}");
-    this.initialViewService.getDeleteUsername(user).toPromise();
+    const user: User = JSON.parse(localStorage.getItem("user") || "{}");
+    this.initialViewService.deleteUsername(user.id).toPromise();
   }
 
-  public correctUsername(message: Message): void {
-    if (message) {
-      localStorage.setItem("user", message.body);
+  public correctUsername(user: User): void {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
       this.router.navigateByUrl("/admin");
     } else {
       alert("Invalid username!");

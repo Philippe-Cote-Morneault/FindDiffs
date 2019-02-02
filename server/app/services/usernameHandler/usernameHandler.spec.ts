@@ -150,7 +150,7 @@ describe("usernameHandler", () => {
     };
     usernameHandler.verifyUsername(mockReq(request), mockRes(response));
     expect(usernameHandler.usernameArray[0]).to.equal(user);
-    usernameHandler.deleteUsername(mockReq(request));
+    usernameHandler.deleteUsername(mockReq(request), mockRes(response));
   });
   it("Should be true if the username (ALPHA) is corretly added when the array is empty", () => {
     const request = {
@@ -172,7 +172,7 @@ describe("usernameHandler", () => {
     };
     usernameHandler.verifyUsername(mockReq(request), mockRes(response));
     expect(usernameHandler.usernameArray[0]).to.equal(user);
-    usernameHandler.deleteUsername(mockReq(request));
+    usernameHandler.deleteUsername(mockReq(request), mockRes(response));
   });
   it("Should be true if the username (ALPHANUMERIC) is corretly added when the array is empty", () => {
     const user: string = "username12";
@@ -184,7 +184,7 @@ describe("usernameHandler", () => {
     };
     usernameHandler.verifyUsername(mockReq(request), mockRes(response));
     expect(usernameHandler.usernameArray[0]).to.equal(user);
-    usernameHandler.deleteUsername(mockReq(request));
+    usernameHandler.deleteUsername(mockReq(request), mockRes(response));
   });
   it("Should be true if the username is not added: name too short", () => {
     const request = {
@@ -226,9 +226,9 @@ describe("usernameHandler", () => {
     expect(usernameHandler.usernameArray[0]).to.equal("username1");
     expect(usernameHandler.usernameArray[1]).to.equal("username2");
     expect(usernameHandler.usernameArray[2]).to.equal("username3");
-    usernameHandler.deleteUsername(mockReq(firstRequest));
-    usernameHandler.deleteUsername(mockReq(secondRequest));
-    usernameHandler.deleteUsername(mockReq(thirdRequest));
+    usernameHandler.deleteUsername(mockReq(firstRequest), mockRes(response));
+    usernameHandler.deleteUsername(mockReq(secondRequest), mockRes(response));
+    usernameHandler.deleteUsername(mockReq(thirdRequest), mockRes(response));
   });
   it("Should be true if two identical usernames are added", () => {
     const request = {
@@ -241,7 +241,7 @@ describe("usernameHandler", () => {
     usernameHandler.verifyUsername(mockReq(request), mockRes(response));
     expect(usernameHandler.usernameArray.length).to.equal(1);
     expect(usernameHandler.usernameArray[0]).to.equal("username");
-    usernameHandler.deleteUsername(mockReq(request));
+    usernameHandler.deleteUsername(mockReq(request), mockRes(response));
   });
   // deleteUsername
   it("Should return true if the username is removed from the array", () => {
@@ -253,7 +253,7 @@ describe("usernameHandler", () => {
     };
     usernameHandler.verifyUsername(mockReq(request), mockRes(response));
     expect(usernameHandler.usernameArray.length).to.equal(1);
-    usernameHandler.deleteUsername(mockReq(request));
+    usernameHandler.deleteUsername(mockReq(request), mockRes(response));
     expect(usernameHandler.usernameArray.length).to.equal(0);
   });
 });

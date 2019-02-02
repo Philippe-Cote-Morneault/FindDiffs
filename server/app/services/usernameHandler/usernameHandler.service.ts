@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import "reflect-metadata";
 import { Message } from "../../../../common/communication/message";
+import { User } from "../../../../common/communication/user";
 
 export class UsernameHandler {
 
     public usernameArray: string[] = [];
 
     public deleteUsername(req: Request, res: Response): void {
-        const username: string = req.params.username;
+        const username: string = req.body.username;
         const title: string = "UsernameDeleted";
         const index: number = this.usernameArray.indexOf(username);
         this.usernameArray.splice(index);
@@ -19,17 +20,16 @@ export class UsernameHandler {
     }
 
     public verifyUsername(req: Request, res: Response): void {
-        const username: string = req.params.username;
-        const title: string = "VerifyUsername";
+        const username: string = req.body.username;
         if (!this.isEmpty(username)) {
             if (this.isAlphaNumeric(username) && this.isCorrectLength(username)) {
                 if (this.isAvailable(username, this.usernameArray)) {
                     this.add(username, this.usernameArray);
-                    const message: Message = {
-                        title: title,
-                        body: username,
+                    const user: User = {
+                        id: "",
+                        username: username,
                     };
-                    res.send(JSON.stringify(message));
+                    res.send(JSON.stringify(user));
                  }
             }
         }
