@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import "reflect-metadata";
+import { Message } from "../../../../common/communication/message";
 import { IUser, User } from "../../model/schemas/user";
 import { IUserService } from "../interfaces";
 import { Service } from "../service";
-import { Message } from "../../../../common/communication/message";
 
 export class UserService extends Service implements IUserService {
 
