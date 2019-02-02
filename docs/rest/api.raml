@@ -79,7 +79,7 @@ version: 1
               "id":"432423423423ef",
               "pov":"Simple",
               "title":"The name of the gamecard",
-              "image-pair":
+              "image_pair":
                 {
                 "id":"438943af323ed43",
                 "url_differences":"http://localhost:3000/image-pair/438943af323ed43/difference",
@@ -89,9 +89,35 @@ version: 1
                 "creation_date":"2019-01-27T19:50:48.036Z",
                 "differences_count":7
                 },
-              "best-time-solo":[1254512,1282445,544512],
-              "best-time-online":[1254512,1282445,544512]
+              "best_time_solo":[1254512,1282445,544512],
+              "best_time_online":[1254512,1282445,544512]
               }
+  get:
+    description: Retrieve all the gamecards
+    responses: 
+          200:
+            body: 
+              application/json:
+                example: |
+                  [
+                    {
+                      "id":"432423423423ef",
+                      "pov":"Simple",
+                      "title":"The name of the gamecard",
+                      "image_pair":
+                        {
+                        "id":"438943af323ed43",
+                        "url_differences":"http://localhost:3000/image-pair/438943af323ed43/difference",
+                        "url_modified":"http://localhost:3000/image-pair/438943af323ed43/modified",
+                        "url_original":"http://localhost:3000/image-pair/438943af323ed43/original",
+                        "name":"The name of the pair",
+                        "creation_date":"2019-01-27T19:50:48.036Z",
+                        "differences_count":7
+                        },
+                      "best_time_solo":[1254512,1282445,544512],
+                      "best_time_online":[1254512,1282445,544512]
+                    }
+                  ]
   /{id}:
     get:
       description: Retrieve data about a gamecard
@@ -104,7 +130,7 @@ version: 1
                 "id":"432423423423ef",
                 "pov":"Simple",
                 "title":"The name of the gamecard",
-                "image-pair":
+                "image_pair":
                   {
                   "id":"438943af323ed43",
                   "url_differences":"http://localhost:3000/image-pair/438943af323ed43/difference",
@@ -114,8 +140,8 @@ version: 1
                   "creation_date":"2019-01-27T19:50:48.036Z",
                   "differences_count":7
                   },
-                "best-time-solo":[1254512,1282445,544512],
-                "best-time-online":[1254512,1282445,544512]
+                "best_time_solo":[1254512,1282445,544512],
+                "best_time_online":[1254512,1282445,544512]
                 }
     delete:
       description: Delete a gamecard
