@@ -1,88 +1,81 @@
 import { Request, Response } from "express";
 import "reflect-metadata";
+import { IUser, User } from "../../model/schemas/user";
+import { IUserService } from "../interfaces";
+import { Service } from "../service";
 import { Message } from "../../../../common/communication/message";
 
-export class UserService {
+export class UserService extends Service implements IUserService {
 
-    public usernameArray: string[] = [];
-
-    public deleteUsername(req: Request): void {
-        const username: string = req.params.username;
-        const index: number = this.usernameArray.indexOf(username);
-        this.usernameArray.splice(index);
+    public index(): Promise<string> {
+        return User.find({}).then((docs: IUser[]) => {
+            return  JSON.stringify(docs);
+        }).catch((error: Error) => {
+            return this.printError(error.message);
+        });
     }
 
-    public verifyUsername(req: Request, res: Response): void {
-        const username: string = req.params.username;
-        const title: string = "VerifyUsername";
-        if (!this.isEmpty(username)) {
-            if (this.isAlphaNumeric(username) && this.isCorrectLength(username)) {
-                if (this.isAvailable(username, this.usernameArray)) {
-                    this.add(username, this.usernameArray);
-                    const message: Message = {
-                        title: title,
-                        body: username,
-                    };
-                    res.send(JSON.stringify(message));
-                 }
+    public single(id: string): Promise<string> {
+        return User.findById(id)
+            .then((doc: IUser) => {
+                return JSON.stringify(doc); })
+            .catch((error: Error) => {
+                // TODO Catch exception and rethrow a diffrent error code
+                return JSON.stringify(this.printError(error.message));
+            });
+    }
+
+    public delete(id: string): Promise<string> {
+        return User.findById(id)
+        .then((doc: IUser) => {
+            doc.remove();
+            const message: Message = {
+                title: "Success",
+                body: "The user was deleted.",
+            };
+
+            return JSON.stringify(message); })
+        .catch((error: Error) => {
+            // TODO Catch exception and rethrow a diffrent error code
+            return JSON.stringify(this.printError(error.message));
+        });
+    }
+
+    public async post(req: Request): Promise<string> {
+        if (req.body.username) {
+            if (this.validateUsername(req.body.username)) {
+                if (await this.isAvailable(req.body.username)) {
+                    const user: IUser = new User({
+                        username: req.body.username,
+                        creation_date: new Date(),
+                    });
+                    user.save();
+
+                    return JSON.stringify(user);
+                }
+
+                return this.printError("The username is already taken.");
+
             }
-        }
-    }
-    public add(username: string, usernameArray: string[]): void {
-        usernameArray[usernameArray.length] = username;
-    }
-    public isAvailable(username: string, usernameArray: string[]): boolean {
-        if (!this.isArrayEmpty(usernameArray)) {
-           return usernameArray.filter((x: string) => x === username).length === 0;
+
+            return this.printError("The field username is not valid.");
         }
 
-        return true;
+        return this.printError("The field username is not set.");
     }
 
-    public isArrayEmpty(usernameArray: string[]): boolean {
-        const emptyLength: Number = 0;
-
-        return (usernameArray.length === emptyLength);
+    private isAvailable(username: string): Promise<boolean> {
+        return User.count({username: username}).then((c: number) => {
+            return c > 0;
+        }).catch(() => {
+            return false;
+        });
     }
 
-    public isEmpty(username: string): boolean {
-        const emptyString: String = "";
+    private validateUsername(username: string): boolean {
+        const regex: RegExp = new RegExp("^[a-zA-Z0-9]{2,13}$");
 
-        return (username === emptyString);
+        return regex.test(username);
     }
 
-    public isAlphaNumeric(username: string): boolean {
-        const lowerCaseUsername: string = username.toLowerCase();
-        for (let i = 0; i < lowerCaseUsername.length; i++) {
-            if (!this.isAlpha(lowerCaseUsername[i]) && !this.isNumeric(lowerCaseUsername[i])) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    // TODO isAlpha already exists? use regex
-    public isAlpha(letter: string): boolean {
-        const MAX_VALUE: Number = 122;
-        const MIN_VALUE: Number = 97;
-
-        return (letter.charCodeAt(0) <= MAX_VALUE && letter.charCodeAt(0) >= MIN_VALUE);
-    }
-
-    // TODO isNumber already exists
-    public isNumeric(letter: string): boolean {
-        const MAX_VALUE: Number = 58;
-        const MIN_VALUE: Number = 47;
-
-        return (letter.charCodeAt(0) < MAX_VALUE && letter.charCodeAt(0) > MIN_VALUE);
-    }
-
-    // TODO change to regex
-    public isCorrectLength(username: string): boolean {
-        const MAX_VALUE: Number = 13;
-        const MIN_VALUE: Number = 2;
-
-        return (username.length < MAX_VALUE && username.length > MIN_VALUE);
-    }
 }
