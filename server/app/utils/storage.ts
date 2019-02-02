@@ -51,5 +51,5 @@ export class Storage {
 }
 
 export const uploads: multer.Instance = multer({
-    dest: "uploads",
+    dest: Storage.STORAGE_PATH,
 });
