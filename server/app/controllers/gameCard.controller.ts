@@ -13,7 +13,7 @@ export class GameCardController implements IGameCardController {
         const router: Router = Router();
 
         router.post("/", async(req: Request, res: Response, next: NextFunction) => {
-                res.send(this.gameCardService.post(req));
+                res.send(await this.gameCardService.post(req));
             });
 
         router.get("/", async(req: Request, res: Response, next: NextFunction) => {
