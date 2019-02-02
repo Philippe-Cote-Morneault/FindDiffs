@@ -38,6 +38,20 @@ describe("utils/Storage", () => {
             expect(() => Storage.openBuffer(fileName)).to.throw(new FileNotFoundException(fileName).message);
         });
     });
+    describe("getPath()", () => {
+        it("Should return the same path as the static variable plus a slash.", () => {
+            expect(Storage.getPath("")).to.equal(Storage.STORAGE_PATH + "/");
+        });
+
+        it("Should return the same path as the static variable plus a slash and the id.", () => {
+            expect(Storage.getPath("abc")).to.equal(Storage.STORAGE_PATH + "/abc");
+        });
+    });
+    describe("getFullPath", () => {
+        it("Should be diffrent than the storage path", () => {
+            expect(Storage.getFullPath("")).to.not.equal(Storage.STORAGE_PATH);
+        });
+    });
     afterEach(() => {
         del.sync([Storage.STORAGE_PATH  + "/**"]);
     });

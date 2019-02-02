@@ -3,18 +3,19 @@ import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
 import * as SocketIO from "socket.io";
 import { Application } from "./app";
+import Config from "./config";
+import { IServer } from "./interfaces";
 import Types from "./types";
 import { Message } from "../../common/communication/message";
 import { GameCard, POVType } from "../../common/model/gameCard/gameCard";
 
 @injectable()
-export class Server {
-    private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || "3000");
+export class Server implements IServer {
+    private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || Config.port);
     private readonly baseDix: number = 10;
     private server: http.Server;
 
-    public constructor(@inject(Types.Application) private application: Application) { }
-    // tslint:disable-next-line:max-func-body-length
+    public constructor(@inject(Types.IApplication) private application: Application) { }
     public init(): void {
         this.application.app.set("port", this.appPort);
 
