@@ -16,8 +16,8 @@ export class UserController implements IController {
             res.send(response);
         });
 
-        router.post("/", (req: Request, res: Response, next: NextFunction) => {
-            const response: string = this.userService.post(req);
+        router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+            const response: string = await this.userService.post(req);
             res.send(response);
         });
         router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {

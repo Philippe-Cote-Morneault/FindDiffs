@@ -10,7 +10,7 @@ export interface IImagePairService {
 }
 
 export interface IUserService {
-    post(req: Request): string;
+    post(req: Request): Promise<string>;
     index(): Promise<string>;
     single(id: string): Promise<string>;
     delete(id: string): Promise<string>;
