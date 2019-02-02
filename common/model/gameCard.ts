@@ -1,10 +1,10 @@
-import { CommonImagePair } from "./imagePair";
+import { ICommonImagePair } from "./imagePair";
 
-export interface CommonGameCard {
+export interface ICommonGameCard {
     guid: string,
     pov: POVType,
     title: string,
-    images: CommonImagePair,
+    images: ICommonImagePair,
     bestTimesSolo: number[],
     bestTimesOnline: number[],
 }
