@@ -4,6 +4,8 @@ import { Pixel } from "./pixel";
 /**
  * Class that represents a BMP bitmap. Provides various methods to create files from a bitmap, create bitmaps from files, and more.
  */
+
+ // RFC:7854
 export class Bitmap {
     public static ROW_BYTE_MULTIPLE: number = 4;
     public static BYTES_PER_PIXEL: number = 3;

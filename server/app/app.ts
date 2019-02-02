@@ -4,22 +4,25 @@ import * as cors from "cors";
 import * as express from "express";
 import { inject, injectable } from "inversify";
 import * as logger from "morgan";
-import * as path from "path";
-import { Routes } from "./routes";
+import { ImagePairController } from "./controllers/imagePair.controller";
+import { UserController } from "./controllers/user.controller";
+import { IApplication } from "./interfaces";
 import Types from "./types";
+import { DbConnectionHandler } from "./utils/dbConnectionHandler";
 
 @injectable()
-export class Application {
+export class Application implements IApplication {
 
     private readonly internalError: number = 500;
     public app: express.Application;
 
-    public constructor(@inject(Types.Routes) private api: Routes) {
+    public constructor(
+        @inject(Types.IImagePairController) private imagePairController: ImagePairController,
+        @inject(Types.IUserController) private userController: UserController) {
         this.app = express();
-
         this.config();
-
-        this.routes();
+        this.bindRoutes();
+        this.databaseConnection();
     }
 
     private config(): void {
@@ -28,22 +31,31 @@ export class Application {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(cookieParser());
-        this.app.use(express.static(path.join(__dirname, "../client")));
         this.app.use(cors());
     }
 
-    public routes(): void {
-        const router: express.Router = express.Router();
-
-        router.use(this.api.routes);
-
-        this.app.use(router);
+    public bindRoutes(): void {
+        this.app.use("/image-pair", this.imagePairController.router);
+        this.app.use("/user", this.userController.router);
 
         this.errorHandeling();
     }
 
+    private databaseConnection(): void {
+        // tslint:disable no-console
+        const database: DbConnectionHandler = new DbConnectionHandler();
+        database.connect(
+            () => {
+                console.log("Connected to database!");
+            },
+            (err: Error) => {
+                console.log("Error with database");
+                console.error(err);
+            });
+    }
+
     private errorHandeling(): void {
-        // Gestion des erreurs
+        // Error management
         this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
             const err: Error = new Error("Not Found");
             next(err);

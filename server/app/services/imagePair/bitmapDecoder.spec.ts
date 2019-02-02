@@ -1,16 +1,15 @@
 import {expect} from "chai";
 import {readFileSync } from "fs";
+import * as path from "path";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { BitmapDecoder } from "./bitmapDecoder";
-//import { DifferenceImageGenerator } from "./differenceImageGenerator";
 
 /* tslint:disable:no-magic-numbers */
 
 describe("BitmapDecoder", () => {
-    const path = require("path");
     const flagBuffer: ArrayBuffer = readFileSync(
-        path.resolve(__dirname, "../../../test/testBitmaps/FLAG_B24.BMP")).buffer;
-    
+        path.resolve(__dirname, "../../../test/testBitmaps/FLAG_B24.bmp")).buffer;
+
     const flame1Buffer: ArrayBuffer = readFileSync(
         path.resolve(__dirname, "../../../test/testBitmaps/flame1.bmp")).buffer;
 
@@ -26,7 +25,7 @@ describe("BitmapDecoder", () => {
         it("Should create a bitmap with a height of 480 pixels", () => {
             expect(bitmap.height).to.equal(480);
         });
-    
+
         it("Should create a bitmap with a width of 640 pixels", () => {
             expect(bitmap.width).to.equal(640);
         });
@@ -78,23 +77,11 @@ describe("BitmapDecoder", () => {
                 expect(bitmap.pixelData.length).to.equal(640 * 480);
             });
 
-            // TODO: Figure out if you need to test if pixels array is correct.
-
-            
-
         });
 
-            // Create generator
-           // const generator: DifferenceImageGenerator = new DifferenceImageGenerator(bitmap, bitmapEdited);
-            // The bitmap created by the algorithm
-            //const finalMap: Bitmap = generator.generateImage();
-    
-            // Write the new map made by algorithm
-            //writeFileSync("testing123.bmp", new Buffer(BitmapEncoder.encodeBitmap(finalMap)));
     });
 
     describe("fromPixels()", () => {
-        // TODO: Find out where to get pixels from
         const originalImage: Bitmap = BitmapDecoder.FromArrayBuffer(flagBuffer);
         const fromPixelsImage: Bitmap = BitmapDecoder.fromPixels(originalImage.pixelData, originalImage);
 

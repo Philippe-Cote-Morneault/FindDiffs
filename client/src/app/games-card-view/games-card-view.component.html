@@ -1,0 +1,31 @@
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="item1">{{gameCard.title}}</div>
+        <div class="item2">
+            <img src="{{gameCard.image}}" width="150" height="150"/>
+        </div>
+        <div class="item3">
+            <span> Best solo times: </span>
+            <ol *ngFor='let soloTime of gameCard.bestTimeSolo; let i = index'>
+                <span> {{i+1}}: </span> {{gameCard.soloTime}}
+            </ol> 
+        </div>
+        <div class="item4">
+            <span> Best 1 vs. 1 times: </span>
+            <ol *ngFor='let onlineTime of gameCard.bestTimeOnline;let i = index'>
+                <span> {{i+1}}: </span> {{gameCard.onlineTime}}
+            </ol>  
+        </div>
+        <div class="item5">
+            <button class="button" onclick="">Solo</button>
+        </div>
+        <div class="item6">
+            <button class="button" onclick="">1 vs. 1</button>
+        </div>
+    </div>
+</body>
