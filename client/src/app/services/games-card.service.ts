@@ -5,7 +5,6 @@ import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { Event, SocketService } from "./socket.service";
-
 /*
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -16,15 +15,15 @@ const httpOptions = {
   providedIn: "root",
 })
 export class GamesCardViewService {
+  private readonly BASE_URL: string = "http://localhost:3000/user/";
+  private readonly GET_ALL_CARDS_URL: string = "gamecard/";
 
   public constructor(private http: HttpClient, private socketService: SocketService) { }
 
-  private gamesUrl: string = "api/games";
-
-  public getGameCards(povType: POVType): Observable<ICommonGameCard[]> {
-    return this.http.get<ICommonGameCard[]>(this.gamesUrl)
-      .pipe(
-        catchError(this.handleError("getGameCards", [])),
+  public getGameCards(povType: POVType): Observable<Message> {
+    return this.http.get<Message>(this.BASE_URL + this.GET_ALL_CARDS_URL)
+        .pipe(
+          catchError(this.handleError<Message>("getUsernameValidation")),
       );
   }
 

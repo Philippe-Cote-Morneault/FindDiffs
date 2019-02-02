@@ -28,7 +28,7 @@ export class InitialViewComponent {
   public correctUsername(message: Message): void {
     if (message) {
       localStorage.setItem("user", message.body);
-      this.router.navigateByUrl("/admin");
+      this.router.navigateByUrl("/gamesList");
     } else {
       alert("Invalid username!");
     }
