@@ -1,7 +1,7 @@
 import { Component, HostListener } from "@angular/core";
 import { Router } from "@angular/router";
-import { User } from "../../../../common/communication/user";
 import { Message } from "../../../../common/communication/message";
+import { User } from "../../../../common/communication/user";
 import { InitialViewService } from "../initial-view.service";
 
 @Component({
