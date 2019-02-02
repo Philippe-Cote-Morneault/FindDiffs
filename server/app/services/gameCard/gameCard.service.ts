@@ -33,7 +33,6 @@ export class GameCardService extends Service implements IGameCardService {
     }
 
     public async post(req: Request): Promise<string> {
-        try {
             this.validatePost(req);
             const imagePair: ICommonImagePair = await this.getImagePairId(req.body["image-pair-id"]);
             const gameCard: IGameCard = new GameCard({
@@ -47,9 +46,6 @@ export class GameCardService extends Service implements IGameCardService {
             await gameCard.save();
 
             return JSON.stringify(this.getCommonGameCard(gameCard, imagePair));
-        } catch (err) {
-            return this.printError(err.message);
-        }
     }
 
     public async index(): Promise<string> {
@@ -75,8 +71,7 @@ export class GameCardService extends Service implements IGameCardService {
             return JSON.stringify(this.getCommonGameCard(doc, imagePair));
         })
         .catch((err: Error) => {
-            // TODO Catch exception and rethrow a diffrent error code
-            return JSON.stringify(this.printError(err.message));
+            throw new NotFoundException("The id could not be found.");
         });
     }
 
@@ -91,8 +86,7 @@ export class GameCardService extends Service implements IGameCardService {
 
             return JSON.stringify(message); })
         .catch((error: Error) => {
-            // TODO Catch exception and rethrow a diffrent error code
-            return JSON.stringify(this.printError(error.message));
+            throw new NotFoundException("The id could not be found.");
         });
     }
 

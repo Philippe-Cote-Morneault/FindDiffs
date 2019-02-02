@@ -1,6 +1,8 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { Message } from "../../../../common/communication/message";
+import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
+import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { IUser, User } from "../../model/schemas/user";
 import { IUserService } from "../interfaces";
 import { Service } from "../service";
@@ -11,7 +13,7 @@ export class UserService extends Service implements IUserService {
         return User.find({}).then((docs: IUser[]) => {
             return  JSON.stringify(docs);
         }).catch((error: Error) => {
-            return this.printError(error.message);
+            throw new InvalidFormatException(error.message);
         });
     }
 
@@ -20,8 +22,7 @@ export class UserService extends Service implements IUserService {
             .then((doc: IUser) => {
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
-                // TODO Catch exception and rethrow a diffrent error code
-                return JSON.stringify(this.printError(error.message));
+                throw new NotFoundException("The id could not be found");
             });
     }
 
@@ -36,8 +37,7 @@ export class UserService extends Service implements IUserService {
 
             return JSON.stringify(message); })
         .catch((error: Error) => {
-            // TODO Catch exception and rethrow a diffrent error code
-            return JSON.stringify(this.printError(error.message));
+            throw new NotFoundException("The id could not be found");
         });
     }
 
@@ -54,14 +54,14 @@ export class UserService extends Service implements IUserService {
                     return JSON.stringify(user);
                 }
 
-                return this.printError("The username is already taken.");
+                throw new InvalidFormatException("The username is already taken.");
 
             }
 
-            return this.printError("The field username is not valid.");
+            throw new InvalidFormatException("The field username is not valid.");
         }
 
-        return this.printError("The field username is not set.");
+        throw new InvalidFormatException("The field username is not set.");
     }
 
     private async isAvailable(username: string): Promise<boolean> {
