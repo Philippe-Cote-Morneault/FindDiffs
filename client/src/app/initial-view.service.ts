@@ -7,7 +7,7 @@ import { Message } from "../../../common/communication/message";
 @Injectable()
 export class InitialViewService {
 
-    private readonly BASE_URL: string = "http://localhost:3000/user";
+    private readonly BASE_URL: string = "http://localhost:3000/user/";
     public constructor(private http: HttpClient) { }
 
     public postUsernameValidation<User>(username: string): Observable<User> {
@@ -24,6 +24,7 @@ export class InitialViewService {
 
     private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
         return (error: Error): Observable<T> => {
+
             return of(result as T);
         };
     }

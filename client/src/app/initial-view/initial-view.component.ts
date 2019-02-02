@@ -1,6 +1,7 @@
 import { Component, HostListener } from "@angular/core";
 import { Router } from "@angular/router";
 import { User } from "../../../../common/communication/user";
+import { Message } from "../../../../common/communication/message";
 import { InitialViewService } from "../initial-view.service";
 
 @Component({
@@ -25,12 +26,12 @@ export class InitialViewComponent {
     this.initialViewService.deleteUsername(user.id).toPromise();
   }
 
-  public correctUsername(user: User): void {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
+  public correctUsername(response: User | Message): void {
+    if ((response as User).id) {
+      localStorage.setItem("user", JSON.stringify(response));
       this.router.navigateByUrl("/admin");
     } else {
-      alert("Invalid username!");
+      alert((response as Message).body);
     }
   }
 }
