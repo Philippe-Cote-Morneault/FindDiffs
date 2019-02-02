@@ -15,3 +15,10 @@ export interface IUserService {
     single(id: string): Promise<string>;
     delete(id: string): Promise<string>;
 }
+
+export interface IGameCardService {
+    post(req: Request): Promise<string>;
+    index(): Promise<string>;
+    single(id: string): Promise<string>;
+    delete(id: string): Promise<string>;
+}
