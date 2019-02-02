@@ -10,6 +10,7 @@ import { GameCard, IGameCard } from "../../model/schemas/gameCard";
 import { EnumUtils } from "../../utils/EnumUtils";
 import { IGameCardService } from "../interfaces";
 import { Service } from "../service";
+import { Message } from "../../../../common/communication/message";
 
 export class GameCardService extends Service implements IGameCardService {
 
@@ -67,11 +68,32 @@ export class GameCardService extends Service implements IGameCardService {
     }
 
     public single(id: string): Promise<string> {
-        throw new Error("Method not implemented.");
+        return GameCard.findById(id).select("+imagePairId")
+        .then(async(doc: IGameCard) => {
+            const imagePair: ICommonImagePair = await this.getImagePairId(doc.imagePairId);
+
+            return JSON.stringify(this.getCommonGameCard(doc, imagePair));
+        })
+        .catch((err: Error) => {
+            // TODO Catch exception and rethrow a diffrent error code
+            return JSON.stringify(this.printError(err.message));
+        });
     }
 
     public delete(id: string): Promise<string> {
-        throw new Error("Method not implemented.");
+        return GameCard.findById(id)
+        .then((doc: IGameCard) => {
+            doc.remove();
+            const message: Message = {
+                title: "Success",
+                body: "The gamecard was deleted.",
+            };
+
+            return JSON.stringify(message); })
+        .catch((error: Error) => {
+            // TODO Catch exception and rethrow a diffrent error code
+            return JSON.stringify(this.printError(error.message));
+        });
     }
 
     private async getImagePairId(id: string): Promise<ICommonImagePair> {
