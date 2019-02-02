@@ -143,7 +143,7 @@ describe("usernameHandler", () => {
   it("Should be true if the username is empty", () => {
     const user: string = "username";
     const request = {
-      params: { username : "username", },
+      body: { username : "username", },
     };
     const response = {
       body: { },
@@ -154,7 +154,7 @@ describe("usernameHandler", () => {
   });
   it("Should be true if the username (ALPHA) is corretly added when the array is empty", () => {
     const request = {
-      params: { username : "", },
+      body: { username : "", },
     };
     const response = {
       body: { },
@@ -165,7 +165,7 @@ describe("usernameHandler", () => {
   it("Should be true if the username (NUMERIC) is corretly added when the array is empty", () => {
     const user: string = "1234";
     const request = {
-      params: { username : "1234", },
+      body: { username : "1234", },
     };
     const response = {
       body: { },
@@ -177,7 +177,7 @@ describe("usernameHandler", () => {
   it("Should be true if the username (ALPHANUMERIC) is corretly added when the array is empty", () => {
     const user: string = "username12";
     const request = {
-      params: { username : "username12", },
+      body: { username : "username12", },
     };
     const response = {
       body: { },
@@ -188,7 +188,7 @@ describe("usernameHandler", () => {
   });
   it("Should be true if the username is not added: name too short", () => {
     const request = {
-      params: { username : "us", },
+      body: { username : "us", },
     };
     const response = {
       body: { },
@@ -198,7 +198,7 @@ describe("usernameHandler", () => {
   });
   it("Should be true if the username is not added: name too long", () => {
     const request = {
-      params: { username : "username1234567", },
+      body: { username : "username1234567", },
     };
     const response = {
       body: { },
@@ -208,13 +208,13 @@ describe("usernameHandler", () => {
   });
   it("Should be true if multiple differents usernames are added", () => {
     const firstRequest = {
-      params: { username : "username1", },
+      body: { username : "username1", },
     };
     const secondRequest = {
-      params: { username : "username2", },
+      body: { username : "username2", },
     };
     const thirdRequest = {
-      params: { username : "username3", },
+      body: { username : "username3", },
     };
     const response = {
       body: { },
@@ -232,7 +232,7 @@ describe("usernameHandler", () => {
   });
   it("Should be true if two identical usernames are added", () => {
     const request = {
-      params: { username : "username", },
+      body: { username : "username", },
     };
     const response = {
       body: { },
@@ -246,7 +246,7 @@ describe("usernameHandler", () => {
   // deleteUsername
   it("Should return true if the username is removed from the array", () => {
     const request = {
-      params: { username: "bob", },
+      body: { username: "bob", },
     };
     const response = {
       body: { },
