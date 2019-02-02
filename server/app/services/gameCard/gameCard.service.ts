@@ -1,6 +1,7 @@
 import Axios, { AxiosResponse } from "axios";
 import { Request } from "express";
 import "reflect-metadata";
+import { Message } from "../../../../common/communication/message";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
@@ -10,7 +11,6 @@ import { GameCard, IGameCard } from "../../model/schemas/gameCard";
 import { EnumUtils } from "../../utils/EnumUtils";
 import { IGameCardService } from "../interfaces";
 import { Service } from "../service";
-import { Message } from "../../../../common/communication/message";
 
 export class GameCardService extends Service implements IGameCardService {
 
@@ -33,23 +33,19 @@ export class GameCardService extends Service implements IGameCardService {
     }
 
     public async post(req: Request): Promise<string> {
-        try {
-            this.validatePost(req);
-            const imagePair: ICommonImagePair = await this.getImagePairId(req.body["image-pair-id"]);
-            const gameCard: IGameCard = new GameCard({
-                pov: req.body.pov,
-                title: req.body.name,
-                imagePairId: imagePair.id,
-                best_time_solo: [0, 0, 0],
-                best_time_online: [0, 0, 0],
-                creation_date: new Date(),
-            });
-            await gameCard.save();
+        this.validatePost(req);
+        const imagePair: ICommonImagePair = await this.getImagePairId(req.body["image-pair-id"]);
+        const gameCard: IGameCard = new GameCard({
+            pov: req.body.pov,
+            title: req.body.name,
+            imagePairId: imagePair.id,
+            best_time_solo: [0, 0, 0],
+            best_time_online: [0, 0, 0],
+            creation_date: new Date(),
+        });
+        await gameCard.save();
 
-            return JSON.stringify(this.getCommonGameCard(gameCard, imagePair));
-        } catch (err) {
-            return this.printError(err.message);
-        }
+        return JSON.stringify(this.getCommonGameCard(gameCard, imagePair));
     }
 
     public async index(): Promise<string> {
@@ -67,7 +63,7 @@ export class GameCardService extends Service implements IGameCardService {
         });
     }
 
-    public single(id: string): Promise<string> {
+    public async single(id: string): Promise<string> {
         return GameCard.findById(id).select("+imagePairId")
         .then(async(doc: IGameCard) => {
             const imagePair: ICommonImagePair = await this.getImagePairId(doc.imagePairId);
@@ -75,15 +71,14 @@ export class GameCardService extends Service implements IGameCardService {
             return JSON.stringify(this.getCommonGameCard(doc, imagePair));
         })
         .catch((err: Error) => {
-            // TODO Catch exception and rethrow a diffrent error code
-            return JSON.stringify(this.printError(err.message));
+            throw new NotFoundException("The id could not be found.");
         });
     }
 
-    public delete(id: string): Promise<string> {
+    public async delete(id: string): Promise<string> {
         return GameCard.findById(id)
-        .then((doc: IGameCard) => {
-            doc.remove();
+        .then(async (doc: IGameCard) => {
+            await doc.remove();
             const message: Message = {
                 title: "Success",
                 body: "The gamecard was deleted.",
@@ -91,8 +86,7 @@ export class GameCardService extends Service implements IGameCardService {
 
             return JSON.stringify(message); })
         .catch((error: Error) => {
-            // TODO Catch exception and rethrow a diffrent error code
-            return JSON.stringify(this.printError(error.message));
+            throw new NotFoundException("The id could not be found.");
         });
     }
 
