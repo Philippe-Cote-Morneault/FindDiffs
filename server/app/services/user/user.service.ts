@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import "reflect-metadata";
 import { Message } from "../../../../common/communication/message";
 import { IUser, User } from "../../model/schemas/user";
@@ -65,9 +65,9 @@ export class UserService extends Service implements IUserService {
     }
 
     private isAvailable(username: string): Promise<boolean> {
-        return User.count({username: username}).then((c: number) => {
-            return c > 0;
-        }).catch(() => {
+        return User.countDocuments({username: username}).then((c: number) => {
+            return c === 0;
+        }).catch((err: Error) => {
             return false;
         });
     }
