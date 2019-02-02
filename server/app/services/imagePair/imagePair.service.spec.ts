@@ -1,18 +1,18 @@
 import {expect} from "chai";
 import { mockReq } from "sinon-express-mock";
-import { ImagePairController } from "./imagePairController";
+import { ImagePairService } from "./imagePair.service";
 
-describe("ImagePairController", () => {
-    const imagePairController: ImagePairController = new ImagePairController();
+describe("ImagePairService", () => {
+    const imagePairService: ImagePairService = new ImagePairService();
     it("If body is empty, should return an error", () => {
         // tslint:disable:typedef
         const request = {
             body: {
             },
         };
-        const response: string = imagePairController.genDifference(mockReq(request));
+        const response: string = imagePairService.post(mockReq(request));
         const errorMessage: string = "The field name is missing.";
-        expect(response).to.equal(imagePairController.printError(errorMessage));
+        expect(response).to.equal(imagePairService.printError(errorMessage));
     });
 
     it("If body does not contain an original image return an error", () => {
@@ -21,9 +21,9 @@ describe("ImagePairController", () => {
                 name: "bob",
             },
         };
-        const response: string = imagePairController.genDifference(mockReq(request));
+        const response: string = imagePairService.post(mockReq(request));
         const errorMessage: string = "Files needs to be uploaded, no files were uploaded.";
-        expect(response).to.equal(imagePairController.printError(errorMessage));
+        expect(response).to.equal(imagePairService.printError(errorMessage));
     });
 
     it("If body does not contain a modified image return an error", () => {
@@ -35,9 +35,9 @@ describe("ImagePairController", () => {
                 originalImage: "image",
             },
         };
-        const response: string = imagePairController.genDifference(mockReq(request));
+        const response: string = imagePairService.post(mockReq(request));
         const errorMessage: string = "Modified image is missing.";
-        expect(response).to.equal(imagePairController.printError(errorMessage));
+        expect(response).to.equal(imagePairService.printError(errorMessage));
     });
 
     it("If body contains images but invalid return an error", () => {
@@ -50,8 +50,8 @@ describe("ImagePairController", () => {
                 modifiedImage: "image",
             },
         };
-        const response: string = imagePairController.genDifference(mockReq(request));
+        const response: string = imagePairService.post(mockReq(request));
         const errorMessage: string = "Original image is not a file.";
-        expect(response).to.equal(imagePairController.printError(errorMessage));
+        expect(response).to.equal(imagePairService.printError(errorMessage));
     });
 });

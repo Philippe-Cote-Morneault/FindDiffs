@@ -1,17 +1,40 @@
 import { Request } from "express";
 import * as fs from "fs";
+import { injectable } from "inversify";
 import "reflect-metadata";
-import { Message } from "../../../common/communication/message";
-import { InvalidFormatException } from "../../../common/errors/invalidFormatException";
-import { Bitmap } from "../model/bitmap/bitmap";
-import { ImagePair, IImagePair } from "../model/schemas/imagePair";
-import { BitmapDecoder } from "../services/differenceGenerator/bitmapDecoder";
-import { BitmapEncoder } from "../services/differenceGenerator/bitmapEncoder";
-import { DifferenceDetector } from "../services/differenceGenerator/differenceDetector";
-import { DifferenceImageGenerator } from "../services/differenceGenerator/differenceImageGenerator";
-import { Storage } from "../utils/storage";
+import { Message } from "../../../../common/communication/message";
+import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
+import { Bitmap } from "../../model/bitmap/bitmap";
+import { ImagePair, IImagePair } from "../../model/schemas/imagePair";
+import { Storage } from "../../utils/storage";
+import { IImagePairService } from "../interfaces";
+import { BitmapDecoder } from "./bitmapDecoder";
+import { BitmapEncoder } from "./bitmapEncoder";
+import { DifferenceDetector } from "./differenceDetector";
+import { DifferenceImageGenerator } from "./differenceImageGenerator";
 
-export class ImagePairController {
+@injectable()
+export class ImagePairService implements IImagePairService {
+
+    public index(): string {
+        throw new Error("Method not implemented.");
+    }
+
+    public single(id: string): string {
+        throw new Error("Method not implemented.");
+    }
+
+    public getDifference(id: string): string {
+        throw new Error("Method not implemented.");
+    }
+
+    public getModified(id: string): string {
+        throw new Error("Method not implemented.");
+    }
+
+    public getOriginal(id: string): string {
+        throw new Error("Method not implemented.");
+    }
 
     public printError(error: string): string {
         const message: Message = {
@@ -48,7 +71,7 @@ export class ImagePairController {
         }
     }
 
-    public genDifference(req: Request): string {
+    public post(req: Request): string {
         let originalImage: Bitmap;
         let modifiedImage: Bitmap;
         try {
