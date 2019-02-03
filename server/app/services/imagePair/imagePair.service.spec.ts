@@ -6,6 +6,7 @@ import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { Storage } from "../../utils/storage";
 import { ImagePairService } from "./imagePair.service";
+import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
 
 interface FilesFetchMock {
     name: string;
@@ -172,8 +173,9 @@ describe("ImagePairService", () => {
     methodsToTest.forEach((file: FilesFetchMock) => {
         queryResponse[file.field] = file.fake_id;
     });
+    // tslint:disable-next-line:max-func-body-length
     methodsToTest.forEach((method: FilesFetchMock) => {
-        describe(`${method}()`, () => {
+        describe(`${method.name}()`, () => {
             it("Should return a full path of the file", async () => {
                 const FAKE_PATH: string = `/${method.fake_id}`;
 
@@ -191,6 +193,18 @@ describe("ImagePairService", () => {
                     throw new NoErrorThrownException();
                 } catch (err) {
                     expect(err.message).to.equal("The id could not be found.");
+                }
+            });
+            it("Should throw an error if the file is not present on the server", async () => {
+                (ImagePair.findById as sinon.SinonStub).returns(new MongooseMock.Query(
+                    new MongooseMock.Schema(queryResponse, false), true));
+                (Storage.exists as sinon.SinonStub).returns(false);
+
+                try {
+                    await imagePairService[method.name]("id");
+                    throw new NoErrorThrownException();
+                } catch (err) {
+                    expect(err.message).to.equal(new FileNotFoundException(method.fake_id).message);
                 }
             });
         });
