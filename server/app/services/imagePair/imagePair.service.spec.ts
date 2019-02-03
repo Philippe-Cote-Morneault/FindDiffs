@@ -1,12 +1,12 @@
 import {expect} from "chai";
 import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
+import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
 import { ImagePair } from "../../model/schemas/imagePair";
 import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { Storage } from "../../utils/storage";
 import { ImagePairService } from "./imagePair.service";
-import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
 
 interface FilesFetchMock {
     name: string;
