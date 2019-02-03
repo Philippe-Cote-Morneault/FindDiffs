@@ -280,5 +280,21 @@ describe("GameCardService", () => {
                 expect(err.message).to.equal("The id could not be found.");
             }
         });
+
+        it("Should throw an error if the request is empty", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+                body: {},
+            };
+            (GameCard.findById as sinon.SinonStub).resolves({});
+            try {
+                await service.update(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("No changes were detected!");
+            }
+        });
     });
 });
