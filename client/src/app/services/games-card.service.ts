@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { of, Observable } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
-import { ICommonGameCard } from "../../../../common/model/gameCard";
+import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { Event, SocketService } from "./socket.service";
 
 @Injectable({
@@ -21,6 +21,13 @@ export class GamesCardService {
     );
   }
 
+  public addGameCard(gameName: string, imagePairId: string, pov: POVType): Observable<ICommonGameCard> {
+    // TODO: Find type for this object
+    const requestBody = { "name": gameName, "image-pair-id": imagePairId, "pov": "Simple"};
+
+    return this.http.post<ICommonGameCard>(this.BASE_URL + "gamecard", requestBody);
+  }
+
   public deleteGameCard(gameCardId: string): Observable<Message> {
     return this.http.delete<Message>(this.BASE_URL + this.GAMECARD_URL + gameCardId).pipe(
       catchError(this.handleError<Message>("deleteGameCard")),
@@ -33,7 +40,7 @@ export class GamesCardService {
     formData.append("best_time_online", gameCard.best_time_online.toString());
 
     console.log(formData);
-    
+
     return this.http.put<Message>(this.BASE_URL + this.GAMECARD_URL + gameCard.id, formData).pipe(
       catchError(this.handleError<Message>("resetBestTimes")),
     );
