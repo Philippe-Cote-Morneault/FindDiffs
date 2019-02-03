@@ -8,7 +8,7 @@ import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import Config from "../../config";
 import { GameCard, IGameCard } from "../../model/schemas/gameCard";
-import { EnumUtils } from "../../utils/EnumUtils";
+import { EnumUtils } from "../../utils/enumUtils";
 import { IGameCardService } from "../interfaces";
 import { Service } from "../service";
 
