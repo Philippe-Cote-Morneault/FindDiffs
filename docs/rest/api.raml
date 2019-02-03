@@ -268,7 +268,7 @@ version: 1
     put:
       description: Update a gamecard
       body:
-        multipart/form-data:
+        application/json:
           properties:
             best_time_solo:
               required: false
@@ -276,6 +276,11 @@ version: 1
             best_time_online:
               required: false
               type: string
+          example: | 
+            {
+              "best_time_online":"",
+              "best_time_solo":"",
+            }
       responses: 
         200:
           body:
