@@ -155,8 +155,7 @@ describe("GameCardService", () => {
     });
 
     describe("index()", () => {
-        it("Should return an array of multiple game cards", async () => {
-            const NUMBER_OF_VALUES: number = 3;
+        it("Should return an array of game cards", async () => {
             const imagepair: ICommonImagePair = {
                 id: "an id",
                 url_difference: "differences",
@@ -170,9 +169,18 @@ describe("GameCardService", () => {
                 data: imagepair,
             };
             (Axios.get as sinon.SinonStub).resolves(axiosResponse);
-            (GameCard.find as sinon.SinonStub).returns(new MongooseMockQuery(new Array()
-            .fill({
-                id: "id",
+            (GameCard.find as sinon.SinonStub).returns(new MongooseMockQuery(
+            [{
+                pov: POVType.Free,
+                title: "title",
+                imagePairId: "an id",
+                creation_date: new Date(),
+                best_time_online: [0],
+                best_time_solo: [0],
+            }]));
+            const response: string = await service.index();
+            expect(JSON.parse(response).length).to.equal(1);
+        });
                 pov: POVType.Free,
                 title: "title",
                 imagePairId: "an id",
