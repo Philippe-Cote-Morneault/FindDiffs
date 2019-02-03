@@ -344,5 +344,22 @@ describe("GameCardService", () => {
             }));
             await service.update(mockReq(request));
         });
+
+        it("Should return a success message", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+                body: {
+                    best_time_online: "change",
+                    best_time_solo: "change",
+
+                },
+            };
+            (GameCard.findById as sinon.SinonStub).resolves();
+
+            const response: string = await service.update(mockReq(request));
+            expect(JSON.parse(response).title).to.equal("success");
+        });
     });
 });
