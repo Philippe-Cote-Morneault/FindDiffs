@@ -12,7 +12,6 @@ export class AdminViewComponent {
   public header: string = "Create a game in:";
 
   public onClosed(closed: boolean): void {
-    console.log("onClosed");
     if (closed) {
       this.isPopUpVisible = false;
     }
