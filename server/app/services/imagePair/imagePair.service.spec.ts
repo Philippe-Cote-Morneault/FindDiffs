@@ -2,18 +2,32 @@ import {expect} from "chai";
 import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
 import { ImagePair } from "../../model/schemas/imagePair";
+import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
+import { Storage } from "../../utils/storage";
 import { ImagePairService } from "./imagePair.service";
+
+interface FilesFetchMock {
+    name: string;
+    fake_id: string;
+    field: string;
+}
 
 describe("ImagePairService", () => {
     const imagePairService: ImagePairService = new ImagePairService();
 
     beforeEach(() => {
         sinon.stub(ImagePair, "find");
+        sinon.stub(ImagePair, "findById");
+        sinon.stub(Storage, "exists");
+        sinon.stub(Storage, "getFullPath").callsFake((id: string) => `/${id}`);
     });
 
     afterEach(() => {
         (ImagePair.find as sinon.SinonStub).restore();
+        (ImagePair.findById as sinon.SinonStub).restore();
+        (Storage.exists as sinon.SinonStub).restore();
+        (Storage.getFullPath as sinon.SinonStub).restore();
     });
 
     describe("post()", () => {
@@ -133,6 +147,52 @@ describe("ImagePairService", () => {
             } catch (err) {
                 expect(err.message).to.equal("The id could not be found.");
             }
+        });
+    });
+
+    // Tests for the files fetch methods
+    const methodsToTest: FilesFetchMock[] = [
+        {
+            name: "getDifference",
+            fake_id: "id_difference",
+            field: "file_difference_id",
+        },
+        {
+            name: "getOriginal",
+            fake_id: "id_original",
+            field: "file_original_id",
+        },
+        {
+            name: "getModified",
+            fake_id: "id_modified",
+            field: "file_modified_id",
+        },
+    ];
+    const queryResponse: Object[]  = new Array();
+    methodsToTest.forEach((file: FilesFetchMock) => {
+        queryResponse[file.field] = file.fake_id;
+    });
+    methodsToTest.forEach((method: FilesFetchMock) => {
+        describe(`${method}()`, () => {
+            it("Should return a full path of the file", async () => {
+                const FAKE_PATH: string = `/${method.fake_id}`;
+
+                (ImagePair.findById as sinon.SinonStub).returns(new MongooseMock.Query(
+                    new MongooseMock.Schema(queryResponse, false), true));
+                (Storage.exists as sinon.SinonStub).returns(true);
+
+                expect(await imagePairService[method.name]("id")).to.equal(FAKE_PATH);
+            });
+
+            it("Should throw an error if the id is not valid", async () => {
+                (ImagePair.findById as sinon.SinonStub).returns(new MongooseMock.Query({}, false));
+                try {
+                    await imagePairService[method.name]("id");
+                    throw new NoErrorThrownException();
+                } catch (err) {
+                    expect(err.message).to.equal("The id could not be found.");
+                }
+            });
         });
     });
 });
