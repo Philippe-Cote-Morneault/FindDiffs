@@ -27,7 +27,7 @@
         <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
       </div>
       <div *ngIf="verifyInfo()"></div>
-      <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId">Submit</button>
+      <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addImagePair()">Submit</button>
       <button class="btn btn-danger" (click)="hideView()" >Cancel</button>
     </form>
   </div>

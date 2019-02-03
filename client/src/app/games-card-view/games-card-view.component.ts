@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
-import { ImagePairService } from "../services/image-pair.service";
+import { GamesCardService } from "../services/games-card.service";
+import { Message } from "../../../../common/communication/message";
 
 @Component({
   selector: "app-games-card-view",
@@ -10,19 +11,60 @@ import { ImagePairService } from "../services/image-pair.service";
 })
 export class GamesCardViewComponent implements OnInit {
   @Input() public gameCard: ICommonGameCard;
-  public buttonSolo: string = "Solo";
-  public buttonOnline: string = "1 vs. 1";
-  public originalImage: File;
+  @Input() public isInAdminView: boolean = false;
 
-  public constructor(public imagePairService: ImagePairService) { }
+  public leftButton: string = "Play";
+  public rightButton: string = "Create";
 
-  public ngOnInit(): void {
-    this.getOriginalImage();
+  private gamesCardService: GamesCardService;
+
+  public constructor(gamesCardService: GamesCardService) {
+    this.gamesCardService = gamesCardService;
   }
 
+  public ngOnInit(): void {
+    if (this.isInAdminView) {
+      this.leftButton = "Delete";
+      this.rightButton = "Reset";
+    }
+  }
+
+  public onLeftButtonClick(): void {
+    if (this.isInAdminView) {
+      this.deleteGameCard();
+    }
+  }
+
+  public onRightButtonClick(): void {
+    if (this.isInAdminView) {
+      this.resetBestTimes();
+    }
+  }
+
+  public deleteGameCard(): void {
+    if (confirm("Are you sure you want to delete the Game Card called " + this.gameCard.title + "?")) {
+      this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe((message: Message) => {
+        console.log(message);
+        window.location.reload();
+      });
+    }
+  }
+
+  public resetBestTimes(): void {
+    if (confirm("Are you sure you want to reset the best times of the Game Card called " + this.gameCard.title + "?")) {
+      this.gamesCardService.resetBestTimes(this.gameCard).subscribe((message: Message) => {
+        console.log(message);
+        if (message.title !== "Error") {
+        window.location.reload();
+        }
+      });
+    }
+  }
   private getOriginalImage(): void {
     this.imagePairService.getOriginalImage(this.gameCard.image_pair.id).subscribe(
       (originalImage: File) => {this.originalImage = originalImage; },
     );
   }
+    this.getOriginalImage();
+  public originalImage: File;
 }

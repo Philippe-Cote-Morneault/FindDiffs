@@ -11,4 +11,9 @@ export class AdminViewComponent {
   public freeMode: string = "Free mode";
   public header: string = "Create a game in:";
 
+  public onClosed(closed: boolean): void {
+    if (closed) {
+      this.isPopUpVisible = false;
+    }
+  }
 }

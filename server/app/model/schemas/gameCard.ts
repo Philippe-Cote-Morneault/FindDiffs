@@ -5,8 +5,8 @@ export interface IGameCard extends Document {
     pov: POVType;
     title: string;
     imagePairId: string;
-    best_time_solo: [number];
-    best_time_online: [number];
+    best_time_solo: number[];
+    best_time_online: number[];
     creation_date: Date;
 }
 

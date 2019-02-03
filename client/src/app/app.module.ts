@@ -10,7 +10,7 @@ import { GamesCardViewComponent } from "./games-card-view/games-card-view.compon
 import { GamesListViewComponent } from "./games-list-view/games-list-view.component";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 import { GameCardLoaderService } from "./services/game-card-loader.service";
-import { InitialViewService } from "./services/initial-view.service";
+import { UserService } from "./services/user.service";
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { InitialViewService } from "./services/initial-view.service";
     AppRoutingModule,
     FormsModule,
   ],
-  providers: [InitialViewService, InitialViewComponent, GameCardLoaderService],
+  providers: [UserService, InitialViewComponent, GameCardLoaderService],
   bootstrap: [AppComponent],
   entryComponents: [GamesCardViewComponent],
 })

@@ -1,33 +1,52 @@
-/*import {expect} from "chai";
-import { DatabaseConnectionHandler } from "./databaseConnectionHandler";
+import {expect} from "chai";
+import * as mongoose from "mongoose";
+import * as sinon from "sinon";
+import { NoErrorThrownException } from "../tests/noErrorThrownException";
+import { DbConnectionHandler } from "./dbConnectionHandler";
 
 describe("DatabaseConnectionHandler", () => {
-    it("Should connect", () => {
-        new DatabaseConnectionHandler();
-        expect("12321").to.equal("hello");
+    beforeEach(() => {
+        sinon.stub(mongoose, "connect");
+        sinon.stub(mongoose, "disconnect");
     });
-});
+    afterEach(() => {
+        (mongoose.connect as sinon.SinonStub).restore();
+        (mongoose.disconnect as sinon.SinonStub).restore();
+    });
+    describe("connect()", () => {
+        it("Should connect without any error and call a callback", () => {
+            const db: DbConnectionHandler = new DbConnectionHandler();
+            (mongoose.connect as sinon.SinonStub).yields(undefined);
+            db.connect(() => {
+                expect(true).to.equal(true);
+            },         () => {
+                throw new NoErrorThrownException();
+            });
+        });
 
-let card = new gameCard({
-                guid: "123213fssf",
-                pov: "Simple",
-                title: "this is the title",
-                images: {
-                    id: "12fdsfds",
-                    url_difference: "urlDif",
-                    url_modified: "urlMod",
-                    url_original: "urlOg",
-                    name: "name",
-                    creation_date: new Date(),
-                    differences_count: 7,
-                },
-                bestTimesSolo: [1, 2, 3],
-                bestTimesOnline: [4, 5, 6],
+        it("Should connect with an error and call a callback", () => {
+            const db: DbConnectionHandler = new DbConnectionHandler();
+            (mongoose.connect as sinon.SinonStub).yields(new Error("No internet"));
+            db.connect(() => {
+                throw new NoErrorThrownException();
+            },         () => {
+                expect(true).to.equal(true);
             });
-            card.save((err) => {
-                if (err) {
-                    console.error("error");
-                    console.log(err);
-                }
-            });
-*/
+        });
+    });
+    describe("disconnect()", () => {
+        it("Should disconnect without any problem", async () => {
+            const db: DbConnectionHandler = new DbConnectionHandler();
+            (mongoose.disconnect as sinon.SinonStub).resolves();
+            await db.disconnect();
+        });
+    });
+    describe("getInstance()", () => {
+        it("Should be able to have a single intance", async () => {
+            expect(
+                Object.is(DbConnectionHandler.getInstance(), DbConnectionHandler.getInstance()),
+                ).to.equal(true);
+        });
+    });
+
+});

@@ -21,4 +21,5 @@ export interface IGameCardService {
     index(): Promise<string>;
     single(id: string): Promise<string>;
     delete(id: string): Promise<string>;
+    update(req: Request): Promise<string>;
 }

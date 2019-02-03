@@ -8,13 +8,13 @@ import {Storage} from "./storage";
 
 describe("utils/Storage", () => {
     describe("exists()", () => {
-        it("Return true if a file exists", () => {
+        it("Should return true if a file exists", () => {
             const fileName: string = "file";
             fs.writeFileSync(Storage.STORAGE_PATH + "/" + fileName, "data");
 
             expect(Storage.exists(fileName)).to.equal(true);
         });
-        it("Return false if a file does not exist", () => {
+        it("Should return false if a file does not exist", () => {
             const fileName: string = "file";
             expect(Storage.exists(fileName)).to.equal(false);
         });

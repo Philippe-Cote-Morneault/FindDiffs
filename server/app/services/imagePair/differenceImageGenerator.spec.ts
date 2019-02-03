@@ -20,7 +20,7 @@ describe("DifferenceImageGenerator - Generator", () => {
 
     describe("generateImage()", () => {
 
-        it("Same images should produce a white image", () => {
+        it("Should produce a white image if images are the same", () => {
             const newBitmap: Bitmap = new DifferenceImageGenerator(bitmapA, bitmapA).generateImage();
             const whitePixel: Pixel = Pixel.fromColor(COLOR.WHITE);
             const whiteCount: number = newBitmap.pixelData.filter(
@@ -29,7 +29,7 @@ describe("DifferenceImageGenerator - Generator", () => {
             expect(whiteCount).to.equal(newBitmap.height * newBitmap.width);
         });
 
-        it("Diffrent images of one pixel should produce 37 black pixels", () => {
+        it("Should produce 37 black pixels if images are different by one pixel", () => {
             const newBitmap: Bitmap = new DifferenceImageGenerator(bitmapA, bitmapB).generateImage();
             const blackPixel: Pixel = Pixel.fromColor(COLOR.BLACK);
             const blackCount: number = newBitmap.pixelData.filter(

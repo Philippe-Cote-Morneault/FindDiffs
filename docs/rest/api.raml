@@ -265,3 +265,36 @@ version: 1
                 "title":"success",
                 "body":"Gamecard was deleted successfully"
                 }
+    put:
+      description: Update a gamecard
+      body:
+        application/json:
+          properties:
+            best_time_solo:
+              required: false
+              type: string
+            best_time_online:
+              required: false
+              type: string
+          example: | 
+            {
+              "best_time_online":"",
+              "best_time_solo":"",
+            }
+      responses: 
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "title":"success",
+                  "body":"Gamecard was updated successfully"
+                }
+        400:
+          body:
+            application/json:
+              example: |
+                {
+                  "title":"Error",
+                  "body":"The request is not valid"
+                }

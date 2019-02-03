@@ -1,36 +1,31 @@
-import { Component, HostListener } from "@angular/core";
+import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
-import { InitialViewService } from "../services/initial-view.service";
+import { ICommonUser } from "../../../../common/model/user";
+import { UserService } from "../services/user.service";
 
 @Component({
-  selector: "app-initial-view",
-  templateUrl: "./initial-view.component.html",
-  styleUrls: ["./initial-view.component.css"],
+    selector: "app-initial-view",
+    templateUrl: "./initial-view.component.html",
+    styleUrls: ["./initial-view.component.css"],
 })
 export class InitialViewComponent {
 
-  public constructor(public initialViewService: InitialViewService, private router: Router) { }
-  public title: string = "Spot the Differences";
-  public button: string = "Accept";
+    public constructor(public userService: UserService, private router: Router) {}
+    public title: string = "Spot the Differences";
+    public button: string = "Accept";
 
-  public verifyUsername(): void {
-    const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
-    this.initialViewService.getUsernameValidation(username).subscribe(this.correctUsername.bind(this));
-  }
-
-  @HostListener("window:beforeunload", ["$event"])
-  public beforeUnload($event: Event): void  {
-    const user: string = JSON.parse(localStorage.getItem("user") || "{}");
-    this.initialViewService.getDeleteUsername(user).toPromise();
-  }
-
-  public correctUsername(message: Message): void {
-    if (message) {
-      localStorage.setItem("user", message.body);
-      this.router.navigateByUrl("/gamesList");
-    } else {
-      alert("Invalid username!");
+    public verifyUsername(): void {
+        const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
+        this.userService.postUsernameValidation(username).subscribe(this.correctUsername.bind(this));
     }
-  }
+
+    public correctUsername(response: ICommonUser | Message): void {
+        if ((response as ICommonUser).id) {
+            localStorage.setItem("user", JSON.stringify(response));
+            this.router.navigateByUrl("/gamesList");
+        } else {
+            alert((response as Message).body);
+        }
+    }
 }

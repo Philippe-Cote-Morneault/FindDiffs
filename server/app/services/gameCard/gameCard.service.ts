@@ -51,6 +51,44 @@ export class GameCardService extends Service implements IGameCardService {
         return JSON.stringify(this.getCommonGameCard(gameCard, imagePair));
     }
 
+    private async makeChanges(req: Request, doc: IGameCard): Promise<void> {
+        let changed: boolean = false;
+        if (req.body.best_time_solo) {
+            changed = true;
+            doc.best_time_solo = ScoreGenerator.generateScore(this.DEFAULT_SCORE_NUMBER);
+        }
+        if (req.body.best_time_online) {
+            changed = true;
+            doc.best_time_online = ScoreGenerator.generateScore(this.DEFAULT_SCORE_NUMBER);
+        }
+        if (!changed) {
+            throw new InvalidFormatException("No changes were detected!");
+        }
+        await doc.save();
+    }
+
+    public async update(req: Request): Promise<string> {
+        const id: string = req.params.id;
+
+        return GameCard.findById(id).then(async (doc: IGameCard) => {
+
+            await this.makeChanges(req, doc);
+
+            const message: Message = {
+                title: "success",
+                body: "The gamecard was updated.",
+            };
+
+            return JSON.stringify(message);
+        }).catch((err: Error) => {
+            if (err.name === "InvalidFormatException") {
+                throw err;
+            }
+            throw new NotFoundException("The id could not be found.");
+        });
+
+    }
+
     public async index(): Promise<string> {
         return GameCard.find({}).select("+imagePairId").then(async (docs: IGameCard[]) => {
             const gameCards: ICommonGameCard[] = new Array<ICommonGameCard>();
