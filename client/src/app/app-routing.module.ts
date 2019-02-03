@@ -7,7 +7,7 @@ import { InitialViewComponent } from "./initial-view/initial-view.component";
 
 const routes: Routes = [
   { path: "", component: InitialViewComponent},
-  { path: "admin", component: AdminViewComponent},
+  { path: "gamesList/admin", component: AdminViewComponent},
   { path: "gamesList", component: GamesListViewComponent},
 ];
 

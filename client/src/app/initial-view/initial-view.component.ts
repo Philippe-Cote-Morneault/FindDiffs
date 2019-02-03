@@ -29,7 +29,7 @@ export class InitialViewComponent {
   public correctUsername(response: User | Message): void {
     if ((response as User).id) {
       localStorage.setItem("user", JSON.stringify(response));
-      this.router.navigateByUrl("/admin");
+      this.router.navigateByUrl("/gamesList");
     } else {
       alert((response as Message).body);
     }
