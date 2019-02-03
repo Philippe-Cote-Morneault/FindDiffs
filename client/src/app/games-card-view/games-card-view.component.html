@@ -7,18 +7,18 @@
     <div class="grid-container">
         <div class="item1">{{gameCard.title}}</div>
         <div class="item2">
-            <img src="{{gameCard.image}}" width="150" height="150"/>
+            <img src="{{gameCard.image_pair.url_original}}" width="160" height="120"/>
         </div>
         <div class="item3">
             <span> Best solo times: </span>
-            <ol *ngFor='let soloTime of gameCard.bestTimeSolo; let i = index'>
-                <span> {{i+1}}: </span> {{gameCard.soloTime}}
+            <ol *ngFor='let soloTime of gameCard.best_time_solo; let i = index'>
+                <span> {{i+1}}:  </span> {{toMinutes(i, gameCard.best_time_solo)}}
             </ol> 
         </div>
         <div class="item4">
             <span> Best 1 vs. 1 times: </span>
-            <ol *ngFor='let onlineTime of gameCard.bestTimeOnline;let i = index'>
-                <span> {{i+1}}: </span> {{gameCard.onlineTime}}
+            <ol *ngFor='let onlineTime of gameCard.best_time_online;let i = index'>
+                <span> {{i+1}}: </span> {{toMinutes(i, gameCard.best_time_online)}}
             </ol>  
         </div>
         <div class="item5">
