@@ -2,6 +2,7 @@ import {expect} from "chai";
 import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
 import { User } from "../../model/schemas/user";
+import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { UserService } from "./user.service";
 
 // tslint:disable:no-magic-numbers
@@ -36,7 +37,7 @@ describe("UserService", () => {
             };
             try {
                 await userService.post(mockReq(request));
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(notSetError);
             }
@@ -48,7 +49,7 @@ describe("UserService", () => {
             };
             try {
                 await userService.post(mockReq(request));
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(notValidError);
             }
@@ -60,7 +61,7 @@ describe("UserService", () => {
             };
             try {
                 await userService.post(mockReq(request));
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(notValidError);
             }
@@ -72,7 +73,7 @@ describe("UserService", () => {
             };
             try {
                 await userService.post(mockReq(request));
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(notValidError);
             }
@@ -140,7 +141,7 @@ describe("UserService", () => {
 
             try {
                 await userService.post(mockReq(request));
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(alreadyTakenError);
             }
@@ -172,7 +173,7 @@ describe("UserService", () => {
 
             try {
                 await userService.delete("5c5636f68f786067b76d6b3e");
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(idNotInDB);
             }
@@ -194,7 +195,7 @@ describe("UserService", () => {
 
             try {
                 await userService.index();
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 // The error message is empty
                 expect(err.message).to.equal("");
@@ -222,7 +223,7 @@ describe("UserService", () => {
 
             try {
                 await userService.single(usernameId);
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(idNotInDB);
             }

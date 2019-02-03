@@ -1,5 +1,6 @@
 import {expect} from "chai";
 import { mockReq } from "sinon-express-mock";
+import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { ImagePairService } from "./imagePair.service";
 
 describe("ImagePairService", () => {
@@ -13,7 +14,7 @@ describe("ImagePairService", () => {
             const errorMessage: string = "The field name is missing.";
             try {
                 await imagePairService.post(mockReq(request));
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }
@@ -29,7 +30,7 @@ describe("ImagePairService", () => {
             const errorMessage: string = "Files needs to be uploaded, no files were uploaded.";
             try {
                 await imagePairService.post(mockReq(request));
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }
@@ -47,7 +48,7 @@ describe("ImagePairService", () => {
             const errorMessage: string = "Modified image is missing.";
             try {
                 await imagePairService.post(mockReq(request));
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }
@@ -66,7 +67,7 @@ describe("ImagePairService", () => {
             const errorMessage: string = "Original image is not a file.";
             try {
                 await imagePairService.post(mockReq(request));
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }

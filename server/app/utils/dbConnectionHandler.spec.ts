@@ -1,6 +1,7 @@
 import {expect} from "chai";
 import * as mongoose from "mongoose";
 import * as sinon from "sinon";
+import { NoErrorThrownException } from "../tests/noErrorThrownException";
 import { DbConnectionHandler } from "./dbConnectionHandler";
 
 describe("DatabaseConnectionHandler", () => {
@@ -19,7 +20,7 @@ describe("DatabaseConnectionHandler", () => {
             db.connect(() => {
                 expect(true).to.equal(true);
             },         () => {
-                throw new Error("An error occured");
+                throw new NoErrorThrownException();
             });
         });
 
@@ -27,7 +28,7 @@ describe("DatabaseConnectionHandler", () => {
             const db: DbConnectionHandler = new DbConnectionHandler();
             (mongoose.connect as sinon.SinonStub).yields(new Error("No internet"));
             db.connect(() => {
-                throw new Error("An error occured");
+                throw new NoErrorThrownException();
             },         () => {
                 expect(true).to.equal(true);
             });

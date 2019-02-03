@@ -6,6 +6,7 @@ import { POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { GameCard } from "../../model/schemas/gameCard";
 import { MongooseMockQuery } from "../../tests/mocks";
+import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { GameCardService } from "./gameCard.service";
 
 describe("GameCardService", () => {
@@ -35,7 +36,7 @@ describe("GameCardService", () => {
             const errorMessage: string = "The field name is not present.";
             try {
                 await service.post(mockReq(request));
-                throw new Error("No errror thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }
@@ -50,7 +51,7 @@ describe("GameCardService", () => {
             const errorMessage: string = "The field image-pair-id is not present.";
             try {
                 await service.post(mockReq(request));
-                throw new Error("No errror thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }
@@ -66,7 +67,7 @@ describe("GameCardService", () => {
             const errorMessage: string = "The field pov is not present.";
             try {
                 await service.post(mockReq(request));
-                throw new Error("No errror thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }
@@ -83,7 +84,7 @@ describe("GameCardService", () => {
             const errorMessage: string = "The pov type is not recognized.";
             try {
                 await service.post(mockReq(request));
-                throw new Error("No errror thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }
@@ -102,7 +103,7 @@ describe("GameCardService", () => {
             const errorMessage: string = "The image id could not be found.";
             try {
                 await service.post(mockReq(request));
-                throw new Error("No errror thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }
@@ -121,7 +122,7 @@ describe("GameCardService", () => {
             const errorMessage: string = "The image id could not be found.";
             try {
                 await service.post(mockReq(request));
-                throw new Error("No errror thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }
@@ -201,7 +202,7 @@ describe("GameCardService", () => {
 
             try {
                 await service.index();
-                throw new Error("No errror thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal("The image id could not be found.");
             }
@@ -213,7 +214,7 @@ describe("GameCardService", () => {
             (GameCard.findById as sinon.SinonStub).returns(new MongooseMockQuery({}, false));
             try {
                 await service.single("invalid id");
-                throw new Error("No error thrown by service");
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal("The id could not be found.");
             }
