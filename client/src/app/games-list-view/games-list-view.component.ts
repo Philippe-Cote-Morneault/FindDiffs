@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, Input, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GameCardLoaderService } from "../services/game-card-loader.service";
 import { GamesCardViewService } from "../services/games-card.service";
@@ -12,25 +12,14 @@ import { SocketService } from "../services/socket.service";
 export class GamesListViewComponent implements OnInit {
   @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
   @ViewChild("freePOVGamesContainer", { read: ViewContainerRef}) private freePOVContainer: ViewContainerRef;
+
+  @Input() public isInAdminView: boolean;
+
   public simplePOVgames: ICommonGameCard[] = [];
   public freePOVgames: ICommonGameCard[] = [];
 
   public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService,
                      public gameCardLoaderService: GameCardLoaderService) {
-    /*
-    this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
-      console.log(message);
-      //this.simplePOVgames = cards;
-      //console.log(cards);
-    });
-    */
-
-    /*
-    this.gameCardsService.getGameCards(POVType.Free).subscribe((cards: ICommonGameCard[]) => {
-      this.freePOVgames = cards;
-    });
-    */
-
   }
 
   public ngOnInit(): void {
@@ -46,9 +35,8 @@ export class GamesListViewComponent implements OnInit {
 
   private addAllGameCards(): void {
     this.gameCardsService.getGameCards().subscribe((gameCards: ICommonGameCard[]) => {
-      console.log(gameCards);
       gameCards.forEach((gameCard: ICommonGameCard) => {
-        this.gameCardLoaderService.addDynamicComponent(gameCard);
+        this.gameCardLoaderService.addDynamicComponent(gameCard, this.isInAdminView);
       });
     });
   }

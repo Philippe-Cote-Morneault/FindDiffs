@@ -8,6 +8,7 @@ import { ICommonGameCard } from "../../../../common/model/gameCard";
 })
 export class GamesCardViewComponent {
   @Input() public gameCard: ICommonGameCard;
+  @Input() public isInAdminView: boolean;
   public constructor() {
     console.log("created");
   }

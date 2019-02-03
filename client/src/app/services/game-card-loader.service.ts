@@ -24,7 +24,7 @@ export class GameCardLoaderService {
             this.freePOVContainer = viewContainerRef;
     }
 
-    public addDynamicComponent(gameCard: ICommonGameCard): void {
+    public addDynamicComponent(gameCard: ICommonGameCard, isInAdminView: boolean): void {
         const factory: ComponentFactory<GamesCardViewComponent> = this.factoryResolver
             .resolveComponentFactory(GamesCardViewComponent);
 
@@ -33,5 +33,6 @@ export class GameCardLoaderService {
             this.freePOVContainer.createComponent(factory).instance;
 
         component.gameCard = gameCard;
+        component.isInAdminView = isInAdminView;
     }
   }
