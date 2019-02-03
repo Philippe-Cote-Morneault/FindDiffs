@@ -5,7 +5,7 @@ import { mockReq } from "sinon-express-mock";
 import { POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { GameCard } from "../../model/schemas/gameCard";
-import { MongooseMockQuery } from "../../tests/mocks";
+import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { GameCardService } from "./gameCard.service";
 
@@ -176,14 +176,14 @@ describe("GameCardService", () => {
             (Axios.get as sinon.SinonStub).resolves(axiosResponse);
 
             (GameCard.find as sinon.SinonStub).returns(
-            new MongooseMockQuery([{
+            new MongooseMock.Query([{
                 pov: POVType.Free,
                 title: "title",
                 imagePairId: "an id",
                 creation_date: new Date(),
                 best_time_online: [0],
                 best_time_solo: [0],
-            }],                   true));
+            }],                    true));
 
             const response: string = await service.index();
             expect(JSON.parse(response).length).to.equal(1);
@@ -191,14 +191,14 @@ describe("GameCardService", () => {
         it("Should return an error if a pair is not available", async () => {
             (Axios.get as sinon.SinonStub).rejects();
             (GameCard.find as sinon.SinonStub).returns(
-            new MongooseMockQuery([{
+            new MongooseMock.Query([{
                 pov: POVType.Free,
                 title: "title",
                 imagePairId: "an id",
                 creation_date: new Date(),
                 best_time_online: [0],
                 best_time_solo: [0],
-            }],                   true));
+            }],                    true));
 
             try {
                 await service.index();
@@ -211,7 +211,7 @@ describe("GameCardService", () => {
 
     describe("single()", () => {
         it("Should return throw an error if the id is not in the database", async () => {
-            (GameCard.findById as sinon.SinonStub).returns(new MongooseMockQuery({}, false));
+            (GameCard.findById as sinon.SinonStub).returns(new MongooseMock.Query({}, false));
             try {
                 await service.single("invalid id");
                 throw new NoErrorThrownException();
@@ -236,14 +236,14 @@ describe("GameCardService", () => {
 
             (Axios.get as sinon.SinonStub).resolves(axiosResponse);
             (GameCard.findById as sinon.SinonStub).returns(
-            new MongooseMockQuery({
+            new MongooseMock.Query({
                 pov: POVType.Free,
                 title: "title",
                 imagePairId: "an id",
                 creation_date: new Date(),
                 best_time_online: [0],
                 best_time_solo: [0],
-            },                    true));
+            },                     true));
 
             const response: string = await service.single("good id");
             expect(JSON.parse(response).image_pair.name).to.equal(imagepair.name);
