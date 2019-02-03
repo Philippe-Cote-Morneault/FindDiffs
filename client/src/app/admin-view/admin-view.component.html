@@ -7,9 +7,10 @@
         <div class="navbar-header">
           <a class="navbar-brand">{{header}}</a>
         </div>
-        <button type="button" class="btn btn-dark navbar-btn">{{simpleMode}}</button>
+        <button type="button" class="btn btn-dark navbar-btn" (click)="isPopUpVisible = true">{{simpleMode}}</button>
         <button type="button" class="btn btn-dark navbar-btn">{{freeMode}}</button>
       </div>
     </nav>
     <app-games-list-view></app-games-list-view>
+    <app-create-game-simple-view *ngIf="isPopUpVisible" ></app-create-game-simple-view>
   </body>

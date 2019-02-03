@@ -6,7 +6,9 @@ import { Component } from "@angular/core";
   styleUrls: ["./admin-view.component.css"],
 })
 export class AdminViewComponent {
+  public isPopUpVisible: boolean = false;
   public simpleMode: string = "Simple mode";
   public freeMode: string = "Free mode";
   public header: string = "Create a game in:";
+
 }
