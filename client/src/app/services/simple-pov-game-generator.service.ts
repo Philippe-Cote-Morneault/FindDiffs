@@ -18,16 +18,13 @@ export class SimplePovGameGeneratorService {
     formData.append("originalImage", originalImage);
     formData.append("modifiedImage", modifiedImage);
 
-    return this.http.post<ICommonImagePair>(this.BASE_URL + "image-pair/", formData);
+    return this.http.post<ICommonImagePair>(this.BASE_URL + "image-pair", formData);
   }
 
   public addGameCard(gameName: string, imagePairId: string, pov: POVType): Observable<ICommonGameCard> {
-    const formData: FormData = new FormData();
-    formData.append("name", gameName);
-    formData.append("image-pair-id", imagePairId);
-    formData.append("pov", "Simple");
+    // TODO: Find type for this object
+    const requestBody = { "name": gameName, "image-pair-id": imagePairId, "pov": "Simple"};
 
-    new Response(formData).text().then(console.log);
-    return this.http.post<ICommonGameCard>(this.BASE_URL + "gamecard/", formData);
-  }
+    return this.http.post<ICommonGameCard>(this.BASE_URL + "gamecard", requestBody);
+    }
 }

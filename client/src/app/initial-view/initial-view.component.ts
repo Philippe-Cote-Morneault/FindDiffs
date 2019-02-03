@@ -26,6 +26,7 @@ export class InitialViewComponent {
   }
 
   public correctUsername(message: Message): void {
+    console.log(message);
     if (message) {
       localStorage.setItem("user", message.body);
       this.router.navigateByUrl("/gamesList");
