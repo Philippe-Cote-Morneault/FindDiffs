@@ -1,11 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
-import { AdminViewComponent } from "../admin-view/admin-view.component";
 import { HTMLInputEvent } from "../htmlinput-event";
-import { SimplePovGameGeneratorService } from "../services/simple-pov-game-generator.service";
-import { ICommonImagePair } from "../../../../common/model/imagePair";
-import { POVType, ICommonGameCard } from "../../../../common/model/gameCard";
+import { GamesCardService } from "../services/games-card.service";
+import { ImagePairService } from "../services/image-pair.service";
 
 @Component({
   selector: "app-create-game-simple-view",
@@ -13,7 +11,10 @@ import { POVType, ICommonGameCard } from "../../../../common/model/gameCard";
   styleUrls: ["./create-game-simple-view.component.css"],
 })
 export class CreateGameSimpleViewComponent {
-  private simplePOVGameGeneratorService: SimplePovGameGeneratorService;
+  @Output() public closed: EventEmitter<boolean> = new EventEmitter();
+
+  private gamesCardService: GamesCardService;
+  private imagePairService: ImagePairService;
 
   public canSubmit: boolean = false;
   public informationsNewGame: number[] = [0, 0, 0];
@@ -28,8 +29,9 @@ export class CreateGameSimpleViewComponent {
   private modifiedImageFile: File;
   private gameName: string;
 
-  public constructor(simplePOVGameGeneratorService: SimplePovGameGeneratorService, private adminViewComponent: AdminViewComponent ) {
-    this.simplePOVGameGeneratorService = simplePOVGameGeneratorService;
+  public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService) {
+    this.gamesCardService = gamesCardService;
+    this.imagePairService = imagePairService;
   }
 
   public verifyName(): void {
@@ -53,25 +55,21 @@ export class CreateGameSimpleViewComponent {
   }
 
   public addImagePair(): void {
-    this.simplePOVGameGeneratorService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
+    this.imagePairService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
       .subscribe((imagePair: ICommonImagePair) => {
-        this.simplePOVGameGeneratorService.addGameCard(imagePair.name, imagePair.id, POVType.Simple)
+        this.addGameCard(imagePair.id);
       });
   }
 
   private addGameCard(imagePairId: string): void {
-    this.simplePOVGameGeneratorService.addGameCard(this.gameName, imagePairId, POVType.Simple)
+    this.gamesCardService.addGameCard(this.gameName, imagePairId, POVType.Simple)
           .subscribe((gameCard: ICommonGameCard) => {
             console.log(gameCard);
             window.location.reload();
           });
-      });
-    (document.getElementById("simpleViewId") as HTMLInputElement).style.display = "none";
-    this.adminViewComponent.isPopUpVisible = false;
   }
 
   public hideView(): void {
-    (document.getElementById("simpleViewId") as HTMLInputElement).style.display = "none";
-    this.adminViewComponent.isPopUpVisible = false;
+    this.closed.emit(true);
   }
 }
