@@ -68,8 +68,6 @@ export class UserService extends Service implements IUserService {
     private async isAvailable(username: string): Promise<boolean> {
         return User.countDocuments({username: username}).then((c: number) => {
             return c === 0;
-        }).catch((err: Error) => {
-            return false;
         });
     }
 
