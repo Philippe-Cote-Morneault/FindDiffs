@@ -1,6 +1,8 @@
 // import { doesNotReject } from "assert";
 import {expect} from "chai";
+import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
+import { User } from "../../model/schemas/user";
 import { UserService } from "./user.service";
 
 // tslint:disable:no-magic-numbers
@@ -12,7 +14,19 @@ describe("UserService", () => {
     const alreadyTakenError: string = "The username is already taken.";
     const sucessDelete: string = '{"title":"Sucess","body":"The user was deleted."}';
 
-    // IsUsernameValid
+    beforeEach(() => {
+        sinon.stub(User, "find");
+        sinon.stub(User.prototype, "save");
+        sinon.stub(User, "countDocuments");
+    });
+
+    afterEach(() => {
+        (User.find as sinon.SinonStub).restore();
+        (User.countDocuments as sinon.SinonStub).restore();
+        (User.prototype.save as sinon.SinonStub).restore();
+
+    });
+
     it("Should return the correct error message if input empty", async () => {
         const request = {
             body: { username : "", },
@@ -62,11 +76,19 @@ describe("UserService", () => {
     });
 
     it("Should return the correct message if input length is between 3 and 12", async () => {
+        const testUsername: string = "michel6";
         const request = {
-            body: { username : "", },
+            body: { username : testUsername, },
         };
+        (User.prototype.save as sinon.SinonStub).resolves({
+            username: testUsername,
+            creation_date: "2019-02-03T00:33:58.958Z",
+            id: "5c5636f68f786067b76d6b3e",
+        });
+        (User.countDocuments as sinon.SinonStub).resolves(0);
+
         const data: string = await userService.post(mockReq(request));
-        expect(data).to.equal("abc2");
+        expect(JSON.parse(data).username).to.equal(testUsername);
     });
 
     it("Should return the correct message if the input is alpha", async () => {
