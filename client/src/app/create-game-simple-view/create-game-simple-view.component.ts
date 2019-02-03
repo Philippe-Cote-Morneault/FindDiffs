@@ -1,4 +1,6 @@
 import { Component } from "@angular/core";
+import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { AdminViewComponent } from "../admin-view/admin-view.component";
 import { HTMLInputEvent } from "../htmlinput-event";
 import { SimplePovGameGeneratorService } from "../services/simple-pov-game-generator.service";
@@ -53,7 +55,7 @@ export class CreateGameSimpleViewComponent {
   public addImagePair(): void {
     this.simplePOVGameGeneratorService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
       .subscribe((imagePair: ICommonImagePair) => {
-        this.addGameCard(imagePair.id);
+        this.simplePOVGameGeneratorService.addGameCard(imagePair.name, imagePair.id, POVType.Simple)
       });
   }
 
