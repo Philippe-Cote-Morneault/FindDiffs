@@ -11,7 +11,7 @@ let initialViewServiceGet: ImagePairService;
 describe("InitialViewService", () => {
 
         beforeEach(() => {
-            httpClientSpyPost = jasmine.createSpyObj("HttpClient", ["get"]);
+            httpClientSpyPost = jasmine.createSpyObj("HttpClient", ["post"]);
             initialViewServiceGet = new ImagePairService(httpClientSpyPost);
         });
 
@@ -25,12 +25,16 @@ describe("InitialViewService", () => {
                 creation_date: new Date(),
                 differences_count: 7 };
             const mockImageName: string = "user1";
-            // TODO: mock image?
-            const mockImageOriginalFile: File = "";
-            const mockImageModifiedFile: File = "";
+            const mockImageFile: File = {
+                lastModified: 1000,
+                size: 1000,
+                name: "qasdas",
+                type: "bmp",
+                slice: (start?: 0, end?: 0, contentType?: "aws")};
+
             httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedImage));
 
-            initialViewServiceGet.addImagePair(mockImageName, mockImageOriginalFile, mockImageModifiedFile).subscribe(
+            initialViewServiceGet.addImagePair(mockImageName, mockImageFile, mockImageFile).subscribe(
                 (response: ICommonImagePair) => {
                     expect(response.id).to.equal(expectedImage.id);
                     expect(response.name).to.equal(expectedImage.name);
