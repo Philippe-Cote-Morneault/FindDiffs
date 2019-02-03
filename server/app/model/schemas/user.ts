@@ -1,7 +1,7 @@
 import {model, Document, Model, Schema} from "mongoose";
-import { CommonUser } from "../../../../common/model/user";
+import { ICommonUser } from "../../../../common/model/user";
 
-export interface IUser extends CommonUser, Document {}
+export interface IUser extends ICommonUser, Document {}
 
 export const userSchema: Schema = new Schema({
     username: {type: String, required: true},
