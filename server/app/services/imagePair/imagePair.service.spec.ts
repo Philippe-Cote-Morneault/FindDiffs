@@ -1,10 +1,21 @@
 import {expect} from "chai";
+import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
+import { ImagePair } from "../../model/schemas/imagePair";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { ImagePairService } from "./imagePair.service";
 
 describe("ImagePairService", () => {
     const imagePairService: ImagePairService = new ImagePairService();
+
+    beforeEach(() => {
+        sinon.stub(ImagePair, "find");
+    });
+
+    afterEach(() => {
+        (ImagePair.find as sinon.SinonStub).restore();
+    });
+
     describe("post()", () => {
         it("If body is empty, should return an error", async () => {
             const request: Object = {
@@ -70,6 +81,32 @@ describe("ImagePairService", () => {
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
+            }
+        });
+    });
+    describe("index()", () => {
+        it("Should return an image pair", async () => {
+            const DIFFERENCES_COUNT: number = 4;
+            (ImagePair.find as sinon.SinonStub).resolves({
+                file_difference_id: "a file id",
+                file_original_id: "a file id",
+                file_modified_id: "a file id",
+                name: "naming an image pair",
+                creation_date: new Date(),
+                differences_count: DIFFERENCES_COUNT,
+            });
+            const result: string = await imagePairService.index();
+            expect(JSON.parse(result).differences_count).to.equal(DIFFERENCES_COUNT);
+        });
+
+        it("Should throw an error when returning an image pair", async() => {
+            const ERROR_MESSAGE: string = "my error";
+            (ImagePair.find as sinon.SinonStub).rejects(new Error(ERROR_MESSAGE));
+            try {
+                await imagePairService.index();
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(ERROR_MESSAGE);
             }
         });
     });
