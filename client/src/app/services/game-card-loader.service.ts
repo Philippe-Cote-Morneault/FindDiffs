@@ -19,20 +19,16 @@ export class GameCardLoaderService {
     }
 
     public setContainer(viewContainerRef: ViewContainerRef, pov: POVType): void {
-        console.log("set container with " + pov.toString());
         pov === POVType.Simple ?
             this.simplePOVContainer = viewContainerRef :
             this.freePOVContainer = viewContainerRef;
-        console.log(this.simplePOVContainer);
-        console.log(this.freePOVContainer);
-        console.log( pov === POVType.Simple);
     }
 
     public addDynamicComponent(gameCard: ICommonGameCard): void {
         const factory: ComponentFactory<GamesCardViewComponent> = this.factoryResolver
             .resolveComponentFactory(GamesCardViewComponent);
 
-        const component: GamesCardViewComponent = gameCard.pov === POVType.Simple ?
+        const component: GamesCardViewComponent = POVType[gameCard.pov] === POVType.Simple ?
             this.simplePOVContainer.createComponent(factory).instance :
             this.freePOVContainer.createComponent(factory).instance;
 
