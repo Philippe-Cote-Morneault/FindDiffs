@@ -33,6 +33,12 @@ export class GamesCardService {
     );
   }
 
+  public resetBestTimes(gameCardId: string): Observable<Message> {
+    return this.http.put<Message>(this.BASE_URL + this.GAMECARD_URL + gameCardId, "test").pipe(
+      catchError(this.handleError<Message>("resetBestTimes")),
+    );
+  }
+
   public onGameCardAdded(): Observable<ICommonGameCard> {
     return new Observable<ICommonGameCard>((observer) => {
         this.socketService.onEvent(Event.GAME_CARD_ADDED).subscribe((gameCard: Message) => {

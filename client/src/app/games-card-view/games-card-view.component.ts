@@ -30,8 +30,14 @@ export class GamesCardViewComponent implements OnInit {
   }
 
   public deleteGameCard(): void {
-    this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe((message: Message) => {
-      console.log(message);
-    });
+    if (confirm("Are you sure you want to delete the Game Card called " + this.gameCard.title + "?")) {
+      this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe((message: Message) => {
+        console.log(message);
+      });
+    }
+  }
+
+  public resetBestTimes(): void {
+
   }
 }
