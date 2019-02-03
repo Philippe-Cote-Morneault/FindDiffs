@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { GameCardLoaderService } from "../services/game-card-loader.service";
 import { GamesCardViewService } from "../services/games-card.service";
 import { SocketService } from "../services/socket.service";
-import { GameCardLoaderService } from "../services/game-card-loader.service";
 
 @Component({
   selector: "app-games-list-view",
@@ -19,7 +19,9 @@ export class GamesListViewComponent implements OnInit {
     this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
       console.log(message);
       //this.addGameCard(message[1]);
-      this.gameCardLoaderService.addDynamicComponent(message[1]);
+      for (let i: number = 0; i < message.length; ++i) {
+        this.gameCardLoaderService.addDynamicComponent(message[i]);
+      }
     });
     /*
     this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
