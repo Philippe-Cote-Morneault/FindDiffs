@@ -5,6 +5,7 @@ import { mockReq } from "sinon-express-mock";
 import { POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { GameCard } from "../../model/schemas/gameCard";
+import { GameCardSchemaMock } from "../../tests/gameCardSchemaMock";
 import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { GameCardService } from "./gameCard.service";
