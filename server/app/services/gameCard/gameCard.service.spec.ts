@@ -2,20 +2,24 @@ import Axios from "axios";
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
+import { POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { GameCard } from "../../model/schemas/gameCard";
 import { GameCardService } from "./gameCard.service";
+import { MongooseMockQuery } from "../../tests/mocks";
 
 describe("GameCardService", () => {
     const service: GameCardService = new GameCardService();
     beforeEach(() => {
         sinon.stub(Axios, "get");
         sinon.stub(GameCard.prototype, "save");
+        sinon.stub(GameCard, "find");
     });
 
     afterEach(() => {
         (Axios.get as sinon.SinonStub).restore();
         (GameCard.prototype.save as sinon.SinonStub).restore();
+        (GameCard.find as sinon.SinonStub).restore();
     });
 
     describe("post()", () => {
@@ -147,6 +151,37 @@ describe("GameCardService", () => {
             .to.eql(
                 JSON.stringify(imagepair),
                 );
+        });
+    });
+
+    describe("index()", () => {
+        it("Should return an array of multiple game cards", async () => {
+            const NUMBER_OF_VALUES: number = 3;
+            const imagepair: ICommonImagePair = {
+                id: "an id",
+                url_difference: "differences",
+                url_modified: "modified",
+                url_original: "original",
+                name: "Slim Shady",
+                creation_date: new Date(),
+                differences_count: 0,
+            };
+            const axiosResponse: Object = {
+                data: imagepair,
+            };
+            (Axios.get as sinon.SinonStub).resolves(axiosResponse);
+            (GameCard.find as sinon.SinonStub).returns(new MongooseMockQuery(new Array()
+            .fill({
+                id: "id",
+                pov: POVType.Free,
+                title: "title",
+                imagePairId: "an id",
+                creation_date: new Date(),
+                best_time_online: [0],
+                best_time_solo: [0],
+            },    NUMBER_OF_VALUES)));
+
+            expect(JSON.parse(await service.index()).length).to.equal(NUMBER_OF_VALUES);
         });
     });
 });
