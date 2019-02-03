@@ -142,6 +142,7 @@ describe("ImagePairService", () => {
                 expect(err.message).to.equal(errorMessage);
             }
         });
+
         it("Should return an objet with the image pair if the request is valid.", async () => {
             const request: Object = {
                 body: {
