@@ -15,7 +15,7 @@ import { ScoreGenerator } from "./scoreGenerator";
 
 export class GameCardService extends Service implements IGameCardService {
 
-    private readonly DEFAULT_SCORE_NUMBER: number = 3;
+    public readonly DEFAULT_SCORE_NUMBER: number = 3;
 
     private validatePost(req: Request): void {
         if (!req.body.name) {
