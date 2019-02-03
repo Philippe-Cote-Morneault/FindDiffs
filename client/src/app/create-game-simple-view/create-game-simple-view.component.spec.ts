@@ -1,14 +1,14 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { CreateGameSimpleViewComponent } from './create-game-simple-view.component';
+import { CreateGameSimpleViewComponent } from "./create-game-simple-view.component";
 
-describe('CreateGameSimpleViewComponent', () => {
+describe("CreateGameSimpleViewComponent", () => {
   let component: CreateGameSimpleViewComponent;
   let fixture: ComponentFixture<CreateGameSimpleViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateGameSimpleViewComponent ]
+      declarations: [ CreateGameSimpleViewComponent ],
     })
     .compileComponents();
   }));
@@ -19,7 +19,7 @@ describe('CreateGameSimpleViewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
