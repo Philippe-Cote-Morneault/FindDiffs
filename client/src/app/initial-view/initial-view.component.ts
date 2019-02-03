@@ -1,4 +1,4 @@
-import { Component, HostListener } from "@angular/core";
+import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
 import { User } from "../../../../common/communication/user";
@@ -11,21 +11,13 @@ import { InitialViewService } from "../services/initial-view.service";
 })
 export class InitialViewComponent {
 
-    public constructor(public initialViewService: InitialViewService, private router: Router) {
-        this.router.navigateByUrl("/");
-    }
+    public constructor(public initialViewService: InitialViewService, private router: Router) {}
     public title: string = "Spot the Differences";
     public button: string = "Accept";
 
     public verifyUsername(): void {
         const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
         this.initialViewService.postUsernameValidation(username).subscribe(this.correctUsername.bind(this));
-    }
-
-    @HostListener("window:beforeunload", ["$event"])
-    public beforeUnload($event: Event): void {
-        const user: User = JSON.parse(localStorage.getItem("user") || "{}");
-        this.initialViewService.deleteUsername(user.id).toPromise();
     }
 
     public correctUsername(response: User | Message): void {
