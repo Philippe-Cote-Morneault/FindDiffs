@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
+import { StringFormater } from "../util/stringFormater";
 
 @Component({
   selector: "app-games-card-view",
@@ -27,6 +28,10 @@ export class GamesCardViewComponent implements OnInit {
       this.leftButton = "Delete";
       this.rightButton = "Reset";
     }
+  }
+
+  public toMinutes(index: number, times: number[]): string {
+    return StringFormater.secondsToMinutes(times[index]);
   }
 
   public onLeftButtonClick(): void {
