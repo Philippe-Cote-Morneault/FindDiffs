@@ -2,11 +2,13 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AdminViewComponent } from "./admin-view/admin-view.component";
+import { GamesListViewComponent } from "./games-list-view/games-list-view.component";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 
 const routes: Routes = [
-  { path: "initialView", component: InitialViewComponent},
-  { path: "admin", component: AdminViewComponent},
+  { path: "", component: InitialViewComponent},
+  { path: "gamesList/admin", component: AdminViewComponent},
+  { path: "gamesList", component: GamesListViewComponent},
 ];
 
 @NgModule({

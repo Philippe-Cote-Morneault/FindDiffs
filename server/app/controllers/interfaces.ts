@@ -7,3 +7,7 @@ export interface IImagePairController {
 export interface IUserController {
     router: Router;
 }
+
+export interface IGameCardController {
+    router: Router;
+}

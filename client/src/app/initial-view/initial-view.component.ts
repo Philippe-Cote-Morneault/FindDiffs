@@ -1,8 +1,8 @@
 import { Component, HostListener } from "@angular/core";
 import { Router } from "@angular/router";
-import { User } from "../../../../common/communication/user";
 import { Message } from "../../../../common/communication/message";
-import { InitialViewService } from "../initial-view.service";
+import { User } from "../../../../common/communication/user";
+import { InitialViewService } from "../services/initial-view.service";
 
 @Component({
     selector: "app-initial-view",
@@ -13,7 +13,7 @@ export class InitialViewComponent {
 
     public constructor(public initialViewService: InitialViewService, private router: Router) {
         this.router.navigateByUrl("/");
-     }
+    }
     public title: string = "Spot the Differences";
     public button: string = "Accept";
 
@@ -31,7 +31,7 @@ export class InitialViewComponent {
     public correctUsername(response: User | Message): void {
         if ((response as User).id) {
             localStorage.setItem("user", JSON.stringify(response));
-            this.router.navigateByUrl("/admin");
+            this.router.navigateByUrl("/gamesList");
         } else {
             alert((response as Message).body);
         }
