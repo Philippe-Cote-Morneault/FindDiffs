@@ -80,7 +80,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("If body contains images but invalid return an error", async () => {
+        it("Should return an error if body contains images but invalid ", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
