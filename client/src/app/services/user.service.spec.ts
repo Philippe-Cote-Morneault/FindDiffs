@@ -1,22 +1,22 @@
 import { Message } from "../../../../common/communication/message";
 import { ICommonUser } from "../../../../common/model/user";
 import { TestHelper } from "../../test.helper";
-import { InitialViewService } from "./initial-view.service";
+import { UserService } from "./user.service";
 
 // tslint:disable-next-line:no-any Used to mock the http call
 let httpClientSpyPost: any;
 // tslint:disable-next-line:no-any Used to mock the http call
 let httpClientSpyDelete: any;
-let initialViewServicePost: InitialViewService;
-let initialViewServiceDelete: InitialViewService;
+let userServicePost: UserService;
+let userServiceDelete: UserService;
 
-describe("InitialViewService", () => {
+describe("UserService", () => {
 
         beforeEach(() => {
             httpClientSpyPost = jasmine.createSpyObj("HttpClient", ["post"]);
             httpClientSpyDelete = jasmine.createSpyObj("HttpClient", ["delete"]);
-            initialViewServicePost = new InitialViewService(httpClientSpyPost);
-            initialViewServiceDelete = new InitialViewService(httpClientSpyDelete);
+            userServicePost = new UserService(httpClientSpyPost);
+            userServiceDelete = new UserService(httpClientSpyDelete);
         });
 
         it("should return expected message on verifyUsername request (HttpClient called once)", () => {
@@ -24,7 +24,7 @@ describe("InitialViewService", () => {
             const mockUsername: string = "user1";
             httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedUser));
 
-            initialViewServicePost.postUsernameValidation(mockUsername).subscribe(
+            userServicePost.postUsernameValidation(mockUsername).subscribe(
                 (response: ICommonUser) => {
                     expect(response.id).toEqual(expectedUser.id, "Id check");
                     expect(response.username).toEqual(expectedUser.username, "Username check");
@@ -40,7 +40,7 @@ describe("InitialViewService", () => {
             const mockUserId: string = "user1";
             httpClientSpyDelete.delete.and.returnValue(TestHelper.asyncData(expectedMessage));
 
-            initialViewServiceDelete.deleteUsername(mockUserId).subscribe(
+            userServiceDelete.deleteUsername(mockUserId).subscribe(
                 (response: Message) => {
                     expect(response.title).toEqual(expectedMessage.title, "Title check");
                     expect(response.body).toEqual(expectedMessage.body, "body check");
@@ -56,8 +56,8 @@ describe("InitialViewService", () => {
             const mockUsername: string = "user1";
             httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedMessageError));
 
-            initialViewServicePost.postUsernameValidation(mockUsername).subscribe();
-            initialViewServicePost.postUsernameValidation(mockUsername).subscribe((response: Message) => {
+            userServicePost.postUsernameValidation(mockUsername).subscribe();
+            userServicePost.postUsernameValidation(mockUsername).subscribe((response: Message) => {
                 expect(response.title).toEqual(expectedMessageError.title, "TitleCheck");
                 expect(response.body).toEqual(expectedMessageError.body, "Body check");
             });
