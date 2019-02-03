@@ -1,6 +1,6 @@
 export class ScoreGenerator {
-    private static readonly MIN: number = 60;
-    private static readonly MAX: number = 90;
+    public static readonly MIN: number = 60;
+    public static readonly MAX: number = 90;
 
     public static generateScore(length: number): number[] {
 
