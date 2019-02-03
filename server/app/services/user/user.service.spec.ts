@@ -175,4 +175,50 @@ describe("UserService", () => {
             expect(err.message).to.equal(idNotInDB);
         }
     });
+    // index
+    it("Should be true if index is correct ", async () => {
+        (User.find as sinon.SinonStub).resolves({
+            username: "myname",
+            creation_date: "2019-02-03T00:33:58.958Z",
+            id: "5c5636f68f786067b76d6b3e",
+        });
+        const data: string = await userService.index();
+        expect(JSON.parse(data).username).to.equal("myname");
+    });
+    it("Should be true if index catch error ", async () => {
+        (User.find as sinon.SinonStub).rejects("Not there!");
+
+        try {
+            await userService.index();
+            throw new Error("No error thrown by service");
+        } catch (err) {
+            // The error message is empty
+            expect(err.message).to.equal("");
+        }
+    });
+    // single
+    it("Should be true if single correct", async () => {
+        const usernameId: string = "5c5636f68f786067b76d6b3e";
+
+        (User.findById as sinon.SinonStub).resolves({
+            username: "myname",
+            creation_date: "2019-02-03T00:33:58.958Z",
+            id: usernameId,
+        });
+
+        const data: string = await userService.single(usernameId);
+        expect(JSON.parse(data).username).to.equal("myname");
+    });
+    it("Should be true if single catch error", async () => {
+        const usernameId: string = "5c5636f68f786067b76d6b3e";
+
+        (User.findById as sinon.SinonStub).rejects("Not there!");
+
+        try {
+            await userService.single(usernameId);
+            throw new Error("No error thrown by service");
+        } catch (err) {
+            expect(err.message).to.equal(idNotInDB);
+        }
+    });
 });
