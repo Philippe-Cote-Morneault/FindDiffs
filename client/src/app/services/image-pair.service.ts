@@ -15,12 +15,6 @@ export class ImagePairService {
     this.http = http;
   }
 
-  public getOriginalImage(id: string): Observable<File> {
-    console.log(id);
-    
-    return this.http.get<File>(this.BASE_URL + id + "/original");
-  }
-
   public addImagePair(gameName: string, originalImage: File, modifiedImage: File): Observable<ICommonImagePair> {
     const formData: FormData = new FormData();
     formData.append("name", gameName);
