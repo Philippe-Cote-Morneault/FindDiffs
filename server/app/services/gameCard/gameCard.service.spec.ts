@@ -181,15 +181,23 @@ describe("GameCardService", () => {
             const response: string = await service.index();
             expect(JSON.parse(response).length).to.equal(1);
         });
+        it("Should return an error if a pair is not available", async () => {
+            (Axios.get as sinon.SinonStub).rejects();
+            (GameCard.find as sinon.SinonStub).returns(new MongooseMockQuery(
+            [{
                 pov: POVType.Free,
                 title: "title",
                 imagePairId: "an id",
                 creation_date: new Date(),
                 best_time_online: [0],
                 best_time_solo: [0],
-            },    NUMBER_OF_VALUES)));
-
-            expect(JSON.parse(await service.index()).length).to.equal(NUMBER_OF_VALUES);
+            }]));
+            try {
+                await service.index();
+                throw new Error("No errror thrown by service");
+            } catch (err) {
+                expect(err.message).to.equal("The image id could not be found.");
+            }
         });
     });
 });
