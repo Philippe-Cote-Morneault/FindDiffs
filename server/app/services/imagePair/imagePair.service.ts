@@ -45,6 +45,8 @@ export class ImagePairService extends Service implements IImagePairService {
                 } else {
                     throw new FileNotFoundException(fileId);
                 }
+            }).catch((errro: Error) => {
+                throw new NotFoundException("The id could not be found.");
             });
     }
 
