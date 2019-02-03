@@ -10,6 +10,9 @@ import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { GameCardService } from "./gameCard.service";
 
+// We can disable this tslint max-line-count since it's only a test file and 
+// therefore not a code smell
+// tslint:disabl max-file-line-count
 describe("GameCardService", () => {
     const service: GameCardService = new GameCardService();
     beforeEach(() => {
