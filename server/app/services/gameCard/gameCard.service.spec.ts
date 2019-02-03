@@ -311,5 +311,20 @@ describe("GameCardService", () => {
             }));
             await service.update(mockReq(request));
         });
+
+        it("Should update the field best_time_online", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+                body: {
+                    best_time_online: "change",
+                },
+            };
+            (GameCard.findById as sinon.SinonStub).resolves(new GameCardSchemaMock((doc: GameCardSchemaMock) => {
+                expect(doc.best_time_online.length).to.equal(service.DEFAULT_SCORE_NUMBER);
+            }));
+            await service.update(mockReq(request));
+        });
     });
 });
