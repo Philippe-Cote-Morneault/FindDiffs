@@ -265,4 +265,20 @@ describe("GameCardService", () => {
             }
         });
     });
+    describe("update()" , () => {
+        it("Should throw an error if the id is not in the db", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+            };
+            (GameCard.findById as sinon.SinonStub).rejects(new Error());
+            try {
+                await service.update(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The id could not be found.");
+            }
+        });
+    });
 });
