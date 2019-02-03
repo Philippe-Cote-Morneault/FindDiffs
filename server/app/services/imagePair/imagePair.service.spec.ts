@@ -98,6 +98,27 @@ describe("ImagePairService", () => {
                 expect(err.message).to.equal(errorMessage);
             }
         });
+
+        it("Should return an error if body contains a valid original image but an invalid modified image", async () => {
+            const request: Object = {
+                body: {
+                    name: "bob",
+                },
+                files: {
+                    originalImage: [{
+                        path: "random path",
+                    }],
+                    modifiedImage: "image",
+                },
+            };
+            const errorMessage: string = "Modified image is not a file.";
+            try {
+                await imagePairService.post(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(errorMessage);
+            }
+        });
     });
     describe("index()", () => {
         it("Should return an image pair array", async () => {
