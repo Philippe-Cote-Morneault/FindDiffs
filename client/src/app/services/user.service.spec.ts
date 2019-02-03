@@ -7,16 +7,16 @@ import { UserService } from "./user.service";
 let httpClientSpyPost: any;
 // tslint:disable-next-line:no-any Used to mock the http call
 let httpClientSpyDelete: any;
-let initialViewServicePost: InitialViewService;
-let initialViewServiceDelete: InitialViewService;
+let initialViewServicePost: UserService;
+let initialViewServiceDelete: UserService;
 
 describe("InitialViewService", () => {
 
         beforeEach(() => {
             httpClientSpyPost = jasmine.createSpyObj("HttpClient", ["post"]);
             httpClientSpyDelete = jasmine.createSpyObj("HttpClient", ["delete"]);
-            initialViewServicePost = new InitialViewService(httpClientSpyPost);
-            initialViewServiceDelete = new InitialViewService(httpClientSpyDelete);
+            initialViewServicePost = new UserService(httpClientSpyPost);
+            initialViewServiceDelete = new UserService(httpClientSpyDelete);
         });
 
         it("should return expected message on verifyUsername request (HttpClient called once)", () => {
