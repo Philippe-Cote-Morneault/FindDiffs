@@ -5,10 +5,14 @@ import { mockReq } from "sinon-express-mock";
 import { POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { GameCard } from "../../model/schemas/gameCard";
+import { GameCardSchemaMock } from "../../tests/gameCardSchemaMock";
 import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { GameCardService } from "./gameCard.service";
 
+// We can disable this tslint max-line-count since it's only a test file and
+// therefore not a code smell
+// tslint:disable max-file-line-count
 describe("GameCardService", () => {
     const service: GameCardService = new GameCardService();
     beforeEach(() => {
@@ -263,6 +267,102 @@ describe("GameCardService", () => {
             } catch (err) {
                 expect(err.message).to.equal("The id could not be found.");
             }
+        });
+    });
+    describe("update()" , () => {
+        it("Should throw an error if the id is not in the db", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+            };
+            (GameCard.findById as sinon.SinonStub).rejects(new Error());
+            try {
+                await service.update(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The id could not be found.");
+            }
+        });
+
+        it("Should throw an error if the request is empty", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+                body: {},
+            };
+            (GameCard.findById as sinon.SinonStub).resolves({});
+            try {
+                await service.update(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("No changes were detected!");
+            }
+        });
+
+        it("Should update the field best_time_solo", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+                body: {
+                    best_time_solo: "change",
+                },
+            };
+            (GameCard.findById as sinon.SinonStub).resolves(new GameCardSchemaMock((doc: GameCardSchemaMock) => {
+                expect(doc.best_time_solo.length).to.equal(service.DEFAULT_SCORE_NUMBER);
+            }));
+            await service.update(mockReq(request));
+        });
+
+        it("Should update the field best_time_online", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+                body: {
+                    best_time_online: "change",
+                },
+            };
+            (GameCard.findById as sinon.SinonStub).resolves(new GameCardSchemaMock((doc: GameCardSchemaMock) => {
+                expect(doc.best_time_online.length).to.equal(service.DEFAULT_SCORE_NUMBER);
+            }));
+            await service.update(mockReq(request));
+        });
+
+        it("Should update the two fields", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+                body: {
+                    best_time_online: "change",
+                    best_time_solo: "change",
+
+                },
+            };
+            (GameCard.findById as sinon.SinonStub).resolves(new GameCardSchemaMock((doc: GameCardSchemaMock) => {
+                expect(doc.best_time_online.length).to.equal(service.DEFAULT_SCORE_NUMBER);
+                expect(doc.best_time_solo.length).to.equal(service.DEFAULT_SCORE_NUMBER);
+            }));
+            await service.update(mockReq(request));
+        });
+
+        it("Should return a success message", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+                body: {
+                    best_time_online: "change",
+                    best_time_solo: "change",
+
+                },
+            };
+            (GameCard.findById as sinon.SinonStub).resolves(new GameCardSchemaMock(new Function));
+            const response: string = await service.update(mockReq(request));
+            expect(JSON.parse(response).title).to.equal("success");
         });
     });
 });

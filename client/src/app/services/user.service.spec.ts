@@ -1,7 +1,7 @@
 import { Message } from "../../../../common/communication/message";
 import { ICommonUser } from "../../../../common/model/user";
 import { TestHelper } from "../../test.helper";
-import { InitialViewService } from "./initial-view.service";
+import { UserService } from "./user.service";
 
 // tslint:disable-next-line:no-any Used to mock the http call
 let httpClientSpyPost: any;
