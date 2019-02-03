@@ -16,11 +16,10 @@ export class BitmapEncoder {
     public static encodeBitmap(bitmap: Bitmap): ArrayBuffer {
         const buffer: ArrayBuffer = new ArrayBuffer(bitmap.header.fileSize[0]);
         BitmapEncoder.encodeHeader(bitmap.header, new DataView(
-                buffer,
-                Header.BYTES_OFFSET,
-                Header.BYTES_LENGTH,
-            ));
-
+            buffer,
+            Header.BYTES_OFFSET,
+            Header.BYTES_LENGTH,
+        ));
         BitmapEncoder.encodeInfoHeader(
             bitmap.infoHeader,
             new DataView(
