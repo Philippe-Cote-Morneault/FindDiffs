@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Message } from "../../../../common/communication/message";
 import { map } from "rxjs/operators";
-import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { Event, SocketService } from "./socket.service";
 
 /*
@@ -21,7 +21,7 @@ export class GamesCardViewService {
 
   public constructor(private http: HttpClient, private socketService: SocketService) { }
 
-  public getGameCards(povType: POVType): Observable<ICommonGameCard[]> {
+  public getGameCards(): Observable<ICommonGameCard[]> {
     return this.http.get<ICommonGameCard[]>(this.BASE_URL + this.GET_ALL_CARDS_URL).pipe(
       map((res) => res),
     );

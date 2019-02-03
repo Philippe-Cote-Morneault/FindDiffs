@@ -11,18 +11,12 @@ import { SocketService } from "../services/socket.service";
 })
 export class GamesListViewComponent implements OnInit {
   @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
+  @ViewChild("freePOVGamesContainer", { read: ViewContainerRef}) private freePOVContainer: ViewContainerRef;
   public simplePOVgames: ICommonGameCard[] = [];
   public freePOVgames: ICommonGameCard[] = [];
 
   public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService,
                      public gameCardLoaderService: GameCardLoaderService) {
-    this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
-      console.log(message);
-      //this.addGameCard(message[1]);
-      for (let i: number = 0; i < message.length; ++i) {
-        this.gameCardLoaderService.addDynamicComponent(message[i]);
-      }
-    });
     /*
     this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
       console.log(message);
@@ -43,7 +37,20 @@ export class GamesListViewComponent implements OnInit {
     this.gameCardsService.onGameCardAdded().subscribe((card: ICommonGameCard) => this.addGameCard(card));
     this.gameCardsService.onGameCardDeleted().subscribe((card: ICommonGameCard) => this.removeGameCard(card));
     this.gameCardsService.onGameCardUpdated().subscribe((card: ICommonGameCard) => this.updateGameCard(card));
-    this.gameCardLoaderService.setRootViewContainerRef(this.simplePOVContainer);
+
+    this.gameCardLoaderService.setContainer(this.simplePOVContainer, POVType.Simple);
+    this.gameCardLoaderService.setContainer(this.freePOVContainer, POVType.Free);
+
+    this.addAllGameCards();
+  }
+
+  private addAllGameCards(): void {
+    this.gameCardsService.getGameCards().subscribe((gameCards: ICommonGameCard[]) => {
+      console.log(gameCards);
+      gameCards.forEach((gameCard: ICommonGameCard) => {
+        this.gameCardLoaderService.addDynamicComponent(gameCard);
+      });
+    });
   }
 
   private addGameCard(gamecard: ICommonGameCard): void {
