@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { AdminViewComponent } from "../admin-view/admin-view.component";
 import { HTMLInputEvent } from "../htmlinput-event";
 import { SimplePovGameGeneratorService } from "../services/simple-pov-game-generator.service";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
@@ -25,7 +26,7 @@ export class CreateGameSimpleViewComponent {
   private modifiedImageFile: File;
   private gameName: string;
 
-  public constructor(simplePOVGameGeneratorService: SimplePovGameGeneratorService) {
+  public constructor(simplePOVGameGeneratorService: SimplePovGameGeneratorService, private adminViewComponent: AdminViewComponent ) {
     this.simplePOVGameGeneratorService = simplePOVGameGeneratorService;
   }
 
@@ -57,10 +58,12 @@ export class CreateGameSimpleViewComponent {
             console.log(gameCard);
           });
       });
+    (document.getElementById("simpleViewId") as HTMLInputElement).style.display = "none";
+    this.adminViewComponent.isPopUpVisible = false;
   }
 
   public hideView(): void {
     (document.getElementById("simpleViewId") as HTMLInputElement).style.display = "none";
+    this.adminViewComponent.isPopUpVisible = false;
   }
 }
-// https://www.bootply.com/oFPl81lzM6
