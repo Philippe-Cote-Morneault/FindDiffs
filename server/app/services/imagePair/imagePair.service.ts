@@ -37,41 +37,33 @@ export class ImagePairService extends Service implements IImagePairService {
     }
 
     public async getDifference(id: string): Promise<string> {
-        return ImagePair.findById(id).select("+file_difference_id")
-            .then((doc: IImagePair) => {
-                const fileId: string = doc.get("file_difference_id");
-                if (Storage.exists(fileId)) {
-                    return Storage.getFullPath(fileId);
-                } else {
-                    throw new FileNotFoundException(fileId);
-                }
-            }).catch((errro: Error) => {
-                throw new NotFoundException("The id could not be found.");
-            });
+        return this.returnFile(id, "file_difference_id");
     }
 
     public async getModified(id: string): Promise<string> {
-        return ImagePair.findById(id).select("+file_modified_id")
-            .then((doc: IImagePair) => {
-                const fileId: string = doc.get("file_modified_id");
-                if (Storage.exists(fileId)) {
-                    return Storage.getFullPath(fileId);
-                } else {
-                    throw new FileNotFoundException(fileId);
-                }
-            });
+        return this.returnFile(id, "file_modified_id");
     }
 
     public async getOriginal(id: string): Promise<string> {
-        return ImagePair.findById(id).select("+file_original_id")
-            .then((doc: IImagePair) => {
-                const fileId: string = doc.get("file_original_id");
-                if (Storage.exists(fileId)) {
-                    return Storage.getFullPath(fileId);
-                } else {
-                    throw new FileNotFoundException(fileId);
-                }
-            });
+        return this.returnFile(id, "file_original_id");
+    }
+
+    private async returnFile(id: string, fieldName: string): Promise<string> {
+        return ImagePair.findById(id).select(`+${fieldName}`)
+        .then((doc: IImagePair) => {
+            const fileId: string = doc.get(fieldName);
+            if (Storage.exists(fileId)) {
+                return Storage.getFullPath(fileId);
+            } else {
+                throw new FileNotFoundException(fileId);
+            }
+        }).catch((error: Error) => {
+            if (error.name === "FileNotFoundException") {
+                throw error;
+            } else {
+                throw new NotFoundException("The id could not be found.");
+            }
+        });
     }
 
     private validate(req: Request): void {
