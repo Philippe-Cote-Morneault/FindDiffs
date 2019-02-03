@@ -60,6 +60,7 @@ export class CreateGameSimpleViewComponent {
     this.simplePOVGameGeneratorService.addGameCard(this.gameName, imagePairId, POVType.Simple)
           .subscribe((gameCard: ICommonGameCard) => {
             console.log(gameCard);
+            window.location.reload();
           });
   }
 
