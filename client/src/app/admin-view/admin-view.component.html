@@ -15,5 +15,5 @@
     </nav>
     <div class="filler"></div>
     <app-games-list-view [isInAdminView] = "true"></app-games-list-view>
-    <app-create-game-simple-view *ngIf="isPopUpVisible" ></app-create-game-simple-view>
+    <app-create-game-simple-view (closed)="onClosed($event)" *ngIf="isPopUpVisible"  ></app-create-game-simple-view>
   </body>
