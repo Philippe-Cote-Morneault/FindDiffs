@@ -32,7 +32,7 @@ describe("ImagePairService", () => {
     });
 
     describe("post()", () => {
-        it("If body is empty, should return an error", async () => {
+        it("Should return an error if body is empty", async () => {
             const request: Object = {
                 body: {
                 },
@@ -46,7 +46,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("If body does not contain an original image return an error", async () => {
+        it("Should return an error if body does not contain an original image", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -62,7 +62,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("If body does not contain a modified image return an error", async () => {
+        it("Should return an error if body does not contain a modified image", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -80,7 +80,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("If body contains images but invalid return an error", async () => {
+        it("Should return an error if body contains images but invalid ", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -91,6 +91,27 @@ describe("ImagePairService", () => {
                 },
             };
             const errorMessage: string = "Original image is not a file.";
+            try {
+                await imagePairService.post(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(errorMessage);
+            }
+        });
+
+        it("Should return an error if body contains a valid original image but an invalid modified image", async () => {
+            const request: Object = {
+                body: {
+                    name: "bob",
+                },
+                files: {
+                    originalImage: [{
+                        path: "random path",
+                    }],
+                    modifiedImage: "image",
+                },
+            };
+            const errorMessage: string = "Modified image is not a file.";
             try {
                 await imagePairService.post(mockReq(request));
                 throw new NoErrorThrownException();

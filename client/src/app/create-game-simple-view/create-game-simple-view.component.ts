@@ -53,9 +53,15 @@ export class CreateGameSimpleViewComponent {
   public addImagePair(): void {
     this.simplePOVGameGeneratorService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
       .subscribe((imagePair: ICommonImagePair) => {
-        this.simplePOVGameGeneratorService.addGameCard(imagePair.name, imagePair.id, POVType.Simple)
+        this.addGameCard(imagePair.id);
+      });
+  }
+
+  private addGameCard(imagePairId: string): void {
+    this.simplePOVGameGeneratorService.addGameCard(this.gameName, imagePairId, POVType.Simple)
           .subscribe((gameCard: ICommonGameCard) => {
             console.log(gameCard);
+            window.location.reload();
           });
       });
     (document.getElementById("simpleViewId") as HTMLInputElement).style.display = "none";

@@ -1,7 +1,7 @@
 import { Component, HostListener } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
-import { InitialViewService } from "../services/initial-view.service";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-initial-view",
@@ -10,7 +10,7 @@ import { InitialViewService } from "../services/initial-view.service";
 })
 export class InitialViewComponent {
 
-  public constructor(public initialViewService: InitialViewService, private router: Router) { }
+  public constructor(public initialViewService: UserService, private router: Router) { }
   public title: string = "Spot the Differences";
   public button: string = "Accept";
 
