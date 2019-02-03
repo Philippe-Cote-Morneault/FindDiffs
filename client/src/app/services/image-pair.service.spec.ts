@@ -15,7 +15,7 @@ describe("InitialViewService", () => {
             initialViewServiceGet = new ImagePairService(httpClientSpyPost);
         });
 
-        it("should return expected message on verifyUsername request (HttpClient called once)", () => {
+        it("should return expected message on addImagePair request (HttpClient called once)", () => {
             const expectedImage: ICommonImagePair = {
                 id: "1",
                 url_difference: "/diff",
@@ -30,7 +30,7 @@ describe("InitialViewService", () => {
                 size: 1000,
                 name: "qasdas",
                 type: "bmp",
-                slice: (start?: 0, end?: 0, contentType?: "aws")};
+                slice: (start: 0, end: 0, contentType: "aw") => new Blob };
 
             httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedImage));
 
