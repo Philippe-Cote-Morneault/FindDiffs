@@ -12,7 +12,7 @@ describe("ScoreGenerator", () => {
             expect(numbers.length).to.equal(0);
         });
 
-        it("should be lower than MAX and MIN value specified", () => {
+        it("Should be lower than MAX and MIN value specified", () => {
             const NUMBER_SCORE: number = 100;
             const numbers: number[] = ScoreGenerator.generateScore(NUMBER_SCORE);
 
