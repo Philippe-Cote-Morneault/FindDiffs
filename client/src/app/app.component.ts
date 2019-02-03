@@ -1,5 +1,4 @@
 import { Component, HostListener, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
 import { ICommonUser } from "./../../../common/model/user";
 import { SocketService } from "./services/socket.service";
 import { UserService } from "./services/user.service";
@@ -10,7 +9,7 @@ import { UserService } from "./services/user.service";
     styleUrls: ["./app.component.css"],
 })
 export class AppComponent implements OnInit {
-    public constructor(private socket: SocketService, private userService: UserService, private router: Router) {}
+    public constructor(private socket: SocketService, private userService: UserService) {}
 
     public message: string;
 
@@ -19,7 +18,6 @@ export class AppComponent implements OnInit {
     }
     @HostListener("window:beforeunload", ["$event"])
     public beforeUnload($event: Event): void {
-        this.router.navigateByUrl("/");
         const user: ICommonUser = JSON.parse(localStorage.getItem("user") || "{}");
         this.userService.deleteUsername(user.id).toPromise();
     }
