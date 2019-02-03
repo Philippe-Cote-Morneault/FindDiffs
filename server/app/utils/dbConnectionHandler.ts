@@ -29,4 +29,8 @@ export class DbConnectionHandler {
         });
     }
 
+    public async disconnect(): Promise<void> {
+        await mongoose.disconnect();
+    }
+
 }
