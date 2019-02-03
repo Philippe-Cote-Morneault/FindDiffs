@@ -27,7 +27,7 @@ export class CreateGameSimpleViewComponent {
   public fileEvent(event: HTMLInputEvent, positionFile: number): void {
     if (event.target.files != null) {
       const fileName: string = event.target.files[0].name;
-      fileName.split(".")[1] === "png" ? this.informationsNewGame[positionFile] = 1 : this.informationsNewGame[positionFile] = 0;
+      fileName.split(".")[1] === "bmp" ? this.informationsNewGame[positionFile] = 1 : this.informationsNewGame[positionFile] = 0;
     }
   }
   public verifyInfo(): void {
