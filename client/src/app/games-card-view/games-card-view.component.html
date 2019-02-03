@@ -12,13 +12,13 @@
         <div class="item3">
             <span> Best solo times: </span>
             <ol *ngFor='let soloTime of gameCard.bestTimeSolo; let i = index'>
-                <span> {{i+1}}: </span> {{soloTime}}
+                <span> {{i+1}}: </span> {{gameCard.soloTime}}
             </ol> 
         </div>
         <div class="item4">
             <span> Best 1 vs. 1 times: </span>
             <ol *ngFor='let onlineTime of gameCard.bestTimeOnline;let i = index'>
-                <span> {{i+1}}: </span> {{onlineTime}}
+                <span> {{i+1}}: </span> {{gameCard.onlineTime}}
             </ol>  
         </div>
         <div class="item5">

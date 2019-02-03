@@ -1,15 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
   selector: "app-admin-view",
   templateUrl: "./admin-view.component.html",
   styleUrls: ["./admin-view.component.css"],
 })
-export class AdminViewComponent implements OnInit {
-  public simpleMode = "Simple mode";
-  public freeMode = "Free mode";
-  public header = "Create a game in:";
-  public constructor() {}
-  public ngOnInit() {
-  }
+export class AdminViewComponent {
+  public simpleMode: string = "Simple mode";
+  public freeMode: string = "Free mode";
+  public header: string = "Create a game in:";
 }

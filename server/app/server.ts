@@ -1,16 +1,19 @@
 import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
+import * as SocketIO from "socket.io";
 import { Application } from "./app";
+import Config from "./config";
+import { IServer } from "./interfaces";
 import Types from "./types";
 
 @injectable()
-export class Server {
-    private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || "3000");
+export class Server implements IServer {
+    private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || Config.port);
     private readonly baseDix: number = 10;
     private server: http.Server;
 
-    public constructor(@inject(Types.Application) private application: Application) { }
+    public constructor(@inject(Types.IApplication) private application: Application) { }
     public init(): void {
         this.application.app.set("port", this.appPort);
 
@@ -19,6 +22,15 @@ export class Server {
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());
+
+        const io: SocketIO.Server = SocketIO(this.server);
+        io.on("connection", (socket: SocketIO.Socket) => {
+
+            socket.on("disconnect", () => {
+                // TODO include disconnect code
+            });
+        });
+
     }
 
     private normalizePort(val: number | string): number | string | boolean {
@@ -49,9 +61,6 @@ export class Server {
         }
     }
 
-    /**
-     * Se produit lorsque le serveur se met à écouter sur le port.
-     */
     private  onListening(): void {
         const addr: string | AddressInfo = this.server.address();
         const bind: string = (typeof addr === "string") ? `pipe ${addr}` : `port ${addr.port}`;
