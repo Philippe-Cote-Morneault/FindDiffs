@@ -3,7 +3,9 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class ImagePairService {
   private readonly BASE_URL: string = "http://localhost:3000/image-pair/";
 
@@ -23,6 +25,6 @@ export class ImagePairService {
     formData.append("originalImage", originalImage);
     formData.append("modifiedImage", modifiedImage);
 
-    return this.http.post<ICommonImagePair>(this.BASE_URL + "image-pair", formData);
+    return this.http.post<ICommonImagePair>(this.BASE_URL, formData);
   }
 }

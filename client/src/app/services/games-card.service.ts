@@ -35,13 +35,15 @@ export class GamesCardService {
   }
 
   public resetBestTimes(gameCard: ICommonGameCard): Observable<Message> {
-    const formData: FormData = new FormData();
-    formData.append("best_time_solo", gameCard.best_time_solo.toString());
-    formData.append("best_time_online", gameCard.best_time_online.toString());
+    console.log("resetBestTImes");
 
-    console.log(formData);
+    const requestBody = { "best_time_solo": gameCard.best_time_solo.toString(),
+                          "best_time_online": gameCard.best_time_online.toString()};
 
-    return this.http.put<Message>(this.BASE_URL + this.GAMECARD_URL + gameCard.id, formData).pipe(
+
+    console.log(requestBody);
+
+    return this.http.put<Message>(this.BASE_URL + this.GAMECARD_URL + gameCard.id, requestBody).pipe(
       catchError(this.handleError<Message>("resetBestTimes")),
     );
   }
