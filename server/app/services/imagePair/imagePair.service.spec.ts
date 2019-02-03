@@ -85,18 +85,18 @@ describe("ImagePairService", () => {
         });
     });
     describe("index()", () => {
-        it("Should return an image pair", async () => {
+        it("Should return an image pair array", async () => {
             const DIFFERENCES_COUNT: number = 4;
-            (ImagePair.find as sinon.SinonStub).resolves({
+            (ImagePair.find as sinon.SinonStub).resolves([{
                 file_difference_id: "a file id",
                 file_original_id: "a file id",
                 file_modified_id: "a file id",
                 name: "naming an image pair",
                 creation_date: new Date(),
                 differences_count: DIFFERENCES_COUNT,
-            });
+            }]);
             const result: string = await imagePairService.index();
-            expect(JSON.parse(result).differences_count).to.equal(DIFFERENCES_COUNT);
+            expect(JSON.parse(result)[0].differences_count).to.equal(DIFFERENCES_COUNT);
         });
 
         it("Should throw an error when returning an image pair", async() => {
@@ -107,6 +107,31 @@ describe("ImagePairService", () => {
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(ERROR_MESSAGE);
+            }
+        });
+    });
+    describe("single()", () => {
+        it("Should return a single image pair", async() => {
+            const DIFFERENCES_COUNT: number = 4;
+            (ImagePair.findById as sinon.SinonStub).resolves({
+                file_difference_id: "a file id",
+                file_original_id: "a file id",
+                file_modified_id: "a file id",
+                name: "naming an image pair",
+                creation_date: new Date(),
+                differences_count: DIFFERENCES_COUNT,
+            });
+            const result: string = await imagePairService.single("my id");
+            expect(JSON.parse(result).differences_count).to.equal(DIFFERENCES_COUNT);
+        });
+
+        it("Should throw an error if the id is not in the db", async() => {
+            (ImagePair.findById as sinon.SinonStub).rejects();
+            try {
+                await imagePairService.single("an unkonw id");
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The id could not be found.");
             }
         });
     });
