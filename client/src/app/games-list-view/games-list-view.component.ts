@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GamesCardViewService } from "../services/games-card.service";
 import { SocketService } from "../services/socket.service";
+import { GameCardLoaderService } from "../services/game-card-loader.service";
 
 @Component({
   selector: "app-games-list-view",
@@ -9,14 +10,16 @@ import { SocketService } from "../services/socket.service";
   styleUrls: ["./games-list-view.component.css"],
 })
 export class GamesListViewComponent implements OnInit {
+  @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
   public simplePOVgames: ICommonGameCard[] = [];
   public freePOVgames: ICommonGameCard[] = [];
 
-  public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService) {
+  public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService,
+                     public gameCardLoaderService: GameCardLoaderService) {
     this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
       console.log(message);
       //this.addGameCard(message[1]);
-      this.simplePOVgames = message;
+      this.gameCardLoaderService.addDynamicComponent(message[1]);
     });
     /*
     this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
@@ -38,6 +41,7 @@ export class GamesListViewComponent implements OnInit {
     this.gameCardsService.onGameCardAdded().subscribe((card: ICommonGameCard) => this.addGameCard(card));
     this.gameCardsService.onGameCardDeleted().subscribe((card: ICommonGameCard) => this.removeGameCard(card));
     this.gameCardsService.onGameCardUpdated().subscribe((card: ICommonGameCard) => this.updateGameCard(card));
+    this.gameCardLoaderService.setRootViewContainerRef(this.simplePOVContainer);
   }
 
   private addGameCard(gamecard: ICommonGameCard): void {
