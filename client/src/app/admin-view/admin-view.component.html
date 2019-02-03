@@ -11,6 +11,6 @@
         <button type="button" class="btn btn-dark navbar-btn">{{freeMode}}</button>
       </div>
     </nav>
-    <app-games-list-view></app-games-list-view>
+    <app-games-list-view [isInAdminView] = "true"></app-games-list-view>
     <app-create-game-simple-view *ngIf="isPopUpVisible" ></app-create-game-simple-view>
   </body>

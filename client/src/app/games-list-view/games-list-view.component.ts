@@ -13,7 +13,7 @@ export class GamesListViewComponent implements OnInit {
   @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
   @ViewChild("freePOVGamesContainer", { read: ViewContainerRef}) private freePOVContainer: ViewContainerRef;
 
-  @Input() public isInAdminView: boolean;
+  @Input() public isInAdminView: boolean = false;
 
   public simplePOVgames: ICommonGameCard[] = [];
   public freePOVgames: ICommonGameCard[] = [];

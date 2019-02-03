@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 
 @Component({
@@ -6,12 +6,18 @@ import { ICommonGameCard } from "../../../../common/model/gameCard";
   templateUrl: "./games-card-view.component.html",
   styleUrls: ["./games-card-view.component.css"],
 })
-export class GamesCardViewComponent {
+export class GamesCardViewComponent implements OnInit {
   @Input() public gameCard: ICommonGameCard;
-  @Input() public isInAdminView: boolean;
-  public constructor() {
-    console.log("created");
+  @Input() public isInAdminView: boolean = false;
+
+  // TODO: Find a better name for these variables
+  public leftButton: string = "Play";
+  public rightButton: string = "Create";
+
+  public ngOnInit(): void {
+    if (this.isInAdminView) {
+      this.leftButton = "Delete";
+      this.rightButton = "Reset";
+    }
   }
-  public buttonSolo: string = "Solo";
-  public buttonOnline: string = "1 vs. 1";
 }
