@@ -20,14 +20,18 @@ describe("ImagePairService", () => {
     beforeEach(() => {
         sinon.stub(ImagePair, "find");
         sinon.stub(ImagePair, "findById");
+        sinon.stub(ImagePair.prototype, "save");
         sinon.stub(Storage, "exists");
+        sinon.stub(Storage, "saveBuffer");
         sinon.stub(Storage, "getFullPath").callsFake((id: string) => `/${id}`);
     });
 
     afterEach(() => {
         (ImagePair.find as sinon.SinonStub).restore();
         (ImagePair.findById as sinon.SinonStub).restore();
+        (ImagePair.prototype.save as sinon.SinonStub).restore();
         (Storage.exists as sinon.SinonStub).restore();
+        (Storage.saveBuffer as sinon.SinonStub).restore();
         (Storage.getFullPath as sinon.SinonStub).restore();
     });
 
@@ -99,6 +103,25 @@ describe("ImagePairService", () => {
             }
         });
 
+        it("Should return an error if body contains images but still invalid ", async () => {
+            const request: Object = {
+                body: {
+                    name: "bob",
+                },
+                files: {
+                    originalImage: [],
+                    modifiedImage: [],
+                },
+            };
+            const errorMessage: string = "Original image is missing.";
+            try {
+                await imagePairService.post(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(errorMessage);
+            }
+        });
+
         it("Should return an error if body contains a valid original image but an invalid modified image", async () => {
             const request: Object = {
                 body: {
@@ -118,6 +141,28 @@ describe("ImagePairService", () => {
             } catch (err) {
                 expect(err.message).to.equal(errorMessage);
             }
+        });
+        it("Should return an objet with the image pair if the request is valid.", async () =>{
+            const request: Object = {
+                body: {
+                    name: "bob",
+                },
+                files: {
+                    originalImage: [{
+                        path: "test/testBitmaps/checker.bmp",
+                        filename: "checker.bmp",
+                    }],
+                    modifiedImage: [{
+                        path: "test/testBitmaps/checker-b.bmp",
+                        filename: "checker-b.bmp",
+                    }],
+                },
+            };
+            (Storage.saveBuffer as sinon.SinonStub).returns("an id");
+            (ImagePair.prototype.save as sinon.SinonStub).resolves();
+            const response: string = await imagePairService.post(mockReq(request));
+            expect(JSON.parse(response).name).to.equal(request["body"]["name"]);
+
         });
     });
     describe("index()", () => {
