@@ -1,5 +1,5 @@
 import { Message } from "../../../../common/communication/message";
-import { User } from "../../../../common/communication/user";
+import { ICommonUser } from "../../../../common/model/user";
 import { TestHelper } from "../../test.helper";
 import { InitialViewService } from "./initial-view.service";
 
@@ -20,12 +20,12 @@ describe("InitialViewService", () => {
         });
 
         it("should return expected message on verifyUsername request (HttpClient called once)", () => {
-            const expectedUser: User = { id: "1", username: "user1" };
+            const expectedUser: ICommonUser = { id: "1", username: "user1" , creation_date: new Date()};
             const mockUsername: string = "user1";
             httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedUser));
 
             initialViewServicePost.postUsernameValidation(mockUsername).subscribe(
-                (response: User) => {
+                (response: ICommonUser) => {
                     expect(response.id).toEqual(expectedUser.id, "Id check");
                     expect(response.username).toEqual(expectedUser.username, "Username check");
                 },
