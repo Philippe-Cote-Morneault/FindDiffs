@@ -3,6 +3,8 @@ import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { HTMLInputEvent } from "../htmlinput-event";
 import { SimplePovGameGeneratorService } from "../services/simple-pov-game-generator.service";
+import { GamesCardService } from "../services/games-card.service";
+import { ImagePairService } from "../services/image-pair.service";
 
 @Component({
   selector: "app-create-game-simple-view",
@@ -12,7 +14,8 @@ import { SimplePovGameGeneratorService } from "../services/simple-pov-game-gener
 export class CreateGameSimpleViewComponent {
   @Output() public closed: EventEmitter<boolean> = new EventEmitter();
 
-  private simplePOVGameGeneratorService: SimplePovGameGeneratorService;
+  private gamesCardService: GamesCardService;
+  private imagePairService: ImagePairService;
 
   public canSubmit: boolean = false;
   public informationsNewGame: number[] = [0, 0, 0];
@@ -27,8 +30,9 @@ export class CreateGameSimpleViewComponent {
   private modifiedImageFile: File;
   private gameName: string;
 
-  public constructor(simplePOVGameGeneratorService: SimplePovGameGeneratorService) {
-    this.simplePOVGameGeneratorService = simplePOVGameGeneratorService;
+  public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService) {
+    this.gamesCardService = gamesCardService;
+    this.imagePairService = imagePairService;
   }
 
   public verifyName(): void {
@@ -52,14 +56,14 @@ export class CreateGameSimpleViewComponent {
   }
 
   public addImagePair(): void {
-    this.simplePOVGameGeneratorService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
+    this.imagePairService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
       .subscribe((imagePair: ICommonImagePair) => {
         this.addGameCard(imagePair.id);
       });
   }
 
   private addGameCard(imagePairId: string): void {
-    this.simplePOVGameGeneratorService.addGameCard(this.gameName, imagePairId, POVType.Simple)
+    this.gamesCardService.addGameCard(this.gameName, imagePairId, POVType.Simple)
           .subscribe((gameCard: ICommonGameCard) => {
             console.log(gameCard);
             window.location.reload();
