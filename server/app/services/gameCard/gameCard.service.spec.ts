@@ -296,5 +296,20 @@ describe("GameCardService", () => {
                 expect(err.message).to.equal("No changes were detected!");
             }
         });
+
+        it("Should update the field best_time_solo", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+                body: {
+                    best_time_solo: "change",
+                },
+            };
+            (GameCard.findById as sinon.SinonStub).resolves(new GameCardSchemaMock((doc: GameCardSchemaMock) => {
+                expect(doc.best_time_solo.length).to.equal(service.DEFAULT_SCORE_NUMBER);
+            }));
+            await service.update(mockReq(request));
+        });
     });
 });
