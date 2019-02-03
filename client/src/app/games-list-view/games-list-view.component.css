@@ -28,13 +28,13 @@ body {
 }
 
 #simple_pov_games_container {
-    background-color: blue;
-    height: 500px;
     width: 50%;
+    border: 2px solid black;
+    border-right: 1px solid black;
 }
 
 #free_pov_games_container {
-    background-color: aquamarine;
-    height: 500px;
     width: 50%;
+    border: 2px solid black;
+    border-left: 1px solid black;
 }
