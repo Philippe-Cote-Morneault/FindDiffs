@@ -4,6 +4,7 @@ import { ImagePairService } from "../services/image-pair.service";
 
 @Component({
   selector: "app-games-card-view",
+  providers: [ImagePairService],
   templateUrl: "./games-card-view.component.html",
   styleUrls: ["./games-card-view.component.css"],
 })
@@ -21,7 +22,7 @@ export class GamesCardViewComponent implements OnInit {
 
   private getOriginalImage(): void {
     this.imagePairService.getOriginalImage(this.gameCard.image_pair.id).subscribe(
-      (originalImage: File) => this.originalImage = originalImage,
+      (originalImage: File) => {this.originalImage = originalImage; },
     );
   }
 }
