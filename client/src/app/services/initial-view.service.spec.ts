@@ -1,6 +1,6 @@
-import { Message } from "../../../common/communication/message";
-import { User } from "../../../common/communication/user";
-import { TestHelper } from "../test.helper";
+import { Message } from "../../../../common/communication/message";
+import { User } from "../../../../common/communication/user";
+import { TestHelper } from "../../test.helper";
 import { InitialViewService } from "./initial-view.service";
 
 // tslint:disable-next-line:no-any Used to mock the http call
