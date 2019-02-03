@@ -12,7 +12,6 @@ export class GamesCardViewComponent implements OnInit {
   @Input() public gameCard: ICommonGameCard;
   @Input() public isInAdminView: boolean = false;
 
-  // TODO: Find a better name for these variables
   public leftButton: string = "Play";
   public rightButton: string = "Create";
 
