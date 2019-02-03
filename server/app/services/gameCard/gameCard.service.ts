@@ -11,8 +11,11 @@ import { GameCard, IGameCard } from "../../model/schemas/gameCard";
 import { EnumUtils } from "../../utils/enumUtils";
 import { IGameCardService } from "../interfaces";
 import { Service } from "../service";
+import { ScoreGenerator } from "./scoreGenerator";
 
 export class GameCardService extends Service implements IGameCardService {
+
+    private readonly DEFAULT_SCORE_NUMBER: number = 3;
 
     private validatePost(req: Request): void {
         if (!req.body.name) {
@@ -39,8 +42,8 @@ export class GameCardService extends Service implements IGameCardService {
             pov: req.body.pov,
             title: req.body.name,
             imagePairId: imagePair.id,
-            best_time_solo: [0, 0, 0],
-            best_time_online: [0, 0, 0],
+            best_time_solo: ScoreGenerator.generateScore(this.DEFAULT_SCORE_NUMBER),
+            best_time_online: ScoreGenerator.generateScore(this.DEFAULT_SCORE_NUMBER),
             creation_date: new Date(),
         });
         await gameCard.save();
