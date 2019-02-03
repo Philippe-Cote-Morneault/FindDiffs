@@ -17,8 +17,8 @@ export class AppComponent implements OnInit {
         this.socket.ngOnInit();
     }
     @HostListener("window:beforeunload", ["$event"])
-    public beforeUnload($event: Event): void {
+    public async beforeUnload($event: Event): Promise<void> {
         const user: ICommonUser = JSON.parse(localStorage.getItem("user") || "{}");
-        this.userService.deleteUsername(user.id).toPromise();
+        await this.userService.deleteUsername(user.id).toPromise();
     }
 }

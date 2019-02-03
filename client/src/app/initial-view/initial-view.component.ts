@@ -20,10 +20,10 @@ export class InitialViewComponent {
         this.userService.postUsernameValidation(username).subscribe(this.correctUsername.bind(this));
     }
 
-    public correctUsername(response: ICommonUser | Message): void {
+    public async correctUsername(response: ICommonUser | Message): Promise<void> {
         if ((response as ICommonUser).id) {
             localStorage.setItem("user", JSON.stringify(response));
-            this.router.navigateByUrl("/gamesList");
+            await this.router.navigateByUrl("/gamesList");
         } else {
             alert((response as Message).body);
         }
