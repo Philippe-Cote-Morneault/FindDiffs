@@ -8,3 +8,8 @@
     width:450px;
     color:#9d9d9d;
 }
+
+body {
+    max-height: 100vh;
+    max-width: 100vw;
+}

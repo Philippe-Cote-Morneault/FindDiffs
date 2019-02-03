@@ -44,7 +44,7 @@ export class UserService extends Service implements IUserService {
 
     public async post(req: Request): Promise<string> {
         if (req.body.username) {
-            if (this.isUsernameValid(req.body.username)) {
+            if (await this.isUsernameValid(req.body.username)) {
                 if (await this.isAvailable(req.body.username)) {
                     const user: IUser = new User({
                         username: req.body.username,
@@ -74,7 +74,7 @@ export class UserService extends Service implements IUserService {
     }
 
     private isUsernameValid(username: string): boolean {
-        const regex: RegExp = new RegExp("^[a-zA-Z0-9]{2,13}$");
+        const regex: RegExp = new RegExp("^[a-zA-Z0-9]{3,12}$");
 
         return regex.test(username);
     }

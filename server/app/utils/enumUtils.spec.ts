@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import { EnumUtils } from "./EnumUtils";
+import { EnumUtils } from "./enumUtils";
 
 enum TestEnum { One, Two, Three}
 enum TestEnumValues {One = 1, Two = 2, Three = 3}

@@ -1,5 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { GameCardLoaderService } from "../services/game-card-loader.service";
 import { GamesCardViewService } from "../services/games-card.service";
 import { SocketService } from "../services/socket.service";
 
@@ -9,13 +10,13 @@ import { SocketService } from "../services/socket.service";
   styleUrls: ["./games-list-view.component.css"],
 })
 export class GamesListViewComponent implements OnInit {
-  public simplePOVgames: ICommonGameCard[];
-  public freePOVgames: ICommonGameCard[];
+  @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
+  @ViewChild("freePOVGamesContainer", { read: ViewContainerRef}) private freePOVContainer: ViewContainerRef;
+  public simplePOVgames: ICommonGameCard[] = [];
+  public freePOVgames: ICommonGameCard[] = [];
 
-  public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService) {
-    this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
-      console.log(message);
-    });
+  public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService,
+                     public gameCardLoaderService: GameCardLoaderService) {
     /*
     this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
       console.log(message);
@@ -36,6 +37,20 @@ export class GamesListViewComponent implements OnInit {
     this.gameCardsService.onGameCardAdded().subscribe((card: ICommonGameCard) => this.addGameCard(card));
     this.gameCardsService.onGameCardDeleted().subscribe((card: ICommonGameCard) => this.removeGameCard(card));
     this.gameCardsService.onGameCardUpdated().subscribe((card: ICommonGameCard) => this.updateGameCard(card));
+
+    this.gameCardLoaderService.setContainer(this.simplePOVContainer, POVType.Simple);
+    this.gameCardLoaderService.setContainer(this.freePOVContainer, POVType.Free);
+
+    this.addAllGameCards();
+  }
+
+  private addAllGameCards(): void {
+    this.gameCardsService.getGameCards().subscribe((gameCards: ICommonGameCard[]) => {
+      console.log(gameCards);
+      gameCards.forEach((gameCard: ICommonGameCard) => {
+        this.gameCardLoaderService.addDynamicComponent(gameCard);
+      });
+    });
   }
 
   private addGameCard(gamecard: ICommonGameCard): void {

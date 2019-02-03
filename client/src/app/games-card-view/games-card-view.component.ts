@@ -8,6 +8,9 @@ import { ICommonGameCard } from "../../../../common/model/gameCard";
 })
 export class GamesCardViewComponent {
   @Input() public gameCard: ICommonGameCard;
+  public constructor() {
+    console.log("created");
+  }
   public buttonSolo: string = "Solo";
   public buttonOnline: string = "1 vs. 1";
 }
