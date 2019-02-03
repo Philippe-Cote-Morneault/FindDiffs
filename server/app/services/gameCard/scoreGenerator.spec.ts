@@ -17,7 +17,7 @@ describe("ScoreGenerator", () => {
             const numbers: number[] = ScoreGenerator.generateScore(NUMBER_SCORE);
 
             expect(numbers.filter(
-                (x: number) => x >= ScoreGenerator.MIN && ScoreGenerator.MAX >= x).length
+                (x: number) => x >= ScoreGenerator.MIN && ScoreGenerator.MAX >= x).length,
                 ).to.equal(NUMBER_SCORE);
         });
     });
