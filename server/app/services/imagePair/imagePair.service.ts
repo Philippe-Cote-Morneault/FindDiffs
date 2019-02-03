@@ -31,6 +31,10 @@ export class ImagePairService extends Service implements IImagePairService {
     public async single(id: string): Promise<string> {
         return ImagePair.findById(id)
             .then((doc: IImagePair) => {
+                if (!doc) {
+                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                }
+
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
                 throw new NotFoundException(R.ERROR_UNKOWN_ID);
