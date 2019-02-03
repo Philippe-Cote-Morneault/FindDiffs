@@ -29,6 +29,18 @@ export class GamesCardViewComponent implements OnInit {
     }
   }
 
+  public onLeftButtonClick(): void {
+    if (this.isInAdminView) {
+      this.deleteGameCard();
+    }
+  }
+
+  public onRightButtonClick(): void {
+    if (this.isInAdminView) {
+      this.resetBestTimes();
+    }
+  }
+
   public deleteGameCard(): void {
     if (confirm("Are you sure you want to delete the Game Card called " + this.gameCard.title + "?")) {
       this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe((message: Message) => {
@@ -40,7 +52,7 @@ export class GamesCardViewComponent implements OnInit {
 
   public resetBestTimes(): void {
     if (confirm("Are you sure you want to reset the best times of the Game Card called " + this.gameCard.title + "?")) {
-      this.gamesCardService.resetBestTimes(this.gameCard.id).subscribe((message: Message) => {
+      this.gamesCardService.resetBestTimes(this.gameCard).subscribe((message: Message) => {
         console.log(message);
         window.location.reload();
       });

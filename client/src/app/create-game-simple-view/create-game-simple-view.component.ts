@@ -1,11 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
-import { AdminViewComponent } from "../admin-view/admin-view.component";
 import { HTMLInputEvent } from "../htmlinput-event";
 import { SimplePovGameGeneratorService } from "../services/simple-pov-game-generator.service";
-import { ICommonImagePair } from "../../../../common/model/imagePair";
-import { POVType, ICommonGameCard } from "../../../../common/model/gameCard";
 
 @Component({
   selector: "app-create-game-simple-view",
@@ -13,6 +10,8 @@ import { POVType, ICommonGameCard } from "../../../../common/model/gameCard";
   styleUrls: ["./create-game-simple-view.component.css"],
 })
 export class CreateGameSimpleViewComponent {
+  @Output() public closed: EventEmitter<boolean> = new EventEmitter();
+
   private simplePOVGameGeneratorService: SimplePovGameGeneratorService;
 
   public canSubmit: boolean = false;
@@ -28,7 +27,7 @@ export class CreateGameSimpleViewComponent {
   private modifiedImageFile: File;
   private gameName: string;
 
-  public constructor(simplePOVGameGeneratorService: SimplePovGameGeneratorService, private adminViewComponent: AdminViewComponent ) {
+  public constructor(simplePOVGameGeneratorService: SimplePovGameGeneratorService) {
     this.simplePOVGameGeneratorService = simplePOVGameGeneratorService;
   }
 
@@ -55,7 +54,7 @@ export class CreateGameSimpleViewComponent {
   public addImagePair(): void {
     this.simplePOVGameGeneratorService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
       .subscribe((imagePair: ICommonImagePair) => {
-        this.simplePOVGameGeneratorService.addGameCard(imagePair.name, imagePair.id, POVType.Simple)
+        this.addGameCard(imagePair.id);
       });
   }
 
@@ -65,13 +64,9 @@ export class CreateGameSimpleViewComponent {
             console.log(gameCard);
             window.location.reload();
           });
-      });
-    (document.getElementById("simpleViewId") as HTMLInputElement).style.display = "none";
-    this.adminViewComponent.isPopUpVisible = false;
   }
 
   public hideView(): void {
-    (document.getElementById("simpleViewId") as HTMLInputElement).style.display = "none";
-    this.adminViewComponent.isPopUpVisible = false;
+    this.closed.emit(true);
   }
 }
