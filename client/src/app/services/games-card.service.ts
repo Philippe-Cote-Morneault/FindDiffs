@@ -22,8 +22,7 @@ export class GamesCardService {
   }
 
   public addGameCard(gameName: string, imagePairId: string, pov: POVType): Observable<ICommonGameCard> {
-    // TODO: Find type for this object
-    const requestBody = { "name": gameName, "image-pair-id": imagePairId, "pov": "Simple"};
+    const requestBody: Object = { "name": gameName, "image-pair-id": imagePairId, "pov": "Simple"};
 
     return this.http.post<ICommonGameCard>(this.BASE_URL + "gamecard", requestBody);
   }
@@ -35,12 +34,9 @@ export class GamesCardService {
   }
 
   public resetBestTimes(gameCard: ICommonGameCard): Observable<Message> {
-    console.log("resetBestTImes");
 
-    const requestBody = { "best_time_solo": gameCard.best_time_solo.toString(),
-                          "best_time_online": gameCard.best_time_online.toString()};
-
-    console.log(requestBody);
+    const requestBody: Object = { "best_time_solo": gameCard.best_time_solo.toString(),
+                                  "best_time_online": gameCard.best_time_online.toString()};
 
     return this.http.put<Message>(this.BASE_URL + this.GAMECARD_URL + gameCard.id, requestBody).pipe(
       catchError(this.handleError<Message>("resetBestTimes")),
