@@ -32,7 +32,7 @@ describe("ImagePairService", () => {
     });
 
     describe("post()", () => {
-        it("If body is empty, should return an error", async () => {
+        it("Should return an error if body is empty", async () => {
             const request: Object = {
                 body: {
                 },
@@ -46,7 +46,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("If body does not contain an original image return an error", async () => {
+        it("Should return an error if body does not contain an original image", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -62,7 +62,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("If body does not contain a modified image return an error", async () => {
+        it("Should return an error if body does not contain a modified image", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
