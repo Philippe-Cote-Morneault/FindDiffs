@@ -28,7 +28,7 @@ export class GameCardLoaderService {
         const factory: ComponentFactory<GamesCardViewComponent> = this.factoryResolver
             .resolveComponentFactory(GamesCardViewComponent);
 
-        const component: GamesCardViewComponent = POVType[gameCard.pov] === POVType.Simple ?
+        const component: GamesCardViewComponent = +POVType[gameCard.pov] === POVType.Simple ?
             this.simplePOVContainer.createComponent(factory).instance :
             this.freePOVContainer.createComponent(factory).instance;
 
