@@ -16,6 +16,8 @@ export class ImagePairService {
   }
 
   public getOriginalImage(id: string): Observable<File> {
+    console.log(id);
+    
     return this.http.get<File>(this.BASE_URL + id + "/original");
   }
 

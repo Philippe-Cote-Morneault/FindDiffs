@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
 import { Message } from "../../../../common/communication/message";
+import { ImagePairService } from "../services/image-pair.service";
 
 @Component({
   selector: "app-games-card-view",
@@ -15,11 +16,14 @@ export class GamesCardViewComponent implements OnInit {
 
   public leftButton: string = "Play";
   public rightButton: string = "Create";
+  public originalImage: File;
 
   private gamesCardService: GamesCardService;
+  private imagePairService: ImagePairService;
 
-  public constructor(gamesCardService: GamesCardService) {
+  public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService) {
     this.gamesCardService = gamesCardService;
+    this.imagePairService = imagePairService;
   }
 
   public ngOnInit(): void {
@@ -27,6 +31,7 @@ export class GamesCardViewComponent implements OnInit {
       this.leftButton = "Delete";
       this.rightButton = "Reset";
     }
+    this.getOriginalImage();
   }
 
   public onLeftButtonClick(): void {
@@ -65,6 +70,4 @@ export class GamesCardViewComponent implements OnInit {
       (originalImage: File) => {this.originalImage = originalImage; },
     );
   }
-    this.getOriginalImage();
-  public originalImage: File;
 }
