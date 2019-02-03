@@ -53,7 +53,9 @@ export class GamesCardViewComponent implements OnInit {
     if (confirm("Are you sure you want to reset the best times of the Game Card called " + this.gameCard.title + "?")) {
       this.gamesCardService.resetBestTimes(this.gameCard).subscribe((message: Message) => {
         console.log(message);
+        if (message.title !== "Error") {
         window.location.reload();
+        }
       });
     }
   }
