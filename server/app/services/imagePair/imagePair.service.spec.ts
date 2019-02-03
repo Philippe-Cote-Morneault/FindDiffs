@@ -5,8 +5,7 @@ import { ImagePairService } from "./imagePair.service";
 describe("ImagePairService", () => {
     const imagePairService: ImagePairService = new ImagePairService();
     it("If body is empty, should return an error", async () => {
-        // tslint:disable:typedef
-        const request = {
+        const request: Object = {
             body: {
             },
         };
@@ -20,7 +19,7 @@ describe("ImagePairService", () => {
     });
 
     it("If body does not contain an original image return an error", async () => {
-        const request = {
+        const request: Object = {
             body: {
                 name: "bob",
             },
@@ -36,7 +35,7 @@ describe("ImagePairService", () => {
     });
 
     it("If body does not contain a modified image return an error", async () => {
-        const request = {
+        const request: Object = {
             body: {
                 name: "bob",
             },
@@ -54,7 +53,7 @@ describe("ImagePairService", () => {
     });
 
     it("If body contains images but invalid return an error", async () => {
-        const request = {
+        const request: Object = {
             body: {
                 name: "bob",
             },
