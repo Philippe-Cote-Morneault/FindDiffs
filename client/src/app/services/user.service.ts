@@ -5,7 +5,7 @@ import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 
 @Injectable()
-export class InitialViewService {
+export class UserService {
 
     private readonly BASE_URL: string = "http://localhost:3000/user/";
     public constructor(private http: HttpClient) { }

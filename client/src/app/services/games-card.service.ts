@@ -1,35 +1,35 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { of, Observable } from "rxjs";
+import { catchError, map } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
-import { map } from "rxjs/operators";
-import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { Event, SocketService } from "./socket.service";
-
-/*
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
-*/
 
 @Injectable({
   providedIn: "root",
 })
-export class GamesCardViewService {
+export class GamesCardService {
   private readonly BASE_URL: string = "http://localhost:3000/";
-  private readonly GET_ALL_CARDS_URL: string = "gamecard/";
+  private readonly GAMECARD_URL: string = "gamecard/";
 
   public constructor(private http: HttpClient, private socketService: SocketService) { }
 
-  /*
-  public getGameCards(povType: POVType): Observable<ICommonGameCard[]> {
-    return this.http.get<ICommonGameCard[]>(this.BASE_URL + this.GET_ALL_CARDS_URL);
-  }
-  */
-
-  public getGameCards(povType: POVType): Observable<ICommonGameCard[]> {
-    return this.http.get<ICommonGameCard[]>(this.BASE_URL + this.GET_ALL_CARDS_URL).pipe(
+  public getGameCards(): Observable<ICommonGameCard[]> {
+    return this.http.get<ICommonGameCard[]>(this.BASE_URL + this.GAMECARD_URL).pipe(
       map((res) => res),
+    );
+  }
+
+  public deleteGameCard(gameCardId: string): Observable<Message> {
+    return this.http.delete<Message>(this.BASE_URL + this.GAMECARD_URL + gameCardId).pipe(
+      catchError(this.handleError<Message>("deleteGameCard")),
+    );
+  }
+
+  public resetBestTimes(gameCardId: string): Observable<Message> {
+    return this.http.put<Message>(this.BASE_URL + this.GAMECARD_URL + gameCardId, "test").pipe(
+      catchError(this.handleError<Message>("resetBestTimes")),
     );
   }
 
@@ -60,11 +60,9 @@ export class GamesCardViewService {
     });
   }
 
-  /*
   private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
     return (error: Error): Observable<T> => {
         return of(result as T);
     };
   }
-  */
 }

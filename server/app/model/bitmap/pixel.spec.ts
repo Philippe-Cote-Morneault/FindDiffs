@@ -69,15 +69,15 @@ describe("Pixel", () => {
         });
     });
     describe("fromColor()", () => {
-        it("Black should return a black pixel", () => {
+        it("should return a black pixel if color is black", () => {
             const pixelBlack: Pixel = new Pixel(new Uint8Array([0]) , new Uint8Array([0]), new Uint8Array([0]));
             expect(pixelBlack).to.eql(Pixel.fromColor(COLOR.BLACK));
         });
-        it("White should return a white pixel", () => {
+        it("Should return a white pixel if color is white", () => {
             const pixelWhite: Pixel = new Pixel(new Uint8Array([255]) , new Uint8Array([255]), new Uint8Array([255]));
             expect(pixelWhite).to.eql(Pixel.fromColor(COLOR.WHITE));
         });
-        it("red should return a white pixel", () => {
+        it("Should return a white pixel if color is red", () => {
             const pixelWhite: Pixel = new Pixel(new Uint8Array([255]) , new Uint8Array([255]), new Uint8Array([255]));
             expect(pixelWhite).to.eql(Pixel.fromColor(COLOR.RED));
         });

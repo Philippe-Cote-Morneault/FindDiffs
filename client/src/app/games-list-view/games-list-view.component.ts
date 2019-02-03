@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
-import { GamesCardViewService } from "../services/games-card.service";
+import { GameCardLoaderService } from "../services/game-card-loader.service";
+import { GamesCardService } from "../services/games-card.service";
 import { SocketService } from "../services/socket.service";
 
 @Component({
@@ -9,33 +10,35 @@ import { SocketService } from "../services/socket.service";
   styleUrls: ["./games-list-view.component.css"],
 })
 export class GamesListViewComponent implements OnInit {
-  public simplePOVgames: ICommonGameCard[];
-  public freePOVgames: ICommonGameCard[];
+  @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
+  @ViewChild("freePOVGamesContainer", { read: ViewContainerRef}) private freePOVContainer: ViewContainerRef;
 
-  public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService) {
-    this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
-      console.log(message);
-    });
-    /*
-    this.gameCardsService.getGameCards(POVType.Simple).subscribe((message) => {
-      console.log(message);
-      //this.simplePOVgames = cards;
-      //console.log(cards);
-    });
-    */
+  @Input() public isInAdminView: boolean = false;
 
-    /*
-    this.gameCardsService.getGameCards(POVType.Free).subscribe((cards: ICommonGameCard[]) => {
-      this.freePOVgames = cards;
-    });
-    */
+  public simplePOVgames: ICommonGameCard[] = [];
+  public freePOVgames: ICommonGameCard[] = [];
 
+  public constructor(public gameCardsService: GamesCardService, public socketService: SocketService,
+                     public gameCardLoaderService: GameCardLoaderService) {
   }
 
   public ngOnInit(): void {
     this.gameCardsService.onGameCardAdded().subscribe((card: ICommonGameCard) => this.addGameCard(card));
     this.gameCardsService.onGameCardDeleted().subscribe((card: ICommonGameCard) => this.removeGameCard(card));
     this.gameCardsService.onGameCardUpdated().subscribe((card: ICommonGameCard) => this.updateGameCard(card));
+
+    this.gameCardLoaderService.setContainer(this.simplePOVContainer, POVType.Simple);
+    this.gameCardLoaderService.setContainer(this.freePOVContainer, POVType.Free);
+
+    this.addAllGameCards();
+  }
+
+  private addAllGameCards(): void {
+    this.gameCardsService.getGameCards().subscribe((gameCards: ICommonGameCard[]) => {
+      gameCards.forEach((gameCard: ICommonGameCard) => {
+        this.gameCardLoaderService.addDynamicComponent(gameCard, this.isInAdminView);
+      });
+    });
   }
 
   private addGameCard(gamecard: ICommonGameCard): void {

@@ -1,6 +1,7 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { Message } from "../../../../common/communication/message";
+import { ExistsAlreadyException } from "../../../../common/errors/existsAlreadyException";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { IUser, User } from "../../model/schemas/user";
@@ -54,7 +55,7 @@ export class UserService extends Service implements IUserService {
                     return JSON.stringify(user);
                 }
 
-                throw new InvalidFormatException("The username is already taken.");
+                throw new ExistsAlreadyException("The username is already taken.");
 
             }
 
@@ -67,13 +68,11 @@ export class UserService extends Service implements IUserService {
     private async isAvailable(username: string): Promise<boolean> {
         return User.countDocuments({username: username}).then((c: number) => {
             return c === 0;
-        }).catch((err: Error) => {
-            return false;
         });
     }
 
     private isUsernameValid(username: string): boolean {
-        const regex: RegExp = new RegExp("^[a-zA-Z0-9]{2,13}$");
+        const regex: RegExp = new RegExp("^[a-zA-Z0-9]{3,12}$");
 
         return regex.test(username);
     }
