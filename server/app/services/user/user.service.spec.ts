@@ -8,11 +8,11 @@ import { UserService } from "./user.service";
 // tslint:disable:no-magic-numbers
 describe("UserService", () => {
     const userService: UserService = new UserService();
-    const notSetError: string = "The field username is not set.";
-    const notValidError: string = "The field username is not valid.";
+    const notSetError: string = "The field username is not present.";
+    const notValidError: string = "The username is invalid.";
     const alreadyTakenError: string = "The username is already taken.";
     const sucessDelete: string = "The user was deleted.";
-    const idNotInDB: string = "The id could not be found";
+    const idNotInDB: string = "The id could not be found.";
 
     beforeEach(() => {
         sinon.stub(User, "find");
