@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
-import { Message } from "../../../../common/communication/message";
 
 @Component({
   selector: "app-games-card-view",
