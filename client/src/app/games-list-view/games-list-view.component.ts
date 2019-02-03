@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GameCardLoaderService } from "../services/game-card-loader.service";
-import { GamesCardViewService } from "../services/games-card.service";
+import { GamesCardService } from "../services/games-card.service";
 import { SocketService } from "../services/socket.service";
 
 @Component({
@@ -18,7 +18,7 @@ export class GamesListViewComponent implements OnInit {
   public simplePOVgames: ICommonGameCard[] = [];
   public freePOVgames: ICommonGameCard[] = [];
 
-  public constructor(public gameCardsService: GamesCardViewService, public socketService: SocketService,
+  public constructor(public gameCardsService: GamesCardService, public socketService: SocketService,
                      public gameCardLoaderService: GameCardLoaderService) {
   }
 
