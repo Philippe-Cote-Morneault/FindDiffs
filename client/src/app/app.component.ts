@@ -10,9 +10,7 @@ import { UserService } from "./services/user.service";
     styleUrls: ["./app.component.css"],
 })
 export class AppComponent implements OnInit {
-    public constructor(private socket: SocketService, private userService: UserService, private router: Router) {
-        this.router.navigateByUrl("/");
-    }
+    public constructor(private socket: SocketService, private userService: UserService, private router: Router) {}
 
     public message: string;
 
@@ -21,6 +19,7 @@ export class AppComponent implements OnInit {
     }
     @HostListener("window:beforeunload", ["$event"])
     public beforeUnload($event: Event): void {
+        this.router.navigateByUrl("/");
         const user: ICommonUser = JSON.parse(localStorage.getItem("user") || "{}");
         this.userService.deleteUsername(user.id).toPromise();
     }
