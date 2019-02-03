@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
-import { POVType, ICommonGameCard } from "../../../../common/model/gameCard";
 
 @Injectable({
   providedIn: "root",
