@@ -25,7 +25,8 @@
       ".ts"
     ],
     "exclude": [
-      "**/*.spec.ts"
+      "**/*.spec.ts",
+      "app/services/interfaces.ts"
     ],
     "require": [
       "ts-node/register"
