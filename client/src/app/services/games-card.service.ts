@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Message } from "../../../../common/communication/message";
 import { map } from "rxjs/operators";
+import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { Event, SocketService } from "./socket.service";
 
