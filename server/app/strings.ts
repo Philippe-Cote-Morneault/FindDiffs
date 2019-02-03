@@ -19,9 +19,11 @@ export const R: IString = {
     ERROR_MISSING_FILES: "Files needs to be uploaded, no files were uploaded.",
     ERROR_WRONG_TYPE: "The %s type is not recognized.",
     ERROR_NOT_BMP_FILE: "Not a bmp file",
+    ERROR_INVALID: "The %s is invalid.",
     ERROR_INVALID_SIZE: "Width is %d pixels, should be %d pixels",
     ERROR_INVALID_HEIGHT: "Height is %d pixels, should be %d pixels",
     ERROR_INVALID_FILE: "%s is not a file.",
+    ERROR_USERNAME_TAKEN: "The username is already taken.",
 
     ORIGINAL_IMAGE: "Original image",
     ORIGINAL_IMAGE_: "original image",
@@ -33,8 +35,11 @@ export const R: IString = {
     PAIR_: "image-pair-id",
     POV: "POV",
     POV_: "pov",
+    USERNAME: "Username",
+    USERNAME_: "username",
 
     SUCCESS: "Success",
     SUCCESS_GAME_CARD_UPDATED: "The gamecard was updated.",
     SUCCESS_GAME_CARD_DELETED: "The gamecard was deleted.",
+    SUCCESS_USER_DELETED: "The user was deleted.",
 };
