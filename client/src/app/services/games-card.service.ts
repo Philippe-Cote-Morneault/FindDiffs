@@ -1,16 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { of, Observable } from "rxjs";
-import { Message } from "../../../../common/communication/message";
 import { catchError, map } from "rxjs/operators";
+import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { Event, SocketService } from "./socket.service";
-
-/*
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
-*/
 
 @Injectable({
   providedIn: "root",
