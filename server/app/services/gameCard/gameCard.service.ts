@@ -17,6 +17,7 @@ import { ScoreGenerator } from "./scoreGenerator";
 export class GameCardService extends Service implements IGameCardService {
 
     public readonly DEFAULT_SCORE_NUMBER: number = 3;
+    public readonly NUMBER_OF_DIFFERENCES: number = 7;
 
     private validatePost(req: Request): void {
         if (!req.body.name) {
@@ -39,6 +40,11 @@ export class GameCardService extends Service implements IGameCardService {
     public async post(req: Request): Promise<string> {
         this.validatePost(req);
         const imagePair: ICommonImagePair = await this.getImagePairId(req.body["image-pair-id"]);
+
+        if (imagePair.differences_count !== this.NUMBER_OF_DIFFERENCES) {
+            throw new InvalidFormatException(_e(R.ERROR_DIFFERENCE_INVALID, [imagePair.differences_count]));
+        }
+
         const gameCard: IGameCard = new GameCard({
             pov: req.body.pov,
             title: req.body.name,
