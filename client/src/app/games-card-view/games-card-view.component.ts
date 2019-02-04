@@ -13,9 +13,8 @@ export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean = false;
 
-  public leftButton: string = "Play";
-  public rightButton: string = "Create";
-  public originalImage: File;
+    public leftButton: string = "Play";
+    public rightButton: string = "Create";
 
     private gamesCardService: GamesCardService;
 
@@ -30,13 +29,14 @@ export class GamesCardViewComponent implements OnInit {
         }
     }
 
-  public toMinutes(index: number, times: number[]): string {
-    return StringFormater.secondsToMinutes(times[index]);
-  }
+    public toMinutes(index: number, times: number[]): string {
+        return StringFormater.secondsToMinutes(times[index]);
+    }
 
-  public onLeftButtonClick(): void {
-    if (this.isInAdminView) {
-      this.deleteGameCard();
+    public onLeftButtonClick(): void {
+        if (this.isInAdminView) {
+            this.deleteGameCard();
+        }
     }
 
     public onRightButtonClick(): void {
@@ -45,18 +45,21 @@ export class GamesCardViewComponent implements OnInit {
         }
     }
 
-  public deleteGameCard(): void {
-    if (confirm("Are you sure you want to delete the Game Card called " + this.gameCard.title + "?")) {
-      this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe((message: Message) => {
-        window.location.reload();
-      });
+    public deleteGameCard(): void {
+        if (confirm("Are you sure you want to delete the Game Card called " + this.gameCard.title + "?")) {
+            this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe((message: Message) => {
+                window.location.reload();
+            });
+        }
     }
 
-  public resetBestTimes(): void {
-    if (confirm("Are you sure you want to reset the best times of the Game Card called " + this.gameCard.title + "?")) {
-      this.gamesCardService.resetBestTimes(this.gameCard).subscribe((message: Message) => {
-        if (message.title !== "Error") {
-        window.location.reload();
+    public resetBestTimes(): void {
+        if (confirm("Are you sure you want to reset the best times of the Game Card called " + this.gameCard.title + "?")) {
+            this.gamesCardService.resetBestTimes(this.gameCard).subscribe((message: Message) => {
+                if (message.title !== "Error") {
+                    window.location.reload();
+                }
+            });
         }
     }
 }
