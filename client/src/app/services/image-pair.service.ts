@@ -1,18 +1,20 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { of, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { SERVER_URL } from "../../../../common/url";
+import { HTTP } from "./HTTP.service";
 
 @Injectable({
     providedIn: "root",
 })
-export class ImagePairService {
+export class ImagePairService extends HTTP {
     private http: HttpClient;
 
     public constructor(http: HttpClient) {
+        super();
         this.http = http;
     }
 
@@ -25,12 +27,5 @@ export class ImagePairService {
         return this.http.post<ICommonImagePair>(`${SERVER_URL}/image-pair/`, formData).pipe(
             catchError((error) => this.handleError(error)),
         );
-    }
-
-    private handleError(error: HttpErrorResponse): Observable<Message> {
-        return of({
-            title: "error",
-            body: error.error.body,
-        });
     }
 }
