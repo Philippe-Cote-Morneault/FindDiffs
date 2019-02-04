@@ -163,9 +163,7 @@ describe("ImagePairService", () => {
             (ImagePair.prototype.save as sinon.SinonStub).resolves();
             const response: string = await imagePairService.post(mockReq(request));
             expect(JSON.parse(response).name).to.equal(request["body"]["name"]);
-        // Improve chances for gitlab ci test
-        // tslint:disable-next-line:no-magic-numbers
-        }).slow(30000);
+        });
     });
     describe("index()", () => {
         it("Should return an image pair array", async () => {

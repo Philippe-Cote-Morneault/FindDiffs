@@ -44,7 +44,7 @@ test:
     script:
         - cd client && ng test --watch=false --code-coverage --browsers ChromeHeadlessNoSandbox
         - cd ..
-        - cd server && npm run coverage
+        - cd server && npm run coverage -- --timeout 30000
     only:
         - master
         - develop
