@@ -24,7 +24,7 @@ export class GamesCardService {
     public addGameCard(gameName: string, imagePairId: string, pov: POVType): Observable<ICommonGameCard> {
         const requestBody: Object = { "name": gameName, "image-pair-id": imagePairId, "pov": "Simple" };
 
-        return this.http.post<ICommonGameCard>(this.BASE_URL + "gamecard", requestBody);
+        return this.http.post<ICommonGameCard>(this.BASE_URL + this.GAMECARD_URL, requestBody);
     }
 
     public deleteGameCard(gameCardId: string): Observable<Message> {
