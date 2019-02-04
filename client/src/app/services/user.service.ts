@@ -1,14 +1,17 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { of, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 import { SERVER_URL } from "../../../../common/url";
+import { HTTP } from "./HTTP.service";
 
 @Injectable()
-export class UserService {
+export class UserService extends HTTP {
 
-    public constructor(private http: HttpClient) { }
+    public constructor(private http: HttpClient) {
+        super();
+    }
 
     public postUsernameValidation<User>(username: string): Observable<User | Message> {
         return this.http.post<User>(`${SERVER_URL}/user/`, {username: username}).pipe(
@@ -21,12 +24,4 @@ export class UserService {
             catchError((error) => this.handleError(error)),
         );
     }
-
-    public handleError(error: HttpErrorResponse): Observable<Message> {
-
-        return of({
-            title: "Error",
-            body: error.error.body,
-        });
-      }
 }
