@@ -5,33 +5,33 @@ import { GamesCardService } from "../services/games-card.service";
 import { SocketService } from "../services/socket.service";
 
 @Component({
-  selector: "app-games-list-view",
-  templateUrl: "./games-list-view.component.html",
-  styleUrls: ["./games-list-view.component.css"],
+    selector: "app-games-list-view",
+    templateUrl: "./games-list-view.component.html",
+    styleUrls: ["./games-list-view.component.css"],
 })
 export class GamesListViewComponent implements OnInit {
-  @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
-  @ViewChild("freePOVGamesContainer", { read: ViewContainerRef}) private freePOVContainer: ViewContainerRef;
+    @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
+    @ViewChild("freePOVGamesContainer", { read: ViewContainerRef }) private freePOVContainer: ViewContainerRef;
 
-  @Input() public isInAdminView: boolean = false;
+    @Input() public isInAdminView: boolean = false;
 
-  public constructor(public gameCardsService: GamesCardService, public socketService: SocketService,
-                     public gameCardLoaderService: GameCardLoaderService) {
-  }
+    public constructor(public gameCardsService: GamesCardService, public socketService: SocketService,
+        public gameCardLoaderService: GameCardLoaderService) {
+    }
 
-  public ngOnInit(): void {
-    this.gameCardLoaderService.setContainer(this.simplePOVContainer, POVType.Simple);
-    this.gameCardLoaderService.setContainer(this.freePOVContainer, POVType.Free);
+    public ngOnInit(): void {
+        this.gameCardLoaderService.setContainer(this.simplePOVContainer, POVType.Simple);
+        this.gameCardLoaderService.setContainer(this.freePOVContainer, POVType.Free);
 
-    this.addAllGameCards();
-  }
+        this.addAllGameCards();
+    }
 
-  private addAllGameCards(): void {
-    this.gameCardsService.getGameCards().subscribe((gameCards: ICommonGameCard[]) => {
-      gameCards.forEach((gameCard: ICommonGameCard) => {
-        this.gameCardLoaderService.addDynamicComponent(gameCard, this.isInAdminView);
-      });
-    });
-  }
+    private addAllGameCards(): void {
+        this.gameCardsService.getGameCards().subscribe((gameCards: ICommonGameCard[]) => {
+            gameCards.forEach((gameCard: ICommonGameCard) => {
+                this.gameCardLoaderService.addDynamicComponent(gameCard, this.isInAdminView);
+            });
+        });
+    }
 
 }
