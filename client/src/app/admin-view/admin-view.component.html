@@ -1,19 +1,21 @@
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
 </head>
-  <body>
+
+<body>
     <nav class="navbar-static-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand">{{header}}</a>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Create a game in:</a>
+            </div>
+            <div class="button-wrapper">
+                <button type="button" class="btn btn-dark navbar-btn" (click)="isPopUpVisible = true">Simple mode</button>
+                <button type="button" class="btn btn-dark navbar-btn">Free mode</button>
+            </div>
         </div>
-        <div class="button-wrapper">
-          <button type="button" class="btn btn-dark navbar-btn" (click)="isPopUpVisible = true">{{simpleMode}}</button>
-          <button type="button" class="btn btn-dark navbar-btn">{{freeMode}}</button>
-        </div>
-      </div>
     </nav>
     <div class="filler"></div>
-    <app-games-list-view [isInAdminView] = "true"></app-games-list-view>
-    <app-create-game-simple-view (closed)="onClosed($event)" *ngIf="isPopUpVisible"  ></app-create-game-simple-view>
-  </body>
+    <app-games-list-view [isInAdminView]="true"></app-games-list-view>
+    <app-create-game-simple-view (closed)="onClosed($event)" *ngIf="isPopUpVisible"></app-create-game-simple-view>
+</body>

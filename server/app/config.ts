@@ -2,10 +2,10 @@ export default{
     "hostname": "localhost",
     "port": 3000,
     "mongodb": {
-        "hostname": "ds213255.mlab.com",
-        "port": 13255,
-        "username": "jesus",
+        "hostname": "martinpouliot.ca",
+        "port": 27018,
+        "username": "dev",
         "password": "potato123",
-        "database": "log2990-106",
+        "database": "log2990",
     },
 };

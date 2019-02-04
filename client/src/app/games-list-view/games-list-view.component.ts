@@ -2,7 +2,6 @@ import { Component, Input, OnInit, ViewChild, ViewContainerRef } from "@angular/
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GameCardLoaderService } from "../services/game-card-loader.service";
 import { GamesCardService } from "../services/games-card.service";
-import { SocketService } from "../services/socket.service";
 
 @Component({
     selector: "app-games-list-view",
@@ -15,7 +14,8 @@ export class GamesListViewComponent implements OnInit {
 
     @Input() public isInAdminView: boolean = false;
 
-    public constructor(public gameCardsService: GamesCardService, public socketService: SocketService,
+    public constructor(
+        public gameCardsService: GamesCardService,
         public gameCardLoaderService: GameCardLoaderService) {
     }
 

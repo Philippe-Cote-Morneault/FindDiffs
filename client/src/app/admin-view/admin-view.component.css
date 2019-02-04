@@ -28,8 +28,8 @@ body {
     height: 100px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
-    background-color: white;
+    width: 101%;
+    background-color: #33343D;
 }
 
 .filler {

@@ -1,18 +1,16 @@
 body{
-    margin: -1px -1px;
-    padding: 1px 1px;
     text-align: center;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    color: white;
   }
   .global-wrapper{
     height: 50%;
     width: 100%;
     background-color: #33343D;
-    border-radius: 2%;
-    border: 1px black solid;
+    border: 2px black solid;
   }
   #button-addon{
     background-color: green;
@@ -34,6 +32,12 @@ body{
     margin-top: 5%;
     color: white;
   }
+  .custom-file{
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 2%;
+  }
   h2{
     margin-top: 10%;
     color:white;
@@ -45,6 +49,14 @@ body{
   #submitId{
     margin-right: 50px;
   }
-  #validationServer03{
+  #gameNameInput{
     width: auto;
+  }
+  .btn{
+    margin-bottom: 2%;
+  }
+  .form-control{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2%;
   }
