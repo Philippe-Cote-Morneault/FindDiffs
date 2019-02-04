@@ -13,9 +13,9 @@ cache:
 lint:
     stage: lint
     script:
-        - cd client && npm run lint
+        - cd client && npm install && npm run lint
         - cd ..
-        - cd server && npm run lint
+        - cd server && npm install && npm run lint
 
 build:
     stage: build
