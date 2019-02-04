@@ -10,19 +10,29 @@ cache:
         - client/node_modules
         - server/node_modules
 
+install_dependencies:
+  stage: build
+  script:
+    - cd client && npm install
+    - cd ..
+    - cd server && npm install
+  artifacts:
+    paths:
+        - client/node_modules
+        - server/node_modules
 lint:
     stage: lint
     script:
-        - cd client && npm install && npm run lint
+        - cd client && npm run lint
         - cd ..
-        - cd server && npm install && npm run lint
+        - cd server && npm run lint
 
 build:
     stage: build
     script:
-        - cd client && npm install && ng build
+        - cd client && ng build
         - cd ..
-        - cd server && npm install && npm build
+        - cd server && npm build
 
 test:
     stage: test
