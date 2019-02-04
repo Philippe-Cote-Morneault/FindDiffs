@@ -1,9 +1,9 @@
 image: trion/ng-cli-karma
 
 stages:
-    - lint
     - build
     - test
+    - lint
 
 cache:
     paths:
