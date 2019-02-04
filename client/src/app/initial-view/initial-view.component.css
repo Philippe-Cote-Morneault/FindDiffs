@@ -1,33 +1,33 @@
 body{
-  height: 100vh;
-  width: 100vw;
-  background-color: #41414E;
-  margin: -1px -1px;
-  padding: 1px 1px;
-  text-align: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #41414E;
+    margin: -1px -1px;
+    padding: 1px 1px;
+    text-align: center;
 }
 .global-wrapper{
-  height: 55%;
-  width: 60%;
-  background-color: #33343D;
-  margin: 10% auto;
-  border-radius: 2%;
-  border: 1px black solid;
+    height: 55%;
+    width: 60%;
+    background-color: #33343D;
+    margin: 10% auto;
+    border-radius: 2%;
+    border: 1px black solid;
 }
 #button-addon2{
-  background-color: green;
-  color: white;
+    background-color: green;
+    color: white;
 }
 .input-group{
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
-  margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    margin-top: 10%;
 }
 h2{
-  margin-top: 5%;
-  color:white;
+    margin-top: 5%;
+    color:white;
 }
 #logo{
-  margin-top: 5%
+    margin-top: 5%
 }

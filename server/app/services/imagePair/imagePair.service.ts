@@ -7,6 +7,7 @@ import { InvalidFormatException } from "../../../../common/errors/invalidFormatE
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { ImagePair, IImagePair } from "../../model/schemas/imagePair";
+import { _e, R } from "../../strings";
 import { Storage } from "../../utils/storage";
 import { IImagePairService } from "../interfaces";
 import { Service } from "../service";
@@ -30,9 +31,13 @@ export class ImagePairService extends Service implements IImagePairService {
     public async single(id: string): Promise<string> {
         return ImagePair.findById(id)
             .then((doc: IImagePair) => {
+                if (!doc) {
+                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                }
+
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
-                throw new NotFoundException("The id could not be found.");
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
             });
     }
 
@@ -61,34 +66,34 @@ export class ImagePairService extends Service implements IImagePairService {
             if (error.name === "FileNotFoundException") {
                 throw error;
             } else {
-                throw new NotFoundException("The id could not be found.");
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
             }
         });
     }
 
     private validate(req: Request): void {
         if (!req.body.name) {
-            throw new InvalidFormatException("The field name is missing.");
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.NAME_]));
         }
 
         if (!req.files) {
-            throw new InvalidFormatException("Files needs to be uploaded, no files were uploaded.");
+            throw new InvalidFormatException(R.ERROR_MISSING_FILES);
         }
 
         if (!req.files["originalImage"] || req.files["originalImage"].length < 1) {
-            throw new InvalidFormatException("Original image is missing.");
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.ORIGINAL_IMAGE_]));
         }
 
         if (!req.files["modifiedImage"] || req.files["modifiedImage"].length < 1) {
-            throw new InvalidFormatException("Modified image is missing.");
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.MODIFIED_IMAGE_]));
         }
 
         if (!req.files["originalImage"][0].path) {
-            throw new InvalidFormatException("Original image is not a file.");
+            throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.ORIGINAL_IMAGE]));
         }
 
         if (!req.files["modifiedImage"][0].path) {
-            throw new InvalidFormatException("Modified image is not a file.");
+            throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.MODIFIED_IMAGE]));
         }
     }
 

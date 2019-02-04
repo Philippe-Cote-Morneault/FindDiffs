@@ -8,6 +8,7 @@ import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import Config from "../../config";
 import { GameCard, IGameCard } from "../../model/schemas/gameCard";
+import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { IGameCardService } from "../interfaces";
 import { Service } from "../service";
@@ -19,19 +20,19 @@ export class GameCardService extends Service implements IGameCardService {
 
     private validatePost(req: Request): void {
         if (!req.body.name) {
-            throw new InvalidFormatException("The field name is not present.");
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.NAME_]));
         }
 
         if (!req.body["image-pair-id"]) {
-            throw new InvalidFormatException("The field image-pair-id is not present.");
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.PAIR_]));
         }
 
         if (!req.body.pov) {
-            throw new InvalidFormatException("The field pov is not present.");
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.POV_]));
         }
 
         if (!EnumUtils.isStringInEnum(req.body.pov, POVType)) {
-            throw new InvalidFormatException("The pov type is not recognized.");
+            throw new InvalidFormatException(_e(R.ERROR_WRONG_TYPE, [R.POV_]));
         }
     }
 
@@ -62,7 +63,7 @@ export class GameCardService extends Service implements IGameCardService {
             doc.best_time_online = ScoreGenerator.generateScore(this.DEFAULT_SCORE_NUMBER);
         }
         if (!changed) {
-            throw new InvalidFormatException("No changes were detected!");
+            throw new InvalidFormatException(R.ERROR_NO_CHANGES);
         }
         await doc.save();
     }
@@ -71,12 +72,15 @@ export class GameCardService extends Service implements IGameCardService {
         const id: string = req.params.id;
 
         return GameCard.findById(id).then(async (doc: IGameCard) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
 
             await this.makeChanges(req, doc);
 
             const message: Message = {
-                title: "success",
-                body: "The gamecard was updated.",
+                title: R.SUCCESS,
+                body: R.SUCCESS_GAME_CARD_UPDATED,
             };
 
             return JSON.stringify(message);
@@ -84,7 +88,7 @@ export class GameCardService extends Service implements IGameCardService {
             if (err.name === "InvalidFormatException") {
                 throw err;
             }
-            throw new NotFoundException("The id could not be found.");
+            throw new NotFoundException(R.ERROR_UNKOWN_ID);
         });
 
     }
@@ -107,27 +111,33 @@ export class GameCardService extends Service implements IGameCardService {
     public async single(id: string): Promise<string> {
         return GameCard.findById(id).select("+imagePairId")
         .then(async(doc: IGameCard) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
             const imagePair: ICommonImagePair = await this.getImagePairId(doc.imagePairId);
 
             return JSON.stringify(this.getCommonGameCard(doc, imagePair));
         })
         .catch((err: Error) => {
-            throw new NotFoundException("The id could not be found.");
+            throw new NotFoundException(R.ERROR_UNKOWN_ID);
         });
     }
 
     public async delete(id: string): Promise<string> {
         return GameCard.findById(id)
         .then(async (doc: IGameCard) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
             await doc.remove();
             const message: Message = {
-                title: "Success",
-                body: "The gamecard was deleted.",
+                title: R.SUCCESS,
+                body: R.SUCCESS_GAME_CARD_DELETED,
             };
 
             return JSON.stringify(message); })
         .catch((error: Error) => {
-            throw new NotFoundException("The id could not be found.");
+            throw new NotFoundException(R.ERROR_UNKOWN_ID);
         });
     }
 
@@ -137,7 +147,7 @@ export class GameCardService extends Service implements IGameCardService {
             return response.data;
         })
         .catch(() => {
-            throw new NotFoundException("The image id could not be found.");
+            throw new NotFoundException(R.ERROR_UNKOWN_ID_IMAGE);
         });
     }
 

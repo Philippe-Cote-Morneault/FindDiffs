@@ -5,6 +5,7 @@ import { ExistsAlreadyException } from "../../../../common/errors/existsAlreadyE
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { IUser, User } from "../../model/schemas/user";
+import { _e, R } from "../../strings";
 import { IUserService } from "../interfaces";
 import { Service } from "../service";
 
@@ -21,24 +22,31 @@ export class UserService extends Service implements IUserService {
     public async single(id: string): Promise<string> {
         return User.findById(id)
             .then((doc: IUser) => {
+                if (!doc) {
+                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                }
+
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
-                throw new NotFoundException("The id could not be found");
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
             });
     }
 
     public async delete(id: string): Promise<string> {
         return User.findById(id)
         .then(async (doc: IUser) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
             await doc.remove();
             const message: Message = {
-                title: "Success",
-                body: "The user was deleted.",
+                title: R.SUCCESS,
+                body: R.SUCCESS_USER_DELETED,
             };
 
             return JSON.stringify(message); })
         .catch((error: Error) => {
-            throw new NotFoundException("The id could not be found");
+            throw new NotFoundException(R.ERROR_UNKOWN_ID);
         });
     }
 
@@ -55,14 +63,14 @@ export class UserService extends Service implements IUserService {
                     return JSON.stringify(user);
                 }
 
-                throw new ExistsAlreadyException("The username is already taken.");
+                throw new ExistsAlreadyException(R.ERROR_USERNAME_TAKEN);
 
             }
 
-            throw new InvalidFormatException("The field username is not valid.");
+            throw new InvalidFormatException(_e(R.ERROR_INVALID, [R.USERNAME_]));
         }
 
-        throw new InvalidFormatException("The field username is not set.");
+        throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.USERNAME_]));
     }
 
     private async isAvailable(username: string): Promise<boolean> {

@@ -39,9 +39,6 @@ describe("InitialViewService", () => {
                     expect(response.id).to.equal(expectedImage.id);
                     expect(response.name).to.equal(expectedImage.name);
                 },
-              //  fail,
             );
-
-           // expect(httpClientSpyPost.post.calls.count()).toBe(1, "one call");
         });
   });
