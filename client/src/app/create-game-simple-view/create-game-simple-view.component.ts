@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { HTMLInputEvent } from "../htmlinput-event";
@@ -22,6 +23,7 @@ export class CreateGameSimpleViewComponent {
     private originalImageFile: File;
     private modifiedImageFile: File;
     private gameName: string;
+    private CORRECT_DIFFERENCE_COUNT: number = 7;
 
     public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService) {
         this.gamesCardService = gamesCardService;
@@ -31,7 +33,7 @@ export class CreateGameSimpleViewComponent {
     public verifyName(): void {
         const MIN_LENGTH: number = 2;
         const MAX_LENGTH: number = 13;
-        const gameName: string = (document.getElementById("validationServer03") as HTMLInputElement).value;
+        const gameName: string = (document.getElementById("gameNameInput") as HTMLInputElement).value;
         gameName.length > MIN_LENGTH && gameName.length < MAX_LENGTH ? this.informationsNewGame[0] = 1 : this.informationsNewGame[0] = 0;
         this.gameName = gameName;
     }
@@ -50,9 +52,9 @@ export class CreateGameSimpleViewComponent {
 
     public addImagePair(): void {
         this.imagePairService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
-            .subscribe((imagePair: ICommonImagePair) => {
-                this.addGameCard(imagePair.id);
-            });
+        .subscribe(
+            this.verifyImageType.bind(this),
+        );
     }
 
     private addGameCard(imagePairId: string): void {
@@ -64,5 +66,13 @@ export class CreateGameSimpleViewComponent {
 
     public hideView(): void {
         this.closed.emit(true);
+    }
+
+    public async verifyImageType(response: ICommonImagePair | Message): Promise<void> {
+        if ((response as ICommonImagePair).differences_count === this.CORRECT_DIFFERENCE_COUNT) {
+            await this.addGameCard((response as ICommonImagePair).id);
+        } else {
+            alert((response as Message).title);
+        }
     }
 }
