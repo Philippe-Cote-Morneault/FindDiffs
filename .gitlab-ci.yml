@@ -40,3 +40,6 @@ test:
         - cd client && ng test --watch=false --code-coverage --browsers ChromeHeadlessNoSandbox
         - cd ..
         - cd server && npm test
+only:
+    - master
+    - develop
