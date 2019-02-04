@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
+import { StringFormater } from "../util/stringFormater";
 
 @Component({
     selector: "app-games-card-view",
@@ -28,6 +29,10 @@ export class GamesCardViewComponent implements OnInit {
         }
     }
 
+    public toMinutes(index: number, times: number[]): string {
+        return StringFormater.secondsToMinutes(times[index]);
+    }
+
     public onLeftButtonClick(): void {
         if (this.isInAdminView) {
             this.deleteGameCard();
@@ -43,7 +48,6 @@ export class GamesCardViewComponent implements OnInit {
     public deleteGameCard(): void {
         if (confirm("Are you sure you want to delete the Game Card called " + this.gameCard.title + "?")) {
             this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe((message: Message) => {
-                console.log(message);
                 window.location.reload();
             });
         }
@@ -52,7 +56,6 @@ export class GamesCardViewComponent implements OnInit {
     public resetBestTimes(): void {
         if (confirm("Are you sure you want to reset the best times of the Game Card called " + this.gameCard.title + "?")) {
             this.gamesCardService.resetBestTimes(this.gameCard).subscribe((message: Message) => {
-                console.log(message);
                 if (message.title !== "Error") {
                     window.location.reload();
                 }

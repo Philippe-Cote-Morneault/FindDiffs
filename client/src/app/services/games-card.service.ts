@@ -33,14 +33,15 @@ export class GamesCardService {
         );
     }
 
-    public resetBestTimes(gameCard: ICommonGameCard): Observable<Message> {
+    public resetBestTimes(gameCard: ICommonGameCard): Observable<ICommonGameCard | Message> {
 
         const requestBody: Object = {
             "best_time_solo": gameCard.best_time_solo.toString(),
-            "best_time_online": gameCard.best_time_online.toString()
+            "best_time_online": gameCard.best_time_online.toString(),
         };
 
-        return this.http.put<Message>(this.BASE_URL + this.GAMECARD_URL + gameCard.id, requestBody).pipe(
+        return this.http.put(this.BASE_URL + this.GAMECARD_URL + gameCard.id, requestBody).pipe(
+            map((value) => value as ICommonGameCard),
             catchError(this.handleError<Message>("resetBestTimes")),
         );
     }

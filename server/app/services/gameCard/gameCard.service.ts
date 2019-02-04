@@ -72,6 +72,9 @@ export class GameCardService extends Service implements IGameCardService {
         const id: string = req.params.id;
 
         return GameCard.findById(id).then(async (doc: IGameCard) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
 
             await this.makeChanges(req, doc);
 
@@ -108,6 +111,9 @@ export class GameCardService extends Service implements IGameCardService {
     public async single(id: string): Promise<string> {
         return GameCard.findById(id).select("+imagePairId")
         .then(async(doc: IGameCard) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
             const imagePair: ICommonImagePair = await this.getImagePairId(doc.imagePairId);
 
             return JSON.stringify(this.getCommonGameCard(doc, imagePair));
@@ -120,6 +126,9 @@ export class GameCardService extends Service implements IGameCardService {
     public async delete(id: string): Promise<string> {
         return GameCard.findById(id)
         .then(async (doc: IGameCard) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
             await doc.remove();
             const message: Message = {
                 title: R.SUCCESS,

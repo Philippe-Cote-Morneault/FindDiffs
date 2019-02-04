@@ -22,6 +22,10 @@ export class UserService extends Service implements IUserService {
     public async single(id: string): Promise<string> {
         return User.findById(id)
             .then((doc: IUser) => {
+                if (!doc) {
+                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                }
+
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
                 throw new NotFoundException(R.ERROR_UNKOWN_ID);
@@ -31,6 +35,9 @@ export class UserService extends Service implements IUserService {
     public async delete(id: string): Promise<string> {
         return User.findById(id)
         .then(async (doc: IUser) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
             await doc.remove();
             const message: Message = {
                 title: R.SUCCESS,
