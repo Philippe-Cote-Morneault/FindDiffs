@@ -20,7 +20,6 @@ export class CreateGameSimpleViewComponent {
     public informationsNewGame: number[] = [0, 0, 0];
     public mymodel: string = "";
 
-    public title: string = "Create a simple point of view game";
     public submitButton: string = "Submit";
     public cancelButton: string = "Cancel";
     public nameOfGame: string = "Name of the game :";

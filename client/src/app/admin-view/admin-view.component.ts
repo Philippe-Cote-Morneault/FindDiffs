@@ -7,9 +7,6 @@ import { Component } from "@angular/core";
 })
 export class AdminViewComponent {
     public isPopUpVisible: boolean = false;
-    public simpleMode: string = "Simple mode";
-    public freeMode: string = "Free mode";
-    public header: string = "Create a game in:";
 
     public onClosed(closed: boolean): void {
         if (closed) {
