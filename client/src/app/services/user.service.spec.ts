@@ -51,7 +51,7 @@ describe("UserService", () => {
             expect(httpClientSpyDelete.delete.calls.count()).toBe(1, "one call");
         });
 
-        it("should return an error", () => {
+        it("should return an error if the username is already taken", () => {
             const expectedMessageError: Message = { title: "Error", body: "There is already a user with the same username on the server" };
             const mockUsername: string = "user1";
             httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedMessageError));
