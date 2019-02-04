@@ -362,7 +362,7 @@ describe("GameCardService", () => {
             };
             (GameCard.findById as sinon.SinonStub).resolves(new GameCardSchemaMock(new Function));
             const response: string = await service.update(mockReq(request));
-            expect(JSON.parse(response).title).to.equal("success");
+            expect(JSON.parse(response).title).to.equal("Success");
         });
     });
 });
