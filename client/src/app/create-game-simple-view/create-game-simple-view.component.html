@@ -1,41 +1,41 @@
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-        crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
 </head>
 
 <body>
-    <div class="global-wrapper" id="simpleViewId">
-        <h2>
-            Create a simple point of view game
-        </h2>
-        <p>
-            Image format : bitmap 24-bit (640x480)
-        </p>
-        <form class="was-validated">
+  <div class="global-wrapper" id="simpleViewId">
+    <h2>
+      Create a simple point of view game
+    </h2>
+    <p>
+      Image format : bitmap 24-bit (640x480)
+    </p>
+    <form class="was-validated">
 
-            Name of the game
-            <div>
-                <input type="text" class="form-control is-invalid" id="gameNameInput" (change)="verifyName()"
-                    placeholder="Name game" required>
-            </div>
+      Name of the game
+      <div>
+        <input type="text" class="form-control is-invalid" id="gameNameInput" (change)="verifyName()" placeholder="Name game"
+          required>
+      </div>
 
-            Original image :
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 1)"
-                    accept=".bmp" required>
-                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-            </div>
+      Original image :
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 1)" accept=".bmp"
+          required>
+        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+      </div>
 
-            Modified image :
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 2)"
-                    accept=".bmp" required>
-                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-            </div>
-            <div *ngIf="verifyInfo()"></div>
-            <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addImagePair()">Submit</button>
-            <button class="btn btn-danger" (click)="hideView()">Cancel</button>
-        </form>
-    </div>
+      Modified image :
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 2)" accept=".bmp"
+          required>
+        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+      </div>
+      <div *ngIf="verifyInfo()"></div>
+      <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addImagePair()">Submit</button>
+      <button class="btn btn-danger" (click)="hideView()">Cancel</button>
+    </form>
+  </div>
 
 </body>
