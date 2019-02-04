@@ -4,19 +4,18 @@ import { of, Observable } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { SERVER_URL } from "../../../../common/url";
 import { Event, SocketService } from "./socket.service";
 
 @Injectable({
     providedIn: "root",
 })
 export class GamesCardService {
-    private readonly BASE_URL: string = "http://localhost:3000/";
-    private readonly GAMECARD_URL: string = "gamecard/";
 
     public constructor(private http: HttpClient, private socketService: SocketService) { }
 
     public getGameCards(): Observable<ICommonGameCard[]> {
-        return this.http.get<ICommonGameCard[]>(this.BASE_URL + this.GAMECARD_URL).pipe(
+        return this.http.get<ICommonGameCard[]>(`${SERVER_URL}/gamecard/`).pipe(
             map((res) => res),
         );
     }
@@ -24,11 +23,11 @@ export class GamesCardService {
     public addGameCard(gameName: string, imagePairId: string, pov: POVType): Observable<ICommonGameCard> {
         const requestBody: Object = { "name": gameName, "image-pair-id": imagePairId, "pov": "Simple" };
 
-        return this.http.post<ICommonGameCard>(this.BASE_URL + this.GAMECARD_URL, requestBody);
+        return this.http.post<ICommonGameCard>(`${SERVER_URL}/gamecard/`, requestBody);
     }
 
     public deleteGameCard(gameCardId: string): Observable<Message> {
-        return this.http.delete<Message>(this.BASE_URL + this.GAMECARD_URL + gameCardId).pipe(
+        return this.http.delete<Message>(`${SERVER_URL}/gamecard/${gameCardId}`).pipe(
             catchError(this.handleError<Message>("deleteGameCard")),
         );
     }
@@ -40,7 +39,7 @@ export class GamesCardService {
             "best_time_online": gameCard.best_time_online.toString(),
         };
 
-        return this.http.put(this.BASE_URL + this.GAMECARD_URL + gameCard.id, requestBody).pipe(
+        return this.http.put(`${SERVER_URL}/gamecard/${gameCard.id}`, requestBody).pipe(
             map((value) => value as ICommonGameCard),
             catchError(this.handleError<Message>("resetBestTimes")),
         );

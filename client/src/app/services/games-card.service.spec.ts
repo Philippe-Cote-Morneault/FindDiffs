@@ -1,10 +1,12 @@
 import { HttpClientTestingModule, HttpTestingController, TestRequest} from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
+import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GamesCardService } from "./games-card.service";
 import { POVType, ICommonGameCard } from "../../../../common/model/gameCard";
 import { Message } from "../../../../common/communication/message";
 
+// tslint:disable:no-magic-numbers
 describe("GamesCardService", () => {
     let service: GamesCardService;
     let httpMock: HttpTestingController;
