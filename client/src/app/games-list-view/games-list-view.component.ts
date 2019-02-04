@@ -15,7 +15,9 @@ export class GamesListViewComponent implements OnInit {
 
     @Input() public isInAdminView: boolean = false;
 
-    public constructor(public gameCardsService: GamesCardService, public socketService: SocketService,
+    public constructor(
+        public gameCardsService: GamesCardService,
+        public socketService: SocketService,
         public gameCardLoaderService: GameCardLoaderService) {
     }
 

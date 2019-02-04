@@ -22,6 +22,10 @@ export class UserService extends Service implements IUserService {
     public async single(id: string): Promise<string> {
         return User.findById(id)
             .then((doc: IUser) => {
+                if (!doc) {
+                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                }
+
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
                 throw new NotFoundException(R.ERROR_UNKOWN_ID);
@@ -31,6 +35,9 @@ export class UserService extends Service implements IUserService {
     public async delete(id: string): Promise<string> {
         return User.findById(id)
         .then(async (doc: IUser) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
             await doc.remove();
             const message: Message = {
                 title: R.SUCCESS,
@@ -44,26 +51,29 @@ export class UserService extends Service implements IUserService {
     }
 
     public async post(req: Request): Promise<string> {
-        if (req.body.username) {
-            if (this.isUsernameValid(req.body.username)) {
-                if (await this.isAvailable(req.body.username)) {
-                    const user: IUser = new User({
-                        username: req.body.username,
-                        creation_date: new Date(),
-                    });
-                    await user.save();
+        await this.validatePost(req);
 
-                    return JSON.stringify(user);
-                }
+        const user: IUser = new User({
+            username: req.body.username,
+            creation_date: new Date(),
+        });
+        await user.save();
 
-                throw new ExistsAlreadyException(R.ERROR_USERNAME_TAKEN);
+        return JSON.stringify(user);
+    }
 
-            }
+    private async validatePost(req: Request): Promise<void> {
+        if (!req.body.username) {
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.USERNAME_]));
+        }
 
+        if (!this.isUsernameValid(req.body.username)) {
             throw new InvalidFormatException(_e(R.ERROR_INVALID, [R.USERNAME_]));
         }
 
-        throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.USERNAME_]));
+        if (!await this.isAvailable(req.body.username)) {
+            throw new ExistsAlreadyException(R.ERROR_USERNAME_TAKEN);
+        }
     }
 
     private async isAvailable(username: string): Promise<boolean> {

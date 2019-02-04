@@ -1,13 +1,11 @@
-import {vsprintf} from "sprintf-js";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { Header, InfoHeader} from "../../model/bitmap/header";
 import { Pixel } from "../../model/bitmap/pixel";
-import { R } from "../../strings";
+import { _e, R } from "../../strings";
 
 export class BitmapDecoder {
 
-    /*tslint:disable no-magic-numbers*/
     public static FromArrayBuffer(arrayBuffer: ArrayBuffer): Bitmap {
         const header: Header = this.decodeHeader(new DataView(
             arrayBuffer,
@@ -69,7 +67,7 @@ export class BitmapDecoder {
             );
         if (width[0] !== InfoHeader.EXPECTED_WIDTH) {
             throw new InvalidFormatException(
-                    vsprintf(R.ERROR_INVALID_SIZE, [width[0], InfoHeader.EXPECTED_WIDTH]),
+                    _e(R.ERROR_INVALID_SIZE, [width[0], InfoHeader.EXPECTED_WIDTH]),
                 );
         }
 
@@ -78,7 +76,7 @@ export class BitmapDecoder {
             );
         if (height[0] !== InfoHeader.EXPECTED_HEIGHT) {
             throw new InvalidFormatException(
-                vsprintf(R.ERROR_INVALID_HEIGHT, [height[0], InfoHeader.EXPECTED_HEIGHT]),
+                    _e(R.ERROR_INVALID_HEIGHT, [height[0], InfoHeader.EXPECTED_HEIGHT]),
                 );
         }
 
@@ -99,6 +97,8 @@ export class BitmapDecoder {
         for (let y: number = infoHeader.height[0] - 1; y >= 0; --y) {
            for (let x: number = 0; x < infoHeader.width[0]; ++x) {
                const index: number = y * infoHeader.width[0] + x;
+
+               // tslint:disable-next-line:no-magic-numbers
                pixelData[index] = new Pixel(new Uint8Array([dataView.getUint8(pos + 2)]),
                                             new Uint8Array([dataView.getUint8(pos + 1)]),
                                             new Uint8Array([dataView.getUint8(pos)]));

@@ -224,6 +224,16 @@ describe("GameCardService", () => {
             }
         });
 
+        it("Should throw an error if the id is not in the database and mongoose returns null", async () => {
+            (GameCard.findById as sinon.SinonStub).returns(new MongooseMock.NullQuery(true));
+            try {
+                await service.single("invalid id");
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The id could not be found.");
+            }
+        });
+
         it("Should return a game card", async () => {
             const imagepair: ICommonImagePair = {
                 id: "an id",
@@ -260,8 +270,18 @@ describe("GameCardService", () => {
 
             expect(JSON.parse(response).body).to.equal("The gamecard was deleted.");
         });
+
         it("Should throw an error if the id is invalid", async() => {
             (GameCard.findById as sinon.SinonStub).rejects();
+            try {
+                await service.delete("invalid id");
+            } catch (err) {
+                expect(err.message).to.equal("The id could not be found.");
+            }
+        });
+
+        it("Should throw an error if the id is invalid and mongoose returns null", async() => {
+            (GameCard.findById as sinon.SinonStub).resolves(undefined);
             try {
                 await service.delete("invalid id");
             } catch (err) {
@@ -277,6 +297,21 @@ describe("GameCardService", () => {
                 },
             };
             (GameCard.findById as sinon.SinonStub).rejects(new Error());
+            try {
+                await service.update(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The id could not be found.");
+            }
+        });
+
+        it("Should throw an error if the id is not in the db and mongoose return null", async() => {
+            const request: Object = {
+                params: {
+                    id: "invalid id",
+                },
+            };
+            (GameCard.findById as sinon.SinonStub).resolves(undefined);
             try {
                 await service.update(mockReq(request));
                 throw new NoErrorThrownException();

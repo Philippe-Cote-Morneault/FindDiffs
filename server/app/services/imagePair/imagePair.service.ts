@@ -12,9 +12,7 @@ import { Storage } from "../../utils/storage";
 import { IImagePairService } from "../interfaces";
 import { Service } from "../service";
 import { BitmapDecoder } from "./bitmapDecoder";
-import { BitmapEncoder } from "./bitmapEncoder";
-import { DifferenceDetector } from "./differenceDetector";
-import { DifferenceImageGenerator } from "./differenceImageGenerator";
+import { Difference } from "./difference";
 
 @injectable()
 export class ImagePairService extends Service implements IImagePairService {
@@ -31,6 +29,10 @@ export class ImagePairService extends Service implements IImagePairService {
     public async single(id: string): Promise<string> {
         return ImagePair.findById(id)
             .then((doc: IImagePair) => {
+                if (!doc) {
+                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                }
+
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
                 throw new NotFoundException(R.ERROR_UNKOWN_ID);
@@ -96,9 +98,9 @@ export class ImagePairService extends Service implements IImagePairService {
     public async post(req: Request): Promise<string> {
         let originalImage: Bitmap;
         let modifiedImage: Bitmap;
+
         this.validate(req);
 
-        // Read file and extract its bytes.
         originalImage = BitmapDecoder.FromArrayBuffer(
             fs.readFileSync(req.files["originalImage"][0].path).buffer,
         );
@@ -106,21 +108,18 @@ export class ImagePairService extends Service implements IImagePairService {
             fs.readFileSync(req.files["modifiedImage"][0].path).buffer,
         );
 
-        // We call the difference image generator and save the result with the help of multer.
-        const differenceImageGenerator: DifferenceImageGenerator = new DifferenceImageGenerator(originalImage, modifiedImage);
-        const differences: Bitmap = differenceImageGenerator.generateImage();
+        const difference: Difference = new Difference(originalImage, modifiedImage);
 
-        const guid: string = Storage.saveBuffer(BitmapEncoder.encodeBitmap(differences));
-        const difference: IImagePair = new ImagePair({
-            file_difference_id: guid,
+        const imagePair: IImagePair = new ImagePair({
+            file_difference_id: difference.saveStorage(),
             file_modified_id: req.files["modifiedImage"][0].filename,
             file_original_id: req.files["originalImage"][0].filename,
             name: req.body.name,
             creation_date: new Date(),
-            differences_count: new DifferenceDetector(differences).countDifferences(),
+            differences_count: difference.countDifferences(),
         });
-        await difference.save();
+        await imagePair.save();
 
-        return JSON.stringify(difference);
+        return JSON.stringify(imagePair);
     }
 }

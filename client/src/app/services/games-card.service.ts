@@ -37,7 +37,7 @@ export class GamesCardService {
 
         const requestBody: Object = {
             "best_time_solo": gameCard.best_time_solo.toString(),
-            "best_time_online": gameCard.best_time_online.toString()
+            "best_time_online": gameCard.best_time_online.toString(),
         };
 
         return this.http.put(this.BASE_URL + this.GAMECARD_URL + gameCard.id, requestBody).pipe(

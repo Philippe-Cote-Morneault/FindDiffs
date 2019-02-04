@@ -217,6 +217,16 @@ describe("ImagePairService", () => {
                 expect(err.message).to.equal("The id could not be found.");
             }
         });
+
+        it("Should throw an error if the id is not in the db but mongoose returns null", async() => {
+            (ImagePair.findById as sinon.SinonStub).resolves(undefined);
+            try {
+                await imagePairService.single("an unkonw id");
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The id could not be found.");
+            }
+        });
     });
 
     // Tests for the files fetch methods
