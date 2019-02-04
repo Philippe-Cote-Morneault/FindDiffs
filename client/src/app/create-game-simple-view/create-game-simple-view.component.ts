@@ -18,12 +18,8 @@ export class CreateGameSimpleViewComponent {
 
   public canSubmit: boolean = false;
   public informationsNewGame: number[] = [0, 0, 0];
-  public mymodel: string = "";
 
-  public title: string = "Create a simple point of view game";
-  public submitButton: string = "Submit";
-  public cancelButton: string = "Cancel";
-  public nameOfGame: string = "Name of the game :";
+  public mymodel: string = "";
 
   private originalImageFile: File;
   private modifiedImageFile: File;
@@ -49,6 +45,7 @@ export class CreateGameSimpleViewComponent {
       positionFile === 1 ? this.originalImageFile = event.target.files[0] : this.modifiedImageFile = event.target.files[0];
     }
   }
+
   public verifyInfo(): void {
     const allEqual: boolean = this.informationsNewGame.every((value) => value === 1);
     this.canSubmit = allEqual;
@@ -64,7 +61,6 @@ export class CreateGameSimpleViewComponent {
   private addGameCard(imagePairId: string): void {
     this.gamesCardService.addGameCard(this.gameName, imagePairId, POVType.Simple)
           .subscribe((gameCard: ICommonGameCard) => {
-            console.log(gameCard);
             window.location.reload();
           });
   }
