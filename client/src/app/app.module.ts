@@ -13,22 +13,22 @@ import { GameCardLoaderService } from "./services/game-card-loader.service";
 import { UserService } from "./services/user.service";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    InitialViewComponent,
-    AdminViewComponent,
-    CreateGameSimpleViewComponent,
-    GamesCardViewComponent,
-    GamesListViewComponent,
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    FormsModule,
-  ],
-  providers: [UserService, InitialViewComponent, GameCardLoaderService],
-  bootstrap: [AppComponent],
-  entryComponents: [GamesCardViewComponent],
+    declarations: [
+        AppComponent,
+        InitialViewComponent,
+        AdminViewComponent,
+        CreateGameSimpleViewComponent,
+        GamesCardViewComponent,
+        GamesListViewComponent,
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        FormsModule,
+    ],
+    providers: [UserService, InitialViewComponent, GameCardLoaderService],
+    bootstrap: [AppComponent],
+    entryComponents: [GamesCardViewComponent],
 })
 export class AppModule { }

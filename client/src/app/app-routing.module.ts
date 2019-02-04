@@ -6,14 +6,14 @@ import { GamesListViewComponent } from "./games-list-view/games-list-view.compon
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 
 const routes: Routes = [
-  { path: "", component: InitialViewComponent},
-  { path: "admin", component: AdminViewComponent},
-  { path: "gamesList", component: GamesListViewComponent},
+    { path: "", component: InitialViewComponent },
+    { path: "admin", component: AdminViewComponent },
+    { path: "gamesList", component: GamesListViewComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
 
 })
 export class AppRoutingModule { }
