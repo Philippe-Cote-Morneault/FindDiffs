@@ -1,6 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController, TestRequest} from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
+import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GamesCardService } from "./games-card.service";
 import { Message } from "../../../../common/communication/message";
@@ -24,8 +25,8 @@ describe("GamesCardService", () => {
         "creation_date": new Date(),
         "differences_count": 7,
         },
-        "best_time_solo": [1254512,1282445,544512],
-        "best_time_online": [1254512,1282445,544512],
+        "best_time_solo": [1254512, 1282445, 544512],
+        "best_time_online": [1254512, 1282445, 544512],
     };
 
     const mockGameCard2: ICommonGameCard = {
@@ -42,8 +43,8 @@ describe("GamesCardService", () => {
         "creation_date": new Date(),
         "differences_count": 7,
         },
-        "best_time_solo": [1254512,1282445,544512],
-        "best_time_online": [1254512,1282445,544512],
+        "best_time_solo": [1254512, 1282445, 544512],
+        "best_time_online": [1254512, 1282445, 544512],
     };
 
     const mockGameCard3: ICommonGameCard = {
@@ -60,8 +61,8 @@ describe("GamesCardService", () => {
         "creation_date": new Date(),
         "differences_count": 7,
         },
-        "best_time_solo": [43209,4832324,3428432],
-        "best_time_online": [432432,54353,423423],
+        "best_time_solo": [43209, 4832324, 3428432],
+        "best_time_online": [432432, 54353, 423423],
     };
 
     const mockGameArray: ICommonGameCard[] = [mockGameCard1, mockGameCard2, mockGameCard3];

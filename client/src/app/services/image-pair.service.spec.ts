@@ -15,7 +15,7 @@ describe("InitialViewService", () => {
             initialViewServiceGet = new ImagePairService(httpClientSpyPost);
         });
 
-        it("should return expected message on addImagePair request (HttpClient called once)", () => {
+        it("Should return expected message on addImagePair request (HttpClient called once)", () => {
             const expectedImage: ICommonImagePair = {
                 id: "1",
                 url_difference: "/diff",

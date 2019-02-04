@@ -24,6 +24,7 @@ export const R: IString = {
     ERROR_INVALID_HEIGHT: "Height is %d pixels, should be %d pixels",
     ERROR_INVALID_FILE: "%s is not a file.",
     ERROR_USERNAME_TAKEN: "The username is already taken.",
+    ERROR_DIFFERENCE_INVALID: "The game card should have 7 differences. It has %d differences.",
 
     ORIGINAL_IMAGE: "Original image",
     ORIGINAL_IMAGE_: "original image",
