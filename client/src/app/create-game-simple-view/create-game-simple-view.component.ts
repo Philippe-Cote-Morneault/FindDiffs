@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { HTMLInputEvent } from "../htmlinput-event";
@@ -51,15 +52,23 @@ export class CreateGameSimpleViewComponent {
 
     public addImagePair(): void {
         this.imagePairService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
-            .subscribe((imagePair: ICommonImagePair) => {
-                this.addGameCard(imagePair.id);
+            .subscribe((response: ICommonImagePair | Message) => {
+                if ((response as Message).title) {
+                    alert((response as Message).body);
+                } else {
+                    this.addGameCard((response as ICommonImagePair).id);
+                }
             });
     }
 
     private addGameCard(imagePairId: string): void {
         this.gamesCardService.addGameCard(this.gameName, imagePairId, POVType.Simple)
-            .subscribe((gameCard: ICommonGameCard) => {
-                window.location.reload();
+            .subscribe((response: ICommonGameCard | Message) => {
+                if ((response as Message).title) {
+                    alert((response as Message).body);
+                } else {
+                    window.location.reload();
+                }
             });
     }
 
