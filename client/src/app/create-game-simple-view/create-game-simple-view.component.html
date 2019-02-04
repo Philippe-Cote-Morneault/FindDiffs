@@ -1,35 +1,40 @@
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
 </head>
-<body>
-  <div class="global-wrapper" id="simpleViewId">
-    <h2>
-      {{title}}
-    </h2>
-    <p>
-      Image format : bitmap 24-bit (640x480)
-    </p>
-    <form class="was-validated">
-      <div class="col-md-6 mb-3">
-        Name of the game
-        <input type="text" class="form-control is-invalid" id="validationServer03" [(ngModel)]="mymodel" name="mymodel" (ngModelChange)="verifyName()" placeholder="Name game" width="10px" required>
-      </div>
-      
-      Original image : 
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 1)" accept=".bmp" required>
-        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-      </div>
 
-      Modified image : 
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 2)" accept=".bmp" required>
-        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-      </div>
-      <div *ngIf="verifyInfo()"></div>
-      <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addImagePair()">Submit</button>
-      <button class="btn btn-danger" (click)="hideView()" >Cancel</button>
-    </form>
-  </div>
-  
+<body>
+    <div class="global-wrapper" id="simpleViewId">
+        <h2>
+            {{title}}
+        </h2>
+        <p>
+            Image format : bitmap 24-bit (640x480)
+        </p>
+        <form class="was-validated">
+            <div class="col-md-6 mb-3">
+                Name of the game
+                <input type="text" class="form-control is-invalid" id="validationServer03" [(ngModel)]="mymodel" name="mymodel"
+                    (ngModelChange)="verifyName()" placeholder="Name game" width="10px" required>
+            </div>
+
+            Original image :
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 1)"
+                    accept=".bmp" required>
+                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+            </div>
+
+            Modified image :
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 2)"
+                    accept=".bmp" required>
+                <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+            </div>
+            <div *ngIf="verifyInfo()"></div>
+            <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addImagePair()">Submit</button>
+            <button class="btn btn-danger" (click)="hideView()">Cancel</button>
+        </form>
+    </div>
+
 </body>

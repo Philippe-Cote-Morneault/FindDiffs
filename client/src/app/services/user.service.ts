@@ -11,7 +11,7 @@ export class UserService {
     public constructor(private http: HttpClient) { }
 
     public postUsernameValidation<User>(username: string): Observable<User> {
-        return this.http.post<User>(this.BASE_URL, {username: username}).pipe(
+        return this.http.post<User>(this.BASE_URL, { username: username }).pipe(
             catchError(this.handleError<User>("postUsernameValidation")),
         );
     }
