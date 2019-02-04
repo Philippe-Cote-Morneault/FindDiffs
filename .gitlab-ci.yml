@@ -39,7 +39,7 @@ test:
     script:
         - cd client && ng test --watch=false --code-coverage --browsers ChromeHeadlessNoSandbox
         - cd ..
-        - cd server && npm test
+        - cd server && npm run coverage
 only:
     - master
     - develop
