@@ -1,6 +1,5 @@
-import { Component, HostListener, OnInit } from "@angular/core";
+import { Component, HostListener } from "@angular/core";
 import { ICommonUser } from "./../../../common/model/user";
-import { SocketService } from "./services/socket.service";
 import { UserService } from "./services/user.service";
 
 @Component({
@@ -8,14 +7,11 @@ import { UserService } from "./services/user.service";
     templateUrl: "./app.component.html",
     styleUrls: ["./app.component.css"],
 })
-export class AppComponent implements OnInit {
-    public constructor(private socket: SocketService, private userService: UserService) {}
+export class AppComponent {
+    public constructor(private userService: UserService) {}
 
     public message: string;
 
-    public ngOnInit(): void {
-        this.socket.ngOnInit();
-    }
     @HostListener("window:beforeunload", ["$event"])
     public async beforeUnload($event: Event): Promise<void> {
         const user: ICommonUser = JSON.parse(localStorage.getItem("user") || "{}");

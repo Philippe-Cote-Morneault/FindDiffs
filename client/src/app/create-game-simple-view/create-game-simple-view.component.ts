@@ -18,7 +18,7 @@ export class CreateGameSimpleViewComponent {
     private imagePairService: ImagePairService;
 
     public canSubmit: boolean = false;
-    public informationsNewGame: number[] = [0, 0, 0];
+    public informationsNewGame: boolean[] = [false, false, false];
 
     private originalImageFile: File;
     private modifiedImageFile: File;
@@ -34,19 +34,20 @@ export class CreateGameSimpleViewComponent {
         const MIN_LENGTH: number = 2;
         const MAX_LENGTH: number = 13;
         const gameName: string = (document.getElementById("gameNameInput") as HTMLInputElement).value;
-        gameName.length > MIN_LENGTH && gameName.length < MAX_LENGTH ? this.informationsNewGame[0] = 1 : this.informationsNewGame[0] = 0;
+        this.informationsNewGame[0] = gameName.length > MIN_LENGTH && gameName.length < MAX_LENGTH;
         this.gameName = gameName;
     }
 
-    public fileEvent(event: HTMLInputEvent, positionFile: number): void {
+    public fileEvent(event: HTMLInputEvent, fileId: number): void {
         if (event.target.files != null) {
             const fileName: string = event.target.files[0].name;
-            fileName.split(".")[1] === "bmp" ? this.informationsNewGame[positionFile] = 1 : this.informationsNewGame[positionFile] = 0;
-            positionFile === 1 ? this.originalImageFile = event.target.files[0] : this.modifiedImageFile = event.target.files[0];
+            this.informationsNewGame[fileId] = fileName.split(".")[1] === "bmp";
+
+            fileId === 1 ? this.originalImageFile = event.target.files[0] : this.modifiedImageFile = event.target.files[0];
         }
     }
     public verifyInfo(): void {
-        const allEqual: boolean = this.informationsNewGame.every((value) => value === 1);
+        const allEqual: boolean = this.informationsNewGame.every((value) => value);
         this.canSubmit = allEqual;
     }
 
