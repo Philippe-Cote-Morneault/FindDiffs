@@ -26,6 +26,9 @@ lint:
         - cd client && npm run lint
         - cd ..
         - cd server && npm run lint
+    only:
+        - master
+        - develop
 
 build:
     stage: build
@@ -33,13 +36,15 @@ build:
         - cd client && ng build
         - cd ..
         - cd server && npm build
-
+    only:
+        - master
+        - develop
 test:
     stage: test
     script:
         - cd client && ng test --watch=false --code-coverage --browsers ChromeHeadlessNoSandbox
         - cd ..
         - cd server && npm run coverage
-only:
-    - master
-    - develop
+    only:
+        - master
+        - develop
