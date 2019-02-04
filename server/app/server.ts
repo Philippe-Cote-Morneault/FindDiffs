@@ -27,6 +27,7 @@ export class Server implements IServer {
         io.on("connection", (socket: SocketIO.Socket) => {
 
             socket.on("disconnect", () => {
+                // tslint:disable-next-line:no-suspicious-comment
                 // TODO include disconnect code
             });
         });
