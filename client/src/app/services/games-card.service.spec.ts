@@ -90,6 +90,27 @@ describe("GamesCardService", () => {
 
             httpMock.verify();
         });
+
+        it("Should return an error if there is an error", () => {
+            service.getGameCards().subscribe((message: Message) => {
+                expect(message.title).to.equal("Error");
+                expect(message.body).to.equal("There was some error");
+            });
+
+            const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/gamecard/");
+            const mockErrorResponse: Object = { status: 400, statusText: "Bad Request" };
+            expect(testRequest.request.method).to.equal("GET");
+
+            testRequest.flush(
+                {
+                    "title": "Error",
+                    "body": "There was some error",
+                },
+                mockErrorResponse,
+            );
+
+            httpMock.verify();
+        });
     });
 
     describe("addGameCard()", () => {
@@ -114,6 +135,7 @@ describe("GamesCardService", () => {
             });
 
             const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/gamecard/");
+            const mockErrorResponse: Object = { status: 400, statusText: "Bad Request" };
             expect(testRequest.request.method).to.equal("POST");
 
             testRequest.flush(
@@ -121,6 +143,7 @@ describe("GamesCardService", () => {
                     "title": "Error",
                     "body": "The pov is not a Simple or free type",
                 },
+                mockErrorResponse,
             );
 
             httpMock.verify();
@@ -147,7 +170,7 @@ describe("GamesCardService", () => {
 
         it("Should return an error message if there is an error", () => {
             service.deleteGameCard(mockGameCard1.id).subscribe((message: Message) => {
-                expect(message.title).to.equal("error");
+                expect(message.title).to.equal("Error");
                 expect(message.body).to.equal("There was some error");
             });
 
@@ -157,7 +180,7 @@ describe("GamesCardService", () => {
 
             testRequest.flush(
                 {
-                    "title": "error",
+                    "title": "Error",
                     "body": "There was some error",
                 },
                 mockErrorResponse,
@@ -194,6 +217,7 @@ describe("GamesCardService", () => {
             });
 
             const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/gamecard/" + mockGameCard1.id);
+            const mockErrorResponse: Object = { status: 400, statusText: "Bad Request" };
             expect(testRequest.request.method).to.equal("PUT");
 
             testRequest.flush(
@@ -201,6 +225,7 @@ describe("GamesCardService", () => {
                     "title": "Error",
                     "body": "The request is not valid",
                 },
+                mockErrorResponse,
             );
 
             httpMock.verify();
