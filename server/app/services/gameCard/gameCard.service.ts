@@ -72,6 +72,9 @@ export class GameCardService extends Service implements IGameCardService {
         const id: string = req.params.id;
 
         return GameCard.findById(id).then(async (doc: IGameCard) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
 
             await this.makeChanges(req, doc);
 
