@@ -5,14 +5,13 @@ import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { SERVER_URL } from "../../../../common/url";
-import { Event, SocketService } from "./socket.service";
 
 @Injectable({
     providedIn: "root",
 })
 export class GamesCardService {
 
-    public constructor(private http: HttpClient, private socketService: SocketService) { }
+    public constructor(private http: HttpClient) { }
 
     public getGameCards(): Observable<ICommonGameCard[] | Message> {
         return this.http.get<ICommonGameCard[]>(`${SERVER_URL}/gamecard/`).pipe(
@@ -44,33 +43,6 @@ export class GamesCardService {
         return this.http.put<Message>(`${SERVER_URL}/gamecard/${gameCard.id}`, requestBody).pipe(
             catchError((error) => this.handleError(error)),
         );
-    }
-
-    public onGameCardAdded(): Observable<ICommonGameCard> {
-        return new Observable<ICommonGameCard>((observer) => {
-            this.socketService.onEvent(Event.GAME_CARD_ADDED).subscribe((gameCard: Message) => {
-                const card: ICommonGameCard = JSON.parse(gameCard.body);
-                observer.next(card);
-            });
-        });
-    }
-
-    public onGameCardDeleted(): Observable<ICommonGameCard> {
-        return new Observable<ICommonGameCard>((observer) => {
-            this.socketService.onEvent(Event.GAME_CARD_DELETED).subscribe((gameCard: Message) => {
-                const card: ICommonGameCard = JSON.parse(gameCard.body);
-                observer.next(card);
-            });
-        });
-    }
-
-    public onGameCardUpdated(): Observable<ICommonGameCard> {
-        return new Observable<ICommonGameCard>((observer) => {
-            this.socketService.onEvent(Event.GAME_CARD_UPDATED).subscribe((gameCard: Message) => {
-                const card: ICommonGameCard = JSON.parse(gameCard.body);
-                observer.next(card);
-            });
-        });
     }
 
     private handleError(error: HttpErrorResponse): Observable<Message> {

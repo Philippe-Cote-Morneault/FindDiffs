@@ -4,7 +4,6 @@ import { expect } from "chai";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GamesCardService } from "./games-card.service";
-import { Message } from "../../../../common/communication/message";
 
 // tslint:disable:no-magic-numbers
 describe("GamesCardService", () => {
