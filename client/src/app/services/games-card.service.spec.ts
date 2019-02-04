@@ -1,9 +1,9 @@
 import { HttpClientTestingModule, HttpTestingController, TestRequest} from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
+import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GamesCardService } from "./games-card.service";
-import { POVType, ICommonGameCard } from "../../../../common/model/gameCard";
-
+// tslint:disable:no-magic-numbers
 describe("GamesCardService", () => {
     let service: GamesCardService;
     let httpMock: HttpTestingController;
@@ -34,8 +34,8 @@ describe("GamesCardService", () => {
             "creation_date": new Date(),
             "differences_count": 7,
             },
-            "best_time_solo": [1254512,1282445,544512],
-            "best_time_online": [1254512,1282445,544512],
+            "best_time_solo": [1254512, 1282445, 544512],
+            "best_time_online": [1254512, 1282445, 544512],
         };
         service.addGameCard("game1", "12345678", POVType.Simple).subscribe((gameCard: ICommonGameCard) => {
             expect(gameCard).to.equal(mockGameCard);
