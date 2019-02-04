@@ -1,17 +1,20 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { of, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { SERVER_URL } from "../../../../common/url";
+import { HTTP } from "./HTTP.service";
 
 @Injectable({
     providedIn: "root",
 })
-export class GamesCardService {
+export class GamesCardService extends HTTP {
 
-    public constructor(private http: HttpClient) { }
+    public constructor(private http: HttpClient) {
+        super();
+    }
 
     public getGameCards(): Observable<ICommonGameCard[] | Message> {
         return this.http.get<ICommonGameCard[]>(`${SERVER_URL}/gamecard/`).pipe(
@@ -42,12 +45,5 @@ export class GamesCardService {
         return this.http.put<Message>(`${SERVER_URL}/gamecard/${gameCard.id}`, requestBody).pipe(
             catchError((error) => this.handleError(error)),
         );
-    }
-
-    private handleError(error: HttpErrorResponse): Observable<Message> {
-        return of({
-            title: "error",
-            body: error.error.body,
-        });
     }
 }
