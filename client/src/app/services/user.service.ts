@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { of, throwError, Observable } from "rxjs";
+import { of, Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 
@@ -22,9 +22,10 @@ export class UserService {
         );
     }
 
-    private handleError(error: HttpErrorResponse): Observable<Message> {
+    public handleError(error: HttpErrorResponse): Observable<Message> {
+
         return of({
-            title: "error",
+            title: "Error",
             body: error.error.body,
         });
       }
