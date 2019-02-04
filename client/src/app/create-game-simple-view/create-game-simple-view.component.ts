@@ -18,7 +18,7 @@ export class CreateGameSimpleViewComponent {
     private imagePairService: ImagePairService;
 
     public canSubmit: boolean = false;
-    public informationsNewGame: boolean[] = [false, false, false];
+    public fromValidation: boolean[] = [false, false, false];
 
     private originalImageFile: File;
     private modifiedImageFile: File;
@@ -33,27 +33,27 @@ export class CreateGameSimpleViewComponent {
         const MIN_LENGTH: number = 2;
         const MAX_LENGTH: number = 13;
         const gameName: string = (document.getElementById("gameNameInput") as HTMLInputElement).value;
-        this.informationsNewGame[0] = gameName.length > MIN_LENGTH && gameName.length < MAX_LENGTH;
+        this.fromValidation[0] = gameName.length > MIN_LENGTH && gameName.length < MAX_LENGTH;
         this.gameName = gameName;
     }
 
     public fileEvent(event: HTMLInputEvent, fileId: number): void {
         if (event.target.files != null) {
             const fileName: string = event.target.files[0].name;
-            this.informationsNewGame[fileId] = fileName.split(".")[1] === "bmp";
+            this.fromValidation[fileId] = fileName.split(".")[1] === "bmp";
 
             fileId === 1 ? this.originalImageFile = event.target.files[0] : this.modifiedImageFile = event.target.files[0];
         }
     }
     public verifyInfo(): void {
-        const allEqual: boolean = this.informationsNewGame.every((value) => value);
+        const allEqual: boolean = this.fromValidation.every((value) => value);
         this.canSubmit = allEqual;
     }
 
     public addImagePair(): void {
         this.imagePairService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
             .subscribe((response: ICommonImagePair | Message) => {
-                if ((response as Message).title) {
+                if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
                     this.addGameCard((response as ICommonImagePair).id);
@@ -64,7 +64,7 @@ export class CreateGameSimpleViewComponent {
     private addGameCard(imagePairId: string): void {
         this.gamesCardService.addGameCard(this.gameName, imagePairId, POVType.Simple)
             .subscribe((response: ICommonGameCard | Message) => {
-                if ((response as Message).title) {
+                if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
                     window.location.reload();
