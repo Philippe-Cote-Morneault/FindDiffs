@@ -12,8 +12,6 @@ import { UserService } from "../services/user.service";
 export class InitialViewComponent {
 
     public constructor(public userService: UserService, private router: Router) {}
-    public title: string = "Spot the Differences";
-    public button: string = "Accept";
 
     public verifyUsername(): void {
         const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
