@@ -19,7 +19,7 @@ describe("UserService", () => {
             userServiceDelete = new UserService(httpClientSpyDelete);
         });
 
-        it("should return expected message on verifyUsername request (HttpClient called once)", () => {
+        it("Should return expected message on verifyUsername request (HttpClient called once)", () => {
             const expectedUser: ICommonUser = { id: "1", username: "user1" , creation_date: new Date()};
             const mockUsername: string = "user1";
             httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedUser));
@@ -35,7 +35,7 @@ describe("UserService", () => {
             expect(httpClientSpyPost.post.calls.count()).toBe(1, "one call");
         });
 
-        it("should return expected message on deleteUsername request (HttpClient called once)", () => {
+        it("Should return expected message on deleteUsername request (HttpClient called once)", () => {
             const expectedMessage: Message = { title: "UsernameDeleted", body: "user1" };
             const mockUserId: string = "user1";
             httpClientSpyDelete.delete.and.returnValue(TestHelper.asyncData(expectedMessage));
@@ -51,7 +51,7 @@ describe("UserService", () => {
             expect(httpClientSpyDelete.delete.calls.count()).toBe(1, "one call");
         });
 
-        it("should return an error", () => {
+        it("Should return an error if the username is already taken", () => {
             const expectedMessageError: Message = { title: "Error", body: "There is already a user with the same username on the server" };
             const mockUsername: string = "user1";
             httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedMessageError));

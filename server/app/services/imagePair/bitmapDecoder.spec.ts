@@ -35,7 +35,7 @@ describe("BitmapDecoder", () => {
                 expect(bitmap.header.fileSize[0]).to.equal(921738);
             });
 
-            it("should create a bitmap with an offset of 138 bytes", () => {
+            it("Should create a bitmap with an offset of 138 bytes", () => {
                 expect(bitmap.header.dataOffset[0]).to.equal(138);
             });
 
@@ -98,7 +98,7 @@ describe("BitmapDecoder", () => {
                 expect(fromPixelsImage.header.fileSize[0]).to.equal(921738);
             });
 
-            it("should create a bitmap with an offset of 54 bytes", () => {
+            it("Should create a bitmap with an offset of 54 bytes", () => {
                 expect(fromPixelsImage.header.dataOffset[0]).to.equal(54);
             });
         });
