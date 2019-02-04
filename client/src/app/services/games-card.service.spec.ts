@@ -147,7 +147,7 @@ describe("GamesCardService", () => {
 
         it("Should return an error message if there is an error", () => {
             service.deleteGameCard(mockGameCard1.id).subscribe((message: Message) => {
-                expect(message.title).to.equal("error");
+                expect(message.title).to.equal("Error");
                 expect(message.body).to.equal("There was some error");
             });
 
@@ -157,7 +157,7 @@ describe("GamesCardService", () => {
 
             testRequest.flush(
                 {
-                    "title": "error",
+                    "title": "Error",
                     "body": "There was some error",
                 },
                 mockErrorResponse,
