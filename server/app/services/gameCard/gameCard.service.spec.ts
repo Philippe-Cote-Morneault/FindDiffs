@@ -132,7 +132,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should return the correct response if all the fields are valid", async () => {
+        it("Should return an error since there is not 7 differences.", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -154,6 +154,36 @@ describe("GameCardService", () => {
             };
 
             (Axios.get as sinon.SinonStub).resolves(axiosResponse);
+            try {
+                await service.post(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The game card should have 7 differences. It has 0 differences.");
+            }
+        });
+
+        it("Should return the correct response if all the fields are valid", async () => {
+            const request: Object = {
+                body: {
+                    name: "bob",
+                    "image-pair-id": "an id",
+                    pov: "Free",
+                },
+            };
+            const imagepair: ICommonImagePair = {
+                id: "an id",
+                url_difference: "differences",
+                url_modified: "modified",
+                url_original: "original",
+                name: "Slim Shady",
+                creation_date: new Date(),
+                differences_count: 7,
+            };
+            const axiosResponse: Object = {
+                data: imagepair,
+            };
+
+            (Axios.get as sinon.SinonStub).resolves(axiosResponse);
 
             const response: string = await service.post(mockReq(request));
             expect(JSON.stringify(JSON.parse(response).image_pair))
@@ -161,6 +191,7 @@ describe("GameCardService", () => {
                 JSON.stringify(imagepair),
                 );
         });
+
     });
 
     describe("index()", () => {
