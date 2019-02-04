@@ -1,5 +1,8 @@
 export class StringFormater {
     public static secondsToMinutes(time: number): string {
+        if (time < 0) {
+            return "00:00";
+        }
         const MAX_MINUTES: number = 60;
         const CARRY_FLAG: number = 10;
         const minutes: number = Math.floor((time) / MAX_MINUTES);
