@@ -116,10 +116,12 @@ describe("GamesCardService", () => {
             const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/gamecard/");
             expect(testRequest.request.method).to.equal("POST");
 
-            testRequest.flush({
-                "title": "Error",
-                "body": "The pov is not a Simple or free type",
-                });
+            testRequest.flush(
+                {
+                    "title": "Error",
+                    "body": "The pov is not a Simple or free type",
+                },
+            );
 
             httpMock.verify();
         });
@@ -150,12 +152,16 @@ describe("GamesCardService", () => {
             });
 
             const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/gamecard/" + mockGameCard1.id);
+            const mockErrorResponse: Object = { status: 400, statusText: "Bad Request" };
             expect(testRequest.request.method).to.equal("DELETE");
 
-            testRequest.flush({
-                "title": "error",
-                "body": "There was some error",
-                });
+            testRequest.flush(
+                {
+                    "title": "error",
+                    "body": "There was some error",
+                },
+                mockErrorResponse,
+            );
 
             httpMock.verify();
         });

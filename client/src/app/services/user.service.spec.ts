@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Message } from "../../../../common/communication/message";
 import { ICommonUser } from "../../../../common/model/user";
-import { NoErrorThrownException } from "../../../../server/app/tests/noErrorThrownException";
 import { TestHelper } from "../../test.helper";
 import { UserService } from "./user.service";
 
