@@ -12,10 +12,11 @@
             Image format : bitmap 24-bit (640x480)
         </p>
         <form class="was-validated">
-            <div class="col-md-6 mb-3">
-                Name of the game
-                <input type="text" class="form-control is-invalid" id="validationServer03" [(ngModel)]="mymodel" name="mymodel"
-                    (ngModelChange)="verifyName()" placeholder="Name game" width="10px" required>
+
+            Name of the game
+            <div>
+                <input type="text" class="form-control is-invalid" id="validationServer03" (change)="verifyName()"
+                    placeholder="Name game" required>
             </div>
 
             Original image :

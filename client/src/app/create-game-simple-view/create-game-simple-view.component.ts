@@ -18,11 +18,6 @@ export class CreateGameSimpleViewComponent {
 
     public canSubmit: boolean = false;
     public informationsNewGame: number[] = [0, 0, 0];
-    public mymodel: string = "";
-
-    public submitButton: string = "Submit";
-    public cancelButton: string = "Cancel";
-    public nameOfGame: string = "Name of the game :";
 
     private originalImageFile: File;
     private modifiedImageFile: File;

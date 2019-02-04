@@ -5,6 +5,8 @@ body{
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
+    border-radius: 2%;
+    width: 40%;
   }
   .global-wrapper{
     height: 50%;
@@ -12,38 +14,10 @@ body{
     background-color: #33343D;
     border: 2px black solid;
   }
-  #button-addon{
-    background-color: green;
-    color: white;
-  }
-  .btn-primary{
-    margin-left: 30%;
-    float: left;
-    background-color: green;
-  }
-  .btn-default{
-    color: white;
-    background-color: red;
-  }
-  .input-group{
-    margin-left: 20%;
-    margin-right: auto;
-    width: 70%;
-    margin-top: 5%;
-    color: white;
-  }
-  .custom-file{
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-bottom: 2%;
-  }
   h2{
-    margin-top: 10%;
-    color:white;
+    margin-top: 2%;
   }
   p{
-    color:white;
     margin-left: 20px;
   }
   #submitId{
@@ -52,6 +26,13 @@ body{
   #validationServer03{
     width: auto;
   }
-  .btn{
+  #validationServer03{
+    width: 100%;
+    text-align: center;
+  }
+  input {
+    margin-bottom: 2%;
+  }
+  .custom-file {
     margin-bottom: 2%;
   }
