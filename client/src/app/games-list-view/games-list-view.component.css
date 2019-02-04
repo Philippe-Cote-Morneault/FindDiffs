@@ -18,6 +18,11 @@ body {
 #games_container_header > p {
     width: 50%;
     text-align: center;
+    background-color: #33343D;
+    margin: 0px;
+    padding-bottom: 10px;
+    color: white;
+    font-size: 20px;
 }
 
 #games_container_wrapper {
@@ -25,6 +30,7 @@ body {
     flex-direction: row;
     justify-content: center;
     width: 100%;
+    background-color: #33343D;
 }
 
 #simple_pov_games_container {
