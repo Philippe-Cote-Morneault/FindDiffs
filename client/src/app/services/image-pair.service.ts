@@ -5,12 +5,12 @@ import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { SERVER_URL } from "../../../../common/url";
-import { HTTP } from "./HTTP.service";
+import { HTTPService } from "./HTTP.service";
 
 @Injectable({
     providedIn: "root",
 })
-export class ImagePairService extends HTTP {
+export class ImagePairService extends HTTPService {
     private http: HttpClient;
 
     public constructor(http: HttpClient) {

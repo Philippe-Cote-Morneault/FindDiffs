@@ -4,10 +4,10 @@ import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 import { SERVER_URL } from "../../../../common/url";
-import { HTTP } from "./HTTP.service";
+import { HTTPService } from "./HTTP.service";
 
 @Injectable()
-export class UserService extends HTTP {
+export class UserService extends HTTPService {
 
     public constructor(private http: HttpClient) {
         super();

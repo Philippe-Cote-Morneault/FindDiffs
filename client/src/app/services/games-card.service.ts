@@ -5,12 +5,12 @@ import { catchError } from "rxjs/operators";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { SERVER_URL } from "../../../../common/url";
-import { HTTP } from "./HTTP.service";
+import { HTTPService } from "./HTTP.service";
 
 @Injectable({
     providedIn: "root",
 })
-export class GamesCardService extends HTTP {
+export class GamesCardService extends HTTPService {
 
     public constructor(private http: HttpClient) {
         super();

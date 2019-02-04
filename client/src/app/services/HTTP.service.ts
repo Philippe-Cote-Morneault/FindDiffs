@@ -6,7 +6,7 @@ import { Message } from "../../../../common/communication/message";
 @Injectable({
     providedIn: "root",
 })
-export class HTTP {
+export class HTTPService {
 
     public handleError(error: HttpErrorResponse): Observable<Message> {
 
