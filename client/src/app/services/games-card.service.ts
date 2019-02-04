@@ -34,7 +34,6 @@ export class GamesCardService {
     }
 
     public resetBestTimes(gameCard: ICommonGameCard): Observable<Message> {
-
         const requestBody: Object = {
             "best_time_solo": gameCard.best_time_solo.toString(),
             "best_time_online": gameCard.best_time_online.toString(),

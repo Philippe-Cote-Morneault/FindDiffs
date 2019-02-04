@@ -22,9 +22,10 @@ export class UserService {
         );
     }
 
-    private handleError(error: HttpErrorResponse): Observable<Message> {
+    public handleError(error: HttpErrorResponse): Observable<Message> {
+
         return of({
-            title: "error",
+            title: "Error",
             body: error.error.body,
         });
       }

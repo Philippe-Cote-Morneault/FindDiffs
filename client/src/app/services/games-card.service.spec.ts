@@ -142,9 +142,26 @@ describe("GamesCardService", () => {
 
             httpMock.verify();
         });
+
+        it("Should return an error message if there is an error", () => {
+            service.deleteGameCard(mockGameCard1.id).subscribe((message: Message) => {
+                expect(message.title).to.equal("error");
+                expect(message.body).to.equal("There was some error");
+            });
+
+            const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/gamecard/" + mockGameCard1.id);
+            expect(testRequest.request.method).to.equal("DELETE");
+
+            testRequest.flush({
+                "title": "error",
+                "body": "There was some error",
+                });
+
+            httpMock.verify();
+        });
     });
 
-    describe("resetBestTimes", () => {
+    describe("resetBestTimes()", () => {
         it("Should return a success message when reseting times", () => {
             service.resetBestTimes(mockGameCard1).subscribe((message: Message) => {
                 expect(message.title).to.equal("success");
