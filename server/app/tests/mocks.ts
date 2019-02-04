@@ -13,6 +13,20 @@ export namespace MongooseMock {
         }
     }
 
+    export class NullQuery {
+        private isResolved: boolean;
+
+        public constructor(isResolved: boolean) {
+            this.isResolved = isResolved;
+        }
+
+        public async select(): Promise<undefined> {
+            return (this.isResolved) ? undefined : Promise.reject(undefined);
+        }
+    }
+
+    // These are mocks so it's okay to have many in one file
+    // tslint:disable-next-line:max-classes-per-file
     export class Schema {
         private data: Object;
         private isNotAnArray: boolean;

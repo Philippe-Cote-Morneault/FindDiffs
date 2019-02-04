@@ -5,6 +5,7 @@ import { ExistsAlreadyException } from "../../../../common/errors/existsAlreadyE
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { IUser, User } from "../../model/schemas/user";
+import { _e, R } from "../../strings";
 import { IUserService } from "../interfaces";
 import { Service } from "../service";
 
@@ -21,48 +22,58 @@ export class UserService extends Service implements IUserService {
     public async single(id: string): Promise<string> {
         return User.findById(id)
             .then((doc: IUser) => {
+                if (!doc) {
+                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                }
+
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
-                throw new NotFoundException("The id could not be found");
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
             });
     }
 
     public async delete(id: string): Promise<string> {
         return User.findById(id)
         .then(async (doc: IUser) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            }
             await doc.remove();
             const message: Message = {
-                title: "Success",
-                body: "The user was deleted.",
+                title: R.SUCCESS,
+                body: R.SUCCESS_USER_DELETED,
             };
 
             return JSON.stringify(message); })
         .catch((error: Error) => {
-            throw new NotFoundException("The id could not be found");
+            throw new NotFoundException(R.ERROR_UNKOWN_ID);
         });
     }
 
     public async post(req: Request): Promise<string> {
-        if (req.body.username) {
-            if (this.isUsernameValid(req.body.username)) {
-                if (await this.isAvailable(req.body.username)) {
-                    const user: IUser = new User({
-                        username: req.body.username,
-                        creation_date: new Date(),
-                    });
-                    await user.save();
+        await this.validatePost(req);
 
-                    return JSON.stringify(user);
-                }
+        const user: IUser = new User({
+            username: req.body.username,
+            creation_date: new Date(),
+        });
+        await user.save();
 
-                throw new ExistsAlreadyException("The username is already taken.");
+        return JSON.stringify(user);
+    }
 
-            }
-
-            throw new InvalidFormatException("The field username is not valid.");
+    private async validatePost(req: Request): Promise<void> {
+        if (!req.body.username) {
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.USERNAME_]));
         }
 
-        throw new InvalidFormatException("The field username is not set.");
+        if (!this.isUsernameValid(req.body.username)) {
+            throw new InvalidFormatException(_e(R.ERROR_INVALID, [R.USERNAME_]));
+        }
+
+        if (!await this.isAvailable(req.body.username)) {
+            throw new ExistsAlreadyException(R.ERROR_USERNAME_TAKEN);
+        }
     }
 
     private async isAvailable(username: string): Promise<boolean> {

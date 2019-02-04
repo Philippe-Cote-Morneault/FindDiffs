@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { injectable } from "inversify";
 import { Message } from "../../../common/communication/message";
+import { R } from "../strings";
 
 @injectable()
 export abstract class Controller {
@@ -9,7 +10,7 @@ export abstract class Controller {
     protected handleError(res: Response , error: Error): void {
         error["status"] ? res.status(error["status"]) : res.status(Controller.BAD_REQUEST);
         const message: Message = {
-            title: "Error",
+            title: R.ERROR,
             body: error.message,
         };
         res.json(message);

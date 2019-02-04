@@ -41,7 +41,7 @@ describe("ImagePairService", () => {
                 body: {
                 },
             };
-            const errorMessage: string = "The field name is missing.";
+            const errorMessage: string = "The field name is not present.";
             try {
                 await imagePairService.post(mockReq(request));
                 throw new NoErrorThrownException();
@@ -75,7 +75,7 @@ describe("ImagePairService", () => {
                     originalImage: "image",
                 },
             };
-            const errorMessage: string = "Modified image is missing.";
+            const errorMessage: string = "The field modified image is not present.";
             try {
                 await imagePairService.post(mockReq(request));
                 throw new NoErrorThrownException();
@@ -113,7 +113,7 @@ describe("ImagePairService", () => {
                     modifiedImage: [],
                 },
             };
-            const errorMessage: string = "Original image is missing.";
+            const errorMessage: string = "The field original image is not present.";
             try {
                 await imagePairService.post(mockReq(request));
                 throw new NoErrorThrownException();
@@ -142,7 +142,8 @@ describe("ImagePairService", () => {
                 expect(err.message).to.equal(errorMessage);
             }
         });
-        it("Should return an objet with the image pair if the request is valid.", async () =>{
+
+        it("Should return an objet with the image pair if the request is valid.", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -163,7 +164,8 @@ describe("ImagePairService", () => {
             const response: string = await imagePairService.post(mockReq(request));
             expect(JSON.parse(response).name).to.equal(request["body"]["name"]);
 
-        });
+        // tslint:disable-next-line:no-magic-numbers
+        }).slow(10000);
     });
     describe("index()", () => {
         it("Should return an image pair array", async () => {
@@ -208,6 +210,16 @@ describe("ImagePairService", () => {
 
         it("Should throw an error if the id is not in the db", async() => {
             (ImagePair.findById as sinon.SinonStub).rejects();
+            try {
+                await imagePairService.single("an unkonw id");
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The id could not be found.");
+            }
+        });
+
+        it("Should throw an error if the id is not in the db but mongoose returns null", async() => {
+            (ImagePair.findById as sinon.SinonStub).resolves(undefined);
             try {
                 await imagePairService.single("an unkonw id");
                 throw new NoErrorThrownException();
