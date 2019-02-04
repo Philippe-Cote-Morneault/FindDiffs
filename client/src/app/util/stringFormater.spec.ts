@@ -25,4 +25,8 @@ describe("String formater", () => {
     it("Should return a formated string with the number 120", () => {
         expect(StringFormater.secondsToMinutes(120)).to.equal("02:00");
     });
+
+    it("Should return a formated string with the number 600", () => {
+        expect(StringFormater.secondsToMinutes(600)).to.equal("10:00");
+    });
 });
