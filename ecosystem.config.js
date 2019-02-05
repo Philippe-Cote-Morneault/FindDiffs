@@ -22,7 +22,7 @@ module.exports = {
       host: [
           {
               host: "log2990.martinpouliot.ca",
-              port: 8478
+              port: "8478"
           }
       ],
       ref: 'origin/develop',
