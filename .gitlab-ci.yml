@@ -1,9 +1,9 @@
 image: trion/ng-cli-karma
 
 stages:
+    - lint
     - build
     - test
-    - lint
     - deploy
 
 cache:
@@ -26,7 +26,7 @@ build:
     script:
         - cd client && npm install && ng build
         - cd ..
-        - cd server && npm install && npm build
+        - cd server && npm install && npm tsc
     only:
         - master
         - develop
@@ -68,12 +68,12 @@ deploy:
         # In order to properly check the server's host key, assuming you created the
         # SSH_SERVER_HOSTKEYS variable previously, uncomment the following two lines
         # instead.
-        - mkdir -p ~/.ssh
-        - echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
+        - mkdir -p .ssh
+        - echo "$SSH_SERVER_HOSTKEYS" > .ssh/known_hosts
+        - echo "    UserKnownHostsFile=$(pwd)/.ssh/known_hosts" > /etc/ssh/ssh_config
     script:
         - npm i -g pm2
         - pm2 deploy ecosystem.config.js production
     only: 
         - master
         - develop
-    
