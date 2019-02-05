@@ -54,13 +54,14 @@ deploy:
     before_script:
         # Install ssh-agent if not already installed, it is required by Docker.
         # (change apt-get to yum if you use a CentOS-based image)
-        - 'which ssh-agent || ( apt install openssh )'
+        - apt-get update
+        - 'which ssh-agent || ( apt-get install openssh )'
 
         # Add bash
-        - apt install bash
+        - apt-get install bash
 
         # Add git
-        - apt install git
+        - apt-get install git
 
         # Run ssh-agent (inside the build environment)
         - eval $(ssh-agent -s)
