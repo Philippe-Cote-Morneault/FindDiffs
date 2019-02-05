@@ -69,7 +69,7 @@ deploy:
         # SSH_SERVER_HOSTKEYS variable previously, uncomment the following two lines
         # instead.
         - mkdir -p ~/.ssh
-        - '[[ -f /.dockerenv ]] && echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts'
+        - echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts
     script:
         - npm i -g pm2
         - pm2 deploy ecosystem.config.js production
