@@ -26,7 +26,7 @@ build:
     script:
         - cd client && npm install && ng build
         - cd ..
-        - cd server && npm install && npm tsc
+        - cd server && npm install && npm run tsc
     only:
         - master
         - develop
