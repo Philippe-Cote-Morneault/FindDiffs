@@ -10,7 +10,7 @@ cache:
     paths:
         - client/node_modules
         - server/node_modules
-        
+
 lint:
     stage: lint
     script:
@@ -63,13 +63,13 @@ deploy:
         # you are suspectible to man-in-the-middle attacks.
         # WARNING: Use this only with the Docker executor, if you use it with shell
         # you will overwrite your user's SSH config.
-        - mkdir -p ~/.ssh
-        - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+        # - mkdir -p ~/.ssh
+        # - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
         # In order to properly check the server's host key, assuming you created the
         # SSH_SERVER_HOSTKEYS variable previously, uncomment the following two lines
         # instead.
-        # - mkdir -p ~/.ssh
-        # - '[[ -f /.dockerenv ]] && echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts'
+        - mkdir -p ~/.ssh
+        - '[[ -f /.dockerenv ]] && echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts'
     script:
         - npm i -g pm2
         - pm2 deploy ecosystem.config.js production
