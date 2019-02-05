@@ -19,7 +19,12 @@ module.exports = {
   deploy: {
     production: {
       user: 'root',
-      host: 'martinpouliot.ca:8478',
+      host: [
+          {
+              host: "log2990.martinpouliot.ca",
+              port: 8478
+          }
+      ],
       ref: 'origin/develop',
       repo: 'git@gitlab.com:log2990-106/log2990.git',
       path: '/root/log2990/',
