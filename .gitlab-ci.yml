@@ -77,3 +77,6 @@ deploy:
     only: 
         - master
         - develop
+    environment:
+        name: develop
+        url: http://log2990.martinpouliot.ca:3000/
