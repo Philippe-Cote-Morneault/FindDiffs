@@ -9,6 +9,8 @@ export class CreateGameFreeViewComponent implements OnInit {
     @Output() public closed: EventEmitter<boolean> = new EventEmitter();
 
     public canSubmit: boolean = false;
+    public displayError: string = "inline";
+    public hideError: string = "none";
 
     constructor() { }
 
@@ -29,12 +31,18 @@ export class CreateGameFreeViewComponent implements OnInit {
     }
     public isQuantityValid(): boolean {
         const quantity: string = (document.getElementById("quantityObject") as HTMLInputElement).value;
+        this.toggleErrorMessage(quantity);
 
         return quantity.length !== 0 && !isNaN(Number(quantity));
     }
 
+    private toggleErrorMessage(quantity: string): void {
+        let errorDisplay: string | null = (document.getElementById("erreurMessage") as HTMLElement).style.display;
+        errorDisplay = (quantity.length > 0 && isNaN(Number(quantity))) ? this.displayError : this.hideError;
+    }
+
     public verifyInfo(): void {
-        this.canSubmit = (this.isNameValid() && this.isModificationTypeValid() && this.isQuantityValid());
+        this.canSubmit = (this.isQuantityValid() && this.isNameValid() && this.isModificationTypeValid());
     }
 
     public hideView(): void {
