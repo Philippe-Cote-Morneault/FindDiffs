@@ -37,8 +37,8 @@ export class CreateGameFreeViewComponent implements OnInit {
     }
 
     private toggleErrorMessage(quantity: string): void {
-        let errorDisplay: string | null = (document.getElementById("erreurMessage") as HTMLElement).style.display;
-        errorDisplay = (quantity.length > 0 && isNaN(Number(quantity))) ? this.displayError : this.hideError;
+        (document.getElementById("erreurMessage") as HTMLElement).style.display = (quantity.length > 0 && isNaN(Number(quantity)))
+        ? this.displayError : this.hideError;
     }
 
     public verifyInfo(): void {
