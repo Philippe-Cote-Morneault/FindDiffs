@@ -1,4 +1,5 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
+import { ICommonGameCard } from "../../../../common/model/gameCard";
 
 @Component({
   selector: "app-game-view",
@@ -6,7 +7,7 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./game-view.component.css"],
 })
 export class GameViewComponent implements OnInit {
-
+  @Input() public gameCard: ICommonGameCard;
   constructor() { }
 
   ngOnInit() {
