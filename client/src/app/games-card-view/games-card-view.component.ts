@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
@@ -18,7 +19,7 @@ export class GamesCardViewComponent implements OnInit {
 
     private gamesCardService: GamesCardService;
 
-    public constructor(gamesCardService: GamesCardService) {
+    public constructor(gamesCardService: GamesCardService, private router: Router) {
         this.gamesCardService = gamesCardService;
     }
 
@@ -36,6 +37,8 @@ export class GamesCardViewComponent implements OnInit {
     public onLeftButtonClick(): void {
         if (this.isInAdminView) {
             this.deleteGameCard();
+        } else {
+            this.router.navigateByUrl("/game");
         }
     }
 
