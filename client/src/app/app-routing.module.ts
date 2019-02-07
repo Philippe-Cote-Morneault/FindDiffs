@@ -10,7 +10,7 @@ const routes: Routes = [
     { path: "", component: InitialViewComponent },
     { path: "admin", component: AdminViewComponent },
     { path: "gamesList", component: GamesListViewComponent },
-    { path: "game", component: GameViewComponent },
+    { path: "game/:id", component: GameViewComponent },
 ];
 
 @NgModule({
