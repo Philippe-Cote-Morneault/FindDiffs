@@ -25,13 +25,6 @@ body{
     color: white;
     background-color: red;
   }
-
-  .custom-file{
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-bottom: 2%;
-  }
   h2{
     margin-top: 10%;
     color:white;
@@ -50,7 +43,25 @@ body{
     margin-bottom: 2%;
   }
   .form-control{
+    width: auto;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 2%;
+  }
+  .checkbox{
+    text-align: left;
+    margin-left: 42%;
+  }
+  #quantityObject{
+    margin-bottom: 0%;
+  }
+  #erreurMessage{
+    width: 40%;
+    margin-left: auto;
+    color: red;
+    display: none;
+    font-size: 0.8em;
+  }
+  #modificationTypeBloc{
+    margin-top: 3%;
   }

@@ -6,11 +6,13 @@ import { Component } from "@angular/core";
     styleUrls: ["./admin-view.component.css"],
 })
 export class AdminViewComponent {
-    public isPopUpVisible: boolean = false;
+    public isCreatingGameSimpleMode: boolean = false;
+    public isCreatingGameFreeMode: boolean = false;
 
     public onClosed(closed: boolean): void {
         if (closed) {
-            this.isPopUpVisible = false;
+            this.isCreatingGameSimpleMode = false;
+            this.isCreatingGameFreeMode = false;
         }
     }
 }

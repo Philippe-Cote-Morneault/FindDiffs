@@ -5,6 +5,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { AdminViewComponent } from "./admin-view/admin-view.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { CreateGameFreeViewComponent } from "./create-game-free-view/create-game-free-view.component";
 import { CreateGameSimpleViewComponent } from "./create-game-simple-view/create-game-simple-view.component";
 import { GameViewComponent } from "./game-view/game-view.component";
 import { GamesCardViewComponent } from "./games-card-view/games-card-view.component";
@@ -22,6 +23,7 @@ import { UserService } from "./services/user.service";
         GamesCardViewComponent,
         GamesListViewComponent,
         GameViewComponent,
+        CreateGameFreeViewComponent,
     ],
     imports: [
         BrowserModule,
