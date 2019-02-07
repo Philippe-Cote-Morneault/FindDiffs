@@ -1,0 +1,54 @@
+body{
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+  }
+  .global-wrapper{
+    height: 50%;
+    width: 100%;
+    background-color: #33343D;
+    border: 2px black solid;
+  }
+  #button-addon{
+    background-color: green;
+    color: white;
+  }
+  .btn-primary{
+    margin-left: 30%;
+    float: left;
+    background-color: green;
+  }
+  .btn-default{
+    color: white;
+    background-color: red;
+  }
+  h2{
+    margin-top: 10%;
+    color:white;
+  }
+  p{
+    color:white;
+    margin-left: 20px;
+  }
+  #submitId{
+    margin-right: 50px;
+  }
+  #gameNameInput{
+    width: auto;
+  }
+  .btn{
+    margin-bottom: 2%;
+  }
+  .form-control{
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2%;
+  }
+  .checkbox{
+    text-align: left;
+    margin-left: 42%;
+  }
