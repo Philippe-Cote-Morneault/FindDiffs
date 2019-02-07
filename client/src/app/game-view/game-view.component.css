@@ -2,17 +2,17 @@
 #game_wrapper {
     width: 100%;
     height: 100%;
+    background-color: #33343D;
 }
 
 #game_info {
-    height: 200px;
+    height: 300px;
     display: flex;
-    background-color: #33343D;
   }
 
 #game_info > div {
     background-color: rgb(122, 119, 112);
-    width: 50%;
+    width: 100%;
     margin: 10px;
     text-align: center;
     font-size: 30px;
@@ -23,20 +23,20 @@
     flex-direction: row;
     justify-content: center;
     width: 100%;
-    background-color: #33343D;
 }
 
 #image_original {
-    display: block;
+    display: flex;
     margin-left: auto;
     margin-right: auto;
-    background-color: rgb(122, 119, 112);
+    justify-content: center;
     width: 50%;
 }
 
 #image_modified {
-    display: block;
+    display: flex;
     margin-left: auto;
     margin-right: auto;
+    justify-content: center;
     width: 50%;
 }
