@@ -271,3 +271,149 @@ version: 1
                   "title":"Error",
                   "body":"The request is not valid"
                 }
+/scene:
+  post:
+    description: Create a new scene with the parameters that needs to be generated
+    body:
+      multipart/form-data:
+        properties: 
+          object_type:
+            type: string
+            enum: [Theme, Geometric]
+          object_qty: number
+    responses: 
+      200:
+        body:
+          application/json:
+            example: | 
+              {
+                "scene_objects": [
+                  {
+                    "color": 43432432,
+                    "dimensions": [
+                      3,
+                      4,
+                      23,
+                      4,
+                      2
+                    ],
+                    "type": "cube",
+                    "position": [
+                      3,
+                      2,
+                      4
+                    ],
+                    "texture": null
+                  }
+                ],
+                "bg_color": 434343,
+                "texture": null,
+                "id": 4343242
+              }
+  /{id}:
+    get:
+      description: Fetch a scene about a scene
+      responses: 
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "scene_objects": [
+                    {
+                      "color": 43432432,
+                      "dimensions": [
+                        3,
+                        4,
+                        23,
+                        4,
+                        2
+                      ],
+                      "type": "cube",
+                      "position": [
+                        3,
+                        2,
+                        4
+                      ],
+                      "texture": null
+                    }
+                  ],
+                  "bg_color": 434343,
+                  "texture": null,
+                  "id": 4343242
+                }
+    /modified:
+      post:
+        description: Create a modified version of the scene
+        body:
+          multipart/form-data:
+            properties: 
+              add:
+                type: boolean
+                required: false
+              delete:
+                type: boolean
+                required: false
+              color:
+                type: boolean
+                required: false
+        responses: 
+          200:
+            body: 
+              application/json:
+                example: | 
+                  {
+                    "scene_objects": [
+                      {
+                        "color": 43432432,
+                        "dimensions": [
+                          3,
+                          4,
+                          23,
+                          4,
+                          2
+                        ],
+                        "type": "cube",
+                        "position": [
+                          3,
+                          2,
+                          4
+                        ],
+                        "texture": null
+                      }
+                    ],
+                    "bg_color": 434343,
+                    "texture": null,
+                    "id": 4343242
+                  }
+      get:
+        description: Return a modified scene
+        responses: 
+          200:
+            body: 
+              application/json:
+                example: | 
+                  {
+                    "scene_objects": [
+                      {
+                        "color": 43432432,
+                        "dimensions": [
+                          3,
+                          4,
+                          23,
+                          4,
+                          2
+                        ],
+                        "type": "cube",
+                        "position": [
+                          3,
+                          2,
+                          4
+                        ],
+                        "texture": null
+                      }
+                    ],
+                    "bg_color": 434343,
+                    "texture": null,
+                    "id": 4343242
+                  }
