@@ -11,6 +11,7 @@ import { GamesListViewComponent } from "./games-list-view/games-list-view.compon
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 import { GameCardLoaderService } from "./services/game-card-loader.service";
 import { UserService } from "./services/user.service";
+import { CubeComponent } from './cube/cube.component';
 
 @NgModule({
     declarations: [
@@ -20,6 +21,7 @@ import { UserService } from "./services/user.service";
         CreateGameSimpleViewComponent,
         GamesCardViewComponent,
         GamesListViewComponent,
+        CubeComponent,
     ],
     imports: [
         BrowserModule,
