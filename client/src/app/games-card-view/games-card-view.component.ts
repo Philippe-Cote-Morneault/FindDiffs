@@ -34,11 +34,11 @@ export class GamesCardViewComponent implements OnInit {
         return StringFormater.secondsToMinutes(times[index]);
     }
 
-    public onLeftButtonClick(): void {
+    public async onLeftButtonClick(): Promise<void> {
         if (this.isInAdminView) {
             this.deleteGameCard();
         } else {
-            this.router.navigateByUrl("/game/" + this.gameCard.id);
+            await this.router.navigateByUrl("/game/" + this.gameCard.id);
         }
     }
 
