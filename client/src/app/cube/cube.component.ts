@@ -24,7 +24,6 @@ export class CubeComponent implements AfterViewInit {
   private renderer: THREE.WebGLRenderer;
   private cube: THREE.Mesh;
 
-  /* CUBE PROPERTIES */
   @Input()
   public rotationSpeedX: number = 0.005;
 
@@ -34,7 +33,6 @@ export class CubeComponent implements AfterViewInit {
   @Input()
   public size: number = 2;
 
-  /* STAGE PROPERTIES */
   @Input()
   public cameraZ: number = 3;
 
