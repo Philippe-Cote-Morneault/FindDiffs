@@ -417,3 +417,37 @@ version: 1
                     "texture": null,
                     "id": 4343242
                   }
+/difference:
+  /free:
+    description: Not implemented yet
+  /simple:
+    post:
+      description: Check for a difference in the simple game type
+      body:
+        multipart/form-data:
+          properties:
+            image_pair_id: string
+            x: integer
+            y: integer
+      responses:
+        200:
+          description: A difference was found
+          body:
+            application/json:
+              example: |
+                {
+                  "hit":true,
+                  "pixels_affected": [
+                    {
+                      "x":3,
+                      "y":4
+                    }
+                  ]
+        404:
+          description: No difference was found
+          body:
+            application/json:
+              example: |
+                {
+                  "hit": false
+                }
