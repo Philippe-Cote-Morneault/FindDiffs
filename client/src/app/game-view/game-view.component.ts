@@ -11,8 +11,10 @@ import { GamesCardService } from "../services/games-card.service";
 export class GameViewComponent implements OnInit {
   public gameCard: ICommonGameCard;
   private gamesCardService: GamesCardService;
-
   private id: string;
+  private differencesUser: number = 0;
+  private differencesOpponent: number = 0;
+  private isSolo: boolean = false;
 
   public constructor(gamesCardService: GamesCardService, private route: ActivatedRoute) {
     this.gamesCardService = gamesCardService;

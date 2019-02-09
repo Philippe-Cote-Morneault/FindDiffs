@@ -1,7 +1,8 @@
 <div id="game_wrapper">
     <div id="game_info">
-      <div> <p>Différences trouvées: </p>
-            Chrono:
+      <div> <p> Différences trouvées: {{differencesUser}}</p>
+            <p *ngIf="!isSolo"> Différences trouvées adversaire: {{differencesOpponent}}</p>
+            <p> Chrono: </p>
       </div>
       <div> <p> Messages: </p> </div>
     </div>
