@@ -1,5 +1,7 @@
+import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
 import { ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
 
 export interface SceneTransformation {
-   applyTransformation(originalObjects: ICommonSceneObject[], indexOfModifiedObjects: number[]): void;
+   applyTransformation(transformationEligibleObjects: ICommonSceneObject[], modifiedObjects: ICommonSceneObject[],
+                       modifications: ICommonSceneModifications): void;
 }
