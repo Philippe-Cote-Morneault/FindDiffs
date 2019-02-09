@@ -10,4 +10,17 @@ export class SceneDifferenceGenerator {
 
         return objects;
     }
+
+
+    private static addOject(): void {
+
+    }
+
+    private static removeObject(): void {
+
+    }
+
+    private static changeColor(): void {
+        
+    }
 }
