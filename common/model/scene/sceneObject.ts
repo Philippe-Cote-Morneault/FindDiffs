@@ -1,7 +1,11 @@
 export interface ICommonSceneObject {
-    color: ;
+    color: string;
     dimensions: number[];
-    type: ;
+    type: GeometricShapes;
     position: number[];
-    texture: ;
+    texture: Textures;
 }
+
+export enum GeometricShapes { SPHERE, CUBE, CONE, CYLINDER, SQUARED_BASE_PYRAMID };
+
+export enum Textures {};
