@@ -12,8 +12,8 @@ export class GameViewComponent implements OnInit {
   public gameCard: ICommonGameCard;
   private gamesCardService: GamesCardService;
   private id: string;
-  private differencesUser: number = 0;
-  private differencesOpponent: number = 0;
+  private differenceCounterUser: number = 0;
+  private differenceCounterOpponent: number = 0;
   private isSolo: boolean = false;
 
   public constructor(gamesCardService: GamesCardService, private route: ActivatedRoute) {
