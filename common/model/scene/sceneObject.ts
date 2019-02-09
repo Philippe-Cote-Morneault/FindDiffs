@@ -1,3 +1,6 @@
+/**
+ * Represents an object in a ThreeJS scene.
+ */
 export interface ICommonSceneObject {
     id: string;
     color: string;
