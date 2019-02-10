@@ -1,4 +1,4 @@
-import { GeometricShapes, ICommonSceneObject} from "../../../../common/model/scene/sceneObject";
+import { GeometricShapes} from "../../../../common/model/scene/sceneObject";
 
 export class SceneGenerator {
     private readonly MIN_ELEMENTS: number = 10;
