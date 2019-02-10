@@ -11,8 +11,8 @@ describe("PixelRestorationService", () => {
 
   it("should have no pixels", () => {
       const blankCanvas: HTMLCanvasElement = (document.createElement("canvas") as HTMLCanvasElement);
-      if (pixelRestorationService.canvas) {
-        expect(pixelRestorationService.canvas.toDataURL).toEqual(blankCanvas.toDataURL);
+      if (pixelRestorationService.modifiedCanvas) {
+        expect(pixelRestorationService.modifiedCanvas.toDataURL).toEqual(blankCanvas.toDataURL);
       }
   });
 
