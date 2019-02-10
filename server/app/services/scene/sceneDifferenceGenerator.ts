@@ -28,7 +28,7 @@ export class SceneDifferenceGenerator {
             id: "test",
             addedObjects: [],
             deletedObjects: [],
-            colorChangedObjects: new Map<string, string>(),
+            colorChangedObjects: new Map<string, number>(),
         };
 
         for (let i: number = 0; i < this.NUMBER_OF_ERRORS; ++i) {
