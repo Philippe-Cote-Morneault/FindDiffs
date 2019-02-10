@@ -9,5 +9,5 @@ export interface ICommonSceneModifications {
     // Array of ids of deleted objects
     deletedObjects: string[];
     // Key is the id of the object that it's color changed, value is the hex color it changed to
-    colorChangedObjects: Map<string, string>;
+    colorChangedObjects: Map<string, number>;
 }

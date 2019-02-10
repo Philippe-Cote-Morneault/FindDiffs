@@ -11,6 +11,7 @@ export class SceneObjectRemover implements SceneTransformation {
 
         const indexOfObject: number = Math.floor(Math.random() * transformationEligibleObjects.length);
         const removedObject: ICommonSceneObject = transformationEligibleObjects[indexOfObject];
+
         modifiedObjects.push(removedObject);
         modifications.deletedObjects.push(removedObject.id);
         transformationEligibleObjects.splice(indexOfObject, 1);

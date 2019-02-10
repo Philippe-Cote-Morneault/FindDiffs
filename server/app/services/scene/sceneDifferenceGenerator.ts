@@ -1,10 +1,9 @@
-import { ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
-import { SceneTransformation } from "./sceneTransformation";
-import { SceneObjectAdder } from "./sceneObjectAdder";
-import { SceneObjectRemover } from "./sceneObjectRemover";
-import { SceneObjectColorChanger } from "./sceneObjectColorChanger";
 import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
-import { stringify } from "querystring";
+import { ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
+import { SceneObjectAdder } from "./sceneObjectAdder";
+import { SceneObjectColorChanger } from "./sceneObjectColorChanger";
+import { SceneObjectRemover } from "./sceneObjectRemover";
+import { SceneTransformation } from "./sceneTransformation";
 
 export class SceneDifferenceGenerator {
     private readonly NUMBER_OF_ERRORS: number = 7;
@@ -41,9 +40,11 @@ export class SceneDifferenceGenerator {
     }
 
     private applyRandomModification(): void {
-        const indexOfTransformation: number = Math.floor(Math.random() * this.transformationsToApply.length);
-        const transformation: SceneTransformation = this.transformationsToApply[indexOfTransformation];
-        transformation.applyTransformation(this.transformationEligibleObjects, this.modifiedObjects, this.modifications);
+        this.chooseRandomModification().applyTransformation(
+            this.transformationEligibleObjects,
+            this.modifiedObjects,
+            this.modifications,
+        );
     }
 
     private setTransformationsToApply(requiresInsertion: boolean, requiresRemoval: boolean, requiresColorChange: boolean ): void {
@@ -56,5 +57,11 @@ export class SceneDifferenceGenerator {
         if (requiresColorChange) {
             this.transformationsToApply.push(new SceneObjectColorChanger);
         }
+    }
+
+    private chooseRandomModification(): SceneTransformation {
+        const indexOfTransformation: number = Math.floor(Math.random() * this.transformationsToApply.length);
+
+        return this.transformationsToApply[indexOfTransformation];
     }
 }
