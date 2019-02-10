@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
+import { PixelPositionService } from "../services/pixel-position.service";
 // import { ConvertActionBindingResult } from "@angular/compiler/src/compiler_util/expression_converter";
 
 @Component({
@@ -16,7 +17,10 @@ export class GameViewComponent implements OnInit {
     private id: string;
     private canvas: HTMLCanvasElement;
 
-    public constructor(gamesCardService: GamesCardService, private route: ActivatedRoute) {
+    public constructor(
+        gamesCardService: GamesCardService,
+        private route: ActivatedRoute,
+        public pixelPositionService: PixelPositionService) {
         this.gamesCardService = gamesCardService;
     }
 
@@ -27,7 +31,7 @@ export class GameViewComponent implements OnInit {
 
         this.getGameById();
         this.canvas = (document.getElementById("myCanvas") as HTMLCanvasElement);
-        this.canvas.addEventListener("click", this.getClickPosition);
+        this.canvas.addEventListener("click", this.getClickPosition.bind(this));
     }
 
     private getGameById(): void {
@@ -38,15 +42,8 @@ export class GameViewComponent implements OnInit {
 
     // tslint:disable-next-line:no-any
     public getClickPosition(e: any): void {
-        this.canvas = (document.getElementById("myCanvas") as HTMLCanvasElement);
-        const ctx: CanvasRenderingContext2D | null = this.canvas.getContext("2d");
         const xPosition: number = e.layerX;
         const yPosition: number = e.layerY;
-        if (ctx) {
-            const pixel: ImageData = ctx.getImageData(xPosition, yPosition, 1, 1);
-            console.log(pixel);
-        }
-        alert(xPosition + "::" + yPosition);
+        this.pixelPositionService.postPixelPosition(this.gameCard.id, xPosition, yPosition).subscribe(/*Do something*/ );
     }
-
 }
