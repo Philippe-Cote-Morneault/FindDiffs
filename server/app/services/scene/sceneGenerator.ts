@@ -9,21 +9,22 @@ export class SceneGenerator {
 
     public randomNumberElementsPerShape(): void {
         const shapesQuantity: number[] = new Array(GeometricShapes.NUMBER_ELEMENTS);
+        let totalShapes: number = 0;
+        do {
+            totalShapes = 0;
+            for (let i: number = 0; i < GeometricShapes.NUMBER_ELEMENTS - 1; i++) {
+                let numberOfShapes: number = 0;
+                numberOfShapes = (Math.random() * this.MAX_ELEMENTS);
+                shapesQuantity[i] = numberOfShapes;
+            }
+            totalShapes = shapesQuantity.reduce((accumulator: number, value: number) => {
+                return accumulator + value;
+            },
+                                                0);
+        }
+        while (totalShapes < this.MIN_ELEMENTS || totalShapes > this.MAX_ELEMENTS);
+
         for (let i: number = 0; i < GeometricShapes.NUMBER_ELEMENTS - 1; i++) {
-            let numberOfShapes: number = 0;
-            numberOfShapes = (Math.random() * this.MAX_ELEMENTS);
-            shapesQuantity[i] = numberOfShapes;
-        }
-
-        const totalShapes: number = shapesQuantity.reduce((accumulator: number, pilot: number) => {
-            return accumulator + pilot;
-        },
-                                                          0);
-        if (totalShapes < this.MIN_ELEMENTS || totalShapes > this.MAX_ELEMENTS) {
-            this.randomNumberElementsPerShape();
-        }
-
-        for (let i: number = 0; i < GeometricShapes.NUMBER_ELEMENTS; i++) {
             this.shapes.set(i, shapesQuantity[i]);
         }
     }
