@@ -19,7 +19,6 @@ export class SceneObjectColorChanger implements SceneTransformation {
         transformationEligibleObjects.splice(indexOfObject, 1);
     }
 
-    // Taken from https://stackoverflow.com/a/5092872/10002144
     private generateRandomColor(): number {
         return Math.floor(Math.random() * SceneObjectColorChanger.numberOfHexColors);
     }
