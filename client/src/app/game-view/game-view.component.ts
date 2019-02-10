@@ -3,6 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
 import { PixelPositionService } from "../services/pixel-position.service";
+import { PixelRestorationService } from "../services/pixel-restoration.service";
 // import { ConvertActionBindingResult } from "@angular/compiler/src/compiler_util/expression_converter";
 
 @Component({
@@ -20,7 +21,8 @@ export class GameViewComponent implements OnInit {
     public constructor(
         gamesCardService: GamesCardService,
         private route: ActivatedRoute,
-        public pixelPositionService: PixelPositionService) {
+        public pixelPositionService: PixelPositionService,
+        public pixelRestorationService: PixelRestorationService) {
         this.gamesCardService = gamesCardService;
     }
 
@@ -30,7 +32,7 @@ export class GameViewComponent implements OnInit {
         });
 
         this.getGameById();
-        this.canvas = (document.getElementById("myCanvas") as HTMLCanvasElement);
+        this.canvas = (document.getElementById("original_canvas") as HTMLCanvasElement);
         this.canvas.addEventListener("click", this.getClickPosition.bind(this));
     }
 
@@ -44,6 +46,7 @@ export class GameViewComponent implements OnInit {
     public getClickPosition(e: any): void {
         const xPosition: number = e.layerX;
         const yPosition: number = e.layerY;
-        this.pixelPositionService.postPixelPosition(this.gameCard.id, xPosition, yPosition).subscribe(/*Do something*/ );
+        this.pixelPositionService.postPixelPosition(this.gameCard.id, xPosition, yPosition).subscribe(
+            this.pixelRestorationService.restoreImage);
     }
 }
