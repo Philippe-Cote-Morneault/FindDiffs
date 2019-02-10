@@ -169,7 +169,7 @@ version: 1
       multipart/form-data:
         properties: 
           name: string
-          image-pair-id: string
+          resource_id: string
           pov:
             type: string
             enum: [Simple, Free]
@@ -182,16 +182,7 @@ version: 1
               "id":"432423423423ef",
               "pov":"Simple",
               "title":"The name of the gamecard",
-              "image_pair":
-                {
-                "id":"438943af323ed43",
-                "url_differences":"http://localhost:3000/image-pair/438943af323ed43/difference",
-                "url_modified":"http://localhost:3000/image-pair/438943af323ed43/modified",
-                "url_original":"http://localhost:3000/image-pair/438943af323ed43/original",
-                "name":"The name of the pair",
-                "creation_date":"2019-01-27T19:50:48.036Z",
-                "differences_count":7
-                },
+              "resource_id":"id to image-pair or scene"
               "best_time_solo":[1254512,1282445,544512],
               "best_time_online":[1254512,1282445,544512]
               }
@@ -215,16 +206,7 @@ version: 1
                       "id":"432423423423ef",
                       "pov":"Simple",
                       "title":"The name of the gamecard",
-                      "image_pair":
-                        {
-                        "id":"438943af323ed43",
-                        "url_differences":"http://localhost:3000/image-pair/438943af323ed43/difference",
-                        "url_modified":"http://localhost:3000/image-pair/438943af323ed43/modified",
-                        "url_original":"http://localhost:3000/image-pair/438943af323ed43/original",
-                        "name":"The name of the pair",
-                        "creation_date":"2019-01-27T19:50:48.036Z",
-                        "differences_count":7
-                        },
+                      "resource_id":"id to image-pair or scene"
                       "best_time_solo":[1254512,1282445,544512],
                       "best_time_online":[1254512,1282445,544512]
                     }
@@ -241,16 +223,7 @@ version: 1
                 "id":"432423423423ef",
                 "pov":"Simple",
                 "title":"The name of the gamecard",
-                "image_pair":
-                  {
-                  "id":"438943af323ed43",
-                  "url_differences":"http://localhost:3000/image-pair/438943af323ed43/difference",
-                  "url_modified":"http://localhost:3000/image-pair/438943af323ed43/modified",
-                  "url_original":"http://localhost:3000/image-pair/438943af323ed43/original",
-                  "name":"The name of the pair",
-                  "creation_date":"2019-01-27T19:50:48.036Z",
-                  "differences_count":7
-                  },
+                "resource_id":"id to image-pair or scene",
                 "best_time_solo":[1254512,1282445,544512],
                 "best_time_online":[1254512,1282445,544512]
                 }
@@ -297,4 +270,184 @@ version: 1
                 {
                   "title":"Error",
                   "body":"The request is not valid"
+                }
+/scene:
+  post:
+    description: Create a new scene with the parameters that needs to be generated
+    body:
+      multipart/form-data:
+        properties: 
+          object_type:
+            type: string
+            enum: [Theme, Geometric]
+          object_qty: number
+    responses: 
+      200:
+        body:
+          application/json:
+            example: | 
+              {
+                "scene_objects": [
+                  {
+                    "color": 43432432,
+                    "dimensions": [
+                      3,
+                      4,
+                      23,
+                      4,
+                      2
+                    ],
+                    "type": "cube",
+                    "position": [
+                      3,
+                      2,
+                      4
+                    ],
+                    "texture": null
+                  }
+                ],
+                "bg_color": 434343,
+                "texture": null,
+                "id": 4343242
+              }
+  /{id}:
+    get:
+      description: Fetch a scene about a scene
+      responses: 
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "scene_objects": [
+                    {
+                      "color": 43432432,
+                      "dimensions": [
+                        3,
+                        4,
+                        23,
+                        4,
+                        2
+                      ],
+                      "type": "cube",
+                      "position": [
+                        3,
+                        2,
+                        4
+                      ],
+                      "texture": null
+                    }
+                  ],
+                  "bg_color": 434343,
+                  "texture": null,
+                  "id": 4343242
+                }
+    /modified:
+      post:
+        description: Create a modified version of the scene
+        body:
+          multipart/form-data:
+            properties: 
+              add:
+                type: boolean
+                required: false
+              delete:
+                type: boolean
+                required: false
+              color:
+                type: boolean
+                required: false
+        responses: 
+          200:
+            body: 
+              application/json:
+                example: | 
+                  {
+                    "scene_objects": [
+                      {
+                        "color": 43432432,
+                        "dimensions": [
+                          3,
+                          4,
+                          23,
+                          4,
+                          2
+                        ],
+                        "type": "cube",
+                        "position": [
+                          3,
+                          2,
+                          4
+                        ],
+                        "texture": null
+                      }
+                    ],
+                    "bg_color": 434343,
+                    "texture": null,
+                    "id": 4343242
+                  }
+      get:
+        description: Return a modified scene
+        responses: 
+          200:
+            body: 
+              application/json:
+                example: | 
+                  {
+                    "scene_objects": [
+                      {
+                        "color": 43432432,
+                        "dimensions": [
+                          3,
+                          4,
+                          23,
+                          4,
+                          2
+                        ],
+                        "type": "cube",
+                        "position": [
+                          3,
+                          2,
+                          4
+                        ],
+                        "texture": null
+                      }
+                    ],
+                    "bg_color": 434343,
+                    "texture": null,
+                    "id": 4343242
+                  }
+/difference:
+  /free:
+    description: Not implemented yet
+  /simple:
+    post:
+      description: Check for a difference in the simple game type
+      body:
+        multipart/form-data:
+          properties:
+            image_pair_id: string
+            x: integer
+            y: integer
+      responses:
+        200:
+          description: A difference was found
+          body:
+            application/json:
+              example: |
+                {
+                  "hit":true,
+                  "pixels_affected": [
+                    {
+                      "x":3,
+                      "y":4
+                    }
+                  ]
+        404:
+          description: No difference was found
+          body:
+            application/json:
+              example: |
+                {
+                  "hit": false
                 }
