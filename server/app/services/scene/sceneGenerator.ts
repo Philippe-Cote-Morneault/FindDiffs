@@ -14,7 +14,7 @@ export class SceneGenerator {
             totalShapes = 0;
             for (let i: number = 0; i < GeometricShapes.NUMBER_ELEMENTS - 1; i++) {
                 let numberOfShapes: number = 0;
-                numberOfShapes = (Math.random() * this.MAX_ELEMENTS);
+                numberOfShapes = Math.round((Math.random() * this.MAX_ELEMENTS));
                 shapesQuantity[i] = numberOfShapes;
             }
             totalShapes = shapesQuantity.reduce((accumulator: number, value: number) => {
