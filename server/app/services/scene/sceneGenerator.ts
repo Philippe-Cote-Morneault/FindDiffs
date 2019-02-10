@@ -3,6 +3,7 @@ import { GeometricShapes, ICommonSceneObject} from "../../../../common/model/sce
 export class SceneGenerator {
     private readonly MIN_ELEMENTS: number = 10;
     private readonly MAX_ELEMENTS: number = 200;
+    public readonly sizeScene: number = 200;
 
     private shapes: Map<GeometricShapes, number> = new Map<GeometricShapes, number>();
 
