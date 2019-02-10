@@ -5,17 +5,12 @@ import { Component, EventEmitter, OnInit, Output } from "@angular/core";
     templateUrl: "./create-game-free-view.component.html",
     styleUrls: ["./create-game-free-view.component.css"],
 })
-export class CreateGameFreeViewComponent implements OnInit {
+export class CreateGameFreeViewComponent {
     @Output() public closed: EventEmitter<boolean> = new EventEmitter();
 
     public canSubmit: boolean = false;
     public displayError: string = "inline";
     public hideError: string = "none";
-
-    constructor() { }
-
-    ngOnInit() {
-    }
 
     public isNameValid(): boolean {
         const gameName: string = (document.getElementById("gameNameInput") as HTMLInputElement).value;
