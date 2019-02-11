@@ -15,10 +15,10 @@ export class GameViewComponent implements OnInit {
   public gameCard: ICommonGameCard;
   private gamesCardService: GamesCardService;
   private id: string;
-  private differenceCounterUser: number = 0;
-  private differenceCounterOpponent: number = 0;
-  private isSolo: boolean = false;
-  private canvas: HTMLCanvasElement;
+  private differenceCounterUser: number;
+  private differenceCounterOpponent: number;
+  private isSolo: boolean;
+  private canvas: HTMLCanvasElement; //TODO: initialize in constructor
 
   public constructor(
     gamesCardService: GamesCardService,
@@ -26,6 +26,10 @@ export class GameViewComponent implements OnInit {
     public pixelPositionService: PixelPositionService,
     public pixelRestorationService: PixelRestorationService) {
     this.gamesCardService = gamesCardService;
+    this.isSolo = false;
+    this.differenceCounterOpponent = 0;
+    this.differenceCounterUser = 0;
+    this.getGameById();
   }
 
   public ngOnInit(): void {
