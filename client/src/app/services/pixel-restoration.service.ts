@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IPixel } from "../../Objects/Pixel";
+// import { IPixel } from "../../Objects/Pixel";
 
 @Injectable({
     providedIn: "root",
