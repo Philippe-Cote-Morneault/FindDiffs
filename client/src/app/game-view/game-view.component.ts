@@ -4,7 +4,6 @@ import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
 import { PixelPositionService } from "../services/pixel-position.service";
 import { PixelRestorationService } from "../services/pixel-restoration.service";
-// import { ConvertActionBindingResult } from "@angular/compiler/src/compiler_util/expression_converter";
 
 @Component({
   selector: "app-game-view",
@@ -15,10 +14,10 @@ export class GameViewComponent implements OnInit {
   public gameCard: ICommonGameCard;
   private gamesCardService: GamesCardService;
   private id: string;
-  private differenceCounterUser: number;
-  private differenceCounterOpponent: number;
-  private isSolo: boolean;
-  private canvas: HTMLCanvasElement; //TODO: initialize in constructor
+  private canvas: HTMLCanvasElement;
+
+  // tslint:disable-next-line:no-suspicious-comment
+  // TODO: initialize in constructor
 
   public constructor(
     gamesCardService: GamesCardService,
@@ -26,9 +25,6 @@ export class GameViewComponent implements OnInit {
     public pixelPositionService: PixelPositionService,
     public pixelRestorationService: PixelRestorationService) {
     this.gamesCardService = gamesCardService;
-    this.isSolo = false;
-    this.differenceCounterOpponent = 0;
-    this.differenceCounterUser = 0;
     this.getGameById();
   }
 
