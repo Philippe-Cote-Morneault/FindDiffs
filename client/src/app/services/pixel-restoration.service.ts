@@ -17,8 +17,8 @@ export class PixelRestorationService {
             this.context = this.originalCanvas.getContext("2d");
             pixelAffected.forEach((element) => {
                 if (this.context) {
-                const pixel: ImageData = this.context.getImageData(element.x, element.y, this.pixelDimension, this.pixelDimension);
-                this.addPixel(pixel, element.x, element.y);
+                //const pixel: ImageData = this.context.getImageData(element.x, element.y, this.pixelDimension, this.pixelDimension);
+                //this.addPixel(pixel, element.x, element.y);
                 }
             });
         }
