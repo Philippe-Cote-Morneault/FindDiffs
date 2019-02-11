@@ -38,6 +38,7 @@ export const R: IString = {
     USERNAME_: "username",
     RESOURCE: "Resource",
     RESOURCE_: "resource",
+    RESOURCE_ID_: "resource_id",
 
     SUCCESS: "Success",
     SUCCESS_GAME_CARD_UPDATED: "The gamecard was updated.",

@@ -26,7 +26,7 @@ export class GameCardService extends Service implements IGameCardService {
         }
 
         if (!req.body[this.RESOURCE_ID]) {
-            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.RESOURCE]));
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.RESOURCE_ID_]));
         }
 
         if (!req.body.pov) {
@@ -36,11 +36,13 @@ export class GameCardService extends Service implements IGameCardService {
         if (!EnumUtils.isStringInEnum(req.body.pov, POVType)) {
             throw new InvalidFormatException(_e(R.ERROR_WRONG_TYPE, [R.POV_]));
         }
-
         const povType: POVType = EnumUtils.enumFromString<POVType>(req.body.pov, POVType) as POVType;
         switch (povType) {
             case POVType.Simple:
-                await this.getImagePairId(req.body[this.RESOURCE_ID]);
+                const imagePair: ICommonImagePair = await this.getImagePairId(req.body[this.RESOURCE_ID]);
+                if (imagePair.differences_count !== this.NUMBER_OF_DIFFERENCES) {
+                    throw new InvalidFormatException(_e(R.ERROR_DIFFERENCE_INVALID, [imagePair.differences_count]));
+                }
                 break;
             case POVType.Free:
                 // tslint:disable-next-line:no-suspicious-comment
@@ -52,12 +54,7 @@ export class GameCardService extends Service implements IGameCardService {
     }
 
     public async post(req: Request): Promise<string> {
-        this.validatePost(req);
-        const imagePair: ICommonImagePair = await this.getImagePairId(req.body[this.RESOURCE_ID]);
-
-        if (imagePair.differences_count !== this.NUMBER_OF_DIFFERENCES) {
-            throw new InvalidFormatException(_e(R.ERROR_DIFFERENCE_INVALID, [imagePair.differences_count]));
-        }
+        await this.validatePost(req);
 
         const gameCard: IGameCard = new GameCard({
             pov: req.body.pov,
