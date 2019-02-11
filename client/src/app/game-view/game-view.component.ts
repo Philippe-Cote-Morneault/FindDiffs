@@ -2,6 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
+import { PixelPositionService } from "../services/pixel-position.service";
+import { PixelRestorationService } from "../services/pixel-restoration.service";
+// import { ConvertActionBindingResult } from "@angular/compiler/src/compiler_util/expression_converter";
 
 @Component({
   selector: "app-game-view",
@@ -15,8 +18,13 @@ export class GameViewComponent implements OnInit {
   private differenceCounterUser: number = 0;
   private differenceCounterOpponent: number = 0;
   private isSolo: boolean = false;
+  private canvas: HTMLCanvasElement;
 
-  public constructor(gamesCardService: GamesCardService, private route: ActivatedRoute) {
+  public constructor(
+    gamesCardService: GamesCardService,
+    private route: ActivatedRoute,
+    public pixelPositionService: PixelPositionService,
+    public pixelRestorationService: PixelRestorationService) {
     this.gamesCardService = gamesCardService;
   }
 
@@ -26,6 +34,8 @@ export class GameViewComponent implements OnInit {
     });
 
     this.getGameById();
+    this.canvas = (document.getElementById("original_canvas") as HTMLCanvasElement);
+    this.canvas.addEventListener("click", this.getClickPosition.bind(this));
   }
 
   private getGameById(): void {
@@ -34,4 +44,11 @@ export class GameViewComponent implements OnInit {
     });
   }
 
+  // tslint:disable-next-line:no-any
+  public getClickPosition(e: any): void {
+    const xPosition: number = e.layerX;
+    const yPosition: number = e.layerY;
+    this.pixelPositionService.postPixelPosition(this.gameCard.id, xPosition, yPosition).subscribe(
+      this.pixelRestorationService.restoreImage);
+  }
 }
