@@ -25,7 +25,6 @@ export class GameViewComponent implements OnInit {
         public pixelPositionService: PixelPositionService,
         public pixelRestorationService: PixelRestorationService,
         public imagePairService: ImagePairService) {
-        this.imagePairService = imagePairService;
         this.isSolo = false;
         this.differenceCounterOpponent = 0;
         this.differenceCounterUser = 0;
@@ -45,7 +44,7 @@ export class GameViewComponent implements OnInit {
 
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
-            this.imagePair = this.imagePair;
+            this.imagePair = imagePair;
             this.loadCanvas(this.modifiedCanvasID, imagePair.url_modified);
             this.loadCanvas(this.originalCanvasID, imagePair.url_original);
         });
