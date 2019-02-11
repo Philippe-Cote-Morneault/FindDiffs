@@ -17,6 +17,8 @@ export class GameViewComponent implements OnInit {
 
     private id: string;
     private canvas: HTMLCanvasElement;
+    private originalCanvasID: string;
+    private modifiedCanvasID: string;
 
     public constructor(
         gamesCardService: GamesCardService,
@@ -24,6 +26,8 @@ export class GameViewComponent implements OnInit {
         public pixelPositionService: PixelPositionService,
         public pixelRestorationService: PixelRestorationService) {
         this.gamesCardService = gamesCardService;
+        this.originalCanvasID = "original_canvas";
+        this.modifiedCanvasID = "modified_canvas";
     }
 
     public ngOnInit(): void {
@@ -32,13 +36,13 @@ export class GameViewComponent implements OnInit {
         });
 
         this.getGameById();
-        this.canvas = (document.getElementById("original_canvas") as HTMLCanvasElement);
-        this.canvas.addEventListener("click", this.getClickPosition.bind(this));
     }
 
     private getGameById(): void {
         this.gamesCardService.getGameById(this.id).subscribe((gameCard: ICommonGameCard) => {
             this.gameCard = gameCard;
+            this.loadCanvas(this.modifiedCanvasID, gameCard.image_pair.url_modified);
+            this.loadCanvas(this.originalCanvasID, gameCard.image_pair.url_original);
         });
     }
 
@@ -48,5 +52,16 @@ export class GameViewComponent implements OnInit {
         const yPosition: number = e.layerY;
         this.pixelPositionService.postPixelPosition(this.gameCard.id, xPosition, yPosition).subscribe(
             this.pixelRestorationService.restoreImage);
+    }
+
+    public loadCanvas(canvasID: string, imageSrc: string): void {
+        this.canvas = (document.getElementById(canvasID) as HTMLCanvasElement);
+        this.canvas.addEventListener("click", this.getClickPosition.bind(this));
+        const canvasContext: CanvasRenderingContext2D | null = this.canvas.getContext("2d");
+        const image: HTMLImageElement = new Image();
+        image.src = imageSrc;
+        if (canvasContext) {
+            canvasContext.drawImage(image, 0, 0);
+        }
     }
 }

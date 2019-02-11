@@ -7,12 +7,12 @@
     </div>
     <div id="game_image_wrapper">
       <div id="image_original">
-          <img src="{{gameCard.image_pair.url_original}}" width="640" height="480" /> 
+        <canvas id="original_canvas" width="640" height="480" style="border:1px solid #d3d3d3;"></canvas>
       </div>
       <div id="image_modified">
-          <img src="{{gameCard.image_pair.url_modified}}" width="640" height="480" /> 
+        <canvas id="modified_canvas" width="640" height="480" style="border:1px solid #d3d3d3;"></canvas>
       </div>
     </div>
   </div>
-  <canvas id="original_canvas" width="300" height="150" style="border:1px solid #d3d3d3;"></canvas>
-  <canvas id="modified_canvas" width="300" height="150" style="border:1px solid #d3d3d3;"></canvas>
+  
+  
