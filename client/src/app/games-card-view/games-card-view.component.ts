@@ -18,6 +18,8 @@ export class GamesCardViewComponent implements OnInit {
     public rightButton: string = "Create";
 
     private gamesCardService: GamesCardService;
+    public imagePairUrlOriginal: string;
+    public imagePairUrlModified: string;
 
     public constructor(gamesCardService: GamesCardService, private router: Router) {
         this.gamesCardService = gamesCardService;
