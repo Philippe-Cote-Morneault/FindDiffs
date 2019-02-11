@@ -4,7 +4,6 @@ import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
 import { PixelPositionService } from "../services/pixel-position.service";
 import { PixelRestorationService } from "../services/pixel-restoration.service";
-// import { ConvertActionBindingResult } from "@angular/compiler/src/compiler_util/expression_converter";
 
 @Component({
     selector: "app-game-view",

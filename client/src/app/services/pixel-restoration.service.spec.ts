@@ -3,6 +3,8 @@ import * as sinon from "sinon";
 /*import { IPixel } from "../../Objects/Pixel";*/
 import { PixelRestorationService } from "./pixel-restoration.service";
 
+// tslint:disable no-magic-numbers
+
 describe("PixelRestorationService", () => {
 
   const pixelRestorationService: PixelRestorationService = new PixelRestorationService();
