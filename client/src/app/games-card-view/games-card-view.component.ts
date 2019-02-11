@@ -22,7 +22,6 @@ export class GamesCardViewComponent implements OnInit {
     private gamesCardService: GamesCardService;
     private imagePairService: ImagePairService;
     public imagePairUrlOriginal: string;
-    public imagePairUrlModified: string;
 
     public constructor(
         gamesCardService: GamesCardService,
@@ -79,7 +78,6 @@ export class GamesCardViewComponent implements OnInit {
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.gameCard.resource_id).subscribe((imagePair: ICommonImagePair) => {
             this.imagePairUrlOriginal = imagePair.url_original;
-            this.imagePairUrlModified = imagePair.url_modified;
         });
     }
 }
