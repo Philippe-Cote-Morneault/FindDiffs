@@ -15,21 +15,15 @@ import { StringFormater } from "../util/stringFormater";
 export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean = false;
+    public imagePair: ICommonImagePair;
 
     public leftButton: string = "Play";
     public rightButton: string = "Create";
 
-    private gamesCardService: GamesCardService;
-    private imagePairService: ImagePairService;
-    public imagePairUrlOriginal: string;
-
     public constructor(
-        gamesCardService: GamesCardService,
+        private gamesCardService: GamesCardService,
         private router: Router,
-        imagePairService: ImagePairService) {
-        this.gamesCardService = gamesCardService;
-        this.imagePairService = imagePairService;
-    }
+        private imagePairService: ImagePairService) { }
 
     public ngOnInit(): void {
         if (this.isInAdminView) {
@@ -77,7 +71,7 @@ export class GamesCardViewComponent implements OnInit {
 
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.gameCard.resource_id).subscribe((imagePair: ICommonImagePair) => {
-            this.imagePairUrlOriginal = imagePair.url_original;
+            this.imagePair = imagePair;
         });
     }
 }
