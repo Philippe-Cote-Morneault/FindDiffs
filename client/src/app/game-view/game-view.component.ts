@@ -55,7 +55,7 @@ export class GameViewComponent implements OnInit {
     public getClickPosition(e: any): void {
         const xPosition: number = e.layerX;
         const yPosition: number = e.layerY;
-        this.pixelPositionService.postPixelPosition(this.gameCard.id, xPosition, yPosition).subscribe(
+        this.pixelPositionService.postPixelPosition(this.gameCard.image_pair.id, xPosition, yPosition).subscribe(
             this.pixelRestorationService.restoreImage);
     }
 
