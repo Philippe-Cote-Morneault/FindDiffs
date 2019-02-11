@@ -2,7 +2,9 @@ import { Component, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
+import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { GamesCardService } from "../services/games-card.service";
+import { ImagePairService } from "../services/image-pair.service";
 import { StringFormater } from "../util/stringFormater";
 
 @Component({
@@ -18,11 +20,16 @@ export class GamesCardViewComponent implements OnInit {
     public rightButton: string = "Create";
 
     private gamesCardService: GamesCardService;
+    private imagePairService: ImagePairService;
     public imagePairUrlOriginal: string;
     public imagePairUrlModified: string;
 
-    public constructor(gamesCardService: GamesCardService, private router: Router) {
+    public constructor(
+        gamesCardService: GamesCardService,
+        private router: Router,
+        imagePairService: ImagePairService) {
         this.gamesCardService = gamesCardService;
+        this.imagePairService = imagePairService;
     }
 
     public ngOnInit(): void {
@@ -30,6 +37,7 @@ export class GamesCardViewComponent implements OnInit {
             this.leftButton = "Delete";
             this.rightButton = "Reset";
         }
+        this.getImagePairById();
     }
 
     public toMinutes(index: number, times: number[]): string {
@@ -66,5 +74,12 @@ export class GamesCardViewComponent implements OnInit {
                 }
             });
         }
+    }
+
+    private getImagePairById(): void {
+        this.imagePairService.getImagePairById(this.gameCard.resource_id).subscribe((imagePair: ICommonImagePair) => {
+            this.imagePairUrlOriginal = imagePair.url_original;
+            this.imagePairUrlModified = imagePair.url_modified;
+        });
     }
 }
