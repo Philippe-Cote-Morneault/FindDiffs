@@ -9,8 +9,6 @@ import { SceneTransformation } from "./sceneTransformation";
 export class SceneObjectAdder implements SceneTransformation {
     public applyTransformation(transformationEligibleObjects: ICommonSceneObject[], modifiedObjects: ICommonSceneObject[],
                                modifications: ICommonSceneModifications): void {
-
-        
     }
 
     private chooseRandomShape(): GeometricShape {

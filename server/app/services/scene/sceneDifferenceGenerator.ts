@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
 import { ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
 import { SceneObjectAdder } from "./sceneObjectAdder";
@@ -23,9 +24,8 @@ export class SceneDifferenceGenerator {
 
         this.setTransformationsToApply(requiresInsertion, requiresRemoval, requiresColorChange);
 
-        // TODO: Find out how to get id
         this.modifications = {
-            id: "test",
+            id: uuid(),
             addedObjects: [],
             deletedObjects: [],
             colorChangedObjects: new Map<string, number>(),
