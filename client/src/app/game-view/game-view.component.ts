@@ -2,11 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
+import { PixelPositionService } from "../services/pixel-position.service";
+import { PixelRestorationService } from "../services/pixel-restoration.service";
+// import { ConvertActionBindingResult } from "@angular/compiler/src/compiler_util/expression_converter";
 
 @Component({
-  selector: "app-game-view",
-  templateUrl: "./game-view.component.html",
-  styleUrls: ["./game-view.component.css"],
+    selector: "app-game-view",
+    templateUrl: "./game-view.component.html",
+    styleUrls: ["./game-view.component.css"],
 })
 export class GameViewComponent implements OnInit {
   public gameCard: ICommonGameCard;
@@ -15,23 +18,38 @@ export class GameViewComponent implements OnInit {
   private differenceCounterUser: number = 0;
   private differenceCounterOpponent: number = 0;
   private isSolo: boolean = false;
+    private id: string;
+    private canvas: HTMLCanvasElement;
 
-  public constructor(gamesCardService: GamesCardService, private route: ActivatedRoute) {
-    this.gamesCardService = gamesCardService;
-  }
+    public constructor(
+        gamesCardService: GamesCardService,
+        private route: ActivatedRoute,
+        public pixelPositionService: PixelPositionService,
+        public pixelRestorationService: PixelRestorationService) {
+        this.gamesCardService = gamesCardService;
+    }
 
-  public ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.id = params["id"];
-    });
+    public ngOnInit(): void {
+        this.route.params.subscribe((params) => {
+            this.id = params["id"];
+        });
 
-    this.getGameById();
-  }
+        this.getGameById();
+        this.canvas = (document.getElementById("original_canvas") as HTMLCanvasElement);
+        this.canvas.addEventListener("click", this.getClickPosition.bind(this));
+    }
 
-  private getGameById(): void {
-    this.gamesCardService.getGameById(this.id).subscribe((gameCard: ICommonGameCard) => {
-      this.gameCard = gameCard;
-    });
-  }
+    private getGameById(): void {
+        this.gamesCardService.getGameById(this.id).subscribe((gameCard: ICommonGameCard) => {
+            this.gameCard = gameCard;
+        });
+    }
 
+    // tslint:disable-next-line:no-any
+    public getClickPosition(e: any): void {
+        const xPosition: number = e.layerX;
+        const yPosition: number = e.layerY;
+        this.pixelPositionService.postPixelPosition(this.gameCard.id, xPosition, yPosition).subscribe(
+            this.pixelRestorationService.restoreImage);
+    }
 }
