@@ -14,8 +14,10 @@ import { PixelRestorationService } from "../services/pixel-restoration.service";
 export class GameViewComponent implements OnInit {
     public gameCard: ICommonGameCard;
     private gamesCardService: GamesCardService;
-
     private id: string;
+    private differenceCounterUser: number;
+    private differenceCounterOpponent: number;
+    private isSolo: boolean;
     private canvas: HTMLCanvasElement;
     private originalCanvasID: string;
     private modifiedCanvasID: string;
@@ -26,6 +28,9 @@ export class GameViewComponent implements OnInit {
         public pixelPositionService: PixelPositionService,
         public pixelRestorationService: PixelRestorationService) {
         this.gamesCardService = gamesCardService;
+        this.isSolo = false;
+        this.differenceCounterOpponent = 0;
+        this.differenceCounterUser = 0;
         this.originalCanvasID = "original_canvas";
         this.modifiedCanvasID = "modified_canvas";
     }
@@ -36,6 +41,8 @@ export class GameViewComponent implements OnInit {
         });
 
         this.getGameById();
+        this.canvas = (document.getElementById("original_canvas") as HTMLCanvasElement);
+        this.canvas.addEventListener("click", this.getClickPosition.bind(this));
     }
 
     private getGameById(): void {
