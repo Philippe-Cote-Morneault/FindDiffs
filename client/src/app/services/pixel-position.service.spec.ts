@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Message } from "../../../../common/communication/message";
 import { ICommonReveal } from "../../../../common/model/reveal";
 import { TestHelper } from "../../test.helper";
@@ -35,20 +36,17 @@ describe("UserService", () => {
     });
 
     it("should return an error message", () => {
-        const expectedResponse: Message = { title: "Error", body: "Miss" };
-        const mockID: string = "128391";
-        const mockX: number = 2;
-        const mockY: number = 3;
-        httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedResponse));
-
-        pixelPositionService.postPixelPosition(mockID, mockX, mockY).subscribe(
-            (response: Message) => {
-                expect(response.body).toEqual("Miss");
+        const expectedMessageError: Message = { title: "Error", body: "No difference was found at the specified position" };
+        const mockHttpError: HttpErrorResponse = new HttpErrorResponse({
+            error: {
+                title: "Error", body: "No difference was found at the specified position",
             },
-            fail,
+            status: 404 });
+        pixelPositionService.handleError(mockHttpError).subscribe(
+            (data) => {
+                expect(data).toEqual(expectedMessageError);
+            },
         );
-
-        expect(httpClientSpyPost.post.calls.count()).toBe(1, "one call");
     });
 
 });
