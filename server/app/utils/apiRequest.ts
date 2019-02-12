@@ -14,7 +14,7 @@ export class ApiRequest {
             return response.data;
         })
         .catch(() => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }
 
@@ -23,7 +23,7 @@ export class ApiRequest {
             responseType: "arraybuffer",
           }).then((response: AxiosResponse) => Buffer.from(response.data, "binary").buffer)
           .catch(() => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
           });
     }
 

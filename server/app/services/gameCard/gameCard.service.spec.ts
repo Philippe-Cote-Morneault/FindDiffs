@@ -104,7 +104,7 @@ describe("GameCardService", () => {
                 },
             };
             (ApiRequest.getImagePairId as sinon.SinonStub).rejects(
-                    new NotFoundException(R.ERROR_UNKOWN_ID),
+                    new NotFoundException(R.ERROR_UNKNOWN_ID),
                 );
 
             const errorMessage: string = "The id could not be found.";
@@ -125,7 +125,7 @@ describe("GameCardService", () => {
                 },
             };
             (ApiRequest.getImagePairId as sinon.SinonStub).rejects(
-                new NotFoundException(R.ERROR_UNKOWN_ID),
+                new NotFoundException(R.ERROR_UNKNOWN_ID),
             );
 
             const errorMessage: string = "The id could not be found.";

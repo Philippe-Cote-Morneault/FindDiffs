@@ -37,7 +37,7 @@ describe("ApiRequest", () => {
                 await ApiRequest.getImagePairId("an invalid id");
                 throw new NoErrorThrownException();
             } catch (err) {
-                expect(err.message).to.equal(R.ERROR_UNKOWN_ID);
+                expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);
             }
         });
     });

@@ -12,7 +12,7 @@ export function _e(format: string, args: any[]): string {
 export const R: IString = {
     ERROR: "Error",
     ERROR_NO_CHANGES: "No changes were detected!",
-    ERROR_UNKOWN_ID: "The id could not be found.",
+    ERROR_UNKNOWN_ID: "The id could not be found.",
     ERROR_UNKOWN_RESOURCE_ID: "The resource id could not be found.",
     ERROR_MISSING: "%s is missing.",
     ERROR_MISSING_FIELD: "The field %s is not present.",

@@ -89,7 +89,7 @@ export class GameCardService extends Service implements IGameCardService {
 
         return GameCard.findById(id).then(async (doc: IGameCard) => {
             if (!doc) {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
 
             await this.makeChanges(req, doc);
@@ -104,7 +104,7 @@ export class GameCardService extends Service implements IGameCardService {
             if (err.name === "InvalidFormatException") {
                 throw err;
             }
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
 
     }
@@ -126,13 +126,13 @@ export class GameCardService extends Service implements IGameCardService {
     public async single(id: string): Promise<string> {
         return GameCard.findById(id).then(async(doc: IGameCard) => {
             if (!doc) {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
 
             return JSON.stringify(this.getCommonGameCard(doc));
         })
         .catch((err: Error) => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }
 
@@ -140,7 +140,7 @@ export class GameCardService extends Service implements IGameCardService {
         return GameCard.findById(id)
         .then(async (doc: IGameCard) => {
             if (!doc) {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
             await doc.remove();
             const message: Message = {
@@ -150,7 +150,7 @@ export class GameCardService extends Service implements IGameCardService {
 
             return JSON.stringify(message); })
         .catch((error: Error) => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }
 
