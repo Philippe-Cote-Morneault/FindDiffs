@@ -5,10 +5,26 @@ import { Bitmap } from "../../model/bitmap/bitmap";
 import * as BitmapHeader from "../../model/bitmap/header";
 import { Position } from "../../model/bitmap/pixel";
 import { _e, R } from "../../strings";
+import { ApiRequest } from "../../utils/apiRequest";
+import { BitmapDecoder } from "../imagePair/bitmapDecoder";
 import { IDifferenceService } from "../interfaces";
 import { Service } from "../service";
+import { RevealDifference } from "./revealDifference";
 
 export class DifferenceService extends Service implements IDifferenceService {
+
+    public async postSimple(req: Request): Promise<string> {
+        this.validateSimple(req);
+
+        const differenceBitmap: Bitmap = BitmapDecoder.FromArrayBuffer(
+            await ApiRequest.getImagePairDiffId(req.body.image_pair_id),
+        );
+        const position: Position = new Position(Number(req.body.x), Number(req.body.y));
+        const revealDifferences: RevealDifference = new RevealDifference(differenceBitmap, position);
+
+        return JSON.stringify(revealDifferences.reveal());
+    }
+
     private validateSimple(req: Request): void {
         if (!req.body.x) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.X_]));
