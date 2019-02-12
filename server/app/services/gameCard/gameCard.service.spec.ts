@@ -1,12 +1,14 @@
-import Axios from "axios";
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
+import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { GameCard } from "../../model/schemas/gameCard";
+import { R } from "../../strings";
 import { GameCardSchemaMock } from "../../tests/gameCardSchemaMock";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
+import { ApiRequest } from "../../utils/apiRequest";
 import { GameCardService } from "./gameCard.service";
 
 // We can disable this tslint max-line-count since it's only a test file and
@@ -15,7 +17,7 @@ import { GameCardService } from "./gameCard.service";
 describe("GameCardService", () => {
     const service: GameCardService = new GameCardService();
     beforeEach(() => {
-        sinon.stub(Axios, "get");
+        sinon.stub(ApiRequest, "getImagePairId");
         sinon.stub(GameCard.prototype, "save");
         sinon.stub(GameCard.prototype, "remove");
         sinon.stub(GameCard, "find");
@@ -23,7 +25,7 @@ describe("GameCardService", () => {
     });
 
     afterEach(() => {
-        (Axios.get as sinon.SinonStub).restore();
+        (ApiRequest.getImagePairId as sinon.SinonStub).restore();
         (GameCard.prototype.save as sinon.SinonStub).restore();
         (GameCard.prototype.remove as sinon.SinonStub).restore();
         (GameCard.find as sinon.SinonStub).restore();
@@ -101,7 +103,9 @@ describe("GameCardService", () => {
                     pov: "Simple",
                 },
             };
-            (Axios.get as sinon.SinonStub).rejects();
+            (ApiRequest.getImagePairId as sinon.SinonStub).rejects(
+                    new NotFoundException(R.ERROR_UNKNOWN_ID),
+                );
 
             const errorMessage: string = "The id could not be found.";
             try {
@@ -120,7 +124,9 @@ describe("GameCardService", () => {
                     pov: "Simple",
                 },
             };
-            (Axios.get as sinon.SinonStub).rejects();
+            (ApiRequest.getImagePairId as sinon.SinonStub).rejects(
+                new NotFoundException(R.ERROR_UNKNOWN_ID),
+            );
 
             const errorMessage: string = "The id could not be found.";
             try {
@@ -148,11 +154,8 @@ describe("GameCardService", () => {
                 creation_date: new Date(),
                 differences_count: 0,
             };
-            const axiosResponse: Object = {
-                data: imagepair,
-            };
 
-            (Axios.get as sinon.SinonStub).resolves(axiosResponse);
+            (ApiRequest.getImagePairId as sinon.SinonStub).resolves(imagepair);
             try {
                 await service.post(mockReq(request));
                 throw new NoErrorThrownException();
@@ -178,11 +181,8 @@ describe("GameCardService", () => {
                 creation_date: new Date(),
                 differences_count: 7,
             };
-            const axiosResponse: Object = {
-                data: imagepair,
-            };
 
-            (Axios.get as sinon.SinonStub).resolves(axiosResponse);
+            (ApiRequest.getImagePairId as sinon.SinonStub).resolves(imagepair);
 
             const response: ICommonGameCard = JSON.parse(await service.post(mockReq(request)));
 
@@ -205,10 +205,8 @@ describe("GameCardService", () => {
                 creation_date: new Date(),
                 differences_count: 0,
             };
-            const axiosResponse: Object = {
-                data: imagepair,
-            };
-            (Axios.get as sinon.SinonStub).resolves(axiosResponse);
+
+            (ApiRequest.getImagePairId as sinon.SinonStub).resolves(imagepair);
 
             (GameCard.find as sinon.SinonStub).resolves(
             [{
@@ -256,11 +254,8 @@ describe("GameCardService", () => {
                 creation_date: new Date(),
                 differences_count: 0,
             };
-            const axiosResponse: Object = {
-                data: imagepair,
-            };
 
-            (Axios.get as sinon.SinonStub).resolves(axiosResponse);
+            (ApiRequest.getImagePairId as sinon.SinonStub).resolves(imagepair);
             (GameCard.findById as sinon.SinonStub).resolves(
             {
                 pov: POVType.Simple,
