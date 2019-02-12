@@ -26,21 +26,14 @@ export class DifferenceService extends Service implements IDifferenceService {
     }
 
     private validateSimple(req: Request): void {
-        if (!req.body.x) {
-            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.X_]));
-        }
-
-        if (!req.body.y) {
-            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.Y_]));
-        }
 
         if (isNaN(req.body.y) || isNaN(req.body.x)) {
             const fields: string = "x or y";
             throw new InvalidFormatException(_e(R.ERROR_N_A_N, [fields]));
         }
 
-        if (Number(req.body.y) > BitmapHeader.InfoHeader.EXPECTED_HEIGHT || Number(req.body.y) < 0 ||
-            Number(req.body.x) > BitmapHeader.InfoHeader.EXPECTED_WIDTH || Number(req.body.x) < 0) {
+        if (Number(req.body.y) >= BitmapHeader.InfoHeader.EXPECTED_HEIGHT || Number(req.body.y) < 0 ||
+            Number(req.body.x) >= BitmapHeader.InfoHeader.EXPECTED_WIDTH || Number(req.body.x) < 0) {
             throw new InvalidFormatException(R.ERROR_OUT_OF_BOUND);
         }
 
