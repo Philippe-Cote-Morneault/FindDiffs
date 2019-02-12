@@ -62,8 +62,10 @@ export class GameViewComponent implements OnInit {
         const canvasContext: CanvasRenderingContext2D | null = this.canvas.getContext("2d");
         const image: HTMLImageElement = new Image();
         image.src = imageSrc;
-        if (canvasContext) {
-            canvasContext.drawImage(image, 0, 0);
-        }
+        image.onload = () => {
+            if (canvasContext) {
+                canvasContext.drawImage(image, 0, 0);
+            }
+        };
     }
 }
