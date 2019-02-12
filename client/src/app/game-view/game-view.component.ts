@@ -11,7 +11,7 @@ import { PixelRestorationService } from "../services/pixel-restoration.service";
     styleUrls: ["./game-view.component.css"],
 })
 export class GameViewComponent implements OnInit {
-    //public imagePair: ICommonImagePair;
+    // public imagePair: ICommonImagePair;
     private imagePairId: string;
     private differenceCounterUser: number;
     private differenceCounterOpponent: number;
@@ -38,13 +38,11 @@ export class GameViewComponent implements OnInit {
         });
 
         this.getImagePairById();
-        this.canvas = (document.getElementById("original_canvas") as HTMLCanvasElement);
-        this.canvas.addEventListener("click", this.getClickPosition.bind(this));
     }
 
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
-            //this.imagePair = imagePair;
+            // this.imagePair = imagePair;
             this.loadCanvas(this.modifiedCanvasID, imagePair.url_modified);
             this.loadCanvas(this.originalCanvasID, imagePair.url_original);
         });
