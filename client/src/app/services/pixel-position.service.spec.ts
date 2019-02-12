@@ -17,7 +17,7 @@ describe("UserService", () => {
     });
 
     it("should return expected message on postPixelPosition request (HttpClient called once)", () => {
-        const expectedResponse: Object = { "hit": "true", "pixels_affected": [{"x": 2, "y": 2}, {"x": 3, "y": 2}]};
+        const expectedResponse: Object = { "hit": true, "pixels_affected": [{"x": 2, "y": 2}, {"x": 3, "y": 2}]};
         const mockID: string = "128391";
         const mockX: number = 2;
         const mockY: number = 3;
