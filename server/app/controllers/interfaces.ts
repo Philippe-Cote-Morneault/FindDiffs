@@ -11,3 +11,7 @@ export interface IUserController {
 export interface IGameCardController {
     router: Router;
 }
+
+export interface IDifferenceController {
+    router: Router;
+}

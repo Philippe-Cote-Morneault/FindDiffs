@@ -23,3 +23,8 @@ export interface IGameCardService {
     delete(id: string): Promise<string>;
     update(req: Request): Promise<string>;
 }
+
+export interface IDifferenceService {
+    postSimple(req: Request): Promise<string>;
+    postFree(req: Request): Promise<string>;
+}
