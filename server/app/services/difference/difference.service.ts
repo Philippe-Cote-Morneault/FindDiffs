@@ -49,7 +49,7 @@ export class DifferenceService extends Service implements IDifferenceService {
         }
     }
 
-    public postFree(req: Request): Promise<string> {
+    public async postFree(req: Request): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
