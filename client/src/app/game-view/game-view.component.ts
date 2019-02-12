@@ -1,10 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ICommonGameCard } from "../../../../common/model/gameCard";
-import { GamesCardService } from "../services/games-card.service";
+import { ICommonImagePair } from "../../../../common/model/imagePair";
+import { ImagePairService } from "../services/image-pair.service";
 import { PixelPositionService } from "../services/pixel-position.service";
 import { PixelRestorationService } from "../services/pixel-restoration.service";
-// import { ConvertActionBindingResult } from "@angular/compiler/src/compiler_util/expression_converter";
 
 @Component({
     selector: "app-game-view",
@@ -12,9 +11,8 @@ import { PixelRestorationService } from "../services/pixel-restoration.service";
     styleUrls: ["./game-view.component.css"],
 })
 export class GameViewComponent implements OnInit {
-    public gameCard: ICommonGameCard;
-    private gamesCardService: GamesCardService;
-    private id: string;
+    // public imagePair: ICommonImagePair;
+    private imagePairId: string;
     // private differenceCounterUser: number;
     // private differenceCounterOpponent: number;
     // private isSolo: boolean;
@@ -23,11 +21,10 @@ export class GameViewComponent implements OnInit {
     private modifiedCanvasID: string;
 
     public constructor(
-        gamesCardService: GamesCardService,
         private route: ActivatedRoute,
         public pixelPositionService: PixelPositionService,
-        public pixelRestorationService: PixelRestorationService) {
-        this.gamesCardService = gamesCardService;
+        public pixelRestorationService: PixelRestorationService,
+        public imagePairService: ImagePairService) {
         // this.isSolo = false;
         // this.differenceCounterOpponent = 0;
         // this.differenceCounterUser = 0;
@@ -37,17 +34,17 @@ export class GameViewComponent implements OnInit {
 
     public ngOnInit(): void {
         this.route.params.subscribe((params) => {
-            this.id = params["id"];
+            this.imagePairId = params["id"];
         });
 
-        this.getGameById();
+        this.getImagePairById();
     }
 
-    private getGameById(): void {
-        this.gamesCardService.getGameById(this.id).subscribe((gameCard: ICommonGameCard) => {
-            this.gameCard = gameCard;
-            this.loadCanvas(this.modifiedCanvasID, gameCard.image_pair.url_modified);
-            this.loadCanvas(this.originalCanvasID, gameCard.image_pair.url_original);
+    private getImagePairById(): void {
+        this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
+            // this.imagePair = imagePair;
+            this.loadCanvas(this.modifiedCanvasID, imagePair.url_modified);
+            this.loadCanvas(this.originalCanvasID, imagePair.url_original);
         });
     }
 
@@ -55,7 +52,7 @@ export class GameViewComponent implements OnInit {
     public getClickPosition(e: any): void {
         const xPosition: number = e.layerX;
         const yPosition: number = e.layerY;
-        this.pixelPositionService.postPixelPosition(this.gameCard.image_pair.id, xPosition, yPosition).subscribe(
+        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(
             this.pixelRestorationService.restoreImage);
     }
 
