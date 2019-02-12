@@ -13,6 +13,7 @@ export class PixelRestorationService {
     /**
      * name
      */
+     // tslint:disable:no-magic-numbers
     public restoreImage(response: ICommonReveal): void {
         if (response.hit) {
             this.originalCanvas = (document.getElementById("original_canvas")) as HTMLCanvasElement;
