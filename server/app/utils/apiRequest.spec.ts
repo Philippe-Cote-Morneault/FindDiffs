@@ -41,4 +41,24 @@ describe("ApiRequest", () => {
             }
         });
     });
+
+    describe("getImagePairDiffId()", () => {
+        it("Should return binary data if the id is valid", async () => {
+            const bufferSize: number = 4;
+
+            const buffer: ArrayBuffer = Buffer.alloc(bufferSize, "data").buffer;
+            (Axios.get as sinon.SinonStub).resolves({data: buffer});
+            const response: ArrayBuffer = await ApiRequest.getImagePairDiffId("a valid id");
+            expect(JSON.stringify(response)).to.equal(JSON.stringify(buffer));
+        });
+        it("Should return an error if the image pair id is invalid", async () => {
+            (Axios.get as sinon.SinonStub).rejects();
+            try {
+                await ApiRequest.getImagePairDiffId("an invalid id");
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);
+            }
+        });
+    });
 });
