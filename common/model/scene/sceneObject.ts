@@ -1,3 +1,5 @@
+import { ICommonPosition } from "../reveal";
+
 /**
  * Represents an object in a ThreeJS scene.
  */
@@ -6,7 +8,7 @@ export interface ICommonSceneObject {
     color: number;
     dimensions: number[];
     type: GeometricShape;
-    position: number[];
+    position: ICommonPosition;
     texture: Textures;
 }
 
