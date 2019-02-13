@@ -11,6 +11,7 @@ import { UserController } from "./controllers/user.controller";
 import { IApplication } from "./interfaces";
 import Types from "./types";
 import { DbConnectionHandler } from "./utils/dbConnectionHandler";
+import { SceneController } from "./controllers/scene.controller";
 
 @injectable()
 export class Application implements IApplication {
@@ -22,6 +23,7 @@ export class Application implements IApplication {
         @inject(Types.IImagePairController) private imagePairController: ImagePairController,
         @inject(Types.IUserController) private userController: UserController,
         @inject(Types.IDifferenceController) private differenceController: DifferenceController,
+        @inject(Types.ISceneController) private sceneController: SceneController,
         @inject(Types.IGameCardController) private gameCardController: GameCardController) {
         this.app = express();
         this.config();
@@ -43,6 +45,7 @@ export class Application implements IApplication {
         this.app.use("/user", this.userController.router);
         this.app.use("/gamecard", this.gameCardController.router);
         this.app.use("/difference", this.differenceController.router);
+        this.app.use("/scene", this.sceneController.router);
 
         this.errorHandeling();
     }
