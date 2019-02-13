@@ -7,5 +7,5 @@ export interface ICommonSceneObject {
 }
 
 export enum GeometricShapes { SPHERE, CUBE, CONE, CYLINDER, SQUARED_BASE_PYRAMID };
-
+export enum ObjectTypes { Theme, Geometric };
 export enum Textures {};
