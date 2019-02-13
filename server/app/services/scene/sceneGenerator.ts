@@ -1,4 +1,4 @@
-import { GeometricShapes } from "../../../../common/model/scene/sceneObject";
+import { GeometricShapes, ICommonPositionObjects, ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
 import { SceneObjectPosition } from "./sceneObjectPosition";
 
 export class SceneGenerator {
@@ -28,5 +28,15 @@ export class SceneGenerator {
         for (let i: number = 0; i < GeometricShapes.NUMBER_ELEMENTS - 1; i++) {
             this.shapes.set(i, shapesQuantity[i]);
         }
+    }
+
+    public generateScene(): void {
+        const CUBE: number = 3;
+        const sceneObjects: ICommonSceneObject[] = new Array(Math.pow(this.sceneObjectPosition.sizeScene, CUBE));
+
+        for (let i: number = 0; i < this.totalShapes; i++) {
+            const position: ICommonPositionObjects = this.sceneObjectPosition.modelPosition();
+        }
+
     }
 }
