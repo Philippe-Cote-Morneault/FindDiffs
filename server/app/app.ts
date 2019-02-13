@@ -7,11 +7,11 @@ import * as logger from "morgan";
 import { DifferenceController } from "./controllers/difference.controller";
 import { GameCardController } from "./controllers/gameCard.controller";
 import { ImagePairController } from "./controllers/imagePair.controller";
+import { SceneController } from "./controllers/scene.controller";
 import { UserController } from "./controllers/user.controller";
 import { IApplication } from "./interfaces";
 import Types from "./types";
 import { DbConnectionHandler } from "./utils/dbConnectionHandler";
-import { SceneController } from "./controllers/scene.controller";
 
 @injectable()
 export class Application implements IApplication {
