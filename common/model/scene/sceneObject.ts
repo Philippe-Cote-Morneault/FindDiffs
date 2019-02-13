@@ -11,6 +11,7 @@ export interface ICommonSceneObject {
 }
 
 export enum GeometricShape { SPHERE, CUBE, CONE, CYLINDER, SQUARED_BASE_PYRAMID };
+export enum ObjectTypes { Theme, Geometric };
 
 // TODO: Define what texture to put
 export enum Textures {};
