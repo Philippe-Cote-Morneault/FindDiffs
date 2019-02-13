@@ -1,4 +1,5 @@
 import { GeometricShapes } from "../../../../common/model/scene/sceneObject";
+import { SceneObjectPosition } from "./sceneObjectPosition";
 
 export class SceneGenerator {
     private readonly MIN_ELEMENTS: number = 10;
@@ -7,6 +8,7 @@ export class SceneGenerator {
 
     private shapes: Map<GeometricShapes, number> = new Map<GeometricShapes, number>();
 
+    public constructor(private sceneObjectPosition: SceneObjectPosition) { }
     public randomNumberElementsPerShape(): void {
         const shapesQuantity: number[] = new Array(GeometricShapes.NUMBER_ELEMENTS);
         do {
