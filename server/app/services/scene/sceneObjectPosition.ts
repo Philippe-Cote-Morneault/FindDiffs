@@ -5,7 +5,7 @@ export class SceneObjectPosition {
     private readonly SQUARE: number = 2;
     private readonly CUBE: number = 3;
 
-    public modelPosition(): ICommonPositionObjects {
+    public modelPosition(): {modelPosition: ICommonPositionObjects; position: number } {
         const TEN: number = 10;
         const POWER_HUNDRED: number = 3;
         const POWER_THOUSANDS: number = 6;
@@ -24,6 +24,6 @@ export class SceneObjectPosition {
         modelPosition.y = y;
         modelPosition.z = z;
 
-        return modelPosition;
+        return { modelPosition: modelPosition, position: position } ;
     }
 }
