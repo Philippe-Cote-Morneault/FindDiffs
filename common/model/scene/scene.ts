@@ -9,7 +9,6 @@ export interface ICommonScene {
     texture: string;
     id: string;
     dimensions: ICommonSceneDimensions;
-
 }
 
 /**
