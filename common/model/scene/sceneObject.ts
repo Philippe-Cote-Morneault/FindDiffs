@@ -3,7 +3,7 @@ export interface ICommonSceneObject {
     color: string;
     dimensions: number[];
     type: GeometricShapes;
-    position: number[];
+    position: ICommonPositionObjects;
     texture: Textures;
 }
 
