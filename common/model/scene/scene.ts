@@ -8,5 +8,15 @@ export interface ICommonScene {
     bg_color: string;
     texture: string;
     id: string;
+    dimensions: ICommonSceneDimensions;
+
 }
 
+/**
+ * Represents 3D dimensions of a scene.
+ */
+export interface ICommonSceneDimensions {
+    x: number;
+    y: number;
+    z: number;
+}
