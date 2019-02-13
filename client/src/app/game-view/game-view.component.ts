@@ -67,5 +67,6 @@ export class GameViewComponent implements OnInit {
                 canvasContext.drawImage(image, 0, 0);
             }
         };
+        image.crossOrigin = "Anonymous";
     }
 }
