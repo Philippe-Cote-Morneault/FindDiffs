@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import { ICommonScene } from "../../../../common/model/scene/scene";
 import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
 import { ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
 import { SceneObjectAdder } from "./sceneObjectAdder";
@@ -7,20 +8,21 @@ import { SceneObjectRemover } from "./sceneObjectRemover";
 import { SceneTransformation } from "./sceneTransformation";
 
 export class SceneDifferenceGenerator {
-    private static readonly NUMBER_OF_ERRORS: number = 7;
+    private static readonly NUMBER_OF_DIFFERENCES: number = 7;
     // Holds the modifications that can be applied to a scene according to user preference
     private transformationsToApply: SceneTransformation[] = [];
-    // Objects that can be modified from the original scene. Modified objects will be removed from this array
+    private modifiedScene: ICommonScene;
+    // Holds all objects that have not been modified yet. Objects will be removed from this array when they are modified.
     private transformationEligibleObjects: ICommonSceneObject[];
-    // Objects that have been added to the scene or that their color has changed
-    private modifiedObjects: ICommonSceneObject[];
     private modifications: ICommonSceneModifications;
 
-    public generateModifiedScene(originalObjects: ICommonSceneObject[], requiresInsertion: boolean, requiresRemoval: boolean,
+    public generateModifiedScene(originalScene: ICommonScene, requiresInsertion: boolean, requiresRemoval: boolean,
                                  requiresColorChange: boolean): ICommonSceneModifications {
 
+        // Deep copy the original scene
+        this.modifiedScene = JSON.parse(JSON.stringify(originalScene));
         // Deep copy the originalObjects array
-        this.transformationEligibleObjects = JSON.parse(JSON.stringify(originalObjects));
+        this.transformationEligibleObjects = JSON.parse(JSON.stringify(originalScene.sceneObjects));
 
         this.setTransformationsToApply(requiresInsertion, requiresRemoval, requiresColorChange);
 
@@ -31,18 +33,17 @@ export class SceneDifferenceGenerator {
             colorChangedObjects: new Map<string, number>(),
         };
 
-        for (let i: number = 0; i < SceneDifferenceGenerator.NUMBER_OF_ERRORS; ++i) {
+        for (let i: number = 0; i < SceneDifferenceGenerator.NUMBER_OF_DIFFERENCES; ++i) {
             this.applyRandomModification();
         }
 
         return this.modifications;
-
     }
 
     private applyRandomModification(): void {
         this.chooseRandomModification().applyTransformation(
+            this.modifiedScene,
             this.transformationEligibleObjects,
-            this.modifiedObjects,
             this.modifications,
         );
     }
