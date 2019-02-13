@@ -10,12 +10,14 @@
         <a class="navbar-brand">Create a game in:</a>
       </div>
       <div class="button-wrapper">
-        <button type="button" class="btn btn-dark navbar-btn" (click)="isPopUpVisible = true">Simple mode</button>
-        <button type="button" class="btn btn-dark navbar-btn">Free mode</button>
+        <button type="button" class="btn btn-dark navbar-btn" (click)="isCreatingGameSimpleMode = true">Simple mode</button>
+        <button type="button" class="btn btn-dark navbar-btn" (click)="isCreatingGameFreeMode = true">Free mode</button>
+        <button type="button" id="leaveButton" class="btn btn-danger navbar-btn" (click)="leaveAdminMode()">Leave</button>
       </div>
     </div>
   </nav>
   <div class="filler"></div>
   <app-games-list-view [isInAdminView]="true"></app-games-list-view>
-  <app-create-game-simple-view (closed)="onClosed($event)" *ngIf="isPopUpVisible"></app-create-game-simple-view>
+  <app-create-game-simple-view (closed)="onClosed($event)" *ngIf="isCreatingGameSimpleMode"></app-create-game-simple-view>
+  <app-create-game-free-view (closed)="onClosed($event)" *ngIf="isCreatingGameFreeMode"></app-create-game-free-view>
 </body>

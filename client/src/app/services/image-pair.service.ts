@@ -28,4 +28,10 @@ export class ImagePairService extends HTTPService {
             catchError((error) => this.handleError(error)),
         );
     }
+
+    public getImagePairById(gameCardRessourceId: string): Observable<ICommonImagePair | Message> {
+        return this.http.get<ICommonImagePair>(`${SERVER_URL}/image-pair/${gameCardRessourceId}`).pipe(
+            catchError((error) => this.handleError(error)),
+        );
+    }
 }
