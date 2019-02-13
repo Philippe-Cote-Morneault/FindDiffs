@@ -35,7 +35,7 @@ export class SceneGenerator {
         const sceneObjects: ICommonSceneObject[] = new Array(Math.pow(this.sceneObjectPosition.sizeScene, CUBE));
 
         for (let i: number = 0; i < this.totalShapes; i++) {
-            const position: ICommonPositionObjects = this.sceneObjectPosition.modelPosition();
+            const position: object = this.sceneObjectPosition.modelPosition();
         }
 
     }
