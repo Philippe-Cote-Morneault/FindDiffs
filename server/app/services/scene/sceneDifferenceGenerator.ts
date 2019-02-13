@@ -7,7 +7,7 @@ import { SceneObjectRemover } from "./sceneObjectRemover";
 import { SceneTransformation } from "./sceneTransformation";
 
 export class SceneDifferenceGenerator {
-    private readonly NUMBER_OF_ERRORS: number = 7;
+    private static readonly NUMBER_OF_ERRORS: number = 7;
     // Holds the modifications that can be applied to a scene according to user preference
     private transformationsToApply: SceneTransformation[] = [];
     // Objects that can be modified from the original scene. Modified objects will be removed from this array
@@ -31,7 +31,7 @@ export class SceneDifferenceGenerator {
             colorChangedObjects: new Map<string, number>(),
         };
 
-        for (let i: number = 0; i < this.NUMBER_OF_ERRORS; ++i) {
+        for (let i: number = 0; i < SceneDifferenceGenerator.NUMBER_OF_ERRORS; ++i) {
             this.applyRandomModification();
         }
 
