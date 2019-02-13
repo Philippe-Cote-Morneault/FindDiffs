@@ -9,7 +9,7 @@ export class SceneGenerator {
     private shapes: Map<GeometricShapes, number> = new Map<GeometricShapes, number>();
 
     public constructor(private sceneObjectPosition: SceneObjectPosition) { }
-    public randomNumberElementsPerShape(): void {
+    public numberElementsPerShapeGenerator(): void {
         const shapesQuantity: number[] = new Array(GeometricShapes.NUMBER_ELEMENTS);
         do {
             this.totalShapes = 0;
