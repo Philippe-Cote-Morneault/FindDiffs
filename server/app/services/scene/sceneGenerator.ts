@@ -31,7 +31,7 @@ export class SceneGenerator {
         }
     }
 
-    public sceneGeneration(): void {
+    public modelPosition(): void {
         const TEN: number = 10;
         const POWER_HUNDRED: number = 3;
         const POWER_THOUSANDS: number = 6;
