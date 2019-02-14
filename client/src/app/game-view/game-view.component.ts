@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ImagePairService } from "../services/image-pair.service";
@@ -11,14 +11,12 @@ import { PixelRestorationService } from "../services/pixel-restoration.service";
     styleUrls: ["./game-view.component.css"],
 })
 export class GameViewComponent implements OnInit {
-    // public imagePair: ICommonImagePair;
+    @ViewChild("originalCanvas") private originalCanvas: ElementRef;
+    @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     private imagePairId: string;
     // private differenceCounterUser: number;
     // private differenceCounterOpponent: number;
     // private isSolo: boolean;
-    private canvas: HTMLCanvasElement;
-    private originalCanvasID: string;
-    private modifiedCanvasID: string;
 
     public constructor(
         private route: ActivatedRoute,
@@ -28,8 +26,6 @@ export class GameViewComponent implements OnInit {
         // this.isSolo = false;
         // this.differenceCounterOpponent = 0;
         // this.differenceCounterUser = 0;
-        this.originalCanvasID = "original_canvas";
-        this.modifiedCanvasID = "modified_canvas";
     }
 
     public ngOnInit(): void {
@@ -42,9 +38,8 @@ export class GameViewComponent implements OnInit {
 
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
-            // this.imagePair = imagePair;
-            this.loadCanvas(this.modifiedCanvasID, imagePair.url_modified);
-            this.loadCanvas(this.originalCanvasID, imagePair.url_original);
+            this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
+            this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
         });
     }
 
@@ -56,10 +51,10 @@ export class GameViewComponent implements OnInit {
             this.pixelRestorationService.restoreImage);
     }
 
-    public loadCanvas(canvasID: string, imageSrc: string): void {
-        this.canvas = (document.getElementById(canvasID) as HTMLCanvasElement);
-        this.canvas.addEventListener("click", this.getClickPosition.bind(this));
-        const canvasContext: CanvasRenderingContext2D | null = this.canvas.getContext("2d");
+    // tslint:disable-next-line:no-any
+    public loadCanvas(canvas: any, imageSrc: string): void {
+        canvas.addEventListener("click", this.getClickPosition.bind(this));
+        const canvasContext: CanvasRenderingContext2D | null = canvas.getContext("2d");
         const image: HTMLImageElement = new Image();
         image.src = imageSrc;
         image.onload = () => {
