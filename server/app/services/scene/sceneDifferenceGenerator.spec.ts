@@ -12,7 +12,9 @@ describe("SceneDifferenceGenerator", () => {
             dimensions: [2, 2, 3],
             type: GeometricShape.CUBE,
             position: {
-                
+                x: 10,
+                y: 20,
+                z: 5,
             },
             texture: null,
         },
