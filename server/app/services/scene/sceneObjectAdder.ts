@@ -1,7 +1,6 @@
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
-import { GeometricShape, ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
-import { EnumUtils } from "../../utils/enumUtils";
+import { ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
 import { SceneTransformation } from "./sceneTransformation";
 
 /**
@@ -12,9 +11,10 @@ export class SceneObjectAdder implements SceneTransformation {
                                modifications: ICommonSceneModifications): void {
     }
 
-    private chooseRandomShape(): GeometricShape {
+    /*private chooseRandomShape(): GeometricShape {
         const indexOfTransformation: number = Math.floor(Math.random() * EnumUtils.enumLength(GeometricShape));
 
         return GeometricShape[GeometricShape[indexOfTransformation]];
     }
+    */
 }
