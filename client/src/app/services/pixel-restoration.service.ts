@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { ICommonReveal } from "../../../../common/model/reveal";
-// import { IPixel } from "../../Objects/Pixel";
 
 @Injectable({
     providedIn: "root",

@@ -15,3 +15,7 @@ export interface IGameCardController {
 export interface IDifferenceController {
     router: Router;
 }
+
+export interface ISceneController {
+    router: Router;
+}
