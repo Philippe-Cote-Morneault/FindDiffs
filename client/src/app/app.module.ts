@@ -15,6 +15,7 @@ import { InitialViewComponent } from "./initial-view/initial-view.component";
 import { GameCardLoaderService } from "./services/game-card-loader.service";
 import { UserService } from "./services/user.service";
 import { GameSimplePovComponent } from './game-simple-pov/game-simple-pov.component';
+import { GameFreePovComponent } from './game-free-pov/game-free-pov.component';
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import { GameSimplePovComponent } from './game-simple-pov/game-simple-pov.compon
         GameViewComponent,
         CreateGameFreeViewComponent,
         GameSimplePovComponent,
+        GameFreePovComponent,
     ],
     imports: [
         BrowserModule,
