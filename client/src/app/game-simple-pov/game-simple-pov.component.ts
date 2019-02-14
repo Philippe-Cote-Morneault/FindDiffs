@@ -15,6 +15,37 @@ export class GameSimplePovComponent implements OnInit {
     this.modifiedCanvasID = "modified_canvas";
    }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+  this.getImagePairById();
+  }
 
+  private getImagePairById(): void {
+    this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
+        // this.imagePair = imagePair;
+        this.loadCanvas(this.modifiedCanvasID, imagePair.url_modified);
+        this.loadCanvas(this.originalCanvasID, imagePair.url_original);
+    });
+  }
+
+      // tslint:disable-next-line:no-any
+      public getClickPosition(e: any): void {
+        const xPosition: number = e.layerX;
+        const yPosition: number = e.layerY;
+        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(
+            this.pixelRestorationService.restoreImage);
+    }
+
+    public loadCanvas(canvasID: string, imageSrc: string): void {
+        this.canvas = (document.getElementById(canvasID) as HTMLCanvasElement);
+        this.canvas.addEventListener("click", this.getClickPosition.bind(this));
+        const canvasContext: CanvasRenderingContext2D | null = this.canvas.getContext("2d");
+        const image: HTMLImageElement = new Image();
+        image.src = imageSrc;
+        image.onload = () => {
+            if (canvasContext) {
+                canvasContext.drawImage(image, 0, 0);
+            }
+        };
+        image.crossOrigin = "Anonymous";
+    }
 }
