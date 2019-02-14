@@ -9,7 +9,6 @@ import { GamesCardService } from "../services/games-card.service";
     styleUrls: ["./game-view.component.css"],
 })
 export class GameViewComponent implements OnInit {
-    // public imagePair: ICommonImagePair;
     private id: string;
     public gameCard: ICommonGameCard;
     private differenceCounterUser: number;
