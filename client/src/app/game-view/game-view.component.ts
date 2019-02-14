@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { ICommonGameCard } from "../../../../common/model/gameCard";
+import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/games-card.service";
 
 @Component({

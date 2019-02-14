@@ -1,5 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ImagePairService } from "../services/image-pair.service";
 import { PixelPositionService } from "../services/pixel-position.service";
@@ -11,6 +12,7 @@ import { PixelRestorationService } from "../services/pixel-restoration.service";
   styleUrls: ["./game-simple-pov.component.css"],
 })
 export class GameSimplePovComponent implements OnInit {
+  @Input() public gameCard: ICommonGameCard;
   private id: string;
   private originalCanvasID: string;
   private modifiedCanvasID: string;
@@ -26,10 +28,10 @@ export class GameSimplePovComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.route.params.subscribe((params) => {
+    /*this.route.params.subscribe((params) => {
       this.id = params["id"];
     });
-
+    */
     this.getImagePairById();
   }
 
