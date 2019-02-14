@@ -19,7 +19,7 @@ export class AdminViewComponent {
         }
     }
 
-    public leaveAdminMode(): void {
-        this.router.navigateByUrl("/gamesList");
+    public async leaveAdminMode(): Promise<void> {
+        await this.router.navigateByUrl("/gamesList");
     }
 }
