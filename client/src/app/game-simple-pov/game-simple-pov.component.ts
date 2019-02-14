@@ -1,4 +1,8 @@
 import { Component, OnInit } from "@angular/core";
+import { ICommonImagePair } from "../../../../common/model/imagePair";
+import { ImagePairService } from "../services/image-pair.service";
+import { PixelPositionService } from "../services/pixel-position.service";
+import { PixelRestorationService } from "../services/pixel-restoration.service";
 
 @Component({
   selector: "app-game-simple-pov",
@@ -10,7 +14,10 @@ export class GameSimplePovComponent implements OnInit {
   private modifiedCanvasID: string;
   private canvas: HTMLCanvasElement;
 
-  public constructor() {
+  public constructor(
+    public pixelPositionService: PixelPositionService,
+    public pixelRestorationService: PixelRestorationService,
+    public imagePairService: ImagePairService) {
     this.originalCanvasID = "original_canvas";
     this.modifiedCanvasID = "modified_canvas";
    }
