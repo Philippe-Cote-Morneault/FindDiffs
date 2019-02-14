@@ -1,6 +1,7 @@
-import { ColorGenerator } from "../../../../common/model/colorGenerator";
+import { v4 as uuid } from "uuid";
 import { ICommon3DPosition } from "../../../../common/model/positions";
 import { GeometricShape, ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
+import { ColorUtils } from "../../utils/colorUtils";
 import { EnumUtils } from "../../utils/enumUtils";
 import { SceneObjectPosition } from "./sceneObjectPosition";
 
@@ -93,8 +94,8 @@ export class SceneGenerator {
     public addObj3Params(typeObj: GeometricShape, sceneObjects: ICommonSceneObject[], positionObject:
                    { modelPosition: ICommon3DPosition; position: number; }): void {
         sceneObjects.push({
-            id: "obj1",
-            color: ColorGenerator.generateColor(),
+            id: uuid(),
+            color: ColorUtils.generateColor(),
             dimensions: [1, 1, 1],
             type: typeObj,
             position: positionObject.modelPosition,
@@ -105,8 +106,8 @@ export class SceneGenerator {
     public addCylinder(typeObj: GeometricShape, sceneObjects: ICommonSceneObject[], positionObject:
         { modelPosition: ICommon3DPosition; position: number; }): void {
         sceneObjects.push({
-            id: "obj1",
-            color: ColorGenerator.generateColor(),
+            id: uuid(),
+            color: ColorUtils.generateColor(),
             dimensions: [1, 1, 1, 1],
             type: typeObj,
             position: positionObject.modelPosition,
@@ -117,8 +118,8 @@ export class SceneGenerator {
     public addPyramid(typeObj: GeometricShape, sceneObjects: ICommonSceneObject[], positionObject:
         { modelPosition: ICommon3DPosition; position: number; }): void {
         sceneObjects.push({
-            id: "obj1",
-            color: ColorGenerator.generateColor(),
+            id: uuid(),
+            color: ColorUtils.generateColor(),
             dimensions: [1, 1],
             type: typeObj,
             position: positionObject.modelPosition,
