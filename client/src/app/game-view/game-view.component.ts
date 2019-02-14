@@ -16,9 +16,6 @@ export class GameViewComponent implements OnInit {
     private differenceCounterUser: number;
     private differenceCounterOpponent: number;
     private isSolo: boolean;
-    private canvas: HTMLCanvasElement;
-    private originalCanvasID: string;
-    private modifiedCanvasID: string;
 
     public constructor(
         private route: ActivatedRoute,
@@ -28,8 +25,6 @@ export class GameViewComponent implements OnInit {
         this.isSolo = true;
         this.differenceCounterOpponent = 0;
         this.differenceCounterUser = 0;
-        this.originalCanvasID = "original_canvas";
-        this.modifiedCanvasID = "modified_canvas";
     }
 
     public ngOnInit(): void {

@@ -6,8 +6,14 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./game-simple-pov.component.css"],
 })
 export class GameSimplePovComponent implements OnInit {
+  private originalCanvasID: string;
+  private modifiedCanvasID: string;
+  private canvas: HTMLCanvasElement;
 
-  public constructor() { }
+  public constructor() {
+    this.originalCanvasID = "original_canvas";
+    this.modifiedCanvasID = "modified_canvas";
+   }
 
   public ngOnInit(): void { }
 
