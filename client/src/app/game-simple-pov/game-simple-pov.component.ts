@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
@@ -33,7 +33,15 @@ export class GameSimplePovComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.id = params["id"];
     });
+
     this.getGameById();
+  }
+
+  private getGameById(): void {
+    this.gameCardService.getGameById(this.id).subscribe((gameCard: ICommonGameCard) => {
+      this.gameCard = gameCard;
+    });
+
     this.getImagePairById();
   }
 
@@ -41,12 +49,6 @@ export class GameSimplePovComponent implements OnInit {
     this.imagePairService.getImagePairById(this.gameCard.resource_id).subscribe((imagePair: ICommonImagePair) => {
       this.loadCanvas(this.modifiedCanvasID, imagePair.url_modified);
       this.loadCanvas(this.originalCanvasID, imagePair.url_original);
-    });
-  }
-
-  private getGameById(): void {
-    this.gameCardService.getGameById(this.id).subscribe((gameCard: ICommonGameCard) => {
-        this.gameCard = gameCard;
     });
   }
 
