@@ -1,0 +1,19 @@
+#game_image_wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 480px;
+    width: 100%;
+}
+
+#image_modified, #image_original {
+    display: block;
+    justify-content: center;
+    width: 640px;
+    height: 480px;
+}
+
+#original_canvas, #modified_canvas {
+  width: 99%;
+  height: 99%;
+}

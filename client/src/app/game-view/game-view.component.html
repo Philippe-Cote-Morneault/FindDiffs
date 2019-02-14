@@ -9,12 +9,8 @@
       <p> Messages: </p>
     </div>
   </div>
-  <div id="game_image_wrapper">
-    <div id="image_original">
-      <canvas id="original_canvas" width="640px" height="480px" style="border:1px solid #000000;"></canvas>
-    </div>
-    <div id="image_modified">
-      <canvas id="modified_canvas" width="640px" height="480px" style="border:1px solid #000000;"></canvas>
-    </div>
+  <div *ngIf="(gameCard.pov === Simple); then thenBlock else elseBlock">
+      <ng-template #thenBlock> <app-game-simple-pov></app-game-simple-pov> </ng-template>
+      <ng-template #elseBlock> <app-game-free-pov></app-game-free-pov> </ng-template> 
   </div>
 </div>
