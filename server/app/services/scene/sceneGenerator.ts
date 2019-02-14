@@ -1,3 +1,4 @@
+import { ColorGenerator } from "../../../../common/model/colorGenerator";
 import { GeometricShapes, ICommonPositionObjects, ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
 import { SceneObjectPosition } from "./sceneObjectPosition";
 
@@ -30,13 +31,94 @@ export class SceneGenerator {
         }
     }
 
-    public generateScene(): void {
-        const CUBE: number = 3;
-        const sceneObjects: ICommonSceneObject[] = new Array(Math.pow(this.sceneObjectPosition.sizeScene, CUBE));
+    public generateScene(): ICommonSceneObject[] {
+        this.numberElementsPerShapeGenerator();
 
-        for (let i: number = 0; i < this.totalShapes; i++) {
-            const position: object = this.sceneObjectPosition.modelPosition();
+        const CUBE: number = 3;
+        const sceneObjects: ICommonSceneObject[] = new Array(this.totalShapes);
+        const validPosition: boolean[] = new Array(Math.pow(this.sceneObjectPosition.sizeScene, CUBE));
+        validPosition.fill(true);
+        for (let i: number = 0; i < GeometricShapes.NUMBER_ELEMENTS - 1; i++) {
+            const numberShape: number = (this.shapes.get(i)) as number;
+            if (numberShape) {
+                for (let j: number = 0; j < numberShape; j++) {
+                    // tslint:disable-next-line
+                    let positionObject: { modelPosition: ICommonPositionObjects, position: number } = this.sceneObjectPosition.modelPosition();
+                    positionObject = this.waitUntilValidPosition(validPosition, positionObject);
+                    this.addModel(sceneObjects, positionObject);
+                }
+            }
         }
 
+        return sceneObjects;
+    }
+
+    public waitUntilValidPosition(validPosition: boolean[], positionObject:
+                                                            { modelPosition: ICommonPositionObjects; position: number; }):
+                                                            { modelPosition: ICommonPositionObjects; position: number } {
+        while (validPosition[positionObject.position] === false) {
+            positionObject = this.sceneObjectPosition.modelPosition();
+        }
+
+        return positionObject;
+    }
+
+    public addModel(sceneObjects: ICommonSceneObject[], positionObject:
+                    { modelPosition: ICommonPositionObjects; position: number; }): void {
+        switch (+GeometricShapes) {
+            case GeometricShapes.CONE:
+                this.addObj3Params(GeometricShapes.CONE, sceneObjects, positionObject);
+                break;
+            case GeometricShapes.CUBE:
+                this.addObj3Params(GeometricShapes.CUBE, sceneObjects, positionObject);
+                break;
+            case GeometricShapes.CYLINDER:
+                this.addCylinder(GeometricShapes.CYLINDER, sceneObjects, positionObject);
+                break;
+                break;
+            case GeometricShapes.SPHERE:
+                this.addObj3Params(GeometricShapes.SPHERE, sceneObjects, positionObject);
+                break;
+            case GeometricShapes.SQUARED_BASE_PYRAMID:
+                this.addPyramid(GeometricShapes.SQUARED_BASE_PYRAMID, sceneObjects, positionObject);
+                break;
+            default: break;
+        }
+    }
+
+    public addObj3Params(typeObj: GeometricShapes, sceneObjects: ICommonSceneObject[], positionObject:
+                   { modelPosition: ICommonPositionObjects; position: number; }): void {
+        sceneObjects.push({
+            id: "obj1",
+            color: ColorGenerator.generateColor(),
+            dimensions: [1, 1, 1],
+            type: typeObj,
+            position: positionObject.modelPosition,
+            texture: 0,
+        });
+    }
+
+    public addCylinder(typeObj: GeometricShapes, sceneObjects: ICommonSceneObject[], positionObject:
+        { modelPosition: ICommonPositionObjects; position: number; }): void {
+        sceneObjects.push({
+            id: "obj1",
+            color: ColorGenerator.generateColor(),
+            dimensions: [1, 1, 1, 1],
+            type: typeObj,
+            position: positionObject.modelPosition,
+            texture: 0,
+        });
+    }
+
+    public addPyramid(typeObj: GeometricShapes, sceneObjects: ICommonSceneObject[], positionObject:
+        { modelPosition: ICommonPositionObjects; position: number; }): void {
+        sceneObjects.push({
+            id: "obj1",
+            color: ColorGenerator.generateColor(),
+            dimensions: [1, 1],
+            type: typeObj,
+            position: positionObject.modelPosition,
+            texture: 0,
+        });
     }
 }
