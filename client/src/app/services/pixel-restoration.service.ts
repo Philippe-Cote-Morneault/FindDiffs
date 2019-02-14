@@ -1,19 +1,19 @@
 import { Injectable } from "@angular/core";
 import { ICommonReveal } from "../../../../common/model/reveal";
-// import { IPixel } from "../../Objects/Pixel";
 
 @Injectable({
     providedIn: "root",
 })
 export class PixelRestorationService {
+    public static pixelDimension: number = 1;
     public modifiedCanvas: HTMLCanvasElement | null;
     public originalCanvas: HTMLCanvasElement | null;
     public context: CanvasRenderingContext2D | null;
-    public pixelDimension: number = 1;
     /**
      * name
      */
      // tslint:disable:no-magic-numbers
+
     public restoreImage(response: ICommonReveal): void {
         if (response.hit) {
             this.originalCanvas = (document.getElementById("original_canvas")) as HTMLCanvasElement;
@@ -21,7 +21,8 @@ export class PixelRestorationService {
                 this.context = this.originalCanvas.getContext("2d");
                 response.pixels_affected.forEach((element) => {
                     if (this.context) {
-                        const pixel: ImageData = this.context.getImageData(element.x, element.y, this.pixelDimension, this.pixelDimension);
+                        const pixel: ImageData = this.context.getImageData(
+                            element.x, element.y, PixelRestorationService.pixelDimension, PixelRestorationService.pixelDimension);
                         this.addPixel(pixel, element.x, element.y);
                     }
                 });
