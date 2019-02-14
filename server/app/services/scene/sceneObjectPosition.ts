@@ -1,11 +1,11 @@
-import { ICommonPositionObjects } from "../../../../common/model/scene/sceneObject";
+import { ICommon3DPosition } from "../../../../common/model/positions";
 
 export class SceneObjectPosition {
     public readonly sizeScene: number = 1000;
     private readonly SQUARE: number = 2;
     private readonly CUBE: number = 3;
 
-    public modelPosition(): {modelPosition: ICommonPositionObjects; position: number } {
+    public modelPosition(): {modelPosition: ICommon3DPosition; position: number } {
         const TEN: number = 10;
         const POWER_HUNDRED: number = 3;
         const POWER_THOUSANDS: number = 6;
@@ -17,7 +17,7 @@ export class SceneObjectPosition {
 
         ((position > this.sizeScene) && (z - 1 >= 0)) ? z -= 1 : z = z;
 
-        const modelPosition: ICommonPositionObjects = {x: 0, y: 0, z: 0};
+        const modelPosition: ICommon3DPosition = {x: 0, y: 0, z: 0};
         modelPosition.x = x;
         modelPosition.y = y;
         modelPosition.z = z;
