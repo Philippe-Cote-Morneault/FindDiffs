@@ -1,6 +1,6 @@
 export interface ICommonSceneObject {
     id: string;
-    color: string;
+    color: number;
     dimensions: number[];
     type: GeometricShapes;
     position: ICommonPositionObjects;
