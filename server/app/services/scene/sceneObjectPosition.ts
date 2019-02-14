@@ -15,9 +15,7 @@ export class SceneObjectPosition {
         const y: number = ((position % Math.pow(this.sizeScene, this.SQUARE)) - position % this.sizeScene) / Math.pow(TEN, POWER_HUNDRED);
         const x: number = ((position) - (position % Math.pow(this.sizeScene, this.SQUARE))) / Math.pow(TEN, POWER_THOUSANDS);
 
-        if (position > this.sizeScene) {
-            z -= 1;
-        }
+        ((position > this.sizeScene) && (z - 1 >= 0)) ? z -= 1 : z = z;
 
         const modelPosition: ICommonPositionObjects = {x: 0, y: 0, z: 0};
         modelPosition.x = x;
