@@ -16,6 +16,13 @@ export interface IUserService {
     delete(id: string): Promise<string>;
 }
 
+export interface ISceneService {
+    post(req: Request): Promise<string>;
+    postModified(req: Request): Promise<string>;
+    single(id: string): Promise<string>;
+    singleModified(id: string): Promise<string>;
+}
+
 export interface IGameCardService {
     post(req: Request): Promise<string>;
     index(): Promise<string>;
