@@ -41,7 +41,7 @@ export class GamesCardViewComponent implements OnInit {
         if (this.isInAdminView) {
             this.deleteGameCard();
         } else {
-            await this.router.navigateByUrl("/game/" + this.gameCard.resource_id);
+            await this.router.navigateByUrl("/game/" + this.gameCard.id);
         }
     }
 

@@ -12,7 +12,7 @@ import { PixelRestorationService } from "../services/pixel-restoration.service";
 })
 export class GameViewComponent implements OnInit {
     // public imagePair: ICommonImagePair;
-    private imagePairId: string;
+    private id: string;
     private differenceCounterUser: number;
     private differenceCounterOpponent: number;
     private isSolo: boolean;
@@ -29,7 +29,7 @@ export class GameViewComponent implements OnInit {
 
     public ngOnInit(): void {
         this.route.params.subscribe((params) => {
-            this.imagePairId = params["id"];
+            this.id = params["id"];
         });
 
         this.getImagePairById();
