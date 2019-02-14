@@ -1,9 +1,6 @@
+import { ICommon2DPosition } from "./positions";
+
 export interface ICommonReveal{
     hit: boolean; 
-    pixels_affected: ICommonPosition[];
-}
-
-export interface ICommonPosition{
-    x: number;
-    y: number;
+    pixels_affected: ICommon2DPosition[];
 }
