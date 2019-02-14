@@ -8,33 +8,46 @@ export class PixelRestorationService {
     public static pixelDimension: number = 1;
     public modifiedCanvas: HTMLCanvasElement | null;
     public originalCanvas: HTMLCanvasElement | null;
-    public context: CanvasRenderingContext2D | null;
+    public originalContext: CanvasRenderingContext2D | null;
+    public modifiedContext: CanvasRenderingContext2D | null;
     /**
      * name
      */
-     // tslint:disable:no-magic-numbers
+    // tslint:disable:no-magic-numbers
 
     public restoreImage(response: ICommonReveal): void {
         if (response.hit) {
             this.originalCanvas = (document.getElementById("original_canvas")) as HTMLCanvasElement;
             if (this.originalCanvas) {
-                this.context = this.originalCanvas.getContext("2d");
+                this.originalContext = this.originalCanvas.getContext("2d");
                 response.pixels_affected.forEach((element) => {
-                    if (this.context) {
-                        const pixel: ImageData = this.context.getImageData(
+                    if (this.originalContext) {
+                        const imageData: ImageData = this.originalContext.getImageData(
                             element.x, element.y, PixelRestorationService.pixelDimension, PixelRestorationService.pixelDimension);
-                        this.addPixel(pixel, element.x, element.y);
+                        this.modifiedCanvas = (document.getElementById("modified_canvas")) as HTMLCanvasElement;
+                        if (this.modifiedCanvas) {
+                            this.modifiedContext = this.modifiedCanvas.getContext("2d");
+                            if (this.modifiedContext) {
+                                this.modifiedContext.clearRect(element.x, element.y, imageData.width, imageData.height);
+                                this.modifiedContext.fillStyle = "rgba(" + imageData.data[0]
+                                    + "," + imageData.data[1]
+                                    + "," + imageData.data[2]
+                                    + "," + imageData.data[3] + ")";
+                                this.modifiedContext.fillRect(element.x, element.y, imageData.width, imageData.height);
+                            }
+                        }
                     }
                 });
             }
         }
     }
 
-    public addPixel(imageData: ImageData, posX: number, posY: number): void {
+    /*public addPixel(imageData: ImageData, posX: number, posY: number): void {
         this.modifiedCanvas = (document.getElementById("modified_canvas")) as HTMLCanvasElement;
         if (this.modifiedCanvas) {
             this.context = this.modifiedCanvas.getContext("2d");
             if (this.context) {
+                this.context.clearRect(posX, posY, imageData.width, imageData.height);
                 this.context.fillStyle = "rgba(" + imageData.data[0]
                     + "," + imageData.data[1]
                     + "," + imageData.data[2]
@@ -42,5 +55,5 @@ export class PixelRestorationService {
                 this.context.fillRect(posX, posY, imageData.width, imageData.height);
             }
         }
-    }
+    }*/
 }
