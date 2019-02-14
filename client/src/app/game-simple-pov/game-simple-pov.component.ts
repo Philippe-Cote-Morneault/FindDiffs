@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
+import { GamesCardService } from "../services/games-card.service";
 import { ImagePairService } from "../services/image-pair.service";
 import { PixelPositionService } from "../services/pixel-position.service";
 import { PixelRestorationService } from "../services/pixel-restoration.service";
@@ -12,7 +13,7 @@ import { PixelRestorationService } from "../services/pixel-restoration.service";
   styleUrls: ["./game-simple-pov.component.css"],
 })
 export class GameSimplePovComponent implements OnInit {
-  @Input() public gameCard: ICommonGameCard;
+  public gameCard: ICommonGameCard;
   private id: string;
   private originalCanvasID: string;
   private modifiedCanvasID: string;
@@ -22,23 +23,30 @@ export class GameSimplePovComponent implements OnInit {
     private route: ActivatedRoute,
     public pixelPositionService: PixelPositionService,
     public pixelRestorationService: PixelRestorationService,
-    public imagePairService: ImagePairService) {
+    public imagePairService: ImagePairService,
+    public gameCardService: GamesCardService) {
     this.originalCanvasID = "original_canvas";
     this.modifiedCanvasID = "modified_canvas";
   }
 
   public ngOnInit(): void {
-    /*this.route.params.subscribe((params) => {
+    this.route.params.subscribe((params) => {
       this.id = params["id"];
     });
-    */
+    this.getGameById();
     this.getImagePairById();
   }
 
   private getImagePairById(): void {
-    this.imagePairService.getImagePairById(this.id).subscribe((imagePair: ICommonImagePair) => {
+    this.imagePairService.getImagePairById(this.gameCard.resource_id).subscribe((imagePair: ICommonImagePair) => {
       this.loadCanvas(this.modifiedCanvasID, imagePair.url_modified);
       this.loadCanvas(this.originalCanvasID, imagePair.url_original);
+    });
+  }
+
+  private getGameById(): void {
+    this.gameCardService.getGameById(this.id).subscribe((gameCard: ICommonGameCard) => {
+        this.gameCard = gameCard;
     });
   }
 

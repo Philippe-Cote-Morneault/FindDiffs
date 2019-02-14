@@ -9,8 +9,7 @@
       <p> Messages: </p>
     </div>
   </div>
-  <div *ngIf="(gameCard.pov === POVtype.Simple); then thenBlock else elseBlock">
+  <div *ngIf="povSimple; then thenBlock else elseBlock"></div>
       <ng-template #thenBlock> <app-game-simple-pov></app-game-simple-pov> </ng-template>
-      <ng-template #elseBlock> <app-game-free-pov></app-game-free-pov> </ng-template> 
-  </div>
+      <ng-template #elseBlock> <app-game-free-pov></app-game-free-pov> </ng-template>
 </div>

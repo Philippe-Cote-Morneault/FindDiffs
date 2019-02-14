@@ -10,7 +10,8 @@ import { GamesCardService } from "../services/games-card.service";
 })
 export class GameViewComponent implements OnInit {
     private id: string;
-    public gameCard: ICommonGameCard;
+    private gameCard: ICommonGameCard;
+    private povSimple: boolean;
     private differenceCounterUser: number;
     private differenceCounterOpponent: number;
     private isSolo: boolean;
@@ -21,6 +22,7 @@ export class GameViewComponent implements OnInit {
         this.isSolo = true;
         this.differenceCounterOpponent = 0;
         this.differenceCounterUser = 0;
+        this.povSimple = true;
     }
 
     public ngOnInit(): void {
@@ -29,11 +31,16 @@ export class GameViewComponent implements OnInit {
         });
 
         this.getGameById();
+        this.isSimpleView();
     }
 
     private getGameById(): void {
-    this.gameCardService.getGameById(this.id).subscribe((gameCard: ICommonGameCard) => {
-        this.gameCard = gameCard;
-    });
-  }
+        this.gameCardService.getGameById(this.id).subscribe((gameCard: ICommonGameCard) => {
+            this.gameCard = gameCard;
+        });
+    }
+
+    private isSimpleView(): void {
+        this.povSimple = (this.gameCard.pov === POVType.Simple);
+    }
 }
