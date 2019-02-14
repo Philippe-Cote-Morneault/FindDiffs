@@ -45,7 +45,8 @@ export class SceneGenerator {
                     // tslint:disable-next-line
                     let positionObject: { modelPosition: ICommonPositionObjects, position: number } = this.sceneObjectPosition.modelPosition();
                     positionObject = this.waitUntilValidPosition(validPosition, positionObject);
-                    this.addModel(sceneObjects, positionObject);
+                    validPosition[positionObject.position] = false;
+                    this.addModel(i, sceneObjects, positionObject);
                 }
             }
         }
@@ -63,9 +64,9 @@ export class SceneGenerator {
         return positionObject;
     }
 
-    public addModel(sceneObjects: ICommonSceneObject[], positionObject:
+    public addModel(type: number, sceneObjects: ICommonSceneObject[], positionObject:
                     { modelPosition: ICommonPositionObjects; position: number; }): void {
-        switch (+GeometricShapes) {
+        switch (type) {
             case GeometricShapes.CONE:
                 this.addObj3Params(GeometricShapes.CONE, sceneObjects, positionObject);
                 break;
