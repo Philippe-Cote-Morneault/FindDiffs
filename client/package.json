@@ -25,6 +25,7 @@
     "@types/sinon": "^7.0.5",
     "chai": "^4.2.0",
     "core-js": "2.5.4",
+    "ng4-loading-spinner": "^1.2.3",
     "rxjs": "~6.3.3",
     "sinon": "^7.2.3",
     "socket.io": "^2.2.0",

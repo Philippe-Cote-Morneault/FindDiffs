@@ -1,4 +1,3 @@
-import Axios, { AxiosResponse } from "axios";
 import { Request } from "express";
 import "reflect-metadata";
 import { Message } from "../../../../common/communication/message";
@@ -6,9 +5,9 @@ import { InvalidFormatException } from "../../../../common/errors/invalidFormatE
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
-import Config from "../../config";
 import { GameCard, IGameCard } from "../../model/schemas/gameCard";
 import { _e, R } from "../../strings";
+import { ApiRequest } from "../../utils/apiRequest";
 import { EnumUtils } from "../../utils/enumUtils";
 import { IGameCardService } from "../interfaces";
 import { Service } from "../service";
@@ -39,7 +38,7 @@ export class GameCardService extends Service implements IGameCardService {
         const povType: POVType = EnumUtils.enumFromString<POVType>(req.body.pov, POVType) as POVType;
         switch (povType) {
             case POVType.Simple:
-                const imagePair: ICommonImagePair = await this.getImagePairId(req.body[this.RESOURCE_ID]);
+                const imagePair: ICommonImagePair = await ApiRequest.getImagePairId(req.body[this.RESOURCE_ID]);
                 if (imagePair.differences_count !== this.NUMBER_OF_DIFFERENCES) {
                     throw new InvalidFormatException(_e(R.ERROR_DIFFERENCE_INVALID, [imagePair.differences_count]));
                 }
@@ -47,7 +46,7 @@ export class GameCardService extends Service implements IGameCardService {
             case POVType.Free:
                 // tslint:disable-next-line:no-suspicious-comment
                 // TODO Change this for an other resource
-                await this.getImagePairId(req.body[this.RESOURCE_ID]);
+                await ApiRequest.getImagePairId(req.body[this.RESOURCE_ID]);
                 break;
             default:
         }
@@ -90,7 +89,7 @@ export class GameCardService extends Service implements IGameCardService {
 
         return GameCard.findById(id).then(async (doc: IGameCard) => {
             if (!doc) {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
 
             await this.makeChanges(req, doc);
@@ -105,7 +104,7 @@ export class GameCardService extends Service implements IGameCardService {
             if (err.name === "InvalidFormatException") {
                 throw err;
             }
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
 
     }
@@ -127,13 +126,13 @@ export class GameCardService extends Service implements IGameCardService {
     public async single(id: string): Promise<string> {
         return GameCard.findById(id).then(async(doc: IGameCard) => {
             if (!doc) {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
 
             return JSON.stringify(this.getCommonGameCard(doc));
         })
         .catch((err: Error) => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }
 
@@ -141,7 +140,7 @@ export class GameCardService extends Service implements IGameCardService {
         return GameCard.findById(id)
         .then(async (doc: IGameCard) => {
             if (!doc) {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
             await doc.remove();
             const message: Message = {
@@ -151,22 +150,12 @@ export class GameCardService extends Service implements IGameCardService {
 
             return JSON.stringify(message); })
         .catch((error: Error) => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }
 
     private getCommonGameCard(mongooseGameCard: IGameCard): ICommonGameCard {
         return (mongooseGameCard as ICommonGameCard);
-    }
-
-    private async getImagePairId(id: string): Promise<ICommonImagePair> {
-        return Axios.get<ICommonImagePair>(`http://${Config.hostname}:${Config.port}/image-pair/${id}`)
-        .then((response: AxiosResponse<ICommonImagePair>) => {
-            return response.data;
-        })
-        .catch(() => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
-        });
     }
 
 }

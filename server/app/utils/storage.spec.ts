@@ -7,6 +7,12 @@ import {Storage} from "./storage";
 /*tslint:disable no-magic-numbers */
 
 describe("utils/Storage", () => {
+    describe("fs tests", () => {
+        it("Should not throw any error if there is an already existing folder.", () => {
+            fs.mkdirSync(Storage.STORAGE_PATH, {recursive: true});
+            fs.mkdirSync(Storage.STORAGE_PATH, {recursive: true});
+        });
+    });
     describe("exists()", () => {
         it("Should return true if a file exists", () => {
             const fileName: string = "file";

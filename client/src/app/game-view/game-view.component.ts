@@ -11,11 +11,11 @@ import { PixelRestorationService } from "../services/pixel-restoration.service";
     styleUrls: ["./game-view.component.css"],
 })
 export class GameViewComponent implements OnInit {
-    //public imagePair: ICommonImagePair;
+    // public imagePair: ICommonImagePair;
     private imagePairId: string;
-    private differenceCounterUser: number;
-    private differenceCounterOpponent: number;
-    private isSolo: boolean;
+    // private differenceCounterUser: number;
+    // private differenceCounterOpponent: number;
+    // private isSolo: boolean;
     private canvas: HTMLCanvasElement;
     private originalCanvasID: string;
     private modifiedCanvasID: string;
@@ -25,9 +25,9 @@ export class GameViewComponent implements OnInit {
         public pixelPositionService: PixelPositionService,
         public pixelRestorationService: PixelRestorationService,
         public imagePairService: ImagePairService) {
-        this.isSolo = false;
-        this.differenceCounterOpponent = 0;
-        this.differenceCounterUser = 0;
+        // this.isSolo = false;
+        // this.differenceCounterOpponent = 0;
+        // this.differenceCounterUser = 0;
         this.originalCanvasID = "original_canvas";
         this.modifiedCanvasID = "modified_canvas";
     }
@@ -38,13 +38,11 @@ export class GameViewComponent implements OnInit {
         });
 
         this.getImagePairById();
-        this.canvas = (document.getElementById("original_canvas") as HTMLCanvasElement);
-        this.canvas.addEventListener("click", this.getClickPosition.bind(this));
     }
 
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
-            //this.imagePair = imagePair;
+            // this.imagePair = imagePair;
             this.loadCanvas(this.modifiedCanvasID, imagePair.url_modified);
             this.loadCanvas(this.originalCanvasID, imagePair.url_original);
         });
@@ -64,8 +62,11 @@ export class GameViewComponent implements OnInit {
         const canvasContext: CanvasRenderingContext2D | null = this.canvas.getContext("2d");
         const image: HTMLImageElement = new Image();
         image.src = imageSrc;
-        if (canvasContext) {
-            canvasContext.drawImage(image, 0, 0);
-        }
+        image.onload = () => {
+            if (canvasContext) {
+                canvasContext.drawImage(image, 0, 0);
+            }
+        };
+        image.crossOrigin = "Anonymous";
     }
 }

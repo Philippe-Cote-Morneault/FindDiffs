@@ -7,15 +7,14 @@ import { R } from "../strings";
 export class ApiRequest {
 
     private static BASE_URL: string = `http://${Config.hostname}:${Config.port}`;
-    // tslint:disable-next-line:no-suspicious-comment
-    // TODO include this in the gamecard service
+
     public static async  getImagePairId(id: string): Promise<ICommonImagePair> {
         return Axios.get<ICommonImagePair>(`${ApiRequest.BASE_URL}/image-pair/${id}`)
         .then((response: AxiosResponse<ICommonImagePair>) => {
             return response.data;
         })
         .catch(() => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }
 
@@ -24,7 +23,7 @@ export class ApiRequest {
             responseType: "arraybuffer",
           }).then((response: AxiosResponse) => Buffer.from(response.data, "binary").buffer)
           .catch(() => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
           });
     }
 

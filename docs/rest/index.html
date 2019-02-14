@@ -320,7 +320,8 @@
   "id": 4343242
 }
 </code></pre></div></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_scene__id__modified"><span class="parent">/scene/{id}</span>/modified</a> <span class="methods"><a href="#scene__id__modified_post"><span class="badge badge_post">post</span></a> <a href="#scene__id__modified_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_scene__id__modified" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#scene__id__modified_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Create a modified version of the scene</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#scene__id__modified_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Return a modified scene</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="scene__id__modified_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/scene/{id}</span>/modified</h4></div><div class="modal-body"><div class="alert alert-info"><p>Create a modified version of the scene</p></div><ul class="nav nav-tabs"><li class="active"><a href="#scene__id__modified_post_request" data-toggle="tab">Request</a></li><li><a href="#scene__id__modified_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="scene__id__modified_post_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Body</h3><p><strong>Media type</strong>: multipart/form-data</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>add</strong>: <em>(boolean)</em></li><li><strong>delete</strong>: <em>(boolean)</em></li><li><strong>color</strong>: <em>(boolean)</em></li></ul></div><div class="tab-pane" id="scene__id__modified_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
-  "scene_objects": [
+  "id": 4343242,
+  "addedObjects": [
     {
       "color": 43432432,
       "dimensions": [
@@ -339,12 +340,17 @@
       "texture": null
     }
   ],
-  "bg_color": 434343,
-  "texture": null,
-  "id": 4343242
+  "deletedObjects": ["323232"],
+  "colorChangedObjects": [
+    {
+      key:"3243",
+      value: 3232323
+    }
+  ]
 }
 </code></pre></div></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="scene__id__modified_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/scene/{id}</span>/modified</h4></div><div class="modal-body"><div class="alert alert-info"><p>Return a modified scene</p></div><ul class="nav nav-tabs"><li class="active"><a href="#scene__id__modified_get_request" data-toggle="tab">Request</a></li><li><a href="#scene__id__modified_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="scene__id__modified_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="scene__id__modified_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
-  "scene_objects": [
+  "id": 4343242,
+  "addedObjects": [
     {
       "color": 43432432,
       "dimensions": [
@@ -363,9 +369,13 @@
       "texture": null
     }
   ],
-  "bg_color": 434343,
-  "texture": null,
-  "id": 4343242
+  "deletedObjects": ["323232"],
+  "colorChangedObjects": [
+    {
+      key:"3243",
+      value: 3232323
+    }
+  ]
 }
 </code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="difference" class="panel-title">/difference</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_difference_free"><span class="parent">/difference</span>/free</a> <span class="methods"></span></h4></div><div id="panel_difference_free" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Not implemented yet</p></div><div class="list-group"></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_difference_simple"><span class="parent">/difference</span>/simple</a> <span class="methods"><a href="#difference_simple_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_difference_simple" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#difference_simple_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Check for a difference in the simple game type</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="difference_simple_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/difference</span>/simple</h4></div><div class="modal-body"><div class="alert alert-info"><p>Check for a difference in the simple game type</p></div><ul class="nav nav-tabs"><li class="active"><a href="#difference_simple_post_request" data-toggle="tab">Request</a></li><li><a href="#difference_simple_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="difference_simple_post_request"><h3>Body</h3><p><strong>Media type</strong>: multipart/form-data</p><p><strong>Type</strong>: object</p><strong>Properties</strong><ul><li><strong>image_pair_id</strong>: <em>required (string)</em></li><li><strong>x</strong>: <em>required (integer)</em></li><li><strong>y</strong>: <em>required (integer)</em></li></ul></div><div class="tab-pane" id="difference_simple_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>A difference was found</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
   "hit":true,
