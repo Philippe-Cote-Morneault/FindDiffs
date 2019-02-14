@@ -30,12 +30,12 @@ export class ImagePairService extends Service implements IImagePairService {
         return ImagePair.findById(id)
             .then((doc: IImagePair) => {
                 if (!doc) {
-                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                    throw new NotFoundException(R.ERROR_UNKNOWN_ID);
                 }
 
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             });
     }
 
@@ -64,7 +64,7 @@ export class ImagePairService extends Service implements IImagePairService {
             if (error.name === "FileNotFoundException") {
                 throw error;
             } else {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
         });
     }

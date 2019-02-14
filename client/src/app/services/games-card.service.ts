@@ -22,8 +22,14 @@ export class GamesCardService extends HTTPService {
         );
     }
 
+    public getGameById(gameCardId: string): Observable<ICommonGameCard | Message> {
+        return this.http.get<ICommonGameCard>(`${SERVER_URL}/gamecard/${gameCardId}`).pipe(
+            catchError((error) => this.handleError(error)),
+        );
+    }
+
     public addGameCard(gameName: string, imagePairId: string, pov: POVType): Observable<ICommonGameCard | Message> {
-        const requestBody: Object = { "name": gameName, "image-pair-id": imagePairId, "pov": "Simple" };
+        const requestBody: Object = { "name": gameName, "resource_id": imagePairId, "pov": "Simple" };
 
         return this.http.post<ICommonGameCard>(`${SERVER_URL}/gamecard/`, requestBody).pipe(
             catchError((error) => this.handleError(error)),

@@ -25,13 +25,7 @@ body{
     color: white;
     background-color: red;
   }
-  .input-group{
-    margin-left: 20%;
-    margin-right: auto;
-    width: 70%;
-    margin-top: 5%;
-    color: white;
-  }
+
   .custom-file{
     width: 80%;
     margin-left: 10%;
