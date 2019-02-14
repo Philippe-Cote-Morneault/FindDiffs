@@ -31,7 +31,6 @@ export class GameViewComponent implements OnInit {
         });
 
         this.getGameById();
-        this.isSimpleView();
     }
 
     private getGameById(): void {
