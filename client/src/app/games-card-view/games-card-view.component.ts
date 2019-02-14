@@ -16,7 +16,6 @@ export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
     public imagePair: ICommonImagePair;
-
     public leftButton: string;
     public rightButton: string;
 
