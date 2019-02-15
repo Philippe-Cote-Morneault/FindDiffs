@@ -5,11 +5,11 @@ import { ICommon3DPosition } from "../positions";
  */
 export interface ICommonSceneObject {
     id: string;
-    color: number;
     dimensions: number[];
     type: GeometricShape;
     position: ICommon3DPosition;
-    texture: Textures;
+    color?: number;
+    texture?: Textures;
 }
 
 export enum GeometricShape { SPHERE, CUBE, CONE, CYLINDER, SQUARED_BASE_PYRAMID };
