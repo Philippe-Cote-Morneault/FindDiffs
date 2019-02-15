@@ -70,57 +70,38 @@ export class SceneGenerator {
 
     public addModel(type: number, sceneObjects: ICommonSceneObject[], positionObject:
                     { modelPosition: ICommon3DPosition; position: number; }): void {
+        let dimensions: number[];
         switch (type) {
             case GeometricShape.CONE:
-                this.addObj3Params(GeometricShape.CONE, sceneObjects, positionObject);
+                dimensions = [1, 1, 1];
+                this.addObj(dimensions, GeometricShape.CONE, sceneObjects, positionObject);
                 break;
             case GeometricShape.CUBE:
-                this.addObj3Params(GeometricShape.CUBE, sceneObjects, positionObject);
+                dimensions = [1, 1, 1];
+                this.addObj(dimensions, GeometricShape.CUBE, sceneObjects, positionObject);
                 break;
             case GeometricShape.CYLINDER:
-                this.addCylinder(GeometricShape.CYLINDER, sceneObjects, positionObject);
-                break;
+                dimensions = [1, 1, 1, 1];
+                this.addObj(dimensions, GeometricShape.CYLINDER, sceneObjects, positionObject);
                 break;
             case GeometricShape.SPHERE:
-                this.addObj3Params(GeometricShape.SPHERE, sceneObjects, positionObject);
+                dimensions = [1, 1, 1];
+                this.addObj(dimensions, GeometricShape.SPHERE, sceneObjects, positionObject);
                 break;
             case GeometricShape.SQUARED_BASE_PYRAMID:
-                this.addPyramid(GeometricShape.SQUARED_BASE_PYRAMID, sceneObjects, positionObject);
+                dimensions = [1, 1];
+                this.addObj(dimensions, GeometricShape.SQUARED_BASE_PYRAMID, sceneObjects, positionObject);
                 break;
             default: break;
         }
     }
 
-    public addObj3Params(typeObj: GeometricShape, sceneObjects: ICommonSceneObject[], positionObject:
+    public addObj(dimensions: number[], typeObj: GeometricShape, sceneObjects: ICommonSceneObject[], positionObject:
                    { modelPosition: ICommon3DPosition; position: number; }): void {
         sceneObjects.push({
             id: uuid(),
             color: ColorUtils.generateColor(),
-            dimensions: [1, 1, 1],
-            type: typeObj,
-            position: positionObject.modelPosition,
-            texture: 0,
-        });
-    }
-
-    public addCylinder(typeObj: GeometricShape, sceneObjects: ICommonSceneObject[], positionObject:
-        { modelPosition: ICommon3DPosition; position: number; }): void {
-        sceneObjects.push({
-            id: uuid(),
-            color: ColorUtils.generateColor(),
-            dimensions: [1, 1, 1, 1],
-            type: typeObj,
-            position: positionObject.modelPosition,
-            texture: 0,
-        });
-    }
-
-    public addPyramid(typeObj: GeometricShape, sceneObjects: ICommonSceneObject[], positionObject:
-        { modelPosition: ICommon3DPosition; position: number; }): void {
-        sceneObjects.push({
-            id: uuid(),
-            color: ColorUtils.generateColor(),
-            dimensions: [1, 1],
+            dimensions: dimensions,
             type: typeObj,
             position: positionObject.modelPosition,
             texture: 0,
