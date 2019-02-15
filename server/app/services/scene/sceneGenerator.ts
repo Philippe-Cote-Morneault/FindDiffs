@@ -6,29 +6,20 @@ import { EnumUtils } from "../../utils/enumUtils";
 import { SceneObjectPosition } from "./sceneObjectPosition";
 
 export class SceneGenerator {
-    private readonly MIN_ELEMENTS: number = 10;
-    private readonly MAX_ELEMENTS: number = 200;
     public totalShapes: number = 0;
     private readonly NUMBER_SHAPES_ENUM: number = EnumUtils.enumLength(GeometricShape);
 
     private shapes: Map<GeometricShape, number> = new Map<GeometricShape, number>();
 
-    public constructor(private sceneObjectPosition: SceneObjectPosition) { }
+    public constructor(private sceneObjectPosition: SceneObjectPosition, totalShapes: number) {
+        this.totalShapes = totalShapes;
+     }
     public numberElementsPerShapeGenerator(): void {
         const shapesQuantity: number[] = new Array(this.NUMBER_SHAPES_ENUM);
-        do {
-            this.totalShapes = 0;
-            for (let i: number = 0; i < this.NUMBER_SHAPES_ENUM - 1; i++) {
-                let numberOfShapes: number = 0;
-                numberOfShapes = Math.round((Math.random() * this.MAX_ELEMENTS));
-                shapesQuantity[i] = numberOfShapes;
-            }
-            this.totalShapes = shapesQuantity.reduce((accumulator: number, value: number) => {
-                return accumulator + value;
-            },
-                                                     0);
+        shapesQuantity.fill(0);
+        for (let i: number = 0; i < this.totalShapes; ++i) {
+            shapesQuantity[Math.round(Math.random() * this.NUMBER_SHAPES_ENUM)] += 1;
         }
-        while (this.totalShapes < this.MIN_ELEMENTS || this.totalShapes > this.MAX_ELEMENTS);
 
         for (let i: number = 0; i < this.NUMBER_SHAPES_ENUM - 1; i++) {
             this.shapes.set(i, shapesQuantity[i]);
@@ -68,28 +59,31 @@ export class SceneGenerator {
         return positionObject;
     }
 
+    // tslint:disable-next-line
     public addModel(type: number, sceneObjects: ICommonSceneObject[], positionObject:
                     { modelPosition: ICommon3DPosition; position: number; }): void {
         let dimensions: number[];
+        const MIN_SIZE_FACTOR: number = 0.5;
+        const factor: number = Math.random() + MIN_SIZE_FACTOR;
         switch (type) {
             case GeometricShape.CONE:
-                dimensions = [1, 1, 1];
+                dimensions = [factor, factor, factor];
                 this.addObj(dimensions, GeometricShape.CONE, sceneObjects, positionObject);
                 break;
             case GeometricShape.CUBE:
-                dimensions = [1, 1, 1];
+                dimensions = [factor, factor, factor];
                 this.addObj(dimensions, GeometricShape.CUBE, sceneObjects, positionObject);
                 break;
             case GeometricShape.CYLINDER:
-                dimensions = [1, 1, 1, 1];
+                dimensions = [factor, factor, factor, factor];
                 this.addObj(dimensions, GeometricShape.CYLINDER, sceneObjects, positionObject);
                 break;
             case GeometricShape.SPHERE:
-                dimensions = [1, 1, 1];
+                dimensions = [factor, factor, factor];
                 this.addObj(dimensions, GeometricShape.SPHERE, sceneObjects, positionObject);
                 break;
             case GeometricShape.SQUARED_BASE_PYRAMID:
-                dimensions = [1, 1];
+                dimensions = [factor, factor];
                 this.addObj(dimensions, GeometricShape.SQUARED_BASE_PYRAMID, sceneObjects, positionObject);
                 break;
             default: break;
