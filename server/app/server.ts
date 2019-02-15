@@ -1,7 +1,6 @@
 import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
-import * as SocketIO from "socket.io";
 import { Application } from "./app";
 import Config from "./config";
 import { IServer } from "./interfaces";
@@ -22,15 +21,6 @@ export class Server implements IServer {
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());
-
-        const io: SocketIO.Server = SocketIO(this.server);
-        io.on("connection", (socket: SocketIO.Socket) => {
-
-            socket.on("disconnect", () => {
-                // tslint:disable-next-line:no-suspicious-comment
-                // TODO include disconnect code
-            });
-        });
 
     }
 
