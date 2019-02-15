@@ -26,15 +26,7 @@ export class PixelRestorationService {
                             element.x, element.y, PixelRestorationService.pixelDimension, PixelRestorationService.pixelDimension);
                         this.modifiedCanvas = (document.getElementById("modified_canvas")) as HTMLCanvasElement;
                         if (this.modifiedCanvas) {
-                            this.modifiedContext = this.modifiedCanvas.getContext("2d");
-                            if (this.modifiedContext) {
-                                this.modifiedContext.clearRect(element.x, element.y, imageData.width, imageData.height);
-                                this.modifiedContext.fillStyle = "rgba(" + imageData.data[0]
-                                    + "," + imageData.data[1]
-                                    + "," + imageData.data[2]
-                                    + "," + imageData.data[3] + ")";
-                                this.modifiedContext.fillRect(element.x, element.y, imageData.width, imageData.height);
-                            }
+                            this.addPixel(imageData, element.x, element.y);
                         }
                     }
                 });
@@ -42,18 +34,18 @@ export class PixelRestorationService {
         }
     }
 
-    /*public addPixel(imageData: ImageData, posX: number, posY: number): void {
+    public addPixel(imageData: ImageData, posX: number, posY: number): void {
         this.modifiedCanvas = (document.getElementById("modified_canvas")) as HTMLCanvasElement;
         if (this.modifiedCanvas) {
-            this.context = this.modifiedCanvas.getContext("2d");
-            if (this.context) {
-                this.context.clearRect(posX, posY, imageData.width, imageData.height);
-                this.context.fillStyle = "rgba(" + imageData.data[0]
+            this.modifiedContext = this.modifiedCanvas.getContext("2d");
+            if (this.modifiedContext) {
+                this.modifiedContext.clearRect(posX, posY, imageData.width, imageData.height);
+                this.modifiedContext.fillStyle = "rgba(" + imageData.data[0]
                     + "," + imageData.data[1]
                     + "," + imageData.data[2]
                     + "," + imageData.data[3] + ")";
-                this.context.fillRect(posX, posY, imageData.width, imageData.height);
+                this.modifiedContext.fillRect(posX, posY, imageData.width, imageData.height);
             }
         }
-    }*/
+    }
 }
