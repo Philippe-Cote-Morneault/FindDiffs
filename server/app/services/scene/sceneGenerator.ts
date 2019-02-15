@@ -1,7 +1,5 @@
-import { v4 as uuid } from "uuid";
 import { ICommon3DPosition } from "../../../../common/model/positions";
 import { GeometricShape, ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
-import { ColorUtils } from "../../utils/colorUtils";
 import { EnumUtils } from "../../utils/enumUtils";
 import { SceneObjectPosition } from "./sceneObjectPosition";
 
@@ -98,13 +96,6 @@ export class SceneGenerator {
 
     public addObj(dimensions: number[], typeObj: GeometricShape, sceneObjects: ICommonSceneObject[], positionObject:
                    { modelPosition: ICommon3DPosition; position: number; }): void {
-        sceneObjects.push({
-            id: uuid(),
-            color: ColorUtils.generateColor(),
-            dimensions: dimensions,
-            type: typeObj,
-            position: positionObject.modelPosition,
-            texture: 0,
-        });
+        sceneObjects.push();
     }
 }
