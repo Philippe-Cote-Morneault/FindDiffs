@@ -59,7 +59,6 @@ export class SceneGenerator {
         return positionObject;
     }
 
-    // tslint:disable-next-line
     public addModel(type: number, sceneObjects: ICommonSceneObject[], positionObject:
                     { modelPosition: ICommon3DPosition; position: number; }): void {
         let dimensions: number[];
