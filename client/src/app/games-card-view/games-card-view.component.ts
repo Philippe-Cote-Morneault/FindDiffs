@@ -14,16 +14,20 @@ import { StringFormater } from "../util/stringFormater";
 })
 export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
-    @Input() public isInAdminView: boolean = false;
+    @Input() public isInAdminView: boolean;
     public imagePair: ICommonImagePair;
 
-    public leftButton: string = "Play";
-    public rightButton: string = "Create";
+    public leftButton: string;
+    public rightButton: string;
 
     public constructor(
         private gamesCardService: GamesCardService,
         private router: Router,
-        private imagePairService: ImagePairService) { }
+        private imagePairService: ImagePairService) {
+            this.rightButton = "Create";
+            this.leftButton = "Play";
+            this.isInAdminView = false;
+         }
 
     public ngOnInit(): void {
         if (this.isInAdminView) {
