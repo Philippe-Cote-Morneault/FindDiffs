@@ -1,8 +1,6 @@
 import { Request } from "express";
-import * as fs from "fs";
 import { injectable } from "inversify";
 import "reflect-metadata";
-import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { Bitmap } from "../../model/bitmap/bitmap";
@@ -39,27 +37,24 @@ export class ImagePairService extends Service implements IImagePairService {
             });
     }
 
-    public async getDifference(id: string): Promise<string> {
+    public async getDifference(id: string): Promise<ArrayBuffer> {
         return this.returnFile(id, "file_difference_id");
     }
 
-    public async getModified(id: string): Promise<string> {
+    public async getModified(id: string): Promise<ArrayBuffer> {
         return this.returnFile(id, "file_modified_id");
     }
 
-    public async getOriginal(id: string): Promise<string> {
+    public async getOriginal(id: string): Promise<ArrayBuffer> {
         return this.returnFile(id, "file_original_id");
     }
 
-    private async returnFile(id: string, fieldName: string): Promise<string> {
+    private async returnFile(id: string, fieldName: string): Promise<ArrayBuffer> {
         return ImagePair.findById(id).select(`+${fieldName}`)
         .then((doc: IImagePair) => {
             const fileId: string = doc.get(fieldName);
-            if (Storage.exists(fileId)) {
-                return Storage.getFullPath(fileId);
-            } else {
-                throw new FileNotFoundException(fileId);
-            }
+
+            return Storage.openBuffer(fileId, false);
         }).catch((error: Error) => {
             if (error.name === "FileNotFoundException") {
                 throw error;
@@ -70,6 +65,7 @@ export class ImagePairService extends Service implements IImagePairService {
     }
 
     private validate(req: Request): void {
+        const MIME_TYPE: string = "image/bmp";
         if (!req.body.name) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.NAME_]));
         }
@@ -86,11 +82,11 @@ export class ImagePairService extends Service implements IImagePairService {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.MODIFIED_IMAGE_]));
         }
 
-        if (!req.files["originalImage"][0].path) {
+        if (req.files["originalImage"][0].mimetype !== MIME_TYPE) {
             throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.ORIGINAL_IMAGE]));
         }
 
-        if (!req.files["modifiedImage"][0].path) {
+        if (req.files["modifiedImage"][0].mimetype !== MIME_TYPE) {
             throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.MODIFIED_IMAGE]));
         }
     }
@@ -102,18 +98,19 @@ export class ImagePairService extends Service implements IImagePairService {
         this.validate(req);
 
         originalImage = BitmapDecoder.FromArrayBuffer(
-            fs.readFileSync(req.files["originalImage"][0].path).buffer,
+            await Storage.openBuffer(req.files["originalImage"][0].key, true),
         );
+
         modifiedImage = BitmapDecoder.FromArrayBuffer(
-            fs.readFileSync(req.files["modifiedImage"][0].path).buffer,
+            await Storage.openBuffer(req.files["modifiedImage"][0].key, true),
         );
 
         const difference: Difference = new Difference(originalImage, modifiedImage);
 
         const imagePair: IImagePair = new ImagePair({
-            file_difference_id: difference.saveStorage(),
-            file_modified_id: req.files["modifiedImage"][0].filename,
-            file_original_id: req.files["originalImage"][0].filename,
+            file_difference_id: await difference.saveStorage(),
+            file_modified_id: Storage.guidFromPath(req.files["modifiedImage"][0].key),
+            file_original_id: Storage.guidFromPath(req.files["originalImage"][0].key),
             name: req.body.name,
             creation_date: new Date(),
             differences_count: difference.countDifferences(),
