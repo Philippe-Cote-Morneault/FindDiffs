@@ -47,13 +47,13 @@ export class GameViewComponent implements OnInit {
     public getClickPosition(e: any): void {
         const xPosition: number = e.layerX;
         const yPosition: number = e.layerY;
-        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(
-            this.pixelRestorationService.restoreImage);
+        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) =>
+            this.pixelRestorationService.restoreImage(response));
     }
 
-    // tslint:disable-next-line:no-any
+    // tslint:disable:no-any
     public loadCanvas(canvas: any, imageSrc: string): void {
-        canvas.addEventListener("click", this.getClickPosition.bind(this));
+        canvas.addEventListener("click", (e: any) => this.getClickPosition(e));
         const canvasContext: CanvasRenderingContext2D | null = canvas.getContext("2d");
         const image: HTMLImageElement = new Image();
         image.src = imageSrc;

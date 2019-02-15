@@ -24,10 +24,7 @@ export class PixelRestorationService {
                     if (this.originalContext) {
                         const imageData: ImageData = this.originalContext.getImageData(
                             element.x, element.y, PixelRestorationService.pixelDimension, PixelRestorationService.pixelDimension);
-                        this.modifiedCanvas = (document.getElementById("modified_canvas")) as HTMLCanvasElement;
-                        if (this.modifiedCanvas) {
-                            this.addPixel(imageData, element.x, element.y);
-                        }
+                        this.addPixel(imageData, element.x, element.y);
                     }
                 });
             }
