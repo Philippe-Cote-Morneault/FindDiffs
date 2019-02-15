@@ -1,3 +1,4 @@
+/*
 import { expect } from "chai";
 import { SceneDifferenceGenerator } from "./sceneDifferenceGenerator";
 
@@ -6,3 +7,4 @@ describe("SceneDifferenceGenerator", () => {
         const differenceGenerator: SceneDifferenceGenerator = new SceneDifferenceGenerator();
     });
 });
+*/
