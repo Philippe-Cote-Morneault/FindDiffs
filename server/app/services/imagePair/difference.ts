@@ -14,7 +14,7 @@ export class Difference {
         this.modifiedImage = modifiedImage;
     }
 
-    public saveStorage(): string {
+    public async saveStorage(): Promise<string> {
         const differenceImageGenerator: DifferenceImageGenerator = new DifferenceImageGenerator(
             this.originalImage,
             this.modifiedImage,
