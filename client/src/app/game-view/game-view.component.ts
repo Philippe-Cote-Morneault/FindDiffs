@@ -56,12 +56,12 @@ export class GameViewComponent implements OnInit {
         canvas.addEventListener("click", (e: any) => this.getClickPosition(e));
         const canvasContext: CanvasRenderingContext2D | null = canvas.getContext("2d");
         const image: HTMLImageElement = new Image();
+        image.crossOrigin = "Anonymous";
         image.src = imageSrc;
         image.onload = () => {
             if (canvasContext) {
                 canvasContext.drawImage(image, 0, 0);
             }
         };
-        image.crossOrigin = "Anonymous";
     }
 }
