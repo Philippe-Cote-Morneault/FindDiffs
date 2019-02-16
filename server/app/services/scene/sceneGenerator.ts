@@ -1,3 +1,4 @@
+/*
 import { v4 as uuid } from "uuid";
 import { ICommon3DPosition } from "../../../../common/model/positions";
 import { GeometricShape, ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
@@ -108,3 +109,4 @@ export class SceneGenerator {
         });
     }
 }
+*/
