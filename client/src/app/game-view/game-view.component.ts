@@ -71,7 +71,7 @@ export class GameViewComponent implements OnInit {
     }
 
     public differenceFound(): void {
-        this.differenceCounterUser++;
+        this.differenceCounterUser = this.differenceCounterUser + 1;
         this.differenceSound.play();
     }
 }
