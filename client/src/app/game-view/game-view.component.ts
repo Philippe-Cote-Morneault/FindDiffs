@@ -50,8 +50,8 @@ export class GameViewComponent implements OnInit {
         const yPosition: number = e.layerY;
         this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) => {
             if (response.hit) {
-            this.pixelRestorationService.restoreImage(response, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
-            this.differenceFound();
+                this.pixelRestorationService.restoreImage(response, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
+                this.differenceFound();
             }
         });
     }
@@ -71,7 +71,7 @@ export class GameViewComponent implements OnInit {
     }
 
     public differenceFound(): void {
-        this.differenceCounterUser++;
+        this.differenceCounterUser = this.differenceCounterUser + 1;
         this.differenceSound.play();
     }
 }
