@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
 import { ICommonUser } from "../../../../common/model/user";
@@ -10,11 +10,11 @@ import { UserService } from "../services/user.service";
     styleUrls: ["./initial-view.component.css"],
 })
 export class InitialViewComponent {
-
+    @ViewChild("usernameInput") private usernameInput: ElementRef;
     public constructor(public userService: UserService, private router: Router) {}
 
     public verifyUsername(): void {
-        const username: string = (document.getElementById("usernameInput") as HTMLInputElement).value;
+        const username: string = this.usernameInput.nativeElement.value;
         this.userService.postUsernameValidation(username).subscribe(this.correctUsername.bind(this));
     }
 
