@@ -1,13 +1,14 @@
-import Axios from "axios";
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
-import { POVType } from "../../../../common/model/gameCard";
+import { NotFoundException } from "../../../../common/errors/notFoundException";
+import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { GameCard } from "../../model/schemas/gameCard";
+import { R } from "../../strings";
 import { GameCardSchemaMock } from "../../tests/gameCardSchemaMock";
-import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
+import { ApiRequest } from "../../utils/apiRequest";
 import { GameCardService } from "./gameCard.service";
 
 // We can disable this tslint max-line-count since it's only a test file and
@@ -16,7 +17,7 @@ import { GameCardService } from "./gameCard.service";
 describe("GameCardService", () => {
     const service: GameCardService = new GameCardService();
     beforeEach(() => {
-        sinon.stub(Axios, "get");
+        sinon.stub(ApiRequest, "getImagePairId");
         sinon.stub(GameCard.prototype, "save");
         sinon.stub(GameCard.prototype, "remove");
         sinon.stub(GameCard, "find");
@@ -24,7 +25,7 @@ describe("GameCardService", () => {
     });
 
     afterEach(() => {
-        (Axios.get as sinon.SinonStub).restore();
+        (ApiRequest.getImagePairId as sinon.SinonStub).restore();
         (GameCard.prototype.save as sinon.SinonStub).restore();
         (GameCard.prototype.remove as sinon.SinonStub).restore();
         (GameCard.find as sinon.SinonStub).restore();
@@ -46,13 +47,13 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the field image-pair-id is not present", async () => {
+        it("Should throw an error if the field resource_id is not present", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
                 },
             };
-            const errorMessage: string = "The field image-pair-id is not present.";
+            const errorMessage: string = "The field resource_id is not present.";
             try {
                 await service.post(mockReq(request));
                 throw new NoErrorThrownException();
@@ -65,7 +66,7 @@ describe("GameCardService", () => {
             const request: Object = {
                 body: {
                     name: "bob",
-                    "image-pair-id": "an id",
+                    resource_id: "an id",
                 },
             };
             const errorMessage: string = "The field pov is not present.";
@@ -81,7 +82,7 @@ describe("GameCardService", () => {
             const request: Object = {
                 body: {
                     name: "bob",
-                    "image-pair-id": "an id",
+                    resource_id: "an id",
                     pov: "bob",
                 },
             };
@@ -94,17 +95,19 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the image-pair-id is not in storage", async () => {
+        it("Should throw an error if the resource_id is not in storage", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
-                    "image-pair-id": "an id",
-                    pov: "Free",
+                    resource_id: "an id",
+                    pov: "Simple",
                 },
             };
-            (Axios.get as sinon.SinonStub).rejects();
+            (ApiRequest.getImagePairId as sinon.SinonStub).rejects(
+                    new NotFoundException(R.ERROR_UNKNOWN_ID),
+                );
 
-            const errorMessage: string = "The image id could not be found.";
+            const errorMessage: string = "The id could not be found.";
             try {
                 await service.post(mockReq(request));
                 throw new NoErrorThrownException();
@@ -113,17 +116,19 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the image-pair-id is not in storage", async () => {
+        it("Should throw an error if the resource_id is not in storage", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
-                    "image-pair-id": "an id",
-                    pov: "Free",
+                    resource_id: "an id",
+                    pov: "Simple",
                 },
             };
-            (Axios.get as sinon.SinonStub).rejects();
+            (ApiRequest.getImagePairId as sinon.SinonStub).rejects(
+                new NotFoundException(R.ERROR_UNKNOWN_ID),
+            );
 
-            const errorMessage: string = "The image id could not be found.";
+            const errorMessage: string = "The id could not be found.";
             try {
                 await service.post(mockReq(request));
                 throw new NoErrorThrownException();
@@ -136,8 +141,8 @@ describe("GameCardService", () => {
             const request: Object = {
                 body: {
                     name: "bob",
-                    "image-pair-id": "an id",
-                    pov: "Free",
+                    resource_id: "an id",
+                    pov: "Simple",
                 },
             };
             const imagepair: ICommonImagePair = {
@@ -149,11 +154,8 @@ describe("GameCardService", () => {
                 creation_date: new Date(),
                 differences_count: 0,
             };
-            const axiosResponse: Object = {
-                data: imagepair,
-            };
 
-            (Axios.get as sinon.SinonStub).resolves(axiosResponse);
+            (ApiRequest.getImagePairId as sinon.SinonStub).resolves(imagepair);
             try {
                 await service.post(mockReq(request));
                 throw new NoErrorThrownException();
@@ -166,8 +168,8 @@ describe("GameCardService", () => {
             const request: Object = {
                 body: {
                     name: "bob",
-                    "image-pair-id": "an id",
-                    pov: "Free",
+                    resource_id: "an id",
+                    pov: "Simple",
                 },
             };
             const imagepair: ICommonImagePair = {
@@ -179,17 +181,15 @@ describe("GameCardService", () => {
                 creation_date: new Date(),
                 differences_count: 7,
             };
-            const axiosResponse: Object = {
-                data: imagepair,
-            };
 
-            (Axios.get as sinon.SinonStub).resolves(axiosResponse);
+            (ApiRequest.getImagePairId as sinon.SinonStub).resolves(imagepair);
 
-            const response: string = await service.post(mockReq(request));
-            expect(JSON.stringify(JSON.parse(response).image_pair))
-            .to.eql(
-                JSON.stringify(imagepair),
-                );
+            const response: ICommonGameCard = JSON.parse(await service.post(mockReq(request)));
+
+            expect(response.resource_id).to.equal(request["body"]["resource_id"]);
+            expect(response.title).to.equal(request["body"]["name"]);
+            expect(response.pov).to.equal(request["body"]["pov"]);
+
         });
 
     });
@@ -205,48 +205,27 @@ describe("GameCardService", () => {
                 creation_date: new Date(),
                 differences_count: 0,
             };
-            const axiosResponse: Object = {
-                data: imagepair,
-            };
-            (Axios.get as sinon.SinonStub).resolves(axiosResponse);
 
-            (GameCard.find as sinon.SinonStub).returns(
-            new MongooseMock.Query([{
-                pov: POVType.Free,
+            (ApiRequest.getImagePairId as sinon.SinonStub).resolves(imagepair);
+
+            (GameCard.find as sinon.SinonStub).resolves(
+            [{
+                pov: POVType.Simple,
                 title: "title",
-                imagePairId: "an id",
+                resource_id: "an id",
                 creation_date: new Date(),
                 best_time_online: [0],
                 best_time_solo: [0],
-            }],                    true));
+            }]);
 
             const response: string = await service.index();
             expect(JSON.parse(response).length).to.equal(1);
-        });
-        it("Should return an error if a pair is not available", async () => {
-            (Axios.get as sinon.SinonStub).rejects();
-            (GameCard.find as sinon.SinonStub).returns(
-            new MongooseMock.Query([{
-                pov: POVType.Free,
-                title: "title",
-                imagePairId: "an id",
-                creation_date: new Date(),
-                best_time_online: [0],
-                best_time_solo: [0],
-            }],                    true));
-
-            try {
-                await service.index();
-                throw new NoErrorThrownException();
-            } catch (err) {
-                expect(err.message).to.equal("The image id could not be found.");
-            }
         });
     });
 
     describe("single()", () => {
         it("Should return throw an error if the id is not in the database", async () => {
-            (GameCard.findById as sinon.SinonStub).returns(new MongooseMock.Query({}, false));
+            (GameCard.findById as sinon.SinonStub).rejects();
             try {
                 await service.single("invalid id");
                 throw new NoErrorThrownException();
@@ -256,7 +235,7 @@ describe("GameCardService", () => {
         });
 
         it("Should throw an error if the id is not in the database and mongoose returns null", async () => {
-            (GameCard.findById as sinon.SinonStub).returns(new MongooseMock.NullQuery(true));
+            (GameCard.findById as sinon.SinonStub).resolves(undefined);
             try {
                 await service.single("invalid id");
                 throw new NoErrorThrownException();
@@ -275,23 +254,20 @@ describe("GameCardService", () => {
                 creation_date: new Date(),
                 differences_count: 0,
             };
-            const axiosResponse: Object = {
-                data: imagepair,
-            };
 
-            (Axios.get as sinon.SinonStub).resolves(axiosResponse);
-            (GameCard.findById as sinon.SinonStub).returns(
-            new MongooseMock.Query({
-                pov: POVType.Free,
+            (ApiRequest.getImagePairId as sinon.SinonStub).resolves(imagepair);
+            (GameCard.findById as sinon.SinonStub).resolves(
+            {
+                pov: POVType.Simple,
                 title: "title",
-                imagePairId: "an id",
+                resource_id: "an id",
                 creation_date: new Date(),
                 best_time_online: [0],
                 best_time_solo: [0],
-            },                     true));
+            });
 
             const response: string = await service.single("good id");
-            expect(JSON.parse(response).image_pair.name).to.equal(imagepair.name);
+            expect(JSON.parse(response).title).to.equal("title");
         });
     });
     describe("delete()", () => {

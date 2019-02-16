@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
@@ -24,7 +25,8 @@ export class CreateGameSimpleViewComponent {
     private modifiedImageFile: File;
     private gameName: string;
 
-    public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService) {
+    public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService,
+                       private spinnerService: Ng4LoadingSpinnerService) {
         this.gamesCardService = gamesCardService;
         this.imagePairService = imagePairService;
     }
@@ -51,6 +53,7 @@ export class CreateGameSimpleViewComponent {
     }
 
     public addImagePair(): void {
+        this.spinnerService.show();
         this.imagePairService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
             .subscribe((response: ICommonImagePair | Message) => {
                 if ((response as Message).body) {
@@ -73,6 +76,7 @@ export class CreateGameSimpleViewComponent {
     }
 
     public hideView(): void {
+        this.spinnerService.hide();
         this.closed.emit(true);
     }
 }

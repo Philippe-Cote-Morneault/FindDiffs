@@ -3,7 +3,9 @@
     margin-right: 5px;
     background-color: black;
 }
-
+.btn-dark{
+    width: 140px;
+}
 .navbar-header {
     text-align: center;
 }
@@ -11,6 +13,7 @@
 .button-wrapper {
     display: flex;
     justify-content: center;
+    margin-left: 67px;
 }
 .container-fluid {
     width:450px;
@@ -34,4 +37,8 @@ body {
 
 .filler {
     height: 100px;
+}
+
+#leaveButton{
+    float: right;
 }
