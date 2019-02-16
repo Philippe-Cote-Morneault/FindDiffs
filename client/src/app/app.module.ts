@@ -12,10 +12,10 @@ import { GameViewComponent } from "./game-view/game-view.component";
 import { GamesCardViewComponent } from "./games-card-view/games-card-view.component";
 import { GamesListViewComponent } from "./games-list-view/games-list-view.component";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
+import { CubeComponent } from "./models/cube/cube.component";
+import { SphereComponent } from "./models/sphere/sphere.component";
 import { GameCardLoaderService } from "./services/game-card-loader.service";
 import { UserService } from "./services/user.service";
-import { CubeComponent } from './cube/cube.component';
-import { SphereComponent } from './sphere/sphere.component';
 
 @NgModule({
     declarations: [
