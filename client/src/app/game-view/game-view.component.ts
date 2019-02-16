@@ -38,8 +38,4 @@ export class GameViewComponent implements OnInit {
             this.gameCard = gameCard;
         });
     }
-
-    private isSimpleView(): boolean {
-        return (this.gameCard.pov === POVType.Simple);
-    }
 }
