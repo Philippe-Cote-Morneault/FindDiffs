@@ -14,7 +14,7 @@ export class GameViewComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     private imagePairId: string;
-    private differenceCounterUser: number;
+    public differenceCounterUser: number;
     // tslint:disable-next-line:no-any
     private differenceSound: any;
 
