@@ -48,7 +48,7 @@ export class GameViewComponent implements OnInit {
         const xPosition: number = e.layerX;
         const yPosition: number = e.layerY;
         this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) =>
-            this.pixelRestorationService.restoreImage(response));
+            this.pixelRestorationService.restoreImage(response, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement));
     }
 
     // tslint:disable:no-any
