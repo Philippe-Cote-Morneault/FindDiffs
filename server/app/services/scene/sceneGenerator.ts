@@ -29,20 +29,16 @@ export class SceneGenerator {
     public generateScene(): ICommonSceneObject[] {
         this.numberElementsPerShapeGenerator();
 
-        const CUBE: number = 3;
         const sceneObjects: ICommonSceneObject[] = new Array(this.totalShapes);
-        const validPosition: boolean[] = new Array(Math.pow(this.sceneObjectPosition.sizeScene, CUBE));
-        validPosition.fill(true);
-        let validPosition2: boolean[][][] = this.initializeArray(this.sceneObjectPosition.sizeScene);
+        let validPositions: boolean[][][] = this.initializeArray(this.sceneObjectPosition.sizeScene);
         for (let i: number = 0; i < this.NUMBER_SHAPES_ENUM - 1; i++) {
             const numberShape: number = (this.shapes.get(i)) as number;
             if (numberShape) {
                 for (let j: number = 0; j < numberShape; j++) {
                     // tslint:disable-next-line
                     let positionObject: { modelPosition: ICommon3DPosition, position: number } = this.sceneObjectPosition.modelPosition();
-                    positionObject = this.waitUntilValidPosition(validPosition2, validPosition, positionObject);
-                    validPosition[positionObject.position] = false;
-                    validPosition2 = this.updateArray(validPosition2, positionObject);
+                    positionObject = this.waitUntilValidPosition(validPositions, positionObject);
+                    validPositions = this.updateArray(validPositions, positionObject);
                     this.addModel(i, sceneObjects, positionObject);
                 }
             }
@@ -67,7 +63,7 @@ export class SceneGenerator {
         for (let i: number = 0; i < sizeScene; ++i) {
             for (let j: number = 0; j < sizeScene; ++j) {
                 for (let k: number = 0; k < sizeScene; ++k) {
-                    array[i][j][k] = false;
+                    array[i][j][k] = true;
                 }
             }
         }
@@ -75,69 +71,53 @@ export class SceneGenerator {
         return array;
     }
 
-    public waitUntilValidPosition(validPosition2: boolean[][][], validPosition: boolean[], positionObject:
+    public waitUntilValidPosition(validPositions: boolean[][][], positionObject:
                                                             { modelPosition: ICommon3DPosition; position: number; }):
                                                             { modelPosition: ICommon3DPosition; position: number } {
-        while (validPosition[positionObject.position] === false) {
+        while (!this.allFree(validPositions, positionObject)) {
             positionObject = this.sceneObjectPosition.modelPosition();
         }
-
-        // tslint:disable
-        while (validPosition2[positionObject.modelPosition.x][positionObject.modelPosition.y][positionObject.modelPosition.z] === false &&
-
-            validPosition2[positionObject.modelPosition.x + 1][positionObject.modelPosition.y][positionObject.modelPosition.z] === false &&
-            validPosition2[positionObject.modelPosition.x - 1][positionObject.modelPosition.y][positionObject.modelPosition.z] === false &&
-
-
-            validPosition2[positionObject.modelPosition.x][positionObject.modelPosition.y + 1][positionObject.modelPosition.z] === false &&
-            validPosition2[positionObject.modelPosition.x][positionObject.modelPosition.y - 1][positionObject.modelPosition.z] === false &&
-
-            validPosition2[positionObject.modelPosition.x][positionObject.modelPosition.y][positionObject.modelPosition.z + 1] === false &&
-            validPosition2[positionObject.modelPosition.x][positionObject.modelPosition.y][positionObject.modelPosition.z - 1] === false &&
-
-            validPosition2[positionObject.modelPosition.x + 1][positionObject.modelPosition.y + 1][positionObject.modelPosition.z] === false &&
-            validPosition2[positionObject.modelPosition.x + 1][positionObject.modelPosition.y - 1][positionObject.modelPosition.z] === false &&
-            validPosition2[positionObject.modelPosition.x - 1][positionObject.modelPosition.y + 1][positionObject.modelPosition.z] === false &&
-            validPosition2[positionObject.modelPosition.x - 1][positionObject.modelPosition.y - 1][positionObject.modelPosition.z] === false &&
-
-            validPosition2[positionObject.modelPosition.x + 1][positionObject.modelPosition.y][positionObject.modelPosition.z + 1] === false &&
-            validPosition2[positionObject.modelPosition.x + 1][positionObject.modelPosition.y][positionObject.modelPosition.z - 1] === false &&
-            validPosition2[positionObject.modelPosition.x - 1][positionObject.modelPosition.y][positionObject.modelPosition.z + 1] === false &&
-            validPosition2[positionObject.modelPosition.x - 1][positionObject.modelPosition.y][positionObject.modelPosition.z - 1] === false &&
-            
-            validPosition2[positionObject.modelPosition.x][positionObject.modelPosition.y + 1][positionObject.modelPosition.z + 1] === false &&
-            validPosition2[positionObject.modelPosition.x][positionObject.modelPosition.y + 1][positionObject.modelPosition.z - 1] === false &&
-            validPosition2[positionObject.modelPosition.x][positionObject.modelPosition.y - 1][positionObject.modelPosition.z + 1] === false &&
-            validPosition2[positionObject.modelPosition.x][positionObject.modelPosition.y - 1][positionObject.modelPosition.z - 1] === false &&
-
-            validPosition2[positionObject.modelPosition.x + 1][positionObject.modelPosition.y + 1][positionObject.modelPosition.z + 1] === false &&
-            validPosition2[positionObject.modelPosition.x + 1][positionObject.modelPosition.y + 1][positionObject.modelPosition.z - 1] === false &&
-            validPosition2[positionObject.modelPosition.x + 1][positionObject.modelPosition.y - 1][positionObject.modelPosition.z + 1] === false &&
-            validPosition2[positionObject.modelPosition.x + 1][positionObject.modelPosition.y - 1][positionObject.modelPosition.z - 1] === false &&
-    
-            validPosition2[positionObject.modelPosition.x - 1][positionObject.modelPosition.y + 1][positionObject.modelPosition.z + 1] ===false &&
-            validPosition2[positionObject.modelPosition.x - 1][positionObject.modelPosition.y + 1][positionObject.modelPosition.z - 1] === false &&
-            validPosition2[positionObject.modelPosition.x - 1][positionObject.modelPosition.y - 1][positionObject.modelPosition.z + 1] === false &&
-            validPosition2[positionObject.modelPosition.x - 1][positionObject.modelPosition.y - 1][positionObject.modelPosition.z - 1] === false) {
-                positionObject = this.sceneObjectPosition.modelPosition();
-        }
-
 
         return positionObject;
     }
 
-    public updateArray(validPosition2: boolean[][][], positionObject:
+    private allFree(validPosition: boolean[][][], positionObject: { modelPosition: ICommon3DPosition; position: number; }): boolean {
+        const TWO: number = 2;
+        const x: number = positionObject.modelPosition.x;
+        const y: number = positionObject.modelPosition.y;
+        const z: number = positionObject.modelPosition.z;
+        let areAllFree: boolean = true;
+
+        for (let i: number = -1; i < TWO; ++i) {
+            for (let j: number = -1; j < TWO; ++j) {
+                for (let k: number = -1; k < TWO; ++k) {
+                    if (!validPosition[x + i][y + i][z + i]) {
+                        areAllFree = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return areAllFree;
+    }
+
+    private updateArray(validPositions: boolean[][][], positionObject:
         { modelPosition: ICommon3DPosition; position: number; }): boolean[][][] {
-            const SIX: number = 6;
-            for (let i: number = positionObject.modelPosition.x; i < SIX; ++i) {
-                for (let j: number = positionObject.modelPosition.y; j < SIX; ++j) {
-                    for (let k: number = positionObject.modelPosition.z; k < SIX; ++k) {
-                        validPosition2[i + ((SIX % i) * -1)][j + ((SIX % j) * -1)][k + ((SIX % k) * -1)] = false;
+            const TWO: number = 2;
+            const x: number = positionObject.modelPosition.x;
+            const y: number = positionObject.modelPosition.y;
+            const z: number = positionObject.modelPosition.z;
+
+            for (let i: number = -1; i < TWO; ++i) {
+                for (let j: number = -1; j < TWO; ++j) {
+                    for (let k: number = -1; k < TWO; ++k) {
+                        validPositions[x + i][y + i][z + i] = false;
                     }
                 }
             }
 
-            return validPosition2;
+            return validPositions;
     }
 
     public addModel(type: number, sceneObjects: ICommonSceneObject[], positionObject:
