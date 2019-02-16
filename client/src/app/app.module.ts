@@ -15,6 +15,7 @@ import { InitialViewComponent } from "./initial-view/initial-view.component";
 import { GameCardLoaderService } from "./services/game-card-loader.service";
 import { UserService } from "./services/user.service";
 import { CubeComponent } from './cube/cube.component';
+import { SphereComponent } from './sphere/sphere.component';
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import { CubeComponent } from './cube/cube.component';
         CreateGameFreeViewComponent,
         GameViewComponent,
         CubeComponent,
+        SphereComponent,
     ],
     imports: [
         BrowserModule,
