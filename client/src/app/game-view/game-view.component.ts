@@ -14,18 +14,19 @@ export class GameViewComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     private imagePairId: string;
-    // private differenceCounterUser: number;
-    // private differenceCounterOpponent: number;
-    // private isSolo: boolean;
+    private differenceCounterUser: number;
+    // tslint:disable-next-line:no-any
+    private differenceSound: any;
 
     public constructor(
         private route: ActivatedRoute,
         public pixelPositionService: PixelPositionService,
         public pixelRestorationService: PixelRestorationService,
         public imagePairService: ImagePairService) {
-        // this.isSolo = false;
-        // this.differenceCounterOpponent = 0;
-        // this.differenceCounterUser = 0;
+        this.differenceCounterUser = 0;
+        this.differenceSound = new Audio;
+        this.differenceSound.src = "../../assets/mario.mp3";
+        this.differenceSound.load();
     }
 
     public ngOnInit(): void {
@@ -47,8 +48,12 @@ export class GameViewComponent implements OnInit {
     public getClickPosition(e: any): void {
         const xPosition: number = e.layerX;
         const yPosition: number = e.layerY;
-        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) =>
-            this.pixelRestorationService.restoreImage(response, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement));
+        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) => {
+            if (response.hit) {
+            this.pixelRestorationService.restoreImage(response, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
+            this.differenceFound();
+            }
+        });
     }
 
     // tslint:disable:no-any
@@ -63,5 +68,10 @@ export class GameViewComponent implements OnInit {
                 canvasContext.drawImage(image, 0, 0);
             }
         };
+    }
+
+    public differenceFound(): void {
+        this.differenceCounterUser++;
+        this.differenceSound.play();
     }
 }
