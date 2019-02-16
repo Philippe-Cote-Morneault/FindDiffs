@@ -1,8 +1,8 @@
-import { expect } from "chai";
-import { SceneDifferenceGenerator } from "./sceneDifferenceGenerator";
+// import { expect } from "chai";
+// import { SceneDifferenceGenerator } from "./sceneDifferenceGenerator";
 
 describe("SceneDifferenceGenerator", () => {
     describe("generateModifiedScene", () => {
-        const differenceGenerator: SceneDifferenceGenerator = new SceneDifferenceGenerator();
+        // const differenceGenerator: SceneDifferenceGenerator = new SceneDifferenceGenerator();
     });
 });
