@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
-import ICommonScene, { ICommonScene } from "../../../../common/model/scene/scene";
-import ICommonSceneModifications, { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
+import { ICommonScene } from "../../../../../common/model/scene/scene";
+import { ICommonSceneModifications } from "../../../../../common/model/scene/sceneModifications";
 
 @Injectable({
   providedIn: "root",
