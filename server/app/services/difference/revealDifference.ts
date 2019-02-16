@@ -1,5 +1,6 @@
 import { NotFoundException } from "../../../../common/errors/notFoundException";
-import { ICommonPosition, ICommonReveal } from "../../../../common/model/reveal";
+import { ICommon2DPosition } from "../../../../common/model/positions";
+import { ICommonReveal } from "../../../../common/model/reveal";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { Position } from "../../model/bitmap/pixel";
 import { R } from "../../strings";
@@ -27,7 +28,7 @@ export class RevealDifference {
 
             return {
                     hit: true,
-                    pixels_affected: pixelsPosition as ICommonPosition[],
+                    pixels_affected: pixelsPosition as ICommon2DPosition[],
                 };
         } else {
             throw new NotFoundException(R.ERROR_NO_DIFFERENCE_FOUND);
