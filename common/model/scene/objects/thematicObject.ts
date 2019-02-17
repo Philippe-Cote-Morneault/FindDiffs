@@ -6,4 +6,4 @@ export interface ICommonThematicObject extends ICommonSceneObject {
 }
 
 // TODO: Define what texture to put
-export enum Textures {};
+export enum Textures {Test};

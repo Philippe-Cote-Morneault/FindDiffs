@@ -1,11 +1,13 @@
 import { v4 as uuid } from "uuid";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonSceneObject } from "../../../../common/model/scene/objects/sceneObject";
-import { ICommonScene } from "../../../../common/model/scene/scene";
+import { Textures } from "../../../../common/model/scene/objects/thematicObject";
+import { ICommonScene, Type } from "../../../../common/model/scene/scene";
 import { SceneObjectAdder } from "./transformations/sceneObjectAdder";
 import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChanger";
 import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
 import { SceneTransformation } from "./transformations/sceneTransformation";
+import { SceneObjectTextureChanger } from "./transformations/sceneObjectTextureChanger";
 
 export class SceneDifferenceGenerator {
     private static readonly NUMBER_OF_DIFFERENCES: number = 7;
@@ -26,13 +28,7 @@ export class SceneDifferenceGenerator {
 
         this.setTransformationsToApply(requiresInsertion, requiresRemoval, requiresColorChange);
 
-        this.modifications = {
-            id: uuid(),
-            type: originalScene.type,
-            addedObjects: [],
-            deletedObjects: [],
-            //colorChangedObjects: new Map<string, number>(),
-        };
+        this.initializeModifications();
 
         for (let i: number = 0; i < SceneDifferenceGenerator.NUMBER_OF_DIFFERENCES; ++i) {
             this.applyRandomModification();
@@ -51,13 +47,36 @@ export class SceneDifferenceGenerator {
 
     private setTransformationsToApply(requiresInsertion: boolean, requiresRemoval: boolean, requiresColorChange: boolean ): void {
         if (requiresInsertion) {
-            this.transformationsToApply.push(new SceneObjectAdder);
+            this.transformationsToApply.push(new SceneObjectAdder());
         }
         if (requiresRemoval) {
-            this.transformationsToApply.push(new SceneObjectRemover);
+            this.transformationsToApply.push(new SceneObjectRemover());
         }
         if (requiresColorChange) {
-            this.transformationsToApply.push(new SceneObjectColorChanger);
+            this.transformationsToApply.push(
+                this.modifiedScene.type === Type.Geometric ? new SceneObjectColorChanger() : new SceneObjectTextureChanger(),
+            );
+        }
+    }
+
+    // TODO: See if we cant make less duplication here
+    private initializeModifications(): void {
+        if (this.modifiedScene.type === Type.Geometric) {
+            this.modifications = {
+                id: uuid(),
+                type: this.modifiedScene.type,
+                addedObjects: [],
+                deletedObjects: [],
+                colorChangedObjects: new Map<string, number>(),
+            } as ICommonSceneModifications;
+        } else {
+            this.modifications = {
+                id: uuid(),
+                type: this.modifiedScene.type,
+                addedObjects: [],
+                deletedObjects: [],
+                texturesChangedObjects: new Map<string, Textures>(),
+            } as ICommonSceneModifications;
         }
     }
 
