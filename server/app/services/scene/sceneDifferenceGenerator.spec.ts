@@ -9,6 +9,10 @@ describe("SceneDifferenceGenerator", () => {
     };
 
     const sphereMock: ICommonSceneObject = {
+
+    }
+
+    const cubeMock: ICommonSceneObject = {
         
     }
     describe("generateModifiedScene", () => {
