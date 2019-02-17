@@ -1,3 +1,4 @@
+// tslint:disable
 /*
 import { v4 as uuid } from "uuid";
 import { ICommon3DPosition } from "../../../../common/model/positions";
