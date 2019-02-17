@@ -19,8 +19,8 @@
           required>
       </div>
       <div class="form-group">
-        <label for="sel1" #objectType>Type of objects</label>
-        <select class="form-control" id="sel1" (change)="verifyInfo()">
+        <label for="sel1">Type of objects</label>
+        <select class="form-control" id="sel1" #objectType (change)="verifyInfo()">
           <option>Geometric</option>
           <option>Thematic</option>
         </select>
