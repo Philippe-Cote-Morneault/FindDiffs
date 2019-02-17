@@ -2,10 +2,10 @@ import { ICommon3DPosition } from "../../../../common/model/positions";
 import { Grid } from "./gird";
 
 export class RandomGrid extends Grid {
-    private NUMBER_POSITION: number = 400;
+    private static readonly NUMBER_POSITION: number = 400;
 
     protected generateGrid(): void {
-        for (let i: number = 0; i < this.NUMBER_POSITION; i++) {
+        for (let i: number = 0; i < RandomGrid.NUMBER_POSITION; i++) {
             this.positions.push(this.generatePosition());
         }
     }
@@ -23,7 +23,7 @@ export class RandomGrid extends Grid {
 
             for (const position of this.positions) {
                 const distance: number = this.distanceBetweenPosition(position, newPosition);
-                if (distance > this.minDistancePos) {
+                if (distance < this.minDistancePos) {
                     isPositionValid = false;
                     break;
                 }
@@ -33,10 +33,6 @@ export class RandomGrid extends Grid {
         return newPosition;
     }
 
-    private distanceBetweenPosition(position1: ICommon3DPosition, position2: ICommon3DPosition): number {
-        // tslint:disable-next-line:no-magic-numbers
-        return Math.sqrt(Math.pow(position1.x - position2.x, 2) + Math.pow(position1.y - position2.y, 2));
-    }
     private generateCoordinates(range: number): number {
         // tslint:disable-next-line:no-magic-numbers
         return Math.floor(Math.random() * range) - Math.floor(range / 2);
