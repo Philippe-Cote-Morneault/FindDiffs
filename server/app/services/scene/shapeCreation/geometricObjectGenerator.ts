@@ -1,5 +1,9 @@
+import { CubeFactory } from "./cubeFactory";
+import { GeometricObjectFactory } from "./geometricObjectFactory";
+
 export class GeometricObjectGenerator {
     private static instance: GeometricObjectGenerator;
+    private geometricShapeFactories: GeometricObjectFactory[] = [];
 
     public constructor() {
         //
@@ -11,5 +15,10 @@ export class GeometricObjectGenerator {
         }
 
         return GeometricObjectGenerator.instance;
+    }
+
+    private setFactories(): void {
+        this.geometricShapeFactories.push(new CubeFactory());
+
     }
 }
