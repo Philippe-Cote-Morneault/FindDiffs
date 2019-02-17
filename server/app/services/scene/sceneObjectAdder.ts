@@ -9,6 +9,9 @@ import { SceneTransformation } from "./sceneTransformation";
 export class SceneObjectAdder implements SceneTransformation {
     public applyTransformation(modifiedScene: ICommonScene, transformationEligibleObjects: ICommonSceneObject[],
                                modifications: ICommonSceneModifications): void {
+
+        // tslint:disable-next-line:no-suspicious-comment
+        // TODO: Add call to algorithm
     }
 
     /*private chooseRandomShape(): GeometricShape {

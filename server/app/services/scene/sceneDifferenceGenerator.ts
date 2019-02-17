@@ -14,7 +14,6 @@ export class SceneDifferenceGenerator {
     private modifiedScene: ICommonScene;
     // Holds all objects that have not been modified yet. Objects will be removed from this array when they are modified.
     private transformationEligibleObjects: ICommonSceneObject[];
-    
     private modifications: ICommonSceneModifications;
 
     public generateModifiedScene(originalScene: ICommonScene, requiresInsertion: boolean, requiresRemoval: boolean,
