@@ -1,5 +1,5 @@
-import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObject";
-import { SceneObjectParser } from "./sceneObjectParser";
+import { ICommonGeometricObject } from "../../../../../../../common/model/scene/objects/geometricObject";
+import { SceneObjectParser } from "../sceneObjectParser";
 
 export class GeometricObjectParser extends SceneObjectParser {
 

@@ -2,21 +2,20 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonGeometricScene, ICommonScene, ICommonThematicScene, Type } from "../../../../../../common/model/scene/scene";
-import { GeometricObjectParser } from "./geometricObjectParser";
+import { GeometricObjectParser } from "./objectParser/geometricObjectParser";
 import { GeometricSceneParser } from "./geometricSceneParser";
 import { SceneObjectParser } from "./sceneObjectParser";
-import { ThematicObjectParser } from "./thematicObjectParser";
+import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
 import { ThematicSceneParser } from "./thematicSceneParser";
 
 @Injectable({
   providedIn: "root",
 })
 export class SceneParserService {
-    private static readonly FOV: number = 75;
 
     private sceneObjectParser: SceneObjectParser;
 
-    public parseScene(originalScene: ICommonScene, windowWidth: number, windowHeight: number): THREE.Scene {
+    public parseScene(originalScene: ICommonScene, containerWidth: number, containerHeight: number): THREE.Scene {
         let scene: THREE.Scene;
 
         if (originalScene.type === Type.Geometric) {
@@ -34,11 +33,4 @@ export class SceneParserService {
         return scene;
     }
 
-    private createCamera(): THREE.PerspectiveCamera {
-        const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
-            SceneParserService.FOV, 
-            window.innerWidth/window.innerHeight, 
-            0.1, 
-            1000 );
-    }
 }

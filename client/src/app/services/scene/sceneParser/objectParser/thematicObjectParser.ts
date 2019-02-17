@@ -1,5 +1,5 @@
-import { SceneObjectParser } from "./sceneObjectParser";
-import { ICommonThematicObject } from "../../../../../../common/model/scene/objects/thematicObject";
+import { SceneObjectParser } from "../sceneObjectParser";
+import { ICommonThematicObject } from "../../../../../../../common/model/scene/objects/thematicObject";
 
 export class ThematicObjectParser extends SceneObjectParser {
 
