@@ -1,9 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
+import { ICommonScene } from "../../../../../common/model/scene/scene";
+import * as THREE from "three";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class SceneParserService {
 
-  constructor() { }
+  	public constructor() { 
+
+	}
+
+	public parseScene(scene: ICommonScene): Scene {
+		
+	}
 }
