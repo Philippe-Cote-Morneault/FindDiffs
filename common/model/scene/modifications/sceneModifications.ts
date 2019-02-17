@@ -1,12 +1,12 @@
 import { ICommonSceneObject } from "../objects/sceneObject";
-import { Type } from "../scene";
+import { ObjectType } from "../scene";
 /**
  * Represents the modifications applied to an original scene. 
  */
 export interface ICommonSceneModifications {
     id: string;
 
-    type: Type;
+    type: ObjectType;
     
     // Array of objects added to the modified scene
     addedObjects: ICommonSceneObject[];
