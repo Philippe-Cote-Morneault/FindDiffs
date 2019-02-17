@@ -1,11 +1,11 @@
-import { CubeFactory } from "./cubeFactory";
-import { GeometricObjectFactory } from "./geometricObjectFactory";
-import { ICommonEulerAngles } from "../../../../../common/model/scene/eulerAngles";
-import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+//import { CubeFactory } from "./cubeFactory";
+//import { GeometricObjectFactory } from "./geometricObjectFactory";
+//import { ICommonEulerAngles } from "../../../../../common/model/scene/eulerAngles";
+//import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 
 export class GeometricObjectGenerator {
     private static instance: GeometricObjectGenerator;
-    private geometricShapeFactories: GeometricObjectFactory[] = [];
+   // private geometricShapeFactories: GeometricObjectFactory[] = [];
 
     public constructor() {
         //
@@ -19,12 +19,14 @@ export class GeometricObjectGenerator {
         return GeometricObjectGenerator.instance;
     }
 
+    /*
     public createObject(position: ICommonEulerAngles): ICommonGeometricObject {
-        
+
     }
 
     private setFactories(): void {
         this.geometricShapeFactories.push(new CubeFactory());
 
     }
+    */
 }
