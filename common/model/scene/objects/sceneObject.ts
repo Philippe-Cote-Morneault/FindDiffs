@@ -6,7 +6,6 @@ import { EulerAngles } from "../eulerAngles";
  */
 export interface ICommonSceneObject {
     id: string;
-    dimensions: number[];
     orientation: EulerAngles;
     type: ObjectType;
     position: ICommon3DPosition;
