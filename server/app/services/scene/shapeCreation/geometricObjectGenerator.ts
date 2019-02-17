@@ -1,7 +1,7 @@
-import { CubeFactory } from "./cubeFactory";
-import { GeometricObjectFactory } from "./geometricObjectFactory";
 import { ICommonEulerAngles } from "../../../../../common/model/scene/eulerAngles";
 import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+import { CubeFactory } from "./cubeFactory";
+import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class GeometricObjectGenerator {
     private static instance: GeometricObjectGenerator;
