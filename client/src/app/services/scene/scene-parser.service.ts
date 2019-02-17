@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { ICommonScene } from "../../../../../common/model/scene/scene";
 import { SceneObjectParserService } from "./scene-object-parser.service";
-import { ICommonSceneObject } from "../../../../../common/model/scene/sceneObject";
+import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
 
 @Injectable({
   providedIn: "root",

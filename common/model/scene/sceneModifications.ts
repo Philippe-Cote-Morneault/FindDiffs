@@ -1,4 +1,4 @@
-import { ICommonSceneObject } from "./sceneObject";
+import { ICommonSceneObject } from "./objects/sceneObject";
 /**
  * Represents the modifications applied to an original scene. 
  */

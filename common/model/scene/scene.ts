@@ -1,4 +1,4 @@
-import { ICommonSceneObject } from "./sceneObject";
+import { ICommonSceneObject } from "./objects/sceneObject";
 
 /**
  * Represents a ThreeJS scene

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ICommonSceneObject, GeometricShape } from "../../../../../common/model/scene/sceneObject";
+import { ICommonSceneObject, GeometricShape } from "../../../../../common/model/scene/objects/sceneObject";
 import * as THREE from "three";
 
 @Injectable({
@@ -12,7 +12,7 @@ export class SceneObjectParserService {
     }
 
     private parseGeometricShape(shape: ICommonSceneObject): THREE.Object3D {
-        
+
     }
   
 }
