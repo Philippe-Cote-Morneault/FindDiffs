@@ -9,7 +9,8 @@ export interface ICommonSceneObject {
     color: number;
     dimensions: number[];
     orientation: EulerAngles;
-    type: GeometricShape;
+    shape: GeometricShape;
+    type: ObjectTypes;
     position: ICommon3DPosition;
     texture: Textures;
 }
