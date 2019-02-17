@@ -83,6 +83,7 @@ export class UserService extends Service implements IUserService {
     }
 
     private isUsernameValid(username: string): boolean {
+        // Check if the username is between 3 and 12 alpha numeric character
         const regex: RegExp = new RegExp("^[a-zA-Z0-9]{3,12}$");
 
         return regex.test(username);
