@@ -12,10 +12,11 @@ import { ThematicSceneParser } from "./thematicSceneParser";
   providedIn: "root",
 })
 export class SceneParserService {
+    private static readonly FOV: number = 75;
 
     private sceneObjectParser: SceneObjectParser;
 
-    public parseScene(originalScene: ICommonScene): THREE.Scene {
+    public parseScene(originalScene: ICommonScene, windowWidth: number, windowHeight: number): THREE.Scene {
         let scene: THREE.Scene;
 
         if (originalScene.type === Type.Geometric) {
@@ -31,5 +32,13 @@ export class SceneParserService {
         });
 
         return scene;
+    }
+
+    private createCamera(): THREE.PerspectiveCamera {
+        const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
+            SceneParserService.FOV, 
+            window.innerWidth/window.innerHeight, 
+            0.1, 
+            1000 );
     }
 }
