@@ -3,7 +3,7 @@ import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { ICommonEulerAngles } from "../../../../../../common/model/scene/eulerAngles";
 import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObject";
 
-export abstract class GeometricObject {
+export abstract class GeometricObjectFactory {
     public parse(sceneObject: ICommonGeometricObject): THREE.Object3D {
         const geometricObject: THREE.Object3D = this.createShape(this.createMeshMaterial(sceneObject.color),
                                                                  sceneObject.dimensions);

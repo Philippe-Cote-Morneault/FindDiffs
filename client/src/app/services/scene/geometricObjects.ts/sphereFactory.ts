@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { GeometricObject } from "./geometricObject";
+import { GeometricObjectFactory } from "./geometricObjectFactory";
 
-export class Sphere extends GeometricObject {
+export class SphereFactory extends GeometricObjectFactory {
     public createShape(color: THREE.MeshBasicMaterial, dimensions: number[]): THREE.Object3D {
         const sphereShape: THREE.SphereGeometry = new THREE.SphereGeometry(...dimensions);
 
