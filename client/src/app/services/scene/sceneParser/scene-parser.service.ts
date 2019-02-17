@@ -24,7 +24,7 @@ export class SceneParserService {
         this.generateGrid(originalScene.dimensions.x, 100);
 
         originalScene.sceneObjects.forEach((object: ICommonSceneObject) => {
-            scene.add(this.sceneObjectParserService.parseSceneObject(object));
+            scene.add(this.sceneObjectParser.parse(object));
         });
 
         return scene;

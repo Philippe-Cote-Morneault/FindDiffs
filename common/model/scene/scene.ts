@@ -1,5 +1,3 @@
-import { ICommonGeometricObject } from "./objects/geometricObject";
-import { ICommonThematicObject } from "./objects/thematicObject";
 import { ICommonSceneObject } from "./objects/sceneObject";
 
 /**
@@ -14,12 +12,10 @@ export interface ICommonScene {
 
 export interface ICommonGeometricScene extends ICommonScene {
     bg_color: string;
-    sceneObjects: ICommonGeometricObject[];
 }
 
 export interface ICommonThematicScene extends ICommonScene {
     texture: string;
-    sceneObjects: ICommonThematicObject[];
 }
 
 /**
