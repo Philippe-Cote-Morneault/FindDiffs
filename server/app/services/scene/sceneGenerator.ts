@@ -61,7 +61,7 @@ export class SceneGenerator {
     public waitUntilValidPosition(validPosition: boolean[], positionObject:
                                                             { modelPosition: ICommon3DPosition; position: number; }):
                                                             { modelPosition: ICommon3DPosition; position: number } {
-        while (validPosition[positionObject.position] === false) {
+        while (!validPosition[positionObject.position]) {
             positionObject = this.sceneObjectPosition.modelPosition();
         }
 
