@@ -2,9 +2,9 @@ import { v4 as uuid } from "uuid";
 import { ICommon3DPosition } from "../../../../../common/model/positions";
 import { ICommonEulerAngles } from "../../../../../common/model/scene/eulerAngles";
 import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { NumberGenerationUtils } from "../../../utils/numerGenerationUtils";
 import { ObjectType } from "../../../../../common/model/scene/scene";
 import { ColorUtils } from "../../../utils/colorUtils";
+import { NumberGenerationUtils } from "../../../utils/numerGenerationUtils";
 
 export abstract class GeometricObjectFactory {
     private static readonly SIZE_MAX_PERCENTAGE: number = 150;
