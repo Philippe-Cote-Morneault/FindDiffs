@@ -1,11 +1,13 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
-import { ObjectType } from "../../../../common/model/scene/scene";
+import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { ISceneService } from "../interfaces";
 import { Service } from "../service";
+import { SceneGenerator } from "./sceneGenerator";
+import { IScene, Scene } from "../../model/schemas/scene";
 
 export class SceneService extends Service implements ISceneService {
     private readonly MIN_OBJECT: number = 10;
@@ -32,7 +34,18 @@ export class SceneService extends Service implements ISceneService {
     }
     public async post(req: Request): Promise<string> {
         this.validatePost(req);
-        throw new Error("Method not implemented.");
+        const sceneGenerator: SceneGenerator = new SceneGenerator(req.body.object_qty);
+        const scene: ICommonScene = sceneGenerator.generateScene();
+
+        const sceneSchema: IScene = new Scene({
+            scene: scene,
+            grid: sceneGenerator.getGrid(),
+            creation_date: new Date(),
+        });
+        await sceneSchema.save();
+        scene.id = sceneSchema.id;
+
+        return JSON.stringify(scene);
     }
 
     private validatePostModified(req: Request): void {
