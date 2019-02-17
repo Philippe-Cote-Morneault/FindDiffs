@@ -8,5 +8,4 @@ export interface ICommonSceneModifications {
     addedObjects: ICommonSceneObject[];
     // Array of ids of deleted objects
     deletedObjects: string[];
-
 }

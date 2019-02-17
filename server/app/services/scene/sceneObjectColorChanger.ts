@@ -1,6 +1,6 @@
+import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonGeometricShape } from "../../../../common/model/scene/objects/geometricShape";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
 import { SceneTransformation } from "./sceneTransformation";
 
 /**
@@ -10,7 +10,7 @@ export class SceneObjectColorChanger implements SceneTransformation {
     private static readonly numberOfHexColors: number = 16777215;
 
     public applyTransformation(modifedScene: ICommonScene, transformationEligibleObjects: ICommonGeometricShape[],
-                               modifications: ICommonSceneModifications): void {
+                               modifications: ICommonGeometricModifications): void {
 
         const indexOfObject: number = Math.floor(Math.random() * transformationEligibleObjects.length);
         const modifiedObject: ICommonGeometricShape = transformationEligibleObjects[indexOfObject];
