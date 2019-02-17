@@ -1,4 +1,4 @@
-import { DefaultGrid, Grid } from "./gird";
+import { DefaultGrid, Grid } from "./grid";
 
 export class SceneGenerator {
     private objectQty: number;
