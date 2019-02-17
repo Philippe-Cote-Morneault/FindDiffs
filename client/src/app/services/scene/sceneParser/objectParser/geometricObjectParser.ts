@@ -7,4 +7,5 @@ export class GeometricObjectParser extends SceneObjectParser {
 
     }
     
+    protected 
 }

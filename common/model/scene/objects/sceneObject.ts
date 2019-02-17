@@ -1,12 +1,12 @@
 import { ICommon3DPosition } from "../../positions";
-import { EulerAngles } from "../eulerAngles";
+import { ICommonEulerAngles } from "../eulerAngles";
 
 /**
  * Represents an object in a ThreeJS scene.
  */
 export interface ICommonSceneObject {
     id: string;
-    orientation: EulerAngles;
+    orientation: ICommonEulerAngles;
     position: ICommon3DPosition;
 }
 

@@ -1,4 +1,4 @@
-export interface EulerAngles {
+export interface ICommonEulerAngles {
     xAngle: number;
     yAngle: number;
     zAngle: number;
