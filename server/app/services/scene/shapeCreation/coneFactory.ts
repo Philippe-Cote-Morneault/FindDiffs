@@ -7,11 +7,13 @@ export class ConeFactory extends GeometricObjectFactory {
     private static readonly REFERENCE_HEIGHT: number = 3;
 
     protected createShape(geometricObject: ICommonGeometricObject): ICommonCone {
+        const scalePercentage: number = this.generateRandomPercentage();
+
         const coneObject: ICommonCone = geometricObject as ICommonCone;
 
         coneObject.shapeType = GeometricShapeType.CONE;
-        coneObject.radius = ConeFactory.REFERENCE_RADIUS;
-        coneObject.height = ConeFactory.REFERENCE_HEIGHT;
+        coneObject.radius = scalePercentage * ConeFactory.REFERENCE_RADIUS;
+        coneObject.height = scalePercentage * ConeFactory.REFERENCE_HEIGHT;
 
         return coneObject;
     }
