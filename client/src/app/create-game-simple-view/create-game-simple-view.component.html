@@ -3,7 +3,7 @@
     crossorigin="anonymous">
 </head>
 
-<body>
+<div class="body">
   <div class="global-wrapper" id="simpleViewId">
     <h2>
       Create a simple point of view game
@@ -15,7 +15,7 @@
 
       Name of the game
       <div>
-        <input type="text" class="form-control is-invalid" id="gameNameInput" (change)="verifyName()" placeholder="Name game"
+        <input type="text" class="form-control is-invalid" id="gameNameInput" #gameNameInput (change)="verifyName()" placeholder="Name game"
           required>
       </div>
 
@@ -38,4 +38,4 @@
     </form>
   </div>
 
-</body>
+</div>

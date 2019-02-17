@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ImagePairService } from "../services/image-pair.service";
@@ -11,25 +11,24 @@ import { PixelRestorationService } from "../services/pixel-restoration.service";
     styleUrls: ["./game-view.component.css"],
 })
 export class GameViewComponent implements OnInit {
-    // public imagePair: ICommonImagePair;
+    @ViewChild("originalCanvas") private originalCanvas: ElementRef;
+    @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     private imagePairId: string;
-    // private differenceCounterUser: number;
-    // private differenceCounterOpponent: number;
-    // private isSolo: boolean;
-    private canvas: HTMLCanvasElement;
-    private originalCanvasID: string;
-    private modifiedCanvasID: string;
+    private differenceCounterUser: number;
+    private differenceFound: number[];
+    // tslint:disable-next-line:no-any
+    private differenceSound: any;
 
     public constructor(
         private route: ActivatedRoute,
         public pixelPositionService: PixelPositionService,
         public pixelRestorationService: PixelRestorationService,
         public imagePairService: ImagePairService) {
-        // this.isSolo = false;
-        // this.differenceCounterOpponent = 0;
-        // this.differenceCounterUser = 0;
-        this.originalCanvasID = "original_canvas";
-        this.modifiedCanvasID = "modified_canvas";
+        this.differenceCounterUser = 0;
+        this.differenceSound = new Audio;
+        this.differenceSound.src = "../../assets/mario.mp3";
+        this.differenceSound.load();
+        this.differenceFound = [];
     }
 
     public ngOnInit(): void {
@@ -42,9 +41,8 @@ export class GameViewComponent implements OnInit {
 
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
-            // this.imagePair = imagePair;
-            this.loadCanvas(this.modifiedCanvasID, imagePair.url_modified);
-            this.loadCanvas(this.originalCanvasID, imagePair.url_original);
+            this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
+            this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
         });
     }
 
@@ -52,21 +50,41 @@ export class GameViewComponent implements OnInit {
     public getClickPosition(e: any): void {
         const xPosition: number = e.layerX;
         const yPosition: number = e.layerY;
-        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(
-            this.pixelRestorationService.restoreImage);
+        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) => {
+            if (response.hit) {
+                const hashDifference: number = response.pixels_affected.length;
+                if (this.isANewDifference(hashDifference)) {
+                    this.pixelRestorationService.restoreImage(response,
+                                                              this.originalCanvas.nativeElement,
+                                                              this.modifiedCanvas.nativeElement);
+                    this.addDifference(hashDifference);
+                }
+            }
+        });
     }
 
-    public loadCanvas(canvasID: string, imageSrc: string): void {
-        this.canvas = (document.getElementById(canvasID) as HTMLCanvasElement);
-        this.canvas.addEventListener("click", this.getClickPosition.bind(this));
-        const canvasContext: CanvasRenderingContext2D | null = this.canvas.getContext("2d");
+    // tslint:disable:no-any
+    public loadCanvas(canvas: any, imageSrc: string): void {
+        canvas.addEventListener("click", (e: any) => this.getClickPosition(e));
+        const canvasContext: CanvasRenderingContext2D | null = canvas.getContext("2d");
         const image: HTMLImageElement = new Image();
+        image.crossOrigin = "Anonymous";
         image.src = imageSrc;
         image.onload = () => {
             if (canvasContext) {
                 canvasContext.drawImage(image, 0, 0);
             }
         };
-        image.crossOrigin = "Anonymous";
+    }
+
+    public addDifference(hashDifference: number): void {
+        this.differenceFound[this.differenceFound.length++] = hashDifference;
+        this.differenceCounterUser = this.differenceCounterUser + 1;
+        this.differenceSound.play();
+    }
+
+    public isANewDifference(hashDifference: number): boolean {
+
+        return !this.differenceFound.includes(hashDifference);
     }
 }
