@@ -16,7 +16,7 @@ export abstract class GeometricObjectFactory {
 
     public createObject(position: ICommon3DPosition): ICommonGeometricObject {
         const geometricObject: ICommonGeometricObject = {
-            id: uuid(),
+            id: uuid().replace(/-/g, ""),
             orientation: this.generateRandomOrientation(),
             position: position,
             type: ObjectType.Geometric,
