@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonGeometricScene, ICommonScene, ICommonThematicScene, Type } from "../../../../../../common/model/scene/scene";
-import { GeometricObjectParser } from "./objectParser/geometricObjectParser";
 import { GeometricSceneParser } from "./geometricSceneParser";
-import { SceneObjectParser } from "./sceneObjectParser";
+import { GeometricObjectParser } from "./objectParser/geometricObjectParser";
 import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
+import { SceneObjectParser } from "./sceneObjectParser";
 import { ThematicSceneParser } from "./thematicSceneParser";
 
 @Injectable({
