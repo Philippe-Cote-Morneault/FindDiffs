@@ -12,7 +12,7 @@ export class SceneObjectParserService {
     }
 
     private parseGeometricShape(shape: ICommonSceneObject): THREE.Object3D {
-
+        
     }
   
 }
