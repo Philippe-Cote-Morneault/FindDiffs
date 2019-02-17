@@ -13,7 +13,7 @@ export class SceneRendererService {
   }
 
   public renderScene(renderer: THREE.WebGLRenderer, scene: ICommonScene): void {
-
+	
   }
 
   public renderModifedScene(renderer: THREE.WebGLRenderer, originalScene: ICommonScene,
