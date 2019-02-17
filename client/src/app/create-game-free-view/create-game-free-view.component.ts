@@ -17,12 +17,19 @@ export class CreateGameFreeViewComponent {
     @ViewChild("erreurMessage") private erreurMessage: ElementRef;
     @ViewChild("objectType") private objectType: ElementRef;
 
-    public canSubmit: boolean = false;
-    public displayError: string = "inline";
-    public hideError: string = "none";
+    public canSubmit: boolean;
+    public displayError: string;
+    public hideError: string;
+    public MAX_QTE: number;
+    public MIN_QTE: Number;
 
     public constructor (private spinnerService: Ng4LoadingSpinnerService, public scenePairService: ScenePairService) {
-
+        this.displayError = "inline";
+        this.hideError = "none";
+        this.canSubmit = false;
+        // tslint:disable:no-magic-numbers
+        this.MAX_QTE = 200;
+        this.MIN_QTE = 10;
     }
     public isNameValid(): boolean {
         const gameName: string = this.gameNameInput.nativeElement.value;
@@ -37,19 +44,20 @@ export class CreateGameFreeViewComponent {
         return isAddType || isRemoveType || isModifiedType;
     }
     public isQuantityValid(): boolean {
-        const quantity: string = this.quantityObject.nativeElement.value;
+        const quantity: number = Number(this.quantityObject.nativeElement.value);
         this.toggleErrorMessage(quantity);
 
-        return quantity.length !== 0 && !isNaN(Number(quantity));
+        return !isNaN(quantity) && quantity > this.MIN_QTE && quantity < this.MAX_QTE;
     }
 
-    private toggleErrorMessage(quantity: string): void {
-        this.erreurMessage.nativeElement.style.display = (quantity.length > 0 && isNaN(Number(quantity)))
+    private toggleErrorMessage(quantity: number): void {
+        this.erreurMessage.nativeElement.style.display = ((isNaN(quantity) || (quantity < this.MIN_QTE || quantity > this.MAX_QTE))
+                                                           && quantity !== 0)
         ? this.displayError : this.hideError;
     }
 
     public verifyInfo(): void {
-        this.canSubmit = (this.isQuantityValid() && this.isNameValid() && this.isModificationTypeValid());
+        this.canSubmit = (this.isNameValid() && this.isQuantityValid() && this.isModificationTypeValid());
     }
 
     public hideView(): void {
