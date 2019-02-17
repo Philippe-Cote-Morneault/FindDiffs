@@ -79,11 +79,22 @@ export class CreateGameFreeViewComponent {
 
         // TODO: Subscribe
         this.scenePairService.addScenePair(gameName, objectType, Number(quantity), isAddType, isRemoveType, isModifiedType)
-            .subscribe((response: ICommonScene| Message) => {
+            .subscribe((response: ICommonScene | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    this.addGameCard((response as ICommonImagePair).id);
+                    this.addGameCard((response as ICommonScene).id);
+                }
+            });
+    }
+
+    private addGameCard(imagePairId: string): void {
+        this.gamesCardService.addGameCard(this.gameName, imagePairId, POVType.Simple)
+            .subscribe((response: ICommonGameCard | Message) => {
+                if ((response as Message).body) {
+                    alert((response as Message).body);
+                } else {
+                    window.location.reload();
                 }
             });
     }
