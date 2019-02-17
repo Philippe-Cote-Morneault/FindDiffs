@@ -1,5 +1,5 @@
 import { ICommonThematicModifications } from "../../../../../common/model/scene/modifications/thematicModifications";
-import { ICommonThematicObject } from "../../../../../common/model/scene/objects/thematicObject";
+import { ICommonThematicObject } from "../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ICommonScene } from "../../../../../common/model/scene/scene";
 import { SceneTransformation } from "./sceneTransformation";
 

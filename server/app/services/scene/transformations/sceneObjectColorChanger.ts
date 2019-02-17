@@ -1,5 +1,5 @@
 import { ICommonGeometricModifications } from "../../../../../common/model/scene/modifications/geometricModifications";
-import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObject";
+import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ICommonScene } from "../../../../../common/model/scene/scene";
 import { SceneTransformation } from "./sceneTransformation";
 

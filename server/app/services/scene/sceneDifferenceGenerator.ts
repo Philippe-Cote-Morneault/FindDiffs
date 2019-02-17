@@ -1,8 +1,8 @@
 import { v4 as uuid } from "uuid";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonSceneObject } from "../../../../common/model/scene/objects/sceneObject";
-import { Textures } from "../../../../common/model/scene/objects/thematicObject";
-import { ICommonScene, Type } from "../../../../common/model/scene/scene";
+import { Textures } from "../../../../common/model/scene/objects/thematicObjects/thematicObject";
+import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { SceneObjectAdder } from "./transformations/sceneObjectAdder";
 import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChanger";
 import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
@@ -54,14 +54,14 @@ export class SceneDifferenceGenerator {
         }
         if (requiresColorChange) {
             this.transformationsToApply.push(
-                this.modifiedScene.type === Type.Geometric ? new SceneObjectColorChanger() : new SceneObjectTextureChanger(),
+                this.modifiedScene.type === ObjectType.Geometric ? new SceneObjectColorChanger() : new SceneObjectTextureChanger(),
             );
         }
     }
 
     // TODO: See if we cant make less duplication here
     private initializeModifications(): void {
-        if (this.modifiedScene.type === Type.Geometric) {
+        if (this.modifiedScene.type === ObjectType.Geometric) {
             this.modifications = {
                 id: uuid(),
                 type: this.modifiedScene.type,
