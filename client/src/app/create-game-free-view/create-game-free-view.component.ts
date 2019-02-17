@@ -1,4 +1,6 @@
 import { Component,  ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
+import { ScenePairService } from "../services/scene-pair.service";
 
 @Component({
     selector: "app-create-game-free-view",
@@ -13,11 +15,15 @@ export class CreateGameFreeViewComponent {
     @ViewChild("modified") private modified: ElementRef;
     @ViewChild("quantityObject") private quantityObject: ElementRef;
     @ViewChild("erreurMessage") private erreurMessage: ElementRef;
+    @ViewChild("objectType") private objectType: ElementRef;
 
     public canSubmit: boolean = false;
     public displayError: string = "inline";
     public hideError: string = "none";
 
+    public constructor (private spinnerService: Ng4LoadingSpinnerService, public scenePairService: ScenePairService) {
+
+    }
     public isNameValid(): boolean {
         const gameName: string = this.gameNameInput.nativeElement.value;
 
@@ -48,5 +54,18 @@ export class CreateGameFreeViewComponent {
 
     public hideView(): void {
         this.closed.emit(true);
+    }
+
+    public addScenePair(): void {
+        this.spinnerService.show();
+        const gameName: string = this.gameNameInput.nativeElement.value;
+        const isAddType: boolean = this.add.nativeElement.checked;
+        const isRemoveType: boolean = this.remove.nativeElement.checked;
+        const isModifiedType: boolean = this.modified.nativeElement.checked;
+        const quantity: string = this.quantityObject.nativeElement.value;
+        const objectType: string = this.objectType.nativeElement.value;
+
+        // TODO: Subscribe
+        this.scenePairService.addScenePair(gameName, objectType, Number(quantity), isAddType, isRemoveType, isModifiedType).subscribe();
     }
 }
