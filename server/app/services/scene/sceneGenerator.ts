@@ -27,9 +27,9 @@ export class SceneGenerator {
         };
     }
 
-    public generateScene(): void {
-        // TODO change for generated grids with a singleton to store 10 examples
-        const grid: Grid = new DefaultGrid(this.SCENE_SIZE, this.SCENE_SIZE, this.SCENE_OBJECT_MARGIN);
+    public getGrid(): Grid | undefined {
+        return this.grid;
+    }
 
     public generateScene(): ICommonScene {
         this.grid = new RandomGrid(this.SCENE_SIZE, this.SCENE_SIZE, this.SCENE_OBJECT_MARGIN);
