@@ -25,7 +25,6 @@ export class SceneParserService {
             this.sceneObjectParser = new ThematicObjectParser();
             scene = ThematicSceneParser.parseScene(originalScene as ICommonThematicScene);
         }
-        this.sceneObjectParser = originalScene.type === Type.Geometric ? new GeometricObjectParser() : new ThematicObjectParser();
 
         originalScene.sceneObjects.forEach((object: ICommonSceneObject) => {
             scene.add(this.sceneObjectParser.parse(object));
