@@ -1,6 +1,6 @@
-import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
-import { ICommonScene } from "../../../../../common/model/scene/scene";
+import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
+import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
+import { ICommonScene } from "../../../../../../common/model/scene/scene";
 import { SceneTransformation } from "./sceneTransformation";
 
 /**
