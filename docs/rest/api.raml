@@ -363,7 +363,8 @@ version: 1
               application/json:
                 example: | 
                   {
-                    "scene_objects": [
+                    "id": 4343242,
+                    "addedObjects": [
                       {
                         "color": 43432432,
                         "dimensions": [
@@ -382,9 +383,13 @@ version: 1
                         "texture": null
                       }
                     ],
-                    "bg_color": 434343,
-                    "texture": null,
-                    "id": 4343242
+                    "deletedObjects": ["323232"],
+                    "colorChangedObjects": [
+                      {
+                        key:"3243",
+                        value: 3232323
+                      }
+                    ]
                   }
       get:
         description: Return a modified scene
@@ -394,7 +399,8 @@ version: 1
               application/json:
                 example: | 
                   {
-                    "scene_objects": [
+                    "id": 4343242,
+                    "addedObjects": [
                       {
                         "color": 43432432,
                         "dimensions": [
@@ -413,9 +419,13 @@ version: 1
                         "texture": null
                       }
                     ],
-                    "bg_color": 434343,
-                    "texture": null,
-                    "id": 4343242
+                    "deletedObjects": ["323232"],
+                    "colorChangedObjects": [
+                      {
+                        key:"3243",
+                        value: 3232323
+                      }
+                    ]
                   }
 /difference:
   /free:
@@ -449,5 +459,6 @@ version: 1
             application/json:
               example: |
                 {
-                  "hit": false
+                  "title":"Error",
+                  "body":"No difference was found at the specified position"
                 }

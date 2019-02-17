@@ -23,12 +23,12 @@ export class UserService extends Service implements IUserService {
         return User.findById(id)
             .then((doc: IUser) => {
                 if (!doc) {
-                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                    throw new NotFoundException(R.ERROR_UNKNOWN_ID);
                 }
 
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             });
     }
 
@@ -36,7 +36,7 @@ export class UserService extends Service implements IUserService {
         return User.findById(id)
         .then(async (doc: IUser) => {
             if (!doc) {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
             await doc.remove();
             const message: Message = {
@@ -46,7 +46,7 @@ export class UserService extends Service implements IUserService {
 
             return JSON.stringify(message); })
         .catch((error: Error) => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }
 
@@ -68,7 +68,7 @@ export class UserService extends Service implements IUserService {
         }
 
         if (!this.isUsernameValid(req.body.username)) {
-            throw new InvalidFormatException(_e(R.ERROR_INVALID, [R.USERNAME_]));
+            throw new InvalidFormatException(R.ERROR_INVALID_USERNAME);
         }
 
         if (!await this.isAvailable(req.body.username)) {
@@ -83,6 +83,7 @@ export class UserService extends Service implements IUserService {
     }
 
     private isUsernameValid(username: string): boolean {
+        // Check if the username is between 3 and 12 alpha numeric character
         const regex: RegExp = new RegExp("^[a-zA-Z0-9]{3,12}$");
 
         return regex.test(username);

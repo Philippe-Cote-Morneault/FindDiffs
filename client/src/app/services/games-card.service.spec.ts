@@ -14,16 +14,7 @@ describe("GamesCardService", () => {
         "id": "432423423423ef",
         "pov": POVType.Simple,
         "title": "title1",
-        "image_pair":
-        {
-        "id": "438943af323ed43",
-        "url_difference": "http://localhost:3000/image-pair/438943af323ed43/difference",
-        "url_modified": "http://localhost:3000/image-pair/438943af323ed43/modified",
-        "url_original": "http://localhost:3000/image-pair/438943af323ed43/original",
-        "name": "title1",
-        "creation_date": new Date(),
-        "differences_count": 7,
-        },
+        "resource_id": "and id",
         "best_time_solo": [1254512, 1282445, 544512],
         "best_time_online": [1254512, 1282445, 544512],
     };
@@ -32,16 +23,7 @@ describe("GamesCardService", () => {
         "id": "jf243ddf42r2",
         "pov": POVType.Free,
         "title": "title2",
-        "image_pair":
-        {
-        "id": "fdskfdsfsd",
-        "url_difference": "http://localhost:3000/image-pair/fdskfdsfsd/difference",
-        "url_modified": "http://localhost:3000/image-pair/fdskfdsfsd/modified",
-        "url_original": "http://localhost:3000/image-pair/fdskfdsfsd/original",
-        "name": "title2",
-        "creation_date": new Date(),
-        "differences_count": 7,
-        },
+        "resource_id": "and an other id",
         "best_time_solo": [1254512, 1282445, 544512],
         "best_time_online": [1254512, 1282445, 544512],
     };
@@ -50,16 +32,7 @@ describe("GamesCardService", () => {
         "id": "43dfsfdsl;4",
         "pov": POVType.Simple,
         "title": "title3",
-        "image_pair":
-        {
-        "id": "438943af323ed43",
-        "url_difference": "http://localhost:3000/image-pair/438943af323ed43/difference",
-        "url_modified": "http://localhost:3000/image-pair/438943af323ed43/modified",
-        "url_original": "http://localhost:3000/image-pair/438943af323ed43/original",
-        "name": "title3",
-        "creation_date": new Date(),
-        "differences_count": 7,
-        },
+        "resource_id": "fhdhf",
         "best_time_solo": [43209, 4832324, 3428432],
         "best_time_online": [432432, 54353, 423423],
     };
@@ -128,7 +101,7 @@ describe("GamesCardService", () => {
         });
 
         it("Should return an error message when sending a wrong POV", () => {
-            service.addGameCard(mockGameCard1.title, mockGameCard1.image_pair.id, mockGameCard1.pov)
+            service.addGameCard(mockGameCard1.title, mockGameCard1.resource_id, mockGameCard1.pov)
                 .subscribe((message: Message) => {
                     expect(message.title).to.equal("Error");
                     expect(message.body).to.equal("The pov is not a Simple or free type");

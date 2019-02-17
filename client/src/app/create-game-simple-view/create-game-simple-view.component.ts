@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component,  ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
@@ -13,6 +14,7 @@ import { ImagePairService } from "../services/image-pair.service";
 })
 export class CreateGameSimpleViewComponent {
     @Output() public closed: EventEmitter<boolean> = new EventEmitter();
+    @ViewChild("gameNameInput") private gameNameInput: ElementRef;
 
     private gamesCardService: GamesCardService;
     private imagePairService: ImagePairService;
@@ -24,7 +26,8 @@ export class CreateGameSimpleViewComponent {
     private modifiedImageFile: File;
     private gameName: string;
 
-    public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService) {
+    public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService,
+                       private spinnerService: Ng4LoadingSpinnerService) {
         this.gamesCardService = gamesCardService;
         this.imagePairService = imagePairService;
     }
@@ -32,7 +35,7 @@ export class CreateGameSimpleViewComponent {
     public verifyName(): void {
         const MIN_LENGTH: number = 2;
         const MAX_LENGTH: number = 13;
-        const gameName: string = (document.getElementById("gameNameInput") as HTMLInputElement).value;
+        const gameName: string = this.gameNameInput.nativeElement.value;
         this.fromValidation[0] = gameName.length > MIN_LENGTH && gameName.length < MAX_LENGTH;
         this.gameName = gameName;
     }
@@ -51,6 +54,7 @@ export class CreateGameSimpleViewComponent {
     }
 
     public addImagePair(): void {
+        this.spinnerService.show();
         this.imagePairService.addImagePair(this.gameName, this.originalImageFile, this.modifiedImageFile)
             .subscribe((response: ICommonImagePair | Message) => {
                 if ((response as Message).body) {
@@ -73,6 +77,7 @@ export class CreateGameSimpleViewComponent {
     }
 
     public hideView(): void {
+        this.spinnerService.hide();
         this.closed.emit(true);
     }
 }
