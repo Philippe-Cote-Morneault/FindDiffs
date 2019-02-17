@@ -1,9 +1,10 @@
 import { v4 as uuid } from "uuid";
 import { ICommon3DPosition } from "../../../../../common/model/positions";
-import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ICommonEulerAngles } from "../../../../../common/model/scene/eulerAngles";
+import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+import { NumberGenerationUtils } from "../../../utils/numerGenerationUtils";
 
-export abstract class SceneGeometricObject {
+export abstract class GeometricObjectFactory {
     private static readonly SIZE_MAX_PERCENTAGE: number = 150;
     private static readonly SIZE_MIN_PERCENTAGE: number = 50;
     // tslint:disable-next-line:no-magic-numbers
@@ -23,15 +24,18 @@ export abstract class SceneGeometricObject {
     protected abstract createShape(): ICommonGeometricObject;
 
     protected generateRandomPercentage(): number {
-        return Math.random() * (SceneGeometricObject.SIZE_MAX_PERCENTAGE - SceneGeometricObject.SIZE_MIN_PERCENTAGE) +
-            SceneGeometricObject.SIZE_MIN_PERCENTAGE;
+        return NumberGenerationUtils.generateInRange(GeometricObjectFactory.SIZE_MIN_PERCENTAGE, GeometricObjectFactory.SIZE_MAX_PERCENTAGE);
     }
 
     private generateRandomOrientation(): ICommonEulerAngles {
         return {
-            xAngle: ,
-            yAngle: ,
-            zAngle: ,
+            xAngle: this.generateRandomRadianAngle(),
+            yAngle: this.generateRandomRadianAngle(),
+            zAngle: this.generateRandomRadianAngle(),
         } as ICommonEulerAngles;
+    }
+
+    private generateRandomRadianAngle(): number {
+        return NumberGenerationUtils.generateInRange(GeometricObjectFactory.MIN_RADIAN_ANGLE, GeometricObjectFactory.MAX_RADIAN_ANGLE);
     }
 }
