@@ -3,6 +3,8 @@ import { ICommon3DPosition } from "../../../../common/model/positions";
 
 export abstract class Grid {
 
+    public static readonly CENTER: ICommon3DPosition = {x: 0, y: 0, z: 0};
+
     protected width: number;
     protected height: number;
     protected minDistancePos: number;
@@ -24,12 +26,26 @@ export abstract class Grid {
             throw new StackEmptyException();
         }
         const nextPositionIndex: number = Math.floor(Math.random() * (this.positionsStack.length - 1));
+        const position: ICommon3DPosition = this.positionsStack.splice(nextPositionIndex, 1)[0];
 
-        return this.positionsStack.splice(nextPositionIndex, 1)[0];
+        if (!this.isInSafeZone(position)) {
+            return position;
+        }
+
+        return this.getNextPosition();
     }
 
     public restoreStack(): void {
         this.positionsStack = this.positions.slice();
+    }
+
+    private isInSafeZone(position: ICommon3DPosition): boolean {
+        return this.distanceBetweenPosition(position, Grid.CENTER) < this.minDistancePos;
+    }
+
+    protected distanceBetweenPosition(position1: ICommon3DPosition, position2: ICommon3DPosition): number {
+        // tslint:disable-next-line:no-magic-numbers
+        return Math.sqrt(Math.pow(position1.x - position2.x, 2) + Math.pow(position1.y - position2.y, 2));
     }
 
     protected abstract generateGrid(): void;
