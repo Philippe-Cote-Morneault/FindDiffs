@@ -20,7 +20,7 @@ export class ScenePairService extends HTTPService {
                         quantity: number, isAddModif: boolean,
                         isRemoveModif: boolean, isModifiedModif: boolean): Observable<any> {
 
-        const requestBody: Object = {"name": gameName, "type": objectType,
+        const requestBody: Object = {"name": gameName, "object_type": objectType,
                                      "object_qty": quantity, "add": isAddModif,
                                      "remove": isRemoveModif, "modified": isModifiedModif };
 
