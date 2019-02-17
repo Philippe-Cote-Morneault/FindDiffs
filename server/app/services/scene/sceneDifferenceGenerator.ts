@@ -1,11 +1,11 @@
 import { v4 as uuid } from "uuid";
+import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
+import { ICommonSceneObject } from "../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
-import { ICommonSceneObject } from "../../../../common/model/scene/sceneObject";
-import { SceneObjectAdder } from "./sceneObjectAdder";
-import { SceneObjectColorChanger } from "./sceneObjectColorChanger";
-import { SceneObjectRemover } from "./sceneObjectRemover";
-import { SceneTransformation } from "./sceneTransformation";
+import { SceneObjectAdder } from "./transformations/sceneObjectAdder";
+import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChanger";
+import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
+import { SceneTransformation } from "./transformations/sceneTransformation";
 
 export class SceneDifferenceGenerator {
     private static readonly NUMBER_OF_DIFFERENCES: number = 7;
@@ -28,9 +28,10 @@ export class SceneDifferenceGenerator {
 
         this.modifications = {
             id: uuid(),
+            type: originalScene.type,
             addedObjects: [],
             deletedObjects: [],
-            colorChangedObjects: new Map<string, number>(),
+            //colorChangedObjects: new Map<string, number>(),
         };
 
         for (let i: number = 0; i < SceneDifferenceGenerator.NUMBER_OF_DIFFERENCES; ++i) {

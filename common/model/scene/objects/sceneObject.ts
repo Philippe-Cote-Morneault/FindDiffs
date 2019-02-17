@@ -7,9 +7,7 @@ import { EulerAngles } from "../eulerAngles";
 export interface ICommonSceneObject {
     id: string;
     orientation: EulerAngles;
-    type: ObjectType;
     position: ICommon3DPosition;
 }
 
-export enum ObjectType { Theme, Geometric };
 

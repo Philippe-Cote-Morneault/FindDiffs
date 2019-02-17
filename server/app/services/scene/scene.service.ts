@@ -1,7 +1,7 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
-import { ObjectTypes } from "../../../../common/model/scene/sceneObject";
+import { Type } from "../../../../common/model/scene/scene";
 import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { ISceneService } from "../interfaces";
@@ -16,7 +16,7 @@ export class SceneService extends Service implements ISceneService {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.OBJECT_TYPE_]));
         }
 
-        if (!EnumUtils.isStringInEnum(req.body.object_type, ObjectTypes)) {
+        if (!EnumUtils.isStringInEnum(req.body.object_type, Type)) {
             throw new InvalidFormatException(_e(R.ERROR_WRONG_TYPE, [req.body.object_type]));
         }
 
