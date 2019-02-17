@@ -1,9 +1,8 @@
-import { ICommonSceneObject } from "./sceneObject";
+import { ICommonSceneObject } from "../sceneObject";
 
 export interface ICommonGeometricObject extends ICommonSceneObject {
     color: number;
-    shape: GeometricShape;
-    dimensions: number[];
+    shapeType: GeometricShapeType;
 }
 
-export enum GeometricShape { SPHERE, CUBE, CONE, CYLINDER, SQUARED_BASE_PYRAMID };
+export enum GeometricShapeType { SPHERE, CUBE, CONE, CYLINDER, SQUARED_BASE_PYRAMID };

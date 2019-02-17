@@ -1,4 +1,4 @@
-import { ICommonSceneObject } from "./sceneObject";
+import { ICommonSceneObject } from "../sceneObject";
 
 export interface ICommonThematicObject extends ICommonSceneObject {
     texture: Textures;

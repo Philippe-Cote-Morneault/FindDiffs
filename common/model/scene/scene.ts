@@ -7,7 +7,7 @@ export interface ICommonScene {
     id: string;
     dimensions: ICommonSceneDimensions;
     sceneObjects: ICommonSceneObject[];
-    type: Type;
+    type: ObjectType;
 }
 
 export interface ICommonGeometricScene extends ICommonScene {
@@ -27,4 +27,4 @@ export interface ICommonSceneDimensions {
     z: number;
 }
 
-export enum Type {Geometric, Thematic};
+export enum ObjectType {Geometric, Thematic};
