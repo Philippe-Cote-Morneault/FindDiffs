@@ -8,6 +8,9 @@ import { ScenePairService } from "../services/scene-pair.service";
     styleUrls: ["./create-game-free-view.component.css"],
 })
 export class CreateGameFreeViewComponent {
+    private static MAX_QTE: number = 200;
+    private static MIN_QTE: number = 10;
+
     @Output() public closed: EventEmitter<boolean> = new EventEmitter();
     @ViewChild("gameNameInput") private gameNameInput: ElementRef;
     @ViewChild("add") private add: ElementRef;
@@ -20,16 +23,11 @@ export class CreateGameFreeViewComponent {
     public canSubmit: boolean;
     public displayError: string;
     public hideError: string;
-    public MAX_QTE: number;
-    public MIN_QTE: Number;
 
     public constructor (private spinnerService: Ng4LoadingSpinnerService, public scenePairService: ScenePairService) {
         this.displayError = "inline";
         this.hideError = "none";
         this.canSubmit = false;
-        // tslint:disable:no-magic-numbers
-        this.MAX_QTE = 200;
-        this.MIN_QTE = 10;
     }
     public isNameValid(): boolean {
         const gameName: string = this.gameNameInput.nativeElement.value;
@@ -47,12 +45,12 @@ export class CreateGameFreeViewComponent {
         const quantity: number = Number(this.quantityObject.nativeElement.value);
         this.toggleErrorMessage(quantity);
 
-        return !isNaN(quantity) && quantity > this.MIN_QTE && quantity < this.MAX_QTE;
+        return !isNaN(quantity) && quantity > CreateGameFreeViewComponent.MIN_QTE && quantity < CreateGameFreeViewComponent.MAX_QTE;
     }
 
     private toggleErrorMessage(quantity: number): void {
-        this.erreurMessage.nativeElement.style.display = ((isNaN(quantity) || (quantity < this.MIN_QTE || quantity > this.MAX_QTE))
-                                                           && quantity !== 0)
+        this.erreurMessage.nativeElement.style.display = ((isNaN(quantity) ||
+        (quantity < CreateGameFreeViewComponent.MIN_QTE || quantity > CreateGameFreeViewComponent.MAX_QTE)) && quantity !== 0)
         ? this.displayError : this.hideError;
     }
 
