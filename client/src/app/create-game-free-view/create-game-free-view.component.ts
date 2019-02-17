@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
+import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/games-card.service";
 import { ScenePairService } from "../services/scene-pair.service";
@@ -77,19 +78,18 @@ export class CreateGameFreeViewComponent {
         const quantity: string = this.quantityObject.nativeElement.value;
         const objectType: string = this.objectType.nativeElement.value;
 
-        // TODO: Subscribe
         this.scenePairService.addScenePair(gameName, objectType, Number(quantity), isAddType, isRemoveType, isModifiedType)
             .subscribe((response: ICommonScene | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    this.addGameCard((response as ICommonScene).id);
+                    this.addGameCard((response as ICommonScene).id, gameName);
                 }
             });
     }
 
-    private addGameCard(imagePairId: string): void {
-        this.gamesCardService.addGameCard(this.gameName, imagePairId, POVType.Simple)
+    private addGameCard(scenePairId: string, gameName: string): void {
+        this.gamesCardService.addGameCard(gameName, scenePairId, POVType.Free)
             .subscribe((response: ICommonGameCard | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);
