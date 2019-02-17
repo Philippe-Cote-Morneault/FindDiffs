@@ -1,5 +1,8 @@
-import { Component,  ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
+import { Message } from "../../../../common/communication/message";
+import { ICommonScene } from "../../../../common/model/scene/scene";
+import { GamesCardService } from "../services/games-card.service";
 import { ScenePairService } from "../services/scene-pair.service";
 
 @Component({
@@ -24,7 +27,10 @@ export class CreateGameFreeViewComponent {
     public displayError: string;
     public hideError: string;
 
-    public constructor (private spinnerService: Ng4LoadingSpinnerService, public scenePairService: ScenePairService) {
+    public constructor(
+        private spinnerService: Ng4LoadingSpinnerService,
+        public scenePairService: ScenePairService,
+        public gamesCardService: GamesCardService) {
         this.displayError = "inline";
         this.hideError = "none";
         this.canSubmit = false;
@@ -50,8 +56,8 @@ export class CreateGameFreeViewComponent {
 
     private toggleErrorMessage(quantity: number): void {
         this.erreurMessage.nativeElement.style.display = ((isNaN(quantity) ||
-        (quantity < CreateGameFreeViewComponent.MIN_QTE || quantity > CreateGameFreeViewComponent.MAX_QTE)) && quantity !== 0)
-        ? this.displayError : this.hideError;
+            (quantity < CreateGameFreeViewComponent.MIN_QTE || quantity > CreateGameFreeViewComponent.MAX_QTE)) && quantity !== 0)
+            ? this.displayError : this.hideError;
     }
 
     public verifyInfo(): void {
@@ -72,6 +78,13 @@ export class CreateGameFreeViewComponent {
         const objectType: string = this.objectType.nativeElement.value;
 
         // TODO: Subscribe
-        this.scenePairService.addScenePair(gameName, objectType, Number(quantity), isAddType, isRemoveType, isModifiedType).subscribe();
+        this.scenePairService.addScenePair(gameName, objectType, Number(quantity), isAddType, isRemoveType, isModifiedType)
+            .subscribe((response: ICommonScene| Message) => {
+                if ((response as Message).body) {
+                    alert((response as Message).body);
+                } else {
+                    this.addGameCard((response as ICommonImagePair).id);
+                }
+            });
     }
 }
