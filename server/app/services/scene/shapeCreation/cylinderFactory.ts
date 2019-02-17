@@ -8,9 +8,10 @@ export class CylinderFactory extends GeometricObjectFactory {
 
     protected createShape(geometricObjet: ICommonGeometricObject): ICommonCylinder {
         const scalePercentage: number = this.generateRandomPercentage();
-        const cylinderShape: ICommonCylinder = geometricObjet as ICommonCylinder;
-        cylinderShape.shapeType = GeometricShapeType.CYLINDER;
 
+        const cylinderShape: ICommonCylinder = geometricObjet as ICommonCylinder;
+
+        cylinderShape.shapeType = GeometricShapeType.CYLINDER;
         cylinderShape.radius = scalePercentage * CylinderFactory.REFERENCE_RADIUS;
         cylinderShape.height = scalePercentage * CylinderFactory.REFERENCE_HEIGHT;
 

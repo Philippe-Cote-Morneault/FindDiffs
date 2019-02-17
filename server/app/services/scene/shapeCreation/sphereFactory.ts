@@ -6,8 +6,9 @@ export class SphereFactory extends GeometricObjectFactory {
     private static readonly REFERENCE_RADIUS: number = 3;
     protected createShape(geometricObject: ICommonGeometricObject): ICommonSphere {
         const sphereObject: ICommonSphere = geometricObject as ICommonSphere;
+
         sphereObject.shapeType = GeometricShapeType.SPHERE;
-        sphereObject.radius = SphereFactory.REFERENCE_RADIUS;
+        sphereObject.radius = this.generateRandomPercentage() * SphereFactory.REFERENCE_RADIUS;
 
         return sphereObject;
     }
