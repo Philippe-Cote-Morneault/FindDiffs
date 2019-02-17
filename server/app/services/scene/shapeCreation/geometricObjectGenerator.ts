@@ -1,9 +1,9 @@
-import { CubeFactory } from "./cubeFactory";
-import { GeometricObjectFactory } from "./geometricObjectFactory";
-import { ICommonEulerAngles } from "../../../../../common/model/scene/eulerAngles";
+import { ICommon3DPosition } from "../../../../../common/model/positions";
 import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ConeFactory } from "./coneFactory";
+import { CubeFactory } from "./cubeFactory";
 import { CylinderFactory } from "./cylinderFactory";
+import { GeometricObjectFactory } from "./geometricObjectFactory";
 import { PyramidFactory } from "./pyramidFactory";
 import { SphereFactory } from "./sphereFactory";
 
@@ -23,9 +23,8 @@ export class GeometricObjectGenerator {
         return GeometricObjectGenerator.instance;
     }
 
-
-    public createObject(position: ICommonEulerAngles): ICommonGeometricObject {
-
+    public createObject(position: ICommon3DPosition): ICommonGeometricObject {
+        return this.chooseRandomFactory().createObject(position);
     }
 
     private setFactories(): void {
@@ -35,4 +34,11 @@ export class GeometricObjectGenerator {
         this.geometricShapeFactories.push(new PyramidFactory());
         this.geometricShapeFactories.push(new SphereFactory());
     }
+
+    private chooseRandomFactory(): GeometricObjectFactory {
+        const indexOfTransformation: number = Math.floor(Math.random() * this.geometricShapeFactories.length);
+
+        return this.geometricShapeFactories[indexOfTransformation];
+    }
+
 }
