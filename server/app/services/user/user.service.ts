@@ -68,7 +68,7 @@ export class UserService extends Service implements IUserService {
         }
 
         if (!this.isUsernameValid(req.body.username)) {
-            throw new InvalidFormatException(_e(R.ERROR_INVALID, [R.USERNAME_]));
+            throw new InvalidFormatException(R.ERROR_INVALID_USERNAME);
         }
 
         if (!await this.isAvailable(req.body.username)) {
