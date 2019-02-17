@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
-import { ICommonScene } from "../../../../../common/model/scene/scene";
-import { SceneObjectParserService } from "./scene-object-parser.service";
-import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
+import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
+import { ICommonScene, Type } from "../../../../../../common/model/scene/scene";
+import { GeometricObjectParser } from "./geometricObjectParser";
+import { SceneObjectParser } from "./sceneObjectParser";
+import { ThematicObjectParser } from "./thematicObjectParser";
 
 @Injectable({
   providedIn: "root",
@@ -10,12 +12,12 @@ import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sc
 export class SceneParserService {
     private static readonly SCENE_BG_COLOR_NUMBER_BASE: number = 16;
 
-    public constructor(private sceneObjectParserService: SceneObjectParserService) {
-
-    }
+    private sceneObjectParser: SceneObjectParser;
 
     public parseScene(originalScene: ICommonScene): THREE.Scene {
-        const scene: THREE.Scene = this.generateSceneObject(
+        this.sceneObjectParser = originalScene.type === Type.Geometric ? new GeometricObjectParser() : new ThematicObjectParser();
+
+        const scene: THREE.Scene = this.initializeScene(
             parseInt(originalScene.bg_color, SceneParserService.SCENE_BG_COLOR_NUMBER_BASE),
         );
 
@@ -32,10 +34,11 @@ export class SceneParserService {
         return new THREE.GridHelper(size, divisions);
     }
 
-    private generateSceneObject(bgColor: number): THREE.Scene {
+    private initializeScene(bgColor: number): THREE.Scene {
         const scene: THREE.Scene = new THREE.Scene();
         scene.background = new THREE.Color(bgColor);
 
         return scene;
     }
+
 }
