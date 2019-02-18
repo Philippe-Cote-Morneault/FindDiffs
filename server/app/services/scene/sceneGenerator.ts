@@ -7,8 +7,8 @@ import { GeometricObjectGenerator } from "./shapeCreation/geometricObjectGenerat
 
 export class SceneGenerator {
     private objectQty: number;
-    private readonly SCENE_SIZE: number =  1000;
-    private readonly SCENE_OBJECT_MARGIN: number = 20;
+    private readonly SCENE_SIZE: number =  250;
+    private readonly SCENE_OBJECT_MARGIN: number = 9;
     private scene: ICommonScene;
     private grid: Grid | undefined;
 
