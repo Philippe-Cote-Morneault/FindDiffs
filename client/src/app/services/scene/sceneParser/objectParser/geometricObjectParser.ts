@@ -3,11 +3,11 @@ import {
     GeometricShapeType,
     ICommonGeometricObject,
     } from "../../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { ConeFactory } from "../../geometricObjects.ts/coneFactory";
-import { CubeFactory } from "../../geometricObjects.ts/cubeFactory";
-import { CylinderFactory } from "../../geometricObjects.ts/cylinderFactory";
-import { PyramidFactory } from "../../geometricObjects.ts/pyramidFactory";
-import { SphereFactory } from "../../geometricObjects.ts/sphereFactory";
+import { ConeFactory } from "../geometricObjects/coneFactory";
+import { CubeFactory } from "../geometricObjects/cubeFactory";
+import { CylinderFactory } from "../geometricObjects/cylinderFactory";
+import { PyramidFactory } from "../geometricObjects/pyramidFactory";
+import { SphereFactory } from "../geometricObjects/sphereFactory";
 import { SceneObjectParser } from "../sceneObjectParser";
 
 export class GeometricObjectParser extends SceneObjectParser {

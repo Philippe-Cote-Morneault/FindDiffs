@@ -1,6 +1,12 @@
 import { Injectable } from "@angular/core";
-import { ICommonScene, ObjectType } from "../../../../../../common/model/scene/scene";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
+import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
+import { ICommonGeometricScene, ICommonScene, ICommonThematicScene, ObjectType } from "../../../../../../common/model/scene/scene";
+import { GeometricSceneParser } from "./geometricSceneParser";
+import { GeometricObjectParser } from "./objectParser/geometricObjectParser";
+import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
+import { SceneObjectParser } from "./sceneObjectParser";
+import { ThematicSceneParser } from "./thematicSceneParser";
 
 @Injectable({
     providedIn: "root",
@@ -9,10 +15,8 @@ export class ModifiedSceneParserService {
 
     private sceneObjectParser: SceneObjectParser;
 
-    public parseModifiedScene(originalScene: ICommonScene, modifiedScene: ICommonSceneModifications): ICommonScene {
+    public parseModifiedScene(originalScene: ICommonScene, modifiedScene: ICommonSceneModifications): THREE.Scene {
         let scene: THREE.Scene;
-
-        console.log(originalScene.type === ObjectType.Geometric);
 
         if (originalScene.type === ObjectType.Geometric) {
             this.sceneObjectParser = new GeometricObjectParser();
@@ -28,4 +32,6 @@ export class ModifiedSceneParserService {
 
         return scene;
     }
+
+
 }
