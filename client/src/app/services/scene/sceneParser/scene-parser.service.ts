@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
-import { ICommonGeometricScene, ICommonScene, ICommonThematicScene, Type } from "../../../../../../common/model/scene/scene";
+import { ICommonGeometricScene, ICommonScene, ICommonThematicScene, ObjectType } from "../../../../../../common/model/scene/scene";
 import { GeometricSceneParser } from "./geometricSceneParser";
 import { GeometricObjectParser } from "./objectParser/geometricObjectParser";
 import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
@@ -18,7 +18,7 @@ export class SceneParserService {
     public parseScene(originalScene: ICommonScene, containerWidth: number, containerHeight: number): THREE.Scene {
         let scene: THREE.Scene;
 
-        if (originalScene.type === Type.Geometric) {
+        if (originalScene.type === ObjectType.Geometric) {
             this.sceneObjectParser = new GeometricObjectParser();
             scene = GeometricSceneParser.parseScene(originalScene as ICommonGeometricScene);
         } else {

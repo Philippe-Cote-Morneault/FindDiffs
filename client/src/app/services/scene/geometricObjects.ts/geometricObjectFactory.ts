@@ -1,12 +1,12 @@
 import * as THREE from "three";
 import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { ICommonEulerAngles } from "../../../../../../common/model/scene/eulerAngles";
-import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObject";
+import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 
-export abstract class GeometricObject {
+export abstract class GeometricObjectFactory {
     public parse(sceneObject: ICommonGeometricObject): THREE.Object3D {
         const geometricObject: THREE.Object3D = this.createShape(this.createMeshMaterial(sceneObject.color),
-                                                                 sceneObject.dimensions);
+                                                                 sceneObject);
 
         this.setPosition(sceneObject.position, geometricObject);
 
@@ -17,7 +17,7 @@ export abstract class GeometricObject {
         return geometricObject;
     }
 
-    protected abstract createShape(color: THREE.MeshBasicMaterial, dimensions: number[]): THREE.Object3D;
+    protected abstract createShape(color: THREE.MeshBasicMaterial, geometricObject: ICommonGeometricObject): THREE.Object3D;
 
     private setPosition(position: ICommon3DPosition, geometricObject: THREE.Object3D): void {
         geometricObject.position.set(position.x, position.y, position.z);
