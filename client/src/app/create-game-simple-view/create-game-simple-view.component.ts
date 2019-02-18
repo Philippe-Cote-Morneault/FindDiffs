@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component,  ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
@@ -14,6 +14,7 @@ import { ImagePairService } from "../services/image-pair.service";
 })
 export class CreateGameSimpleViewComponent {
     @Output() public closed: EventEmitter<boolean> = new EventEmitter();
+    @ViewChild("gameNameInput") private gameNameInput: ElementRef;
 
     private gamesCardService: GamesCardService;
     private imagePairService: ImagePairService;
@@ -34,7 +35,7 @@ export class CreateGameSimpleViewComponent {
     public verifyName(): void {
         const MIN_LENGTH: number = 2;
         const MAX_LENGTH: number = 13;
-        const gameName: string = (document.getElementById("gameNameInput") as HTMLInputElement).value;
+        const gameName: string = this.gameNameInput.nativeElement.value;
         this.fromValidation[0] = gameName.length > MIN_LENGTH && gameName.length < MAX_LENGTH;
         this.gameName = gameName;
     }

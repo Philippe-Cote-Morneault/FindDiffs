@@ -15,6 +15,7 @@ export class GameViewComponent implements OnInit {
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     private imagePairId: string;
     private differenceCounterUser: number;
+    private differenceFound: number[];
     // tslint:disable-next-line:no-any
     private differenceSound: any;
 
@@ -27,6 +28,7 @@ export class GameViewComponent implements OnInit {
         this.differenceSound = new Audio;
         this.differenceSound.src = "../../assets/mario.mp3";
         this.differenceSound.load();
+        this.differenceFound = [];
     }
 
     public ngOnInit(): void {
@@ -50,8 +52,13 @@ export class GameViewComponent implements OnInit {
         const yPosition: number = e.layerY;
         this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) => {
             if (response.hit) {
-                this.pixelRestorationService.restoreImage(response, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
-                this.differenceFound();
+                const hashDifference: number = response.pixels_affected.length;
+                if (this.isANewDifference(hashDifference)) {
+                    this.pixelRestorationService.restoreImage(response,
+                                                              this.originalCanvas.nativeElement,
+                                                              this.modifiedCanvas.nativeElement);
+                    this.addDifference(hashDifference);
+                }
             }
         });
     }
@@ -70,8 +77,14 @@ export class GameViewComponent implements OnInit {
         };
     }
 
-    public differenceFound(): void {
+    public addDifference(hashDifference: number): void {
+        this.differenceFound[this.differenceFound.length++] = hashDifference;
         this.differenceCounterUser = this.differenceCounterUser + 1;
         this.differenceSound.play();
+    }
+
+    public isANewDifference(hashDifference: number): boolean {
+
+        return !this.differenceFound.includes(hashDifference);
     }
 }

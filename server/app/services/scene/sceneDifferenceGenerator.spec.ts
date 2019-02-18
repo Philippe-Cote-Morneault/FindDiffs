@@ -1,3 +1,4 @@
+// tslint:disable no-useless-files
 /*
 import { expect } from "chai";
 import { SceneDifferenceGenerator } from "./sceneDifferenceGenerator";

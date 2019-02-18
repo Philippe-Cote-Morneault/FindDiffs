@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component,  ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
+import { ScenePairService } from "../services/scene-pair.service";
 
 @Component({
     selector: "app-create-game-free-view",
@@ -6,41 +8,70 @@ import { Component, EventEmitter, Output } from "@angular/core";
     styleUrls: ["./create-game-free-view.component.css"],
 })
 export class CreateGameFreeViewComponent {
+    private static MAX_QTE: number = 200;
+    private static MIN_QTE: number = 10;
+
     @Output() public closed: EventEmitter<boolean> = new EventEmitter();
+    @ViewChild("gameNameInput") private gameNameInput: ElementRef;
+    @ViewChild("add") private add: ElementRef;
+    @ViewChild("remove") private remove: ElementRef;
+    @ViewChild("modified") private modified: ElementRef;
+    @ViewChild("quantityObject") private quantityObject: ElementRef;
+    @ViewChild("erreurMessage") private erreurMessage: ElementRef;
+    @ViewChild("objectType") private objectType: ElementRef;
 
-    public canSubmit: boolean = false;
-    public displayError: string = "inline";
-    public hideError: string = "none";
+    public canSubmit: boolean;
+    public displayError: string;
+    public hideError: string;
 
+    public constructor (private spinnerService: Ng4LoadingSpinnerService, public scenePairService: ScenePairService) {
+        this.displayError = "inline";
+        this.hideError = "none";
+        this.canSubmit = false;
+    }
     public isNameValid(): boolean {
-        const gameName: string = (document.getElementById("gameNameInput") as HTMLInputElement).value;
+        const gameName: string = this.gameNameInput.nativeElement.value;
 
         return gameName.length !== 0;
     }
     public isModificationTypeValid(): boolean {
-        const isAddType: boolean = (document.getElementById("add") as HTMLInputElement).checked;
-        const isRemoveType: boolean = (document.getElementById("remove") as HTMLInputElement).checked;
-        const isModifiedType: boolean = (document.getElementById("modified") as HTMLInputElement).checked;
+        const isAddType: boolean = this.add.nativeElement.checked;
+        const isRemoveType: boolean = this.remove.nativeElement.checked;
+        const isModifiedType: boolean = this.modified.nativeElement.checked;
 
         return isAddType || isRemoveType || isModifiedType;
     }
     public isQuantityValid(): boolean {
-        const quantity: string = (document.getElementById("quantityObject") as HTMLInputElement).value;
+        const quantity: number = Number(this.quantityObject.nativeElement.value);
         this.toggleErrorMessage(quantity);
 
-        return quantity.length !== 0 && !isNaN(Number(quantity));
+        return !isNaN(quantity) && quantity > CreateGameFreeViewComponent.MIN_QTE && quantity < CreateGameFreeViewComponent.MAX_QTE;
     }
 
-    private toggleErrorMessage(quantity: string): void {
-        (document.getElementById("erreurMessage") as HTMLElement).style.display = (quantity.length > 0 && isNaN(Number(quantity)))
+    private toggleErrorMessage(quantity: number): void {
+        this.erreurMessage.nativeElement.style.display = ((isNaN(quantity) ||
+        (quantity < CreateGameFreeViewComponent.MIN_QTE || quantity > CreateGameFreeViewComponent.MAX_QTE)) && quantity !== 0)
         ? this.displayError : this.hideError;
     }
 
     public verifyInfo(): void {
-        this.canSubmit = (this.isQuantityValid() && this.isNameValid() && this.isModificationTypeValid());
+        this.canSubmit = (this.isNameValid() && this.isQuantityValid() && this.isModificationTypeValid());
     }
 
     public hideView(): void {
         this.closed.emit(true);
+    }
+
+    public addScenePair(): void {
+        this.spinnerService.show();
+        const gameName: string = this.gameNameInput.nativeElement.value;
+        const isAddType: boolean = this.add.nativeElement.checked;
+        const isRemoveType: boolean = this.remove.nativeElement.checked;
+        const isModifiedType: boolean = this.modified.nativeElement.checked;
+        const quantity: string = this.quantityObject.nativeElement.value;
+        const objectType: string = this.objectType.nativeElement.value;
+
+        // TODO: Subscribe
+        this.scenePairService.addScenePair(gameName, objectType, Number(quantity), isAddType, isRemoveType, isModifiedType).subscribe();
     }
 }

@@ -8,6 +8,7 @@ import { SceneTransformation } from "./sceneTransformation";
  */
 export class SceneObjectAdder implements SceneTransformation {
     public applyTransformation(modifiedScene: ICommonScene, transformationEligibleObjects: ICommonSceneObject[],
+                               // tslint:disable-next-line:no-empty
                                modifications: ICommonSceneModifications): void {
     }
 
