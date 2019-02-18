@@ -1,20 +1,26 @@
+import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
-import { ICommonScene } from "../../../../../../common/model/scene/scene";
+import { Grid } from "../../grid";
+import { GeometricObjectGenerator } from "../../shapeCreation/geometricObjectGenerator";
 import { SceneTransformation } from "./sceneTransformation";
 
 /**
  * In charge of adding a random object to a scene
  */
 export class SceneObjectAdder implements SceneTransformation {
-    public applyTransformation(modifiedScene: ICommonScene, transformationEligibleObjects: ICommonSceneObject[],
+    private grid: Grid;
+
+    public constructor(grid: Grid) {
+        this.grid = grid;
+    }
+
+    public applyTransformation(objectsToTransform: ICommonSceneObject[],
                                modifications: ICommonSceneModifications): void {
-    }
+            const position: ICommon3DPosition = this.grid.getNextPosition();
 
-    /*private chooseRandomShape(): GeometricShape {
-        const indexOfTransformation: number = Math.floor(Math.random() * EnumUtils.enumLength(GeometricShape));
-
-        return GeometricShape[GeometricShape[indexOfTransformation]];
+            modifications.addedObjects.push(
+                GeometricObjectGenerator.getInstance().createObject(position),
+            );
     }
-    */
 }
