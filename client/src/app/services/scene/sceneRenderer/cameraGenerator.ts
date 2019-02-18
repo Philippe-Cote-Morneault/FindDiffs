@@ -15,7 +15,6 @@ export class CameraGenerator {
 
         camera.position.z = 50;
 
-
         return camera;
     }
 }
