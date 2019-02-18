@@ -3,6 +3,7 @@ import { ICommonSceneModifications } from "../../../../../common/model/scene/mod
 import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
 import { Textures } from "../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
+import { Grid } from "../grid";
 import { SceneObjectAdder } from "./transformations/sceneObjectAdder";
 import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChanger";
 import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
@@ -11,68 +12,68 @@ import { SceneTransformation } from "./transformations/sceneTransformation";
 
 export class SceneDifferenceGenerator {
     private static readonly NUMBER_OF_DIFFERENCES: number = 7;
-    // Holds the modifications that can be applied to a scene according to user preference
-    private transformationsToApply: SceneTransformation[] = [];
-    private modifiedScene: ICommonScene;
-    // Holds all objects that have not been modified yet. Objects will be removed from this array when they are modified.
-    private transformationEligibleObjects: ICommonSceneObject[];
-    private modifications: ICommonSceneModifications;
 
-    public generateModifiedScene(originalScene: ICommonScene, requiresInsertion: boolean, requiresRemoval: boolean,
+    private transformationsToApply: SceneTransformation[] = [];
+    private objectsToTransform: ICommonSceneObject[];
+
+    private scene: ICommonScene;
+    private grid: Grid;
+    private sceneModifs: ICommonSceneModifications;
+
+    public constructor(originalScene: ICommonScene, grid: Grid) {
+        this.scene = originalScene;
+        this.grid = grid;
+    }
+    public generateModifiedScene(requiresInsertion: boolean, requiresRemoval: boolean,
                                  requiresColorChange: boolean): ICommonSceneModifications {
 
-        // Deep copy the original scene
-        this.modifiedScene = JSON.parse(JSON.stringify(originalScene));
         // Deep copy the originalObjects array
-        this.transformationEligibleObjects = JSON.parse(JSON.stringify(originalScene.sceneObjects));
-
+        this.objectsToTransform = JSON.parse(JSON.stringify(this.scene.sceneObjects));
         this.setTransformationsToApply(requiresInsertion, requiresRemoval, requiresColorChange);
-
         this.initializeModifications();
 
         for (let i: number = 0; i < SceneDifferenceGenerator.NUMBER_OF_DIFFERENCES; ++i) {
             this.applyRandomModification();
         }
 
-        return this.modifications;
+        return this.sceneModifs;
     }
 
     private applyRandomModification(): void {
         this.chooseRandomModification().applyTransformation(
-            this.modifiedScene,
-            this.transformationEligibleObjects,
-            this.modifications,
+            this.objectsToTransform,
+            this.sceneModifs,
         );
     }
 
     private setTransformationsToApply(requiresInsertion: boolean, requiresRemoval: boolean, requiresColorChange: boolean ): void {
         if (requiresInsertion) {
-            this.transformationsToApply.push(new SceneObjectAdder());
+            this.transformationsToApply.push(new SceneObjectAdder(this.grid));
         }
         if (requiresRemoval) {
             this.transformationsToApply.push(new SceneObjectRemover());
         }
         if (requiresColorChange) {
             this.transformationsToApply.push(
-                this.modifiedScene.type === ObjectType.Geometric ? new SceneObjectColorChanger() : new SceneObjectTextureChanger(),
+                this.scene.type === ObjectType.Geometric ? new SceneObjectColorChanger() : new SceneObjectTextureChanger(),
             );
         }
     }
 
     // TODO: See if we cant make less duplication here
     private initializeModifications(): void {
-        if (this.modifiedScene.type === ObjectType.Geometric) {
-            this.modifications = {
-                id: uuid(),
-                type: this.modifiedScene.type,
+        if (this.scene.type === ObjectType.Geometric) {
+            this.sceneModifs = {
+                id:  uuid().replace(/-/g, ""),
+                type: this.scene.type,
                 addedObjects: [],
                 deletedObjects: [],
                 colorChangedObjects: new Map<string, number>(),
             } as ICommonSceneModifications;
         } else {
-            this.modifications = {
-                id: uuid(),
-                type: this.modifiedScene.type,
+            this.sceneModifs = {
+                id: uuid().replace(/-/g, ""),
+                type: this.scene.type,
                 addedObjects: [],
                 deletedObjects: [],
                 texturesChangedObjects: new Map<string, Textures>(),
