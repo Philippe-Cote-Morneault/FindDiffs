@@ -17,10 +17,10 @@ export abstract class GeometricObjectFactory {
         return geometricObject;
     }
 
-    protected abstract createShape(color: THREE.MeshBasicMaterial, geometricObject: ICommonGeometricObject): THREE.Object3D;
+    protected abstract createShape(color: THREE.MeshStandardMaterial, geometricObject: ICommonGeometricObject): THREE.Object3D;
 
     private setPosition(position: ICommon3DPosition, geometricObject: THREE.Object3D): void {
-        geometricObject.position.set(position.x, position.y, position.z);
+        geometricObject.position.set(position.x, position.z, position.y);
     }
 
     private setOrientation(eulerAngles: ICommonEulerAngles, geometricObject: THREE.Object3D): void {
@@ -28,7 +28,7 @@ export abstract class GeometricObjectFactory {
     }
 
     // TODO: See if you need to convert to hex
-    private createMeshMaterial(color: number): THREE.MeshBasicMaterial {
-        return new THREE.MeshBasicMaterial({color: color});
+    private createMeshMaterial(color: number): THREE.MeshStandardMaterial {
+        return new THREE.MeshStandardMaterial({color: color, roughness: 0.95, metalness: 0.5, flatShading: true});
     }
 }

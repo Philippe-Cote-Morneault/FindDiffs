@@ -4,7 +4,7 @@ import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class ConeFactory extends GeometricObjectFactory {
     private static readonly RADIAL_SEGMENTS: number = 8;
-    public createShape(color: THREE.MeshBasicMaterial, geometricObject: ICommonCone): THREE.Object3D {
+    public createShape(color: THREE.MeshStandardMaterial, geometricObject: ICommonCone): THREE.Object3D {
         const coneShape: THREE.ConeGeometry = new THREE.ConeGeometry(geometricObject.radius,
                                                                      geometricObject.height,
                                                                      ConeFactory.RADIAL_SEGMENTS);
