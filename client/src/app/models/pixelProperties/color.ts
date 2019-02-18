@@ -1,1 +1,1 @@
-export  enum RgbaPosition { R = 1, G, B, A }
+export  enum RgbaPosition { R, G, B, A }
