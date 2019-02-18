@@ -36,7 +36,7 @@ export class SceneGenerator {
             if (numberShape) {
                 for (let j: number = 0; j < numberShape; j++) {
                     // tslint:disable-next-line
-                    let positionObject: { modelPosition: ICommon3DPosition, position: number } = this.sceneObjectPosition.modelPosition();
+                    let positionObject: ICommon3DPosition = this.sceneObjectPosition.modelPosition();
                     positionObject = this.waitUntilValidPosition(validPositions, positionObject);
                     validPositions = this.updateArray(validPositions, positionObject);
                     this.addModel(i, sceneObjects, positionObject);
@@ -71,9 +71,7 @@ export class SceneGenerator {
         return array;
     }
 
-    public waitUntilValidPosition(validPositions: boolean[][][], positionObject:
-                                                            { modelPosition: ICommon3DPosition; position: number; }):
-                                                            { modelPosition: ICommon3DPosition; position: number } {
+    public waitUntilValidPosition(validPositions: boolean[][][], positionObject: ICommon3DPosition): ICommon3DPosition {
         while (!this.allFree(validPositions, positionObject)) {
             positionObject = this.sceneObjectPosition.modelPosition();
         }
@@ -81,11 +79,11 @@ export class SceneGenerator {
         return positionObject;
     }
 
-    private allFree(validPosition: boolean[][][], positionObject: { modelPosition: ICommon3DPosition; position: number; }): boolean {
+    private allFree(validPosition: boolean[][][], positionObject: ICommon3DPosition): boolean {
         const TWO: number = 2;
-        const x: number = positionObject.modelPosition.x;
-        const y: number = positionObject.modelPosition.y;
-        const z: number = positionObject.modelPosition.z;
+        const x: number = positionObject.x;
+        const y: number = positionObject.y;
+        const z: number = positionObject.z;
         let areAllFree: boolean = true;
 
         for (let i: number = -1; i < TWO; ++i) {
@@ -102,12 +100,11 @@ export class SceneGenerator {
         return areAllFree;
     }
 
-    private updateArray(validPositions: boolean[][][], positionObject:
-        { modelPosition: ICommon3DPosition; position: number; }): boolean[][][] {
+    private updateArray(validPositions: boolean[][][], positionObject: ICommon3DPosition): boolean[][][] {
             const TWO: number = 2;
-            const x: number = positionObject.modelPosition.x;
-            const y: number = positionObject.modelPosition.y;
-            const z: number = positionObject.modelPosition.z;
+            const x: number = positionObject.x;
+            const y: number = positionObject.y;
+            const z: number = positionObject.z;
 
             for (let i: number = -1; i < TWO; ++i) {
                 for (let j: number = -1; j < TWO; ++j) {
@@ -120,8 +117,7 @@ export class SceneGenerator {
             return validPositions;
     }
 
-    public addModel(type: number, sceneObjects: ICommonSceneObject[], positionObject:
-                    { modelPosition: ICommon3DPosition; position: number; }): void {
+    public addModel(type: number, sceneObjects: ICommonSceneObject[], positionObject: ICommon3DPosition): void {
         let dimensions: number[];
         const MIN_SIZE_FACTOR: number = 0.5;
         const factor: number = Math.random() + MIN_SIZE_FACTOR;
@@ -150,14 +146,14 @@ export class SceneGenerator {
         }
     }
 
-    public addObj(dimensions: number[], typeObj: GeometricShape, sceneObjects: ICommonSceneObject[], positionObject:
-                   { modelPosition: ICommon3DPosition; position: number; }): void {
+    public addObj(dimensions: number[], typeObj: GeometricShape, sceneObjects: ICommonSceneObject[], positionObject: ICommon3DPosition):
+    void {
         sceneObjects.push({
             id: uuid(),
             color: ColorUtils.generateColor(),
             dimensions: dimensions,
             type: typeObj,
-            position: positionObject.modelPosition,
+            position: positionObject,
             texture: 0,
         });
     }
