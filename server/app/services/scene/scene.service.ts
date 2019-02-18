@@ -1,8 +1,9 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
+import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
-import { IScene, Scene } from "../../model/schemas/scene";
+import { IScene, Scene} from "../../model/schemas/scene";
 import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { ISceneService } from "../interfaces";
@@ -61,7 +62,17 @@ export class SceneService extends Service implements ISceneService {
     }
 
     public async single(id: string): Promise<string> {
-        throw new Error("Method not implemented.");
+        return Scene.findById(id).then(async(doc: IScene) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+            }
+            doc.scene.id = doc.id;
+
+            return JSON.stringify(doc.scene);
+        })
+        .catch((err: Error) => {
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+        });
     }
 
     public async singleModified(id: string): Promise<string> {
