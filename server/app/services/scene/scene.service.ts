@@ -1,11 +1,14 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
-import { ObjectType } from "../../../../common/model/scene/scene";
+import { NotFoundException } from "../../../../common/errors/notFoundException";
+import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { IScene, Scene} from "../../model/schemas/scene";
 import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { ISceneService } from "../interfaces";
 import { Service } from "../service";
+import { SceneGenerator } from "./sceneGenerator";
 
 export class SceneService extends Service implements ISceneService {
     private readonly MIN_OBJECT: number = 10;
@@ -30,9 +33,21 @@ export class SceneService extends Service implements ISceneService {
             throw new InvalidFormatException(R.ERROR_OBJECTS_QTY);
         }
     }
+
     public async post(req: Request): Promise<string> {
         this.validatePost(req);
-        throw new Error("Method not implemented.");
+        const sceneGenerator: SceneGenerator = new SceneGenerator(req.body.object_qty);
+        const scene: ICommonScene = sceneGenerator.generateScene();
+
+        const sceneSchema: IScene = new Scene({
+            scene: scene,
+            grid: sceneGenerator.getGrid(),
+            creation_date: new Date(),
+        });
+        await sceneSchema.save();
+        scene.id = sceneSchema.id;
+
+        return JSON.stringify(scene);
     }
 
     private validatePostModified(req: Request): void {
@@ -47,7 +62,17 @@ export class SceneService extends Service implements ISceneService {
     }
 
     public async single(id: string): Promise<string> {
-        throw new Error("Method not implemented.");
+        return Scene.findById(id).then(async(doc: IScene) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+            }
+            doc.scene.id = doc.id;
+
+            return JSON.stringify(doc.scene);
+        })
+        .catch((err: Error) => {
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+        });
     }
 
     public async singleModified(id: string): Promise<string> {
