@@ -2,12 +2,15 @@ import { Request } from "express";
 import "reflect-metadata";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
+import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { IScene, Scene} from "../../model/schemas/scene";
 import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { ISceneService } from "../interfaces";
 import { Service } from "../service";
+import { SceneDifferenceGenerator } from "./differenceGeneration/sceneDifferenceGenerator";
+import { Grid } from "./grid";
 import { SceneGenerator } from "./sceneGenerator";
 
 export class SceneService extends Service implements ISceneService {
@@ -58,7 +61,29 @@ export class SceneService extends Service implements ISceneService {
 
     public async postModified(req: Request): Promise<string> {
         this.validatePostModified(req);
-        throw new Error("Method not implemented.");
+
+        return Scene.findById(req.params.id).then(async(doc: IScene) => {
+            const grid: Grid = doc.grid as Grid;
+            const scene: ICommonScene = doc.scene as ICommonScene;
+            scene.id = doc.id;
+
+            const differenceGenerator: SceneDifferenceGenerator = new SceneDifferenceGenerator(
+                scene,
+                grid,
+            );
+
+            const sceneModifications: ICommonSceneModifications = differenceGenerator.generateModifiedScene(
+                req.body.add,
+                req.body.delete,
+                req.body.color,
+            );
+            doc.modifications = sceneModifications;
+            await doc.save();
+
+            return JSON.stringify(sceneModifications);
+        }).catch((err: Error) => {
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+        });
     }
 
     public async single(id: string): Promise<string> {
