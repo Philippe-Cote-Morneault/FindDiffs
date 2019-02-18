@@ -1,5 +1,8 @@
 import { NotFoundException } from "../../../../../../../common/errors/notFoundException";
-import { GeometricShapeType, ICommonGeometricObject } from "../../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+import {
+    GeometricShapeType,
+    ICommonGeometricObject,
+    } from "../../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ConeFactory } from "../../geometricObjects.ts/coneFactory";
 import { CubeFactory } from "../../geometricObjects.ts/cubeFactory";
 import { CylinderFactory } from "../../geometricObjects.ts/cylinderFactory";

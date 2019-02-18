@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import * as THREE from "three";
+/* tslint:disable */
+
 import "src/js/test";
 import "node_modules/three/examples/js/controls/OrbitControls";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";

@@ -1,8 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController, TestRequest} from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
-import { Message } from "../../../../common/communication/message";
-import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { Message } from "../../../../../common/communication/message";
+import { ICommonGameCard, POVType } from "../../../../../common/model/gameCard";
 import { GamesCardService } from "./games-card.service";
 
 // tslint:disable:no-magic-numbers

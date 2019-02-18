@@ -5,8 +5,8 @@ import {
     Injectable,
     ViewContainerRef
   } from "@angular/core";
-import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
-import { GamesCardViewComponent } from "../games-card-view/games-card-view.component";
+import { ICommonGameCard, POVType } from "../../../../../common/model/gameCard";
+import { GamesCardViewComponent } from "../../games-card-view/games-card-view.component";
 
 @Injectable()
 export class GameCardLoaderService {

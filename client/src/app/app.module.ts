@@ -12,9 +12,9 @@ import { GameViewComponent } from "./game-view/game-view.component";
 import { GamesCardViewComponent } from "./games-card-view/games-card-view.component";
 import { GamesListViewComponent } from "./games-list-view/games-list-view.component";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
-import { GameCardLoaderService } from "./services/game-card-loader.service";
+import { GameCardLoaderService } from "./services/gameCard/game-card-loader.service";
 import { UserService } from "./services/user.service";
-import { TestComponent } from './test/test.component';
+import { TestComponent } from "./test/test.component";
 
 @NgModule({
     declarations: [
