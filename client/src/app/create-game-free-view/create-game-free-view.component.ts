@@ -71,14 +71,25 @@ export class CreateGameFreeViewComponent {
 
     public addScenePair(): void {
         this.spinnerService.show();
-        const gameName: string = this.gameNameInput.nativeElement.value;
         const isAddType: boolean = this.add.nativeElement.checked;
         const isRemoveType: boolean = this.remove.nativeElement.checked;
         const isModifiedType: boolean = this.modified.nativeElement.checked;
         const quantity: string = this.quantityObject.nativeElement.value;
         const objectType: string = this.objectType.nativeElement.value;
 
-        this.scenePairService.addScenePair(gameName, objectType, Number(quantity), isAddType, isRemoveType, isModifiedType)
+        this.scenePairService.addScenePair(objectType, Number(quantity))
+            .subscribe((response: ICommonScene | Message) => {
+                if ((response as Message).body) {
+                    alert((response as Message).body);
+                } else {
+                    this.modifyScenePair((response as ICommonScene).id, isAddType, isRemoveType, isModifiedType);
+                }
+            });
+    }
+
+    public modifyScenePair(idScenePair: string, isAddType: boolean, isRemoveType: boolean, isModifiedType: boolean): void {
+        const gameName: string = this.gameNameInput.nativeElement.value;
+        this.scenePairService.addScenePair(idScenePair, isAddType, isRemoveType, isModifiedType)
             .subscribe((response: ICommonScene | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);
@@ -86,7 +97,7 @@ export class CreateGameFreeViewComponent {
                     this.addGameCard((response as ICommonScene).id, gameName);
                 }
             });
-    }
+        }
 
     private addGameCard(scenePairId: string, gameName: string): void {
         this.gamesCardService.addGameCard(gameName, scenePairId, POVType.Free)
