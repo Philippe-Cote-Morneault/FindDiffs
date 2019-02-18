@@ -2,10 +2,10 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { Message } from "../../../../common/communication/message";
-import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
-import { SERVER_URL } from "../../../../common/url";
-import { HTTPService } from "./HTTP.service";
+import { Message } from "../../../../../common/communication/message";
+import { ICommonGameCard, POVType } from "../../../../../common/model/gameCard";
+import { SERVER_URL } from "../../../../../common/url";
+import { HTTPService } from "../HTTP.service";
 
 @Injectable({
     providedIn: "root",

@@ -4,8 +4,8 @@ import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { GamesCardService } from "../services/games-card.service";
-import { ScenePairService } from "../services/scene-pair.service";
+import { GamesCardService } from "../services/gameCard/games-card.service";
+import { ScenePairService } from "../services/scene/scene-pair.service";
 
 @Component({
     selector: "app-create-game-free-view",
