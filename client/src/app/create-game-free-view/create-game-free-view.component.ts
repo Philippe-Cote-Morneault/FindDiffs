@@ -1,5 +1,10 @@
-import { Component,  ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
+import { Message } from "../../../../common/communication/message";
+import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { ICommonScene } from "../../../../common/model/scene/scene";
+import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
+import { GamesCardService } from "../services/games-card.service";
 import { ScenePairService } from "../services/scene-pair.service";
 
 @Component({
@@ -24,7 +29,10 @@ export class CreateGameFreeViewComponent {
     public displayError: string;
     public hideError: string;
 
-    public constructor (private spinnerService: Ng4LoadingSpinnerService, public scenePairService: ScenePairService) {
+    public constructor(
+        private spinnerService: Ng4LoadingSpinnerService,
+        public scenePairService: ScenePairService,
+        public gamesCardService: GamesCardService) {
         this.displayError = "inline";
         this.hideError = "none";
         this.canSubmit = false;
@@ -50,8 +58,8 @@ export class CreateGameFreeViewComponent {
 
     private toggleErrorMessage(quantity: number): void {
         this.erreurMessage.nativeElement.style.display = ((isNaN(quantity) ||
-        (quantity < CreateGameFreeViewComponent.MIN_QTE || quantity > CreateGameFreeViewComponent.MAX_QTE)) && quantity !== 0)
-        ? this.displayError : this.hideError;
+            (quantity < CreateGameFreeViewComponent.MIN_QTE || quantity > CreateGameFreeViewComponent.MAX_QTE)) && quantity !== 0)
+            ? this.displayError : this.hideError;
     }
 
     public verifyInfo(): void {
@@ -64,14 +72,43 @@ export class CreateGameFreeViewComponent {
 
     public addScenePair(): void {
         this.spinnerService.show();
-        const gameName: string = this.gameNameInput.nativeElement.value;
         const isAddType: boolean = this.add.nativeElement.checked;
         const isRemoveType: boolean = this.remove.nativeElement.checked;
         const isModifiedType: boolean = this.modified.nativeElement.checked;
         const quantity: string = this.quantityObject.nativeElement.value;
         const objectType: string = this.objectType.nativeElement.value;
+        const gameName: string = this.gameNameInput.nativeElement.value;
 
-        // TODO: Subscribe
-        this.scenePairService.addScenePair(gameName, objectType, Number(quantity), isAddType, isRemoveType, isModifiedType).subscribe();
+        this.scenePairService.addScenePair(objectType, Number(quantity))
+            .subscribe((response: ICommonScene | Message) => {
+                if ((response as Message).body) {
+                    alert((response as Message).body);
+                } else {
+                    this.modifyScenePair((response as ICommonScene).id, gameName, isAddType, isRemoveType, isModifiedType);
+                }
+            });
+    }
+
+    public modifyScenePair(idScenePair: string, gameName: string, isAddType: boolean,
+                           isRemoveType: boolean, isModifiedType: boolean): void {
+        this.scenePairService.modifyScenePair(idScenePair, isAddType, isRemoveType, isModifiedType)
+            .subscribe((response: ICommonSceneModifications | Message) => {
+                if ((response as Message).body) {
+                    alert((response as Message).body);
+                } else {
+                    this.addGameCard((response as ICommonSceneModifications).id, gameName);
+                }
+            });
+        }
+
+    private addGameCard(scenePairId: string, gameName: string): void {
+        this.gamesCardService.addGameCard(gameName, scenePairId, POVType.Free)
+            .subscribe((response: ICommonGameCard | Message) => {
+                if ((response as Message).body) {
+                    alert((response as Message).body);
+                } else {
+                    window.location.reload();
+                }
+            });
     }
 }
