@@ -4,7 +4,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { AdminViewComponent } from "./admin-view/admin-view.component";
 import { GameViewComponent } from "./game-view/game-view.component";
 import { GamesListViewComponent } from "./games-list-view/games-list-view.component";
-import { InitialViewComponent } from "./initial-view/initial-view.component";
+//import { InitialViewComponent } from "./initial-view/initial-view.component";
 import { TestComponent } from "./test/test.component";
 
 const routes: Routes = [

@@ -6,11 +6,15 @@ export class CameraGenerator {
     private static readonly FAR_CLIP: number = 1000;
 
     public static createCamera(containerWidth: number, containerHeight: number): THREE.PerspectiveCamera {
-        return new THREE.PerspectiveCamera(
+        const camera: THREE.PerspectiveCamera =  new THREE.PerspectiveCamera(
             CameraGenerator.FOV,
             containerWidth / containerHeight,
             CameraGenerator.NEAR_CLIP,
             CameraGenerator.FAR_CLIP,
         );
+
+        camera.position.z = 5;
+
+        return camera;
     }
 }
