@@ -1,25 +1,18 @@
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
-import { ICommonScene } from "../../../../../../common/model/scene/scene";
 import { SceneTransformation } from "./sceneTransformation";
 
 /**
  * In charge of removing a random object from a scene
  */
 export class SceneObjectRemover implements SceneTransformation {
-    public applyTransformation(modifiedScene: ICommonScene, transformationEligibleObjects: ICommonSceneObject[],
+    public applyTransformation(objectsToTransform: ICommonSceneObject[],
                                modifications: ICommonSceneModifications): void {
 
-        const indexOfObjectToRemove: number = Math.floor(Math.random() * transformationEligibleObjects.length);
-        const removedObject: ICommonSceneObject = transformationEligibleObjects[indexOfObjectToRemove];
+        const indexOfObjectToRemove: number = Math.floor(Math.random() * objectsToTransform.length);
+        const removedObject: ICommonSceneObject = objectsToTransform[indexOfObjectToRemove];
 
         modifications.deletedObjects.push(removedObject.id);
-
-        transformationEligibleObjects.splice(indexOfObjectToRemove, 1);
-
-        modifiedScene.sceneObjects.splice(
-            modifiedScene.sceneObjects.findIndex((object: ICommonSceneObject) => object.id === removedObject.id),
-            1,
-        );
+        objectsToTransform.splice(indexOfObjectToRemove, 1);
     }
 }
