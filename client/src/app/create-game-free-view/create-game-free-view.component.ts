@@ -2,8 +2,8 @@ import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
 import { GamesCardService } from "../services/games-card.service";
 import { ScenePairService } from "../services/scene-pair.service";
 
