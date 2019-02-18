@@ -3,7 +3,7 @@ import { ICommonCone } from "../../../../../../common/model/scene/objects/geomet
 import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class ConeFactory extends GeometricObjectFactory {
-    private static readonly RADIAL_SEGMENTS: number = 8;
+    private static readonly RADIAL_SEGMENTS: number = 100;
     public createShape(color: THREE.MeshStandardMaterial, geometricObject: ICommonCone): THREE.Object3D {
         const coneShape: THREE.ConeGeometry = new THREE.ConeGeometry(geometricObject.radius,
                                                                      geometricObject.height,

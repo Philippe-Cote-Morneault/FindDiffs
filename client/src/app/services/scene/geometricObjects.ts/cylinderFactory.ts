@@ -3,7 +3,7 @@ import { ICommonCylinder } from "../../../../../../common/model/scene/objects/ge
 import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class CylinderFactory extends GeometricObjectFactory {
-    private static readonly RADIAL_SEGMENTS: number = 8;
+    private static readonly RADIAL_SEGMENTS: number = 100;
     public createShape(color: THREE.MeshStandardMaterial, geometricObject: ICommonCylinder): THREE.Object3D {
         const cylinderShape: THREE.CylinderGeometry = new THREE.CylinderGeometry(geometricObject.radius,
                                                                                  geometricObject.radius,

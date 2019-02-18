@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import * as THREE from "three";
-import { OrbitControls } from "three-orbitcontrols-ts";
+import "src/js/test";
+import "node_modules/three/examples/js/controls/OrbitControls";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { SceneParserService } from "../services/scene/sceneParser/scene-parser.service";
 import { CameraGenerator } from "../services/scene/sceneRenderer/cameraGenerator";
@@ -27,7 +28,7 @@ export class TestComponent implements OnInit {
                 renderer.setSize(1000, 600);
                 this.div.appendChild(renderer.domElement);
                 const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
-                const controls: OrbitControls = new OrbitControls(camera, renderer.domElement);
+                const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
                 const parsedScene: THREE.Scene = this.sceneParser.parseScene(scene, 1000, 600);
                 //controls.update();
 
