@@ -1,7 +1,7 @@
 export class ColorUtils {
-    public static readonly MAX_COLOR: number = 16777215; // 0xFFFFFF (white)
+    private static readonly numberOfHexColors: number = 16777215;
 
-    public static generateColor(): number {
-        return Math.round(Math.random() * this.MAX_COLOR);
+    public static generateRandomColor(): number {
+        return Math.floor(Math.random() * ColorUtils.numberOfHexColors);
     }
 }

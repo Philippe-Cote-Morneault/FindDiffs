@@ -38,7 +38,7 @@ describe("SceneService", () => {
         it("Should return an error if the object qty is not a number", async () => {
             const request: object = {
                 body: {
-                    object_type: "Theme",
+                    object_type: "Thematic",
                     object_qty: "nan",
                 },
             };
@@ -54,7 +54,7 @@ describe("SceneService", () => {
         it("Should return an error if the object qty is higher than 200", async () => {
             const request: object = {
                 body: {
-                    object_type: "Theme",
+                    object_type: "Thematic",
                     object_qty: 201,
                 },
             };
@@ -70,7 +70,7 @@ describe("SceneService", () => {
         it("Should return an error if the object qty is lower than 10", async () => {
             const request: object = {
                 body: {
-                    object_type: "Theme",
+                    object_type: "Thematic",
                     object_qty: 9,
                 },
             };

@@ -1,14 +1,21 @@
-import { ICommonSceneObject } from "./sceneObject";
+import { ICommonSceneObject } from "./objects/sceneObject";
 
 /**
  * Represents a ThreeJS scene
  */
 export interface ICommonScene {
-    sceneObjects: ICommonSceneObject[];
-    bg_color: string;
-    texture: string;
     id: string;
     dimensions: ICommonSceneDimensions;
+    sceneObjects: ICommonSceneObject[];
+    type: ObjectType;
+}
+
+export interface ICommonGeometricScene extends ICommonScene {
+    bg_color: string;
+}
+
+export interface ICommonThematicScene extends ICommonScene {
+    texture: string;
 }
 
 /**
@@ -19,3 +26,5 @@ export interface ICommonSceneDimensions {
     y: number;
     z: number;
 }
+
+export enum ObjectType {Geometric, Thematic};
