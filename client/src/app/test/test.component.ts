@@ -27,5 +27,5 @@ export class TestComponent implements OnInit {
                 renderer.render(this.sceneParser.parseScene(scene, 640, 480), CameraGenerator.createCamera(640, 480));
             }
         });
+    }
 }
-
