@@ -32,6 +32,7 @@ export class SceneService extends Service implements ISceneService {
             throw new InvalidFormatException(R.ERROR_OBJECTS_QTY);
         }
     }
+
     public async post(req: Request): Promise<string> {
         this.validatePost(req);
         const sceneGenerator: SceneGenerator = new SceneGenerator(req.body.object_qty);
