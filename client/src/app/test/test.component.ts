@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import * as THREE from "three";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
-import { SceneService } from "../services/scene/scene.service";
 import { SceneParserService } from "../services/scene/sceneParser/scene-parser.service";
 import { CameraGenerator } from "../services/scene/sceneRenderer/cameraGenerator";
+import { SceneService } from "../services/scene/scene.service";
 
 @Component({
     selector: "app-test",
@@ -27,6 +27,5 @@ export class TestComponent implements OnInit {
                 renderer.render(this.sceneParser.parseScene(scene, 640, 480), CameraGenerator.createCamera(640, 480));
             }
         });
-    }
-
 }
+
