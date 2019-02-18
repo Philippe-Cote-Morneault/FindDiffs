@@ -91,7 +91,7 @@ export class SceneGenerator {
         for (let i: number = -1; i < TWO; ++i) {
             for (let j: number = -1; j < TWO; ++j) {
                 for (let k: number = -1; k < TWO; ++k) {
-                    if (!validPosition[x + i][y + i][z + i]) {
+                    if (!validPosition[x + i][y + j][z + k]) {
                         areAllFree = false;
                         break;
                     }
@@ -112,7 +112,7 @@ export class SceneGenerator {
             for (let i: number = -1; i < TWO; ++i) {
                 for (let j: number = -1; j < TWO; ++j) {
                     for (let k: number = -1; k < TWO; ++k) {
-                        validPositions[x + i][y + i][z + i] = false;
+                        validPositions[x + i][y + j][z + k] = false;
                     }
                 }
             }
