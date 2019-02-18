@@ -7,12 +7,14 @@ import { SceneObjectPosition } from "./sceneObjectPosition";
 
 export class SceneGenerator {
     public totalShapes: number = 0;
+    public sceneSize: number = 0;
     private readonly NUMBER_SHAPES_ENUM: number = EnumUtils.enumLength(GeometricShape);
 
     private shapes: Map<GeometricShape, number> = new Map<GeometricShape, number>();
 
     public constructor(private sceneObjectPosition: SceneObjectPosition, totalShapes: number) {
         this.totalShapes = totalShapes;
+        this.sceneSize = this.sceneObjectPosition.sizeScene;
      }
     public numberElementsPerShapeGenerator(): void {
         const shapesQuantity: number[] = new Array(this.NUMBER_SHAPES_ENUM);
@@ -89,9 +91,11 @@ export class SceneGenerator {
         for (let i: number = -1; i < TWO; ++i) {
             for (let j: number = -1; j < TWO; ++j) {
                 for (let k: number = -1; k < TWO; ++k) {
-                    if (!validPosition[x + i][y + j][z + k]) {
-                        areAllFree = false;
-                        break;
+                    if (x + i > 0 && y + j > 0 && z + k > 0 && x + i < this.sceneSize && y + j < this.sceneSize && z + k < this.sceneSize) {
+                        if (!validPosition[x + i][y + j][z + k]) {
+                            areAllFree = false;
+                            break;
+                        }
                     }
                 }
             }
@@ -109,7 +113,10 @@ export class SceneGenerator {
             for (let i: number = -1; i < TWO; ++i) {
                 for (let j: number = -1; j < TWO; ++j) {
                     for (let k: number = -1; k < TWO; ++k) {
-                        validPositions[x + i][y + j][z + k] = false;
+                        // tslint:disable-next-line
+                        if (x + i > 0 && y + j > 0 && z + k > 0 && x + i < this.sceneSize && y + j < this.sceneSize && z + k < this.sceneSize) {
+                            validPositions[x + i][y + j][z + k] = false;
+                        }
                     }
                 }
             }
