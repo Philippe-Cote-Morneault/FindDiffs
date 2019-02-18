@@ -3,6 +3,7 @@ import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonScene } from "../../../../common/model/scene/scene";
+import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
 import { GamesCardService } from "../services/games-card.service";
 import { ScenePairService } from "../services/scene-pair.service";
 
@@ -76,25 +77,26 @@ export class CreateGameFreeViewComponent {
         const isModifiedType: boolean = this.modified.nativeElement.checked;
         const quantity: string = this.quantityObject.nativeElement.value;
         const objectType: string = this.objectType.nativeElement.value;
+        const gameName: string = this.gameNameInput.nativeElement.value;
 
         this.scenePairService.addScenePair(objectType, Number(quantity))
             .subscribe((response: ICommonScene | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    this.modifyScenePair((response as ICommonScene).id, isAddType, isRemoveType, isModifiedType);
+                    this.modifyScenePair((response as ICommonScene).id, gameName, isAddType, isRemoveType, isModifiedType);
                 }
             });
     }
 
-    public modifyScenePair(idScenePair: string, isAddType: boolean, isRemoveType: boolean, isModifiedType: boolean): void {
-        const gameName: string = this.gameNameInput.nativeElement.value;
-        this.scenePairService.addScenePair(idScenePair, isAddType, isRemoveType, isModifiedType)
-            .subscribe((response: ICommonScene | Message) => {
+    public modifyScenePair(idScenePair: string, gameName: string, isAddType: boolean,
+                           isRemoveType: boolean, isModifiedType: boolean): void {
+        this.scenePairService.modifyScenePair(idScenePair, isAddType, isRemoveType, isModifiedType)
+            .subscribe((response: ICommonSceneModifications | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    this.addGameCard((response as ICommonScene).id, gameName);
+                    this.addGameCard((response as ICommonSceneModifications).id, gameName);
                 }
             });
         }
