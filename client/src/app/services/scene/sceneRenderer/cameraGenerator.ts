@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export class CameraGenerator {
-    private static readonly FOV: number = 75;
+    private static readonly FOV: number = 90;
     private static readonly NEAR_CLIP: number = 0.1;
     private static readonly FAR_CLIP: number = 1000;
 
@@ -13,7 +13,7 @@ export class CameraGenerator {
             CameraGenerator.FAR_CLIP,
         );
 
-        camera.position.z = 5;
+        camera.position.z = 50;
 
 
         return camera;

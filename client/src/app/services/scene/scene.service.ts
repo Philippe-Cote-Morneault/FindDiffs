@@ -18,7 +18,7 @@ export class SceneService extends HTTPService {
     }
 
     public createScene(objectType: ObjectType, objectQuantity: number): Observable<ICommonScene | Message> {
-        const requestBody: Object = { "object_type": objectType, "object_qty": objectQuantity };
+        const requestBody: Object = { "object_type": "Geometric", "object_qty": objectQuantity };
 
         return this.http.post<ICommonScene>(`${SERVER_URL}/scene/`, requestBody).pipe(
             catchError((error) => this.handleError(error)),
