@@ -27,6 +27,7 @@ export abstract class GeometricObjectFactory {
         geometricObject.setRotationFromEuler(new THREE.Euler(eulerAngles.xAngle, eulerAngles.yAngle, eulerAngles.zAngle));
     }
 
+    // tslint:disable-next-line:no-suspicious-comment
     // TODO: See if you need to convert to hex
     private createMeshMaterial(color: number): THREE.MeshStandardMaterial {
         return new THREE.MeshStandardMaterial({color: color, roughness: 0.95, metalness: 0.5, flatShading: true});

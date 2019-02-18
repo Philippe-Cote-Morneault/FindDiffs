@@ -3,6 +3,9 @@ import { ICommonGeometricScene } from "../../../../../../common/model/scene/scen
 
 export class GeometricSceneParser {
     private static readonly SCENE_BG_COLOR_NUMBER_BASE: number = 16;
+    private static readonly WHITE_LIGHT_COLOR: number = 0xFFFFFF;
+    private static readonly SOFT_WHITE_LIGHT_COLOR: number = 0x303030;
+    private static readonly GRID_NUMBER_DIVISIONS: number = 10;
 
     public static parseScene(originalScene: ICommonGeometricScene): THREE.Scene {
         const scene: THREE.Scene = new THREE.Scene();
@@ -10,23 +13,29 @@ export class GeometricSceneParser {
         scene.background = new THREE.Color(parseInt((originalScene as ICommonGeometricScene).bg_color,
                                                     GeometricSceneParser.SCENE_BG_COLOR_NUMBER_BASE));
 
-        // TODO: Find a way to hold dimensions and divisions in scene object
-        scene.add(GeometricSceneParser.generateGrid(originalScene.dimensions.x, 10));
+        scene.add(GeometricSceneParser.generateGrid(originalScene.dimensions.x, GeometricSceneParser.GRID_NUMBER_DIVISIONS));
 
-        const light1: THREE.PointLight = new THREE.PointLight( 0xffffff, 5, 350 );
+        // tslint:disable-next-line:no-magic-numbers
+        const light1: THREE.PointLight = new THREE.PointLight(GeometricSceneParser.WHITE_LIGHT_COLOR, 5, 350 );
+        // tslint:disable-next-line:no-magic-numbers
         light1.position.set( 150, 100, 150 );
         scene.add(light1);
 
-        const light2: THREE.PointLight = new THREE.PointLight( 0xffffff, 5, 350 );
+        // tslint:disable-next-line:no-magic-numbers
+        const light2: THREE.PointLight = new THREE.PointLight(GeometricSceneParser.WHITE_LIGHT_COLOR, 5, 350 );
+        // tslint:disable-next-line:no-magic-numbers
         light2.position.set( -150, 100, 150 );
         scene.add(light2);
 
-        const light3: THREE.PointLight = new THREE.PointLight( 0xffffff, 2, 300 );
+        // tslint:disable-next-line:no-magic-numbers
+        const light3: THREE.PointLight = new THREE.PointLight(GeometricSceneParser.WHITE_LIGHT_COLOR, 2, 300 );
+        // tslint:disable-next-line:no-magic-numbers
         light3.position.set( 0, 100, -150 );
         scene.add(light3);
 
-        const ambiantLight = new THREE.AmbientLight(0x303030); // soft white light
+        const ambiantLight: THREE.AmbientLight = new THREE.AmbientLight(GeometricSceneParser.SOFT_WHITE_LIGHT_COLOR);
         scene.add( ambiantLight );
+
         return scene;
     }
 
