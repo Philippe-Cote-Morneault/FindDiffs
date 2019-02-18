@@ -101,6 +101,14 @@ export class SceneService extends Service implements ISceneService {
     }
 
     public async singleModified(id: string): Promise<string> {
-        throw new Error("Method not implemented.");
-    }
+        return Scene.findById(id).then(async(doc: IScene) => {
+            if (!doc) {
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+            }
+
+            return JSON.stringify(doc.modifications);
+        })
+        .catch((err: Error) => {
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+        });    }
 }
