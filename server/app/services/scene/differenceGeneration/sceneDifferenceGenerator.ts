@@ -60,24 +60,17 @@ export class SceneDifferenceGenerator {
         }
     }
 
-    // TODO: See if we cant make less duplication here
     private initializeModifications(): void {
-        if (this.scene.type === ObjectType.Geometric) {
-            this.sceneModifs = {
+        this.sceneModifs = {
                 id:  uuid().replace(/-/g, ""),
                 type: this.scene.type,
                 addedObjects: [],
                 deletedObjects: [],
-                colorChangedObjects: new Map<string, number>(),
-            } as ICommonSceneModifications;
+        };
+        if (this.scene.type === ObjectType.Geometric) {
+            this.sceneModifs["colorChangedObjects"] = new Map<string, number>();
         } else {
-            this.sceneModifs = {
-                id: uuid().replace(/-/g, ""),
-                type: this.scene.type,
-                addedObjects: [],
-                deletedObjects: [],
-                texturesChangedObjects: new Map<string, Textures>(),
-            } as ICommonSceneModifications;
+            this.sceneModifs["texturesChangedObjects"] = new Map<string, Textures>();
         }
     }
 
