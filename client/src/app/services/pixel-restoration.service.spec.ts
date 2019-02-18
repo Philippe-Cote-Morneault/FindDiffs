@@ -1,6 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-// import * as sinon from "sinon";
-/*import { IPixel } from "../../Objects/Pixel";*/
+import * as sinon from "sinon";
 import { ICommon2DPosition } from "../../../../common/model/positions";
 import { ICommonReveal } from "../../../../common/model/reveal";
 import { PixelRestorationService } from "./pixel-restoration.service";
@@ -84,5 +83,37 @@ describe("PixelRestorationService", () => {
     pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
 
     expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
+  });
+
+  it("should not add a pixel because originalContext is null", () => {
+    const stub: sinon.SinonStub = sinon.stub(originalCanvas, "getContext");
+    stub.returns(null);
+
+    const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
+    const expectedImageData: ImageData = new ImageData(data, 1, 1);
+    if (originalContext) {
+      originalContext.putImageData(expectedImageData, 0, 0);
+    }
+    const posPixel: ICommon2DPosition = {x: 0, y: 0};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+    expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
+    stub.restore();
+  });
+
+  it("should not add a pixel because modifiedContext is null", () => {
+    const stub: sinon.SinonStub = sinon.stub(modifiedCanvas, "getContext");
+    stub.returns(null);
+
+    const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
+    const expectedImageData: ImageData = new ImageData(data, 1, 1);
+    if (originalContext) {
+      originalContext.putImageData(expectedImageData, 0, 0);
+    }
+    const posPixel: ICommon2DPosition = {x: 0, y: 0};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+    expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
+    stub.restore();
   });
 });
