@@ -13,7 +13,6 @@ import { PixelRestorationService } from "../services/pixel-restoration.service";
 export class GameViewComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
-    public isSolo: boolean;
     private imagePairId: string;
     private differenceCounterUser: number;
     private differenceFound: number[];
@@ -25,7 +24,6 @@ export class GameViewComponent implements OnInit {
         public pixelPositionService: PixelPositionService,
         public pixelRestorationService: PixelRestorationService,
         public imagePairService: ImagePairService) {
-        this.isSolo = true;
         this.differenceCounterUser = 0;
         this.differenceSound = new Audio;
         this.differenceSound.src = "../../assets/mario.mp3";
