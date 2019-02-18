@@ -1,6 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import * as sinon from "sinon";
-/*import { IPixel } from "../../Objects/Pixel";*/
+import { ICommon2DPosition } from "../../../../common/model/positions";
+import { ICommonReveal } from "../../../../common/model/reveal";
 import { PixelRestorationService } from "./pixel-restoration.service";
 
 // tslint:disable no-magic-numbers
@@ -8,69 +9,62 @@ import { PixelRestorationService } from "./pixel-restoration.service";
 describe("PixelRestorationService", () => {
 
   const pixelRestorationService: PixelRestorationService = new PixelRestorationService();
+  let originalCanvas: HTMLCanvasElement;
+  let originalContext: CanvasRenderingContext2D | null;
+  let modifiedCanvas: HTMLCanvasElement;
+  let modifiedContext: CanvasRenderingContext2D | null;
 
-  beforeEach(() => TestBed.configureTestingModule({}));
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    originalCanvas  = (document.createElement("canvas") as HTMLCanvasElement);
+    originalContext = originalCanvas.getContext("2d");
 
-  it("should have no pixels", () => {
-      const blankCanvas: HTMLCanvasElement = (document.createElement("canvas") as HTMLCanvasElement);
-      if (pixelRestorationService.modifiedCanvas) {
-        expect(pixelRestorationService.modifiedCanvas.toDataURL()).toEqual(blankCanvas.toDataURL());
-      }
+    modifiedCanvas = (document.createElement("canvas") as HTMLCanvasElement);
+    modifiedContext = modifiedCanvas.getContext("2d");
+
   });
 
-  it("should call fillRect method once", () => {
-    if (pixelRestorationService.context) {
-      const spy: sinon.SinonSpy = sinon.spy(pixelRestorationService.context, "fillRect");
-      const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
-      const expectedImageData: ImageData = new ImageData(data, 1, 1);
-      pixelRestorationService.addPixel(expectedImageData, 0, 0);
-      expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(0, 0, 1, 1);
-      spy.restore();
-    }
-  });
   it("should add a pixel to the canvas", () => {
-    const blankCanvas: HTMLCanvasElement = (document.createElement("canvas") as HTMLCanvasElement);
 
     const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
     const expectedImageData: ImageData = new ImageData(data, 1, 1);
-    pixelRestorationService.addPixel(expectedImageData, 0, 0);
-
-    if (pixelRestorationService.modifiedCanvas) {
-      expect(pixelRestorationService.modifiedCanvas.toDataURL()).toBeFalsy(blankCanvas.toDataURL());
+    if (originalContext) {
+      originalContext.putImageData(expectedImageData, 0, 0);
     }
+    const posPixel: ICommon2DPosition = {x: 0, y: 0};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+    expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
+
   });
 
   it("should add a black pixel to the canvas", () => {
+
     const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
     const expectedImageData: ImageData = new ImageData(data, 1, 1);
-    pixelRestorationService.addPixel(expectedImageData, 0, 0);
-
-    if (pixelRestorationService.context) {
-      expect(pixelRestorationService.context.getImageData(0, 0, 1, 1)).toEqual(expectedImageData);
+    if (originalContext) {
+      originalContext.putImageData(expectedImageData, 0, 0);
     }
+    const posPixel: ICommon2DPosition = {x: 0, y: 0};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+    expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
+
   });
 
   it("should add a red pixel to the canvas", () => {
+
     const data: Uint8ClampedArray = new Uint8ClampedArray([255, 0, 0, 255]);
     const expectedImageData: ImageData = new ImageData(data, 1, 1);
-    pixelRestorationService.addPixel(expectedImageData, 0, 0);
-
-    if (pixelRestorationService.context) {
-      expect(pixelRestorationService.context.getImageData(0, 0, 1, 1)).toEqual(expectedImageData);
+    if (originalContext) {
+      originalContext.putImageData(expectedImageData, 0, 0);
     }
-  });
+    const posPixel: ICommon2DPosition = {x: 0, y: 0};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
 
-  it("should add multiple black pixels to the canvas", () => {
-    const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255,
-                                                           0, 0, 0, 255,
-                                                           0, 0, 0, 255,
-                                                           0, 0, 0, 255]);
-    const expectedImageData: ImageData = new ImageData(data, 4, 1);
-    pixelRestorationService.addPixel(expectedImageData, 0, 0);
-    if (pixelRestorationService.context) {
-      expect(pixelRestorationService.context.getImageData(0, 0, 4, 1)).toEqual(expectedImageData);
-    }
+    expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
+
   });
 
   it("should add multiple red pixels to the canvas", () => {
@@ -79,9 +73,47 @@ describe("PixelRestorationService", () => {
                                                            255, 0, 0, 255,
                                                            255, 0, 0, 255]);
     const expectedImageData: ImageData = new ImageData(data, 4, 1);
-    pixelRestorationService.addPixel(expectedImageData, 0, 0);
-    if (pixelRestorationService.context) {
-      expect(pixelRestorationService.context.getImageData(0, 0, 4, 1)).toEqual(expectedImageData);
+
+    if (modifiedContext && originalContext) {
+      originalContext.putImageData(expectedImageData, 0, 0);
     }
+
+    const posPixel: ICommon2DPosition[] = [{x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}, {x: 3, y: 0}];
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: posPixel};
+    pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+
+    expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
+  });
+
+  it("should not add a pixel because originalContext is null", () => {
+    const stub: sinon.SinonStub = sinon.stub(originalCanvas, "getContext");
+    stub.returns(null);
+
+    const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
+    const expectedImageData: ImageData = new ImageData(data, 1, 1);
+    if (originalContext) {
+      originalContext.putImageData(expectedImageData, 0, 0);
+    }
+    const posPixel: ICommon2DPosition = {x: 0, y: 0};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+    expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
+    stub.restore();
+  });
+
+  it("should not add a pixel because modifiedContext is null", () => {
+    const stub: sinon.SinonStub = sinon.stub(modifiedCanvas, "getContext");
+    stub.returns(null);
+
+    const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
+    const expectedImageData: ImageData = new ImageData(data, 1, 1);
+    if (originalContext) {
+      originalContext.putImageData(expectedImageData, 0, 0);
+    }
+    const posPixel: ICommon2DPosition = {x: 0, y: 0};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+    expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
+    stub.restore();
   });
 });

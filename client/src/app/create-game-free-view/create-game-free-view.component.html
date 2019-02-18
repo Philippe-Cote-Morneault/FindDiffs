@@ -20,7 +20,7 @@
       </div>
       <div class="form-group">
         <label for="sel1">Type of objects</label>
-        <select class="form-control" id="sel1" (change)="verifyInfo()">
+        <select class="form-control" id="sel1" #objectType (change)="verifyInfo()">
           <option>Geometric</option>
           <option>Thematic</option>
         </select>
@@ -44,7 +44,7 @@
         </div>
       </div>
       
-      <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId">Submit</button>
+      <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addScenePair()">Submit</button>
       <button class="btn btn-danger" (click)="hideView()">Cancel</button>
     </form>
   </div>
