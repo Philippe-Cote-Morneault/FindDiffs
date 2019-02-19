@@ -4,7 +4,7 @@ import * as THREE from "three";
 
 import "src/js/test";
 import "node_modules/three/examples/js/controls/OrbitControls";
-import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { ICommonScene } from "../../../../common/model/scene/scene";
 import { SceneParserService } from "../services/scene/sceneParser/scene-parser.service";
 import { CameraGenerator } from "../services/scene/sceneRenderer/cameraGenerator";
 import { SceneService } from "../services/scene/scene.service";
