@@ -30,7 +30,7 @@ export class GameViewFreeComponent implements OnInit {
 
     private getScenePairById(): void {
         this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
-                this.loadScene(this.originalScene.nativeElement, response.id);
+            this.loadScene(this.originalScene.nativeElement, response.id);
         });
         this.sceneService.getModifiedSceneById(this.scenePairID).subscribe((response: ICommonSceneModifications) => {
             this.loadScene(this.modifiedScene.nativeElement, response.id);
