@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ICommonPyramid } from "../../../../../../common/model/scene/objects/geometricObjects/pyramid";
+import { ICommonPyramid } from "../../../../../../../common/model/scene/objects/geometricObjects/pyramid";
 import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class PyramidFactory extends GeometricObjectFactory {

@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { ICommon3DPosition } from "../../../../../../common/model/positions";
-import { ICommonEulerAngles } from "../../../../../../common/model/scene/eulerAngles";
-import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+import { ICommon3DPosition } from "../../../../../../../common/model/positions";
+import { ICommonEulerAngles } from "../../../../../../../common/model/scene/eulerAngles";
+import { ICommonGeometricObject } from "../../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 
 export abstract class GeometricObjectFactory {
     public parse(sceneObject: ICommonGeometricObject): THREE.Object3D {

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ICommonSphere } from "../../../../../../common/model/scene/objects/geometricObjects/sphere";
+import { ICommonSphere } from "../../../../../../../common/model/scene/objects/geometricObjects/sphere";
 import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class SphereFactory extends GeometricObjectFactory {

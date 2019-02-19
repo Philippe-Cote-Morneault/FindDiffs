@@ -1,36 +1,26 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
-import { ICommonGeometricScene, ICommonScene, ICommonThematicScene, ObjectType } from "../../../../../../common/model/scene/scene";
-import { GeometricSceneParser } from "./geometricSceneParser";
-import { GeometricObjectParser } from "./objectParser/geometricObjectParser";
-import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
-import { SceneObjectParser } from "./sceneObjectParser";
-import { ThematicSceneParser } from "./thematicSceneParser";
+import {  ICommonScene } from "../../../../../../common/model/scene/scene";
+import { AbstractSceneParser } from "./abstractSceneParserService";
 
 @Injectable({
-  providedIn: "root",
+    providedIn: "root",
 })
-export class SceneParserService {
+export class SceneParserService extends AbstractSceneParser {
 
-    private sceneObjectParser: SceneObjectParser;
+    public parseScene(sceneModel: ICommonScene): THREE.Scene {
+        const scene: THREE.Scene = this.createScene(sceneModel);
 
-    public parseScene(originalScene: ICommonScene, containerWidth: number, containerHeight: number): THREE.Scene {
-        let scene: THREE.Scene;
-
-        if (originalScene.type === ObjectType.Geometric) {
-            this.sceneObjectParser = new GeometricObjectParser();
-            scene = GeometricSceneParser.parseScene(originalScene as ICommonGeometricScene);
-        } else {
-            this.sceneObjectParser = new ThematicObjectParser();
-            scene = ThematicSceneParser.parseScene(originalScene as ICommonThematicScene);
-        }
-
-        originalScene.sceneObjects.forEach((object: ICommonSceneObject) => {
-            scene.add(this.sceneObjectParser.parse(object));
-        });
+        this.parseObjects(scene, sceneModel.sceneObjects);
 
         return scene;
+    }
+
+    private parseObjects(scene: THREE.Scene, sceneObjects: ICommonSceneObject[]): void {
+        sceneObjects.forEach((object: ICommonSceneObject) => {
+            scene.add(this.sceneObjectParser.parse(object));
+        });
     }
 
 }
