@@ -45,11 +45,8 @@ export class GamesCardViewComponent implements OnInit {
         if (this.isInAdminView) {
             this.deleteGameCard();
         } else {
-            if (this.gameCard.pov === POVType.Simple) {
-                await this.router.navigateByUrl("/gameSimple/" + this.gameCard.resource_id);
-            } else {
-                await this.router.navigateByUrl("/gameFree/" + this.gameCard.resource_id);
-            }
+            const gameUrl: string = (this.gameCard.pov.toString() === "Simple") ? "/gameSimple/" : "/gameFree/";
+            await this.router.navigateByUrl(gameUrl + this.gameCard.resource_id);
         }
     }
 
