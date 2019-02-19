@@ -5,6 +5,13 @@ import { FileNotFoundException } from "../../../common/errors/fileNotFoundExcept
 import { S3Exception } from "../../../common/errors/s3Exception";
 import Config from "../config";
 
+AWS.config.update({
+    accessKeyId: Config.s3.key,
+    secretAccessKey: Config.s3.secret,
+});
+
+const s3: AWS.S3 = new AWS.S3();
+
 export class Storage {
     public static readonly STORAGE_PATH: string = "storage";
 
@@ -50,12 +57,5 @@ export class Storage {
     }
 
 }
-
-AWS.config.update({
-    accessKeyId: Config.s3.key,
-    secretAccessKey: Config.s3.secret,
-});
-
-const s3: AWS.S3 = new AWS.S3();
 
 export const uploads: multer.Instance = multer({});
