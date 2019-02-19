@@ -25,7 +25,7 @@ export class GamesCardViewComponent implements OnInit {
 
     public constructor(
         private gamesCardService: GamesCardService,
-        private sceneService: GamesCardService,
+        private sceneService: SceneService,
         private router: Router,
         private imagePairService: ImagePairService) {
             this.rightButton = "Create";
@@ -38,7 +38,12 @@ export class GamesCardViewComponent implements OnInit {
             this.leftButton = "Delete";
             this.rightButton = "Reset";
         }
-        this.getImagePairById();
+
+        if (this.gameCard.pov.toString() === "Simple") {
+            this.getImagePairById();
+        } else {
+            this.getScenePairById();
+        }
     }
 
     public toMinutes(index: number, times: number[]): string {
@@ -81,6 +86,12 @@ export class GamesCardViewComponent implements OnInit {
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.gameCard.resource_id).subscribe((imagePair: ICommonImagePair) => {
             this.imagePair = imagePair;
+        });
+    }
+
+    private getScenePairById(): void {
+        this.sceneService.getSceneById(this.scenePair.id).subscribe((response: ICommonScene) => {
+            this.scenePair = this.scenePair;
         });
     }
 }
