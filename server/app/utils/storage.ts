@@ -32,11 +32,6 @@ export class Storage {
             throw new S3Exception(err.message);
         });
     }
-    public static guidFromPath(guid: string): string {
-        const split: string[] = guid.split("/");
-
-        return split[split.length - 1];
-    }
 
     public static async openBuffer(guid: string, completePath: boolean): Promise<ArrayBuffer> {
         let path: string;
