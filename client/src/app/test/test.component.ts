@@ -25,7 +25,7 @@ export class TestComponent implements OnInit {
     public ngOnInit(): void {
         this.div = document.getElementById("3jstest");
         
-        this.sceneService.createScene(ObjectType.Geometric, 200).subscribe((sceneModel: ICommonScene) => {
+        this.sceneService.createScene("Geometric", 200).subscribe((sceneModel: ICommonScene) => {
             if (this.div !== null) {
                 const sceneRendererService: SceneRendererService = new SceneRendererService();
                 const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);

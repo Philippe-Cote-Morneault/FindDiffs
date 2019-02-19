@@ -3,7 +3,7 @@ import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 
@@ -76,7 +76,7 @@ export class CreateGameFreeViewComponent {
         const isRemoveType: boolean = this.remove.nativeElement.checked;
         const isModifiedType: boolean = this.modified.nativeElement.checked;
         const quantity: string = this.quantityObject.nativeElement.value;
-        const objectType: ObjectType = this.objectType.nativeElement.selectedIndex;
+        const objectType: string = this.objectType.nativeElement.value;
         const gameName: string = this.gameNameInput.nativeElement.value;
 
         this.sceneService.createScene(objectType, Number(quantity))
