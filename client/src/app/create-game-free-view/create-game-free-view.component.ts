@@ -3,9 +3,9 @@ import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonScene } from "../../../../common/model/scene/scene";
+import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
-import { ScenePairService } from "../services/scene/scene-pair.service";
+import { SceneService } from "../services/scene/scene.service";
 
 @Component({
     selector: "app-create-game-free-view",
@@ -31,7 +31,7 @@ export class CreateGameFreeViewComponent {
 
     public constructor(
         private spinnerService: Ng4LoadingSpinnerService,
-        public scenePairService: ScenePairService,
+        public sceneService: SceneService,
         public gamesCardService: GamesCardService) {
         this.displayError = "inline";
         this.hideError = "none";
@@ -76,10 +76,10 @@ export class CreateGameFreeViewComponent {
         const isRemoveType: boolean = this.remove.nativeElement.checked;
         const isModifiedType: boolean = this.modified.nativeElement.checked;
         const quantity: string = this.quantityObject.nativeElement.value;
-        const objectType: string = this.objectType.nativeElement.value;
+        const objectType: ObjectType = this.objectType.nativeElement.selectedIndex;
         const gameName: string = this.gameNameInput.nativeElement.value;
 
-        this.scenePairService.addScenePair(objectType, Number(quantity))
+        this.sceneService.createScene(objectType, Number(quantity))
             .subscribe((response: ICommonScene | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);
@@ -91,7 +91,7 @@ export class CreateGameFreeViewComponent {
 
     public modifyScenePair(idScenePair: string, gameName: string, isAddType: boolean,
                            isRemoveType: boolean, isModifiedType: boolean): void {
-        this.scenePairService.modifyScenePair(idScenePair, isAddType, isRemoveType, isModifiedType)
+        this.sceneService.createModifiedScene(idScenePair, isAddType, isRemoveType, isModifiedType)
             .subscribe((response: ICommonSceneModifications | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);
