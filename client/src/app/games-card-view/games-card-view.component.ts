@@ -90,7 +90,7 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     private getScenePairById(): void {
-        this.sceneService.getSceneById(this.scenePair.id).subscribe((response: ICommonScene) => {
+        this.sceneService.getSceneById(this.scenePair.id).subscribe((scenePair: ICommonScene) => {
             this.scenePair = this.scenePair;
         });
     }
