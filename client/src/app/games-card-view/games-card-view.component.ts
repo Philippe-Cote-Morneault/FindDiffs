@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
-import { ICommonGameCard } from "../../../../common/model/gameCard";
+import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair.service";
@@ -45,7 +45,11 @@ export class GamesCardViewComponent implements OnInit {
         if (this.isInAdminView) {
             this.deleteGameCard();
         } else {
-            await this.router.navigateByUrl("/game/" + this.gameCard.resource_id);
+            if (this.gameCard.pov === POVType.Simple) {
+                await this.router.navigateByUrl("/gameSimple/" + this.gameCard.resource_id);
+            } else {
+                await this.router.navigateByUrl("/gameFree/" + this.gameCard.resource_id);
+            }
         }
     }
 
