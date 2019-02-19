@@ -1,7 +1,5 @@
 import * as AWS from "aws-sdk";
-import { Request } from "express";
 import * as multer from "multer";
-import * as multerS3 from "multer-s3";
 import * as uuid from "uuid";
 import { FileNotFoundException } from "../../../common/errors/fileNotFoundException";
 import { S3Exception } from "../../../common/errors/s3Exception";
@@ -65,13 +63,4 @@ AWS.config.update({
 
 const s3: AWS.S3 = new AWS.S3();
 
-export const uploads: multer.Instance = multer({
-    storage: multerS3({
-        s3: s3,
-        bucket: Config.s3.bucket,
-        key: (req: Request, file: Express.Multer.File, cb: Function) => {
-            const guid: string = Storage.generateGUID();
-            cb(null, Storage.getPath(guid));
-        },
-    }),
-});
+export const uploads: multer.Instance = multer({});
