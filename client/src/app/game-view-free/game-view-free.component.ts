@@ -30,15 +30,15 @@ export class GameViewFreeComponent implements OnInit {
 
     private getScenePairById(): void {
         this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
-            this.loadScene(this.originalScene.nativeElement, response.id);
+            this.loadScene(this.originalScene.nativeElement, response);
         });
         this.sceneService.getModifiedSceneById(this.scenePairID).subscribe((response: ICommonSceneModifications) => {
-            this.loadScene(this.modifiedScene.nativeElement, response.id);
+            this.loadScene(this.modifiedScene.nativeElement, response);
         });
     }
 
     // tslint:disable:no-any
-    public loadScene(scene: any, sceneSrc: string): void {
+    public loadScene(div: any, scene: ICommonScene | ICommonSceneModifications): void {
         // tslint:disable-next-line:no-suspicious-comment
         // TODO: copy pasta Phil's code
     }
