@@ -15,7 +15,7 @@ export class SceneParserService {
 
     private sceneObjectParser: SceneObjectParser;
 
-    public parseScene(originalScene: ICommonScene, containerWidth: number, containerHeight: number): THREE.Scene {
+    public parseScene(originalScene: ICommonScene): THREE.Scene {
         let scene: THREE.Scene;
 
         if (originalScene.type === ObjectType.Geometric) {
