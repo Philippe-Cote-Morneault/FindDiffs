@@ -92,25 +92,20 @@ export class ImagePairService extends Service implements IImagePairService {
     }
 
     public async post(req: Request): Promise<string> {
-        let originalImage: Bitmap;
-        let modifiedImage: Bitmap;
-
         this.validate(req);
 
-        originalImage = BitmapDecoder.FromArrayBuffer(
-            await Storage.openBuffer(req.files["originalImage"][0].key, true),
-        );
+        const originalImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files["originalImage"][0].buffer.buffer);
+        const modifiedImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files["modifiedImage"][0].buffer.buffer);
 
-        modifiedImage = BitmapDecoder.FromArrayBuffer(
-            await Storage.openBuffer(req.files["modifiedImage"][0].key, true),
-        );
+        const originalImageId: string = await Storage.saveBuffer(req.files["originalImage"][0].buffer.buffer);
+        const modifiedImageId: string = await Storage.saveBuffer(req.files["modifiedImage"][0].buffer.buffer);
 
         const difference: Difference = new Difference(originalImage, modifiedImage);
 
         const imagePair: IImagePair = new ImagePair({
             file_difference_id: await difference.saveStorage(),
-            file_modified_id: Storage.guidFromPath(req.files["modifiedImage"][0].key),
-            file_original_id: Storage.guidFromPath(req.files["originalImage"][0].key),
+            file_modified_id: originalImageId,
+            file_original_id: modifiedImageId,
             name: req.body.name,
             creation_date: new Date(),
             differences_count: difference.countDifferences(),
