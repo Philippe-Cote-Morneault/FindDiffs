@@ -51,7 +51,7 @@ export class ImagePairService extends Service implements IImagePairService {
 
     private async returnFile(id: string, fieldName: string): Promise<ArrayBuffer> {
         return ImagePair.findById(id).select(`+${fieldName}`)
-        .then((doc: IImagePair) => {
+        .then(async (doc: IImagePair) => {
             const fileId: string = doc.get(fieldName);
 
             return Storage.openBuffer(fileId, false);
@@ -65,7 +65,6 @@ export class ImagePairService extends Service implements IImagePairService {
     }
 
     private validate(req: Request): void {
-        const MIME_TYPE: string = "image/bmp";
         if (!req.body.name) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.NAME_]));
         }
@@ -82,18 +81,17 @@ export class ImagePairService extends Service implements IImagePairService {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.MODIFIED_IMAGE_]));
         }
 
-        if (req.files["originalImage"][0].mimetype !== MIME_TYPE) {
+        if (!req.files["originalImage"][0].originalname) {
             throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.ORIGINAL_IMAGE]));
         }
 
-        if (req.files["modifiedImage"][0].mimetype !== MIME_TYPE) {
+        if (!req.files["modifiedImage"][0].originalname) {
             throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.MODIFIED_IMAGE]));
         }
     }
 
     public async post(req: Request): Promise<string> {
         this.validate(req);
-
         const originalImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files["originalImage"][0].buffer.buffer);
         const modifiedImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files["modifiedImage"][0].buffer.buffer);
 
