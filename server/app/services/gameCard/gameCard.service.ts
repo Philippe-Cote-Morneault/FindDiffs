@@ -17,14 +17,13 @@ export class GameCardService extends Service implements IGameCardService {
 
     public readonly DEFAULT_SCORE_NUMBER: number = 3;
     public readonly NUMBER_OF_DIFFERENCES: number = 7;
-    public readonly RESOURCE_ID: string = "resource_id";
 
     private async validatePost(req: Request): Promise<void> {
         if (!req.body.name) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.NAME_]));
         }
 
-        if (!req.body[this.RESOURCE_ID]) {
+        if (!req.body.resource_id) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.RESOURCE_ID_]));
         }
 
@@ -38,15 +37,13 @@ export class GameCardService extends Service implements IGameCardService {
         const povType: POVType = EnumUtils.enumFromString<POVType>(req.body.pov, POVType) as POVType;
         switch (povType) {
             case POVType.Simple:
-                const imagePair: ICommonImagePair = await ApiRequest.getImagePairId(req.body[this.RESOURCE_ID]);
+                const imagePair: ICommonImagePair = await ApiRequest.getImagePairId(req.body.resource_id);
                 if (imagePair.differences_count !== this.NUMBER_OF_DIFFERENCES) {
                     throw new InvalidFormatException(_e(R.ERROR_DIFFERENCE_INVALID, [imagePair.differences_count]));
                 }
                 break;
             case POVType.Free:
-                // tslint:disable-next-line:no-suspicious-comment
-                // TODO Change this for an other resource
-                await ApiRequest.getImagePairId(req.body[this.RESOURCE_ID]);
+                await ApiRequest.getSceneId(req.body.resource_id);
                 break;
             default:
         }
