@@ -17,6 +17,7 @@ import { StringFormater } from "../util/stringFormater";
 export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
+    public gameCardPov: string = this.gameCard.pov.toString();
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
@@ -39,7 +40,7 @@ export class GamesCardViewComponent implements OnInit {
             this.rightButton = "Reset";
         }
 
-        if (this.gameCard.pov.toString() === "Simple") {
+        if (this.gameCardPov === "Simple") {
             this.getImagePairById();
         } else {
             this.getScenePairById();
@@ -54,7 +55,7 @@ export class GamesCardViewComponent implements OnInit {
         if (this.isInAdminView) {
             this.deleteGameCard();
         } else {
-            const gameUrl: string = (this.gameCard.pov.toString() === "Simple") ? "/gameSimple/" : "/gameFree/";
+            const gameUrl: string = (this.gameCardPov === "Simple") ? "/gameSimple/" : "/gameFree/";
             await this.router.navigateByUrl(gameUrl + this.gameCard.resource_id);
         }
     }
