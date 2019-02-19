@@ -6,7 +6,11 @@ import { ImagePair } from "../../model/schemas/imagePair";
 import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { Storage } from "../../utils/storage";
+import { BitmapDecoder } from "./bitmapDecoder";
+import { Difference } from "./difference";
 import { ImagePairService } from "./imagePair.service";
+
+// tslint:disable max-file-line-count
 
 interface FilesFetchMock {
     name: string;
@@ -24,6 +28,10 @@ describe("ImagePairService", () => {
         sinon.stub(Storage, "openBuffer");
         sinon.stub(Storage, "saveBuffer");
         sinon.stub(Storage, "STORAGE_PATH").value("test");
+        sinon.stub(BitmapDecoder, "FromArrayBuffer");
+
+        sinon.stub(Difference.prototype, "countDifferences");
+        sinon.stub(Difference.prototype, "saveStorage");
     });
 
     afterEach(() => {
@@ -32,6 +40,10 @@ describe("ImagePairService", () => {
         (ImagePair.prototype.save as sinon.SinonStub).restore();
         (Storage.saveBuffer as sinon.SinonStub).restore();
         (Storage.openBuffer as sinon.SinonStub).restore();
+        (BitmapDecoder.FromArrayBuffer as sinon.SinonStub).restore();
+
+        (Difference.prototype.countDifferences as sinon.SinonStub).restore();
+        (Difference.prototype.saveStorage as sinon.SinonStub).restore();
     });
 
     describe("post()", () => {
@@ -128,7 +140,7 @@ describe("ImagePairService", () => {
                 },
                 files: {
                     originalImage: [{
-                        path: "random path",
+                        originalname: "random name",
                     }],
                     modifiedImage: "image",
                 },
@@ -149,19 +161,24 @@ describe("ImagePairService", () => {
                 },
                 files: {
                     originalImage: [{
-                        path: "test/testBitmaps/checker.bmp",
-                        filename: "checker.bmp",
+                        originalname: "checker.bmp",
+                        buffer: Buffer.alloc(1),
                     }],
                     modifiedImage: [{
-                        path: "test/testBitmaps/checker-b.bmp",
-                        filename: "checker-b.bmp",
+                        originalname: "checker-b.bmp",
+                        buffer: Buffer.alloc(1),
                     }],
                 },
             };
             (Storage.saveBuffer as sinon.SinonStub).returns("an id");
             (ImagePair.prototype.save as sinon.SinonStub).resolves();
+            (BitmapDecoder.FromArrayBuffer as sinon.SinonStub).resolves();
+
+            (Difference.prototype.saveStorage as sinon.SinonStub).resolves("an id");
+            (Difference.prototype.countDifferences as sinon.SinonStub).returns(1);
+
             const response: string = await imagePairService.post(mockReq(request));
-            expect(JSON.parse(response).name).to.equal(request["body"]["name"]);
+            expect(JSON.parse(response).differences_count).to.equal(1);
         });
     });
     describe("index()", () => {
@@ -273,7 +290,7 @@ describe("ImagePairService", () => {
             it("Should throw an error if the file is not present on the server", async () => {
                 (ImagePair.findById as sinon.SinonStub).returns(new MongooseMock.Query(
                     new MongooseMock.Schema(queryResponse, false), true));
-                (Storage.openBuffer as sinon.SinonStub).rejects(new FileNotFoundException(method.fake_id).message);
+                (Storage.openBuffer as sinon.SinonStub).rejects(new FileNotFoundException(method.fake_id));
 
                 try {
                     await imagePairService[method.name]("id");
