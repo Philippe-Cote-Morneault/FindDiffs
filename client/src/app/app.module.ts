@@ -8,6 +8,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { CreateGameFreeViewComponent } from "./create-game-free-view/create-game-free-view.component";
 import { CreateGameSimpleViewComponent } from "./create-game-simple-view/create-game-simple-view.component";
+import { GameViewFreeComponent } from "./game-view-free/game-view-free.component";
 import { GameViewSimpleComponent } from "./game-view-simple/game-view-simple.component";
 import { GamesCardViewComponent } from "./games-card-view/games-card-view.component";
 import { GamesListViewComponent } from "./games-list-view/games-list-view.component";
@@ -27,6 +28,7 @@ import { TestComponent } from "./test/test.component";
         GameViewSimpleComponent,
         CreateGameFreeViewComponent,
         TestComponent,
+        GameViewFreeComponent,
     ],
     imports: [
         BrowserModule,
