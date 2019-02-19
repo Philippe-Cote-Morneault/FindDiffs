@@ -9,7 +9,7 @@ import { SceneObjectParser } from "./sceneObjectParser";
 import { ThematicSceneParser } from "./thematicSceneParser";
 
 @Injectable({
-  providedIn: "root",
+    providedIn: "root",
 })
 export class SceneParserService {
 
@@ -32,5 +32,7 @@ export class SceneParserService {
 
         return scene;
     }
+
+    private set
 
 }
