@@ -57,6 +57,4 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         }
         objectToModify.color = color;
     }
-
-
 }
