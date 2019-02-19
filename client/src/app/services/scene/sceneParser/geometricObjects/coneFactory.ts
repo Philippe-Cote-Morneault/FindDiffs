@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ICommonCone } from "../../../../../../common/model/scene/objects/geometricObjects/cone";
+import { ICommonCone } from "../../../../../../../common/model/scene/objects/geometricObjects/cone";
 import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class ConeFactory extends GeometricObjectFactory {

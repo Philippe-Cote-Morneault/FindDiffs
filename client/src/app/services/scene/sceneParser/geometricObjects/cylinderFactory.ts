@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ICommonCylinder } from "../../../../../../common/model/scene/objects/geometricObjects/cylinder";
+import { ICommonCylinder } from "../../../../../../../common/model/scene/objects/geometricObjects/cylinder";
 import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class CylinderFactory extends GeometricObjectFactory {

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ICommonCube } from "../../../../../../common/model/scene/objects/geometricObjects/cube";
+import { ICommonCube } from "../../../../../../../common/model/scene/objects/geometricObjects/cube";
 import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class CubeFactory extends GeometricObjectFactory {

@@ -31,7 +31,7 @@ export class TestComponent implements OnInit {
                 this.div.appendChild(renderer.domElement);
                 const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
                 const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-                const parsedScene: THREE.Scene = this.sceneParser.parseScene(scene, 1000, 600);
+                const parsedScene: THREE.Scene = this.sceneParser.parseScene(scene);
                 //controls.update();
 
                 let animate = () =>  {
