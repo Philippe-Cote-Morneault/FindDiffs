@@ -37,6 +37,7 @@ export class GameViewFreeComponent implements OnInit {
     private getScenePairById(): void {
         this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
             this.loadOriginalScene(this.originalScene.nativeElement, response);
+            this.loadModifiedScene(this.originalScene.nativeElement, response);
         });
     }
 
@@ -47,7 +48,7 @@ export class GameViewFreeComponent implements OnInit {
         });
     }
 
-    public loadModifiedScene(div: HTMLElement | null, sceneModified: ICommonSceneModifications): void {
+    public loadModifiedScene(div: HTMLElement | null, sceneModified: ICommonScene): void {
         this.sceneService.createModifiedScene(sceneModified.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
                 console.log(modifications);
                 if (div !== null) {
