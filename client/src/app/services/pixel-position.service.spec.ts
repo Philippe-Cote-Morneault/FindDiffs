@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from "@angular/common/http";
 import { HttpClientTestingModule, HttpTestingController, TestRequest} from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
@@ -44,7 +43,7 @@ describe("PixelPositionService", () => {
         );
     });
 
-    it("test", () => {
+    it("should return an error if no differences were found", () => {
         const mockID: string = "128391";
         const mockX: number = 2;
         const mockY: number = 3;
@@ -61,7 +60,7 @@ describe("PixelPositionService", () => {
 
         testRequest.flush(
             {
-                "title": "error",
+                "title": "Error",
                 "body": "No difference was found at the specified position",
             },
             mockHttpError,
