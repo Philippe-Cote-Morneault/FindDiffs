@@ -112,5 +112,6 @@ export class SceneService extends Service implements ISceneService {
         })
         .catch((err: Error) => {
             throw new NotFoundException(R.ERROR_UNKNOWN_ID);
-        });    }
+        });
+    }
 }
