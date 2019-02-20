@@ -86,6 +86,42 @@ describe("GamesCardService", () => {
         });
     });
 
+    describe("getGameById()", () => {
+        it("should return a gameCard", () => {
+            service.getGameById(mockGameCard1.id).subscribe((gameCards: ICommonGameCard) => {
+                expect(gameCards).to.equal(mockGameCard1);
+            });
+
+            const testRequest: TestRequest = httpMock.expectOne(`http://localhost:3000/gamecard/${mockGameCard1.id}`);
+            expect(testRequest.request.method).to.equal("GET");
+
+            testRequest.flush(mockGameCard1);
+
+            httpMock.verify();
+        });
+
+        it("should return an error if there is no gameCard with the specified id", () => {
+            service.getGameById("1").subscribe((message: Message) => {
+                expect(message.title).to.equal("Error");
+                expect(message.body).to.equal("No gameCard has the specified id");
+            });
+
+            const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/gamecard/1");
+            const mockErrorResponse: Object = { status: 400, statusText: "Bad Request" };
+            expect(testRequest.request.method).to.equal("GET");
+
+            testRequest.flush(
+                {
+                    "title": "Error",
+                    "body": "No gameCard has the specified id",
+                },
+                mockErrorResponse,
+            );
+
+            httpMock.verify();
+        });
+    });
+
     describe("addGameCard()", () => {
         it("Should return a new GameCard when posting an ImagePair", () => {
             service.addGameCard("game1", "12345678", POVType.Simple).subscribe((gameCard: ICommonGameCard) => {
