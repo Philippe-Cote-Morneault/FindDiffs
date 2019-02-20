@@ -6,6 +6,7 @@ import { ICommonGeometricObject } from "../../../../../../common/model/scene/obj
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene, ObjectType } from "../../../../../../common/model/scene/scene";
 import { AbstractSceneParser } from "./abstractSceneParserService";
+import { Pair } from "../../../../../../common/model/pair";
 
 @Injectable({
     providedIn: "root",
@@ -35,14 +36,16 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
     private parseGeometricObjects(scene: THREE.Scene, sceneModifications: ICommonGeometricModifications,
                                   originalSceneObjects: ICommonGeometricObject[]): void {
 
-        originalSceneObjects.forEach((object: ICommonGeometricObject) => {
-            if (!sceneModifications.deletedObjects.includes(object.id)) {
+        originalSceneObjects.forEach((originalObject: ICommonGeometricObject) => {
+            if (!sceneModifications.deletedObjects.includes(originalObject.id)) {
                 console.log(sceneModifications.colorChangedObjects);
-                if (sceneModifications.colorChangedObjects.has(object.id)) {
+                if (sceneModifications.colorChangedObjects.some((object: Pair<string, number>) => originalObject.id === object.key)) {
                     // sceneModifications.colorChangedObjects.
-                    this.changeObjectColor(object, sceneModifications.colorChangedObjects.get(object.id));
+                    this.changeObjectColor(originalObject,
+                                           this.findChangedColor(originalObject.id, sceneModifications.colorChangedObjects),
+                    );
                 }
-                scene.add(this.sceneObjectParser.parse(object));
+                scene.add(this.sceneObjectParser.parse(originalObject));
             }
         });
     }
@@ -58,5 +61,15 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
             throw new InvalidFormatException("Color not valid!");
         }
         objectToModify.color = color;
+    }
+
+    private findChangedColor(key: string, colorChangedObjects: Pair<string, number>[]): number | undefined {
+        for (let i = 0; i < colorChangedObjects.length; ++i) {
+            if (colorChangedObjects[i].key === key) {
+                return colorChangedObjects[i].value;
+            }
+        }
+
+        return undefined;
     }
 }
