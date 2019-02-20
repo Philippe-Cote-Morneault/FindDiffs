@@ -37,7 +37,9 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
 
         originalSceneObjects.forEach((object: ICommonGeometricObject) => {
             if (!sceneModifications.deletedObjects.includes(object.id)) {
+                console.log(sceneModifications.colorChangedObjects);
                 if (sceneModifications.colorChangedObjects.has(object.id)) {
+                    // sceneModifications.colorChangedObjects.
                     this.changeObjectColor(object, sceneModifications.colorChangedObjects.get(object.id));
                 }
                 scene.add(this.sceneObjectParser.parse(object));

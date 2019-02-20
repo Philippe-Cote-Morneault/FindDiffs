@@ -9,7 +9,7 @@ import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChang
 import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
 import { SceneObjectTextureChanger } from "./transformations/sceneObjectTextureChanger";
 import { SceneTransformation } from "./transformations/sceneTransformation";
-
+import { JSONFriendlyMap } from "../../../../../common/util/collection/JSONFriendlyMap";
 export class SceneDifferenceGenerator {
     private static readonly NUMBER_OF_DIFFERENCES: number = 7;
 
@@ -68,9 +68,9 @@ export class SceneDifferenceGenerator {
                 deletedObjects: [],
         };
         if (this.scene.type === ObjectType.Geometric) {
-            this.sceneModifs["colorChangedObjects"] = new Map<string, number>();
+            this.sceneModifs["colorChangedObjects"] = new JSONFriendlyMap<string, number>();
         } else {
-            this.sceneModifs["texturesChangedObjects"] = new Map<string, Textures>();
+            this.sceneModifs["texturesChangedObjects"] = new JSONFriendlyMap<string, Textures>();
         }
     }
 
