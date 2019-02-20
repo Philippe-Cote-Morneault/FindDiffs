@@ -1,4 +1,6 @@
-import { HttpErrorResponse } from "@angular/common/http";
+import { HttpClientTestingModule, HttpTestingController, TestRequest} from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
+import { expect } from "chai";
 import { Message } from "../../../../common/communication/message";
 import { ICommonUser } from "../../../../common/model/user";
 import { TestHelper } from "../../test.helper";
@@ -10,14 +12,23 @@ let httpClientSpyPost: any;
 let httpClientSpyDelete: any;
 let userServicePost: UserService;
 let userServiceDelete: UserService;
+let httpMock: HttpTestingController;
+let service: UserService;
 
 describe("UserService", () => {
 
     beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            providers: [UserService],
+        });
+
         httpClientSpyPost = jasmine.createSpyObj("HttpClient", ["post"]);
         httpClientSpyDelete = jasmine.createSpyObj("HttpClient", ["delete"]);
         userServicePost = new UserService(httpClientSpyPost);
         userServiceDelete = new UserService(httpClientSpyDelete);
+        httpMock = TestBed.get(HttpTestingController);
+        service = TestBed.get(UserService);
     });
 
     it("should return expected message on verifyUsername request (HttpClient called once)", () => {
@@ -27,13 +38,11 @@ describe("UserService", () => {
 
         userServicePost.postUsernameValidation(mockUsername).subscribe(
             (response: ICommonUser) => {
-                expect(response.id).toEqual(expectedUser.id, "Id check");
-                expect(response.username).toEqual(expectedUser.username, "Username check");
+                expect(response.id).to.equal(expectedUser.id, "Id check");
+                expect(response.username).to.equal(expectedUser.username, "Username check");
             },
             fail,
         );
-
-        expect(httpClientSpyPost.post.calls.count()).toBe(1, "one call");
     });
 
     it("should return expected message on deleteUsername request (HttpClient called once)", () => {
@@ -43,27 +52,55 @@ describe("UserService", () => {
 
         userServiceDelete.deleteUsername(mockUserId).subscribe(
             (response: Message) => {
-                expect(response.title).toEqual(expectedMessage.title, "Title check");
-                expect(response.body).toEqual(expectedMessage.body, "body check");
+                expect(response.title).to.equal(expectedMessage.title, "Title check");
+                expect(response.body).to.equal(expectedMessage.body, "body check");
             },
             fail,
         );
-
-        expect(httpClientSpyDelete.delete.calls.count()).toBe(1, "one call");
     });
 
-    it("should return an error message", () => {
-        const expectedMessageError: Message = { title: "Error", body: "The username is invalid." };
-        const mockHttpError: HttpErrorResponse = new HttpErrorResponse({
-            error: {
-                title: "Error", body: "The username is invalid.",
+    it("should return an error if username is invalid", () => {
+        const expectedMessageError: Message = { title: "Error", body: "The username is invalid" };
+
+        service.postUsernameValidation("user").subscribe((message: Message) => {
+            expect(message.title).to.equal(expectedMessageError.title);
+            expect(message.body).to.equal(expectedMessageError.body);
+        });
+
+        const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/user/");
+        const mockHttpError: Object = {status: 404, statusText: "Bad Request"} ;
+        expect(testRequest.request.method).to.equal("POST");
+
+        testRequest.flush(
+            {
+                "title" : "Error",
+                "body": "The username is invalid",
             },
-            status: 400 });
-        userServicePost.handleError(mockHttpError).subscribe(
-            (data) => {
-                expect(data).toEqual(expectedMessageError);
-            },
+            mockHttpError,
         );
-    });
+        httpMock.verify();
+   });
+
+    it("should return an error if the username can't be deleted", () => {
+        const expectedMessageError: Message = { title: "Error", body: "The username doesn't exist" };
+
+        service.deleteUsername("1").subscribe((message: Message) => {
+            expect(message.title).to.equal(expectedMessageError.title);
+            expect(message.body).to.equal(expectedMessageError.body);
+        });
+
+        const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/user/1");
+        const mockHttpError: Object = {status: 404, statusText: "Bad Request"} ;
+        expect(testRequest.request.method).to.equal("DELETE");
+
+        testRequest.flush(
+            {
+            "title" : "Error",
+            "body": "The username doesn't exist",
+            },
+            mockHttpError,
+        );
+        httpMock.verify();
+   });
 
 });
