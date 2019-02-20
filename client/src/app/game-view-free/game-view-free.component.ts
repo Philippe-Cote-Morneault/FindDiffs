@@ -48,8 +48,8 @@ export class GameViewFreeComponent implements OnInit {
         });
     }
 
-    public loadModifiedScene(div: HTMLElement | null, sceneModified: ICommonScene): void {
-        this.sceneService.createModifiedScene(sceneModified.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
+    public loadModifiedScene(div: HTMLElement | null, scene: ICommonScene): void {
+        this.sceneService.createModifiedScene(scene.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
                 console.log(modifications);
                 if (div !== null) {
                     const sceneRendererService: SceneRendererService = new SceneRendererService();
@@ -57,7 +57,7 @@ export class GameViewFreeComponent implements OnInit {
 
                     div.appendChild(renderer.domElement);
 
-                    const scene: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(sceneModified, modifications);
+                    const sceneModified: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, modifications);
                     const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
                     const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
