@@ -9,6 +9,16 @@ export class JSONFriendlyMap<K, V> {
 
     }
 
+    public get(key: K): V {
+        this.pairs.forEach((pair: Pair<K, V>) => {
+            if (pair.key === key) {
+                return pair.value;
+            }
+        });
+
+        return undefined;
+    }
+
     public has(key: K): boolean {
         this.pairs.forEach((pair: Pair<K, V>) => {
             if (pair.key === key) {
@@ -19,14 +29,10 @@ export class JSONFriendlyMap<K, V> {
         return false;
     }
 
-    public get(key: K): V {
-        this.pairs.forEach((pair: Pair<K, V>) => {
-            if (pair.key === key) {
-                return pair.value;
-            }
-        });
+    public set(key: K, value: V): JSONFriendlyMap<K, V> {
+        this.pairs.push(new Pair<K, V>(key, value));
 
-        return undefined;
+        return this;
     }
 }
 
