@@ -1,6 +1,7 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
+import { NotImplementedException } from "../../../../common/errors/notImplementedException";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import * as BitmapHeader from "../../model/bitmap/header";
 import { Position } from "../../model/bitmap/pixel";
@@ -43,7 +44,6 @@ export class DifferenceService extends Service implements IDifferenceService {
     }
 
     public async postFree(req: Request): Promise<string> {
-        throw new Error("Method not implemented.");
+        throw new NotImplementedException();
     }
-
 }
