@@ -6,7 +6,18 @@ export class JSONFriendlyMap<K, V> {
     private pairs: Pair<K, V>[];
 
     public clear(): void {
+        this.pairs.splice(this.pairs.length);
+    }
 
+    public delete(key: K): boolean {
+        this.pairs.forEach((pair: Pair<K, V>) => {
+            if (pair.key === key) {
+                this.pairs.splice(this.pairs.indexOf(pair), 1);
+                return true;
+            }
+        });
+
+        return false;
     }
 
     public forEach(callbackFn: Function, thisarg?: Object): void {
