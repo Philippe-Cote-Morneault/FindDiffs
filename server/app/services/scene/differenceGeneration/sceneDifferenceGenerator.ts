@@ -1,7 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
-import { Textures } from "../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
 import { Grid } from "../grid";
 import { SceneObjectAdder } from "./transformations/sceneObjectAdder";
@@ -9,7 +8,6 @@ import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChang
 import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
 import { SceneObjectTextureChanger } from "./transformations/sceneObjectTextureChanger";
 import { SceneTransformation } from "./transformations/sceneTransformation";
-import { JSONFriendlyMap } from "../../../../../common/util/collection/JSONFriendlyMap";
 export class SceneDifferenceGenerator {
     private static readonly NUMBER_OF_DIFFERENCES: number = 7;
 
@@ -68,9 +66,9 @@ export class SceneDifferenceGenerator {
                 deletedObjects: [],
         };
         if (this.scene.type === ObjectType.Geometric) {
-            this.sceneModifs["colorChangedObjects"] = new JSONFriendlyMap<string, number>();
+            this.sceneModifs["colorChangedObjects"] = [];
         } else {
-            this.sceneModifs["texturesChangedObjects"] = new JSONFriendlyMap<string, Textures>();
+            this.sceneModifs["texturesChangedObjects"] = [];
         }
     }
 
