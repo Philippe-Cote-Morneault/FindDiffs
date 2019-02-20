@@ -2,6 +2,7 @@ import Axios from "axios";
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { ICommonImagePair } from "../../../common/model/imagePair";
+import { ICommonScene, ObjectType } from "../../../common/model/scene/scene";
 import { R } from "../strings";
 import { NoErrorThrownException } from "../tests/noErrorThrownException";
 import { ApiRequest } from "./apiRequest";
@@ -55,6 +56,32 @@ describe("ApiRequest", () => {
             (Axios.get as sinon.SinonStub).rejects();
             try {
                 await ApiRequest.getImagePairDiffId("an invalid id");
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);
+            }
+        });
+    });
+    describe("getSceneId()", () => {
+        it("Should return a scene if the id is valid", async() => {
+            const scene: ICommonScene = {
+                id: "an id",
+                dimensions: {
+                    x: 100,
+                    y: 100,
+                    z: 100,
+                },
+                type: ObjectType.Geometric,
+                sceneObjects: [],
+            };
+            (Axios.get as sinon.SinonStub).resolves({data: scene});
+            const response: ICommonScene = await ApiRequest.getSceneId("a valid id");
+            expect(JSON.stringify(response)).to.equal(JSON.stringify(scene));
+        });
+        it("Should return an error if the scene id is invalid", async () => {
+            (Axios.get as sinon.SinonStub).rejects();
+            try {
+                await ApiRequest.getSceneId("an invalid id");
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);

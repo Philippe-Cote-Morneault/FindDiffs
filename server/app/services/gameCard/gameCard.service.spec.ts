@@ -4,11 +4,13 @@ import { mockReq } from "sinon-express-mock";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
+import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { GameCard } from "../../model/schemas/gameCard";
 import { R } from "../../strings";
 import { GameCardSchemaMock } from "../../tests/gameCardSchemaMock";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { ApiRequest } from "../../utils/apiRequest";
+import { EnumUtils } from "../../utils/enumUtils";
 import { GameCardService } from "./gameCard.service";
 
 // We can disable this tslint max-line-count since it's only a test file and
@@ -18,6 +20,7 @@ describe("GameCardService", () => {
     const service: GameCardService = new GameCardService();
     beforeEach(() => {
         sinon.stub(ApiRequest, "getImagePairId");
+        sinon.stub(ApiRequest, "getSceneId");
         sinon.stub(GameCard.prototype, "save");
         sinon.stub(GameCard.prototype, "remove");
         sinon.stub(GameCard, "find");
@@ -26,6 +29,7 @@ describe("GameCardService", () => {
 
     afterEach(() => {
         (ApiRequest.getImagePairId as sinon.SinonStub).restore();
+        (ApiRequest.getSceneId as sinon.SinonStub).restore();
         (GameCard.prototype.save as sinon.SinonStub).restore();
         (GameCard.prototype.remove as sinon.SinonStub).restore();
         (GameCard.find as sinon.SinonStub).restore();
@@ -95,6 +99,28 @@ describe("GameCardService", () => {
             }
         });
 
+        it("Should throw an error if the field pov is not in enum POVTypes, but enters switch case", async () => {
+            const request: Object = {
+                body: {
+                    name: "bob",
+                    resource_id: "an id",
+                    pov: "bob",
+                },
+            };
+            sinon.stub(EnumUtils, "isStringInEnum");
+            (EnumUtils.isStringInEnum as sinon.SinonStub).returns(true);
+            const errorMessage: string = "The pov type is not recognized.";
+
+            try {
+                await service.post(mockReq(request));
+                (EnumUtils.isStringInEnum as sinon.SinonStub).restore();
+                throw new NoErrorThrownException();
+            } catch (err) {
+                (EnumUtils.isStringInEnum as sinon.SinonStub).restore();
+                expect(err.message).to.equal(errorMessage);
+            }
+        });
+
         it("Should throw an error if the resource_id is not in storage", async () => {
             const request: Object = {
                 body: {
@@ -116,7 +142,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the resource_id is not in storage", async () => {
+        it("Should throw an error if the resource_id is not in storage Simple", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -125,6 +151,27 @@ describe("GameCardService", () => {
                 },
             };
             (ApiRequest.getImagePairId as sinon.SinonStub).rejects(
+                new NotFoundException(R.ERROR_UNKNOWN_ID),
+            );
+
+            const errorMessage: string = "The id could not be found.";
+            try {
+                await service.post(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(errorMessage);
+            }
+        });
+
+        it("Should throw an error if the resource_id is not in storage Free", async () => {
+            const request: Object = {
+                body: {
+                    name: "bob",
+                    resource_id: "an id",
+                    pov: "Free",
+                },
+            };
+            (ApiRequest.getSceneId as sinon.SinonStub).rejects(
                 new NotFoundException(R.ERROR_UNKNOWN_ID),
             );
 
@@ -164,7 +211,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should return the correct response if all the fields are valid", async () => {
+        it("Should return the correct response if all the fields are valid simple", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -189,7 +236,35 @@ describe("GameCardService", () => {
             expect(response.resource_id).to.equal(request["body"]["resource_id"]);
             expect(response.title).to.equal(request["body"]["name"]);
             expect(response.pov).to.equal(request["body"]["pov"]);
+        });
 
+        it("Should return the correct response if all the fields are valid free", async () => {
+            const request: Object = {
+                body: {
+                    name: "bob",
+                    resource_id: "an id",
+                    pov: "Free",
+                },
+            };
+
+            const scene: ICommonScene = {
+                id: "an id",
+                dimensions: {
+                    x: 100,
+                    y: 100,
+                    z: 100,
+                },
+                type: ObjectType.Geometric,
+                sceneObjects: [],
+            };
+
+            (ApiRequest.getSceneId as sinon.SinonStub).resolves(scene);
+
+            const response: ICommonGameCard = JSON.parse(await service.post(mockReq(request)));
+
+            expect(response.resource_id).to.equal(request["body"]["resource_id"]);
+            expect(response.title).to.equal(request["body"]["name"]);
+            expect(response.pov).to.equal(request["body"]["pov"]);
         });
 
     });

@@ -106,4 +106,15 @@ describe("DifferenceService", () => {
 
         });
     });
+
+    describe("postFree()", () => {
+        it("Should return a not implemented exception", async () => {
+            try {
+                await service.postFree(mockReq({}));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("Method not implemented.");
+            }
+        });
+    });
 });

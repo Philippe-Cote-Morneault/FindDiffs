@@ -4,9 +4,9 @@ export interface IImagePairService {
     post(req: Request): Promise<string>;
     index(): Promise<string>;
     single(id: string): Promise<string>;
-    getDifference(id: string): Promise<string>;
-    getModified(id: string): Promise<string>;
-    getOriginal(id: string): Promise<string>;
+    getDifference(id: string): Promise<ArrayBuffer>;
+    getModified(id: string): Promise<ArrayBuffer>;
+    getOriginal(id: string): Promise<ArrayBuffer>;
 }
 
 export interface IUserService {
