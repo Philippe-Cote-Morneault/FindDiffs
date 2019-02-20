@@ -49,6 +49,10 @@ export class GameViewFreeComponent implements OnInit {
             console.log(sceneModel.id);
             this.sceneService.createModifiedScene(sceneModel.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
                 console.log(modifications);
+                if (div !== null) {
+                    const sceneRendererService: SceneRendererService = new SceneRendererService();
+                    const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
+                }
             });
         });
     }
