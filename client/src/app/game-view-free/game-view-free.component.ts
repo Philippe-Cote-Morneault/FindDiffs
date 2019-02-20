@@ -38,16 +38,17 @@ export class GameViewFreeComponent implements OnInit {
         this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
             this.loadOriginalScene(this.originalScene.nativeElement, response);
         });
-        this.sceneService.getModifiedSceneById(this.scenePairID).subscribe((response: ICommonSceneModifications) => {
-            this.loadModifiedScene(this.modifiedScene.nativeElement, response);
-        });
     }
 
     // tslint:disable:no-any
-    public loadOriginalScene(div: HTMLElement | null, scene: ICommonScene | ICommonSceneModifications): void {
+    public loadOriginalScene(div: HTMLElement | null, scene: ICommonScene): void {
         this.sceneService.createScene(scene.type.toString(), 200).subscribe((sceneModel: ICommonScene) => {
             console.log(sceneModel.id);
-            this.sceneService.createModifiedScene(sceneModel.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
+        });
+    }
+
+    public loadModifiedScene(div: HTMLElement | null, sceneModified: ICommonSceneModifications): void {
+        this.sceneService.createModifiedScene(sceneModified.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
                 console.log(modifications);
                 if (div !== null) {
                     const sceneRendererService: SceneRendererService = new SceneRendererService();
@@ -55,7 +56,7 @@ export class GameViewFreeComponent implements OnInit {
 
                     div.appendChild(renderer.domElement);
 
-                    const sceneModified: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(sceneModel, modifications);
+                    const scene: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(sceneModified, modifications);
                     const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
                     const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
@@ -67,8 +68,5 @@ export class GameViewFreeComponent implements OnInit {
                     animate();
                 }
             });
-        });
-    }
-
-    public loadModifiedScene(div: HTMLElement | null, scene: ICommonScene | ICommonSceneModifications): void { }
+        }
 }
