@@ -63,7 +63,9 @@ export class SceneService extends Service implements ISceneService {
         this.validatePostModified(req);
 
         return Scene.findById(req.params.id).then(async(doc: IScene) => {
-            const grid: Grid = doc.grid as Grid;
+            const grid: Grid = Grid.prototype;
+            Object.assign(grid, doc.grid);
+
             const scene: ICommonScene = doc.scene as ICommonScene;
             scene.id = doc.id;
 
@@ -82,6 +84,7 @@ export class SceneService extends Service implements ISceneService {
 
             return JSON.stringify(sceneModifications);
         }).catch((err: Error) => {
+            console.error(err);
             throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }

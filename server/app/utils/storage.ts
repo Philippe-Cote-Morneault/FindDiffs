@@ -1,55 +1,61 @@
-import * as fs from "fs";
+import * as AWS from "aws-sdk";
 import * as multer from "multer";
-import * as path from "path";
 import * as uuid from "uuid";
 import { FileNotFoundException } from "../../../common/errors/fileNotFoundException";
+import { S3Exception } from "../../../common/errors/s3Exception";
+import Config from "../config";
+
+AWS.config.update({
+    accessKeyId: Config.s3.key,
+    secretAccessKey: Config.s3.secret,
+});
+
+const s3: AWS.S3 = new AWS.S3();
 
 export class Storage {
-    public static STORAGE_PATH: string = "uploads/storage";
-
-    private static createStorageDirectory(): void {
-        fs.mkdirSync(this.STORAGE_PATH, {recursive: true});
-    }
+    public static readonly STORAGE_PATH: string = "storage";
 
     public static getPath(guid: string): string {
         return this.STORAGE_PATH + "/" + guid;
     }
 
-    public static getFullPath(guid: string): string {
-        return path.resolve(this.getPath(guid));
-    }
-
-    private static generateGUID(): string {
+    public static generateGUID(): string {
         return uuid.v4().replace(/-/g, "");
     }
 
-    public static saveBuffer(buffer: ArrayBuffer): string {
-        this.createStorageDirectory();
+    public static async saveBuffer(buffer: ArrayBuffer): Promise<string> {
 
         const guid: string = this.generateGUID();
-        fs.writeFileSync(this.getPath(guid), Buffer.from(buffer));
 
-        return guid;
+        return s3.upload(
+            {
+                Bucket: Config.s3.bucket,
+                Body: Buffer.from(buffer),
+                Key: this.getPath(guid),
+            },
+        ).promise().then(() => {
+            return guid;
+        }).catch((err: Error) => {
+            throw new S3Exception(err.message);
+        });
     }
 
-    public static openBuffer(guid: string): ArrayBuffer {
-        this.createStorageDirectory();
+    public static async openBuffer(guid: string, completePath: boolean): Promise<ArrayBuffer> {
+        let path: string;
+        (!completePath) ? path = this.getPath(guid) : path = guid;
 
-        if (this.exists(guid)) {
-            return fs.readFileSync(this.getPath(guid)).buffer;
-        } else {
-            throw new FileNotFoundException(guid);
-        }
-    }
-
-    public static exists(guid: string): boolean {
-        const filePath: string = this.STORAGE_PATH + "/" + guid;
-
-        return fs.existsSync(filePath);
+        return s3.getObject(
+            {
+                Bucket: Config.s3.bucket,
+                Key: path,
+            },
+        ).promise().then((object: AWS.S3.GetObjectOutput) => {
+            return (object.Body as Buffer).buffer;
+        }).catch((err: Error) => {
+            throw new FileNotFoundException(path);
+        });
     }
 
 }
 
-export const uploads: multer.Instance = multer({
-    dest: Storage.STORAGE_PATH,
-});
+export const uploads: multer.Instance = multer({});

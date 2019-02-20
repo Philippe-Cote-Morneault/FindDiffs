@@ -45,9 +45,9 @@ export class ImagePairController extends Controller implements IImagePairControl
         router.get("/:id/difference", async(req: Request, res: Response, next: NextFunction) => {
             // Get the path of the file and send it to the client
             try {
-                const filePath: string = await this.imagePairService.getDifference(req.params.id);
+                const file: ArrayBuffer = await this.imagePairService.getDifference(req.params.id);
                 res.set("Content-Type", "image/bmp");
-                res.sendFile(filePath);
+                res.send(Buffer.from(file));
             } catch (err) {
                 this.handleError(res, err);
             }
@@ -56,9 +56,9 @@ export class ImagePairController extends Controller implements IImagePairControl
         router.get("/:id/modified", async(req: Request, res: Response, next: NextFunction) => {
             // Get the path of the file and send it to the client
             try {
-                const filePath: string = await this.imagePairService.getModified(req.params.id);
+                const file: ArrayBuffer = await this.imagePairService.getModified(req.params.id);
                 res.set("Content-Type", "image/bmp");
-                res.sendFile(filePath);
+                res.send(Buffer.from(file));
             } catch (err) {
                 this.handleError(res, err);
             }
@@ -67,9 +67,9 @@ export class ImagePairController extends Controller implements IImagePairControl
         router.get("/:id/original", async(req: Request, res: Response, next: NextFunction) => {
             // Get the path of the file and send it to the client
             try {
-                const filePath: string = await this.imagePairService.getOriginal(req.params.id);
+                const file: ArrayBuffer = await this.imagePairService.getOriginal(req.params.id);
                 res.set("Content-Type", "image/bmp");
-                res.sendFile(filePath);
+                res.send(Buffer.from(file));
             } catch (err) {
                 this.handleError(res, err);
             }

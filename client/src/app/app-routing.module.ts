@@ -7,7 +7,7 @@ import { GamesListViewComponent } from "./games-list-view/games-list-view.compon
 import { TestComponent } from "./test/test.component";
 
 const routes: Routes = [
-    //{ path: "", component: InitialViewComponent },
+    // { path: "", component: InitialViewComponent },
     { path: "", component: TestComponent },
     { path: "admin", component: AdminViewComponent },
     { path: "gamesList", component: GamesListViewComponent },
