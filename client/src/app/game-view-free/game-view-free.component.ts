@@ -38,9 +38,6 @@ export class GameViewFreeComponent implements OnInit {
         this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
             this.loadScene(this.originalScene.nativeElement, response);
         });
-        this.sceneService.getModifiedSceneById(this.scenePairID).subscribe((response: ICommonSceneModifications) => {
-            this.loadScene(this.modifiedScene.nativeElement, response);
-        });
     }
 
     // tslint:disable:no-any
