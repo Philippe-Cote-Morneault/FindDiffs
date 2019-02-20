@@ -22,22 +22,22 @@ export class PixelRestorationService {
 
         this.originalContext = originalCanvas.getContext("2d");
         if (this.originalContext) {
-            const imageData: ImageData =
+            const originalImageData: ImageData =
                 this.originalContext.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
             this.modifiedContext = modifiedCanvas.getContext("2d");
             if (this.modifiedContext) {
-                const imageData2: ImageData =
+                const modifiedImageData: ImageData =
                     this.modifiedContext.getImageData(0, 0, modifiedCanvas.width, modifiedCanvas.height);
                 let pos: number;
                 response.pixels_affected.forEach((element) => {
                     pos = this.pixelPositionInImageData(element, originalCanvas.width);
-                    imageData2.data[pos + RgbaPosition.R] = imageData.data[pos + RgbaPosition.R];
-                    imageData2.data[pos + RgbaPosition.G] = imageData.data[pos + RgbaPosition.G];
-                    imageData2.data[pos + RgbaPosition.B] = imageData.data[pos + RgbaPosition.B];
-                    imageData2.data[pos + RgbaPosition.A] = imageData.data[pos + RgbaPosition.A];
+                    modifiedImageData.data[pos + RgbaPosition.R] = originalImageData.data[pos + RgbaPosition.R];
+                    modifiedImageData.data[pos + RgbaPosition.G] = originalImageData.data[pos + RgbaPosition.G];
+                    modifiedImageData.data[pos + RgbaPosition.B] = originalImageData.data[pos + RgbaPosition.B];
+                    modifiedImageData.data[pos + RgbaPosition.A] = originalImageData.data[pos + RgbaPosition.A];
 
                 });
-                this.modifiedContext.putImageData(imageData2, 0, 0);
+                this.modifiedContext.putImageData(modifiedImageData, 0, 0);
             }
 
         }

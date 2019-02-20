@@ -1,4 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
+import * as sinon from "sinon";
 import { Message } from "../../../../common/communication/message";
 import { ICommonReveal } from "../../../../common/model/reveal";
 import { TestHelper } from "../../test.helper";
@@ -8,7 +9,6 @@ import { PixelPositionService } from "./pixel-position.service";
 // tslint:disable:no-any Used to mock the http call
 let httpClientSpyPost: any;
 let pixelPositionService: PixelPositionService;
-
 describe("UserService", () => {
 
     beforeEach(() => {
@@ -47,6 +47,27 @@ describe("UserService", () => {
                 expect(data).toEqual(expectedMessageError);
             },
         );
+    });
+
+    it("test", () => {
+        const stub: sinon.SinonStub = sinon.stub(pixelPositionService, "handleError");
+        const expectedMessageError: Message = { title: "Error", body: "No difference was found at the specified position" };
+        const mockHttpError: HttpErrorResponse = new HttpErrorResponse({
+            error: {
+                title: "Error", body: "No difference was found at the specified position",
+            },
+            status: 404 });
+        const mockID: string = "128391";
+        const mockX: number = 2;
+        const mockY: number = 3;
+        httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(mockHttpError));
+        pixelPositionService.postPixelPosition(mockID, mockX, mockY).subscribe(
+            (error) => {
+                expect(error.error).toEqual(expectedMessageError);
+                stub.calledOnceWithExactly(mockHttpError);
+            });
+        expect(httpClientSpyPost.post.calls.count()).toBe(1, "one call");
+        stub.restore();
     });
 
 });
