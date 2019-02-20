@@ -22,15 +22,12 @@ export class GameCardService extends Service implements IGameCardService {
         if (!req.body.name) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.NAME_]));
         }
-
         if (!req.body.resource_id) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.RESOURCE_ID_]));
         }
-
         if (!req.body.pov) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.POV_]));
         }
-
         if (!EnumUtils.isStringInEnum(req.body.pov, POVType)) {
             throw new InvalidFormatException(_e(R.ERROR_WRONG_TYPE, [R.POV_]));
         }
@@ -46,6 +43,7 @@ export class GameCardService extends Service implements IGameCardService {
                 await ApiRequest.getSceneId(req.body.resource_id);
                 break;
             default:
+                throw new InvalidFormatException(_e(R.ERROR_WRONG_TYPE, [R.POV_]));
         }
     }
 
