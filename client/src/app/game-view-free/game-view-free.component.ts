@@ -50,24 +50,25 @@ export class GameViewFreeComponent implements OnInit {
 
     public loadModifiedScene(div: HTMLElement | null, scene: ICommonScene): void {
         this.sceneService.createModifiedScene(scene.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
-                console.log(modifications);
-                if (div !== null) {
-                    const sceneRendererService: SceneRendererService = new SceneRendererService();
-                    const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
+            /* To copy pasta in loadOriginalScene, modify a bit
+            console.log(modifications);
+            if (div !== null) {
+                const sceneRendererService: SceneRendererService = new SceneRendererService();
+                const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
 
-                    div.appendChild(renderer.domElement);
+                div.appendChild(renderer.domElement);
 
-                    const sceneModified: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, modifications);
-                    const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
-                    const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+                const sceneModified: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, modifications);
+                const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
+                const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
-                    const animate: any = (): void => {
-                        requestAnimationFrame(animate);
-                        sceneRendererService.renderScene(sceneModified, renderer, camera);
-                        controls.update();
-                    };
-                    animate();
-                }
-            });
-        }
+                const animate: any = (): void => {
+                    requestAnimationFrame(animate);
+                    sceneRendererService.renderScene(sceneModified, renderer, camera);
+                    controls.update();
+                };
+                animate();
+            }*/
+        });
+    }
 }
