@@ -3,45 +3,51 @@
 export class JSONFriendlyMap<K, V> {
     public size: number;
 
-    private pairs: Pair<K, V>[];
+    private pairs: Pair<K, V>[] = [];
 
     public clear(): void {
         this.pairs.splice(this.pairs.length);
     }
 
     public delete(key: K): boolean {
-        this.pairs.forEach((pair: Pair<K, V>) => {
+        let deletedItem: boolean = false;
+        this.pairs.filter((pair: Pair<K, V>) => {
             if (pair.key === key) {
                 this.pairs.splice(this.pairs.indexOf(pair), 1);
-                return true;
+                deletedItem = true;
+                return;
             }
         });
 
-        return false;
+        return deletedItem;
     }
 
     public forEach(callbackFn: Function, thisarg?: Object): void {
         this.pairs.forEach((pair: Pair<K, V>) => callbackFn(pair, thisarg));
     }
 
-    public get(key: K): V {
+    public get(key: K): V | undefined {
+        let foundValue: V | undefined = undefined;
         this.pairs.forEach((pair: Pair<K, V>) => {
             if (pair.key === key) {
-                return pair.value;
+                foundValue = pair.value
+                return;
             }
         });
 
-        return undefined;
+        return foundValue;
     }
 
     public has(key: K): boolean {
+        let foundKey: boolean = false;
         this.pairs.forEach((pair: Pair<K, V>) => {
             if (pair.key === key) {
-                return true;
+                foundKey = true;
+                return;
             }
         });
 
-        return false;
+        return foundKey;
     }
 
     public set(key: K, value: V): JSONFriendlyMap<K, V> {

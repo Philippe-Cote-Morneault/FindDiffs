@@ -29,7 +29,7 @@ export class TestComponent implements OnInit {
         
         this.sceneService.createScene(ObjectType.Geometric, 200).subscribe((sceneModel: ICommonScene) => {
             console.log(sceneModel.id);
-            this.sceneService.createModifiedScene(sceneModel.id, true, true, false).subscribe((modifications: ICommonSceneModifications) => {
+            this.sceneService.createModifiedScene(sceneModel.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
                 console.log(modifications);
                 if (this.div !== null) {
                     const sceneRendererService: SceneRendererService = new SceneRendererService();
