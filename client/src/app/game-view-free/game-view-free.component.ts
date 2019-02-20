@@ -20,7 +20,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     private scenePairID: string;
-    // tslint:disable-next-line:no-any
+    private div: HTMLElement | null;
 
     public constructor(
         private route: ActivatedRoute,
