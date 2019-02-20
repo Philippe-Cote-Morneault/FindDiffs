@@ -1,5 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import * as sinon from "sinon";
+import { HttpClientTestingModule, HttpTestingController, TestRequest} from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
+import { expect } from "chai";
 import { Message } from "../../../../common/communication/message";
 import { ICommonReveal } from "../../../../common/model/reveal";
 import { TestHelper } from "../../test.helper";
@@ -8,12 +10,21 @@ import { PixelPositionService } from "./pixel-position.service";
 // tslint:disable:no-magic-numbers
 // tslint:disable:no-any Used to mock the http call
 let httpClientSpyPost: any;
+let httpMock: HttpTestingController;
 let pixelPositionService: PixelPositionService;
-describe("UserService", () => {
+let service: PixelPositionService;
+describe("PixelPositionService", () => {
 
     beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule],
+            providers: [PixelPositionService],
+        });
+
         httpClientSpyPost = jasmine.createSpyObj("HttpClient", ["post"]);
         pixelPositionService = new PixelPositionService(httpClientSpyPost);
+        service = TestBed.get(PixelPositionService);
+        httpMock = TestBed.get(HttpTestingController);
     });
 
     it("should return expected message on postPixelPosition request (HttpClient called once)", () => {
@@ -25,49 +36,38 @@ describe("UserService", () => {
 
         pixelPositionService.postPixelPosition(mockID, mockX, mockY).subscribe(
             (response: ICommonReveal) => {
-                expect(response.hit).toEqual(true);
-                expect(response.pixels_affected.length).toEqual(2);
-                expect(response.pixels_affected[0].x).toEqual(2);
+                expect(response.hit).to.equal(true);
+                expect(response.pixels_affected.length).to.equal(2);
+                expect(response.pixels_affected[0].x).to.equal(2);
             },
             fail,
-        );
-
-        expect(httpClientSpyPost.post.calls.count()).toBe(1, "one call");
-    });
-
-    it("should return an error message", () => {
-        const expectedMessageError: Message = { title: "Error", body: "No difference was found at the specified position" };
-        const mockHttpError: HttpErrorResponse = new HttpErrorResponse({
-            error: {
-                title: "Error", body: "No difference was found at the specified position",
-            },
-            status: 404 });
-        pixelPositionService.handleError(mockHttpError).subscribe(
-            (data) => {
-                expect(data).toEqual(expectedMessageError);
-            },
         );
     });
 
     it("test", () => {
-        const stub: sinon.SinonStub = sinon.stub(pixelPositionService, "handleError");
-        const expectedMessageError: Message = { title: "Error", body: "No difference was found at the specified position" };
-        const mockHttpError: HttpErrorResponse = new HttpErrorResponse({
-            error: {
-                title: "Error", body: "No difference was found at the specified position",
-            },
-            status: 404 });
         const mockID: string = "128391";
         const mockX: number = 2;
         const mockY: number = 3;
-        httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(mockHttpError));
-        pixelPositionService.postPixelPosition(mockID, mockX, mockY).subscribe(
-            (error) => {
-                expect(error.error).toEqual(expectedMessageError);
-                stub.calledOnceWithExactly(mockHttpError);
-            });
-        expect(httpClientSpyPost.post.calls.count()).toBe(1, "one call");
-        stub.restore();
+        const expectedMessageError: Message = { title: "Error", body: "No difference was found at the specified position" };
+
+        service.postPixelPosition(mockID, mockX, mockY).subscribe((message: Message) => {
+            expect(message.title).to.equal(expectedMessageError.title);
+            expect(message.body).to.equal(expectedMessageError.body);
+        });
+
+        const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/difference/simple");
+        const mockHttpError: Object = {status: 404, statusText: "Bad Request"} ;
+        expect(testRequest.request.method).to.equal("POST");
+
+        testRequest.flush(
+            {
+                "title": "error",
+                "body": "No difference was found at the specified position",
+            },
+            mockHttpError,
+        );
+
+        httpMock.verify();
     });
 
 });
