@@ -1,8 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import "node_modules/three/examples/js/controls/OrbitControls";
+import "src/js/test";
+import * as THREE from "three";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonScene } from "../../../../common/model/scene/scene";
+import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { SceneService } from "../services/scene/scene.service";
+import { ModifiedSceneParserService } from "../services/scene/sceneParser/modified-scene-parser.service";
+import { CameraGenerator } from "../services/scene/sceneRenderer/cameraGenerator";
+import { SceneRendererService } from "../services/scene/sceneRenderer/scene-renderer.service";
+// import { SceneParserService } from "../services/scene/sceneParser/scene-parser.service";
 
 @Component({
     selector: "app-game-view-free",
