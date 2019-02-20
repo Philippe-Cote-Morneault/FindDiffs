@@ -47,6 +47,9 @@ export class GameViewFreeComponent implements OnInit {
     public loadScene(div: HTMLElement | null, scene: ICommonScene | ICommonSceneModifications): void {
         this.sceneService.createScene(scene.type.toString(), 200).subscribe((sceneModel: ICommonScene) => {
             console.log(sceneModel.id);
+            this.sceneService.createModifiedScene(sceneModel.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
+                console.log(modifications);
+            });
         });
     }
 }
