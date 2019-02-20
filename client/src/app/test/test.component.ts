@@ -27,7 +27,7 @@ export class TestComponent implements OnInit {
     public ngOnInit(): void {
         this.div = document.getElementById("3jstest");
         
-        this.sceneService.createScene(ObjectType.Geometric, 200).subscribe((sceneModel: ICommonScene) => {
+        this.sceneService.createScene(ObjectType.Geometric.toString(), 200).subscribe((sceneModel: ICommonScene) => {
             console.log(sceneModel.id);
             this.sceneService.createModifiedScene(sceneModel.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
                 console.log(modifications);
