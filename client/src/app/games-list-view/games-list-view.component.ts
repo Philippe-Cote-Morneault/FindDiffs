@@ -28,6 +28,7 @@ export class GamesListViewComponent implements OnInit {
 
     private addAllGameCards(): void {
         this.gameCardsService.getGameCards().subscribe((gameCards: ICommonGameCard[]) => {
+            console.log(gameCards);
             gameCards.forEach((gameCard: ICommonGameCard) => {
                 this.gameCardLoaderService.addDynamicComponent(gameCard, this.isInAdminView);
             });

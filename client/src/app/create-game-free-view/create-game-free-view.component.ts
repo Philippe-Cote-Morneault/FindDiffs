@@ -96,7 +96,7 @@ export class CreateGameFreeViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    this.addGameCard((response as ICommonSceneModifications).id, gameName);
+                    this.addGameCard(idScenePair, gameName);
                 }
             });
         }
