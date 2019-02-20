@@ -4,7 +4,7 @@ import "node_modules/three/examples/js/controls/OrbitControls";
 import "src/js/test";
 import * as THREE from "three";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { ICommonScene } from "../../../../common/model/scene/scene";
 import { SceneService } from "../services/scene/scene.service";
 import { ModifiedSceneParserService } from "../services/scene/sceneParser/modified-scene-parser.service";
 import { CameraGenerator } from "../services/scene/sceneRenderer/cameraGenerator";
@@ -20,7 +20,6 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     private scenePairID: string;
-    private div: HTMLElement | null;
 
     public constructor(
         private route: ActivatedRoute,
@@ -45,8 +44,9 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     // tslint:disable:no-any
-    public loadScene(div: any, scene: ICommonScene | ICommonSceneModifications): void {
-        // tslint:disable-next-line:no-suspicious-comment
-        // TODO: copy pasta Phil's code
+    public loadScene(div: HTMLElement | null, scene: ICommonScene | ICommonSceneModifications): void {
+        this.sceneService.createScene(scene.type.toString(), 200).subscribe((sceneModel: ICommonScene) => {
+            console.log(sceneModel.id);
+        });
     }
 }
