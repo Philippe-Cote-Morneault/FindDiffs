@@ -44,7 +44,7 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     // tslint:disable:no-any
-    public loadScene(div: HTMLElement | null, scene: ICommonScene | ICommonSceneModifications): void {
+    public loadOriginalScene(div: HTMLElement | null, scene: ICommonScene | ICommonSceneModifications): void {
         this.sceneService.createScene(scene.type.toString(), 200).subscribe((sceneModel: ICommonScene) => {
             console.log(sceneModel.id);
             this.sceneService.createModifiedScene(sceneModel.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
@@ -69,4 +69,6 @@ export class GameViewFreeComponent implements OnInit {
             });
         });
     }
+
+    public loadModifiedScene(div: HTMLElement | null, scene: ICommonScene | ICommonSceneModifications): void { }
 }
