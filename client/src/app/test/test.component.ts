@@ -5,10 +5,12 @@ import * as THREE from "three";
 import "src/js/test";
 import "node_modules/three/examples/js/controls/OrbitControls";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
-import { SceneParserService } from "../services/scene/sceneParser/scene-parser.service";
+//import { SceneParserService } from "../services/scene/sceneParser/scene-parser.service";
 import { CameraGenerator } from "../services/scene/sceneRenderer/cameraGenerator";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneRendererService } from "../services/scene/sceneRenderer/scene-renderer.service";
+import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
+import { ModifiedSceneParserService } from "../services/scene/sceneParser/modified-scene-parser.service";
 
 @Component({
     selector: "app-test",
@@ -26,23 +28,27 @@ export class TestComponent implements OnInit {
         this.div = document.getElementById("3jstest");
         
         this.sceneService.createScene(ObjectType.Geometric, 200).subscribe((sceneModel: ICommonScene) => {
-            if (this.div !== null) {
-                const sceneRendererService: SceneRendererService = new SceneRendererService();
-                const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
-                this.div.appendChild(renderer.domElement);
-                const scene: THREE.Scene = new SceneParserService().parseScene(sceneModel);
-                const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
-                const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-
-                let animate = () =>  {
-                    requestAnimationFrame( animate );
-        
-                    sceneRendererService.renderScene(scene, renderer, camera);
-
-                    controls.update();
-                };
-                animate();
-           }
-       })
+            console.log(sceneModel.id);
+            this.sceneService.createModifiedScene(sceneModel.id, true, false, false).subscribe((modifications: ICommonSceneModifications) => {
+                console.log(modifications);
+                if (this.div !== null) {
+                    const sceneRendererService: SceneRendererService = new SceneRendererService();
+                    const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
+                    this.div.appendChild(renderer.domElement);
+                    const scene: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(sceneModel, modifications);
+                    const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
+                    const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    
+                    let animate = () =>  {
+                        requestAnimationFrame( animate );
+            
+                        sceneRendererService.renderScene(scene, renderer, camera);
+    
+                        controls.update();
+                    };
+                    animate();
+               }
+            });
+       });
     }
 }
