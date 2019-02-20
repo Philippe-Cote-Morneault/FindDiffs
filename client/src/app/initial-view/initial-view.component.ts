@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
 import { ICommonUser } from "../../../../common/model/user";
-import { UserService } from "../services/user.service";
+import { UserService } from "../services/user/user.service";
 
 @Component({
     selector: "app-initial-view",

@@ -13,8 +13,8 @@ import { ScenePairService } from "../services/scene/scene-pair.service";
     styleUrls: ["./create-game-free-view.component.css"],
 })
 export class CreateGameFreeViewComponent {
-    private static MAX_QTE: number = 200;
-    private static MIN_QTE: number = 10;
+    private static MAX_QTE: number = 201;
+    private static MIN_QTE: number = 9;
 
     @Output() public closed: EventEmitter<boolean> = new EventEmitter();
     @ViewChild("gameNameInput") private gameNameInput: ElementRef;
