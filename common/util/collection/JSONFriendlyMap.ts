@@ -18,6 +18,16 @@ export class JSONFriendlyMap<K, V> {
 
         return false;
     }
+
+    public get(key: K): V {
+        this.pairs.forEach((pair: Pair<K, V>) => {
+            if (pair.key === key) {
+                return pair.value;
+            }
+        });
+
+        return undefined;
+    }
 }
 
 class Pair<K, V> {
