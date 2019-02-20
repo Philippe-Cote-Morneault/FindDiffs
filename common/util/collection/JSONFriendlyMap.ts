@@ -9,6 +9,10 @@ export class JSONFriendlyMap<K, V> {
 
     }
 
+    public forEach(callbackFn: Function, thisarg?: Object): void {
+        this.pairs.forEach((pair: Pair<K, V>) => callbackFn(pair, thisarg));
+    }
+
     public get(key: K): V {
         this.pairs.forEach((pair: Pair<K, V>) => {
             if (pair.key === key) {
