@@ -5,7 +5,7 @@ import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { HTMLInputEvent } from "../htmlinput-event";
 import { GamesCardService } from "../services/gameCard/games-card.service";
-import { ImagePairService } from "../services/image-pair.service";
+import { ImagePairService } from "../services/image-pair/image-pair.service";
 
 @Component({
     selector: "app-create-game-simple-view",

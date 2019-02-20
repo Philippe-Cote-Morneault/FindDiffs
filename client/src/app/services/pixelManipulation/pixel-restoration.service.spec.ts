@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import * as sinon from "sinon";
-import { ICommon2DPosition } from "../../../../common/model/positions";
-import { ICommonReveal } from "../../../../common/model/reveal";
+import { ICommon2DPosition } from "../../../../../common/model/positions";
+import { ICommonReveal } from "../../../../../common/model/reveal";
 import { PixelRestorationService } from "./pixel-restoration.service";
 
 // tslint:disable no-magic-numbers

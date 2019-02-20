@@ -1,10 +1,10 @@
 import { HttpClientTestingModule, HttpTestingController, TestRequest} from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
-import { Message } from "../../../../common/communication/message";
-import { ICommonScene } from "../../../../common/model/scene/scene";
-import { ICommonSceneModifications } from "../../../../common/model/scene/sceneModifications";
-import { TestHelper } from "../../test.helper";
+import { Message } from "../../../../../common/communication/message";
+import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
+import { ICommonGeometricScene } from "../../../../../common/model/scene/scene";
+import { TestHelper } from "../../../test.helper";
 import { ScenePairService } from "./scene-pair.service";
 
 // tslint:disable:no-magic-numbers
@@ -35,7 +35,7 @@ describe("UserService", () => {
         httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedResponse));
 
         scenePairService.addScenePair(mockType, mockQty).subscribe(
-            (response: ICommonScene) => {
+            (response: ICommonGeometricScene) => {
                 expect(response.id).to.equal("928374");
                 expect(response.bg_color).to.equal("red");
             },

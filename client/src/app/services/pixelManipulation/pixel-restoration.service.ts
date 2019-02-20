@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { ICommon2DPosition } from "../../../../common/model/positions";
-import { ICommonReveal } from "../../../../common/model/reveal";
-import { RgbaPosition } from "../models/pixelProperties/color";
+import { ICommon2DPosition } from "../../../../../common/model/positions";
+import { ICommonReveal } from "../../../../../common/model/reveal";
+import { RgbaPosition } from "../../models/pixelProperties/color";
 
 @Injectable({
     providedIn: "root",

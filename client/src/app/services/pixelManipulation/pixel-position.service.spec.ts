@@ -1,9 +1,9 @@
 import { HttpClientTestingModule, HttpTestingController, TestRequest} from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
-import { Message } from "../../../../common/communication/message";
-import { ICommonReveal } from "../../../../common/model/reveal";
-import { TestHelper } from "../../test.helper";
+import { Message } from "../../../../../common/communication/message";
+import { ICommonReveal } from "../../../../../common/model/reveal";
+import { TestHelper } from "../../../test.helper";
 import { PixelPositionService } from "./pixel-position.service";
 
 // tslint:disable:no-magic-numbers

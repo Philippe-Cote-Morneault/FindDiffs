@@ -1,9 +1,9 @@
 import { HttpClientTestingModule, HttpTestingController, TestRequest} from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
-import { Message } from "../../../../common/communication/message";
-import { ICommonImagePair } from "../../../../common/model/imagePair";
-import { TestHelper } from "../../test.helper";
+import { Message } from "../../../../../common/communication/message";
+import { ICommonImagePair } from "../../../../../common/model/imagePair";
+import { TestHelper } from "../../../test.helper";
 import { ImagePairService } from "./image-pair.service";
 
 // tslint:disable-next-line:no-any Used to mock the http call
