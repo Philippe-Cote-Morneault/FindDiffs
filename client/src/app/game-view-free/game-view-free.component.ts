@@ -43,32 +43,27 @@ export class GameViewFreeComponent implements OnInit {
 
     // tslint:disable:no-any
     public loadOriginalScene(div: HTMLElement | null, scene: ICommonScene): void {
-        const objectQuantity: number = scene.sceneObjects.length;
+        if (div !== null) {
+            const sceneRendererService: SceneRendererService = new SceneRendererService();
+            const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(div.clientWidth, div.clientHeight);
 
-        this.sceneService.createScene(scene.type.toString(), objectQuantity).subscribe((sceneModel: ICommonScene) => {
-            if (div !== null) {
-                const sceneRendererService: SceneRendererService = new SceneRendererService();
-                const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(div.clientWidth, div.clientHeight);
+            div.appendChild(renderer.domElement);
 
-                div.appendChild(renderer.domElement);
+            const sceneOriginal: THREE.Scene = new SceneParserService().parseScene(scene);
+            const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(div.clientWidth, div.clientHeight);
+            const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
-                const sceneOriginal: THREE.Scene = new SceneParserService().parseScene(sceneModel);
-                const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(div.clientWidth, div.clientHeight);
-                const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-
-                const animate: any = (): void => {
-                    requestAnimationFrame(animate);
-                    sceneRendererService.renderScene(sceneOriginal, renderer, camera);
-                    controls.update();
-                };
-                animate();
-            }
-        });
+            const animate: any = (): void => {
+                requestAnimationFrame(animate);
+                sceneRendererService.renderScene(sceneOriginal, renderer, camera);
+                controls.update();
+            };
+            animate();
+        }
     }
 
     public loadModifiedScene(div: HTMLElement | null, scene: ICommonScene): void {
         // const addObject: boolean = scene.;
-
         this.sceneService.createModifiedScene(scene.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
             if (div !== null) {
                 const sceneRendererService: SceneRendererService = new SceneRendererService();
