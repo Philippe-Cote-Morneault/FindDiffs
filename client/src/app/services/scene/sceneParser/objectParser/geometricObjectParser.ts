@@ -26,7 +26,7 @@ export class GeometricObjectParser extends SceneObjectParser {
             case GeometricShapeType.SPHERE:
                 return new SphereFactory().parse(object);
                 break;
-            case GeometricShapeType.SQUARED_BASE_PYRAMID:
+            case GeometricShapeType.TRIANGULAR_BASE_PYRAMID:
                 return new PyramidFactory().parse(object);
                 break;
             default:

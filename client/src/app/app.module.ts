@@ -1,6 +1,7 @@
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { MatProgressSpinnerModule } from "@angular/material";
 import { BrowserModule } from "@angular/platform-browser";
 import { Ng4LoadingSpinnerModule } from "ng4-loading-spinner";
 import { AdminViewComponent } from "./admin-view/admin-view.component";
@@ -36,6 +37,7 @@ import { TestComponent } from "./test/test.component";
         AppRoutingModule,
         FormsModule,
         Ng4LoadingSpinnerModule.forRoot(),
+        MatProgressSpinnerModule,
     ],
     providers: [UserService, InitialViewComponent, GameCardLoaderService],
     bootstrap: [AppComponent],

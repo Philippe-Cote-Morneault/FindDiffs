@@ -26,6 +26,7 @@ export const R: IString = {
     ERROR_N_A_N: "The field %s is not a number.",
     ERROR_INVALID: "The %s is invalid.",
     ERROR_INVALID_USERNAME: "The username is invalid, it must be between 3 and 12 alpha numeric characters.",
+    ERROR_INVALID_GAMENAME: "The game name is invalid, it must be between 3 and 12 alpha numeric characters.",
     ERROR_INVALID_SIZE: "Width is %d pixels, should be %d pixels.",
     ERROR_INVALID_HEIGHT: "Height is %d pixels, should be %d pixels.",
     ERROR_INVALID_FILE: "%s is not a file.",

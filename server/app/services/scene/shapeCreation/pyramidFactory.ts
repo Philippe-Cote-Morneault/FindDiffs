@@ -10,7 +10,7 @@ export class PyramidFactory extends GeometricObjectFactory {
 
         const pyramidObject: ICommonPyramid = geometricObject as ICommonPyramid;
 
-        pyramidObject.shapeType = GeometricShapeType.SQUARED_BASE_PYRAMID;
+        pyramidObject.shapeType = GeometricShapeType.TRIANGULAR_BASE_PYRAMID;
         pyramidObject.radiusBase = scalePercentage * PyramidFactory.REFERENCE_RADIUS;
         pyramidObject.height = scalePercentage * PyramidFactory.REFERENCE_HEIGHT;
 
