@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import "node_modules/three/examples/js/controls/OrbitControls";
 import "src/js/test";
+import "node_modules/three/examples/js/controls/OrbitControls";
 import * as THREE from "three";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
