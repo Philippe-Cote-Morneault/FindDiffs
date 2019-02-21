@@ -21,6 +21,9 @@ export class GameCardService extends Service implements IGameCardService {
         if (!req.body.name) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.NAME_]));
         }
+        if (!Validation.isValidName(req.body.name)) {
+            throw new InvalidFormatException(R.ERROR_INVALID_GAMENAME);
+        }
         if (!req.body.resource_id) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.RESOURCE_ID_]));
         }
