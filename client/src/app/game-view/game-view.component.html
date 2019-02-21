@@ -21,5 +21,8 @@
       <canvas id="modified_canvas" width="640px" height="480px" style="border:1px solid #000000;" #modifiedCanvas ></canvas>
     </div>
   </div>
-  <mat-spinner *ngIf="identifyingDifference"></mat-spinner>
+  <div id="spinner_wrapper" *ngIf="identifyingDifference" >
+    <mat-spinner id="spinner" [diameter]="40"></mat-spinner>
+    <p id="spinner_text"> Identifying Difference </p>
+  </div>
 </div>
