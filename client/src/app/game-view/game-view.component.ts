@@ -18,6 +18,7 @@ export class GameViewComponent implements OnInit {
     private differenceFound: number[];
     // tslint:disable-next-line:no-any
     private differenceSound: any;
+    public identifyingDifference: boolean = false;
 
     public constructor(
         private route: ActivatedRoute,
@@ -48,6 +49,7 @@ export class GameViewComponent implements OnInit {
 
     // tslint:disable-next-line:no-any
     public getClickPosition(e: any): void {
+        this.identifyingDifference = true;
         const xPosition: number = e.layerX;
         const yPosition: number = e.layerY;
         this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) => {
@@ -60,6 +62,7 @@ export class GameViewComponent implements OnInit {
                     this.addDifference(hashDifference);
                 }
             }
+            this.identifyingDifference = false;
         });
     }
 
