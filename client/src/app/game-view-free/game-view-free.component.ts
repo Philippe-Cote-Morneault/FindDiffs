@@ -54,7 +54,12 @@ export class GameViewFreeComponent implements OnInit {
                 const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
                 const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
-                
+                const animate: any = (): void => {
+                    requestAnimationFrame(animate);
+                    sceneRendererService.renderScene(sceneOriginal, renderer, camera);
+                    controls.update();
+                };
+                animate();
             }
         });
     }
