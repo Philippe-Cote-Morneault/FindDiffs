@@ -6,11 +6,11 @@ import { PixelPositionService } from "../services/pixelManipulation/pixel-positi
 import { PixelRestorationService } from "../services/pixelManipulation/pixel-restoration.service";
 
 @Component({
-    selector: "app-game-view",
-    templateUrl: "./game-view.component.html",
-    styleUrls: ["./game-view.component.css"],
+    selector: "app-game-view-simple",
+    templateUrl: "./game-view-simple.component.html",
+    styleUrls: ["./game-view-simple.component.css"],
 })
-export class GameViewComponent implements OnInit {
+export class GameViewSimpleComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     private imagePairId: string;

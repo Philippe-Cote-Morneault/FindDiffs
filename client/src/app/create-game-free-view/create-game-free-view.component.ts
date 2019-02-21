@@ -5,7 +5,7 @@ import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
-import { ScenePairService } from "../services/scene/scene-pair.service";
+import { SceneService } from "../services/scene/scene.service";
 
 @Component({
     selector: "app-create-game-free-view",
@@ -32,7 +32,7 @@ export class CreateGameFreeViewComponent {
 
     public constructor(
         private spinnerService: Ng4LoadingSpinnerService,
-        public scenePairService: ScenePairService,
+        public sceneService: SceneService,
         public gamesCardService: GamesCardService) {
         this.canSubmit = false;
         this.firstNameInput = false;
@@ -91,7 +91,7 @@ export class CreateGameFreeViewComponent {
         const objectType: string = this.objectType.nativeElement.value;
         const gameName: string = this.gameNameInput.nativeElement.value;
 
-        this.scenePairService.addScenePair(objectType, Number(quantity))
+        this.sceneService.createScene(objectType, Number(quantity))
             .subscribe((response: ICommonScene | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);
@@ -103,7 +103,7 @@ export class CreateGameFreeViewComponent {
 
     public modifyScenePair(idScenePair: string, gameName: string, isAddType: boolean,
                            isRemoveType: boolean, isModifiedType: boolean): void {
-        this.scenePairService.modifyScenePair(idScenePair, isAddType, isRemoveType, isModifiedType)
+        this.sceneService.createModifiedScene(idScenePair, isAddType, isRemoveType, isModifiedType)
             .subscribe((response: ICommonSceneModifications | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);

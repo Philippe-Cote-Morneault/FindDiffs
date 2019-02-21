@@ -49,3 +49,9 @@
     border-radius: 10px;
     border: #33343D;
 }
+
+#scene {
+    width: 160px;
+    height: 120px;
+    margin: auto;
+}

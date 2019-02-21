@@ -7,22 +7,18 @@
     <div>
       <p> Differences found: {{differenceCounterUser}}</p>
       <p *ngIf="false"> Opponent's differences found: {{differenceCounterOpponent}}</p>
-      <p> Timer: 0:00</p>
+      <p> Timer: 00:00</p>
     </div>
     <div>
-      <p> Messages: Une partie est commencée</p>
+      <p> Messages: </p>
     </div>
   </div>
   <div id="game_image_wrapper">
     <div id="image_original">
-      <canvas id="original_canvas" width="640px" height="480px" style="border:1px solid #000000;" #originalCanvas ></canvas>
+      <div id="original_scene" width="640px" height="480px" style="border:1px solid #000000;" #originalScene ></div>
     </div>
     <div id="image_modified">
-      <canvas id="modified_canvas" width="640px" height="480px" style="border:1px solid #000000;" #modifiedCanvas ></canvas>
+      <div id="modified_scene" width="640px" height="480px" style="border:1px solid #000000;" #modifiedScene ></div>
     </div>
-  </div>
-  <div id="spinner_wrapper" *ngIf="identifyingDifference" >
-    <mat-spinner id="spinner" [diameter]="40"></mat-spinner>
-    <p id="spinner_text"> Identifying Difference </p>
   </div>
 </div>
