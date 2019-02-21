@@ -19,7 +19,7 @@ export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
     @ViewChild("image") private image: ElementRef;
-    @ViewChild("scene") private scene: HTMLElement;
+    @ViewChild("scene") private scene: ElementRef;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
@@ -48,7 +48,6 @@ export class GamesCardViewComponent implements OnInit {
             this.getImagePairById();
         } else {
             this.getScenePairById();
-            this.sceneLoaderService.loadOriginalScene(this.scene, this.scenePair);
         }
     }
 
@@ -103,7 +102,7 @@ export class GamesCardViewComponent implements OnInit {
     private getScenePairById(): void {
         this.sceneService.getSceneById(this.gameCard.resource_id).subscribe((scenePair: ICommonScene) => {
             this.scenePair = scenePair;
-
+            this.sceneLoaderService.loadOriginalScene(this.scene.nativeElement, this.scenePair);
         });
     }
 }
