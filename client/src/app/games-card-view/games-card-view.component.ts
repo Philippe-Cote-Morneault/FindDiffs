@@ -31,6 +31,7 @@ export class GamesCardViewComponent implements OnInit {
         private sceneService: SceneService,
         private sceneLoader: SceneLoaderService,
         private router: Router,
+        private sceneLoaderService: SceneLoaderService,
         private imagePairService: ImagePairService) {
             this.rightButton = "Create";
             this.leftButton = "Play";
@@ -47,6 +48,7 @@ export class GamesCardViewComponent implements OnInit {
             this.getImagePairById();
         } else {
             this.getScenePairById();
+            this.sceneLoaderService.loadOriginalScene(this.scene, this.scenePair);
         }
     }
 
