@@ -45,6 +45,9 @@ export class GameViewFreeComponent implements OnInit {
     public loadOriginalScene(div: HTMLElement | null, scene: ICommonScene): void {
         this.sceneService.createScene(scene.type.toString(), 200).subscribe((sceneModel: ICommonScene) => {
             if (div !== null) {
+                const sceneRendererService: SceneRendererService = new SceneRendererService();
+                const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
+
                 
             }
         });
