@@ -7,9 +7,9 @@ import { ICommonSceneModifications } from "../../../../common/model/scene/modifi
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { SceneService } from "../services/scene/scene.service";
 import { ModifiedSceneParserService } from "../services/scene/sceneParser/modified-scene-parser.service";
+import { SceneParserService } from "../services/scene/sceneParser/scene-parser.service";
 import { CameraGenerator } from "../services/scene/sceneRenderer/cameraGenerator";
 import { SceneRendererService } from "../services/scene/sceneRenderer/scene-renderer.service";
-// import { SceneParserService } from "../services/scene/sceneParser/scene-parser.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -44,6 +44,9 @@ export class GameViewFreeComponent implements OnInit {
     // tslint:disable:no-any
     public loadOriginalScene(div: HTMLElement | null, scene: ICommonScene): void {
         this.sceneService.createScene(scene.type.toString(), 200).subscribe((sceneModel: ICommonScene) => {
+            if (div !== null) {
+                
+            }
         });
     }
 
