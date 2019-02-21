@@ -18,7 +18,6 @@ import { SceneRendererService } from "../services/scene/sceneRenderer/scene-rend
 })
 export class GameViewFreeComponent implements OnInit {
     @ViewChild("originalScene") private originalScene: ElementRef;
-    @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     private scenePairID: string;
 
     public constructor(
