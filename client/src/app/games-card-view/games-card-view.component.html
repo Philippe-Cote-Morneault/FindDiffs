@@ -7,7 +7,7 @@
   <div class="grid-container">
     <div class="title">{{gameCard.title}}</div>
     <div class="original_image" *ngIf="isSimplePov(); else elseBlock">
-      <img src="{{imagePair.url_original}}" width="160" height="120" />  
+      <img src="{{imagePair.url_original}}" id="image" width="160" height="120" />  
     </div>
     <ng-template #elseBlock> <!-- code a phil --></ng-template>
     <div class="solo_time">

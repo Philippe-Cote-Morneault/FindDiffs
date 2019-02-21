@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
@@ -17,6 +17,7 @@ import { StringFormater } from "../util/stringFormater";
 export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
+    @ViewChild("image") private image: ElementRef;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
