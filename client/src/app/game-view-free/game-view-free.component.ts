@@ -44,14 +44,11 @@ export class GameViewFreeComponent implements OnInit {
     // tslint:disable:no-any
     public loadOriginalScene(div: HTMLElement | null, scene: ICommonScene): void {
         this.sceneService.createScene(scene.type.toString(), 200).subscribe((sceneModel: ICommonScene) => {
-            console.log(sceneModel.id);
         });
     }
 
     public loadModifiedScene(div: HTMLElement | null, scene: ICommonScene): void {
         this.sceneService.createModifiedScene(scene.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
-            /* To copy pasta in loadOriginalScene, modify a bit
-            console.log(modifications);
             if (div !== null) {
                 const sceneRendererService: SceneRendererService = new SceneRendererService();
                 const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
@@ -68,7 +65,7 @@ export class GameViewFreeComponent implements OnInit {
                     controls.update();
                 };
                 animate();
-            }*/
+            }
         });
     }
 }
