@@ -6,10 +6,14 @@
 <body>
   <div class="grid-container">
     <div class="title">{{gameCard.title}}</div>
-    <div class="original_image" *ngIf="isSimplePov(); else elseBlock">
-      <img #image width="160" height="120" />  
+    <div class="original_image" *ngIf="isSimplePov(); else sceneBlock">
+      <img #image width="160" height="120" />
     </div>
-    <ng-template #elseBlock> <!-- code a phil --></ng-template>
+    <ng-template #sceneBlock>
+      <div class="original_image">
+        <div #scene id="scene" width="160" height="120"></div>
+      </div>
+    </ng-template>
     <div class="solo_time">
       <span> Best solo times: </span>
       <ol *ngFor='let soloTime of gameCard.best_time_solo; let i = index'>

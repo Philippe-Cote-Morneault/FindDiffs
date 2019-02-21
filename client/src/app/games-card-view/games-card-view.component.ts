@@ -19,7 +19,7 @@ export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
     @ViewChild("image") private image: ElementRef;
-    @ViewChild("scene") private scene: HTMLElement;
+    @ViewChild("scene") private scene: ElementRef;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
@@ -29,6 +29,7 @@ export class GamesCardViewComponent implements OnInit {
     public constructor(
         private gamesCardService: GamesCardService,
         private sceneService: SceneService,
+        private sceneLoader: SceneLoaderService,
         private router: Router,
         private sceneLoaderService: SceneLoaderService,
         private imagePairService: ImagePairService) {
@@ -45,10 +46,8 @@ export class GamesCardViewComponent implements OnInit {
 
         if (this.isSimplePov()) {
             this.getImagePairById();
-            this.image.nativeElement.src = this.imagePair.url_original;
         } else {
             this.getScenePairById();
-            this.sceneLoaderService.loadOriginalScene(this.scene, this.scenePair);
         }
     }
 
@@ -96,12 +95,14 @@ export class GamesCardViewComponent implements OnInit {
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.gameCard.resource_id).subscribe((imagePair: ICommonImagePair) => {
             this.imagePair = imagePair;
+            this.image.nativeElement.src = imagePair.url_original;
         });
     }
 
     private getScenePairById(): void {
-        this.sceneService.getSceneById(this.scenePair.id).subscribe((scenePair: ICommonScene) => {
+        this.sceneService.getSceneById(this.gameCard.resource_id).subscribe((scenePair: ICommonScene) => {
             this.scenePair = scenePair;
+            this.sceneLoaderService.loadOriginalScene(this.scene.nativeElement, this.scenePair);
         });
     }
 }
