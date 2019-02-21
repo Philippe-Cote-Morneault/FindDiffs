@@ -1,10 +1,10 @@
 import { ICommon3DPosition } from "../../../../common/model/positions";
 import { ICommonSceneObject } from "../../../../common/model/scene/objects/sceneObject";
 import { ICommonGeometricScene, ObjectType } from "../../../../common/model/scene/scene";
+import { ColorUtils } from "../../utils/colorUtils";
 import { Grid } from "./grid";
 import { RandomGrid } from "./randomGrid";
 import { GeometricObjectGenerator } from "./shapeCreation/geometricObjectGenerator";
-import { ColorUtils } from "../../utils/colorUtils";
 
 export class SceneGenerator {
     private objectQty: number;
