@@ -29,7 +29,6 @@ export class GamesCardViewComponent implements OnInit {
     public constructor(
         private gamesCardService: GamesCardService,
         private sceneService: SceneService,
-        private sceneLoader: SceneLoaderService,
         private router: Router,
         private sceneLoaderService: SceneLoaderService,
         private imagePairService: ImagePairService) {
