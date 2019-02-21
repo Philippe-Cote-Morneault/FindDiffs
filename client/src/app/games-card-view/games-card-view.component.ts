@@ -7,6 +7,7 @@ import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { SceneService } from "../services/scene/scene.service";
+import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { StringFormater } from "../util/stringFormater";
 
 @Component({
@@ -18,6 +19,7 @@ export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
     @ViewChild("image") private image: ElementRef;
+    @ViewChild("scene") private scene: HTMLElement;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
@@ -27,6 +29,7 @@ export class GamesCardViewComponent implements OnInit {
     public constructor(
         private gamesCardService: GamesCardService,
         private sceneService: SceneService,
+        private sceneLoader: SceneLoaderService,
         private router: Router,
         private imagePairService: ImagePairService) {
             this.rightButton = "Create";
@@ -42,7 +45,6 @@ export class GamesCardViewComponent implements OnInit {
 
         if (this.isSimplePov()) {
             this.getImagePairById();
-            this.image.nativeElement.src = this.imagePair.url_original;
         } else {
             this.getScenePairById();
         }
@@ -92,12 +94,14 @@ export class GamesCardViewComponent implements OnInit {
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.gameCard.resource_id).subscribe((imagePair: ICommonImagePair) => {
             this.imagePair = imagePair;
+            this.image.nativeElement.src = imagePair.url_original;
         });
     }
 
     private getScenePairById(): void {
-        this.sceneService.getSceneById(this.scenePair.id).subscribe((scenePair: ICommonScene) => {
+        this.sceneService.getSceneById(this.gameCard.resource_id).subscribe((scenePair: ICommonScene) => {
             this.scenePair = scenePair;
+
         });
     }
 }
