@@ -42,7 +42,9 @@ export class GameViewFreeComponent implements OnInit {
 
     // tslint:disable:no-any
     public loadOriginalScene(div: HTMLElement | null, scene: ICommonScene): void {
-        this.sceneService.createScene(scene.type.toString(), 200).subscribe((sceneModel: ICommonScene) => {
+        const objectQuantity: number = scene.sceneObjects.length;
+
+        this.sceneService.createScene(scene.type.toString(), objectQuantity).subscribe((sceneModel: ICommonScene) => {
             if (div !== null) {
                 const sceneRendererService: SceneRendererService = new SceneRendererService();
                 const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
@@ -64,6 +66,8 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     public loadModifiedScene(div: HTMLElement | null, scene: ICommonScene): void {
+        const addObject: boolean = scene.;
+
         this.sceneService.createModifiedScene(scene.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
             if (div !== null) {
                 const sceneRendererService: SceneRendererService = new SceneRendererService();
