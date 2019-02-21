@@ -48,6 +48,12 @@ export class GameViewFreeComponent implements OnInit {
                 const sceneRendererService: SceneRendererService = new SceneRendererService();
                 const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
 
+                div.appendChild(renderer.domElement);
+
+                const sceneOriginal: THREE.Scene = new SceneParserService().parseScene(sceneModel);
+                const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
+                const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+
                 
             }
         });
