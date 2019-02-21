@@ -18,7 +18,7 @@ import { StringFormater } from "../util/stringFormater";
 export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
-    @ViewChild("image") private image: HTMLImageElement;
+    @ViewChild("image") private image: ElementRef;
     @ViewChild("scene") private scene: HTMLElement;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
@@ -45,7 +45,7 @@ export class GamesCardViewComponent implements OnInit {
 
         if (this.isSimplePov()) {
             this.getImagePairById();
-            this.image.src = this.imagePair.url_original;
+            this.image.nativeElement.src = this.imagePair.url_original;
         } else {
             this.getScenePairById();
             this.sceneLoaderService.loadOriginalScene(this.scene, this.scenePair);
