@@ -66,7 +66,7 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     public loadModifiedScene(div: HTMLElement | null, scene: ICommonScene): void {
-        const addObject: boolean = scene.;
+        // const addObject: boolean = scene.;
 
         this.sceneService.createModifiedScene(scene.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
             if (div !== null) {
