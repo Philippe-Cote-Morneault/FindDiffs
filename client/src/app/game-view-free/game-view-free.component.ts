@@ -18,6 +18,7 @@ import { SceneRendererService } from "../services/scene/sceneRenderer/scene-rend
 })
 export class GameViewFreeComponent implements OnInit {
     @ViewChild("originalScene") private originalScene: ElementRef;
+    @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     private scenePairID: string;
 
     public constructor(
@@ -36,7 +37,7 @@ export class GameViewFreeComponent implements OnInit {
     private getScenePairById(): void {
         this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
             this.loadOriginalScene(this.originalScene.nativeElement, response);
-            this.loadModifiedScene(this.originalScene.nativeElement, response);
+            this.loadModifiedScene(this.modifiedScene.nativeElement, response);
         });
     }
 
@@ -47,12 +48,12 @@ export class GameViewFreeComponent implements OnInit {
         this.sceneService.createScene(scene.type.toString(), objectQuantity).subscribe((sceneModel: ICommonScene) => {
             if (div !== null) {
                 const sceneRendererService: SceneRendererService = new SceneRendererService();
-                const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
+                const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(div.clientWidth, div.clientHeight);
 
                 div.appendChild(renderer.domElement);
 
                 const sceneOriginal: THREE.Scene = new SceneParserService().parseScene(sceneModel);
-                const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
+                const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(div.clientWidth, div.clientHeight);
                 const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
                 const animate: any = (): void => {
@@ -71,12 +72,12 @@ export class GameViewFreeComponent implements OnInit {
         this.sceneService.createModifiedScene(scene.id, true, true, true).subscribe((modifications: ICommonSceneModifications) => {
             if (div !== null) {
                 const sceneRendererService: SceneRendererService = new SceneRendererService();
-                const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(1000, 600);
+                const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(div.clientWidth, div.clientHeight);
 
                 div.appendChild(renderer.domElement);
 
                 const sceneModified: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, modifications);
-                const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(1000, 600);
+                const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(div.clientWidth, div.clientHeight);
                 const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
                 const animate: any = (): void => {
