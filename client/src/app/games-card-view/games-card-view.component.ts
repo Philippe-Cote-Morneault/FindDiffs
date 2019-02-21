@@ -7,6 +7,7 @@ import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { SceneService } from "../services/scene/scene.service";
+import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { StringFormater } from "../util/stringFormater";
 
 @Component({
@@ -17,7 +18,8 @@ import { StringFormater } from "../util/stringFormater";
 export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
-    @ViewChild("image") private image: ElementRef;
+    @ViewChild("image") private image: HTMLImageElement;
+    @ViewChild("scene") private scene: HTMLElement;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
@@ -28,6 +30,7 @@ export class GamesCardViewComponent implements OnInit {
         private gamesCardService: GamesCardService,
         private sceneService: SceneService,
         private router: Router,
+        private sceneLoaderService: SceneLoaderService,
         private imagePairService: ImagePairService) {
             this.rightButton = "Create";
             this.leftButton = "Play";
@@ -42,9 +45,10 @@ export class GamesCardViewComponent implements OnInit {
 
         if (this.isSimplePov()) {
             this.getImagePairById();
-            this.image.nativeElement.src = this.imagePair.url_original;
+            this.image.src = this.imagePair.url_original;
         } else {
             this.getScenePairById();
+            this.sceneLoaderService.loadOriginalScene(this.scene, this.scenePair);
         }
     }
 
