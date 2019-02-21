@@ -22,26 +22,41 @@ export class CreateGameFreeViewComponent {
     @ViewChild("remove") private remove: ElementRef;
     @ViewChild("modified") private modified: ElementRef;
     @ViewChild("quantityObject") private quantityObject: ElementRef;
-    @ViewChild("erreurMessage") private erreurMessage: ElementRef;
     @ViewChild("objectType") private objectType: ElementRef;
 
     public canSubmit: boolean;
     public displayError: string;
     public hideError: string;
+    public firstNameInput: boolean;
+    public firstQuantityInput: boolean;
 
     public constructor(
         private spinnerService: Ng4LoadingSpinnerService,
         public scenePairService: ScenePairService,
         public gamesCardService: GamesCardService) {
-        this.displayError = "inline";
-        this.hideError = "none";
         this.canSubmit = false;
+        this.firstNameInput = false;
+        this.firstQuantityInput = false;
     }
     public isNameValid(): boolean {
-        const gameName: string = this.gameNameInput.nativeElement.value;
+        if (this.firstNameInput) {
+            const gameName: string = this.gameNameInput.nativeElement.value;
+            const nameValidationRegex: RegExp = new RegExp("^[a-zA-Z0-9]{3,12}$");
 
-        return gameName.length !== 0;
+            return nameValidationRegex.test(gameName);
+        }
+
+        return true;
     }
+
+    public nameInputVisited(): void {
+        this.firstNameInput = true;
+    }
+
+    public quantityInputVisited(): void {
+        this.firstQuantityInput = true;
+    }
+
     public isModificationTypeValid(): boolean {
         const isAddType: boolean = this.add.nativeElement.checked;
         const isRemoveType: boolean = this.remove.nativeElement.checked;
@@ -50,16 +65,13 @@ export class CreateGameFreeViewComponent {
         return isAddType || isRemoveType || isModifiedType;
     }
     public isQuantityValid(): boolean {
-        const quantity: number = Number(this.quantityObject.nativeElement.value);
-        this.toggleErrorMessage(quantity);
+        if (this.firstQuantityInput) {
+            const quantity: number = Number(this.quantityObject.nativeElement.value);
 
-        return !isNaN(quantity) && quantity > CreateGameFreeViewComponent.MIN_QTE && quantity < CreateGameFreeViewComponent.MAX_QTE;
-    }
+            return !isNaN(quantity) && quantity > CreateGameFreeViewComponent.MIN_QTE && quantity < CreateGameFreeViewComponent.MAX_QTE;
+        }
 
-    private toggleErrorMessage(quantity: number): void {
-        this.erreurMessage.nativeElement.style.display = ((isNaN(quantity) ||
-            (quantity < CreateGameFreeViewComponent.MIN_QTE || quantity > CreateGameFreeViewComponent.MAX_QTE)) && quantity !== 0)
-            ? this.displayError : this.hideError;
+        return true;
     }
 
     public verifyInfo(): void {
