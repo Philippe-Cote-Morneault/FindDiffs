@@ -51,6 +51,21 @@ describe("GameCardService", () => {
             }
         });
 
+        it("Should throw an error if the field name is not valid", async () => {
+            const request: Object = {
+                body: {
+                    name: "mn",
+                },
+            };
+            const errorMessage: string = "The game name is invalid, it must be between 3 and 12 alpha numeric characters.";
+            try {
+                await service.post(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(errorMessage);
+            }
+        });
+
         it("Should throw an error if the field resource_id is not present", async () => {
             const request: Object = {
                 body: {
@@ -428,7 +443,7 @@ describe("GameCardService", () => {
                 },
             };
             (GameCard.findById as sinon.SinonStub).resolves(new GameCardSchemaMock((doc: GameCardSchemaMock) => {
-                expect(doc.best_time_solo.length).to.equal(service.DEFAULT_SCORE_NUMBER);
+                expect(doc.best_time_solo.length).to.equal(GameCardService.DEFAULT_SCORE_NUMBER);
             }));
             await service.update(mockReq(request));
         });
@@ -443,7 +458,7 @@ describe("GameCardService", () => {
                 },
             };
             (GameCard.findById as sinon.SinonStub).resolves(new GameCardSchemaMock((doc: GameCardSchemaMock) => {
-                expect(doc.best_time_online.length).to.equal(service.DEFAULT_SCORE_NUMBER);
+                expect(doc.best_time_online.length).to.equal(GameCardService.DEFAULT_SCORE_NUMBER);
             }));
             await service.update(mockReq(request));
         });
@@ -460,8 +475,8 @@ describe("GameCardService", () => {
                 },
             };
             (GameCard.findById as sinon.SinonStub).resolves(new GameCardSchemaMock((doc: GameCardSchemaMock) => {
-                expect(doc.best_time_online.length).to.equal(service.DEFAULT_SCORE_NUMBER);
-                expect(doc.best_time_solo.length).to.equal(service.DEFAULT_SCORE_NUMBER);
+                expect(doc.best_time_online.length).to.equal(GameCardService.DEFAULT_SCORE_NUMBER);
+                expect(doc.best_time_solo.length).to.equal(GameCardService.DEFAULT_SCORE_NUMBER);
             }));
             await service.update(mockReq(request));
         });
