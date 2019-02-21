@@ -33,7 +33,7 @@ describe("GeometricObjectGenerator", () => {
             const differenceGenerator: SceneDifferenceGenerator = new SceneDifferenceGenerator(sceneObj, grid);
             const differenceObj: ICommonSceneModifications = differenceGenerator.generateModifiedScene(false, true, false);
 
-            expect(sceneObj.sceneObjects.length - differenceObj.addedObjects.length).to.be.lte(sceneObj.sceneObjects.length);
+            expect(sceneObj.sceneObjects.length - differenceObj.deletedObjects.length).to.be.lte(sceneObj.sceneObjects.length);
         });
     });
 });
