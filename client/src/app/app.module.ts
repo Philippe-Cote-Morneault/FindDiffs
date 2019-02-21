@@ -14,7 +14,7 @@ import { GamesCardViewComponent } from "./games-card-view/games-card-view.compon
 import { GamesListViewComponent } from "./games-list-view/games-list-view.component";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 import { GameCardLoaderService } from "./services/gameCard/game-card-loader.service";
-import { UserService } from "./services/user.service";
+import { UserService } from "./services/user/user.service";
 import { TestComponent } from "./test/test.component";
 
 @NgModule({

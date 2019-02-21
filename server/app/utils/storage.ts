@@ -10,7 +10,7 @@ AWS.config.update({
     secretAccessKey: Config.s3.secret,
 });
 
-const s3: AWS.S3 = new AWS.S3();
+export const s3: AWS.S3 = new AWS.S3();
 
 export class Storage {
     public static readonly STORAGE_PATH: string = "storage";

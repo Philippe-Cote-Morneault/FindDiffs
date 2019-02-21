@@ -9,7 +9,6 @@ import { Message } from "../../../../common/communication/message";
 export class HTTPService {
 
     public handleError(error: HttpErrorResponse): Observable<Message> {
-
         return of({
             title: "Error",
             body: error.error.body,

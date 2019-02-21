@@ -5,8 +5,7 @@ import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
-import { ImagePairService } from "../services/image-pair.service";
-import { SceneService } from "../services/scene/scene.service";
+import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { StringFormater } from "../util/stringFormater";
 
 @Component({

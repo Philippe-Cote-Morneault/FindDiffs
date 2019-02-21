@@ -25,6 +25,7 @@ export class GameCardLoaderService {
     }
 
     public addDynamicComponent(gameCard: ICommonGameCard, isInAdminView: boolean): void {
+        console.log(gameCard);
         const factory: ComponentFactory<GamesCardViewComponent> = this.factoryResolver
             .resolveComponentFactory(GamesCardViewComponent);
 

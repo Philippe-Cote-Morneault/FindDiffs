@@ -102,8 +102,8 @@ export class ImagePairService extends Service implements IImagePairService {
 
         const imagePair: IImagePair = new ImagePair({
             file_difference_id: await difference.saveStorage(),
-            file_modified_id: originalImageId,
-            file_original_id: modifiedImageId,
+            file_modified_id: modifiedImageId,
+            file_original_id: originalImageId,
             name: req.body.name,
             creation_date: new Date(),
             differences_count: difference.countDifferences(),
