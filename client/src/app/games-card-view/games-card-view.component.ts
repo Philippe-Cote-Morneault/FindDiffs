@@ -42,7 +42,7 @@ export class GamesCardViewComponent implements OnInit {
 
         if (this.isSimplePov()) {
             this.getImagePairById();
-            this.image.nativeElement = this.imagePair.url_original;
+            this.image.nativeElement.src = this.imagePair.url_original;
         } else {
             this.getScenePairById();
         }
