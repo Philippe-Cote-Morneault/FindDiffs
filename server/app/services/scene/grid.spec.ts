@@ -6,9 +6,10 @@ describe("RandomGrid", () => {
     describe("generateGrid()", () => {
         it("Should generate a grid with a bunch of random positions 200 minimum", () => {
             const SIZE: number = 1000;
+            const DEPTH: number = 50;
             const MARGIN: number = 20;
             const POSITION_TO_GENERATE: number = 200;
-            const defaultGrid: DefaultGrid = new DefaultGrid(SIZE, SIZE, MARGIN);
+            const defaultGrid: DefaultGrid = new DefaultGrid(SIZE, SIZE, DEPTH, MARGIN);
 
             // tslint:disable-next-line:no-magic-numbers
             const minX: number = SIZE / 2  * -1;
