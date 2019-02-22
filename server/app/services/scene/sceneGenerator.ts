@@ -34,7 +34,8 @@ export class SceneGenerator {
     }
 
     public generateScene(): ICommonGeometricScene {
-        this.grid = new RandomGrid(this.SCENE_SIZE, this.SCENE_SIZE, this.SCENE_OBJECT_MARGIN);
+        // tslint:disable-next-line:no-magic-numbers
+        this.grid = new RandomGrid(this.SCENE_SIZE, this.SCENE_SIZE, 50, this.SCENE_OBJECT_MARGIN);
         for (let i: number = 0; i < this.objectQty; i++) {
             const position: ICommon3DPosition = this.grid.getNextPosition();
             this.scene.sceneObjects.push(GeometricObjectGenerator.getInstance().createObject(position));
