@@ -7,8 +7,8 @@ export class GeometricSceneParser {
     public static parseScene(originalScene: ICommonGeometricScene): THREE.Scene {
         const scene: THREE.Scene = new THREE.Scene();
 
-        scene.background = new THREE.Color(parseInt((originalScene as ICommonGeometricScene).bg_color,
-                                                    GeometricSceneParser.SCENE_BG_COLOR_NUMBER_BASE));
+        const colorValueString: string = (originalScene as ICommonGeometricScene).bg_color.toString();
+        scene.background = new THREE.Color(parseInt(colorValueString, GeometricSceneParser.SCENE_BG_COLOR_NUMBER_BASE));
 
         // TODO: Find a way to hold dimensions and divisions in scene object
         scene.add(GeometricSceneParser.generateGrid(originalScene.dimensions.x, 10));
