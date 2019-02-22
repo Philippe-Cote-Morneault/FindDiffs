@@ -52,7 +52,9 @@ export abstract class Grid {
     protected distanceBetweenPosition(position1: ICommon3DPosition, position2: ICommon3DPosition): number {
         // tslint:disable-next-line:no-magic-numbers
         return Math.sqrt(Math.pow(position1.x - position2.x, 2) +
+                         // tslint:disable-next-line:no-magic-numbers
                          Math.pow(position1.y - position2.y, 2) +
+                         // tslint:disable-next-line:no-magic-numbers
                          Math.pow(position1.z - position2.z, 2));
     }
 
