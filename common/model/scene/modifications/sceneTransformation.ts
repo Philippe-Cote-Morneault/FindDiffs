@@ -1,5 +1,5 @@
-import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
+import { ICommonSceneModifications } from "./sceneModifications";
+import { ICommonSceneObject } from "../objects/sceneObject";
 
 /**
  * Represents a transformation to apply to a scene

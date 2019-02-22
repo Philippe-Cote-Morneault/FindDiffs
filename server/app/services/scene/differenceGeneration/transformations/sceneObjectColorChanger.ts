@@ -1,7 +1,7 @@
 import { ICommonGeometricModifications } from "../../../../../../common/model/scene/modifications/geometricModifications";
+import { SceneTransformation } from "../../../../../../common/model/scene/modifications/sceneTransformation";
 import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ColorUtils } from "../../../../utils/colorUtils";
-import { SceneTransformation } from "./sceneTransformation";
 
 /**
  * In charge of changing the color of a random scene object to a random color

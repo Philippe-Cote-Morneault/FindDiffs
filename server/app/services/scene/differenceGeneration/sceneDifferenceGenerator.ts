@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
+import { SceneTransformation } from "../../../../../common/model/scene/modifications/sceneTransformation";
 import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
 import { Textures } from "../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
@@ -8,7 +9,6 @@ import { SceneObjectAdder } from "./transformations/sceneObjectAdder";
 import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChanger";
 import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
 import { SceneObjectTextureChanger } from "./transformations/sceneObjectTextureChanger";
-import { SceneTransformation } from "./transformations/sceneTransformation";
 
 export class SceneDifferenceGenerator {
     private static readonly NUMBER_OF_DIFFERENCES: number = 7;
