@@ -28,7 +28,7 @@ describe("UserService", () => {
         service = TestBed.get(SceneService);
     });
 
-    it("should return expected message on addScenePair request (HttpClient called once)", () => {
+    it("should return expected message on createScene request (HttpClient called once)", () => {
         const expectedResponse: Object = {"bg_color": "red", "dimensions": 2, "id": "928374" , "sceneObject": "scene", "texture": "none"};
         const mockType: string = "Geometry";
         const mockQty: number = 2;
@@ -42,7 +42,7 @@ describe("UserService", () => {
             fail,
         );
     });
-    it("should return expected message on modifyScenePair request (HttpClient called once)", () => {
+    it("should return expected message on createModifiedScene request (HttpClient called once)", () => {
         const expectedResponse: Object = {"addedObjects": ["132342"], "colorChangedObjects": [{key: "3243", value: 3232323}],
                                           "deletedObjects": ["323232"] , "id": "123098"};
         const mockId: string = "123098";
