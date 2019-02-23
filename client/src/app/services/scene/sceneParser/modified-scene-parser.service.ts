@@ -7,7 +7,6 @@ import { ICommonGeometricObject } from "../../../../../../common/model/scene/obj
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene, ObjectType } from "../../../../../../common/model/scene/scene";
 import { AbstractSceneParser } from "./abstractSceneParserService";
-import { stringify } from "@angular/core/src/render3/util";
 
 @Injectable({
     providedIn: "root",
