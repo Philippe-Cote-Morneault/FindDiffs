@@ -108,7 +108,7 @@ describe("UserService", () => {
     it("should return expected message on getSceneById request (HttpClient called once)", () => {
         const expectedResponse: Object = {"bg_color": "red", "dimensions": 2, "id": "928374" , "sceneObject": "scene", "texture": "none"};
 
-        httpClientSpyPost.get.and.returnValue(TestHelper.asyncData(expectedResponse));
+        httpClientSpyGet.get.and.returnValue(TestHelper.asyncData(expectedResponse));
 
         sceneServiceGet.getSceneById("1234232").subscribe(
             (response: ICommonScene) => {
@@ -121,7 +121,7 @@ describe("UserService", () => {
         const expectedResponse: Object = {"addedObjects": ["132342"], "colorChangedObjects": [{key: "3243", value: 3232323}],
                                           "deletedObjects": ["323232"] , "id": "123098"};
 
-        httpClientSpyPost.get.and.returnValue(TestHelper.asyncData(expectedResponse));
+        httpClientSpyGet.get.and.returnValue(TestHelper.asyncData(expectedResponse));
 
         sceneServiceGet.getModifiedSceneById("1234232").subscribe(
             (response: ICommonSceneModifications) => {
