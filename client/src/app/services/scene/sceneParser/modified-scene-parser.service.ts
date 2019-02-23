@@ -7,6 +7,7 @@ import { ICommonGeometricObject } from "../../../../../../common/model/scene/obj
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene, ObjectType } from "../../../../../../common/model/scene/scene";
 import { AbstractSceneParser } from "./abstractSceneParserService";
+import { stringify } from "@angular/core/src/render3/util";
 
 @Injectable({
     providedIn: "root",
@@ -62,13 +63,8 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
     }
 
     private findChangedColor(key: string, colorChangedObjects: Pair<string, number>[]): number | undefined {
-        //TODO: LINT
-        for (let i = 0; i < colorChangedObjects.length; ++i) {
-            if (colorChangedObjects[i].key === key) {
-                return colorChangedObjects[i].value;
-            }
-        }
-
-        return undefined;
+        return colorChangedObjects.find(
+            (x: Pair<string, number>) => x.key === key,
+        ) as (number | undefined);
     }
 }
