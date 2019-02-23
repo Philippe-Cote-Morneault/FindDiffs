@@ -58,7 +58,7 @@ describe("GeometricObjectGenerator", () => {
                 z: 0,
             };
             const object: ICommonGeometricObject =  generator.createObject(posititon);
-            expect(object.shapeType).to.equal(GeometricShapeType.SQUARED_BASE_PYRAMID);
+            expect(object.shapeType).to.equal(GeometricShapeType.TRIANGULAR_BASE_PYRAMID);
         });
         it("Should return a sphere 1/7 of the time", () => {
             // tslint:disable-next-line:no-magic-numbers

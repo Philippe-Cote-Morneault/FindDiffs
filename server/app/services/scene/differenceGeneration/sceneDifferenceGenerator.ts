@@ -8,7 +8,6 @@ import { SceneObjectAdder } from "./transformations/sceneObjectAdder";
 import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChanger";
 import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
 import { SceneObjectTextureChanger } from "./transformations/sceneObjectTextureChanger";
-import { SceneTransformation } from "./transformations/sceneTransformation";
 export class SceneDifferenceGenerator {
     private static readonly NUMBER_OF_DIFFERENCES: number = 7;
 
