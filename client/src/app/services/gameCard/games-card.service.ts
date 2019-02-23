@@ -28,7 +28,6 @@ export class GamesCardService extends HTTPService {
         );
     }
 
-    //TODO: remove "" of pov and resolve bug
     public addGameCard(gameName: string, imagePairId: string, pov: POVType): Observable<ICommonGameCard | Message> {
         const requestBody: Object = { "name": gameName, "resource_id": imagePairId, "pov": POVType[pov] };
 
