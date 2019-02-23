@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
 import { InvalidFormatException } from "../../../../../../common/errors/invalidFormatException";
+import { Pair } from "../../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene, ObjectType } from "../../../../../../common/model/scene/scene";
 import { AbstractSceneParser } from "./abstractSceneParserService";
-import { Pair } from "../../../../../../common/model/pair";
 
 @Injectable({
     providedIn: "root",
@@ -38,9 +38,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
 
         originalSceneObjects.forEach((originalObject: ICommonGeometricObject) => {
             if (!sceneModifications.deletedObjects.includes(originalObject.id)) {
-                console.log(sceneModifications.colorChangedObjects);
                 if (sceneModifications.colorChangedObjects.some((object: Pair<string, number>) => originalObject.id === object.key)) {
-                    // sceneModifications.colorChangedObjects.
                     this.changeObjectColor(originalObject,
                                            this.findChangedColor(originalObject.id, sceneModifications.colorChangedObjects),
                     );
