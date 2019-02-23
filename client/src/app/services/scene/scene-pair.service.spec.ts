@@ -5,27 +5,27 @@ import { Message } from "../../../../../common/communication/message";
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonGeometricScene } from "../../../../../common/model/scene/scene";
 import { TestHelper } from "../../../test.helper";
-import { ScenePairService } from "./scene-pair.service";
+import { SceneService } from "./scene.service";
 
 // tslint:disable:no-magic-numbers
 // tslint:disable:no-any Used to mock the http call
 let httpClientSpyPost: any;
-let scenePairService: ScenePairService;
+let scenePairService: SceneService;
 let httpMock: HttpTestingController;
-let service: ScenePairService;
+let service: SceneService;
 
 describe("UserService", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
-            providers: [ScenePairService],
+            providers: [SceneService],
         });
 
         httpClientSpyPost = jasmine.createSpyObj("HttpClient", ["post"]);
-        scenePairService = new ScenePairService(httpClientSpyPost);
+        scenePairService = new SceneService(httpClientSpyPost);
         httpMock = TestBed.get(HttpTestingController);
-        service = TestBed.get(ScenePairService);
+        service = TestBed.get(SceneService);
     });
 
     it("should return expected message on addScenePair request (HttpClient called once)", () => {
@@ -34,7 +34,7 @@ describe("UserService", () => {
         const mockQty: number = 2;
         httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedResponse));
 
-        scenePairService.addScenePair(mockType, mockQty).subscribe(
+        scenePairService.createScene(mockType, mockQty).subscribe(
             (response: ICommonGeometricScene) => {
                 expect(response.id).to.equal("928374");
                 expect(response.bg_color).to.equal("red");
@@ -52,7 +52,7 @@ describe("UserService", () => {
 
         httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedResponse));
 
-        scenePairService.modifyScenePair(mockId, mockAdd, mockRemove, mockColor).subscribe(
+        scenePairService.createModifiedScene(mockId, mockAdd, mockRemove, mockColor).subscribe(
             (response: ICommonSceneModifications) => {
                 expect(response.id).to.equal("123098");
             },
@@ -62,7 +62,7 @@ describe("UserService", () => {
 
     it("should return an error if the scene is not added", () => {
         const expectedMessageError: Message = { title: "Error", body: "The scene was not added" };
-        service.addScenePair("Geometric", 50).subscribe((message: Message) => {
+        service.createScene("Geometric", 50).subscribe((message: Message) => {
             expect(message.title).to.equal(expectedMessageError.title);
             expect(message.body).to.equal(expectedMessageError.body);
         });
@@ -83,7 +83,7 @@ describe("UserService", () => {
 
     it("should return an error if the scene is not modified", () => {
         const expectedMessageError: Message = { title: "Error", body: "The scene was not modified" };
-        service.modifyScenePair("1", true, false, false).subscribe((message: Message) => {
+        service.createModifiedScene("1", true, false, false).subscribe((message: Message) => {
             expect(message.title).to.equal(expectedMessageError.title);
             expect(message.body).to.equal(expectedMessageError.body);
         });
