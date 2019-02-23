@@ -11,25 +11,24 @@
     <p>
       Image format : bitmap 24-bit (640x480)
     </p>
-    <form class="was-validated">
+    <form class="needs-validated" novalidate>
 
       Name of the game
       <div>
-        <input type="text" class="form-control is-invalid" id="gameNameInput" #gameNameInput (change)="verifyInfo()" placeholder="Name game"
-          required>
+        <input type="text" (blur)="nameInputVisited()" class="form-control" id="gameNameInput" #gameNameInput (change)="verifyInfo()" placeholder="Name game">
+        <p id="erreurMessage" *ngIf="!isNameValid()">The name has to be between 3 and 12 alphanumeric characters.</p>
       </div>
       <div class="form-group">
         <label for="sel1">Type of objects</label>
-        <select class="form-control" id="sel1" (change)="verifyInfo()">
+        <select class="form-control" id="sel1" #objectType (change)="verifyInfo()">
           <option>Geometric</option>
           <option>Thematic</option>
         </select>
       </div>
       Quantity of objects
       <div>
-        <input type="text" class="form-control is-invalid" id="quantityObject" #quantityObject (change)="verifyInfo()" placeholder="Min:10 Max:200"
-          required>
-          <p id="erreurMessage" #erreurMessage>The quantity must be a number between 10 and 200.</p>
+        <input type="text" (blur)="quantityInputVisited()" class="form-control" id="quantityObject" #quantityObject (change)="verifyInfo()" placeholder="Min:10 Max:200">
+          <p id="erreurMessage" *ngIf="!isQuantityValid()">The quantity must be a number between 10 and 200.</p>
       </div>
       <div id="modificationTypeBloc">
         Type of modifications
@@ -44,7 +43,7 @@
         </div>
       </div>
       
-      <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId">Submit</button>
+      <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addScenePair()">Submit</button>
       <button class="btn btn-danger" (click)="hideView()">Cancel</button>
     </form>
   </div>

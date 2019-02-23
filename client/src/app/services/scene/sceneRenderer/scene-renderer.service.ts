@@ -5,6 +5,14 @@ import * as THREE from "three";
     providedIn: "root",
 })
 export class SceneRendererService {
+
+    public generateRender(containerWidth: number, containerHeight: number): THREE.WebGLRenderer {
+        const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
+        renderer.setSize(containerWidth, containerHeight);
+
+        return renderer;
+    }
+
     public renderScene(scene: THREE.Scene, renderer: THREE.WebGLRenderer, camera: THREE.PerspectiveCamera): void {
         renderer.render(scene, camera);
     }

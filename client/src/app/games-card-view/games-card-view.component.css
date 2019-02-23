@@ -1,25 +1,25 @@
-.item1 { 
+.title { 
     grid-area: title; 
     color: white; 
     font-size: 30px;}
-.item2 {
+.original_image {
     grid-area: image; 
 }
-.item3 { 
+.solo_time { 
     grid-area: soloTime;
     color: white; 
     font-size: 15px; 
 }
-.item4 { 
+.online_time { 
     grid-area: onlineTime; 
     color: white;
     font-size: 15px; 
 }
-.item5 { 
+.button_left { 
     grid-area: buttonSolo;
     font-size: 25px; 
 }
-.item6 { 
+.button_right { 
     grid-area: buttonOnline;
     font-size: 25px; 
 }
@@ -48,4 +48,10 @@
     color: white;
     border-radius: 10px;
     border: #33343D;
+}
+
+#scene {
+    width: 160px;
+    height: 120px;
+    margin: auto;
 }

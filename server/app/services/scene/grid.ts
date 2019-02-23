@@ -45,7 +45,7 @@ export abstract class Grid {
         return this.positionsStack;
     }
 
-    private isInSafeZone(position: ICommon3DPosition): boolean {
+    public isInSafeZone(position: ICommon3DPosition): boolean {
         return this.distanceBetweenPosition(position, Grid.CENTER) < this.minDistancePos;
     }
 

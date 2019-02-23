@@ -5,4 +5,4 @@ export interface ICommonGeometricObject extends ICommonSceneObject {
     shapeType?: GeometricShapeType;
 }
 
-export enum GeometricShapeType { SPHERE, CUBE, CONE, CYLINDER, SQUARED_BASE_PYRAMID };
+export enum GeometricShapeType { SPHERE, CUBE, CONE, CYLINDER, TRIANGULAR_BASE_PYRAMID };

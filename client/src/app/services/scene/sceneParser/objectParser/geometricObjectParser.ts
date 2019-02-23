@@ -1,10 +1,13 @@
 import { NotFoundException } from "../../../../../../../common/errors/notFoundException";
-import { GeometricShapeType, ICommonGeometricObject } from "../../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { ConeFactory } from "../../geometricObjects.ts/coneFactory";
-import { CubeFactory } from "../../geometricObjects.ts/cubeFactory";
-import { CylinderFactory } from "../../geometricObjects.ts/cylinderFactory";
-import { PyramidFactory } from "../../geometricObjects.ts/pyramidFactory";
-import { SphereFactory } from "../../geometricObjects.ts/sphereFactory";
+import {
+    GeometricShapeType,
+    ICommonGeometricObject,
+    } from "../../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+import { ConeFactory } from "../geometricObjects/coneFactory";
+import { CubeFactory } from "../geometricObjects/cubeFactory";
+import { CylinderFactory } from "../geometricObjects/cylinderFactory";
+import { PyramidFactory } from "../geometricObjects/pyramidFactory";
+import { SphereFactory } from "../geometricObjects/sphereFactory";
 import { SceneObjectParser } from "../sceneObjectParser";
 
 export class GeometricObjectParser extends SceneObjectParser {
@@ -23,7 +26,7 @@ export class GeometricObjectParser extends SceneObjectParser {
             case GeometricShapeType.SPHERE:
                 return new SphereFactory().parse(object);
                 break;
-            case GeometricShapeType.SQUARED_BASE_PYRAMID:
+            case GeometricShapeType.TRIANGULAR_BASE_PYRAMID:
                 return new PyramidFactory().parse(object);
                 break;
             default:

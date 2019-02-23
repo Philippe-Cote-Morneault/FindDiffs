@@ -5,26 +5,31 @@
 
 <body>
   <div class="grid-container">
-    <div class="item1">{{gameCard.title}}</div>
-    <div class="item2">
-      <img src="{{imagePair.url_original}}" width="160" height="120" />
+    <div class="title">{{gameCard.title}}</div>
+    <div class="original_image" *ngIf="isSimplePov(); else sceneBlock">
+      <img #image width="160" height="120" />
     </div>
-    <div class="item3">
+    <ng-template #sceneBlock>
+      <div class="original_image">
+        <div #scene id="scene" width="160" height="120"></div>
+      </div>
+    </ng-template>
+    <div class="solo_time">
       <span> Best solo times: </span>
       <ol *ngFor='let soloTime of gameCard.best_time_solo; let i = index'>
         <span> {{i+1}}: </span> {{toMinutes(i, gameCard.best_time_solo)}}
       </ol>
     </div>
-    <div class="item4">
+    <div class="online_time">
       <span> Best 1 vs. 1 times: </span>
       <ol *ngFor='let onlineTime of gameCard.best_time_online;let i = index'>
         <span> {{i+1}}: </span> {{toMinutes(i, gameCard.best_time_online)}}
       </ol>
     </div>
-    <div class="item5">
+    <div class="button_left">
       <button class="button" (click)="onLeftButtonClick()">{{leftButton}}</button>
     </div>
-    <div class="item6">
+    <div class="button_right">
       <button class="button" (click)="onRightButtonClick()">{{rightButton}}</button>
     </div>
   </div>

@@ -277,10 +277,12 @@ version: 1
     body:
       multipart/form-data:
         properties: 
-          object_type:
-            type: string
-            enum: [Theme, Geometric]
+          name: string
+          object_type: string
           object_qty: number
+          add: boolean
+          remove: boolean
+          modified: boolean
     responses: 
       200:
         body:

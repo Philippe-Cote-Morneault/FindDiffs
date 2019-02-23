@@ -15,6 +15,11 @@ export class SceneObjectColorChanger implements SceneTransformation {
         const modifiedObject: ICommonGeometricObject = objectsToTransform[indexOfObject];
 
         modifications.colorChangedObjects.set(modifiedObject.id, ColorUtils.numberOfHexColors - modifiedObject.color);
+        modifications.colorChangedObjects.push({
+            key: modifiedObject.id,
+            value: ColorUtils.generateRandomColor(),
+        });
+
         objectsToTransform.splice(indexOfObject, 1);
     }
 

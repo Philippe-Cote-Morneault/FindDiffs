@@ -42,10 +42,12 @@
   },
   "dependencies": {
     "@meanie/mongoose-to-json": "^2.3.0",
+    "@types/aws-sdk": "^2.7.0",
     "@types/mongodb": "^3.1.19",
     "@types/mongoose": "^5.3.10",
     "@types/sprintf-js": "^1.1.1",
     "@types/uuid": "^3.4.4",
+    "aws-sdk": "^2.403.0",
     "axios": "^0.18.0",
     "bitmap-ts": "^1.0.3",
     "body-parser": "^1.18.3",
