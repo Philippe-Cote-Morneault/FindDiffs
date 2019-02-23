@@ -3,14 +3,16 @@ import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
 import { Message } from "../../../../../common/communication/message";
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonGeometricScene } from "../../../../../common/model/scene/scene";
+import { ICommonGeometricScene, ICommonScene } from "../../../../../common/model/scene/scene";
 import { TestHelper } from "../../../test.helper";
 import { SceneService } from "./scene.service";
 
 // tslint:disable:no-magic-numbers
 // tslint:disable:no-any Used to mock the http call
 let httpClientSpyPost: any;
-let scenePairService: SceneService;
+let httpClientSpyGet: any;
+let sceneServicePost: SceneService;
+let sceneServiceGet: SceneService;
 let httpMock: HttpTestingController;
 let service: SceneService;
 
@@ -23,7 +25,9 @@ describe("UserService", () => {
         });
 
         httpClientSpyPost = jasmine.createSpyObj("HttpClient", ["post"]);
-        scenePairService = new SceneService(httpClientSpyPost);
+        httpClientSpyGet = jasmine.createSpyObj("HttpClient", ["get"]);
+        sceneServicePost = new SceneService(httpClientSpyPost);
+        sceneServiceGet = new SceneService(httpClientSpyGet);
         httpMock = TestBed.get(HttpTestingController);
         service = TestBed.get(SceneService);
     });
@@ -34,7 +38,7 @@ describe("UserService", () => {
         const mockQty: number = 2;
         httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedResponse));
 
-        scenePairService.createScene(mockType, mockQty).subscribe(
+        sceneServicePost.createScene(mockType, mockQty).subscribe(
             (response: ICommonGeometricScene) => {
                 expect(response.id).to.equal("928374");
                 expect(response.bg_color).to.equal("red");
@@ -52,7 +56,7 @@ describe("UserService", () => {
 
         httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedResponse));
 
-        scenePairService.createModifiedScene(mockId, mockAdd, mockRemove, mockColor).subscribe(
+        sceneServicePost.createModifiedScene(mockId, mockAdd, mockRemove, mockColor).subscribe(
             (response: ICommonSceneModifications) => {
                 expect(response.id).to.equal("123098");
             },
@@ -100,5 +104,30 @@ describe("UserService", () => {
             mockHttpError,
         );
         httpMock.verify();
+    });
+    it("should return expected message on getSceneById request (HttpClient called once)", () => {
+        const expectedResponse: Object = {"bg_color": "red", "dimensions": 2, "id": "928374" , "sceneObject": "scene", "texture": "none"};
+
+        httpClientSpyPost.get.and.returnValue(TestHelper.asyncData(expectedResponse));
+
+        sceneServiceGet.getSceneById("1234232").subscribe(
+            (response: ICommonScene) => {
+                expect(response.id).to.equal("928374");
+            },
+            fail,
+        );
+    });
+    it("should return expected message on getModifiedSceneById request (HttpClient called once)", () => {
+        const expectedResponse: Object = {"addedObjects": ["132342"], "colorChangedObjects": [{key: "3243", value: 3232323}],
+                                          "deletedObjects": ["323232"] , "id": "123098"};
+
+        httpClientSpyPost.get.and.returnValue(TestHelper.asyncData(expectedResponse));
+
+        sceneServiceGet.getModifiedSceneById("1234232").subscribe(
+            (response: ICommonSceneModifications) => {
+                expect(response.id).to.equal("123098");
+            },
+            fail,
+        );
     });
 });
