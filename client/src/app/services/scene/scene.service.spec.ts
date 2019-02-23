@@ -130,4 +130,44 @@ describe("UserService", () => {
             fail,
         );
     });
+    it("should return an error if the scene is not found", () => {
+        const expectedMessageError: Message = { title: "Error", body: "The scene was not found" };
+        service.getSceneById("12345").subscribe((message: Message) => {
+            expect(message.title).to.equal(expectedMessageError.title);
+            expect(message.body).to.equal(expectedMessageError.body);
+        });
+
+        const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/scene/12345");
+        const mockHttpError: Object = {status: 404, statusText: "Bad Request"} ;
+        expect(testRequest.request.method).to.equal("GET");
+
+        testRequest.flush(
+            {
+                "title": "Error",
+                "body": "The scene was not found",
+            },
+            mockHttpError,
+        );
+        httpMock.verify();
+    });
+    it("should return an error if the modified scene is not found", () => {
+        const expectedMessageError: Message = { title: "Error", body: "The scene was not found" };
+        service.getModifiedSceneById("12345").subscribe((message: Message) => {
+            expect(message.title).to.equal(expectedMessageError.title);
+            expect(message.body).to.equal(expectedMessageError.body);
+        });
+
+        const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/scene/12345/modified");
+        const mockHttpError: Object = {status: 404, statusText: "Bad Request"} ;
+        expect(testRequest.request.method).to.equal("GET");
+
+        testRequest.flush(
+            {
+                "title": "Error",
+                "body": "The scene was not found",
+            },
+            mockHttpError,
+        );
+        httpMock.verify();
+    });
 });
