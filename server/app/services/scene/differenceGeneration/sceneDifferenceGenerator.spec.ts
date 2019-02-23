@@ -25,6 +25,7 @@ describe("GeometricObjectGenerator", () => {
 
             expect(differenceObj.addedObjects.length + sceneObj.sceneObjects.length).to.be.gte(sceneObj.sceneObjects.length);
         });
+
         it("Should return an array of objects which is lower than the original", () => {
             const SCENE_SIZE: number = 1000;
             const DEPTH: number = 50;
@@ -40,6 +41,7 @@ describe("GeometricObjectGenerator", () => {
 
             expect(sceneObj.sceneObjects.length - differenceObj.deletedObjects.length).to.be.lte(sceneObj.sceneObjects.length);
         });
+
         it("Should return an array of objects with different colors than the original", () => {
             const SCENE_SIZE: number = 1000;
             const DEPTH: number = 50;
@@ -72,6 +74,7 @@ describe("GeometricObjectGenerator", () => {
 
             expect(counterDifferences).to.equal(objectIdModifiedColors.length);
         });
+
         it("Should throw an execption because changing the texture was not implemented", () => {
             expect(NotImplementedException);
         });
