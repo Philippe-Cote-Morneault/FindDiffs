@@ -62,6 +62,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
     }
 
     private findChangedColor(key: string, colorChangedObjects: Pair<string, number>[]): number | undefined {
+        //TODO: LINT
         for (let i = 0; i < colorChangedObjects.length; ++i) {
             if (colorChangedObjects[i].key === key) {
                 return colorChangedObjects[i].value;
