@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { ICommonGeometricScene, ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
+import { ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
 import { DefaultGrid } from "../grid";
 import { SceneGenerator } from "../sceneGenerator";
 import { SceneDifferenceGenerator } from "./sceneDifferenceGenerator";
@@ -69,7 +69,7 @@ describe("GeometricObjectGenerator", () => {
 
             expect(counterDifferences).to.equal(objectIdModifiedColors.size);
         });
-        xit("Should not test the texture changer because it was not asked for now", () => {
+        it("Should not test the texture changer because it was not asked for now", () => {
             const SCENE_SIZE: number = 1000;
             const DEPTH: number = 50;
             const SCENE_OBJECT_MARGIN: number = 20;
