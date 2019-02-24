@@ -16,13 +16,13 @@
     <div class="solo_time">
       <span> Best solo times: </span>
       <ol *ngFor='let soloTime of gameCard.best_time_solo; let i = index'>
-        <span> {{i+1}}: </span> {{toMinutes(i, gameCard.best_time_solo)}}
+        <span> {{gameCard.best_time_solo[i].name}}: </span> {{toMinutes(i, gameCard.best_time_solo)}}
       </ol>
     </div>
     <div class="online_time">
       <span> Best 1 vs. 1 times: </span>
       <ol *ngFor='let onlineTime of gameCard.best_time_online;let i = index'>
-        <span> {{i+1}}: </span> {{toMinutes(i, gameCard.best_time_online)}}
+        <span>{{gameCard.best_time_online[i].name}}: {{toMinutes(i, gameCard.best_time_online)}}</span>
       </ol>
     </div>
     <div class="button_left">
