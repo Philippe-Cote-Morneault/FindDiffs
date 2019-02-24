@@ -11,7 +11,7 @@ export interface ICommonScene {
 }
 
 export interface ICommonGeometricScene extends ICommonScene {
-    bg_color: string;
+    bg_color: number;
 }
 
 export interface ICommonThematicScene extends ICommonScene {

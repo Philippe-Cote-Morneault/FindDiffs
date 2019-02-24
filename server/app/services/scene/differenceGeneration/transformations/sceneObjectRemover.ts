@@ -1,6 +1,6 @@
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
+import { SceneTransformation } from "../../../../../../common/model/scene/modifications/sceneTransformation";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
-import { SceneTransformation } from "./sceneTransformation";
 
 /**
  * In charge of removing a random object from a scene

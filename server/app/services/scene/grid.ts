@@ -7,13 +7,15 @@ export abstract class Grid {
 
     protected width: number;
     protected height: number;
+    protected depth: number;
     protected minDistancePos: number;
     protected positions: ICommon3DPosition[];
     protected positionsStack: ICommon3DPosition[];
 
-    public constructor(width: number, height: number, minDistancePos: number) {
+    public constructor(width: number, height: number, depth: number, minDistancePos: number) {
         this.width = width;
         this.height = height;
+        this.depth = depth;
         this.minDistancePos = minDistancePos;
         this.positions = new Array<ICommon3DPosition>();
 
@@ -49,7 +51,11 @@ export abstract class Grid {
 
     protected distanceBetweenPosition(position1: ICommon3DPosition, position2: ICommon3DPosition): number {
         // tslint:disable-next-line:no-magic-numbers
-        return Math.sqrt(Math.pow(position1.x - position2.x, 2) + Math.pow(position1.y - position2.y, 2));
+        return Math.sqrt(Math.pow(position1.x - position2.x, 2) +
+                         // tslint:disable-next-line:no-magic-numbers
+                         Math.pow(position1.y - position2.y, 2) +
+                         // tslint:disable-next-line:no-magic-numbers
+                         Math.pow(position1.z - position2.z, 2));
     }
 
     protected abstract generateGrid(): void;
@@ -64,15 +70,20 @@ export class DefaultGrid extends Grid {
         // tslint:disable-next-line:no-magic-numbers
         const minY: number = (this.height / 2) * -1;
         const maxY: number = minY * -1;
+        // tslint:disable-next-line:no-magic-numbers
+        const minZ: number = (this.depth / 2) * -1;
+        const maxZ: number = minZ * -1;
 
         for (let x: number = minX; x < maxX; x += this.minDistancePos) {
             for (let y: number = minY; y < maxY; y += this.minDistancePos) {
-                const position: ICommon3DPosition = {
-                    x: x,
-                    y: y,
-                    z: 0,
-                };
-                this.positions.push(position);
+                for (let z: number = minZ; z < maxZ; z += this.minDistancePos) {
+                    const position: ICommon3DPosition = {
+                        x: x,
+                        y: y,
+                        z: z,
+                    };
+                    this.positions.push(position);
+                }
             }
         }
     }
