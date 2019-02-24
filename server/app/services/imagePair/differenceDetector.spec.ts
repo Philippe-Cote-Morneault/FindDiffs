@@ -1,8 +1,8 @@
 import {expect} from "chai";
 import * as fs from "fs";
 import { Bitmap } from "../../model/bitmap/bitmap";
-import { Position } from "../../model/bitmap/pixel";
-import { DIFF_COUNT_PIXELS_INDEX } from "../../tests/testData";
+/* import { Position } from "../../model/bitmap/pixel";
+import { DIFF_COUNT_PIXELS_INDEX } from "../../tests/testData";*/
 import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
 import { DifferenceDetector } from "./differenceDetector";
 
@@ -49,7 +49,7 @@ describe("DiffenceDetector", () => {
             });
         });
     });
-
+    /*
     describe("getPixelIndexes()", () => {
         it("Should return expected values for the blacked pixels", () => {
             const BITMAP_CHOICE: number = 1;
@@ -63,5 +63,5 @@ describe("DiffenceDetector", () => {
                 );
             expect(numbers).to.eql(DIFF_COUNT_PIXELS_INDEX);
         });
-    });
+    });*/
 });
