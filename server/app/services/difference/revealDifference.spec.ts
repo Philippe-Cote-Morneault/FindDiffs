@@ -33,7 +33,7 @@ describe("RevealDifference", () => {
                 difference_id: 1,
             };
 
-            const revealDifference: RevealDifference = new RevealDifference([1], posClicked);
+            const revealDifference: RevealDifference = new RevealDifference([1, 0], posClicked);
             expect(revealDifference.reveal()).to.eql(reveal);
         });
     });

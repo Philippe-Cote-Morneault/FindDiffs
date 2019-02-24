@@ -262,6 +262,11 @@ describe("ImagePairService", () => {
             fake_id: "id_modified",
             field: "file_modified_id",
         },
+        {
+            name: "getDifferenceJSON",
+            fake_id: "id_file_json",
+            field: "file_difference_json_id",
+        },
     ];
     const queryResponse: Object[]  = new Array();
     methodsToTest.forEach((file: FilesFetchMock) => {
@@ -276,8 +281,11 @@ describe("ImagePairService", () => {
                     new MongooseMock.Schema(queryResponse, false), true));
                 const buffer: ArrayBuffer = Buffer.alloc(1).buffer;
                 (Storage.openBuffer as sinon.SinonStub).resolves(buffer);
-
-                expect(await imagePairService[method.name]("id")).to.equal(buffer);
+                if (method.name !== "getDifferenceJSON") {
+                    expect(await imagePairService[method.name]("id")).to.equal(buffer);
+                } else {
+                    expect(await imagePairService[method.name]("id")).to.equal("\u0000");
+                }
             });
 
             it("Should throw an error if the id is not valid", async () => {

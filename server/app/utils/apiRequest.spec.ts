@@ -62,6 +62,26 @@ describe("ApiRequest", () => {
             }
         });
     });
+
+    describe("getImagePairDiffJSONId()", () => {
+        it("Should return number[] if the id is valid", async () => {
+            const array: number[] = [0, 1];
+            (Axios.get as sinon.SinonStub).resolves({data: array});
+
+            const response: number[] = await ApiRequest.getImagePairDiffJSONId("a valid id");
+            expect(response).to.eql(array);
+        });
+        it("Should return an error if the image pair id is invalid", async () => {
+            (Axios.get as sinon.SinonStub).rejects();
+            try {
+                await ApiRequest.getImagePairDiffJSONId("an invalid id");
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);
+            }
+        });
+    });
+
     describe("getSceneId()", () => {
         it("Should return a scene if the id is valid", async() => {
             const scene: ICommonScene = {
