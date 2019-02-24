@@ -6,8 +6,8 @@ import { _e, R } from "../strings";
 import { ApiRequest } from "./apiRequest";
 
 export class Validation {
-
     private static readonly CHECK_NAME_REGEX: string = "^[a-zA-Z0-9]{3,12}$";
+
     public static isValidName(name: string): boolean {
         const checkNameRegex: RegExp = new RegExp(Validation.CHECK_NAME_REGEX);
 
