@@ -114,7 +114,7 @@ export class ImagePairService extends Service implements IImagePairService {
             file_difference_json_id: await difference.saveJson(),
             name: req.body.name,
             creation_date: new Date(),
-            differences_count: await difference.differenceCount,
+            differences_count: difference.differenceCount,
         });
         await imagePair.save();
 
