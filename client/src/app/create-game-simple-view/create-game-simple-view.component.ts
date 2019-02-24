@@ -55,7 +55,7 @@ export class CreateGameSimpleViewComponent {
     }
 
     public isOriginalFileValid(): boolean {
-        const ORIGINAL_FIELD: number = 4;
+        const ORIGINAL_FIELD: number = 3;
         if (this.firstOriginalImageInput) {
             return this.fromValidation[ORIGINAL_FIELD];
         }
