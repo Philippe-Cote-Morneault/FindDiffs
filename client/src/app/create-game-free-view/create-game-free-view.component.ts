@@ -47,7 +47,7 @@ export class CreateGameFreeViewComponent {
             return nameValidationRegex.test(gameName);
         }
 
-        return false;
+        return true;
     }
 
     public nameInputVisited(): void {
@@ -72,7 +72,7 @@ export class CreateGameFreeViewComponent {
             return !isNaN(quantity) && quantity > CreateGameFreeViewComponent.MIN_QTE && quantity < CreateGameFreeViewComponent.MAX_QTE;
         }
 
-        return false;
+        return true;
     }
 
     public verifyInfo(): void {
