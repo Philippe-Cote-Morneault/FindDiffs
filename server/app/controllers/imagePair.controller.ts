@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import { ImagePairService } from "../services/imagePair/imagePair.service";
 import TYPES from "../types";
-import { uploads } from "../utils/storage";
+import { uploads } from "../utils/storage/storage";
 import { Controller } from "./controller";
 import { IImagePairController } from "./interfaces";
 

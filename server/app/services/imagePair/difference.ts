@@ -1,5 +1,5 @@
 import { Bitmap } from "../../model/bitmap/bitmap";
-import { Storage } from "../../utils/storage";
+import { Storage } from "../../utils/storage/storage";
 import { BitmapEncoder } from "./bitmapEncoder";
 import { DifferenceDetector } from "./differenceDetector";
 import { DifferenceImageGenerator } from "./differenceImageGenerator";

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import * as fs from "fs";
 import * as sinon from "sinon";
 import { Bitmap } from "../../model/bitmap/bitmap";
-import { Storage } from "../../utils/storage";
+import { Storage } from "../../utils/storage/storage";
 import { BitmapDecoder } from "./bitmapDecoder";
 import { BitmapEncoder } from "./bitmapEncoder";
 import { Difference } from "./difference";
