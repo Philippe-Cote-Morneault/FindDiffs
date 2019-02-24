@@ -17,9 +17,9 @@ export class RandomGrid extends Grid {
         while (!isPositionValid) {
             isPositionValid = true;
 
-            const x: number = this.generateCoordinates(this.width);
-            const y: number = this.generateCoordinates(this.height);
-            const z: number = this.generateCoordinates(this.depth);
+            const x: number = this.generateCoordinates(this.dimensions.x);
+            const y: number = this.generateCoordinates(this.dimensions.y);
+            const z: number = this.generateCoordinates(this.dimensions.z);
             newPosition = {x: x, y: y, z: z};
 
             for (const position of this.positions) {
