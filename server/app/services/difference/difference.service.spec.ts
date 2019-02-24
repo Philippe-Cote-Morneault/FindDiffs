@@ -5,7 +5,7 @@ import { ICommonReveal } from "../../../../common/model/reveal";
 import { R } from "../../strings";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { ApiRequest } from "../../utils/apiRequest";
-import { BitmapDecoder } from "../imagePair/bitmapDecoder";
+import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
 import { DifferenceService } from "./difference.service";
 import { RevealDifference } from "./revealDifference";
 
