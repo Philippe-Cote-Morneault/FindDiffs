@@ -12,7 +12,7 @@ export class RandomGrid extends Grid {
 
     private generatePosition(): ICommon3DPosition {
         let isPositionValid: boolean = false;
-        let newPosition: ICommon3DPosition = {x: 0, y: 0, z: 0};
+        let newPosition: ICommon3DPosition = Grid.CENTER;
 
         while (!isPositionValid) {
             isPositionValid = true;
