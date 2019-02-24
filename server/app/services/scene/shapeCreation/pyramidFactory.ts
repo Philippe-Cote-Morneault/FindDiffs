@@ -5,6 +5,7 @@ import { GeometricObjectFactory } from "./geometricObjectFactory";
 export class PyramidFactory extends GeometricObjectFactory {
     private static readonly REFERENCE_RADIUS: number = 2;
     private static readonly REFERENCE_HEIGHT: number = 3;
+
     protected createShape(geometricObject: ICommonGeometricObject): ICommonPyramid {
         const scalePercentage: number = this.generateRandomPercentage();
 

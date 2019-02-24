@@ -3,11 +3,13 @@ import { ICommonSceneModifications } from "../../../../../common/model/scene/mod
 import { SceneTransformation } from "../../../../../common/model/scene/modifications/sceneTransformation";
 import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
+import { RandomUtils } from "../../../utils/randomUtils";
 import { Grid } from "../grid";
 import { SceneObjectAdder } from "./transformations/sceneObjectAdder";
 import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChanger";
 import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
 import { SceneObjectTextureChanger } from "./transformations/sceneObjectTextureChanger";
+
 export class SceneDifferenceGenerator {
     private static readonly NUMBER_OF_DIFFERENCES: number = 7;
 
@@ -53,7 +55,8 @@ export class SceneDifferenceGenerator {
         }
         if (requiresColorChange) {
             this.transformationsToApply.push(
-                this.scene.type === ObjectType.Geometric ? new SceneObjectColorChanger() : new SceneObjectTextureChanger(),
+                this.scene.type === ObjectType.Geometric ?
+                new SceneObjectColorChanger() : new SceneObjectTextureChanger(),
             );
         }
     }
@@ -73,7 +76,7 @@ export class SceneDifferenceGenerator {
     }
 
     private chooseRandomModification(): SceneTransformation {
-        const indexOfTransformation: number = Math.floor(Math.random() * this.transformationsToApply.length);
+        const indexOfTransformation: number = RandomUtils.random(this.transformationsToApply.length);
 
         return this.transformationsToApply[indexOfTransformation];
     }

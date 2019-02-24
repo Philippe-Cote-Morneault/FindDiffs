@@ -1,4 +1,4 @@
-import { Component,  ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
@@ -16,9 +16,6 @@ export class CreateGameSimpleViewComponent {
     @Output() public closed: EventEmitter<boolean> = new EventEmitter();
     @ViewChild("gameNameInput") private gameNameInput: ElementRef;
 
-    private gamesCardService: GamesCardService;
-    private imagePairService: ImagePairService;
-
     public canSubmit: boolean;
     public fromValidation: boolean[];
 
@@ -26,10 +23,8 @@ export class CreateGameSimpleViewComponent {
     private modifiedImageFile: File;
     private gameName: string;
 
-    public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService,
+    public constructor(private gamesCardService: GamesCardService, private imagePairService: ImagePairService,
                        private spinnerService: Ng4LoadingSpinnerService) {
-        this.gamesCardService = gamesCardService;
-        this.imagePairService = imagePairService;
         this.canSubmit = false;
         this.fromValidation = [false, false, false];
     }

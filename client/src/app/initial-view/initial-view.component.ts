@@ -13,6 +13,7 @@ export class InitialViewComponent implements OnInit {
     private static enterKeyCode: number = 13;
 
     @ViewChild("usernameInput") private usernameInput: ElementRef;
+
     public constructor(public userService: UserService, private router: Router) {
     }
 

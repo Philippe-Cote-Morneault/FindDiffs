@@ -7,10 +7,11 @@ import { RandomGrid } from "./randomGrid";
 import { GeometricObjectGenerator } from "./shapeCreation/geometricObjectGenerator";
 
 export class SceneGenerator {
-    private objectQty: number;
     private readonly SCENE_SIZE: number =  250;
     private readonly SCENE_DEPTH: number = 50;
     private readonly SCENE_OBJECT_MARGIN: number = 9;
+
+    private objectQty: number;
     private scene: ICommonGeometricScene;
     private grid: Grid | undefined;
 
