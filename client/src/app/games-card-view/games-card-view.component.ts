@@ -12,6 +12,7 @@ import { StringFormater } from "../util/stringFormater";
 
 @Component({
     selector: "app-games-card-view",
+    providers: [SceneLoaderService],
     templateUrl: "./games-card-view.component.html",
     styleUrls: ["./games-card-view.component.css"],
 })
@@ -101,7 +102,7 @@ export class GamesCardViewComponent implements OnInit {
     private getScenePairById(): void {
         this.sceneService.getSceneById(this.gameCard.resource_id).subscribe((scenePair: ICommonScene) => {
             this.scenePair = scenePair;
-            this.sceneLoaderService.loadOriginalScene(this.scene.nativeElement, this.scenePair);
+            this.sceneLoaderService.loadOriginalScene(this.scene.nativeElement, this.scenePair, false);
         });
     }
 }

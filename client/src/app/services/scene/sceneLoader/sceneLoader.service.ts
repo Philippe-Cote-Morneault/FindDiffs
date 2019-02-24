@@ -8,48 +8,56 @@ import { ICommonScene } from "../../../../../../common/model/scene/scene";
 import { ModifiedSceneParserService } from "../../../services/scene/sceneParser/modified-scene-parser.service";
 import { SceneParserService } from "../../../services/scene/sceneParser/scene-parser.service";
 import { CameraGenerator } from "../../../services/scene/sceneRenderer/cameraGenerator";
-import { SceneRendererService } from "../../../services/scene/sceneRenderer/scene-renderer.service";
+import { ControlsGenerator } from "../sceneRenderer/controlsGenerator";
+import { RendererGenerator } from "../sceneRenderer/rendererGenerator";
 
 @Injectable({
     providedIn: "root",
 })
 
 export class SceneLoaderService {
-    // tslint:disable:no-any
-    public loadOriginalScene(container: HTMLElement | null, scene: ICommonScene): void {
-        const parsedScene: THREE.Scene = new SceneParserService().parseScene(scene);
+    private camera: THREE.PerspectiveCamera;
+    private renderer: THREE.WebGLRenderer;
+    private controls: THREE.OrbitControls;
+    private scene: THREE.Scene;
 
-        this.renderScene(container, parsedScene);
+    public loadOriginalScene(container: HTMLElement | null, scene: ICommonScene, inGameMode: boolean): void {
+        this.scene = new SceneParserService().parseScene(scene);
+
+        this.renderScene(container, inGameMode);
     }
 
     public loadModifiedScene(container: HTMLElement | null, scene: ICommonScene, sceneModifications: ICommonSceneModifications): void {
-        const parsedModifiedScene: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, sceneModifications);
+        this.scene = new ModifiedSceneParserService().parseModifiedScene(scene, sceneModifications);
 
-        this.renderScene(container, parsedModifiedScene);
+        this.renderScene(container, true);
     }
 
-    private renderScene(container: HTMLElement | null, scene: THREE.Scene): void {
-        if (container !== null) {
-            const sceneRendererService: SceneRendererService = new SceneRendererService();
-            const renderer: THREE.WebGLRenderer = sceneRendererService.generateRenderer(container.clientWidth,
-                                                                                        container.clientHeight);
+    private renderScene(container: HTMLElement | null, inGameMode: boolean): void {
+        if (container) {
+            this.renderer = RendererGenerator.generateRenderer(container.clientWidth,
+                                                               container.clientHeight);
 
-            container.appendChild(renderer.domElement);
+            container.appendChild(this.renderer.domElement);
 
-            const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
-            const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableKeys = false;
+            this.camera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
 
-            const animate: any = (): void => {
-                requestAnimationFrame(animate);
-                sceneRendererService.renderScene(scene, renderer, camera);
-                controls.update();
-            };
+            this.generateControls(inGameMode, this.camera, this.renderer.domElement);
 
-            // tslint:disable-next-line:no-magic-numbers
-            controls.target.set(0, 10, 0);
-
-            animate();
+            this.animate();
         }
     }
+
+    private animate: Function = () => {
+        requestAnimationFrame(this.animate as FrameRequestCallback);
+        this.renderer.render(this.scene, this.camera);
+        this.controls.update();
+    }
+
+    private generateControls(inGameMode: boolean, camera: THREE.PerspectiveCamera, canvas: HTMLCanvasElement): void {
+        this.controls = inGameMode ?
+            ControlsGenerator.generateGameControls(camera, canvas) :
+            ControlsGenerator.generateGameCardControls(camera, canvas);
+    }
+
 }

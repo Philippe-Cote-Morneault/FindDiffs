@@ -13,12 +13,16 @@ import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.se
 export class GameViewFreeComponent implements OnInit {
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
+
     private scenePairID: string;
+    private originalSceneLoader: SceneLoaderService;
+    private modifiedSceneLoader: SceneLoaderService;
 
     public constructor(
         private route: ActivatedRoute,
-        public sceneService: SceneService,
-        public sceneLoaderService: SceneLoaderService) {
+        public sceneService: SceneService) {
+            this.originalSceneLoader = new SceneLoaderService();
+            this.modifiedSceneLoader = new SceneLoaderService();
     }
 
     public ngOnInit(): void {
@@ -31,14 +35,14 @@ export class GameViewFreeComponent implements OnInit {
 
     private getOriginalSceneById(): void {
         this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
-            this.sceneLoaderService.loadOriginalScene(this.originalScene.nativeElement, response);
+            this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
             this.getModifiedSceneById(response);
         });
     }
 
     private getModifiedSceneById(response: ICommonScene): void {
         this.sceneService.getModifiedSceneById(this.scenePairID).subscribe((responseModified: ICommonSceneModifications) => {
-            this.sceneLoaderService.loadModifiedScene(this.modifiedScene.nativeElement, response, responseModified);
+            this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, responseModified);
         });
     }
 }
