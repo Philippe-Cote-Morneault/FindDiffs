@@ -30,7 +30,7 @@ describe("Difference", () => {
             const bitmap: Bitmap = Bitmap.prototype;
             const difference: Difference = new Difference(bitmap, bitmap);
 
-            expect(await difference.saveStorage()).to.equal(responseId);
+            expect(await difference.saveImg()).to.equal(responseId);
         });
     });
     describe("countDifferences()", () => {
@@ -43,9 +43,10 @@ describe("Difference", () => {
 
         it("Should return the number of differences", () => {
             const difference: Difference = new Difference(bitmap, bitmap);
-            difference.difference = bitmap;
+            difference["differenceImg"] = bitmap;
+            difference.compute();
 
-            expect(difference.countDifferences()).to.equal(0);
+            expect(difference.differenceCount).to.equal(0);
         });
     });
 });
