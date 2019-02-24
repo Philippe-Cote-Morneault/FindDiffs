@@ -13,7 +13,7 @@
       Name of the game
       <div>
         <input type="text" (blur)="nameInputVisited()" class="form-control" id="gameNameInput" #gameNameInput (change)="verifyInfo()" placeholder="Name game">
-        <p id="erreurMessage" *ngIf="!isNameValid()">The name has to be between 3 and 12 alphanumeric characters.</p>
+        <p id="errorMessage" *ngIf="!isNameValid()">The name has to be between 3 and 12 alphanumeric characters.</p>
       </div>
       <div class="form-group">
         <label for="sel1">Type of objects</label>
