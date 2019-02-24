@@ -7,10 +7,13 @@ import { Router } from "@angular/router";
     styleUrls: ["./admin-view.component.css"],
 })
 export class AdminViewComponent {
-    public isCreatingGameSimpleMode: boolean = false;
-    public isCreatingGameFreeMode: boolean = false;
+    public isCreatingGameSimpleMode: boolean;
+    public isCreatingGameFreeMode: boolean;
 
-    public constructor(private router: Router) {}
+    public constructor(private router: Router) {
+        this.isCreatingGameSimpleMode = false;
+        this.isCreatingGameFreeMode = false;
+    }
 
     public onClosed(closed: boolean): void {
         if (closed) {
