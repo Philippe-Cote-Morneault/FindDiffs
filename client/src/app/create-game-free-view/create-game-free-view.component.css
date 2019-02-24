@@ -7,8 +7,8 @@ body{
     color: white;
   }
   .global-wrapper{
+    width: 500px;
     height: 50%;
-    width: 100%;
     background-color: #33343D;
     border: 2px black solid;
   }
