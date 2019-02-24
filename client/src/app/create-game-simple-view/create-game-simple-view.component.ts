@@ -22,20 +22,34 @@ export class CreateGameSimpleViewComponent {
     private originalImageFile: File;
     private modifiedImageFile: File;
     private gameName: string;
+    public firstNameInput: boolean;
 
     public constructor(private gamesCardService: GamesCardService, private imagePairService: ImagePairService,
                        private spinnerService: Ng4LoadingSpinnerService) {
         this.canSubmit = false;
         this.fromValidation = [false, false, false];
         this.closed = new EventEmitter();
+        this.firstNameInput = false;
     }
 
-    public verifyName(): void {
-        const MIN_LENGTH: number = 2;
-        const MAX_LENGTH: number = 13;
-        const gameName: string = this.gameNameInput.nativeElement.value;
-        this.fromValidation[0] = gameName.length > MIN_LENGTH && gameName.length < MAX_LENGTH;
-        this.gameName = gameName;
+    public isNameValid(): boolean {
+
+        if (this.firstNameInput) {
+            const gameName: string = this.gameNameInput.nativeElement.value;
+
+            const validationRegex: string = "^[a-zA-Z0-9]{3,12}$";
+            const nameValidationRegex: RegExp = new RegExp(validationRegex);
+            this.fromValidation[0] = nameValidationRegex.test(gameName);
+            this.gameName = gameName;
+
+            return this.fromValidation[0];
+        }
+
+        return true;
+    }
+
+    public nameInputVisited(): void {
+        this.firstNameInput = true;
     }
 
     public fileEvent(event: HTMLInputEvent, fileId: number): void {

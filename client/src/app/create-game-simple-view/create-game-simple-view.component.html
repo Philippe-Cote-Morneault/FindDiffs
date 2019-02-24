@@ -15,8 +15,9 @@
 
       Name of the game
       <div>
-        <input type="text" class="form-control is-invalid" id="gameNameInput" #gameNameInput (change)="verifyName()" placeholder="Name game"
+        <input type="text" (blur)="nameInputVisited()" class="form-control is-invalid" id="gameNameInput" #gameNameInput (change)="isNameValid()" placeholder="Name game"
           required>
+          <p id="errorMessage" *ngIf="!isNameValid()">The name has to be between 3 and 12 alphanumeric characters.</p>
       </div>
 
       Original image :

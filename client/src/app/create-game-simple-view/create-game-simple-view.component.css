@@ -54,3 +54,9 @@
     margin-right: auto;
     margin-bottom: 2%;
   }
+  #errorMessage{
+    display:inline;
+    margin-left: auto;
+    color: red;
+    font-size: 0.8em;
+  }
