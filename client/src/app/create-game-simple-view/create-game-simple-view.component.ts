@@ -13,14 +13,14 @@ import { ImagePairService } from "../services/image-pair/image-pair.service";
     styleUrls: ["./create-game-simple-view.component.css"],
 })
 export class CreateGameSimpleViewComponent {
-    @Output() public closed: EventEmitter<boolean> = new EventEmitter();
+    @Output() public closed: EventEmitter<boolean>;
     @ViewChild("gameNameInput") private gameNameInput: ElementRef;
 
     private gamesCardService: GamesCardService;
     private imagePairService: ImagePairService;
 
-    public canSubmit: boolean = false;
-    public fromValidation: boolean[] = [false, false, false];
+    public canSubmit: boolean;
+    public fromValidation: boolean[];
 
     private originalImageFile: File;
     private modifiedImageFile: File;
@@ -28,8 +28,11 @@ export class CreateGameSimpleViewComponent {
 
     public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService,
                        private spinnerService: Ng4LoadingSpinnerService) {
+        this.closed = new EventEmitter();
+        this.canSubmit = false;
         this.gamesCardService = gamesCardService;
         this.imagePairService = imagePairService;
+        this.fromValidation = [false, false, false];
     }
 
     public verifyName(): void {

@@ -18,7 +18,7 @@ export class GameViewSimpleComponent implements OnInit {
     private differenceFound: number[];
     // tslint:disable-next-line:no-any
     private differenceSound: any;
-    public identifyingDifference: boolean = false;
+    public identifyingDifference: boolean;
 
     public constructor(
         private route: ActivatedRoute,
@@ -30,6 +30,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.differenceSound.src = "../../assets/mario.mp3";
         this.differenceSound.load();
         this.differenceFound = [];
+        this.identifyingDifference = false;
     }
 
     public ngOnInit(): void {
