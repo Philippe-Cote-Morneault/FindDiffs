@@ -14,7 +14,7 @@ export class Bitmap {
     public width: number;
     public header: Header;
     public infoHeader: InfoHeader;
-    public pixelData: Pixel[] = [];
+    public pixelData: Pixel[];
 
     public constructor(header: Header, infoHeader: InfoHeader, pixels: Pixel[]) {
         this.header = header;
