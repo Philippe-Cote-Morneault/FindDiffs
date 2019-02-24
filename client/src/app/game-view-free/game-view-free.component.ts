@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { SceneService } from "../services/scene/scene.service";
@@ -20,6 +21,7 @@ export class GameViewFreeComponent implements OnInit {
 
     public constructor(
         private route: ActivatedRoute,
+        private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService) {
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
@@ -29,7 +31,7 @@ export class GameViewFreeComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.scenePairID = params["id"];
         });
-
+        this.spinnerService.show();
         this.getOriginalSceneById();
     }
 
@@ -43,6 +45,7 @@ export class GameViewFreeComponent implements OnInit {
     private getModifiedSceneById(response: ICommonScene): void {
         this.sceneService.getModifiedSceneById(this.scenePairID).subscribe((responseModified: ICommonSceneModifications) => {
             this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, responseModified);
+            this.spinnerService.hide();
         });
     }
 }

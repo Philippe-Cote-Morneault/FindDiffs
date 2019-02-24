@@ -8,6 +8,7 @@ export class ControlsGenerator {
         const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, canvas);
         controls.enableKeys = false;
         controls.autoRotate = true;
+        // tslint:disable-next-line:no-magic-numbers
         controls.target.set(0, 10, 0);
 
         return controls;
@@ -16,6 +17,7 @@ export class ControlsGenerator {
     public static generateGameControls(camera: THREE.PerspectiveCamera, canvas: HTMLElement): THREE.OrbitControls {
         const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, canvas);
         controls.enableKeys = true;
+        // tslint:disable-next-line:no-magic-numbers
         controls.target.set(0, 10, 0);
 
         return controls;
