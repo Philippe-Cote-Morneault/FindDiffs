@@ -4,6 +4,7 @@ import * as uuid from "uuid";
 import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
 import { S3Exception } from "../../../../common/errors/s3Exception";
 import Config from "../../config";
+import { S3Cache } from "./cache";
 
 AWS.config.update({
     accessKeyId: Config.s3.key,
@@ -34,6 +35,8 @@ export class Storage {
                 Key: this.getPath(guid),
             },
         ).promise().then(() => {
+            S3Cache.updateCache(guid, buffer);
+
             return guid;
         }).catch((err: Error) => {
             throw new S3Exception(err.message);
@@ -43,13 +46,20 @@ export class Storage {
     public static async openBuffer(guid: string): Promise<ArrayBuffer> {
         const path: string = this.getPath(guid);
 
+        if (S3Cache.isInCache(guid)) {
+            return S3Cache.getCache(guid);
+        }
+
         return s3.getObject(
             {
                 Bucket: Config.s3.bucket,
                 Key: path,
             },
         ).promise().then((object: AWS.S3.GetObjectOutput) => {
-            return (object.Body as Buffer).buffer;
+            const buffer: ArrayBuffer = (object.Body as Buffer).buffer;
+            S3Cache.updateCache(guid, buffer);
+
+            return buffer;
         }).catch((err: Error) => {
             throw new FileNotFoundException(path);
         });
