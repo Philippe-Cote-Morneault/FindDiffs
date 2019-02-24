@@ -9,7 +9,6 @@ describe("GeometricObjectGenerator", () => {
         beforeEach(() => {
             sinon.stub(Math, "random");
         });
-        
         afterEach(() => {
             (Math.random as sinon.SinonStub).restore();
         });
