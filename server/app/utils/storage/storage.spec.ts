@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { FileNotFoundException } from "../../../common/errors/fileNotFoundException";
-import { NoErrorThrownException } from "../tests/noErrorThrownException";
+import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
+import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { s3, Storage } from "./storage";
 
 describe("Storage", () => {

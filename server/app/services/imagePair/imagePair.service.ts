@@ -6,7 +6,7 @@ import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { ImagePair, IImagePair } from "../../model/schemas/imagePair";
 import { _e, R } from "../../strings";
-import { Storage } from "../../utils/storage";
+import { Storage } from "../../utils/storage/storage";
 import { IImagePairService } from "../interfaces";
 import { Service } from "../service";
 import { BitmapDecoder } from "./bitmapDecoder";

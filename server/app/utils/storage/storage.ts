@@ -1,9 +1,9 @@
 import * as AWS from "aws-sdk";
 import * as multer from "multer";
 import * as uuid from "uuid";
-import { FileNotFoundException } from "../../../common/errors/fileNotFoundException";
-import { S3Exception } from "../../../common/errors/s3Exception";
-import Config from "../config";
+import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
+import { S3Exception } from "../../../../common/errors/s3Exception";
+import Config from "../../config";
 
 AWS.config.update({
     accessKeyId: Config.s3.key,
@@ -54,6 +54,10 @@ export class Storage {
         }).catch((err: Error) => {
             throw new FileNotFoundException(path);
         });
+    }
+
+    private static cacheFile(buffer: Buffer, guid: string): void {
+        
     }
 
 }
