@@ -1,5 +1,6 @@
 import { ICommon3DPosition } from "../../../../../common/model/positions";
 import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+import { RandomUtils } from "../../../utils/randomUtils";
 import { ConeFactory } from "./coneFactory";
 import { CubeFactory } from "./cubeFactory";
 import { CylinderFactory } from "./cylinderFactory";
@@ -36,7 +37,7 @@ export class GeometricObjectGenerator {
     }
 
     private chooseRandomFactory(): GeometricObjectFactory {
-        const indexOfTransformation: number = Math.floor(Math.random() * this.geometricShapeFactories.length);
+        const indexOfTransformation: number = RandomUtils.random(this.geometricShapeFactories.length);
 
         return this.geometricShapeFactories[indexOfTransformation];
     }

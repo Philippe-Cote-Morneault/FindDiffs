@@ -1,4 +1,5 @@
 import { ICommon3DPosition } from "../../../../common/model/positions";
+import { RandomUtils } from "../../utils/randomUtils";
 import { Grid } from "./grid";
 
 export class RandomGrid extends Grid {
@@ -12,15 +13,15 @@ export class RandomGrid extends Grid {
 
     private generatePosition(): ICommon3DPosition {
         let isPositionValid: boolean = false;
-        let newPosition: ICommon3DPosition = {x: 0, y: 0, z: 0};
+        let newPosition: ICommon3DPosition = Grid.CENTER;
 
         while (!isPositionValid) {
             isPositionValid = true;
-
-            const x: number = this.generateCoordinates(this.width);
-            const y: number = this.generateCoordinates(this.height);
-            const z: number = this.generateCoordinates(this.depth);
-            newPosition = {x: x, y: y, z: z};
+            newPosition = {
+                x: this.generateCoordinates(this.dimensions.x),
+                y: this.generateCoordinates(this.dimensions.y),
+                z: this.generateCoordinates(this.dimensions.z),
+            };
 
             for (const position of this.positions) {
                 const distance: number = this.distanceBetweenPosition(position, newPosition);
@@ -36,6 +37,6 @@ export class RandomGrid extends Grid {
 
     private generateCoordinates(range: number): number {
         // tslint:disable-next-line:no-magic-numbers
-        return Math.floor(Math.random() * range) - Math.floor(range / 2);
+        return RandomUtils.random(range) - Math.floor(range / 2);
     }
 }

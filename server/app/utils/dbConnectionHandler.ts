@@ -5,7 +5,7 @@ export class DbConnectionHandler {
 
     private static instance: DbConnectionHandler;
 
-    private DB_URL: string = "mongodb://" + Config.mongodb.username + ":"
+    private readonly DB_URL: string = "mongodb://" + Config.mongodb.username + ":"
                                     + Config.mongodb.password + "@"
                                     + Config.mongodb.hostname + ":"
                                     + Config.mongodb.port + "/"

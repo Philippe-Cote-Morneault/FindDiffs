@@ -15,7 +15,7 @@ describe("GeometricObjectGenerator", () => {
             const SCENE_SIZE: number = 1000;
             const DEPTH: number = 50;
             const SCENE_OBJECT_MARGIN: number = 20;
-            const grid: DefaultGrid = new DefaultGrid(SCENE_SIZE, SCENE_SIZE, DEPTH, SCENE_OBJECT_MARGIN);
+            const grid: DefaultGrid = new DefaultGrid({x: SCENE_SIZE, y: SCENE_SIZE, z: DEPTH}, SCENE_OBJECT_MARGIN);
 
             // tslint:disable:no-magic-numbers
             const generateScene: SceneGenerator = new SceneGenerator(100);
@@ -31,7 +31,7 @@ describe("GeometricObjectGenerator", () => {
             const SCENE_SIZE: number = 1000;
             const DEPTH: number = 50;
             const SCENE_OBJECT_MARGIN: number = 20;
-            const grid: DefaultGrid = new DefaultGrid(SCENE_SIZE, SCENE_SIZE, DEPTH, SCENE_OBJECT_MARGIN);
+            const grid: DefaultGrid = new DefaultGrid({x: SCENE_SIZE, y: SCENE_SIZE, z: DEPTH}, SCENE_OBJECT_MARGIN);
 
             // tslint:disable:no-magic-numbers
             const generateScene: SceneGenerator = new SceneGenerator(100);
@@ -47,7 +47,7 @@ describe("GeometricObjectGenerator", () => {
             const SCENE_SIZE: number = 1000;
             const DEPTH: number = 50;
             const SCENE_OBJECT_MARGIN: number = 20;
-            const grid: DefaultGrid = new DefaultGrid(SCENE_SIZE, SCENE_SIZE, DEPTH, SCENE_OBJECT_MARGIN);
+            const grid: DefaultGrid = new DefaultGrid({x: SCENE_SIZE, y: SCENE_SIZE, z: DEPTH}, SCENE_OBJECT_MARGIN);
 
             // tslint:disable:no-magic-numbers
             const generateScene: SceneGenerator = new SceneGenerator(100);
@@ -79,7 +79,7 @@ describe("GeometricObjectGenerator", () => {
             const SCENE_SIZE: number = 1000;
             const DEPTH: number = 50;
             const SCENE_OBJECT_MARGIN: number = 20;
-            const grid: DefaultGrid = new DefaultGrid(SCENE_SIZE, SCENE_SIZE, DEPTH, SCENE_OBJECT_MARGIN);
+            const grid: DefaultGrid = new DefaultGrid({x: SCENE_SIZE, y: SCENE_SIZE, z: DEPTH}, SCENE_OBJECT_MARGIN);
 
             // tslint:disable:no-magic-numbers
             const generateScene: SceneGenerator = new SceneGenerator(100);
