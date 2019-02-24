@@ -54,7 +54,7 @@ export class ImagePairService extends Service implements IImagePairService {
         .then(async (doc: IImagePair) => {
             const fileId: string = doc.get(fieldName);
 
-            return Storage.openBuffer(fileId, false);
+            return Storage.openBuffer(fileId);
         }).catch((error: Error) => {
             if (error.name === "FileNotFoundException") {
                 throw error;
