@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
-import { ICommonGameCard } from "../../../../common/model/gameCard";
+import { ICommonGameCard, ICommonScoreEntry } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
@@ -51,8 +51,8 @@ export class GamesCardViewComponent implements OnInit {
         }
     }
 
-    public toMinutes(index: number, times: number[]): string {
-        return StringFormater.secondsToMinutes(times[index]);
+    public toMinutes(index: number, times: ICommonScoreEntry[]): string {
+        return StringFormater.secondsToMinutes(times[index].score);
     }
 
     public async onLeftButtonClick(): Promise<void> {
