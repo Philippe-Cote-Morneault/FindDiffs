@@ -16,7 +16,7 @@ export class SceneDifferenceGenerator {
 
     private scene: ICommonScene;
     private grid: Grid;
-    private sceneModifs: ICommonSceneModifications;
+    private sceneModif: ICommonSceneModifications;
 
     public constructor(originalScene: ICommonScene, grid: Grid) {
         this.scene = originalScene;
@@ -34,13 +34,13 @@ export class SceneDifferenceGenerator {
             this.applyRandomModification();
         }
 
-        return this.sceneModifs;
+        return this.sceneModif;
     }
 
     private applyRandomModification(): void {
         this.chooseRandomModification().applyTransformation(
             this.objectsToTransform,
-            this.sceneModifs,
+            this.sceneModif,
         );
     }
 
@@ -59,16 +59,16 @@ export class SceneDifferenceGenerator {
     }
 
     private initializeModifications(): void {
-        this.sceneModifs = {
+        this.sceneModif = {
                 id:  uuid().replace(/-/g, ""),
                 type: this.scene.type,
                 addedObjects: [],
                 deletedObjects: [],
         };
         if (this.scene.type === ObjectType.Geometric) {
-            this.sceneModifs["colorChangedObjects"] = [];
+            this.sceneModif["colorChangedObjects"] = [];
         } else {
-            this.sceneModifs["texturesChangedObjects"] = [];
+            this.sceneModif["texturesChangedObjects"] = [];
         }
     }
 

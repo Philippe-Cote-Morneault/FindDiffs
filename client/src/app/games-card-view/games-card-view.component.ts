@@ -71,7 +71,7 @@ export class GamesCardViewComponent implements OnInit {
 
     public deleteGameCard(): void {
         if (confirm("Are you sure you want to delete the Game Card called " + this.gameCard.title + "?")) {
-            this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe((message: Message) => {
+            this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe(() => {
                 window.location.reload();
             });
         }
