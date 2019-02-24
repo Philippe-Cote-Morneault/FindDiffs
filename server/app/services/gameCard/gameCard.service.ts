@@ -55,7 +55,7 @@ export class GameCardService extends Service implements IGameCardService {
         return JSON.stringify(this.getCommonGameCard(gameCard));
     }
 
-    private async makeChanges(req: Request, doc: IGameCard): Promise<void> {
+    private async generateScore(req: Request, doc: IGameCard): Promise<void> {
         let changed: boolean = false;
         if (req.body.best_time_solo) {
             changed = true;
@@ -79,7 +79,7 @@ export class GameCardService extends Service implements IGameCardService {
                 throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
 
-            await this.makeChanges(req, doc);
+            await this.generateScore(req, doc);
 
             const message: Message = {
                 title: R.SUCCESS,

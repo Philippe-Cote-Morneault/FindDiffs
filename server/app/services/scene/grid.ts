@@ -1,21 +1,18 @@
 import { StackEmptyException } from "../../../../common/errors/stackEmptyException";
 import { ICommon3DPosition } from "../../../../common/model/positions";
+import { ICommonSceneDimensions } from "../../../../common/model/scene/scene";
 
 export abstract class Grid {
 
     public static readonly CENTER: ICommon3DPosition = {x: 0, y: 0, z: 0};
 
-    protected width: number;
-    protected height: number;
-    protected depth: number;
+    protected dimensions: ICommonSceneDimensions;
     protected minDistancePos: number;
     protected positions: ICommon3DPosition[];
     protected positionsStack: ICommon3DPosition[];
 
-    public constructor(width: number, height: number, depth: number, minDistancePos: number) {
-        this.width = width;
-        this.height = height;
-        this.depth = depth;
+    public constructor(dimensions: ICommonSceneDimensions, minDistancePos: number) {
+        this.dimensions = dimensions;
         this.minDistancePos = minDistancePos;
         this.positions = new Array<ICommon3DPosition>();
 
@@ -65,13 +62,13 @@ export class DefaultGrid extends Grid {
 
     protected generateGrid(): void {
         // tslint:disable-next-line:no-magic-numbers
-        const minX: number = (this.width / 2) * -1;
+        const minX: number = (this.dimensions.x / 2) * -1;
         const maxX: number = minX * -1;
         // tslint:disable-next-line:no-magic-numbers
-        const minY: number = (this.height / 2) * -1;
+        const minY: number = (this.dimensions.y / 2) * -1;
         const maxY: number = minY * -1;
         // tslint:disable-next-line:no-magic-numbers
-        const minZ: number = (this.depth / 2) * -1;
+        const minZ: number = (this.dimensions.z / 2) * -1;
         const maxZ: number = minZ * -1;
 
         for (let x: number = minX; x < maxX; x += this.minDistancePos) {
