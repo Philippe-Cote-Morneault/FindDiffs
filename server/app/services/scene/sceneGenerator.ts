@@ -7,9 +7,9 @@ import { RandomGrid } from "./randomGrid";
 import { GeometricObjectGenerator } from "./shapeCreation/geometricObjectGenerator";
 
 export class SceneGenerator {
-    private readonly SCENE_SIZE: number =  250;
-    private readonly SCENE_DEPTH: number = 50;
-    private readonly SCENE_OBJECT_MARGIN: number = 9;
+    private static readonly SCENE_SIZE: number =  250;
+    private static readonly SCENE_DEPTH: number = 50;
+    private static readonly SCENE_OBJECT_MARGIN: number = 9;
 
     private objectQty: number;
     private scene: ICommonGeometricScene;
@@ -20,9 +20,9 @@ export class SceneGenerator {
         this.grid = undefined;
         this.scene = {
             dimensions: {
-                x: this.SCENE_SIZE,
-                y: this.SCENE_SIZE,
-                z: this.SCENE_DEPTH,
+                x: SceneGenerator.SCENE_SIZE,
+                y: SceneGenerator.SCENE_SIZE,
+                z: SceneGenerator.SCENE_DEPTH,
             },
             sceneObjects: new Array<ICommonSceneObject>(),
             type: ObjectType.Geometric,
@@ -36,8 +36,7 @@ export class SceneGenerator {
     }
 
     public generateScene(): ICommonGeometricScene {
-        // tslint:disable-next-line:no-magic-numbers
-        this.grid = new RandomGrid(this.scene.dimensions, this.SCENE_OBJECT_MARGIN);
+        this.grid = new RandomGrid(this.scene.dimensions, SceneGenerator.SCENE_OBJECT_MARGIN);
         for (let i: number = 0; i < this.objectQty; i++) {
             const position: ICommon3DPosition = this.grid.getNextPosition();
             this.scene.sceneObjects.push(GeometricObjectGenerator.getInstance().createObject(position));
