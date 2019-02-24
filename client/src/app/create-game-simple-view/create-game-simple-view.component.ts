@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
-import { stringify } from "querystring";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
