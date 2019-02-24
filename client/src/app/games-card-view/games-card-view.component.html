@@ -6,7 +6,7 @@
 <body>
   <div class="grid-container">
     <div class="title">{{gameCard.title}}</div>
-    <div class="original_image" *ngIf="isSimplePov(); else sceneBlock">
+    <div class="original_image" *ngIf="isSimplePov()">
       <img #image width="160" height="120" />
     </div>
     <ng-template #sceneBlock>

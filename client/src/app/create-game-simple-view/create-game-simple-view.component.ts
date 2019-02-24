@@ -1,4 +1,4 @@
-import { Component,  ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
@@ -20,7 +20,7 @@ export class CreateGameSimpleViewComponent {
     private imagePairService: ImagePairService;
 
     public canSubmit: boolean = false;
-    public fromValidation: boolean[] = [false, false, false];
+    public fromValidation: boolean[] = [false, false, false, false, false];
 
     private originalImageFile: File;
     private modifiedImageFile: File;
@@ -42,12 +42,27 @@ export class CreateGameSimpleViewComponent {
 
     public fileEvent(event: HTMLInputEvent, fileId: number): void {
         if (event.target.files != null) {
-            const fileName: string = event.target.files[0].name;
+            const files: FileList = event.target.files;
+            const fileName: string = files[0].name;
+            const IMAGE_WIDTH: number = 640;
+            const IMAGE_HEIGHT: number = 480;
+            const VALIDATION_MODIFIER: number = 2;
+
+            const url: string = window.URL.createObjectURL(files[0]);
+            const img: HTMLImageElement = new Image();
+
+            img.onload = () => {
+                this.fromValidation[VALIDATION_MODIFIER + fileId] =
+                    (img.naturalWidth === IMAGE_WIDTH && img.naturalHeight === IMAGE_HEIGHT);
+            };
+
+            img.src = url;
             this.fromValidation[fileId] = fileName.split(".")[1] === "bmp";
 
             fileId === 1 ? this.originalImageFile = event.target.files[0] : this.modifiedImageFile = event.target.files[0];
         }
     }
+
     public verifyInfo(): void {
         const allEqual: boolean = this.fromValidation.every((value) => value);
         this.canSubmit = allEqual;
