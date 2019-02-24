@@ -3,7 +3,6 @@ import { ICommon3DPosition } from "../../../../common/model/positions";
 import { ICommonSceneDimensions } from "../../../../common/model/scene/scene";
 
 export abstract class Grid {
-
     public static readonly CENTER: ICommon3DPosition = {x: 0, y: 0, z: 0};
 
     protected dimensions: ICommonSceneDimensions;
