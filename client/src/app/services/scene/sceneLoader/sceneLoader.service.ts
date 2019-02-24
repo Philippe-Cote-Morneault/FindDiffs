@@ -31,7 +31,7 @@ export class SceneLoaderService {
     private renderScene(container: HTMLElement | null, scene: THREE.Scene): void {
         if (container !== null) {
             const sceneRendererService: SceneRendererService = new SceneRendererService();
-            const renderer: THREE.WebGLRenderer = sceneRendererService.generateRenderer(container.clientWidth, 
+            const renderer: THREE.WebGLRenderer = sceneRendererService.generateRenderer(container.clientWidth,
                                                                                         container.clientHeight);
 
             container.appendChild(renderer.domElement);
@@ -44,6 +44,8 @@ export class SceneLoaderService {
                 sceneRendererService.renderScene(scene, renderer, camera);
                 controls.update();
             };
+
+            // tslint:disable-next-line:no-magic-numbers
             controls.target.set(0, 10, 0);
 
             animate();

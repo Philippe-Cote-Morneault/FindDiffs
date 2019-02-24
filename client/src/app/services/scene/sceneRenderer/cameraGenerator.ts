@@ -14,6 +14,7 @@ export class CameraGenerator {
         );
 
         camera.position.y = CameraGenerator.CAMERA_HEIGHT;
+        // tslint:disable-next-line:no-magic-numbers
         camera.position.set( 0, 10, 150 );
 
         return camera;
