@@ -6,7 +6,7 @@ import * as THREE from "three";
 })
 export class SceneRendererService {
 
-    public generateRender(containerWidth: number, containerHeight: number): THREE.WebGLRenderer {
+    public generateRenderer(containerWidth: number, containerHeight: number): THREE.WebGLRenderer {
         const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
         renderer.setSize(containerWidth, containerHeight);
 

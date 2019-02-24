@@ -9,55 +9,48 @@ import { ModifiedSceneParserService } from "../../../services/scene/sceneParser/
 import { SceneParserService } from "../../../services/scene/sceneParser/scene-parser.service";
 import { CameraGenerator } from "../../../services/scene/sceneRenderer/cameraGenerator";
 import { SceneRendererService } from "../../../services/scene/sceneRenderer/scene-renderer.service";
-import { SceneService } from "../scene.service";
+// import { WebGLRenderer } from "three";
 
 @Injectable({
     providedIn: "root",
 })
 
 export class SceneLoaderService {
-
-    public constructor(public sceneService: SceneService) {
-    }
     // tslint:disable:no-any
-    public loadOriginalScene(div: HTMLElement | null, scene: ICommonScene): void {
+    public loadOriginalScene(container: HTMLElement | null, scene: ICommonScene): void {
+        const parsedScene: THREE.Scene = new SceneParserService().parseScene(scene);
 
-        if (div !== null) {
-            const sceneRendererService: SceneRendererService = new SceneRendererService();
-            const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(div.clientWidth, div.clientHeight);
-
-            div.appendChild(renderer.domElement);
-
-            const sceneOriginal: THREE.Scene = new SceneParserService().parseScene(scene);
-            const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(div.clientWidth, div.clientHeight);
-            const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-
-            const animate: any = (): void => {
-                requestAnimationFrame(animate);
-                sceneRendererService.renderScene(sceneOriginal, renderer, camera);
-                controls.update();
-            };
-            animate();
-        }
+        this.renderScene(container, parsedScene);
     }
 
-    public loadModifiedScene(div: HTMLElement | null, scene: ICommonScene, response: ICommonSceneModifications): void {
+    public loadModifiedScene(container: HTMLElement | null, scene: ICommonScene, sceneModifications: ICommonSceneModifications): void {
+        const parsedModifiedScene: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, sceneModifications);
 
-        if (div !== null) {
+        this.renderScene(container, parsedModifiedScene);
+    }
+
+    /*
+    private animate(scene: THREE.Scene, renderer: WebGLRenderer, camera: THREE.Camera): void {
+
+    }*/
+
+    private renderScene(container: HTMLElement | null, scene: THREE.Scene): void {
+        if (container !== null) {
             const sceneRendererService: SceneRendererService = new SceneRendererService();
-            const renderer: THREE.WebGLRenderer = sceneRendererService.generateRender(div.clientWidth, div.clientHeight);
+            const renderer: THREE.WebGLRenderer = sceneRendererService.generateRenderer(container.clientWidth, container.clientHeight);
 
-            div.appendChild(renderer.domElement);
+            container.appendChild(renderer.domElement);
 
-            const sceneModified: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, response);
-            const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(div.clientWidth, div.clientHeight);
+            const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
             const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
             const animate: any = (): void => {
                 requestAnimationFrame(animate);
-                sceneRendererService.renderScene(sceneModified, renderer, camera);
+                sceneRendererService.renderScene(scene, renderer, camera);
                 controls.update();
             };
+            controls.target.set(0, 10, 0);
+
             animate();
         }
     }

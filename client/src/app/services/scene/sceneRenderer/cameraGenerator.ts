@@ -14,6 +14,7 @@ export class CameraGenerator {
         );
 
         camera.position.y = CameraGenerator.CAMERA_HEIGHT;
+        camera.position.set( 0, 10, 150 );
 
         return camera;
     }
