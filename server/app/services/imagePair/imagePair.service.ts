@@ -77,7 +77,7 @@ export class ImagePairService extends Service implements IImagePairService {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.ORIGINAL_IMAGE_]));
         }
 
-        if (!req.files[R.MODIFED_IMAGE_FIELD] || req.files[R.MODIFED_IMAGE_FIELD].length < 1) {
+        if (!req.files[R.MODIFIED_IMAGE_FIELD] || req.files[R.MODIFIED_IMAGE_FIELD].length < 1) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.MODIFIED_IMAGE_]));
         }
 
@@ -85,7 +85,7 @@ export class ImagePairService extends Service implements IImagePairService {
             throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.ORIGINAL_IMAGE]));
         }
 
-        if (!req.files[R.MODIFED_IMAGE_FIELD][0].originalname) {
+        if (!req.files[R.MODIFIED_IMAGE_FIELD][0].originalname) {
             throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.MODIFIED_IMAGE]));
         }
     }
@@ -93,10 +93,10 @@ export class ImagePairService extends Service implements IImagePairService {
     public async post(req: Request): Promise<string> {
         this.validate(req);
         const originalImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files[R.ORIGINAL_IMAGE_FIELD][0].buffer.buffer);
-        const modifiedImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files[R.MODIFED_IMAGE_FIELD][0].buffer.buffer);
+        const modifiedImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files[R.MODIFIED_IMAGE_FIELD][0].buffer.buffer);
 
         const originalImageId: string = await Storage.saveBuffer(req.files[R.ORIGINAL_IMAGE_FIELD][0].buffer.buffer);
-        const modifiedImageId: string = await Storage.saveBuffer(req.files[R.MODIFED_IMAGE_FIELD][0].buffer.buffer);
+        const modifiedImageId: string = await Storage.saveBuffer(req.files[R.MODIFIED_IMAGE_FIELD][0].buffer.buffer);
 
         const difference: Difference = new Difference(originalImage, modifiedImage);
 
