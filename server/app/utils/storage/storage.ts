@@ -40,9 +40,8 @@ export class Storage {
         });
     }
 
-    public static async openBuffer(guid: string, completePath: boolean): Promise<ArrayBuffer> {
-        let path: string;
-        (!completePath) ? path = this.getPath(guid) : path = guid;
+    public static async openBuffer(guid: string): Promise<ArrayBuffer> {
+        const path: string = this.getPath(guid);
 
         return s3.getObject(
             {

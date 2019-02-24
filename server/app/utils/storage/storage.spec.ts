@@ -52,12 +52,8 @@ describe("Storage", () => {
 
             const unknownId: string = "unknown id";
 
-            try {
-                await Storage.openBuffer(unknownId, false);
-                throw new NoErrorThrownException();
-            } catch (err) {
-                expect(err.message).to.equal(new FileNotFoundException(`${Storage.STORAGE_PATH}/${unknownId}`).message);
-            }
+            const response: ArrayBuffer = await Storage.openBuffer(unknownId);
+            expect(response.byteLength).to.equal(BUFF_SIZE);
         });
 
         it("Should return a buffer if the id exists", async() => {
@@ -70,7 +66,7 @@ describe("Storage", () => {
 
             const unknownId: string = "unknown id";
 
-            const response: ArrayBuffer = await Storage.openBuffer(unknownId, false);
+            const response: ArrayBuffer = await Storage.openBuffer(unknownId);
             expect(response.byteLength).to.equal(BUFF_SIZE);
         });
     });
@@ -103,7 +99,7 @@ describe("Storage", () => {
             }
         });
 
-        it("Should return a buffer if everything went smoothly", async () => {
+        it("Should return a guid if everything went smoothly", async () => {
 
             const guid: string = "a simple guid";
             (s3.upload as sinon.SinonStub).returns({
