@@ -7,8 +7,8 @@ import { Pixel } from "./pixel";
 
  // RFC:7854
 export class Bitmap {
-    public static ROW_BYTE_MULTIPLE: number = 4;
-    public static BYTES_PER_PIXEL: number = 3;
+    public static readonly ROW_BYTE_MULTIPLE: number = 4;
+    public static readonly BYTES_PER_PIXEL: number = 3;
 
     public height: number;
     public width: number;
