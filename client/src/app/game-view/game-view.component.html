@@ -1,0 +1,24 @@
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
+</head>
+<div id="game_wrapper">
+  <div id="game_info">
+    <div>
+      <p> Differences found: {{differenceCounterUser}}</p>
+      <p *ngIf="false"> Opponent's differences found: {{differenceCounterOpponent}}</p>
+      <p> Timer: 0:00</p>
+    </div>
+    <div>
+      <p> Messages: Une partie est commencée</p>
+    </div>
+  </div>
+  <div id="game_image_wrapper">
+    <div id="image_original">
+      <canvas id="original_canvas" width="640px" height="480px" style="border:1px solid #000000;" #originalCanvas ></canvas>
+    </div>
+    <div id="image_modified">
+      <canvas id="modified_canvas" width="640px" height="480px" style="border:1px solid #000000;" #modifiedCanvas ></canvas>
+    </div>
+  </div>
+</div>
