@@ -10,8 +10,6 @@ export class CylinderFactory extends GeometricObjectFactory {
                                                                                  geometricObject.height,
                                                                                  CylinderFactory.RADIAL_SEGMENTS);
 
-
-                                                                                
         return new THREE.Mesh(cylinderShape, material);
     }
 }
