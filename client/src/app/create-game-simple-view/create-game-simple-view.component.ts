@@ -19,8 +19,8 @@ export class CreateGameSimpleViewComponent {
     private gamesCardService: GamesCardService;
     private imagePairService: ImagePairService;
 
-    public canSubmit: boolean = false;
-    public fromValidation: boolean[] = [false, false, false];
+    public canSubmit: boolean;
+    public fromValidation: boolean[];
 
     private originalImageFile: File;
     private modifiedImageFile: File;
@@ -30,6 +30,8 @@ export class CreateGameSimpleViewComponent {
                        private spinnerService: Ng4LoadingSpinnerService) {
         this.gamesCardService = gamesCardService;
         this.imagePairService = imagePairService;
+        this.canSubmit = false;
+        this.fromValidation = [false, false, false];
     }
 
     public verifyName(): void {
