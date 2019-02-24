@@ -23,8 +23,9 @@ describe("DefaultGrid", () => {
         it("Should generate a grid with a bunch of random positions, and call itself back if in safezone", () => {
             const SIZE: number = 500;
             const MARGIN: number = 20;
+            const DEPTH: number = 50;
             const POSITION_TO_GENERATE: number = 200;
-            const defaultGrid: DefaultGrid = new DefaultGrid(SIZE, SIZE, MARGIN);
+            const defaultGrid: DefaultGrid = new DefaultGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
 
             // tslint:disable-next-line:no-magic-numbers
             const minX: number = SIZE / 2  * -1;
@@ -42,9 +43,10 @@ describe("DefaultGrid", () => {
         });
         it("Should generate a grid with a bunch of random positions 200 minimum", () => {
             const SIZE: number = 500;
+            const DEPTH: number = 50;
             const MARGIN: number = 20;
             const POSITION_TO_GENERATE: number = 200;
-            const defaultGrid: DefaultGrid = new DefaultGrid(SIZE, SIZE, MARGIN);
+            const defaultGrid: DefaultGrid = new DefaultGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
 
             // tslint:disable-next-line:no-magic-numbers
             const minX: number = SIZE / 2  * -1;
@@ -65,8 +67,9 @@ describe("DefaultGrid", () => {
     describe("isInSafeZone()", () => {
         it("Should return true if the position is in the SafeZone", () => {
             const SIZE: number = 50;
+            const DEPTH: number = 50;
             const MIN_DISTANCE: number = 5;
-            const grid: Grid = new DefaultGrid(SIZE, SIZE, MIN_DISTANCE);
+            const grid: Grid = new DefaultGrid({x: SIZE, y: SIZE, z: DEPTH}, MIN_DISTANCE);
             const position: ICommon3DPosition = {
                 x: 0,
                 y: 2,
@@ -77,8 +80,9 @@ describe("DefaultGrid", () => {
 
         it("Should return false if the position is in the SafeZone", () => {
             const SIZE: number = 50;
+            const DEPTH: number = 50;
             const MIN_DISTANCE: number = 5;
-            const grid: Grid = new DefaultGrid(SIZE, SIZE, MIN_DISTANCE);
+            const grid: Grid = new DefaultGrid({x: SIZE, y: SIZE, z: DEPTH}, MIN_DISTANCE);
             const position: ICommon3DPosition = {
                 x: 0,
                 y: 10,

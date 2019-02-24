@@ -16,7 +16,7 @@ export class CreateGameFreeViewComponent {
     private static MAX_QTE: number = 201;
     private static MIN_QTE: number = 9;
 
-    @Output() public closed: EventEmitter<boolean> = new EventEmitter();
+    @Output() public closed: EventEmitter<boolean>;
     @ViewChild("gameNameInput") private gameNameInput: ElementRef;
     @ViewChild("add") private add: ElementRef;
     @ViewChild("remove") private remove: ElementRef;
@@ -25,8 +25,6 @@ export class CreateGameFreeViewComponent {
     @ViewChild("objectType") private objectType: ElementRef;
 
     public canSubmit: boolean;
-    public displayError: string;
-    public hideError: string;
     public firstNameInput: boolean;
     public firstQuantityInput: boolean;
 
@@ -34,9 +32,10 @@ export class CreateGameFreeViewComponent {
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
         public gamesCardService: GamesCardService) {
-        this.canSubmit = false;
-        this.firstNameInput = false;
-        this.firstQuantityInput = false;
+            this.canSubmit = false;
+            this.firstNameInput = false;
+            this.firstQuantityInput = false;
+            this.closed = new EventEmitter();
     }
     public isNameValid(): boolean {
         if (this.firstNameInput) {

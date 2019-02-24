@@ -3,8 +3,7 @@
     crossorigin="anonymous">
 </head>
 
-<body>
-  <div class="grid-container">
+<div class="grid-container">
     <div class="title">{{gameCard.title}}</div>
     <div class="original_image" *ngIf="isSimplePov()">
       <img #image width="160" height="120" />
@@ -32,5 +31,4 @@
     <div class="button_right">
       <button class="button" (click)="onRightButtonClick()">{{rightButton}}</button>
     </div>
-  </div>
-</body>
+</div>

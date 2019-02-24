@@ -1,15 +1,18 @@
 import { ICommon3DPosition } from "../../../../common/model/positions";
 import { ICommonSceneObject } from "../../../../common/model/scene/objects/sceneObject";
-import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { ICommonGeometricScene, ObjectType } from "../../../../common/model/scene/scene";
+import { ColorUtils } from "../../utils/colorUtils";
 import { Grid } from "./grid";
 import { RandomGrid } from "./randomGrid";
 import { GeometricObjectGenerator } from "./shapeCreation/geometricObjectGenerator";
 
 export class SceneGenerator {
-    private objectQty: number;
     private readonly SCENE_SIZE: number =  250;
+    private readonly SCENE_DEPTH: number = 50;
     private readonly SCENE_OBJECT_MARGIN: number = 9;
-    private scene: ICommonScene;
+
+    private objectQty: number;
+    private scene: ICommonGeometricScene;
     private grid: Grid | undefined;
 
     public constructor(objectQty: number) {
@@ -19,11 +22,12 @@ export class SceneGenerator {
             dimensions: {
                 x: this.SCENE_SIZE,
                 y: this.SCENE_SIZE,
-                z: this.SCENE_SIZE,
+                z: this.SCENE_DEPTH,
             },
             sceneObjects: new Array<ICommonSceneObject>(),
             type: ObjectType.Geometric,
             id: "",
+            bg_color: ColorUtils.generateRandomColor(),
         };
     }
 
@@ -31,8 +35,9 @@ export class SceneGenerator {
         return this.grid;
     }
 
-    public generateScene(): ICommonScene {
-        this.grid = new RandomGrid(this.SCENE_SIZE, this.SCENE_SIZE, this.SCENE_OBJECT_MARGIN);
+    public generateScene(): ICommonGeometricScene {
+        // tslint:disable-next-line:no-magic-numbers
+        this.grid = new RandomGrid(this.scene.dimensions, this.SCENE_OBJECT_MARGIN);
         for (let i: number = 0; i < this.objectQty; i++) {
             const position: ICommon3DPosition = this.grid.getNextPosition();
             this.scene.sceneObjects.push(GeometricObjectGenerator.getInstance().createObject(position));

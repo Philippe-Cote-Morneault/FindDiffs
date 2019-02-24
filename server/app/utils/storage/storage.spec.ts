@@ -1,10 +1,20 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { FileNotFoundException } from "../../../common/errors/fileNotFoundException";
-import { NoErrorThrownException } from "../tests/noErrorThrownException";
+import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
+import { NoErrorThrownException } from "../../tests/noErrorThrownException";
+import { S3Cache } from "./cache";
 import { s3, Storage } from "./storage";
 
 describe("Storage", () => {
+    beforeEach(() => {
+        sinon.stub(S3Cache, "updateCache");
+        (S3Cache.updateCache as sinon.SinonStub).returns(undefined);
+    });
+
+    afterEach(() => {
+        (S3Cache.updateCache as sinon.SinonStub).restore();
+    });
+
     describe("getPath()", () => {
         it("Should return a path with an id", () => {
             const guid: string = "an id";
@@ -20,13 +30,18 @@ describe("Storage", () => {
 
         beforeEach(() => {
             sinon.stub(s3, "getObject");
+            sinon.stub(S3Cache, "isInCache");
+            sinon.stub(S3Cache, "getCache");
         });
 
         afterEach(() => {
             (s3.getObject as sinon.SinonStub).restore();
+            (S3Cache.isInCache as sinon.SinonStub).restore();
+            (S3Cache.getCache as sinon.SinonStub).restore();
         });
 
         it("Should return an error if the id does not exists", async() => {
+            (S3Cache.isInCache as sinon.SinonStub).returns(false);
             (s3.getObject as sinon.SinonStub).returns({
                 promise: async () => {
                     throw new Error();
@@ -36,24 +51,7 @@ describe("Storage", () => {
             const unknownId: string = "unknown id";
 
             try {
-                await Storage.openBuffer(unknownId, true);
-                throw new NoErrorThrownException();
-            } catch (err) {
-                expect(err.message).to.equal(new FileNotFoundException(unknownId).message);
-            }
-        });
-
-        it("Should return an error if the id does not exists with complete path", async() => {
-            (s3.getObject as sinon.SinonStub).returns({
-                promise: async () => {
-                    throw new Error();
-                },
-            });
-
-            const unknownId: string = "unknown id";
-
-            try {
-                await Storage.openBuffer(unknownId, false);
+                await Storage.openBuffer(unknownId);
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(new FileNotFoundException(`${Storage.STORAGE_PATH}/${unknownId}`).message);
@@ -62,6 +60,7 @@ describe("Storage", () => {
 
         it("Should return a buffer if the id exists", async() => {
             const BUFF_SIZE: number = 4;
+            (S3Cache.isInCache as sinon.SinonStub).returns(false);
             (s3.getObject as sinon.SinonStub).returns({
                 promise: async () => {
                     return { Body: Buffer.alloc(BUFF_SIZE)};
@@ -70,7 +69,18 @@ describe("Storage", () => {
 
             const unknownId: string = "unknown id";
 
-            const response: ArrayBuffer = await Storage.openBuffer(unknownId, false);
+            const response: ArrayBuffer = await Storage.openBuffer(unknownId);
+            expect(response.byteLength).to.equal(BUFF_SIZE);
+        });
+
+        it("Should return a buffer if the id exists in cache", async() => {
+            const BUFF_SIZE: number = 4;
+            (S3Cache.isInCache as sinon.SinonStub).returns(true);
+            (S3Cache.getCache as sinon.SinonStub).returns(Buffer.alloc(BUFF_SIZE));
+
+            const unknownId: string = "unknown id";
+
+            const response: ArrayBuffer = await Storage.openBuffer(unknownId);
             expect(response.byteLength).to.equal(BUFF_SIZE);
         });
     });
@@ -103,7 +113,7 @@ describe("Storage", () => {
             }
         });
 
-        it("Should return a buffer if everything went smoothly", async () => {
+        it("Should return a guid if everything went smoothly", async () => {
 
             const guid: string = "a simple guid";
             (s3.upload as sinon.SinonStub).returns({
