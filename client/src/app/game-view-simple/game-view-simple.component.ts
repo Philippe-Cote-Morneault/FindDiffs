@@ -55,7 +55,7 @@ export class GameViewSimpleComponent implements OnInit {
         const yPosition: number = e.layerY;
         this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) => {
             if (response.hit) {
-                const hashDifference: number = response.pixels_affected.length;
+                const hashDifference: number = response.difference_id;
                 if (this.isANewDifference(hashDifference)) {
                     this.pixelRestorationService.restoreImage(response,
                                                               this.originalCanvas.nativeElement,
