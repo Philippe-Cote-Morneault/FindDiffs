@@ -26,6 +26,7 @@
         <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 1)" accept=".bmp"
           required>
         <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+        <p id="errorMessage" *ngIf="!isFileDimensionsValid()">The file dimensions are not 640x480.</p>
       </div>
 
       Modified image :
