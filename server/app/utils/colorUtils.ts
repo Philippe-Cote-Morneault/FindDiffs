@@ -1,7 +1,7 @@
 export class ColorUtils {
-    public static readonly numberOfHexColors: number = 16777215;
+    public static readonly WHITE: number = 0xFFFFFF;
 
     public static generateRandomColor(): number {
-        return Math.floor(Math.random() * ColorUtils.numberOfHexColors);
+        return Math.floor(Math.random() * ColorUtils.WHITE);
     }
 }
