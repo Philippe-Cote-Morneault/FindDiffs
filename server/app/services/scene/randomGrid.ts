@@ -1,6 +1,6 @@
 import { ICommon3DPosition } from "../../../../common/model/positions";
-import { Grid } from "./grid";
 import { RandomUtils } from "../../utils/randomUtils";
+import { Grid } from "./grid";
 
 export class RandomGrid extends Grid {
     private static readonly NUMBER_POSITION: number = 400;
