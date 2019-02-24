@@ -1,16 +1,21 @@
+import { ICommonScoreEntry } from "../../../../common/model/gameCard";
 import { RandomUtils } from "../../utils/randomUtils";
 
 export class ScoreGenerator {
     public static readonly MIN: number = 60;
     public static readonly MAX: number = 90;
 
-    public static generateScore(length: number): number[] {
+    public static generateScore(length: number): ICommonScoreEntry[] {
 
-        const generatedNumbers: number[] = new Array<number>();
+        const generatedScore: ICommonScoreEntry[] = new Array<ICommonScoreEntry>();
         for (let i: number = 0; i < length; i++) {
-            generatedNumbers.push(RandomUtils.inRangeInt(this.MIN, this.MAX));
+            const scoreEntry: ICommonScoreEntry = {
+                name: "Michel",
+                score: RandomUtils.inRangeInt(this.MIN, this.MAX),
+            };
+            generatedScore.push(scoreEntry);
         }
 
-        return generatedNumbers.sort();
+        return generatedScore.sort((x: ICommonScoreEntry) => x.score);
     }
 }

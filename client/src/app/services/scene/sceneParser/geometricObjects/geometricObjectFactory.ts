@@ -17,7 +17,7 @@ export abstract class GeometricObjectFactory {
         return geometricObject;
     }
 
-    protected abstract createShape(color: THREE.MeshStandardMaterial, geometricObject: ICommonGeometricObject): THREE.Object3D;
+    protected abstract createShape(material: THREE.MeshPhongMaterial, geometricObject: ICommonGeometricObject): THREE.Object3D;
 
     private setPosition(position: ICommon3DPosition, geometricObject: THREE.Object3D): void {
         geometricObject.position.set(position.x, position.z, position.y);
@@ -27,9 +27,7 @@ export abstract class GeometricObjectFactory {
         geometricObject.setRotationFromEuler(new THREE.Euler(eulerAngles.xAngle, eulerAngles.yAngle, eulerAngles.zAngle));
     }
 
-    // tslint:disable-next-line:no-suspicious-comment
-    // TODO: See if you need to convert to hex
-    private createMeshMaterial(color: number): THREE.MeshStandardMaterial {
-        return new THREE.MeshStandardMaterial({color: color, roughness: 0.95, metalness: 0.5, flatShading: true});
+    private createMeshMaterial(color: number): THREE.MeshPhongMaterial {
+        return new THREE.MeshPhongMaterial({color: color});
     }
 }

@@ -1,3 +1,9 @@
+ol {
+    padding-left: 0;
+    padding-top: 10px;
+    text-align: center;
+}
+
 .title { 
     grid-area: title; 
     color: white; 
@@ -8,7 +14,7 @@
 .solo_time { 
     grid-area: soloTime;
     color: white; 
-    font-size: 15px; 
+    font-size: 15px;
 }
 .online_time { 
     grid-area: onlineTime; 
@@ -39,7 +45,7 @@
 .grid-container > div {
     background-color: #41414E;
     text-align: center;
-    padding: 20px 0;
+    padding: 10px 0;
     border-radius: 5px;
 }
 
@@ -48,10 +54,15 @@
     color: white;
     border-radius: 10px;
     border: #33343D;
+    cursor: pointer;
 }
 
 #scene {
     width: 160px;
     height: 120px;
     margin: auto;
+}
+
+.original_image > div{
+    padding-top: 40px;
 }

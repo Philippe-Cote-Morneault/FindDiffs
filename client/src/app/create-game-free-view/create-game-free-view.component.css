@@ -55,7 +55,7 @@ body{
   #quantityObject{
     margin-bottom: 0%;
   }
-  #erreurMessage{
+  #errorMessage{
     display:inline;
     margin-left: auto;
     color: red;
@@ -63,4 +63,8 @@ body{
   }
   #modificationTypeBloc{
     margin-top: 3%;
+  }
+
+  input[type="checkbox"] {
+    cursor: pointer;
   }

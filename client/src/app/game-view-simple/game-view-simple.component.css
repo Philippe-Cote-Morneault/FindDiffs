@@ -29,9 +29,13 @@ body{
     height: 480px;
     width: 100%;
 }
+
+#game_image_wrapper > div{
+  margin: auto;
+}
+
 #image_modified, #image_original {
     display: block;
-    justify-content: center;
     width: 640px;
     height: 480px;
 }
