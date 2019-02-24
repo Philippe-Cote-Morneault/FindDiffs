@@ -25,8 +25,6 @@ export class CreateGameFreeViewComponent {
     @ViewChild("objectType") private objectType: ElementRef;
 
     public canSubmit: boolean;
-    public displayError: string;
-    public hideError: string;
     public firstNameInput: boolean;
     public firstQuantityInput: boolean;
 

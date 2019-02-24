@@ -4,7 +4,7 @@ import { ICommonEulerAngles } from "../../../../../common/model/scene/eulerAngle
 import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ObjectType } from "../../../../../common/model/scene/scene";
 import { ColorUtils } from "../../../utils/colorUtils";
-import { NumberGenerationUtils } from "../../../utils/numerGenerationUtils";
+import { RandomUtils } from "../../../utils/randomUtils";
 
 export abstract class GeometricObjectFactory {
     private static readonly SIZE_MAX_PERCENTAGE: number = 150;
@@ -29,7 +29,7 @@ export abstract class GeometricObjectFactory {
     protected abstract createShape(geometricObject: ICommonGeometricObject): ICommonGeometricObject;
 
     protected generateRandomPercentage(): number {
-        return NumberGenerationUtils.generateInRange(
+        return RandomUtils.inRange(
             GeometricObjectFactory.SIZE_MIN_PERCENTAGE,
             GeometricObjectFactory.SIZE_MAX_PERCENTAGE,
         ) / GeometricObjectFactory.PERCENTAGE_DIVISION;
@@ -44,6 +44,6 @@ export abstract class GeometricObjectFactory {
     }
 
     private generateRandomRadianAngle(): number {
-        return NumberGenerationUtils.generateInRange(GeometricObjectFactory.MIN_RADIAN_ANGLE, GeometricObjectFactory.MAX_RADIAN_ANGLE);
+        return RandomUtils.inRange(GeometricObjectFactory.MIN_RADIAN_ANGLE, GeometricObjectFactory.MAX_RADIAN_ANGLE);
     }
 }
