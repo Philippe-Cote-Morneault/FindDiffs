@@ -1,5 +1,6 @@
 import { ICommon3DPosition } from "../../../../common/model/positions";
 import { Grid } from "./grid";
+import { RandomUtils } from "../../utils/randomUtils";
 
 export class RandomGrid extends Grid {
     private static readonly NUMBER_POSITION: number = 400;
@@ -36,6 +37,6 @@ export class RandomGrid extends Grid {
 
     private generateCoordinates(range: number): number {
         // tslint:disable-next-line:no-magic-numbers
-        return Math.floor(Math.random() * range) - Math.floor(range / 2);
+        return RandomUtils.random(range) - Math.floor(range / 2);
     }
 }

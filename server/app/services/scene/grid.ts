@@ -1,6 +1,7 @@
 import { StackEmptyException } from "../../../../common/errors/stackEmptyException";
 import { ICommon3DPosition } from "../../../../common/model/positions";
 import { ICommonSceneDimensions } from "../../../../common/model/scene/scene";
+import { RandomUtils } from "../../utils/randomUtils";
 
 export abstract class Grid {
     public static readonly CENTER: ICommon3DPosition = {x: 0, y: 0, z: 0};
@@ -23,7 +24,7 @@ export abstract class Grid {
         if (this.positionsStack.length === 0) {
             throw new StackEmptyException();
         }
-        const nextPositionIndex: number = Math.floor(Math.random() * (this.positionsStack.length - 1));
+        const nextPositionIndex: number = RandomUtils.random(this.positionsStack.length - 1);
         const position: ICommon3DPosition = this.positionsStack.splice(nextPositionIndex, 1)[0];
 
         if (!this.isInSafeZone(position)) {
