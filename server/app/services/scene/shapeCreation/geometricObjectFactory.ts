@@ -29,7 +29,7 @@ export abstract class GeometricObjectFactory {
     protected abstract createShape(geometricObject: ICommonGeometricObject): ICommonGeometricObject;
 
     protected generateRandomPercentage(): number {
-        return RandomUtils.generateInRange(
+        return RandomUtils.inRange(
             GeometricObjectFactory.SIZE_MIN_PERCENTAGE,
             GeometricObjectFactory.SIZE_MAX_PERCENTAGE,
         ) / GeometricObjectFactory.PERCENTAGE_DIVISION;
@@ -44,6 +44,6 @@ export abstract class GeometricObjectFactory {
     }
 
     private generateRandomRadianAngle(): number {
-        return RandomUtils.generateInRange(GeometricObjectFactory.MIN_RADIAN_ANGLE, GeometricObjectFactory.MAX_RADIAN_ANGLE);
+        return RandomUtils.inRange(GeometricObjectFactory.MIN_RADIAN_ANGLE, GeometricObjectFactory.MAX_RADIAN_ANGLE);
     }
 }
