@@ -38,6 +38,7 @@ export class SceneLoaderService {
 
             const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
             const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableKeys = false;
 
             const animate: any = (): void => {
                 requestAnimationFrame(animate);
