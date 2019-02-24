@@ -15,6 +15,8 @@ import { ImagePairService } from "../services/image-pair/image-pair.service";
 export class CreateGameSimpleViewComponent {
     @Output() public closed: EventEmitter<boolean>;
     @ViewChild("gameNameInput") private gameNameInput: ElementRef;
+    @ViewChild("originalFile") private originalFile: ElementRef;
+    @ViewChild("modifiedFile") private modifiedFile: ElementRef;
 
     public canSubmit: boolean;
     public fromValidation: boolean[];
@@ -101,7 +103,12 @@ export class CreateGameSimpleViewComponent {
             img.src = url;
             this.fromValidation[fileId] = fileName.split(".")[1] === "bmp";
 
-            fileId === 1 ? this.originalImageFile = event.target.files[0] : this.modifiedImageFile = event.target.files[0];
+            // tslint:disable:ban-comma-operator
+            fileId === 1 ? (this.originalImageFile = event.target.files[0],
+                            this.originalFile.nativeElement.innerText = this.originalImageFile.name)
+                            : (this.modifiedImageFile = event.target.files[0],
+                            this.modifiedFile.nativeElement.innerText = this.modifiedImageFile.name);
+
         }
     }
 

@@ -25,7 +25,7 @@
       <div class="custom-file">
         <input type="file" (blur)="originalImageVisited()" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 1)" accept=".bmp"
           required>
-        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+        <label class="custom-file-label" for="validatedCustomFile" #originalFile>Choose file...</label>
         <p id="errorMessage" *ngIf="!isOriginalFileValid()">The file dimensions are not 640x480.</p>
       </div>
 
@@ -33,7 +33,7 @@
       <div class="custom-file">
         <input type="file" (blur)="modifiedImageVisited()" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 2)" accept=".bmp"
           required>
-        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+        <label class="custom-file-label" for="validatedCustomFile" #modifiedFile>Choose file...</label>
         <p id="errorMessage" *ngIf="!isModifiedFileValid()">The file dimensions are not 640x480.</p>
       </div>
       <div *ngIf="verifyInfo()"></div>
