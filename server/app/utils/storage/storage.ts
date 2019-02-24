@@ -56,10 +56,6 @@ export class Storage {
         });
     }
 
-    private static cacheFile(buffer: Buffer, guid: string): void {
-        
-    }
-
 }
 
 export const uploads: multer.Instance = multer({});
