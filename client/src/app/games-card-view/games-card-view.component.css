@@ -54,6 +54,7 @@ ol {
     color: white;
     border-radius: 10px;
     border: #33343D;
+    cursor: pointer;
 }
 
 #scene {
