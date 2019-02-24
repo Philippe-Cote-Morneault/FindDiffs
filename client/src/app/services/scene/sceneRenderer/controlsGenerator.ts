@@ -7,6 +7,7 @@ export class ControlsGenerator {
     public static generateGameCardControls(camera: THREE.PerspectiveCamera, canvas: HTMLCanvasElement): THREE.OrbitControls {
         const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, canvas);
         controls.enableKeys = false;
+        controls.autoRotate = true;
         controls.target.set(0, 10, 0);
 
         return controls;
