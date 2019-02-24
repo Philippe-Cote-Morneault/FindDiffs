@@ -12,11 +12,12 @@ export class GamesListViewComponent implements OnInit {
     @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
     @ViewChild("freePOVGamesContainer", { read: ViewContainerRef }) private freePOVContainer: ViewContainerRef;
 
-    @Input() public isInAdminView: boolean = false;
+    @Input() public isInAdminView: boolean;
 
     public constructor(
         public gameCardsService: GamesCardService,
         public gameCardLoaderService: GameCardLoaderService) {
+            this.isInAdminView = false;
     }
 
     public ngOnInit(): void {
