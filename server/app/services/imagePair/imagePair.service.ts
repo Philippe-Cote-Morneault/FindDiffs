@@ -41,6 +41,12 @@ export class ImagePairService extends Service implements IImagePairService {
         return this.returnFile(id, "file_difference_id");
     }
 
+    public async getDifferenceJSON(id: string): Promise<string> {
+        const buffer: ArrayBuffer = await this.returnFile(id, "file_difference_json_id");
+
+        return Buffer.from(buffer).toString();
+    }
+
     public async getModified(id: string): Promise<ArrayBuffer> {
         return this.returnFile(id, "file_modified_id");
     }
