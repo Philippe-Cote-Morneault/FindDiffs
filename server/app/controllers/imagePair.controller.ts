@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import { ImagePairService } from "../services/imagePair/imagePair.service";
 import TYPES from "../types";
-import { uploads } from "../utils/storage";
+import { uploads } from "../utils/storage/storage";
 import { Controller } from "./controller";
 import { IImagePairController } from "./interfaces";
 
@@ -43,7 +43,6 @@ export class ImagePairController extends Controller implements IImagePairControl
         });
 
         router.get("/:id/difference", async(req: Request, res: Response, next: NextFunction) => {
-            // Get the path of the file and send it to the client
             try {
                 const file: ArrayBuffer = await this.imagePairService.getDifference(req.params.id);
                 res.set("Content-Type", "image/bmp");
@@ -54,7 +53,6 @@ export class ImagePairController extends Controller implements IImagePairControl
         });
 
         router.get("/:id/modified", async(req: Request, res: Response, next: NextFunction) => {
-            // Get the path of the file and send it to the client
             try {
                 const file: ArrayBuffer = await this.imagePairService.getModified(req.params.id);
                 res.set("Content-Type", "image/bmp");
@@ -65,7 +63,6 @@ export class ImagePairController extends Controller implements IImagePairControl
         });
 
         router.get("/:id/original", async(req: Request, res: Response, next: NextFunction) => {
-            // Get the path of the file and send it to the client
             try {
                 const file: ArrayBuffer = await this.imagePairService.getOriginal(req.params.id);
                 res.set("Content-Type", "image/bmp");

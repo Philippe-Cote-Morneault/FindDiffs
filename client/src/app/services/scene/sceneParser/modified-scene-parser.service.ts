@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { InvalidFormatException } from "../../../../../../common/errors/invalidFormatException";
+import { Pair } from "../../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
@@ -35,12 +36,14 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
     private parseGeometricObjects(scene: THREE.Scene, sceneModifications: ICommonGeometricModifications,
                                   originalSceneObjects: ICommonGeometricObject[]): void {
 
-        originalSceneObjects.forEach((object: ICommonGeometricObject) => {
-            if (!sceneModifications.deletedObjects.includes(object.id)) {
-                if (sceneModifications.colorChangedObjects.has(object.id)) {
-                    this.changeObjectColor(object, sceneModifications.colorChangedObjects.get(object.id));
+        originalSceneObjects.forEach((originalObject: ICommonGeometricObject) => {
+            if (!sceneModifications.deletedObjects.includes(originalObject.id)) {
+                if (sceneModifications.colorChangedObjects.some((object: Pair<string, number>) => originalObject.id === object.key)) {
+                    this.changeObjectColor(originalObject,
+                                           this.findChangedColor(originalObject.id, sceneModifications.colorChangedObjects),
+                    );
                 }
-                scene.add(this.sceneObjectParser.parse(object));
+                scene.add(this.sceneObjectParser.parse(originalObject));
             }
         });
     }
@@ -56,5 +59,11 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
             throw new InvalidFormatException("Color not valid!");
         }
         objectToModify.color = color;
+    }
+
+    private findChangedColor(key: string, colorChangedObjects: Pair<string, number>[]): number | undefined {
+        return colorChangedObjects.find(
+            (x: Pair<string, number>) => x.key === key,
+        ) as (number | undefined);
     }
 }

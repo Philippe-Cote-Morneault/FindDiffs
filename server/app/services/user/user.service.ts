@@ -6,6 +6,7 @@ import { InvalidFormatException } from "../../../../common/errors/invalidFormatE
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { IUser, User } from "../../model/schemas/user";
 import { _e, R } from "../../strings";
+import { Validation } from "../../utils/validation";
 import { IUserService } from "../interfaces";
 import { Service } from "../service";
 
@@ -67,7 +68,7 @@ export class UserService extends Service implements IUserService {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.USERNAME_]));
         }
 
-        if (!this.isUsernameValid(req.body.username)) {
+        if (!Validation.isValidName(req.body.username)) {
             throw new InvalidFormatException(R.ERROR_INVALID_USERNAME);
         }
 
@@ -80,13 +81,6 @@ export class UserService extends Service implements IUserService {
         return User.countDocuments({username: username}).then((c: number) => {
             return c === 0;
         });
-    }
-
-    private isUsernameValid(username: string): boolean {
-        // Check if the username is between 3 and 12 alpha numeric character
-        const regex: RegExp = new RegExp("^[a-zA-Z0-9]{3,12}$");
-
-        return regex.test(username);
     }
 
 }

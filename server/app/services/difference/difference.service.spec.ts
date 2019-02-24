@@ -5,7 +5,7 @@ import { ICommonReveal } from "../../../../common/model/reveal";
 import { R } from "../../strings";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { ApiRequest } from "../../utils/apiRequest";
-import { BitmapDecoder } from "../imagePair/bitmapDecoder";
+import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
 import { DifferenceService } from "./difference.service";
 import { RevealDifference } from "./revealDifference";
 
@@ -104,6 +104,17 @@ describe("DifferenceService", () => {
             const response: string =  await service.postSimple(mockReq(request));
             expect(response).to.equal(JSON.stringify(reveal));
 
+        });
+    });
+
+    describe("postFree()", () => {
+        it("Should return a not implemented exception", async () => {
+            try {
+                await service.postFree(mockReq({}));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("Method not implemented.");
+            }
         });
     });
 });

@@ -84,7 +84,6 @@ export class SceneService extends Service implements ISceneService {
 
             return JSON.stringify(sceneModifications);
         }).catch((err: Error) => {
-            console.error(err);
             throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }
@@ -113,5 +112,6 @@ export class SceneService extends Service implements ISceneService {
         })
         .catch((err: Error) => {
             throw new NotFoundException(R.ERROR_UNKNOWN_ID);
-        });    }
+        });
+    }
 }

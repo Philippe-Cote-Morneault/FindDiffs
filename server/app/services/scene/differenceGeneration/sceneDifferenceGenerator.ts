@@ -1,14 +1,14 @@
 import { v4 as uuid } from "uuid";
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
+import { SceneTransformation } from "../../../../../common/model/scene/modifications/sceneTransformation";
 import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
-import { Textures } from "../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
+import { RandomUtils } from "../../../utils/randomUtils";
 import { Grid } from "../grid";
 import { SceneObjectAdder } from "./transformations/sceneObjectAdder";
 import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChanger";
 import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
 import { SceneObjectTextureChanger } from "./transformations/sceneObjectTextureChanger";
-import { SceneTransformation } from "./transformations/sceneTransformation";
 
 export class SceneDifferenceGenerator {
     private static readonly NUMBER_OF_DIFFERENCES: number = 7;
@@ -18,7 +18,7 @@ export class SceneDifferenceGenerator {
 
     private scene: ICommonScene;
     private grid: Grid;
-    private sceneModifs: ICommonSceneModifications;
+    private sceneModif: ICommonSceneModifications;
 
     public constructor(originalScene: ICommonScene, grid: Grid) {
         this.scene = originalScene;
@@ -36,13 +36,13 @@ export class SceneDifferenceGenerator {
             this.applyRandomModification();
         }
 
-        return this.sceneModifs;
+        return this.sceneModif;
     }
 
     private applyRandomModification(): void {
         this.chooseRandomModification().applyTransformation(
             this.objectsToTransform,
-            this.sceneModifs,
+            this.sceneModif,
         );
     }
 
@@ -55,27 +55,28 @@ export class SceneDifferenceGenerator {
         }
         if (requiresColorChange) {
             this.transformationsToApply.push(
-                this.scene.type === ObjectType.Geometric ? new SceneObjectColorChanger() : new SceneObjectTextureChanger(),
+                this.scene.type === ObjectType.Geometric ?
+                new SceneObjectColorChanger() : new SceneObjectTextureChanger(),
             );
         }
     }
 
     private initializeModifications(): void {
-        this.sceneModifs = {
+        this.sceneModif = {
                 id:  uuid().replace(/-/g, ""),
                 type: this.scene.type,
                 addedObjects: [],
                 deletedObjects: [],
         };
         if (this.scene.type === ObjectType.Geometric) {
-            this.sceneModifs["colorChangedObjects"] = new Map<string, number>();
+            this.sceneModif["colorChangedObjects"] = [];
         } else {
-            this.sceneModifs["texturesChangedObjects"] = new Map<string, Textures>();
+            this.sceneModif["texturesChangedObjects"] = [];
         }
     }
 
     private chooseRandomModification(): SceneTransformation {
-        const indexOfTransformation: number = Math.floor(Math.random() * this.transformationsToApply.length);
+        const indexOfTransformation: number = RandomUtils.random(this.transformationsToApply.length);
 
         return this.transformationsToApply[indexOfTransformation];
     }

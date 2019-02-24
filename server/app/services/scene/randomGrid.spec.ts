@@ -7,9 +7,10 @@ describe("RandomGrid", () => {
     describe("generateGrid()", () => {
         it("Should generate a grid with a bunch of random positions 200 minimum", () => {
             const SIZE: number = 1000;
+            const DEPTH: number = 50;
             const MARGIN: number = 20;
             const POSITION_TO_GENERATE: number = 200;
-            const randomGrid: RandomGrid = new RandomGrid(SIZE, SIZE, MARGIN);
+            const randomGrid: RandomGrid = new RandomGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
 
             // tslint:disable-next-line:no-magic-numbers
             const minX: number = SIZE / 2  * -1;
@@ -29,8 +30,9 @@ describe("RandomGrid", () => {
         it("Should return an error if the stack is popped to much", () => {
             const SIZE: number = 1000;
             const MARGIN: number = 20;
+            const DEPTH: number = 50;
             const POSITION_TO_GENERATE: number = 500;
-            const randomGrid: RandomGrid = new RandomGrid(SIZE, SIZE, MARGIN);
+            const randomGrid: RandomGrid = new RandomGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
 
             try {
                 for (let i: number = 0; i < POSITION_TO_GENERATE; i++) {
@@ -43,10 +45,11 @@ describe("RandomGrid", () => {
         });
         it("Should return the asked number of generations", () => {
             const SIZE: number = 1000;
+            const DEPTH: number = 50;
             const MARGIN: number = 20;
             const POSITION_TO_GENERATE: number = 400;
 
-            const randomGrid: RandomGrid = new RandomGrid(SIZE, SIZE, MARGIN);
+            const randomGrid: RandomGrid = new RandomGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
             expect(randomGrid.getPositions().length).to.equal(POSITION_TO_GENERATE);
         });
     });

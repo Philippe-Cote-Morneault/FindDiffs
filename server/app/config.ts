@@ -13,4 +13,8 @@ export default {
         "secret": "+8x6DTcwFGpwtbEqDKBqA9skQUgiLx5xWuXqTQlU",
         "bucket": "log2990-106",
     },
+    "s3_cache": {
+        "path": "s3_cache/",
+        "expires": 3600,
+    },
 };

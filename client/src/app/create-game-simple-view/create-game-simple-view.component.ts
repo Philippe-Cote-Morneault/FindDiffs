@@ -1,11 +1,11 @@
-import { Component,  ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { HTMLInputEvent } from "../htmlinput-event";
 import { GamesCardService } from "../services/gameCard/games-card.service";
-import { ImagePairService } from "../services/image-pair.service";
+import { ImagePairService } from "../services/image-pair/image-pair.service";
 
 @Component({
     selector: "app-create-game-simple-view",
@@ -13,23 +13,21 @@ import { ImagePairService } from "../services/image-pair.service";
     styleUrls: ["./create-game-simple-view.component.css"],
 })
 export class CreateGameSimpleViewComponent {
-    @Output() public closed: EventEmitter<boolean> = new EventEmitter();
+    @Output() public closed: EventEmitter<boolean>;
     @ViewChild("gameNameInput") private gameNameInput: ElementRef;
 
-    private gamesCardService: GamesCardService;
-    private imagePairService: ImagePairService;
-
-    public canSubmit: boolean = false;
-    public fromValidation: boolean[] = [false, false, false];
+    public canSubmit: boolean;
+    public fromValidation: boolean[];
 
     private originalImageFile: File;
     private modifiedImageFile: File;
     private gameName: string;
 
-    public constructor(gamesCardService: GamesCardService, imagePairService: ImagePairService,
+    public constructor(private gamesCardService: GamesCardService, private imagePairService: ImagePairService,
                        private spinnerService: Ng4LoadingSpinnerService) {
-        this.gamesCardService = gamesCardService;
-        this.imagePairService = imagePairService;
+        this.canSubmit = false;
+        this.fromValidation = [false, false, false];
+        this.closed = new EventEmitter();
     }
 
     public verifyName(): void {

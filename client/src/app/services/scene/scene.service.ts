@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Message } from "../../../../../common/communication/message";
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
+import { ICommonScene } from "../../../../../common/model/scene/scene";
 import { SERVER_URL } from "../../../../../common/url";
 import { HTTPService } from "../HTTP.service";
 
@@ -17,8 +17,8 @@ export class SceneService extends HTTPService {
         super();
     }
 
-    public createScene(objectType: ObjectType, objectQuantity: number): Observable<ICommonScene | Message> {
-        const requestBody: Object = { "object_type": "Geometric", "object_qty": objectQuantity };
+    public createScene(objectType: string, objectQuantity: number): Observable<ICommonScene | Message> {
+        const requestBody: Object = { "object_type": objectType, "object_qty": objectQuantity };
 
         return this.http.post<ICommonScene>(`${SERVER_URL}/scene/`, requestBody).pipe(
             catchError((error) => this.handleError(error)),

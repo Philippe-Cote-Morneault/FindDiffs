@@ -5,12 +5,13 @@ import { GeometricObjectFactory } from "./geometricObjectFactory";
 export class PyramidFactory extends GeometricObjectFactory {
     private static readonly REFERENCE_RADIUS: number = 2;
     private static readonly REFERENCE_HEIGHT: number = 3;
+
     protected createShape(geometricObject: ICommonGeometricObject): ICommonPyramid {
         const scalePercentage: number = this.generateRandomPercentage();
 
         const pyramidObject: ICommonPyramid = geometricObject as ICommonPyramid;
 
-        pyramidObject.shapeType = GeometricShapeType.SQUARED_BASE_PYRAMID;
+        pyramidObject.shapeType = GeometricShapeType.TRIANGULAR_BASE_PYRAMID;
         pyramidObject.radiusBase = scalePercentage * PyramidFactory.REFERENCE_RADIUS;
         pyramidObject.height = scalePercentage * PyramidFactory.REFERENCE_HEIGHT;
 

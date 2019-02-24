@@ -6,10 +6,10 @@ import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { ImagePair, IImagePair } from "../../model/schemas/imagePair";
 import { _e, R } from "../../strings";
-import { Storage } from "../../utils/storage";
+import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
+import { Storage } from "../../utils/storage/storage";
 import { IImagePairService } from "../interfaces";
 import { Service } from "../service";
-import { BitmapDecoder } from "./bitmapDecoder";
 import { Difference } from "./difference";
 
 @injectable()
@@ -54,7 +54,7 @@ export class ImagePairService extends Service implements IImagePairService {
         .then(async (doc: IImagePair) => {
             const fileId: string = doc.get(fieldName);
 
-            return Storage.openBuffer(fileId, false);
+            return Storage.openBuffer(fileId);
         }).catch((error: Error) => {
             if (error.name === "FileNotFoundException") {
                 throw error;
@@ -73,37 +73,37 @@ export class ImagePairService extends Service implements IImagePairService {
             throw new InvalidFormatException(R.ERROR_MISSING_FILES);
         }
 
-        if (!req.files["originalImage"] || req.files["originalImage"].length < 1) {
+        if (!req.files[R.ORIGINAL_IMAGE_FIELD] || req.files[R.ORIGINAL_IMAGE_FIELD].length < 1) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.ORIGINAL_IMAGE_]));
         }
 
-        if (!req.files["modifiedImage"] || req.files["modifiedImage"].length < 1) {
+        if (!req.files[R.MODIFIED_IMAGE_FIELD] || req.files[R.MODIFIED_IMAGE_FIELD].length < 1) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.MODIFIED_IMAGE_]));
         }
 
-        if (!req.files["originalImage"][0].originalname) {
+        if (!req.files[R.ORIGINAL_IMAGE_FIELD][0].originalname) {
             throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.ORIGINAL_IMAGE]));
         }
 
-        if (!req.files["modifiedImage"][0].originalname) {
+        if (!req.files[R.MODIFIED_IMAGE_FIELD][0].originalname) {
             throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.MODIFIED_IMAGE]));
         }
     }
 
     public async post(req: Request): Promise<string> {
         this.validate(req);
-        const originalImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files["originalImage"][0].buffer.buffer);
-        const modifiedImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files["modifiedImage"][0].buffer.buffer);
+        const originalImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files[R.ORIGINAL_IMAGE_FIELD][0].buffer.buffer);
+        const modifiedImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files[R.MODIFIED_IMAGE_FIELD][0].buffer.buffer);
 
-        const originalImageId: string = await Storage.saveBuffer(req.files["originalImage"][0].buffer.buffer);
-        const modifiedImageId: string = await Storage.saveBuffer(req.files["modifiedImage"][0].buffer.buffer);
+        const originalImageId: string = await Storage.saveBuffer(req.files[R.ORIGINAL_IMAGE_FIELD][0].buffer.buffer);
+        const modifiedImageId: string = await Storage.saveBuffer(req.files[R.MODIFIED_IMAGE_FIELD][0].buffer.buffer);
 
         const difference: Difference = new Difference(originalImage, modifiedImage);
 
         const imagePair: IImagePair = new ImagePair({
             file_difference_id: await difference.saveStorage(),
-            file_modified_id: originalImageId,
-            file_original_id: modifiedImageId,
+            file_modified_id: modifiedImageId,
+            file_original_id: originalImageId,
             name: req.body.name,
             creation_date: new Date(),
             differences_count: difference.countDifferences(),

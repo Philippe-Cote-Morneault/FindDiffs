@@ -2,7 +2,7 @@ import {expect} from "chai";
 import * as fs from "fs";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { COLOR, Pixel } from "../../model/bitmap/pixel";
-import { BitmapDecoder } from "./bitmapDecoder";
+import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
 import { DifferenceImageGenerator } from "./differenceImageGenerator";
 
 /*tslint:disable no-magic-numbers*/

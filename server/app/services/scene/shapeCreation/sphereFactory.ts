@@ -4,6 +4,7 @@ import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class SphereFactory extends GeometricObjectFactory {
     private static readonly REFERENCE_RADIUS: number = 3;
+
     protected createShape(geometricObject: ICommonGeometricObject): ICommonSphere {
         const sphereObject: ICommonSphere = geometricObject as ICommonSphere;
 
