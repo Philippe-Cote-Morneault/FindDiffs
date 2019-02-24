@@ -60,3 +60,7 @@
     color: red;
     font-size: 0.8em;
   }
+
+  .custom-file-input {
+    cursor: pointer;
+  }
