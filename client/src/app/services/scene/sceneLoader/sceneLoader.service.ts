@@ -9,7 +9,6 @@ import { ModifiedSceneParserService } from "../../../services/scene/sceneParser/
 import { SceneParserService } from "../../../services/scene/sceneParser/scene-parser.service";
 import { CameraGenerator } from "../../../services/scene/sceneRenderer/cameraGenerator";
 import { SceneRendererService } from "../../../services/scene/sceneRenderer/scene-renderer.service";
-// import { WebGLRenderer } from "three";
 
 @Injectable({
     providedIn: "root",
@@ -29,15 +28,11 @@ export class SceneLoaderService {
         this.renderScene(container, parsedModifiedScene);
     }
 
-    /*
-    private animate(scene: THREE.Scene, renderer: WebGLRenderer, camera: THREE.Camera): void {
-
-    }*/
-
     private renderScene(container: HTMLElement | null, scene: THREE.Scene): void {
         if (container !== null) {
             const sceneRendererService: SceneRendererService = new SceneRendererService();
-            const renderer: THREE.WebGLRenderer = sceneRendererService.generateRenderer(container.clientWidth, container.clientHeight);
+            const renderer: THREE.WebGLRenderer = sceneRendererService.generateRenderer(container.clientWidth, 
+                                                                                        container.clientHeight);
 
             container.appendChild(renderer.domElement);
 
