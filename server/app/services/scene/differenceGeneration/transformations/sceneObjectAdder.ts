@@ -1,9 +1,9 @@
 import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
+import { SceneTransformation } from "../../../../../../common/model/scene/modifications/sceneTransformation";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { Grid } from "../../grid";
 import { GeometricObjectGenerator } from "../../shapeCreation/geometricObjectGenerator";
-import { SceneTransformation } from "./sceneTransformation";
 
 /**
  * In charge of adding a random object to a scene
