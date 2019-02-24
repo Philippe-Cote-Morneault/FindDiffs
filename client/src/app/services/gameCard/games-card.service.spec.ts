@@ -9,14 +9,15 @@ import { GamesCardService } from "./games-card.service";
 describe("GamesCardService", () => {
     let service: GamesCardService;
     let httpMock: HttpTestingController;
-
     const mockGameCard1: ICommonGameCard = {
         "id": "432423423423ef",
         "pov": POVType.Simple,
         "title": "title1",
         "resource_id": "and id",
-        "best_time_solo": [1254512, 1282445, 544512],
-        "best_time_online": [1254512, 1282445, 544512],
+        "best_time_solo": [{name: "michel", score: 1254512}, {name: "michel", score: 1282445}, {name: "michel", score: 544512}]
+,
+        "best_time_online": [{name: "michel", score: 1254512}, {name: "michel", score: 1282445}, {name: "michel", score: 544512}]
+,
     };
 
     const mockGameCard2: ICommonGameCard = {
@@ -24,8 +25,10 @@ describe("GamesCardService", () => {
         "pov": POVType.Free,
         "title": "title2",
         "resource_id": "and an other id",
-        "best_time_solo": [1254512, 1282445, 544512],
-        "best_time_online": [1254512, 1282445, 544512],
+        "best_time_solo": [{name: "michel", score: 1254512}, {name: "michel", score: 1282445}, {name: "michel", score: 544512}]
+,
+        "best_time_online": [{name: "michel", score: 1254512}, {name: "michel", score: 1282445}, {name: "michel", score: 544512}]
+,
     };
 
     const mockGameCard3: ICommonGameCard = {
@@ -33,8 +36,8 @@ describe("GamesCardService", () => {
         "pov": POVType.Simple,
         "title": "title3",
         "resource_id": "fhdhf",
-        "best_time_solo": [43209, 4832324, 3428432],
-        "best_time_online": [432432, 54353, 423423],
+        "best_time_solo": [{name: "michel", score: 43209}, {name: "michel", score: 4832324}, {name: "michel", score: 3428432}],
+        "best_time_online": [{name: "michel", score: 432432}, {name: "michel", score: 54353}, {name: "michel", score: 423423}],
     };
 
     const mockGameArray: ICommonGameCard[] = [mockGameCard1, mockGameCard2, mockGameCard3];
