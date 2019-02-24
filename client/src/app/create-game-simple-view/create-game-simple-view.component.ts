@@ -23,13 +23,17 @@ export class CreateGameSimpleViewComponent {
     private modifiedImageFile: File;
     private gameName: string;
     public firstNameInput: boolean;
+    public firstOriginalImageInput: boolean;
+    public firstModifiedImageInput: boolean;
 
     public constructor(private gamesCardService: GamesCardService, private imagePairService: ImagePairService,
                        private spinnerService: Ng4LoadingSpinnerService) {
         this.canSubmit = false;
-        this.fromValidation = [false, false, false];
+        this.fromValidation = [false, false, false, false, false];
         this.closed = new EventEmitter();
         this.firstNameInput = false;
+        this.firstOriginalImageInput = false;
+        this.firstModifiedImageInput = false;
     }
 
     public isNameValid(): boolean {
@@ -48,18 +52,59 @@ export class CreateGameSimpleViewComponent {
         return true;
     }
 
+    public isOriginalFileValid(): boolean {
+        const ORIGINAL_FIELD: number = 4;
+        if (this.firstOriginalImageInput) {
+            return this.fromValidation[ORIGINAL_FIELD];
+        }
+
+        return true;
+    }
+
+    public isModifiedFileValid(): boolean {
+        const MODIFIED_FIELD: number = 4;
+        if (this.firstModifiedImageInput) {
+            return this.fromValidation[MODIFIED_FIELD];
+        }
+
+        return true;
+    }
+
     public nameInputVisited(): void {
         this.firstNameInput = true;
     }
 
+    public originalImageVisited(): void {
+        this.firstOriginalImageInput = true;
+    }
+
+    public modifiedImageVisited(): void {
+        this.firstModifiedImageInput = true;
+    }
+
     public fileEvent(event: HTMLInputEvent, fileId: number): void {
         if (event.target.files != null) {
-            const fileName: string = event.target.files[0].name;
+            const files: FileList = event.target.files;
+            const fileName: string = files[0].name;
+            const IMAGE_WIDTH: number = 640;
+            const IMAGE_HEIGHT: number = 480;
+            const VALIDATION_MODIFIER: number = 2;
+
+            const url: string = window.URL.createObjectURL(files[0]);
+            const img: HTMLImageElement = new Image();
+
+            img.onload = () => {
+                this.fromValidation[VALIDATION_MODIFIER + fileId] =
+                    (img.naturalWidth === IMAGE_WIDTH && img.naturalHeight === IMAGE_HEIGHT);
+            };
+
+            img.src = url;
             this.fromValidation[fileId] = fileName.split(".")[1] === "bmp";
 
             fileId === 1 ? this.originalImageFile = event.target.files[0] : this.modifiedImageFile = event.target.files[0];
         }
     }
+
     public verifyInfo(): void {
         const allEqual: boolean = this.fromValidation.every((value) => value);
         this.canSubmit = allEqual;
