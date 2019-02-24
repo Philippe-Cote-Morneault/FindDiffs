@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
+import { stringify } from "querystring";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
@@ -15,6 +16,8 @@ import { ImagePairService } from "../services/image-pair/image-pair.service";
 export class CreateGameSimpleViewComponent {
     @Output() public closed: EventEmitter<boolean>;
     @ViewChild("gameNameInput") private gameNameInput: ElementRef;
+    @ViewChild("originalFile") private originalFile: ElementRef;
+    @ViewChild("modifiedFile") private modifiedFile: ElementRef;
 
     public canSubmit: boolean;
     public fromValidation: boolean[];
@@ -22,20 +25,34 @@ export class CreateGameSimpleViewComponent {
     private originalImageFile: File;
     private modifiedImageFile: File;
     private gameName: string;
+    public firstNameInput: boolean;
 
     public constructor(private gamesCardService: GamesCardService, private imagePairService: ImagePairService,
                        private spinnerService: Ng4LoadingSpinnerService) {
         this.canSubmit = false;
         this.fromValidation = [false, false, false];
         this.closed = new EventEmitter();
+        this.firstNameInput = false;
     }
 
-    public verifyName(): void {
-        const MIN_LENGTH: number = 2;
-        const MAX_LENGTH: number = 13;
-        const gameName: string = this.gameNameInput.nativeElement.value;
-        this.fromValidation[0] = gameName.length > MIN_LENGTH && gameName.length < MAX_LENGTH;
-        this.gameName = gameName;
+    public isNameValid(): boolean {
+
+        if (this.firstNameInput) {
+            const gameName: string = this.gameNameInput.nativeElement.value;
+
+            const validationRegex: string = "^[a-zA-Z0-9]{3,12}$";
+            const nameValidationRegex: RegExp = new RegExp(validationRegex);
+            this.fromValidation[0] = nameValidationRegex.test(gameName);
+            this.gameName = gameName;
+
+            return this.fromValidation[0];
+        }
+
+        return true;
+    }
+
+    public nameInputVisited(): void {
+        this.firstNameInput = true;
     }
 
     public fileEvent(event: HTMLInputEvent, fileId: number): void {
@@ -43,7 +60,12 @@ export class CreateGameSimpleViewComponent {
             const fileName: string = event.target.files[0].name;
             this.fromValidation[fileId] = fileName.split(".")[1] === "bmp";
 
-            fileId === 1 ? this.originalImageFile = event.target.files[0] : this.modifiedImageFile = event.target.files[0];
+            // tslint:disable:ban-comma-operator
+            fileId === 1 ? (this.originalImageFile = event.target.files[0],
+                            this.originalFile.nativeElement.innerText = this.originalImageFile.name)
+                            : (this.modifiedImageFile = event.target.files[0],
+                            this.modifiedFile.nativeElement.innerText = this.modifiedImageFile.name);
+
         }
     }
     public verifyInfo(): void {
