@@ -40,7 +40,9 @@ export class CreateGameFreeViewComponent {
     public isNameValid(): boolean {
         if (this.firstNameInput) {
             const gameName: string = this.gameNameInput.nativeElement.value;
-            const nameValidationRegex: RegExp = new RegExp("^[a-zA-Z0-9]{3,12}$");
+
+            const validationRegex: string = "^[a-zA-Z0-9]{3,12}$";
+            const nameValidationRegex: RegExp = new RegExp(validationRegex);
 
             return nameValidationRegex.test(gameName);
         }
