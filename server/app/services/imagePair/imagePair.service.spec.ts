@@ -5,8 +5,8 @@ import { FileNotFoundException } from "../../../../common/errors/fileNotFoundExc
 import { ImagePair } from "../../model/schemas/imagePair";
 import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
+import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
 import { Storage } from "../../utils/storage/storage";
-import { BitmapDecoder } from "./bitmapDecoder";
 import { Difference } from "./difference";
 import { ImagePairService } from "./imagePair.service";
 

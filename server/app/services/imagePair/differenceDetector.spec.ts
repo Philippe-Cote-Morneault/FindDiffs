@@ -3,7 +3,7 @@ import * as fs from "fs";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { Position } from "../../model/bitmap/pixel";
 import { DIFF_COUNT_PIXELS_INDEX } from "../../tests/testData";
-import { BitmapDecoder } from "./bitmapDecoder";
+import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
 import { DifferenceDetector } from "./differenceDetector";
 
 interface BmpTests {
