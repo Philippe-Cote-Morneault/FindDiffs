@@ -16,11 +16,11 @@ export class RandomGrid extends Grid {
 
         while (!isPositionValid) {
             isPositionValid = true;
-
-            const x: number = this.generateCoordinates(this.dimensions.x);
-            const y: number = this.generateCoordinates(this.dimensions.y);
-            const z: number = this.generateCoordinates(this.dimensions.z);
-            newPosition = {x: x, y: y, z: z};
+            newPosition = {
+                x: this.generateCoordinates(this.dimensions.x),
+                y: this.generateCoordinates(this.dimensions.y),
+                z: this.generateCoordinates(this.dimensions.z),
+            };
 
             for (const position of this.positions) {
                 const distance: number = this.distanceBetweenPosition(position, newPosition);
