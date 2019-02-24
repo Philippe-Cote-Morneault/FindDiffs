@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
+import { stringify } from "querystring";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
@@ -15,6 +16,8 @@ import { ImagePairService } from "../services/image-pair/image-pair.service";
 export class CreateGameSimpleViewComponent {
     @Output() public closed: EventEmitter<boolean>;
     @ViewChild("gameNameInput") private gameNameInput: ElementRef;
+    @ViewChild("originalFile") private originalFile: ElementRef;
+    @ViewChild("modifiedFile") private modifiedFile: ElementRef;
 
     public canSubmit: boolean;
     public fromValidation: boolean[];
@@ -57,7 +60,12 @@ export class CreateGameSimpleViewComponent {
             const fileName: string = event.target.files[0].name;
             this.fromValidation[fileId] = fileName.split(".")[1] === "bmp";
 
-            fileId === 1 ? this.originalImageFile = event.target.files[0] : this.modifiedImageFile = event.target.files[0];
+            // tslint:disable:ban-comma-operator
+            fileId === 1 ? (this.originalImageFile = event.target.files[0],
+                            this.originalFile.nativeElement.innerText = this.originalImageFile.name)
+                            : (this.modifiedImageFile = event.target.files[0],
+                            this.modifiedFile.nativeElement.innerText = this.modifiedImageFile.name);
+
         }
     }
     public verifyInfo(): void {

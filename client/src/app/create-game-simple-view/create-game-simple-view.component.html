@@ -25,14 +25,14 @@
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 1)" accept=".bmp"
           required>
-        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+        <label class="custom-file-label" for="validatedCustomFile" #originalFile>Choose file...</label>
       </div>
 
       Modified image :
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 2)" accept=".bmp"
           required>
-        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+        <label class="custom-file-label" for="validatedCustomFile" #modifiedFile>Choose file...</label>
       </div>
       <div *ngIf="verifyInfo()"></div>
       <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addImagePair()">Submit</button>
