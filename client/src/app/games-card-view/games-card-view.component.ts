@@ -26,6 +26,7 @@ export class GamesCardViewComponent implements OnInit {
 
     public leftButton: string;
     public rightButton: string;
+    public simplePOV: string;
 
     public constructor(
         private gamesCardService: GamesCardService,
@@ -35,6 +36,7 @@ export class GamesCardViewComponent implements OnInit {
         private imagePairService: ImagePairService) {
             this.rightButton = "Create";
             this.leftButton = "Play";
+            this.simplePOV = "Simple";
             this.isInAdminView = false;
          }
 
@@ -89,7 +91,7 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     private isSimplePov(): boolean {
-        return this.gameCard.pov.toString() === "Simple";
+        return this.gameCard.pov.toString() === this.simplePOV;
     }
 
     private getImagePairById(): void {
