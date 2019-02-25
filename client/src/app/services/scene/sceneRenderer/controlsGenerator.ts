@@ -18,6 +18,13 @@ export class ControlsGenerator {
         const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, canvas);
         controls.enableKeys = true;
         controls.target.set(0, ControlsGenerator.TARGET_Y_POSITION, 0);
+        controls.enableZoom = false;
+        controls.keys = {
+            LEFT: 65,
+            UP: 87,
+            RIGHT: 68,
+            BOTTOM: 83,
+        };
 
         return controls;
     }
