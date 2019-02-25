@@ -1,4 +1,5 @@
-import { expect } from "chai";
+// tslint:disable-next-line:no-useless-files
+/* import { expect } from "chai";
 import { SceneLoaderService } from "./sceneLoader.service";
 
 describe("SceneLoaderService", () => {
@@ -6,6 +7,6 @@ describe("SceneLoaderService", () => {
 /*
     it("", () => {
         sceneLoaderService.
-    })
-    */
+    }
 });
+*/
