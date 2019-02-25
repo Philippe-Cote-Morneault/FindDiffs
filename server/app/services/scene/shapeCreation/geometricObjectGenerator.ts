@@ -13,7 +13,7 @@ export class GeometricObjectGenerator {
     private geometricShapeFactories: GeometricObjectFactory[];
 
     public constructor() {
-        this.geometricShapeFactories = [];
+        this.geometricShapeFactories = new Array<GeometricObjectFactory>();
         this.setFactories();
     }
 
