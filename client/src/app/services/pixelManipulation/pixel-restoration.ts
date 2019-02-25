@@ -6,7 +6,7 @@ import { RgbaPosition } from "../../models/pixelProperties/color";
 @Injectable({
     providedIn: "root",
 })
-export class PixelRestorationService {
+export class PixelRestoration {
     public static pixelDimension: number = 1;
     public static imageDataPixelSpace: number = 4;
     public originalContext: CanvasRenderingContext2D | null;
@@ -44,6 +44,6 @@ export class PixelRestorationService {
     }
 
     public pixelPositionInImageData(pos: ICommon2DPosition, width: number): number {
-        return ((width * pos.y + pos.x) * PixelRestorationService.imageDataPixelSpace);
+        return ((width * pos.y + pos.x) * PixelRestoration.imageDataPixelSpace);
     }
 }
