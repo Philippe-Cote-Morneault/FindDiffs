@@ -3,12 +3,12 @@ import { ICommonCone } from "../../../../../../../common/model/scene/objects/geo
 import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class ConeFactory extends GeometricObjectFactory {
-    private static readonly RADIAL_SEGMENTS: number = 100;
-    public createShape(color: THREE.MeshStandardMaterial, geometricObject: ICommonCone): THREE.Object3D {
+    private static readonly RADIAL_SEGMENTS: number = 40;
+    protected createShape(material: THREE.MeshPhongMaterial, geometricObject: ICommonCone): THREE.Object3D {
         const coneShape: THREE.ConeGeometry = new THREE.ConeGeometry(geometricObject.radius,
                                                                      geometricObject.height,
                                                                      ConeFactory.RADIAL_SEGMENTS);
 
-        return new THREE.Mesh(coneShape, color);
+        return new THREE.Mesh(coneShape, material);
     }
 }

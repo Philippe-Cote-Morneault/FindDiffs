@@ -52,6 +52,15 @@ export class ImagePairController extends Controller implements IImagePairControl
             }
         });
 
+        router.get("/:id/difference.json", async(req: Request, res: Response, next: NextFunction) => {
+            try {
+                const response: string = await this.imagePairService.getDifferenceJSON(req.params.id);
+                res.send(Buffer.from(response));
+            } catch (err) {
+                this.handleError(res, err);
+            }
+        });
+
         router.get("/:id/modified", async(req: Request, res: Response, next: NextFunction) => {
             try {
                 const file: ArrayBuffer = await this.imagePairService.getModified(req.params.id);

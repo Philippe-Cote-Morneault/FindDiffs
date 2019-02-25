@@ -15,13 +15,13 @@ describe("DifferenceService", () => {
 
         beforeEach(() => {
             sinon.stub(BitmapDecoder, "FromArrayBuffer");
-            sinon.stub(ApiRequest, "getImagePairDiffId");
+            sinon.stub(ApiRequest, "getImagePairDiffJSONId");
             sinon.stub(RevealDifference.prototype, "reveal");
         });
 
         afterEach(() => {
             (BitmapDecoder.FromArrayBuffer as sinon.SinonStub).restore();
-            (ApiRequest.getImagePairDiffId as sinon.SinonStub).restore();
+            (ApiRequest.getImagePairDiffJSONId as sinon.SinonStub).restore();
             (RevealDifference.prototype.reveal as sinon.SinonStub).restore();
         });
 
@@ -94,10 +94,11 @@ describe("DifferenceService", () => {
             };
 
             (BitmapDecoder.FromArrayBuffer as sinon.SinonStub).returns({});
-            (ApiRequest.getImagePairDiffId as sinon.SinonStub).resolves();
+            (ApiRequest.getImagePairDiffJSONId as sinon.SinonStub).resolves();
             const reveal: ICommonReveal = {
                 hit: true,
                 pixels_affected: [],
+                difference_id: 1,
             };
 
             (RevealDifference.prototype.reveal as sinon.SinonStub).returns(reveal);

@@ -14,8 +14,8 @@ import { Grid } from "./grid";
 import { SceneGenerator } from "./sceneGenerator";
 
 export class SceneService extends Service implements ISceneService {
-    private readonly MIN_OBJECT: number = 10;
-    private readonly MAX_OBJECT: number = 200;
+    private static readonly MIN_OBJECT: number = 10;
+    private static readonly MAX_OBJECT: number = 200;
 
     private validatePost(req: Request): void {
         if (!req.body.object_type) {
@@ -30,8 +30,8 @@ export class SceneService extends Service implements ISceneService {
             throw new InvalidFormatException(_e(R.ERROR_N_A_N, [R.OBJECT_QTY_]));
         }
 
-        if (Number(req.body.object_qty) > this.MAX_OBJECT ||
-            Number(req.body.object_qty) < this.MIN_OBJECT) {
+        if (Number(req.body.object_qty) > SceneService.MAX_OBJECT ||
+            Number(req.body.object_qty) < SceneService.MIN_OBJECT) {
 
             throw new InvalidFormatException(R.ERROR_OBJECTS_QTY);
         }

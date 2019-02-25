@@ -32,7 +32,7 @@ describe("PixelRestorationService", () => {
       originalContext.putImageData(expectedImageData, 0, 0);
     }
     const posPixel: ICommon2DPosition = {x: 0, y: 0};
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
     pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
     expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
 
@@ -46,7 +46,7 @@ describe("PixelRestorationService", () => {
       originalContext.putImageData(expectedImageData, 0, 0);
     }
     const posPixel: ICommon2DPosition = {x: 0, y: 0};
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
     pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
     expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
 
@@ -60,7 +60,7 @@ describe("PixelRestorationService", () => {
       originalContext.putImageData(expectedImageData, 0, 0);
     }
     const posPixel: ICommon2DPosition = {x: 0, y: 0};
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
     pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
 
     expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
@@ -79,7 +79,7 @@ describe("PixelRestorationService", () => {
     }
 
     const posPixel: ICommon2DPosition[] = [{x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}, {x: 3, y: 0}];
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: posPixel};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: posPixel, difference_id: 1};
     pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
 
     expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
@@ -95,7 +95,7 @@ describe("PixelRestorationService", () => {
       originalContext.putImageData(expectedImageData, 0, 0);
     }
     const posPixel: ICommon2DPosition = {x: 0, y: 0};
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
     pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
     expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
     stub.restore();
@@ -111,7 +111,7 @@ describe("PixelRestorationService", () => {
       originalContext.putImageData(expectedImageData, 0, 0);
     }
     const posPixel: ICommon2DPosition = {x: 0, y: 0};
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel]};
+    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
     pixelRestorationService.restoreImage(responseServer, originalCanvas, modifiedCanvas);
     expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
     stub.restore();

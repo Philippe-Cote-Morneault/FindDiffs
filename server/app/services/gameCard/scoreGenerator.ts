@@ -4,18 +4,21 @@ import { RandomUtils } from "../../utils/randomUtils";
 export class ScoreGenerator {
     public static readonly MIN: number = 60;
     public static readonly MAX: number = 90;
+    public static readonly DEFAULT_NAME: string = "Michel";
 
     public static generateScore(length: number): ICommonScoreEntry[] {
 
         const generatedScore: ICommonScoreEntry[] = new Array<ICommonScoreEntry>();
         for (let i: number = 0; i < length; i++) {
             const scoreEntry: ICommonScoreEntry = {
-                name: "Michel",
+                name: this.DEFAULT_NAME,
                 score: RandomUtils.inRangeInt(this.MIN, this.MAX),
             };
             generatedScore.push(scoreEntry);
         }
 
-        return generatedScore.sort((x: ICommonScoreEntry) => x.score);
+        return generatedScore.sort(
+            (a: ICommonScoreEntry, b: ICommonScoreEntry) => a.score - b.score,
+        );
     }
 }

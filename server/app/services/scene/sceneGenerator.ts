@@ -8,7 +8,7 @@ import { GeometricObjectGenerator } from "./shapeCreation/geometricObjectGenerat
 
 export class SceneGenerator {
     private static readonly SCENE_SIZE: number =  250;
-    private static readonly SCENE_DEPTH: number = 50;
+    private static readonly SCENE_HEIGHT: number = 50;
     private static readonly SCENE_OBJECT_MARGIN: number = 9;
 
     private objectQty: number;
@@ -21,8 +21,8 @@ export class SceneGenerator {
         this.scene = {
             dimensions: {
                 x: SceneGenerator.SCENE_SIZE,
-                y: SceneGenerator.SCENE_SIZE,
-                z: SceneGenerator.SCENE_DEPTH,
+                y: SceneGenerator.SCENE_HEIGHT,
+                z: SceneGenerator.SCENE_SIZE,
             },
             sceneObjects: new Array<ICommonSceneObject>(),
             type: ObjectType.Geometric,
@@ -36,6 +36,7 @@ export class SceneGenerator {
     }
 
     public generateScene(): ICommonGeometricScene {
+        // tslint:disable-next-line:no-magic-numbers
         this.grid = new RandomGrid(this.scene.dimensions, SceneGenerator.SCENE_OBJECT_MARGIN);
         for (let i: number = 0; i < this.objectQty; i++) {
             const position: ICommon3DPosition = this.grid.getNextPosition();

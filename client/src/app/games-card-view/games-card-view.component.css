@@ -54,10 +54,15 @@ ol {
     color: white;
     border-radius: 10px;
     border: #33343D;
+    cursor: pointer;
 }
 
 #scene {
     width: 160px;
     height: 120px;
     margin: auto;
+}
+
+.original_image > div{
+    padding-top: 40px;
 }

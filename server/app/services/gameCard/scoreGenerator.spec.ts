@@ -21,5 +21,16 @@ describe("ScoreGenerator", () => {
                 (x: ICommonScoreEntry) => x.score >= ScoreGenerator.MIN && ScoreGenerator.MAX >= x.score).length,
                 ).to.equal(NUMBER_SCORE);
         });
+
+        it("Should be sorted in descending order", () => {
+            const NUMBER_SCORE: number = 100;
+            const entries: ICommonScoreEntry[] = ScoreGenerator.generateScore(NUMBER_SCORE);
+
+            let lastValue: number = ScoreGenerator.MIN - 1;
+            entries.forEach((x: ICommonScoreEntry) => {
+                expect(x.score).to.be.gte(lastValue);
+                lastValue = x.score;
+            });
+        });
     });
 });

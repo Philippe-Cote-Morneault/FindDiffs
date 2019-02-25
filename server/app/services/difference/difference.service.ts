@@ -2,12 +2,10 @@ import { Request } from "express";
 import "reflect-metadata";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotImplementedException } from "../../../../common/errors/notImplementedException";
-import { Bitmap } from "../../model/bitmap/bitmap";
 import * as BitmapHeader from "../../model/bitmap/header";
 import { Position } from "../../model/bitmap/pixel";
 import { _e, R } from "../../strings";
 import { ApiRequest } from "../../utils/apiRequest";
-import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
 import { IDifferenceService } from "../interfaces";
 import { Service } from "../service";
 import { RevealDifference } from "./revealDifference";
@@ -17,11 +15,10 @@ export class DifferenceService extends Service implements IDifferenceService {
     public async postSimple(req: Request): Promise<string> {
         this.validateSimple(req);
 
-        const differenceBitmap: Bitmap = BitmapDecoder.FromArrayBuffer(
-            await ApiRequest.getImagePairDiffId(req.body.image_pair_id),
-        );
+        const differencePixels: number[] = await ApiRequest.getImagePairDiffJSONId(req.body.image_pair_id);
+
         const position: Position = new Position(Number(req.body.x), Number(req.body.y));
-        const revealDifferences: RevealDifference = new RevealDifference(differenceBitmap, position);
+        const revealDifferences: RevealDifference = new RevealDifference(differencePixels, position);
 
         return JSON.stringify(revealDifferences.reveal());
     }
