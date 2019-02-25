@@ -25,12 +25,12 @@ export class SceneDifferenceGenerator {
         this.scene = originalScene;
         this.grid = grid;
     }
-    public generateModifiedScene(requiresInsertion: boolean, requiresRemoval: boolean,
-                                 requiresColorChange: boolean): ICommonSceneModifications {
+    public generateModifiedScene(insert: boolean, remove: boolean,
+                                 changeColor: boolean): ICommonSceneModifications {
 
         // Deep copy the originalObjects array
         this.objectsToTransform = JSON.parse(JSON.stringify(this.scene.sceneObjects));
-        this.setTransformationsToApply(requiresInsertion, requiresRemoval, requiresColorChange);
+        this.setTransformationsToApply(insert, remove, changeColor);
         this.initializeModifications();
 
         for (let i: number = 0; i < SceneDifferenceGenerator.NUMBER_OF_DIFFERENCES; ++i) {
@@ -47,14 +47,14 @@ export class SceneDifferenceGenerator {
         );
     }
 
-    private setTransformationsToApply(requiresInsertion: boolean, requiresRemoval: boolean, requiresColorChange: boolean ): void {
-        if (requiresInsertion) {
+    private setTransformationsToApply(insert: boolean, remove: boolean, changeColor: boolean ): void {
+        if (insert) {
             this.transformationsToApply.push(new SceneObjectAdder(this.grid));
         }
-        if (requiresRemoval) {
+        if (remove) {
             this.transformationsToApply.push(new SceneObjectRemover());
         }
-        if (requiresColorChange) {
+        if (changeColor) {
             this.transformationsToApply.push(
                 this.scene.type === ObjectType.Geometric ?
                 new SceneObjectColorChanger() : new SceneObjectTextureChanger(),
