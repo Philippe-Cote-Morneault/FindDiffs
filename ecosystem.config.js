@@ -28,6 +28,7 @@ module.exports = {
         ref: 'origin/develop',
         repo: 'git@gitlab.com:log2990-106/log2990.git',
         path: '/root/log2990/',
+        'pre-deploy': 'git reset --hard',
         'post-deploy':
           'cd server && npm install && npm run tsc && cd .. && pm2 reload ecosystem.config.js --env production'
       }

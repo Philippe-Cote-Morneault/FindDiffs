@@ -100,15 +100,16 @@ export class CreateGameSimpleViewComponent {
                 this.fromValidation[VALIDATION_MODIFIER + fileId] =
                     (img.naturalWidth === IMAGE_WIDTH && img.naturalHeight === IMAGE_HEIGHT);
             };
-
             img.src = url;
             this.fromValidation[fileId] = fileName.split(".")[1] === "bmp";
 
-            // tslint:disable:ban-comma-operator
-            fileId === 1 ? (this.originalImageFile = event.target.files[0],
-                            this.originalFile.nativeElement.innerText = this.originalImageFile.name)
-                            : (this.modifiedImageFile = event.target.files[0],
-                            this.modifiedFile.nativeElement.innerText = this.modifiedImageFile.name);
+            if (!fileId) {
+                this.originalImageFile = event.target.files[0];
+                this.originalFile.nativeElement.innerText = this.originalImageFile.name;
+            } else {
+                this.modifiedImageFile = event.target.files[0];
+                this.modifiedFile.nativeElement.innerText = this.modifiedImageFile.name;
+            }
 
         }
     }

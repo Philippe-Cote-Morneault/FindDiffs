@@ -37,13 +37,9 @@ export class SceneLoaderService {
         if (container) {
             this.renderer = RendererGenerator.generateRenderer(container.clientWidth,
                                                                container.clientHeight);
-
             container.appendChild(this.renderer.domElement);
-
             this.camera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
-
             this.generateControls(inGameMode, this.camera, this.renderer.domElement);
-
             this.animate();
         }
     }
