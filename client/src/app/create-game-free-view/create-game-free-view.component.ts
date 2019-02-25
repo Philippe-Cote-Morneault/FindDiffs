@@ -37,18 +37,6 @@ export class CreateGameFreeViewComponent {
             this.firstQuantityInput = false;
             this.closed = new EventEmitter();
     }
-    public isNameValid(): boolean {
-        if (this.firstNameInput) {
-            const gameName: string = this.gameNameInput.nativeElement.value;
-
-            const validationRegex: string = "^[a-zA-Z0-9]{3,12}$";
-            const nameValidationRegex: RegExp = new RegExp(validationRegex);
-
-            return nameValidationRegex.test(gameName);
-        }
-
-        return false;
-    }
 
     public nameInputVisited(): void {
         this.firstNameInput = true;
@@ -58,6 +46,14 @@ export class CreateGameFreeViewComponent {
         this.firstQuantityInput = true;
     }
 
+    public isNameValid(): boolean {
+       const gameName: string = this.gameNameInput.nativeElement.value;
+       const validationRegex: string = "^[a-zA-Z0-9]{3,12}$";
+       const nameValidationRegex: RegExp = new RegExp(validationRegex);
+
+       return nameValidationRegex.test(gameName);
+    }
+
     public isModificationTypeValid(): boolean {
         const isAddType: boolean = this.add.nativeElement.checked;
         const isRemoveType: boolean = this.remove.nativeElement.checked;
@@ -65,14 +61,11 @@ export class CreateGameFreeViewComponent {
 
         return isAddType || isRemoveType || isModifiedType;
     }
+
     public isQuantityValid(): boolean {
-        if (this.firstQuantityInput) {
-            const quantity: number = Number(this.quantityObject.nativeElement.value);
+        const quantity: number = Number(this.quantityObject.nativeElement.value);
 
-            return !isNaN(quantity) && quantity > CreateGameFreeViewComponent.MIN_QTE && quantity < CreateGameFreeViewComponent.MAX_QTE;
-        }
-
-        return false;
+        return !isNaN(quantity) && quantity > CreateGameFreeViewComponent.MIN_QTE && quantity < CreateGameFreeViewComponent.MAX_QTE;
     }
 
     public verifyInfo(): void {
