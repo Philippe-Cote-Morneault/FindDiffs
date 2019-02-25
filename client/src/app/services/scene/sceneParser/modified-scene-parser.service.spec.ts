@@ -11,6 +11,7 @@ describe("ModifiedSceneParserService", () => {
         const sceneChildrenCount: number = numberOfLightsInScene + 1 + scene.sceneObjects.length +
             sceneModifications.addedObjects.length - sceneModifications.deletedObjects.length;
 
-        expect(modifiedSceneParserService.parseModifiedScene(scene, sceneModifications).children.length).to.equal(sceneChildrenCount);
+        expect(modifiedSceneParserService.parseModifiedScene(scene, sceneModifications).children.length).
+            to.equal(sceneChildrenCount);
     });
 });
