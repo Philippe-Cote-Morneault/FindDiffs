@@ -13,7 +13,7 @@ import { SceneObjectTextureChanger } from "./transformations/sceneObjectTextureC
 export class SceneDifferenceGenerator {
     private static readonly NUMBER_OF_DIFFERENCES: number = 7;
 
-    private transformationsToApply: SceneTransformation[] = [];
+    private transformationsToApply: SceneTransformation[];
     private objectsToTransform: ICommonSceneObject[];
 
     private scene: ICommonScene;
@@ -21,6 +21,7 @@ export class SceneDifferenceGenerator {
     private sceneModif: ICommonSceneModifications;
 
     public constructor(originalScene: ICommonScene, grid: Grid) {
+        this.transformationsToApply = new Array<SceneTransformation>();
         this.scene = originalScene;
         this.grid = grid;
     }
