@@ -10,9 +10,10 @@ import { SphereFactory } from "./sphereFactory";
 
 export class GeometricObjectGenerator {
     private static instance: GeometricObjectGenerator;
-    private geometricShapeFactories: GeometricObjectFactory[] = [];
+    private geometricShapeFactories: GeometricObjectFactory[];
 
     public constructor() {
+        this.geometricShapeFactories = new Array<GeometricObjectFactory>();
         this.setFactories();
     }
 
