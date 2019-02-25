@@ -7,7 +7,7 @@ import { CubeFactory } from "./cubeFactory";
 describe("CubeFactory", () => {
     const factory: CubeFactory = new CubeFactory();
 
-    const cube: ICommonCube= {
+    const cube: ICommonCube = {
         width: 5,
         color: 0x123,
         shapeType: GeometricShapeType.CONE,
