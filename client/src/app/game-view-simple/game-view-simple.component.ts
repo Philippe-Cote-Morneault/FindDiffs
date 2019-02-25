@@ -58,8 +58,8 @@ export class GameViewSimpleComponent implements OnInit {
                 const hashDifference: number = response.difference_id;
                 if (this.isANewDifference(hashDifference)) {
                     this.pixelRestoration.restoreImage(response,
-                                                              this.originalCanvas.nativeElement,
-                                                              this.modifiedCanvas.nativeElement);
+                                                       this.originalCanvas.nativeElement,
+                                                       this.modifiedCanvas.nativeElement);
                     this.addDifference(hashDifference);
                 }
             }

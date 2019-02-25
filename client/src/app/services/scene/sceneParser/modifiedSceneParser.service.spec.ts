@@ -1,25 +1,16 @@
 import { expect } from "chai";
+import { sceneModifications } from "src/app/tests/scene/geometricSceneModificationsMock";
+import { scene } from "src/app/tests/scene/sceneMock";
 import { ModifiedSceneParserService } from "./modified-scene-parser.service";
-import { ICommonGeometricModifications } from "../../../../../../common/model/scene/modifications/geometricModifications";
-import { ICommonGeometricObject, GeometricShapeType } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { ObjectType } from "../../../../../../common/model/scene/scene";
 
 describe("ModifiedSceneParserService", () => {
     const modifiedSceneParserService: ModifiedSceneParserService = new ModifiedSceneParserService();
+    const numberOfLightsInScene: number = 5;
 
-    
+    it("Should create a scene with the right amount of objects.", () => {
+        const sceneChildrenCount: number = numberOfLightsInScene + 1 + scene.sceneObjects.length +
+            sceneModifications.addedObjects.length - sceneModifications.deletedObjects.length;
 
-    /*
-
-    const sceneModifications: ICommonGeometricModifications = {
-        id: "fsfdsfsd",
-        addedObjects: addedObjects
-        deletedObjects: ,
-        colorChangedObjects:
-
-    }
-    it("", () => {
-        modifiedSceneParserService.parseModifiedScene()
+        expect(modifiedSceneParserService.parseModifiedScene(scene, sceneModifications).children.length).to.equal(sceneChildrenCount);
     });
-    */
 });

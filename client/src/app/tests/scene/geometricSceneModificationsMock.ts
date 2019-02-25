@@ -20,7 +20,7 @@ const colorChangedObjects: Pair<string, number>[] = [
 
 const deletedObjects: string[] = [
     "kjhdhgf", "hgfhfsadfsf",
-]
+];
 
 export const sceneModifications: ICommonGeometricModifications = {
     id: "dsgskfds32",
@@ -28,4 +28,4 @@ export const sceneModifications: ICommonGeometricModifications = {
     type: ObjectType.Geometric,
     addedObjects: [cube3, cylinder3],
     deletedObjects: deletedObjects,
-}
+};
