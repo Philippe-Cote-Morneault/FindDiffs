@@ -139,13 +139,13 @@ export class CreateGameSimpleViewComponent {
                 } else {
                     this.hideView();
                     this.gameCardLoaderService.addDynamicComponent((response as ICommonGameCard), true);
+                    this.spinnerService.hide();
                     alert("Simple game created!");
                 }
             });
     }
 
     public hideView(): void {
-        this.spinnerService.hide();
         this.closed.emit(true);
     }
 }
