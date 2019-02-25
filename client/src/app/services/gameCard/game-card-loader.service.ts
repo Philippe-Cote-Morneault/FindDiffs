@@ -11,8 +11,8 @@ import { GamesCardViewComponent } from "../../games-card-view/games-card-view.co
 @Injectable()
 export class GameCardLoaderService {
     private factoryResolver: ComponentFactoryResolver;
-    private simplePOVContainer: ViewContainerRef;
-    private freePOVContainer: ViewContainerRef;
+    public simplePOVContainer: ViewContainerRef;
+    public freePOVContainer: ViewContainerRef;
 
     public constructor(@Inject(ComponentFactoryResolver) factoryResolver: ComponentFactoryResolver) {
         this.factoryResolver = factoryResolver;

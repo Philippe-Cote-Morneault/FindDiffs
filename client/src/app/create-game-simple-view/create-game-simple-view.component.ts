@@ -4,6 +4,7 @@ import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { HTMLInputEvent } from "../htmlinput-event";
+import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 
@@ -29,7 +30,7 @@ export class CreateGameSimpleViewComponent {
     public firstModifiedImageInput: boolean;
 
     public constructor(private gamesCardService: GamesCardService, private imagePairService: ImagePairService,
-                       private spinnerService: Ng4LoadingSpinnerService) {
+                       private spinnerService: Ng4LoadingSpinnerService, private gameCardLoaderService: GameCardLoaderService) {
         this.canSubmit = false;
         this.fromValidation = [false, false, false, false, false];
         this.closed = new EventEmitter();
@@ -135,8 +136,8 @@ export class CreateGameSimpleViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    this.spinnerService.hide();
-                    window.location.reload();
+                    this.hideView();
+                    this.gameCardLoaderService.addDynamicComponent((response as ICommonGameCard), true);
                 }
             });
     }
