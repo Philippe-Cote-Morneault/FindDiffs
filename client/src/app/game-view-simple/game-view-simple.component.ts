@@ -55,14 +55,14 @@ export class GameViewSimpleComponent implements OnInit {
         this.identifyingDifference = true;
         const xPosition: number = e.layerX;
         const yPosition: number = e.layerY;
-        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) => {
+        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(async (response) => {
             if (response.hit) {
                 if (this.isANewDifference(response.difference_id)) {
                     this.pixelRestoration.restoreImage(
                         response,
                         this.originalCanvas.nativeElement,
                         this.modifiedCanvas.nativeElement);
-                    this.addDifference(response.difference_id);
+                    await this.addDifference(response.difference_id);
                 }
             }
             this.identifyingDifference = false;
@@ -83,10 +83,10 @@ export class GameViewSimpleComponent implements OnInit {
         };
     }
 
-    public addDifference(differenceId: number): void {
+    public async addDifference(differenceId: number): Promise<void> {
         this.differenceFound[this.differenceFound.length++] = differenceId;
         this.differenceCounterUser = this.differenceCounterUser + 1;
-        this.differenceSound.play();
+        await this.differenceSound.play();
     }
 
     public isANewDifference(differenceId: number): boolean {
