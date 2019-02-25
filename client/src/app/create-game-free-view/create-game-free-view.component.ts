@@ -75,7 +75,6 @@ export class CreateGameFreeViewComponent {
     }
 
     public hideView(): void {
-        this.spinnerService.hide();
         this.closed.emit(true);
     }
 
@@ -118,6 +117,7 @@ export class CreateGameFreeViewComponent {
                 } else {
                     this.hideView();
                     this.gameCardLoaderService.addDynamicComponent((response as ICommonGameCard), true);
+                    this.spinnerService.hide();
                     alert("Free pov game created!");
                 }
             });
