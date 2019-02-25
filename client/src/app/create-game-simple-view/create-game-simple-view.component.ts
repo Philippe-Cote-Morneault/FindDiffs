@@ -139,6 +139,7 @@ export class CreateGameSimpleViewComponent {
                 } else {
                     this.hideView();
                     this.gameCardLoaderService.addDynamicComponent((response as ICommonGameCard), true);
+                    alert("Simple game created!");
                 }
             });
     }

@@ -118,6 +118,7 @@ export class CreateGameFreeViewComponent {
                 } else {
                     this.hideView();
                     this.gameCardLoaderService.addDynamicComponent((response as ICommonGameCard), true);
+                    alert("Free pov game created!");
                 }
             });
     }
