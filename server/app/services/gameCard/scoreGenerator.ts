@@ -16,6 +16,8 @@ export class ScoreGenerator {
             generatedScore.push(scoreEntry);
         }
 
-        return generatedScore.sort((a: ICommonScoreEntry, b: ICommonScoreEntry) => b.score - a.score);
+        return generatedScore.sort(
+            (a: ICommonScoreEntry, b: ICommonScoreEntry) => a.score - b.score,
+        );
     }
 }
