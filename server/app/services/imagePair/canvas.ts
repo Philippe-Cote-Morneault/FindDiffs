@@ -23,7 +23,6 @@ export class Canvas {
     }
 
     public enlargePixel(pixels: Pixel[], index: number): void {
-
         const pos: Position = this.moveBrush(index);
 
         for (let y: number = 0; y < BRUSH.length; y++) {
