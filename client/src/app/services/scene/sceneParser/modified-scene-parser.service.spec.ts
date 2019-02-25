@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { sceneModifications } from "src/app/tests/scene/geometricSceneModificationsMock";
-import { scene } from "src/app/tests/scene/sceneMock";
+import { sceneModifications } from "../../../tests/scene/geometricSceneModificationsMock";
+import { scene } from "../../../tests/scene/sceneMock";
 import { ModifiedSceneParserService } from "./modified-scene-parser.service";
 
 describe("ModifiedSceneParserService", () => {

@@ -4,6 +4,7 @@ import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
+import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 
@@ -31,7 +32,8 @@ export class CreateGameFreeViewComponent {
     public constructor(
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
-        public gamesCardService: GamesCardService) {
+        public gamesCardService: GamesCardService,
+        private gameCardLoaderService: GameCardLoaderService) {
             this.canSubmit = false;
             this.firstNameInput = false;
             this.firstQuantityInput = false;
@@ -73,6 +75,7 @@ export class CreateGameFreeViewComponent {
     }
 
     public hideView(): void {
+        this.spinnerService.hide();
         this.closed.emit(true);
     }
 
@@ -113,8 +116,8 @@ export class CreateGameFreeViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    this.spinnerService.hide();
-                    window.location.reload();
+                    this.hideView();
+                    this.gameCardLoaderService.addDynamicComponent((response as ICommonGameCard), true);
                 }
             });
     }
