@@ -103,7 +103,7 @@ export class CreateGameSimpleViewComponent {
             img.src = url;
             this.fromValidation[fileId] = fileName.split(".")[1] === "bmp";
 
-            if (!fileId) {
+            if (fileId === 1) {
                 this.originalImageFile = event.target.files[0];
                 this.originalFile.nativeElement.innerText = this.originalImageFile.name;
             } else {
@@ -139,6 +139,7 @@ export class CreateGameSimpleViewComponent {
                 } else {
                     this.hideView();
                     this.gameCardLoaderService.addDynamicComponent((response as ICommonGameCard), true);
+                    alert("Simple game created!");
                 }
             });
     }

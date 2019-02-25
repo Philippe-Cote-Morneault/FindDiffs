@@ -1,0 +1,280 @@
+#%RAML 1.0 Scene
+post:
+  description: Create a new scene with the parameters that needs to be generated
+  body:
+    multipart/form-data:
+      properties: 
+        name: string
+        object_type:
+          type: string
+          enum: [Geometric, Thematic]
+        object_qty: number
+        add: boolean
+        remove: boolean
+        modified: boolean
+  responses: 
+    200:
+      body:
+        application/json:
+          example: | 
+            {
+              "dimensions": {
+                "x": 250,
+                "y": 50,
+                "z": 250
+              },
+              "sceneObjects": [
+                {
+                  "id": "faf766fa869c4aac919699030eab8794",
+                  "orientation": {
+                    "xAngle": 5.296037529952267,
+                    "yAngle": 5.351575482770586,
+                    "zAngle": 5.144020075959465
+                  },
+                  "position": {
+                    "x": 99,
+                    "y": -1,
+                    "z": -104
+                  },
+                  "type": 0,
+                  "color": 8602734,
+                  "shapeType": 3,
+                  "radius": 2.048444551783508,
+                  "height": 3.0726668276752624
+                },
+                {
+                  "id": "88c4bb76194046e483c5465592883bcd",
+                  "orientation": {
+                    "xAngle": 4.198188280968809,
+                    "yAngle": 0.3099441431102797,
+                    "zAngle": 1.6129104921773478
+                  },
+                  "position": {
+                    "x": -4,
+                    "y": 1,
+                    "z": 85
+                  },
+                  "type": 0,
+                  "color": 9151441,
+                  "shapeType": 3,
+                  "radius": 2.0554379798425892,
+                  "height": 3.083156969763884
+                }
+              ],
+              "type": 0,
+              "id": "5c73376756cd8740c5dcb6a3",
+              "bg_color": 6494181
+            }
+/{id}:
+  get:
+    description: Fetch a scene about a scene
+    responses: 
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "dimensions": {
+                  "x": 250,
+                  "y": 50,
+                  "z": 250
+                },
+                "sceneObjects": [
+                  {
+                    "id": "faf766fa869c4aac919699030eab8794",
+                    "orientation": {
+                      "xAngle": 5.296037529952267,
+                      "yAngle": 5.351575482770586,
+                      "zAngle": 5.144020075959465
+                    },
+                    "position": {
+                      "x": 99,
+                      "y": -1,
+                      "z": -104
+                    },
+                    "type": 0,
+                    "color": 8602734,
+                    "shapeType": 3,
+                    "radius": 2.048444551783508,
+                    "height": 3.0726668276752624
+                  },
+                  {
+                    "id": "88c4bb76194046e483c5465592883bcd",
+                    "orientation": {
+                      "xAngle": 4.198188280968809,
+                      "yAngle": 0.3099441431102797,
+                      "zAngle": 1.6129104921773478
+                    },
+                    "position": {
+                      "x": -4,
+                      "y": 1,
+                      "z": 85
+                    },
+                    "type": 0,
+                    "color": 9151441,
+                    "shapeType": 3,
+                    "radius": 2.0554379798425892,
+                    "height": 3.083156969763884
+                  }
+                ],
+                "type": 0,
+                "id": "5c73376756cd8740c5dcb6a3",
+                "bg_color": 6494181
+              }
+  /modified:
+    post:
+      description: Create a modified version of the scene
+      body:
+        multipart/form-data:
+          properties: 
+            add:
+              type: boolean
+              required: false
+            delete:
+              type: boolean
+              required: false
+            color:
+              type: boolean
+              required: false
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: |
+                {
+                  "id": "c4d06e17d42e41d2bca618be31bf1d6f",
+                  "type": 0,
+                  "addedObjects": [
+                    {
+                      "id": "4d41b3b9ea1e4ebda87eb104036d4e80",
+                      "orientation": {
+                        "xAngle": 2.0169037023580776,
+                        "yAngle": 0.5147747981224112,
+                        "zAngle": 6.068382728172416
+                      },
+                      "position": {
+                        "x": -48,
+                        "y": -9,
+                        "z": 119
+                      },
+                      "type": 0,
+                      "color": 12492009,
+                      "shapeType": 2,
+                      "radius": 2.0096837845886513,
+                      "height": 3.014525676882977
+                    },
+                    {
+                      "id": "e06d412b2c1048c0ab837f09f4831213",
+                      "orientation": {
+                        "xAngle": 1.994394563233837,
+                        "yAngle": 3.438225118514819,
+                        "zAngle": 3.6402275388815157
+                      },
+                      "position": {
+                        "x": 64,
+                        "y": 7,
+                        "z": 124
+                      },
+                      "type": 0,
+                      "color": 11834544,
+                      "shapeType": 2,
+                      "radius": 1.6567540677096202,
+                      "height": 2.48513110156443
+                    }
+                  ],
+                  "deletedObjects": [],
+                  "colorChangedObjects": [
+                    {
+                      "key": "c31a12d290a1468dbea5591a8df5f77e",
+                      "value": 2553925
+                    },
+                    {
+                      "key": "8f70e06e625647edae417f787015abcf",
+                      "value": 16378719
+                    },
+                    {
+                      "key": "b3501cbcf82f4892b46853d60d833d1e",
+                      "value": 13504011
+                    },
+                    {
+                      "key": "4ad64304c0e0498dbf11ad2b4adf3a4f",
+                      "value": 12697498
+                    },
+                    {
+                      "key": "6f1bb2408c1d4b109cef0e66fb87c895",
+                      "value": 947217
+                    }
+                  ]
+                }
+    get:
+      description: Return a modified scene
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: | 
+                {
+                  "id": "c4d06e17d42e41d2bca618be31bf1d6f",
+                  "type": 0,
+                  "addedObjects": [
+                    {
+                      "id": "4d41b3b9ea1e4ebda87eb104036d4e80",
+                      "orientation": {
+                        "xAngle": 2.0169037023580776,
+                        "yAngle": 0.5147747981224112,
+                        "zAngle": 6.068382728172416
+                      },
+                      "position": {
+                        "x": -48,
+                        "y": -9,
+                        "z": 119
+                      },
+                      "type": 0,
+                      "color": 12492009,
+                      "shapeType": 2,
+                      "radius": 2.0096837845886513,
+                      "height": 3.014525676882977
+                    },
+                    {
+                      "id": "e06d412b2c1048c0ab837f09f4831213",
+                      "orientation": {
+                        "xAngle": 1.994394563233837,
+                        "yAngle": 3.438225118514819,
+                        "zAngle": 3.6402275388815157
+                      },
+                      "position": {
+                        "x": 64,
+                        "y": 7,
+                        "z": 124
+                      },
+                      "type": 0,
+                      "color": 11834544,
+                      "shapeType": 2,
+                      "radius": 1.6567540677096202,
+                      "height": 2.48513110156443
+                    }
+                  ],
+                  "deletedObjects": [],
+                  "colorChangedObjects": [
+                    {
+                      "key": "c31a12d290a1468dbea5591a8df5f77e",
+                      "value": 2553925
+                    },
+                    {
+                      "key": "8f70e06e625647edae417f787015abcf",
+                      "value": 16378719
+                    },
+                    {
+                      "key": "b3501cbcf82f4892b46853d60d833d1e",
+                      "value": 13504011
+                    },
+                    {
+                      "key": "4ad64304c0e0498dbf11ad2b4adf3a4f",
+                      "value": 12697498
+                    },
+                    {
+                      "key": "6f1bb2408c1d4b109cef0e66fb87c895",
+                      "value": 947217
+                    }
+                  ]
+                }
