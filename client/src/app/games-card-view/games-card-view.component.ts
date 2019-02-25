@@ -38,7 +38,7 @@ export class GamesCardViewComponent implements OnInit {
             this.leftButton = "Play";
             this.simplePOV = "Simple";
             this.isInAdminView = false;
-         }
+        }
 
     public ngOnInit(): void {
         if (this.isInAdminView) {
