@@ -26,9 +26,9 @@ describe("ScoreGenerator", () => {
             const NUMBER_SCORE: number = 100;
             const entries: ICommonScoreEntry[] = ScoreGenerator.generateScore(NUMBER_SCORE);
 
-            let lastValue: number = ScoreGenerator.MAX + 1;
+            let lastValue: number = ScoreGenerator.MIN - 1;
             entries.forEach((x: ICommonScoreEntry) => {
-                expect(x.score).to.be.lte(lastValue);
+                expect(x.score).to.be.gte(lastValue);
                 lastValue = x.score;
             });
         });
