@@ -60,7 +60,7 @@ export class Storage {
             S3Cache.updateCache(guid, buffer);
 
             return buffer;
-        }).catch((err: Error) => {
+        }).catch(() => {
             throw new FileNotFoundException(path);
         });
     }
