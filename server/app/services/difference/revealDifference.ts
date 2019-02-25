@@ -4,7 +4,7 @@ import { ICommonReveal } from "../../../../common/model/reveal";
 import * as BitmapHeader from "../../model/bitmap/header";
 import { Position } from "../../model/bitmap/pixel";
 import { R } from "../../strings";
-import { DifferenceDetector } from "../imagePair/differenceDetector";
+import { PixelIdentifier } from "../imagePair/differenceDetector";
 
 export class RevealDifference {
     private posClicked: Position;
@@ -18,7 +18,7 @@ export class RevealDifference {
     public reveal(): ICommonReveal {
         const index: number = this.posClicked.getIndex(BitmapHeader.InfoHeader.EXPECTED_WIDTH);
 
-        if (this.differencePixels[index] !== DifferenceDetector.WHITE) {
+        if (this.differencePixels[index] !== PixelIdentifier.WHITE) {
             const differenceId: number = this.differencePixels[index];
             const pixelsPosition: Position[] = new Array<Position>();
 

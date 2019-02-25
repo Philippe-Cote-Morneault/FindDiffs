@@ -2,11 +2,12 @@ import { Bitmap } from "../../model/bitmap/bitmap";
 import { Pixel, Position } from "../../model/bitmap/pixel";
 import { BLACK_PIXEL } from "./brush";
 
+export enum PixelIdentifier {
+    BLACK_UNVISITED = -1,
+    WHITE = 0,
+}
+
 export class DifferenceDetector {
-
-    public static readonly BLACK_UNVISITED: number = -1;
-    public static readonly WHITE: number = 0;
-
     public pixels: number[];
     private differenceImage: Bitmap;
 
@@ -16,13 +17,13 @@ export class DifferenceDetector {
 
         differenceImage.pixelData.forEach((pixel: Pixel) => {
             this.pixels.push(
-                pixel.equals(BLACK_PIXEL) ? DifferenceDetector.BLACK_UNVISITED : DifferenceDetector.WHITE,
+                pixel.equals(BLACK_PIXEL) ? PixelIdentifier.BLACK_UNVISITED : PixelIdentifier.WHITE,
             );
         });
     }
 
     private canVisit(index: number): boolean {
-        return this.pixels[index] === DifferenceDetector.BLACK_UNVISITED;
+        return this.pixels[index] === PixelIdentifier.BLACK_UNVISITED;
     }
 
     private visitNextTo(index: number, visitedPixels: number[], differenceId: number): void {
