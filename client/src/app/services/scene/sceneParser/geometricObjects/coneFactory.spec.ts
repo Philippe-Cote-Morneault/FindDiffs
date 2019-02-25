@@ -43,5 +43,4 @@ describe("ConeFactory", () => {
     it("Object3D's id should match the model.", () => {
         expect(object3d.userData.id).to.equal(cone.id);
     });
-
 });
