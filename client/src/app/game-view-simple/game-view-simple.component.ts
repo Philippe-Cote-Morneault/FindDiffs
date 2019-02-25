@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
-import { PixelRestorationService } from "../services/pixelManipulation/pixel-restoration.service";
+import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
 
 @Component({
     selector: "app-game-view-simple",
@@ -23,7 +23,7 @@ export class GameViewSimpleComponent implements OnInit {
     public constructor(
         private route: ActivatedRoute,
         public pixelPositionService: PixelPositionService,
-        public pixelRestorationService: PixelRestorationService,
+        public pixelRestoration: PixelRestoration,
         public imagePairService: ImagePairService) {
         this.differenceCounterUser = 0;
         this.differenceSound = new Audio;
@@ -57,7 +57,7 @@ export class GameViewSimpleComponent implements OnInit {
             if (response.hit) {
                 const hashDifference: number = response.difference_id;
                 if (this.isANewDifference(hashDifference)) {
-                    this.pixelRestorationService.restoreImage(response,
+                    this.pixelRestoration.restoreImage(response,
                                                               this.originalCanvas.nativeElement,
                                                               this.modifiedCanvas.nativeElement);
                     this.addDifference(hashDifference);
