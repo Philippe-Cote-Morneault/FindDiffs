@@ -16,8 +16,8 @@ export class GameViewSimpleComponent implements OnInit {
     private imagePairId: string;
     private differenceCounterUser: number;
     private differenceFound: number[];
-    // tslint:disable-next-line:no-any
-    private differenceSound: any;
+
+    private differenceSound: HTMLAudioElement;
     public identifyingDifference: boolean;
 
     public constructor(
@@ -25,12 +25,14 @@ export class GameViewSimpleComponent implements OnInit {
         public pixelPositionService: PixelPositionService,
         public pixelRestoration: PixelRestoration,
         public imagePairService: ImagePairService) {
+
         this.differenceCounterUser = 0;
+        this.differenceFound = [];
+        this.identifyingDifference = false;
+
         this.differenceSound = new Audio;
         this.differenceSound.src = "../../assets/mario.mp3";
         this.differenceSound.load();
-        this.differenceFound = [];
-        this.identifyingDifference = false;
     }
 
     public ngOnInit(): void {
@@ -55,13 +57,12 @@ export class GameViewSimpleComponent implements OnInit {
         const yPosition: number = e.layerY;
         this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe((response) => {
             if (response.hit) {
-                const hashDifference: number = response.difference_id;
-                if (this.isANewDifference(hashDifference)) {
+                if (this.isANewDifference(response.difference_id)) {
                     this.pixelRestoration.restoreImage(
                         response,
                         this.originalCanvas.nativeElement,
                         this.modifiedCanvas.nativeElement);
-                    this.addDifference(hashDifference);
+                    this.addDifference(response.difference_id);
                 }
             }
             this.identifyingDifference = false;
@@ -82,14 +83,14 @@ export class GameViewSimpleComponent implements OnInit {
         };
     }
 
-    public addDifference(hashDifference: number): void {
-        this.differenceFound[this.differenceFound.length++] = hashDifference;
+    public addDifference(differenceId: number): void {
+        this.differenceFound[this.differenceFound.length++] = differenceId;
         this.differenceCounterUser = this.differenceCounterUser + 1;
         this.differenceSound.play();
     }
 
-    public isANewDifference(hashDifference: number): boolean {
+    public isANewDifference(differenceId: number): boolean {
 
-        return !this.differenceFound.includes(hashDifference);
+        return !this.differenceFound.includes(differenceId);
     }
 }
