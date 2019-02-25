@@ -5,6 +5,7 @@ export interface IImagePairService {
     index(): Promise<string>;
     single(id: string): Promise<string>;
     getDifference(id: string): Promise<ArrayBuffer>;
+    getDifferenceJSON(id: string): Promise<string>;
     getModified(id: string): Promise<ArrayBuffer>;
     getOriginal(id: string): Promise<ArrayBuffer>;
 }

@@ -38,4 +38,13 @@ export class ApiRequest {
           });
     }
 
+    public static async getImagePairDiffJSONId(id: string): Promise<number[]> {
+        return Axios.get<ArrayBuffer>(`${ApiRequest.BASE_URL}/image-pair/${id}/difference.json`, {
+            responseType: "number[]",
+          }).then((response: AxiosResponse) => response.data as number[])
+          .catch((err: Error) => {
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+          });
+    }
+
 }

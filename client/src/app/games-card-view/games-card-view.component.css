@@ -62,3 +62,7 @@ ol {
     height: 120px;
     margin: auto;
 }
+
+.original_image > div{
+    padding-top: 40px;
+}

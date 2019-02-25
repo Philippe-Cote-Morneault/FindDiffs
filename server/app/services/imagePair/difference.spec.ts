@@ -6,10 +6,11 @@ import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
 import { BitmapEncoder } from "../../utils/bitmap/bitmapEncoder";
 import { Storage } from "../../utils/storage/storage";
 import { Difference } from "./difference";
+import { DifferenceDetector } from "./differenceDetector";
 import { DifferenceImageGenerator } from "./differenceImageGenerator";
 
 describe("Difference", () => {
-    describe("saveStorage()", () => {
+    describe("saveImg()", () => {
 
         beforeEach(() => {
             sinon.stub(DifferenceImageGenerator.prototype, "generateImage");
@@ -24,16 +25,38 @@ describe("Difference", () => {
 
         it("Should save the image to the storage and return an id", async () => {
             const responseId: string = "an id";
-            (DifferenceImageGenerator.prototype.generateImage as sinon.SinonStub).returns(undefined);
+
             (Storage.saveBuffer as sinon.SinonStub).resolves(responseId);
             (BitmapEncoder.encodeBitmap as sinon.SinonStub).returns(undefined);
+
             const bitmap: Bitmap = Bitmap.prototype;
             const difference: Difference = new Difference(bitmap, bitmap);
 
-            expect(await difference.saveStorage()).to.equal(responseId);
+            expect(await difference.saveImg()).to.equal(responseId);
         });
     });
-    describe("countDifferences()", () => {
+
+    describe("saveJson()", () => {
+        beforeEach(() => {
+            sinon.stub(Storage, "saveBuffer");
+        });
+
+        afterEach(() => {
+            (Storage.saveBuffer as sinon.SinonStub).restore();
+        });
+        it("Should save the JSON structure and return an id", async() => {
+            const responseId: string = "an id";
+
+            (Storage.saveBuffer as sinon.SinonStub).resolves(responseId);
+
+            const bitmap: Bitmap = Bitmap.prototype;
+            const difference: Difference = new Difference(bitmap, bitmap);
+            const diffDetector: Object = { pixels: [0, 1]};
+            difference["diffDetector"] = diffDetector as DifferenceDetector;
+            expect(await difference.saveJson()).to.equal(responseId);
+        });
+    });
+    describe("countDifferences", () => {
         let bitmap: Bitmap;
         beforeEach(() => {
             bitmap = BitmapDecoder.FromArrayBuffer(
@@ -43,9 +66,10 @@ describe("Difference", () => {
 
         it("Should return the number of differences", () => {
             const difference: Difference = new Difference(bitmap, bitmap);
-            difference.difference = bitmap;
+            difference["differenceImg"] = bitmap;
+            difference.compute();
 
-            expect(difference.countDifferences()).to.equal(0);
+            expect(difference.differenceCount).to.equal(0);
         });
     });
 });
