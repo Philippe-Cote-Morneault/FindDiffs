@@ -1,6 +1,6 @@
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { COLOR, Pixel } from "../../model/bitmap/pixel";
-import { BitmapDecoder } from "./bitmapDecoder";
+import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
 import { Canvas } from "./canvas";
 
 export class DifferenceImageGenerator {

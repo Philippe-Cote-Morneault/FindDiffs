@@ -3,7 +3,7 @@
     crossorigin="anonymous">
 </head>
 
-<body>
+<div class="body">
   <div class="global-wrapper">
     <svg width="90%" height="35%" id="logo">
       <defs id="SvgjsDefs2558">
@@ -28,11 +28,11 @@
       </g>
     </svg>
     <div class="input-group mb-3">
-      <input type="text" id="usernameInput" class="form-control" placeholder="Username" aria-label="Recipient's username"
+      <input type="text" id="usernameInput" #usernameInput class="form-control" placeholder="Username" aria-label="Recipient's username"
         aria-describedby="button-addon2">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="verifyUsername()">Accept</button>
       </div>
     </div>
   </div>
-</body>
+</div>

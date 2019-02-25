@@ -1,6 +1,6 @@
 import { Component, HostListener } from "@angular/core";
 import { ICommonUser } from "./../../../common/model/user";
-import { UserService } from "./services/user.service";
+import { UserService } from "./services/user/user.service";
 
 @Component({
     selector: "app-root",
@@ -9,8 +9,6 @@ import { UserService } from "./services/user.service";
 })
 export class AppComponent {
     public constructor(private userService: UserService) {}
-
-    public message: string;
 
     @HostListener("window:beforeunload", ["$event"])
     public async beforeUnload($event: Event): Promise<void> {

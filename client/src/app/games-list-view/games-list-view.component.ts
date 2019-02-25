@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
-import { GameCardLoaderService } from "../services/game-card-loader.service";
-import { GamesCardService } from "../services/games-card.service";
+import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
+import { GamesCardService } from "../services/gameCard/games-card.service";
 
 @Component({
     selector: "app-games-list-view",
@@ -12,11 +12,12 @@ export class GamesListViewComponent implements OnInit {
     @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
     @ViewChild("freePOVGamesContainer", { read: ViewContainerRef }) private freePOVContainer: ViewContainerRef;
 
-    @Input() public isInAdminView: boolean = false;
+    @Input() public isInAdminView: boolean;
 
     public constructor(
         public gameCardsService: GamesCardService,
         public gameCardLoaderService: GameCardLoaderService) {
+            this.isInAdminView = false;
     }
 
     public ngOnInit(): void {

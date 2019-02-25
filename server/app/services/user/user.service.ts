@@ -6,6 +6,7 @@ import { InvalidFormatException } from "../../../../common/errors/invalidFormatE
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { IUser, User } from "../../model/schemas/user";
 import { _e, R } from "../../strings";
+import { Validation } from "../../utils/validation";
 import { IUserService } from "../interfaces";
 import { Service } from "../service";
 
@@ -23,12 +24,12 @@ export class UserService extends Service implements IUserService {
         return User.findById(id)
             .then((doc: IUser) => {
                 if (!doc) {
-                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                    throw new NotFoundException(R.ERROR_UNKNOWN_ID);
                 }
 
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             });
     }
 
@@ -36,7 +37,7 @@ export class UserService extends Service implements IUserService {
         return User.findById(id)
         .then(async (doc: IUser) => {
             if (!doc) {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
             await doc.remove();
             const message: Message = {
@@ -46,7 +47,7 @@ export class UserService extends Service implements IUserService {
 
             return JSON.stringify(message); })
         .catch((error: Error) => {
-            throw new NotFoundException(R.ERROR_UNKOWN_ID);
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }
 
@@ -67,8 +68,8 @@ export class UserService extends Service implements IUserService {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.USERNAME_]));
         }
 
-        if (!this.isUsernameValid(req.body.username)) {
-            throw new InvalidFormatException(_e(R.ERROR_INVALID, [R.USERNAME_]));
+        if (!Validation.isValidName(req.body.username)) {
+            throw new InvalidFormatException(R.ERROR_INVALID_USERNAME);
         }
 
         if (!await this.isAvailable(req.body.username)) {
@@ -80,12 +81,6 @@ export class UserService extends Service implements IUserService {
         return User.countDocuments({username: username}).then((c: number) => {
             return c === 0;
         });
-    }
-
-    private isUsernameValid(username: string): boolean {
-        const regex: RegExp = new RegExp("^[a-zA-Z0-9]{3,12}$");
-
-        return regex.test(username);
     }
 
 }

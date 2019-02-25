@@ -9,7 +9,7 @@ import { UserService } from "./user.service";
 describe("UserService", () => {
     const userService: UserService = new UserService();
     const notSetError: string = "The field username is not present.";
-    const notValidError: string = "The username is invalid.";
+    const notValidError: string = "The username is invalid, it must be between 3 and 12 alpha numeric characters.";
     const alreadyTakenError: string = "The username is already taken.";
     const sucessDelete: string = "The user was deleted.";
     const idNotInDB: string = "The id could not be found.";

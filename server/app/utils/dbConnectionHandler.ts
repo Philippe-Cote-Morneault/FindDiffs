@@ -5,7 +5,7 @@ export class DbConnectionHandler {
 
     private static instance: DbConnectionHandler;
 
-    private DB_URL: string = "mongodb://" + Config.mongodb.username + ":"
+    private static readonly DB_URL: string = "mongodb://" + Config.mongodb.username + ":"
                                     + Config.mongodb.password + "@"
                                     + Config.mongodb.hostname + ":"
                                     + Config.mongodb.port + "/"
@@ -20,7 +20,7 @@ export class DbConnectionHandler {
     }
 
     public connect(onConnect: Function, onError: Function): void {
-        mongoose.connect(this.DB_URL, {useNewUrlParser: true}, (err: Error) => {
+        mongoose.connect(DbConnectionHandler.DB_URL, {useNewUrlParser: true}, (err: Error) => {
             if (err) {
                onError(err);
             } else {

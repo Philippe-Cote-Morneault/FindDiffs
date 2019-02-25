@@ -1,0 +1,193 @@
+#%RAML 1.0 Gamecard
+post:
+  description: Create a new gamecard
+  body:
+    multipart/form-data:
+      properties: 
+        name: string
+        resource_id: string
+        pov:
+          type: string
+          enum: [Simple, Free]
+  responses:
+    200:
+      body:
+        application/json:
+          example: |
+            {
+              "id":"432423423423ef",
+              "pov":"Simple",
+              "title":"The name of the gamecard",
+              "resource_id":"id to image-pair or scene"
+              "best_time_solo":
+              [
+                {
+                  "name":"Michel",
+                  "score":"1254512"
+                },
+                {
+                  "name":"Michel",
+                  "score":"1282445"
+                },
+                {
+                  "name":"Michel",
+                  "score":"544512"
+                },
+              ],
+              "best_time_online":
+              [
+                {
+                  "name":"Michel",
+                  "score":"1254512"
+                },
+                {
+                  "name":"Michel",
+                  "score":"1282445"
+                },
+                {
+                  "name":"Michel",
+                  "score":"544512"
+                },
+              ],
+            }
+    400:
+      body:
+        application/json:
+          example: |
+            {
+              "title":"Error",
+              "body":"The pov is not a Simple or free type"
+            }
+get:
+  description: Retrieve all the gamecards
+  responses: 
+        200:
+          body: 
+            application/json:
+              example: |
+                [
+                  {
+                    "id":"432423423423ef",
+                    "pov":"Simple",
+                    "title":"The name of the gamecard",
+                    "resource_id":"id to image-pair or scene"
+                    "best_time_solo":
+                    [
+                      {
+                        "name":"Michel",
+                        "score":"1254512"
+                      },
+                      {
+                        "name":"Michel",
+                        "score":"1282445"
+                      },
+                      {
+                        "name":"Michel",
+                        "score":"544512"
+                      },
+                    ],
+                    "best_time_online":
+                    [
+                      {
+                        "name":"Michel",
+                        "score":"1254512"
+                      },
+                      {
+                        "name":"Michel",
+                        "score":"1282445"
+                      },
+                      {
+                        "name":"Michel",
+                        "score":"544512"
+                      },
+                    ]
+                  }
+                ]
+/{id}:
+  get:
+    description: Retrieve data about a gamecard
+    responses: 
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "id":"432423423423ef",
+                "pov":"Simple",
+                "title":"The name of the gamecard",
+                "resource_id":"id to image-pair or scene",
+                "best_time_solo":
+                [
+                  {
+                    "name":"Michel",
+                    "score":"1254512"
+                  },
+                  {
+                    "name":"Michel",
+                    "score":"1282445"
+                  },
+                  {
+                    "name":"Michel",
+                    "score":"544512"
+                  },
+                ],
+                "best_time_online":
+                [
+                  {
+                    "name":"Michel",
+                    "score":"1254512"
+                  },
+                  {
+                    "name":"Michel",
+                    "score":"1282445"
+                  },
+                  {
+                    "name":"Michel",
+                    "score":"544512"
+                  },
+                ]
+              }
+  delete:
+    description: Delete a gamecard
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "title":"success",
+                "body":"Gamecard was deleted successfully"
+              }
+  put:
+    description: Update a gamecard
+    body:
+      application/json:
+        properties:
+          best_time_solo:
+            required: false
+            type: string
+          best_time_online:
+            required: false
+            type: string
+        example: | 
+          {
+            "best_time_online":"new value",
+            "best_time_solo":"new value",
+          }
+    responses: 
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "title":"success",
+                "body":"Gamecard was updated successfully"
+              }
+      400:
+        body:
+          application/json:
+            example: |
+              {
+                "title":"Error",
+                "body":"The request is not valid"
+              }

@@ -3,7 +3,7 @@
     crossorigin="anonymous">
 </head>
 
-<body>
+<div class="body">
   <div class="global-wrapper" id="simpleViewId">
     <h2>
       Create a simple point of view game
@@ -11,31 +11,34 @@
     <p>
       Image format : bitmap 24-bit (640x480)
     </p>
-    <form class="was-validated">
+    <form class="needs-validated">
 
       Name of the game
       <div>
-        <input type="text" class="form-control is-invalid" id="gameNameInput" (change)="verifyName()" placeholder="Name game"
+        <input type="text" (blur)="nameInputVisited()" class="form-control" id="gameNameInput" #gameNameInput (change)="isNameValid()" placeholder="Game name"
           required>
+          <p id="errorMessage" *ngIf="!isNameValid()">The name has to be between 3 and 12 alphanumeric characters.</p>
       </div>
-
+    </form>
+    <form class="was-validated">
       Original image :
       <div class="custom-file">
-        <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 1)" accept=".bmp"
+        <input type="file" (blur)="originalImageVisited()" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 1)" accept=".bmp"
           required>
-        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+        <label class="custom-file-label" for="validatedCustomFile" #originalFile>Choose file...</label>
+        <p id="errorMessage" *ngIf="!isOriginalFileValid()">The file dimensions are not 640x480.</p>
       </div>
 
       Modified image :
       <div class="custom-file">
-        <input type="file" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 2)" accept=".bmp"
+        <input type="file" (blur)="modifiedImageVisited()" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 2)" accept=".bmp"
           required>
-        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+        <label class="custom-file-label" for="validatedCustomFile" #modifiedFile>Choose file...</label>
+        <p id="errorMessage" *ngIf="!isModifiedFileValid()">The file dimensions are not 640x480.</p>
       </div>
       <div *ngIf="verifyInfo()"></div>
       <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addImagePair()">Submit</button>
       <button class="btn btn-danger" (click)="hideView()">Cancel</button>
     </form>
   </div>
-
-</body>
+</div>

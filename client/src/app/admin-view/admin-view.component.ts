@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "app-admin-view",
@@ -6,11 +7,22 @@ import { Component } from "@angular/core";
     styleUrls: ["./admin-view.component.css"],
 })
 export class AdminViewComponent {
-    public isPopUpVisible: boolean = false;
+    public isCreatingGameSimpleMode: boolean;
+    public isCreatingGameFreeMode: boolean;
+
+    public constructor(private router: Router) {
+        this.isCreatingGameSimpleMode = false;
+        this.isCreatingGameFreeMode = false;
+    }
 
     public onClosed(closed: boolean): void {
         if (closed) {
-            this.isPopUpVisible = false;
+            this.isCreatingGameSimpleMode = false;
+            this.isCreatingGameFreeMode = false;
         }
+    }
+
+    public async leaveAdminMode(): Promise<void> {
+        await this.router.navigateByUrl("/gamesList");
     }
 }

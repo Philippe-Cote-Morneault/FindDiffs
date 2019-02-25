@@ -1,0 +1,36 @@
+#%RAML 1.0 Difference
+/free:
+  description: Not implemented yet
+/simple:
+  post:
+    description: Check for a difference in the simple game type
+    body:
+      multipart/form-data:
+        properties:
+          image_pair_id: string
+          x: integer
+          y: integer
+    responses:
+      200:
+        description: A difference was found
+        body:
+          application/json:
+            example: |
+              {
+                "hit":true,
+                "pixels_affected": [
+                  {
+                    "x":3,
+                    "y":4
+                  }
+                ],
+                "difference_id": 3
+      404:
+        description: No difference was found
+        body:
+          application/json:
+            example: |
+              {
+                "title":"Error",
+                "body":"No difference was found at the specified position"
+              }

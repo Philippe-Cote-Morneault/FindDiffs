@@ -5,8 +5,12 @@ import { FileNotFoundException } from "../../../../common/errors/fileNotFoundExc
 import { ImagePair } from "../../model/schemas/imagePair";
 import { MongooseMock } from "../../tests/mocks";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
-import { Storage } from "../../utils/storage";
+import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
+import { Storage } from "../../utils/storage/storage";
+import { Difference } from "./difference";
 import { ImagePairService } from "./imagePair.service";
+
+// tslint:disable max-file-line-count
 
 interface FilesFetchMock {
     name: string;
@@ -16,23 +20,32 @@ interface FilesFetchMock {
 
 describe("ImagePairService", () => {
     const imagePairService: ImagePairService = new ImagePairService();
+    const STORAGE_PATH: string = Storage.STORAGE_PATH;
 
     beforeEach(() => {
         sinon.stub(ImagePair, "find");
         sinon.stub(ImagePair, "findById");
         sinon.stub(ImagePair.prototype, "save");
-        sinon.stub(Storage, "exists");
-        sinon.stub(Storage, "saveBuffer");
-        sinon.stub(Storage, "getFullPath").callsFake((id: string) => `/${id}`);
+        sinon.stub(Storage, "openBuffer");
+        sinon.stub(Storage, "STORAGE_PATH").value("test");
+        sinon.stub(BitmapDecoder, "FromArrayBuffer");
+
+        sinon.stub(Difference.prototype, "saveImg");
+        sinon.stub(Difference.prototype, "saveJson");
+        sinon.stub(Difference.prototype, "compute");
     });
 
     afterEach(() => {
         (ImagePair.find as sinon.SinonStub).restore();
         (ImagePair.findById as sinon.SinonStub).restore();
         (ImagePair.prototype.save as sinon.SinonStub).restore();
-        (Storage.exists as sinon.SinonStub).restore();
-        (Storage.saveBuffer as sinon.SinonStub).restore();
-        (Storage.getFullPath as sinon.SinonStub).restore();
+        (Storage.openBuffer as sinon.SinonStub).restore();
+        (BitmapDecoder.FromArrayBuffer as sinon.SinonStub).restore();
+
+        (Difference.prototype.saveImg as sinon.SinonStub).restore();
+        (Difference.prototype.saveJson as sinon.SinonStub).restore();
+        (Difference.prototype.compute as sinon.SinonStub).restore();
+        sinon.stub(Storage, "STORAGE_PATH").value(STORAGE_PATH);
     });
 
     describe("post()", () => {
@@ -129,7 +142,7 @@ describe("ImagePairService", () => {
                 },
                 files: {
                     originalImage: [{
-                        path: "random path",
+                        originalname: "random name",
                     }],
                     modifiedImage: "image",
                 },
@@ -150,22 +163,25 @@ describe("ImagePairService", () => {
                 },
                 files: {
                     originalImage: [{
-                        path: "test/testBitmaps/checker.bmp",
-                        filename: "checker.bmp",
+                        originalname: "checker.bmp",
+                        buffer: Buffer.alloc(1),
                     }],
                     modifiedImage: [{
-                        path: "test/testBitmaps/checker-b.bmp",
-                        filename: "checker-b.bmp",
+                        originalname: "checker-b.bmp",
+                        buffer: Buffer.alloc(1),
                     }],
                 },
             };
-            (Storage.saveBuffer as sinon.SinonStub).returns("an id");
             (ImagePair.prototype.save as sinon.SinonStub).resolves();
-            const response: string = await imagePairService.post(mockReq(request));
-            expect(JSON.parse(response).name).to.equal(request["body"]["name"]);
+            (BitmapDecoder.FromArrayBuffer as sinon.SinonStub).resolves();
+            (Difference.prototype.compute as sinon.SinonStub).returns(undefined);
 
-        // tslint:disable-next-line:no-magic-numbers
-        }).slow(10000);
+            (Difference.prototype.saveImg as sinon.SinonStub).resolves("an id");
+            (Difference.prototype.saveJson as sinon.SinonStub).resolves("an id 2");
+
+            const response: string = await imagePairService.post(mockReq(request));
+            expect(JSON.parse(response).differences_count).to.equal(0);
+        });
     });
     describe("index()", () => {
         it("Should return an image pair array", async () => {
@@ -246,6 +262,11 @@ describe("ImagePairService", () => {
             fake_id: "id_modified",
             field: "file_modified_id",
         },
+        {
+            name: "getDifferenceJSON",
+            fake_id: "id_file_json",
+            field: "file_difference_json_id",
+        },
     ];
     const queryResponse: Object[]  = new Array();
     methodsToTest.forEach((file: FilesFetchMock) => {
@@ -254,14 +275,17 @@ describe("ImagePairService", () => {
     // tslint:disable-next-line:max-func-body-length
     methodsToTest.forEach((method: FilesFetchMock) => {
         describe(`${method.name}()`, () => {
-            it("Should return a full path of the file", async () => {
-                const FAKE_PATH: string = `/${method.fake_id}`;
+            it("Should return an arraybuffer of the file", async () => {
 
                 (ImagePair.findById as sinon.SinonStub).returns(new MongooseMock.Query(
                     new MongooseMock.Schema(queryResponse, false), true));
-                (Storage.exists as sinon.SinonStub).returns(true);
-
-                expect(await imagePairService[method.name]("id")).to.equal(FAKE_PATH);
+                const buffer: ArrayBuffer = Buffer.alloc(1).buffer;
+                (Storage.openBuffer as sinon.SinonStub).resolves(buffer);
+                if (method.name !== "getDifferenceJSON") {
+                    expect(await imagePairService[method.name]("id")).to.equal(buffer);
+                } else {
+                    expect(await imagePairService[method.name]("id")).to.equal("\u0000");
+                }
             });
 
             it("Should throw an error if the id is not valid", async () => {
@@ -276,7 +300,7 @@ describe("ImagePairService", () => {
             it("Should throw an error if the file is not present on the server", async () => {
                 (ImagePair.findById as sinon.SinonStub).returns(new MongooseMock.Query(
                     new MongooseMock.Schema(queryResponse, false), true));
-                (Storage.exists as sinon.SinonStub).returns(false);
+                (Storage.openBuffer as sinon.SinonStub).rejects(new FileNotFoundException(method.fake_id));
 
                 try {
                     await imagePairService[method.name]("id");

@@ -1,17 +1,15 @@
 import { Request } from "express";
-import * as fs from "fs";
 import { injectable } from "inversify";
 import "reflect-metadata";
-import { FileNotFoundException } from "../../../../common/errors/fileNotFoundException";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { Bitmap } from "../../model/bitmap/bitmap";
 import { ImagePair, IImagePair } from "../../model/schemas/imagePair";
 import { _e, R } from "../../strings";
-import { Storage } from "../../utils/storage";
+import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
+import { Storage } from "../../utils/storage/storage";
 import { IImagePairService } from "../interfaces";
 import { Service } from "../service";
-import { BitmapDecoder } from "./bitmapDecoder";
 import { Difference } from "./difference";
 
 @injectable()
@@ -30,41 +28,44 @@ export class ImagePairService extends Service implements IImagePairService {
         return ImagePair.findById(id)
             .then((doc: IImagePair) => {
                 if (!doc) {
-                    throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                    throw new NotFoundException(R.ERROR_UNKNOWN_ID);
                 }
 
                 return JSON.stringify(doc); })
             .catch((error: Error) => {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             });
     }
 
-    public async getDifference(id: string): Promise<string> {
+    public async getDifference(id: string): Promise<ArrayBuffer> {
         return this.returnFile(id, "file_difference_id");
     }
 
-    public async getModified(id: string): Promise<string> {
+    public async getDifferenceJSON(id: string): Promise<string> {
+        const buffer: ArrayBuffer = await this.returnFile(id, "file_difference_json_id");
+
+        return Buffer.from(buffer).toString();
+    }
+
+    public async getModified(id: string): Promise<ArrayBuffer> {
         return this.returnFile(id, "file_modified_id");
     }
 
-    public async getOriginal(id: string): Promise<string> {
+    public async getOriginal(id: string): Promise<ArrayBuffer> {
         return this.returnFile(id, "file_original_id");
     }
 
-    private async returnFile(id: string, fieldName: string): Promise<string> {
+    private async returnFile(id: string, fieldName: string): Promise<ArrayBuffer> {
         return ImagePair.findById(id).select(`+${fieldName}`)
-        .then((doc: IImagePair) => {
+        .then(async (doc: IImagePair) => {
             const fileId: string = doc.get(fieldName);
-            if (Storage.exists(fileId)) {
-                return Storage.getFullPath(fileId);
-            } else {
-                throw new FileNotFoundException(fileId);
-            }
+
+            return Storage.openBuffer(fileId);
         }).catch((error: Error) => {
             if (error.name === "FileNotFoundException") {
                 throw error;
             } else {
-                throw new NotFoundException(R.ERROR_UNKOWN_ID);
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
         });
     }
@@ -78,45 +79,42 @@ export class ImagePairService extends Service implements IImagePairService {
             throw new InvalidFormatException(R.ERROR_MISSING_FILES);
         }
 
-        if (!req.files["originalImage"] || req.files["originalImage"].length < 1) {
+        if (!req.files[R.ORIGINAL_IMAGE_FIELD] || req.files[R.ORIGINAL_IMAGE_FIELD].length < 1) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.ORIGINAL_IMAGE_]));
         }
 
-        if (!req.files["modifiedImage"] || req.files["modifiedImage"].length < 1) {
+        if (!req.files[R.MODIFIED_IMAGE_FIELD] || req.files[R.MODIFIED_IMAGE_FIELD].length < 1) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.MODIFIED_IMAGE_]));
         }
 
-        if (!req.files["originalImage"][0].path) {
+        if (!req.files[R.ORIGINAL_IMAGE_FIELD][0].originalname) {
             throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.ORIGINAL_IMAGE]));
         }
 
-        if (!req.files["modifiedImage"][0].path) {
+        if (!req.files[R.MODIFIED_IMAGE_FIELD][0].originalname) {
             throw new InvalidFormatException(_e(R.ERROR_INVALID_FILE, [R.MODIFIED_IMAGE]));
         }
     }
 
     public async post(req: Request): Promise<string> {
-        let originalImage: Bitmap;
-        let modifiedImage: Bitmap;
-
         this.validate(req);
+        const originalImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files[R.ORIGINAL_IMAGE_FIELD][0].buffer.buffer);
+        const modifiedImage: Bitmap = BitmapDecoder.FromArrayBuffer(req.files[R.MODIFIED_IMAGE_FIELD][0].buffer.buffer);
 
-        originalImage = BitmapDecoder.FromArrayBuffer(
-            fs.readFileSync(req.files["originalImage"][0].path).buffer,
-        );
-        modifiedImage = BitmapDecoder.FromArrayBuffer(
-            fs.readFileSync(req.files["modifiedImage"][0].path).buffer,
-        );
+        const originalImageId: string = await Storage.saveBuffer(req.files[R.ORIGINAL_IMAGE_FIELD][0].buffer.buffer);
+        const modifiedImageId: string = await Storage.saveBuffer(req.files[R.MODIFIED_IMAGE_FIELD][0].buffer.buffer);
 
         const difference: Difference = new Difference(originalImage, modifiedImage);
+        difference.compute();
 
         const imagePair: IImagePair = new ImagePair({
-            file_difference_id: difference.saveStorage(),
-            file_modified_id: req.files["modifiedImage"][0].filename,
-            file_original_id: req.files["originalImage"][0].filename,
+            file_difference_id: await difference.saveImg(),
+            file_modified_id: modifiedImageId,
+            file_original_id: originalImageId,
+            file_difference_json_id: await difference.saveJson(),
             name: req.body.name,
             creation_date: new Date(),
-            differences_count: difference.countDifferences(),
+            differences_count: difference.differenceCount,
         });
         await imagePair.save();
 

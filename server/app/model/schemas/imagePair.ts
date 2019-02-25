@@ -14,6 +14,7 @@ export const imagePairSchema: Schema = new Schema({
     file_difference_id: {type: String, required: true, select: false},
     file_original_id: {type: String, required: true, select: false},
     file_modified_id: {type: String, required: true, select: false},
+    file_difference_json_id: {type: String, required: true, select: false},
     name: {type: String, required: true},
     creation_date: {type: Date, required: true},
     differences_count: {type: Number, required: true},

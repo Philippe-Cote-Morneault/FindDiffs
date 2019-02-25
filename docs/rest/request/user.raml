@@ -1,0 +1,87 @@
+#%RAML 1.0 User
+description: Manages the user on the server
+post:
+  description: Create a new user on the server
+  body:
+    multipart/form-data:
+      properties: 
+        username: string
+  responses: 
+    200:
+      description: The user was created successfully
+      body:
+        application/json:
+          example: |
+            {
+              "id":"438943af323ed43",
+              "username":"my user",
+              "creation_date":"2019-02-02 08:11:33.001Z"
+            }
+    409:
+      description: There is already a user with the same username on the server
+      body:
+        application/json:
+          example: |
+            {
+              "title":"Error",
+              "body":"There is already a user with the same username on the server"
+            }
+get:
+  description: Return a list of all the users on the server
+  responses: 
+    200:
+      description: Returns a list of all users
+      body:
+        application/json:
+          example: |
+            [
+              {
+                "id":"438943af323ed43",
+                "username":"my user",
+                "creation_date":"2019-02-02 08:11:33.001Z"
+              }
+            ]
+/{id}:
+  delete:
+    description: Delete the user from a server
+    responses: 
+      200:
+        description: Deletes the user from the server
+        body:
+          application/json:
+            example: |
+              {
+                "title":"Success",
+                "body":"The user was deleted"
+              }
+      404:
+        description: The user could not be found
+        body:
+          application/json:
+            example: |
+              {
+                "title":"Error",
+                "body":"The user could not be found"
+              }
+  get:
+    description: Returns the information about the user
+    responses: 
+      200:
+        description: The user and its data
+        body:
+          application/json:
+            example: |
+              {
+                "id":"438943af323ed43",
+                "username":"my user",
+                "creation_date":"2019-02-02 08:11:33.001Z"
+              }
+      404:
+        description: The user could not be found
+        body:
+          application/json:
+            example: |
+              {
+                "title":"Error",
+                "body":"The user could not be found"
+              }
