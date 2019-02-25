@@ -120,6 +120,7 @@ export class CreateGameFreeViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
+                    this.spinnerService.hide();
                     window.location.reload();
                 }
             });
