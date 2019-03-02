@@ -11,6 +11,7 @@ export class TimerService {
         this.timer = new Timer();
     }
     public startTimer(chronometer: HTMLElement): void {
+        this.timer.reset();
         this.timer.start();
         this.timer.addEventListener("secondsUpdated", () =>
             chronometer.innerText = this.timer.getTimeValues().toString());
