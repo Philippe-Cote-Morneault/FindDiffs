@@ -4,6 +4,7 @@ import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
+import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-simple",
@@ -13,6 +14,7 @@ import { PixelRestoration } from "../services/pixelManipulation/pixel-restoratio
 export class GameViewSimpleComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
+    @ViewChild("chronometer") private chronometer: ElementRef;
     private imagePairId: string;
     private differenceCounterUser: number;
     private differenceFound: number[];
@@ -24,7 +26,8 @@ export class GameViewSimpleComponent implements OnInit {
         private route: ActivatedRoute,
         public pixelPositionService: PixelPositionService,
         public pixelRestoration: PixelRestoration,
-        public imagePairService: ImagePairService) {
+        public imagePairService: ImagePairService,
+        public timerService: TimerService) {
 
         this.differenceCounterUser = 0;
         this.differenceFound = [];
@@ -47,6 +50,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
             this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
             this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
+            this.timerService.startTimer(this.chronometer.nativeElement);
         });
     }
 
