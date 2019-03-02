@@ -5,11 +5,18 @@ import Timer from "easytimer.js";
     providedIn: "root",
 })
 export class TimerService {
+    private timer: Timer;
 
+    public constructor() {
+        this.timer = new Timer();
+    }
     public startTimer(chronometer: HTMLElement): void {
-        const timer: Timer = new Timer();
-        timer.start();
-        timer.addEventListener("secondsUpdated", () =>
-            chronometer.innerText = timer.getTimeValues().toString());
+        this.timer.start();
+        this.timer.addEventListener("secondsUpdated", () =>
+            chronometer.innerText = this.timer.getTimeValues().toString());
+    }
+
+    public stopTimer(): void {
+        this.timer.stop();
     }
 }
