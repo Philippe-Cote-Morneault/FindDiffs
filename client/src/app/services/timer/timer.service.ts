@@ -5,6 +5,7 @@ import Timer from "easytimer.js";
     providedIn: "root",
 })
 export class TimerService {
+    private static MINUTES_POSITION: number = 3;
     private timer: Timer;
 
     public constructor() {
@@ -14,7 +15,7 @@ export class TimerService {
         this.timer.reset();
         this.timer.start();
         this.timer.addEventListener("secondsUpdated", () =>
-            chronometer.innerText = this.timer.getTimeValues().toString());
+            chronometer.innerText = this.timer.getTimeValues().toString().slice(TimerService.MINUTES_POSITION));
     }
 
     public stopTimer(): void {
