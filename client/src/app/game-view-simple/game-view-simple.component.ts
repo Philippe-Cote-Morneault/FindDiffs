@@ -16,12 +16,14 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
+    @ViewChild("errorMessage") private errorMessage: ElementRef;
+
     private imagePairId: string;
     private differenceCounterUser: number;
     private differenceFound: number[];
+    private timeout: boolean;
 
     private differenceSound: HTMLAudioElement;
-    public identifyingDifference: boolean;
 
     public constructor(
         private route: ActivatedRoute,
@@ -32,7 +34,7 @@ export class GameViewSimpleComponent implements OnInit {
 
         this.differenceCounterUser = 0;
         this.differenceFound = [];
-        this.identifyingDifference = false;
+        this.timeout = false;
 
         this.differenceSound = new Audio;
         this.differenceSound.src = "../../assets/mario.mp3";
@@ -57,21 +59,23 @@ export class GameViewSimpleComponent implements OnInit {
 
     // tslint:disable-next-line:no-any
     public getClickPosition(e: any): void {
-        this.identifyingDifference = true;
-        const xPosition: number = e.layerX;
-        const yPosition: number = e.layerY;
-        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(async (response) => {
-            if (response.hit) {
-                if (this.isANewDifference(response.difference_id)) {
-                    this.pixelRestoration.restoreImage(
-                        response,
-                        this.originalCanvas.nativeElement,
-                        this.modifiedCanvas.nativeElement);
-                    await this.addDifference(response.difference_id);
+        if (!this.timeout) {
+            const xPosition: number = e.layerX;
+            const yPosition: number = e.layerY;
+            this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(async (response) => {
+                if (response.hit) {
+                    if (this.isANewDifference(response.difference_id)) {
+                        this.pixelRestoration.restoreImage(
+                            response,
+                            this.originalCanvas.nativeElement,
+                            this.modifiedCanvas.nativeElement);
+                        await this.addDifference(response.difference_id);
+                    }
+                } else {
+                    this.showErrorMessage(e.pageX, e.pageY);
                 }
-            }
-            this.identifyingDifference = false;
-        });
+            });
+        }
     }
 
     // tslint:disable:no-any
@@ -104,5 +108,25 @@ export class GameViewSimpleComponent implements OnInit {
 
     private gameOver(): void {
         this.timerService.stopTimer();
+    }
+
+    private showErrorMessage(xPosition: number, yPosition: number): void {
+        this.timeout = true;
+        this.errorMessage.nativeElement.style.top = yPosition + "px";
+        this.errorMessage.nativeElement.style.left = xPosition + "px";
+
+        this.errorMessage.nativeElement.style.display = "inline";
+        this.originalCanvas.nativeElement.style.cursor = "not-allowed";
+        this.modifiedCanvas.nativeElement.style.cursor = "not-allowed";
+        this.errorMessage.nativeElement.style.cursor = "not-allowed";
+        // Doit revenir normal après 1 sec
+        setTimeout(() => {
+            this.errorMessage.nativeElement.style.display = "none";
+            this.originalCanvas.nativeElement.style.cursor = "context-menu";
+            this.modifiedCanvas.nativeElement.style.cursor = "context-menu";
+            this.errorMessage.nativeElement.style.cursor = "context-menu";
+            this.timeout = false;
+            // tslint:disable-next-line:no-magic-numbers
+                }, 1000);
     }
 }
