@@ -70,3 +70,11 @@ body{
   margin-top: 15px;
   margin-bottom: 5px;
 }
+#ErrorMessage {
+  font-size: 25px;
+  font-weight: bold;
+  color: red;
+  position: absolute;
+  display: none;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
