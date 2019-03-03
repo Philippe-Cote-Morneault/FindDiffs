@@ -16,7 +16,6 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
-    @ViewChild("differences") private differences: ElementRef;
     private imagePairId: string;
     private differenceCounterUser: number;
     private differenceFound: number[];
