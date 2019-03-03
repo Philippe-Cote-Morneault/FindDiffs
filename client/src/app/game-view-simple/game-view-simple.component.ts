@@ -12,9 +12,11 @@ import { TimerService } from "../services/timer/timer.service";
     styleUrls: ["./game-view-simple.component.css"],
 })
 export class GameViewSimpleComponent implements OnInit {
+    private static MAX_DIFFERENCES: number = 7;
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
+    @ViewChild("differences") private differences: ElementRef;
     private imagePairId: string;
     private differenceCounterUser: number;
     private differenceFound: number[];
@@ -42,7 +44,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.imagePairId = params["id"];
         });
-
+        this.gameOver();
         this.getImagePairById();
     }
 
@@ -91,10 +93,17 @@ export class GameViewSimpleComponent implements OnInit {
         this.differenceFound[this.differenceFound.length++] = differenceId;
         this.differenceCounterUser = this.differenceCounterUser + 1;
         await this.differenceSound.play();
+        if (this.differenceCounterUser === GameViewSimpleComponent.MAX_DIFFERENCES) {
+            this.gameOver();
+        }
     }
 
     public isANewDifference(differenceId: number): boolean {
 
         return !this.differenceFound.includes(differenceId);
+    }
+
+    private gameOver(): void {
+        this.timerService.stopTimer();
     }
 }
