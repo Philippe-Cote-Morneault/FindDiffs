@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
+import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
@@ -13,6 +14,8 @@ import { TimerService } from "../services/timer/timer.service";
 })
 export class GameViewSimpleComponent implements OnInit {
     private static MAX_DIFFERENCES: number = 7;
+    private static tKeyCode: number = 84;
+
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
@@ -30,7 +33,8 @@ export class GameViewSimpleComponent implements OnInit {
         public pixelPositionService: PixelPositionService,
         public pixelRestoration: PixelRestoration,
         public imagePairService: ImagePairService,
-        public timerService: TimerService) {
+        public timerService: TimerService,
+        public cheatModeService: CheatModeService) {
 
         this.differenceCounterUser = 0;
         this.differenceFound = [];
@@ -39,6 +43,13 @@ export class GameViewSimpleComponent implements OnInit {
         this.differenceSound = new Audio;
         this.differenceSound.src = "../../assets/mario.mp3";
         this.differenceSound.load();
+    }
+
+    @HostListener("document:keydown", ["$event"])
+    public activateCheatMode(event: KeyboardEvent): void {
+        if (event.keyCode === GameViewSimpleComponent.tKeyCode) {
+            this.cheatModeService.toggleCheatMode(event);
+        }
     }
 
     public ngOnInit(): void {
