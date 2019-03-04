@@ -112,21 +112,32 @@ export class GameViewSimpleComponent implements OnInit {
 
     private showErrorMessage(xPosition: number, yPosition: number): void {
         this.timeout = true;
+        this.positionClickError(xPosition, yPosition);
+        this.showClickError();
+        // Doit revenir normal après 1 sec
+        setTimeout(() => {
+            this.hideClickError();
+            this.timeout = false;
+            // tslint:disable-next-line:no-magic-numbers
+                }, 1000);
+    }
+
+    private positionClickError(xPosition: number, yPosition: number): void {
         this.errorMessage.nativeElement.style.top = yPosition + "px";
         this.errorMessage.nativeElement.style.left = xPosition + "px";
+    }
 
+    private showClickError(): void {
         this.errorMessage.nativeElement.style.display = "inline";
         this.originalCanvas.nativeElement.style.cursor = "not-allowed";
         this.modifiedCanvas.nativeElement.style.cursor = "not-allowed";
         this.errorMessage.nativeElement.style.cursor = "not-allowed";
-        // Doit revenir normal après 1 sec
-        setTimeout(() => {
-            this.errorMessage.nativeElement.style.display = "none";
-            this.originalCanvas.nativeElement.style.cursor = "context-menu";
-            this.modifiedCanvas.nativeElement.style.cursor = "context-menu";
-            this.errorMessage.nativeElement.style.cursor = "context-menu";
-            this.timeout = false;
-            // tslint:disable-next-line:no-magic-numbers
-                }, 1000);
+    }
+
+    private hideClickError(): void {
+        this.errorMessage.nativeElement.style.display = "none";
+        this.originalCanvas.nativeElement.style.cursor = "context-menu";
+        this.modifiedCanvas.nativeElement.style.cursor = "context-menu";
+        this.errorMessage.nativeElement.style.cursor = "context-menu";
     }
 }
