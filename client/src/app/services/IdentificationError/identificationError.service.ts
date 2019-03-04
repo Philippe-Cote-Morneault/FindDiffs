@@ -12,9 +12,13 @@ export class IdentificationError {
     private static CONTEXT_MENU: string = "context-menu";
 
     public timeout: boolean;
+    private errorSound: HTMLAudioElement;
 
     public constructor() {
         this.timeout = false;
+        this.errorSound = new Audio;
+        this.errorSound.src = "../../assets/no.mp3";
+        this.errorSound.load();
     }
 
     public showErrorMessage(xPosition: number, yPosition: number,
@@ -22,6 +26,7 @@ export class IdentificationError {
         this.timeout = true;
         this.moveClickError(xPosition, yPosition, errorMessage);
         this.showClickError(errorMessage, original, modified);
+        this.errorSound.play();
 
         setTimeout(() => {
             this.hideClickError(errorMessage, original, modified);
