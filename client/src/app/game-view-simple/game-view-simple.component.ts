@@ -112,7 +112,7 @@ export class GameViewSimpleComponent implements OnInit {
 
     private showErrorMessage(xPosition: number, yPosition: number): void {
         this.timeout = true;
-        this.positionClickError(xPosition, yPosition);
+        this.moveClickError(xPosition, yPosition);
         this.showClickError();
         // Doit revenir normal après 1 sec
         setTimeout(() => {
@@ -122,7 +122,7 @@ export class GameViewSimpleComponent implements OnInit {
                 }, 1000);
     }
 
-    private positionClickError(xPosition: number, yPosition: number): void {
+    private moveClickError(xPosition: number, yPosition: number): void {
         this.errorMessage.nativeElement.style.top = yPosition + "px";
         this.errorMessage.nativeElement.style.left = xPosition + "px";
     }
