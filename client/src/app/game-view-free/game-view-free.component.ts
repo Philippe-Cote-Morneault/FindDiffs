@@ -5,6 +5,7 @@ import { ICommonSceneModifications } from "../../../../common/model/scene/modifi
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
+import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -14,6 +15,7 @@ import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.se
 export class GameViewFreeComponent implements OnInit {
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
+    @ViewChild("chronometer") private chronometer: ElementRef;
 
     private scenePairID: string;
     private originalSceneLoader: SceneLoaderService;
@@ -22,7 +24,8 @@ export class GameViewFreeComponent implements OnInit {
     public constructor(
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
-        public sceneService: SceneService) {
+        public sceneService: SceneService,
+        public timerService: TimerService) {
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
     }
@@ -48,6 +51,7 @@ export class GameViewFreeComponent implements OnInit {
             SceneLoaderService.syncScenes(this.originalSceneLoader.camera, this.originalSceneLoader.controls,
                                           this.modifiedSceneLoader.camera, this.modifiedSceneLoader.controls);
             this.spinnerService.hide();
+            this.timerService.startTimer(this.chronometer.nativeElement);
         });
     }
 }

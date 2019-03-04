@@ -5,9 +5,9 @@
 <div id="game_wrapper">
   <div id="game_info">
     <div>
-      <p> Differences found: 0</p>
+      <p id="differences"> Differences found: 0</p>
       <p *ngIf="false"> Opponent's differences found: {{differenceCounterOpponent}}</p>
-      <p> Timer: 00:00</p>
+      <p class="timer"> Timer:</p><p class="timer" #chronometer>00:00</p>
     </div>
     <div>
       <p> Messages: </p>

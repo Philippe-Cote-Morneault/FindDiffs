@@ -4,6 +4,7 @@ import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
+import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-simple",
@@ -11,8 +12,10 @@ import { PixelRestoration } from "../services/pixelManipulation/pixel-restoratio
     styleUrls: ["./game-view-simple.component.css"],
 })
 export class GameViewSimpleComponent implements OnInit {
+    private static MAX_DIFFERENCES: number = 7;
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
+    @ViewChild("chronometer") private chronometer: ElementRef;
     private imagePairId: string;
     private differenceCounterUser: number;
     private differenceFound: number[];
@@ -24,7 +27,8 @@ export class GameViewSimpleComponent implements OnInit {
         private route: ActivatedRoute,
         public pixelPositionService: PixelPositionService,
         public pixelRestoration: PixelRestoration,
-        public imagePairService: ImagePairService) {
+        public imagePairService: ImagePairService,
+        public timerService: TimerService) {
 
         this.differenceCounterUser = 0;
         this.differenceFound = [];
@@ -39,7 +43,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.imagePairId = params["id"];
         });
-
+        this.gameOver();
         this.getImagePairById();
     }
 
@@ -47,6 +51,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
             this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
             this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
+            this.timerService.startTimer(this.chronometer.nativeElement);
         });
     }
 
@@ -87,10 +92,17 @@ export class GameViewSimpleComponent implements OnInit {
         this.differenceFound[this.differenceFound.length++] = differenceId;
         this.differenceCounterUser = this.differenceCounterUser + 1;
         await this.differenceSound.play();
+        if (this.differenceCounterUser === GameViewSimpleComponent.MAX_DIFFERENCES) {
+            this.gameOver();
+        }
     }
 
     public isANewDifference(differenceId: number): boolean {
 
         return !this.differenceFound.includes(differenceId);
+    }
+
+    private gameOver(): void {
+        this.timerService.stopTimer();
     }
 }

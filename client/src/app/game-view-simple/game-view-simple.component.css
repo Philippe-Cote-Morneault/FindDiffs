@@ -60,5 +60,13 @@ body{
   color: white;
   margin-left: 20px;
   margin-bottom: 0;
+}
 
+.timer {
+  margin-bottom: 0px; 
+}
+
+#differences {
+  margin-top: 15px;
+  margin-bottom: 5px;
 }

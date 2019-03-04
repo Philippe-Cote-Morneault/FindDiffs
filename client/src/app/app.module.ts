@@ -3,7 +3,9 @@ import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Ng4LoadingSpinnerModule } from "ng4-loading-spinner";
+import { ToastrModule } from "ngx-toastr";
 import { AdminViewComponent } from "./admin-view/admin-view.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -36,6 +38,8 @@ import { UserService } from "./services/user/user.service";
         FormsModule,
         Ng4LoadingSpinnerModule.forRoot(),
         MatProgressSpinnerModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
     ],
     providers: [UserService, InitialViewComponent, GameCardLoaderService],
     bootstrap: [AppComponent],
