@@ -22,6 +22,8 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("chronometer") private chronometer: ElementRef;
 
     private scenePairID: string;
+    private currentOriginalScene: ICommonScene;
+    private currentModifiedScene: ICommonSceneModifications;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
 
@@ -46,20 +48,22 @@ export class GameViewFreeComponent implements OnInit {
     @HostListener("document:keydown", ["$event"])
     public toggleCheatMode(event: KeyboardEvent): void {
         if (event.keyCode === GameViewFreeComponent.tKeyCode) {
-            this.cheatModeService.toggleCheatMode(event);
+            this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene, this.currentModifiedScene);
         }
     }
 
     private getOriginalSceneById(): void {
         this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
             this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
-            this.getModifiedSceneById(response);
+            this.currentOriginalScene = response;
+            this.getModifiedSceneById(this.currentOriginalScene);
         });
     }
 
     private getModifiedSceneById(response: ICommonScene): void {
         this.sceneService.getModifiedSceneById(this.scenePairID).subscribe((responseModified: ICommonSceneModifications) => {
-            this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, responseModified);
+            this.currentModifiedScene = responseModified;
+            this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, this.currentModifiedScene);
             this.spinnerService.hide();
             this.timerService.startTimer(this.chronometer.nativeElement);
         });
