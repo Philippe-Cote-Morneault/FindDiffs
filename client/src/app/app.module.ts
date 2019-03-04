@@ -18,6 +18,7 @@ import { GamesListViewComponent } from "./games-list-view/games-list-view.compon
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 import { GameCardLoaderService } from "./services/gameCard/game-card-loader.service";
 import { UserService } from "./services/user/user.service";
+import { EndSoloGameComponent } from './end-solo-game/end-solo-game.component';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { UserService } from "./services/user/user.service";
         GameViewSimpleComponent,
         CreateGameFreeViewComponent,
         GameViewFreeComponent,
+        EndSoloGameComponent,
     ],
     imports: [
         BrowserModule,
