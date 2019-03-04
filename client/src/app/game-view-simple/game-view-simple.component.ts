@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
+import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
@@ -21,7 +22,6 @@ export class GameViewSimpleComponent implements OnInit {
     private imagePairId: string;
     private differenceCounterUser: number;
     private differenceFound: number[];
-    private timeout: boolean;
 
     private differenceSound: HTMLAudioElement;
 
@@ -30,11 +30,11 @@ export class GameViewSimpleComponent implements OnInit {
         public pixelPositionService: PixelPositionService,
         public pixelRestoration: PixelRestoration,
         public imagePairService: ImagePairService,
-        public timerService: TimerService) {
+        public timerService: TimerService,
+        public identificationError: IdentificationError) {
 
         this.differenceCounterUser = 0;
         this.differenceFound = [];
-        this.timeout = false;
 
         this.differenceSound = new Audio;
         this.differenceSound.src = "../../assets/mario.mp3";
@@ -59,7 +59,7 @@ export class GameViewSimpleComponent implements OnInit {
 
     // tslint:disable-next-line:no-any
     public getClickPosition(e: any): void {
-        if (!this.timeout) {
+        if (!this.identificationError.timeout) {
             const xPosition: number = e.layerX;
             const yPosition: number = e.layerY;
             this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(async (response) => {
@@ -72,7 +72,8 @@ export class GameViewSimpleComponent implements OnInit {
                         await this.addDifference(response.difference_id);
                     }
                 } else {
-                    this.showErrorMessage(e.pageX, e.pageY);
+                    this.identificationError.showErrorMessage(e.pageX, e.pageY, this.errorMessage.nativeElement,
+                                                              this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
                 }
             });
         }
@@ -108,36 +109,5 @@ export class GameViewSimpleComponent implements OnInit {
 
     private gameOver(): void {
         this.timerService.stopTimer();
-    }
-
-    private showErrorMessage(xPosition: number, yPosition: number): void {
-        this.timeout = true;
-        this.moveClickError(xPosition, yPosition);
-        this.showClickError();
-        // Doit revenir normal après 1 sec
-        setTimeout(() => {
-            this.hideClickError();
-            this.timeout = false;
-            // tslint:disable-next-line:no-magic-numbers
-                }, 1000);
-    }
-
-    private moveClickError(xPosition: number, yPosition: number): void {
-        this.errorMessage.nativeElement.style.top = yPosition + "px";
-        this.errorMessage.nativeElement.style.left = xPosition + "px";
-    }
-
-    private showClickError(): void {
-        this.errorMessage.nativeElement.style.display = "inline";
-        this.originalCanvas.nativeElement.style.cursor = "not-allowed";
-        this.modifiedCanvas.nativeElement.style.cursor = "not-allowed";
-        this.errorMessage.nativeElement.style.cursor = "not-allowed";
-    }
-
-    private hideClickError(): void {
-        this.errorMessage.nativeElement.style.display = "none";
-        this.originalCanvas.nativeElement.style.cursor = "context-menu";
-        this.modifiedCanvas.nativeElement.style.cursor = "context-menu";
-        this.errorMessage.nativeElement.style.cursor = "context-menu";
     }
 }
