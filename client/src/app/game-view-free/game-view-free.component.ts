@@ -1,8 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
+import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { TimerService } from "../services/timer/timer.service";
@@ -12,7 +13,10 @@ import { TimerService } from "../services/timer/timer.service";
     templateUrl: "./game-view-free.component.html",
     styleUrls: ["./game-view-free.component.css"],
 })
+
 export class GameViewFreeComponent implements OnInit {
+    private static tKeyCode: number = 84;
+
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
@@ -25,7 +29,8 @@ export class GameViewFreeComponent implements OnInit {
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
-        public timerService: TimerService) {
+        public timerService: TimerService,
+        public cheatModeService: CheatModeService) {
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
     }
@@ -36,6 +41,13 @@ export class GameViewFreeComponent implements OnInit {
         });
         this.spinnerService.show();
         this.getOriginalSceneById();
+    }
+
+    @HostListener("document:keydown", ["$event"])
+    public toggleCheatMode(event: KeyboardEvent): void {
+        if (event.keyCode === GameViewFreeComponent.tKeyCode) {
+            this.cheatModeService.toggleCheatMode(event);
+        }
     }
 
     private getOriginalSceneById(): void {
