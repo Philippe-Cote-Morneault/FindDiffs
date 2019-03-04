@@ -46,7 +46,7 @@ export class GameViewSimpleComponent implements OnInit {
     }
 
     @HostListener("document:keydown", ["$event"])
-    public activateCheatMode(event: KeyboardEvent): void {
+    public toggleCheatMode(event: KeyboardEvent): void {
         if (event.keyCode === GameViewSimpleComponent.tKeyCode) {
             this.cheatModeService.toggleCheatMode(event);
         }
