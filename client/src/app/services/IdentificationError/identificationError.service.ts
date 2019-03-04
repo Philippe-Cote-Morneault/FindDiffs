@@ -5,6 +5,12 @@ import { Injectable } from "@angular/core";
 })
 export class IdentificationError {
     private static ONE_SECOND: number = 1000;
+    private static PIXEL: string = "px";
+    private static INLINE: string = "inline";
+    private static NONE: string = "none";
+    private static NOT_ALLOWED: string = "not-allowed";
+    private static CONTEXT_MENU: string = "context-menu";
+
     public timeout: boolean;
 
     public constructor() {
@@ -24,21 +30,21 @@ export class IdentificationError {
     }
 
     private moveClickError(xPosition: number, yPosition: number, errorMessage: HTMLElement): void {
-        errorMessage.style.top = yPosition + "px";
-        errorMessage.style.left = xPosition + "px";
+        errorMessage.style.top = yPosition + IdentificationError.PIXEL;
+        errorMessage.style.left = xPosition + IdentificationError.PIXEL;
     }
 
     private showClickError(errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement): void {
-        errorMessage.style.display = "inline";
-        original.style.cursor = "not-allowed";
-        modified.style.cursor = "not-allowed";
-        errorMessage.style.cursor = "not-allowed";
+        errorMessage.style.display = IdentificationError.INLINE;
+        original.style.cursor = IdentificationError.NOT_ALLOWED;
+        modified.style.cursor = IdentificationError.NOT_ALLOWED;
+        errorMessage.style.cursor = IdentificationError.NOT_ALLOWED;
     }
 
     private hideClickError(errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement): void {
-        errorMessage.style.display = "none";
-        original.style.cursor = "context-menu";
-        modified.style.cursor = "context-menu";
-        errorMessage.style.cursor = "context-menu";
+        errorMessage.style.display = IdentificationError.NONE;
+        original.style.cursor = IdentificationError.CONTEXT_MENU;
+        modified.style.cursor = IdentificationError.CONTEXT_MENU;
+        errorMessage.style.cursor = IdentificationError.CONTEXT_MENU;
     }
 }
