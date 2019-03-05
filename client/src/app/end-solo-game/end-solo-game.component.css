@@ -1,0 +1,60 @@
+.body {
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
+.global-wrapper {
+  height: 100%;
+  width: 500px;
+  background-color: #33343D;
+  border: 2px black solid;
+  border-radius: 25px;
+}
+
+h1 {
+  color: white;
+}
+
+p {
+  color: white;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.btn {
+  margin-bottom: 2%;
+}
+
+
+.popuptext {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+}
+
+.show {
+  visibility: visible;
+  animation: fadeIn 3s;
+}
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
