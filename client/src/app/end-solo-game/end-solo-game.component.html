@@ -1,3 +1,22 @@
-<p>
-  end-solo-game works!
-</p>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="body">
+    <button (click)="test()">Press on me
+      <span class="popuptext" id="myPopup">
+        <div class="global-wrapper">
+          <h1>
+            Game over !
+          </h1>
+          <p>
+            Your time : 99 minutes and 99 seconds ! 
+          </p>
+          <button type="submit" class="btn btn-success" (click)="closePopup()">Continue</button>
+        </div> 
+      </span>
+    </button>
+  </div>
+</body>
