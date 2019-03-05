@@ -18,6 +18,7 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("errorMessage") private errorMessage: ElementRef;
+    @ViewChild("gameTitle") private gameTitle: ElementRef;
 
     private imagePairId: string;
     private differenceCounterUser: number;
@@ -51,6 +52,7 @@ export class GameViewSimpleComponent implements OnInit {
 
     private getImagePairById(): void {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
+            this.gameTitle.nativeElement.innerText = imagePair.name;
             this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
             this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
             this.timerService.startTimer(this.chronometer.nativeElement);
