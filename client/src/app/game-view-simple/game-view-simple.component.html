@@ -5,10 +5,13 @@
 <div id="game_wrapper">
   <div id="game_info">
     <div id="header">
-      <div id="title_wrapper"><p id="title" #gameTitle></p></div>
       <p class="differences"> Differences found:</p><p class="differences">{{differenceCounterUser}}</p>
       <p *ngIf="false" class="differences"> Opponent's differences found:</p><p *ngIf="false" class="differences">{{differenceCounterUser}}</p>
       <p class="timer"> Timer:</p><p class="timer" #chronometer>00:00</p>
+    </div>
+    <div id="title_wrapper">
+      <p id="title" #gameTitle></p>
+      <p id="POV">simple point of view</p>
     </div>
     <div id="message">
         <p #message></p>
