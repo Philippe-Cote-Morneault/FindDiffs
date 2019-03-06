@@ -13,7 +13,7 @@ export class EndSoloGameComponent implements OnInit {
 
   public test(): void {
     // tslint:disable:no-any
-    const popup: any = document.getElementById("myPopup") as HTMLElement;
+    const popup: any = document.getElementById("myPopup");
     popup.classList.toggle("show");
   }
 }
