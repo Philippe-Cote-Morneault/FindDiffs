@@ -1,29 +1,32 @@
 
 #game_wrapper {
-  width: 100vw;
-  height: 100vh;
+  width: 1920px;
+  height: 930px;
   background-color: #41414E;
 }
 
 #game_info {
-    height: 20vh;
+    height: 30vh;
     display: flex;
+    text-align: center;
   }
 
-.header_differences {
+.differences_container {
     background-color: #33343D;
     text-align: center;
     width: 16%;
-    margin: 8px;
+    height: 60%;
+    margin: 10px;
     border-radius: 2%;
     border: 1px black solid;
   }
 
-  .header_timer {
+  .timer_container {
+    height: 60%;
     text-align: center;
     background-color: #33343D;
     width: 16%;
-    margin: 8px;
+    margin: 10px;
     border-radius: 2%;
     border: 1px black solid;
   }
@@ -36,7 +39,7 @@
     overflow-y: visible;
     overflow-x: hidden;
     background-color: #33343D;
-    width: 32%;
+    width: 29%;
     height: 90%;
     margin: 8px;
     border-radius: 2%;
@@ -57,7 +60,7 @@
   #title {
   margin-top: 1%;
   margin-bottom: 0;
-  font-size: 40px;
+  font-size: 50px;
   color: #DADAD9;
   font-weight: bold;
   }
@@ -74,7 +77,7 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    height: 80%;
+    height: 70%;
     width: 100%;
 }
 
