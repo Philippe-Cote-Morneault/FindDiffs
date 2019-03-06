@@ -1,12 +1,12 @@
 
 #game_wrapper {
-  width: 1920px;
-  height: 930px;
+  width: 100vw;
+  height: 100vh;
   background-color: #41414E;
 }
 
 #game_info {
-    height: 30vh;
+    height: 20%;
     display: flex;
     text-align: center;
   }
@@ -14,19 +14,19 @@
 .differences_container {
     background-color: #33343D;
     text-align: center;
-    width: 16%;
-    height: 60%;
-    margin: 10px;
+    width: 15%;
+    height: 65%;
+    margin: 12px;
     border-radius: 2%;
     border: 1px black solid;
   }
 
   .timer_container {
-    height: 60%;
+    height: 65%;
     text-align: center;
     background-color: #33343D;
-    width: 16%;
-    margin: 10px;
+    width: 14%;
+    margin: 12px;
     border-radius: 2%;
     border: 1px black solid;
   }
@@ -39,7 +39,7 @@
     overflow-y: visible;
     overflow-x: hidden;
     background-color: #33343D;
-    width: 29%;
+    width: 32%;
     height: 90%;
     margin: 8px;
     border-radius: 2%;
@@ -66,6 +66,7 @@
   }
 
   #POV{
+    position: relative;
     margin: 0;
     font-weight: bold;
   }
@@ -117,7 +118,7 @@
   color: #DADAD9;
   width: 100%;
   font-weight: bold;
-
+  margin-bottom: 5px;
 }
 
 #differences_title {
@@ -131,7 +132,7 @@
   margin-bottom: 0px; 
   width: 100%;
   color: #EDE6E3;
-  font-size: 25px;
+  font-size: 30px;
 }
 
 #differences {
