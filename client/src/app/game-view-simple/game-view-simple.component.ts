@@ -18,6 +18,7 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
+    private gameCardId: string;
     private imagePairId: string;
     private differenceCounterUser: number;
     private differenceFound: number[];
@@ -46,15 +47,16 @@ export class GameViewSimpleComponent implements OnInit {
 
     public ngOnInit(): void {
         this.route.params.subscribe((params) => {
-            this.imagePairId = params["id"];
+            this.gameCardId = params["id"];
         });
         // this.gameOver();
         this.getImagePairById();
     }
 
     private getImagePairById(): void {
-        this.gamesCardService.getGameById(this.imagePairId).subscribe((gameCard: ICommonGameCard) => {
-            this.imagePairService.getImagePairById(gameCard.resource_id).subscribe((imagePair: ICommonImagePair) => {
+        this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
+            this.imagePairId = gameCard.resource_id;
+            this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
                 this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
                 this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
                 this.timerService.startTimer(this.chronometer.nativeElement);
