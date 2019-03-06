@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
+import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
@@ -29,6 +31,7 @@ export class GameViewSimpleComponent implements OnInit {
         public pixelPositionService: PixelPositionService,
         public pixelRestoration: PixelRestoration,
         public imagePairService: ImagePairService,
+        public gamesCardService: GamesCardService,
         public timerService: TimerService) {
 
         this.differenceCounterUser = 0;
@@ -45,15 +48,17 @@ export class GameViewSimpleComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.imagePairId = params["id"];
         });
-        this.gameOver();
+        // this.gameOver();
         this.getImagePairById();
     }
 
     private getImagePairById(): void {
-        this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
-            this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
-            this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
-            this.timerService.startTimer(this.chronometer.nativeElement);
+        this.gamesCardService.getGameById(this.imagePairId).subscribe((gameCard: ICommonGameCard) => {
+            this.imagePairService.getImagePairById(gameCard.resource_id).subscribe((imagePair: ICommonImagePair) => {
+                this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
+                this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
+                this.timerService.startTimer(this.chronometer.nativeElement);
+            });
         });
     }
 
