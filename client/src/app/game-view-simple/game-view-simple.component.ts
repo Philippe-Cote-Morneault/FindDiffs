@@ -26,6 +26,7 @@ export class GameViewSimpleComponent implements OnInit {
     private differenceSound: HTMLAudioElement;
     public identifyingDifference: boolean;
     public isGameOver: boolean;
+    public playerTime: string;
 
     public constructor(
         private route: ActivatedRoute,
@@ -113,6 +114,7 @@ export class GameViewSimpleComponent implements OnInit {
 
     private gameOver(): void {
         this.timerService.stopTimer();
+        // this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
         this.isGameOver = true;
     }
 }

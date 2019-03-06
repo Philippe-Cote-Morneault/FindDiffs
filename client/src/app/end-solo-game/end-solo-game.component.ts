@@ -33,5 +33,5 @@ export class EndSoloGameComponent implements OnInit {
 
   public toMinutes(index: number, times: ICommonScoreEntry[]): string {
     return StringFormater.secondsToMinutes(times[index].score);
-}
+  }
 }
