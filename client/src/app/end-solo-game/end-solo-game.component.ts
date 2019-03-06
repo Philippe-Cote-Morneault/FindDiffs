@@ -11,9 +11,4 @@ export class EndSoloGameComponent implements OnInit {
 
   public ngOnInit(): void { }
 
-  public test(): void {
-    // tslint:disable:no-any
-    const popup: any = document.getElementById("myPopup");
-    popup.classList.toggle("show");
-  }
 }
