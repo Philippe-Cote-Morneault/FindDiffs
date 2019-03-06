@@ -3,27 +3,25 @@
     crossorigin="anonymous">
 </head>
 
-<body>
-  <div class="body">
-    <button (click)="test()">Press on me
-      <span class="popuptext" id="myPopup">
-        <div class="global-wrapper">
-          <h1>
-            Game over !
-          </h1>
-          <div class="grid-container">
-              <div class="flex-container">
-                  <div class="grid-item">1</div>
-                  <div class="grid-item">2</div>
-                  <div class="grid-item">3</div>
-              </div> 
-              <div class="flex-container">
-                  <div class="grid-item">1</div>
-              </div>
-          </div>
-          <button type="submit" class="btn btn-success" (click)="closePopup()">Continue</button>
-        </div> 
-      </span>
-    </button>
-  </div>
-</body>
+<div class="body">
+  <!-- <button (click)="test()">Press on me -->
+    <span class="popuptext" id="myPopup">
+      <div class="global-wrapper">
+        <h1>
+          Game over !
+        </h1>
+        <div class="grid-container">
+            <div class="flex-container">
+                <div class="grid-item">1</div>
+                <div class="grid-item">2</div>
+                <div class="grid-item">3</div>
+            </div> 
+            <div class="flex-container">
+                <div class="grid-item">1</div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success" (click)="closePopup()">Continue</button>
+      </div> 
+    </span>
+  <!-- </button> -->
+</div>

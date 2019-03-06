@@ -22,6 +22,7 @@ export class GameViewSimpleComponent implements OnInit {
 
     private differenceSound: HTMLAudioElement;
     public identifyingDifference: boolean;
+    public isGameOver: boolean;
 
     public constructor(
         private route: ActivatedRoute,
@@ -33,6 +34,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.differenceCounterUser = 0;
         this.differenceFound = [];
         this.identifyingDifference = false;
+        this.isGameOver = false;
 
         this.differenceSound = new Audio;
         this.differenceSound.src = "../../assets/mario.mp3";
@@ -104,5 +106,6 @@ export class GameViewSimpleComponent implements OnInit {
 
     private gameOver(): void {
         this.timerService.stopTimer();
+        this.isGameOver = true;
     }
 }
