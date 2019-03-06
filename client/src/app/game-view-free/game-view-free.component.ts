@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
+import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
+import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { TimerService } from "../services/timer/timer.service";
@@ -17,7 +19,8 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
 
-    private scenePairID: string;
+    private gameCardId: string;
+    private scenePairId: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
 
@@ -25,6 +28,7 @@ export class GameViewFreeComponent implements OnInit {
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
+        public gamesCardService: GamesCardService,
         public timerService: TimerService) {
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
@@ -32,21 +36,24 @@ export class GameViewFreeComponent implements OnInit {
 
     public ngOnInit(): void {
         this.route.params.subscribe((params) => {
-            this.scenePairID = params["id"];
+            this.gameCardId = params["id"];
         });
         this.spinnerService.show();
         this.getOriginalSceneById();
     }
 
     private getOriginalSceneById(): void {
-        this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
-            this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
-            this.getModifiedSceneById(response);
+        this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
+            this.scenePairId = gameCard.resource_id;
+            this.sceneService.getSceneById(this.scenePairId).subscribe((response: ICommonScene) => {
+                this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
+                this.getModifiedSceneById(response);
+            });
         });
     }
 
     private getModifiedSceneById(response: ICommonScene): void {
-        this.sceneService.getModifiedSceneById(this.scenePairID).subscribe((responseModified: ICommonSceneModifications) => {
+        this.sceneService.getModifiedSceneById(this.scenePairId).subscribe((responseModified: ICommonSceneModifications) => {
             this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, responseModified);
             SceneLoaderService.syncScenes(this.originalSceneLoader.camera, this.originalSceneLoader.controls,
                                           this.modifiedSceneLoader.camera, this.modifiedSceneLoader.controls);
