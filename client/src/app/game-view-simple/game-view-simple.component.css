@@ -25,13 +25,26 @@ body{
     text-align: center;
     width: 64%;
   }
-  #message {
+  #message_container {
+    overflow-y: visible;
+    overflow-x: hidden;
     background-color: #33343D;
     width: 32%;
     margin: 8px;
     border-radius: 2%;
     float: right;
     border: 1px black solid;
+  }
+  .message {
+    margin-bottom: 1%;
+    margin-right: 100%;
+    padding:2px;
+    width: 80%;
+    max-height: none;
+    overflow-wrap: break-word;
+    font-family: Arial;
+    margin-left: 3%;
+    float: left;
   }
   #title {
   margin-top: 1%;
