@@ -1,7 +1,4 @@
 
-body{
-  margin: 0px;
-}
 #game_wrapper {
   width: 100vw;
   height: 100vh;
@@ -9,13 +6,23 @@ body{
 }
 
 #game_info {
-    height: 20%;
+    height: 20vh;
     display: flex;
   }
 
-#header {
+.header_differences {
     background-color: #33343D;
-    width: 32%;
+    text-align: center;
+    width: 16%;
+    margin: 8px;
+    border-radius: 2%;
+    border: 1px black solid;
+  }
+
+  .header_timer {
+    text-align: center;
+    background-color: #33343D;
+    width: 16%;
     margin: 8px;
     border-radius: 2%;
     border: 1px black solid;
@@ -30,6 +37,7 @@ body{
     overflow-x: hidden;
     background-color: #33343D;
     width: 32%;
+    height: 90%;
     margin: 8px;
     border-radius: 2%;
     float: right;
@@ -66,7 +74,7 @@ body{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    height: 480px;
+    height: 80%;
     width: 100%;
 }
 
@@ -102,20 +110,32 @@ body{
   margin-bottom: 0;
 }
 
-.timer {
-  margin-bottom: 0px; 
-  width: 47%;
-  margin-left: 3%;
-  float: left;
-  color: #EDE6E3;
+#timer_title {
+  color: #DADAD9;
+  width: 100%;
+  font-weight: bold;
+
 }
 
-.differences {
-  margin-top:3%;
-  margin-left: 3%;
+#differences_title {
+  color: #DADAD9;
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 5px;;
+}
+
+#timer {
+  margin-bottom: 0px; 
+  width: 100%;
+  color: #EDE6E3;
+  font-size: 25px;
+}
+
+#differences {
+  font-size: 35px;
+  margin-top:0%;
   margin-bottom: 0px;
-  width: 47%;
-  float: left;
+  width: 100%;
   color: #EDE6E3;
 }
 #ErrorMessage {
