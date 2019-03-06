@@ -1,8 +1,6 @@
-export interface SocketMessage {
-    eventType: Event,
+export interface ICommonSocketMessage {
     data: Object,
     timestamp: Date,
-    sender: string,
 }
 
-export enum Event {GameMessage}
+export enum Event {UserConnected = "UserConnected", UserDisconnected = "UserDisconnected"};

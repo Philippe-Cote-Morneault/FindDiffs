@@ -4,6 +4,7 @@ import { AddressInfo } from "net";
 import { Application } from "./app";
 import Config from "./config";
 import { IServer } from "./interfaces";
+import { SocketHandler } from "./services/socket/socketHandler";
 import Types from "./types";
 
 @injectable()
@@ -17,6 +18,8 @@ export class Server implements IServer {
         this.application.app.set("port", this.appPort);
 
         this.server = http.createServer(this.application.app);
+
+        SocketHandler.getInstance().setServer(this.server);
 
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
