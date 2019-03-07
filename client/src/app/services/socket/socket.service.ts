@@ -18,9 +18,9 @@ export class SocketService {
         this.socket = io("http://localhost:3000");
         this.id = this.socket.id;
 
-        this.socket.on('connect', function () {
+        /*this.socket.on('connect', function () {
             console.log("connected");
-        });
+        });*/
     }
 
     public notifyNewUser(username: string): void {
