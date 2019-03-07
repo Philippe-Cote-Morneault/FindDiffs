@@ -28,6 +28,7 @@ export class GamesListViewComponent implements OnInit {
 
         this.addAllGameCards();
         this.socketService.newUserConnected();
+        this.socketService.userDisconnected();
     }
 
     private addAllGameCards(): void {

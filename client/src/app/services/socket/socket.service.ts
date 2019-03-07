@@ -39,4 +39,10 @@ export class SocketService {
             console.log(message);
         });
     }
+
+    public userDisconnected(): void {
+        this.socket.on("UserDisconnected", (message: Object) => {
+            console.log(message);
+        });
+    }
 }
