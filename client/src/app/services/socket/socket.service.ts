@@ -33,4 +33,10 @@ export class SocketService {
 
         this.socket.emit("UserConnected", message);
     }
+
+    public newUserConnected(): void {
+        this.socket.on("NewUser", (message: Object) => {
+            console.log(message);
+        });
+    }
 }

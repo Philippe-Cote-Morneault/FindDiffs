@@ -28,6 +28,12 @@ export class SocketHandler {
 
             socket.on("UserConnected", (message: ICommonSocketMessage) => {
                 console.log(message);
+                const welcomeMsg: Object = {
+                    hi: "Welcome to the game : ",
+                    usename: message.data,
+                    time: message.timestamp,
+                }
+                socket.broadcast.emit("NewUser", welcomeMsg);
             });
         });
     }
