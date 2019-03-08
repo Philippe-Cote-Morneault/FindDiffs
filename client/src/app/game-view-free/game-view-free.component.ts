@@ -1,13 +1,13 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
+import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { TimerService } from "../services/timer/timer.service";
-import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 
 @Component({
     selector: "app-game-view-free",
