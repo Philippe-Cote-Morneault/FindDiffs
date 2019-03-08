@@ -7,6 +7,7 @@ import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { TimerService } from "../services/timer/timer.service";
+import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 
 @Component({
     selector: "app-game-view-free",
@@ -48,7 +49,9 @@ export class GameViewFreeComponent implements OnInit {
     @HostListener("document:keydown", ["$event"])
     public toggleCheatMode(event: KeyboardEvent): void {
         if (event.keyCode === GameViewFreeComponent.tKeyCode) {
-            this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene, this.currentModifiedScene);
+            this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene,
+                                                  (this.currentModifiedScene as ICommonGeometricModifications),
+                                                  this.modifiedScene.nativeElement);
         }
     }
 
