@@ -13,10 +13,14 @@ export class EndSoloGameComponent implements OnInit {
 
   public gameCard: ICommonGameCard;
   public gameCardId: string;
+  public time: string;
+
   public constructor(
     private route: ActivatedRoute,
     public gamesCardService: GamesCardService,
-    private router: Router) { }
+    private router: Router) {
+      this.time = "00:00";
+    }
 
   public ngOnInit(): void {
     this.route.params.subscribe((params) => {
