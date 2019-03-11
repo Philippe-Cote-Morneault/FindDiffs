@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
+import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
@@ -18,14 +19,16 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
+    @ViewChild("errorMessage") private errorMessage: ElementRef;
+    @ViewChild("gameTitle") private gameTitle: ElementRef;
+
     private gameCardId: string;
     private imagePairId: string;
+    private gameCardId: string;
     private differenceCounterUser: number;
     private differenceFound: number[];
 
     private differenceSound: HTMLAudioElement;
-    public identifyingDifference: boolean;
-    public isGameOver: boolean;
     public playerTime: string;
 
     public constructor(
@@ -33,13 +36,12 @@ export class GameViewSimpleComponent implements OnInit {
         public pixelPositionService: PixelPositionService,
         public pixelRestoration: PixelRestoration,
         public imagePairService: ImagePairService,
+        public timerService: TimerService,
         public gamesCardService: GamesCardService,
-        public timerService: TimerService) {
+        public identificationError: IdentificationError) {
 
         this.differenceCounterUser = 0;
         this.differenceFound = [];
-        this.identifyingDifference = false;
-        this.isGameOver = false;
 
         this.differenceSound = new Audio;
         this.differenceSound.src = "../../assets/mario.mp3";
@@ -50,8 +52,15 @@ export class GameViewSimpleComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.gameCardId = params["id"];
         });
-        // this.gameOver();
-        this.getImagePairById();
+        this.getGameCardById();
+    }
+
+    private getGameCardById(): void {
+        this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
+            this.imagePairId = gameCard.resource_id;
+            this.gameTitle.nativeElement.innerText = gameCard.title;
+            this.getImagePairById();
+        });
     }
 
     private getImagePairById(): void {
@@ -67,21 +76,24 @@ export class GameViewSimpleComponent implements OnInit {
 
     // tslint:disable-next-line:no-any
     public getClickPosition(e: any): void {
-        this.identifyingDifference = true;
-        const xPosition: number = e.layerX;
-        const yPosition: number = e.layerY;
-        this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(async (response) => {
-            if (response.hit) {
-                if (this.isANewDifference(response.difference_id)) {
-                    this.pixelRestoration.restoreImage(
-                        response,
-                        this.originalCanvas.nativeElement,
-                        this.modifiedCanvas.nativeElement);
-                    await this.addDifference(response.difference_id);
+        if (!this.identificationError.timeout) {
+            const xPosition: number = e.layerX;
+            const yPosition: number = e.layerY;
+            this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(async (response) => {
+                if (response.hit) {
+                    if (this.isANewDifference(response.difference_id)) {
+                        this.pixelRestoration.restoreImage(
+                            response,
+                            this.originalCanvas.nativeElement,
+                            this.modifiedCanvas.nativeElement);
+                        await this.addDifference(response.difference_id);
+                    }
+                } else {
+                    this.identificationError.showErrorMessage(e.pageX, e.pageY, this.errorMessage.nativeElement,
+                                                              this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
                 }
-            }
-            this.identifyingDifference = false;
-        });
+            });
+        }
     }
 
     // tslint:disable:no-any

@@ -18,9 +18,10 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
+    @ViewChild("gameTitle") private gameTitle: ElementRef;
 
-    private gameCardId: string;
-    private scenePairId: string;
+    private scenePairID: string;
+    private gameCardID: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
 
@@ -28,18 +29,26 @@ export class GameViewFreeComponent implements OnInit {
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
-        public gamesCardService: GamesCardService,
-        public timerService: TimerService) {
+        public timerService: TimerService,
+        public gamesCardService: GamesCardService) {
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
     }
 
     public ngOnInit(): void {
         this.route.params.subscribe((params) => {
-            this.gameCardId = params["id"];
+            this.gameCardID = params["id"];
         });
         this.spinnerService.show();
-        this.getOriginalSceneById();
+        this.getGameCardById();
+    }
+
+    private getGameCardById(): void {
+        this.gamesCardService.getGameById(this.gameCardID).subscribe((gameCard: ICommonGameCard) => {
+            this.scenePairID = gameCard.resource_id;
+            this.gameTitle.nativeElement.innerText = gameCard.title;
+            this.getOriginalSceneById();
+        });
     }
 
     private getOriginalSceneById(): void {
