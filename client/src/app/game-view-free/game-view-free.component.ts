@@ -8,6 +8,8 @@ import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { TimerService } from "../services/timer/timer.service";
+// import { ICommonGeometricObject } from "../../../../common/model/scene/objects/geometricObjects/geometricObject";
+// import { SocketService } from "../services/socket/socket.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -28,6 +30,7 @@ export class GameViewFreeComponent implements OnInit {
     public constructor(
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
+        // private socketService: SocketService,
         public sceneService: SceneService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService) {

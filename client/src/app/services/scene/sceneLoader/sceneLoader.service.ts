@@ -45,6 +45,7 @@ export class SceneLoaderService {
     public loadOriginalScene(container: HTMLElement | null, scene: ICommonScene, inGameMode: boolean): void {
         this.scene = new SceneParserService().parseScene(scene);
 
+        // console.log(this.scene.children[6].uuid);
         this.renderScene(container, inGameMode);
     }
 
