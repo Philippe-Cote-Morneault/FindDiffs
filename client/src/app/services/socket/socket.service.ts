@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
-import { ICommonSocketMessage, ICommonTest } from "../../../../../common/communication/webSocket/socketMessage";
+import { ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 
 @Injectable({
     providedIn: "root",
@@ -35,19 +35,19 @@ export class SocketService {
     }
 
     public newUserConnected(chat: HTMLElement): void {
-        this.socket.on("NewUser", (message: ICommonTest) => {
+        this.socket.on("NewUser", (message: ICommonSocketMessage) => {
 
             const pre: HTMLElement = document.createElement("p");
-            pre.innerText = JSON.stringify(message.usename);
+            pre.innerText = JSON.stringify(message.data);
             chat.appendChild(pre);
         });
     }
 
     public userDisconnected(chat: HTMLElement): void {
-        this.socket.on("UserDisconnected", (message: Object) => {
+        this.socket.on("UserDisconnected", (message: ICommonSocketMessage) => {
 
             const pre: HTMLElement = document.createElement("p");
-            pre.innerText = JSON.stringify(message);
+            pre.innerText = JSON.stringify(message.data);
             chat.appendChild(pre);
         });
     }

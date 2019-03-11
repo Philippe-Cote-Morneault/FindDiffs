@@ -1,12 +1,6 @@
 export interface ICommonSocketMessage {
-    data: Object,
+    data: string,
     timestamp: Date,
-}
-
-export interface ICommonTest {
-    hi: string,
-    usename: Object,
-    time: Date,
 }
 
 export enum Event {UserConnected = "UserConnected", UserDisconnected = "UserDisconnected"};
