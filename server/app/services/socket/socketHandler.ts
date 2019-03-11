@@ -25,6 +25,7 @@ export class SocketHandler {
 
     private init(): void {
         this.idUsernames = new Map<string, Object>();
+        // tslint:disable-next-line:no-any
         this.io.on("connect", (socket: any) => {
             // console.log("connected");
             this.idUsernames.set(socket.id, "");
@@ -35,7 +36,7 @@ export class SocketHandler {
                     hi: "Welcome to the game : ",
                     usename: message.data,
                     time: message.timestamp,
-                }
+                };
                 socket.broadcast.emit("NewUser", welcomeMsg);
             });
 
@@ -44,7 +45,7 @@ export class SocketHandler {
                 const goodByeMsg: Object = {
                     bye: "Good bye :'( : " + username,
                     id: socket.id,
-                }
+                };
                 socket.broadcast.emit("UserDisconnected", goodByeMsg);
             });
         });
