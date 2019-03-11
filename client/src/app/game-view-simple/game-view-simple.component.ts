@@ -22,12 +22,13 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("errorMessage") private errorMessage: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
 
-    private imagePairId: string;
     private gameCardId: string;
+    private imagePairId: string;
+    private isGameOver: boolean;
     private differenceCounterUser: number;
     private differenceFound: number[];
-
     private differenceSound: HTMLAudioElement;
+    public playerTime: string;
 
     public constructor(
         private route: ActivatedRoute,
@@ -38,6 +39,7 @@ export class GameViewSimpleComponent implements OnInit {
         public gamesCardService: GamesCardService,
         public identificationError: IdentificationError) {
 
+        this.isGameOver = false;
         this.differenceCounterUser = 0;
         this.differenceFound = [];
 
@@ -50,7 +52,6 @@ export class GameViewSimpleComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.gameCardId = params["id"];
         });
-        this.gameOver();
         this.getGameCardById();
     }
 
@@ -122,5 +123,7 @@ export class GameViewSimpleComponent implements OnInit {
 
     private gameOver(): void {
         this.timerService.stopTimer();
+        this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
+        this.isGameOver = true;
     }
 }
