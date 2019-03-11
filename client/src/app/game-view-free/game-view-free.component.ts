@@ -22,7 +22,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
 
-    private scenePairID: string;
+    private scenePairId: string;
     private gameCardID: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
@@ -34,8 +34,8 @@ export class GameViewFreeComponent implements OnInit {
         public sceneService: SceneService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService) {
-            this.originalSceneLoader = new SceneLoaderService();
-            this.modifiedSceneLoader = new SceneLoaderService();
+        this.originalSceneLoader = new SceneLoaderService();
+        this.modifiedSceneLoader = new SceneLoaderService();
     }
 
     public ngOnInit(): void {
@@ -48,14 +48,14 @@ export class GameViewFreeComponent implements OnInit {
 
     private getGameCardById(): void {
         this.gamesCardService.getGameById(this.gameCardID).subscribe((gameCard: ICommonGameCard) => {
-            this.scenePairID = gameCard.resource_id;
+            this.scenePairId = gameCard.resource_id;
             this.gameTitle.nativeElement.innerText = gameCard.title;
             this.getOriginalSceneById();
         });
     }
 
     private getOriginalSceneById(): void {
-        this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
+        this.sceneService.getSceneById(this.scenePairId).subscribe((response: ICommonScene) => {
             this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
             this.getModifiedSceneById(response);
         });
