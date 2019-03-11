@@ -22,26 +22,6 @@ export class SceneLoaderService {
     private renderer: THREE.WebGLRenderer;
     private scene: THREE.Scene;
 
-    public static syncScenes(camera1: THREE.PerspectiveCamera, controls1: THREE.OrbitControls,
-                             camera2: THREE.PerspectiveCamera, controls2: THREE.OrbitControls): void {
-
-        controls1.addEventListener("change", () => {
-            camera2.position.copy(camera1.position);
-            camera2.rotation.copy(camera1.rotation);
-            controls2.target.copy(controls1.target);
-            controls2.update();
-            },
-        );
-
-        controls2.addEventListener("change", () => {
-            camera1.position.copy(camera2.position);
-            camera1.rotation.copy(camera2.rotation);
-            controls1.target.copy(controls2.target);
-            controls1.update();
-            },
-        );
-    }
-
     public loadOriginalScene(container: HTMLElement | null, scene: ICommonScene, inGameMode: boolean): void {
         this.scene = new SceneParserService().parseScene(scene);
 
