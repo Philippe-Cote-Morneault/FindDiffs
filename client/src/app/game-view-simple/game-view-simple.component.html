@@ -4,13 +4,21 @@
 </head>
 <div id="game_wrapper">
   <div id="game_info">
-    <div>
-      <p id="differences"> Differences found: {{differenceCounterUser}}</p>
-      <p *ngIf="false"> Opponent's differences found: {{differenceCounterOpponent}}</p>
-      <p class="timer"> Timer:</p><p class="timer" #chronometer>00:00</p>
+    <div class="timer_container">
+        <p id="timer_title">Timer</p><p id="timer" #chronometer>00:00</p>
     </div>
-    <div>
-      <p> Messages: </p>
+    <div class="differences_container">
+      <p id="differences_title">Differences found</p><p id="differences">{{differenceCounterUser}}</p>
+    </div>
+    <div class="differences_container" *ngIf="false" >
+        <p *ngIf="false" id="differences_title"> Opponent's differences found</p><p *ngIf="false" id="differences">{{differenceCounterUser}}</p>
+    </div>
+    <div id="title_wrapper">
+      <p id="title" #gameTitle></p>
+      <p id="POV">simple point of view</p>
+    </div>
+    <div id="message_container">
+        <p #message class="message"></p>
     </div>
   </div>
   <div id="game_image_wrapper">
@@ -20,5 +28,6 @@
     <div id="image_modified">
       <canvas id="modified_canvas" width="640px" height="480px" style="border:1px solid #000000;" #modifiedCanvas ></canvas>
     </div>
+    <p id="ErrorMessage" #errorMessage>ERROR</p>
   </div>
 </div>
