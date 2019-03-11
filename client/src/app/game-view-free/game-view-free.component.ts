@@ -52,14 +52,17 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private getOriginalSceneById(): void {
-        this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
-            this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
-            this.getModifiedSceneById(response);
+        this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
+            this.scenePairId = gameCard.resource_id;
+            this.sceneService.getSceneById(this.scenePairId).subscribe((response: ICommonScene) => {
+                this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
+                this.getModifiedSceneById(response);
+            });
         });
     }
 
     private getModifiedSceneById(response: ICommonScene): void {
-        this.sceneService.getModifiedSceneById(this.scenePairID).subscribe((responseModified: ICommonSceneModifications) => {
+        this.sceneService.getModifiedSceneById(this.scenePairId).subscribe((responseModified: ICommonSceneModifications) => {
             this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, responseModified);
             SceneLoaderService.syncScenes(this.originalSceneLoader.camera, this.originalSceneLoader.controls,
                                           this.modifiedSceneLoader.camera, this.modifiedSceneLoader.controls);
