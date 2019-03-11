@@ -5,14 +5,15 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
+  border-radius: 20px;
 }
 
 .global-wrapper {
   height: 100%;
   width: 500px;
   background-color: #33343D;
-  border: 2px black solid;
-  border-radius: 25px;
+  border-radius: 15px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0); 
 }
 
 h1 {

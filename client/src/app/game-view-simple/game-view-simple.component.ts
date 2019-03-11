@@ -24,10 +24,9 @@ export class GameViewSimpleComponent implements OnInit {
 
     private gameCardId: string;
     private imagePairId: string;
-    private gameCardId: string;
+    private isGameOver: boolean;
     private differenceCounterUser: number;
     private differenceFound: number[];
-
     private differenceSound: HTMLAudioElement;
     public playerTime: string;
 
@@ -40,6 +39,7 @@ export class GameViewSimpleComponent implements OnInit {
         public gamesCardService: GamesCardService,
         public identificationError: IdentificationError) {
 
+        this.isGameOver = false;
         this.differenceCounterUser = 0;
         this.differenceFound = [];
 
@@ -64,13 +64,10 @@ export class GameViewSimpleComponent implements OnInit {
     }
 
     private getImagePairById(): void {
-        this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
-            this.imagePairId = gameCard.resource_id;
-            this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
-                this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
-                this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
-                this.timerService.startTimer(this.chronometer.nativeElement);
-            });
+        this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
+            this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
+            this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
+            this.timerService.startTimer(this.chronometer.nativeElement);
         });
     }
 
@@ -126,7 +123,7 @@ export class GameViewSimpleComponent implements OnInit {
 
     private gameOver(): void {
         this.timerService.stopTimer();
-        // this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
+        this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
         this.isGameOver = true;
     }
 }
