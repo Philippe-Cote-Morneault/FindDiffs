@@ -24,13 +24,10 @@ export class SocketService {
     }
 
     public notifyNewUser(username: string): void {
-        // console.log("notify");
         const message: ICommonSocketMessage = {
             data: username,
             timestamp: new Date(),
         };
-        // console.log(message);
-
         this.socket.emit("UserConnected", message);
     }
 
