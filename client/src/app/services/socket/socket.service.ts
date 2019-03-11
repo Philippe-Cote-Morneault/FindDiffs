@@ -1,4 +1,4 @@
-import { ElementRef, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
 import { ICommonSocketMessage, ICommonTest } from "../../../../../common/communication/webSocket/socketMessage";
 
@@ -34,16 +34,21 @@ export class SocketService {
         this.socket.emit("UserConnected", message);
     }
 
-    public newUserConnected(test: ElementRef): void {
+    public newUserConnected(chat: HTMLElement): void {
         this.socket.on("NewUser", (message: ICommonTest) => {
-            // console.log(message);
-            // test.nativeElement.innerText = message.usename;
+
+            const pre: HTMLElement = document.createElement("p");
+            pre.innerText = JSON.stringify(message.usename);
+            chat.appendChild(pre);
         });
     }
 
-    public userDisconnected(): void {
+    public userDisconnected(chat: HTMLElement): void {
         this.socket.on("UserDisconnected", (message: Object) => {
-            // console.log(message);
+
+            const pre: HTMLElement = document.createElement("p");
+            pre.innerText = JSON.stringify(message);
+            chat.appendChild(pre);
         });
     }
 }
