@@ -6,7 +6,8 @@ import { ICommonScene } from "../../../../common/model/scene/scene";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { TimerService } from "../services/timer/timer.service";
-//import { SocketService } from "../services/socket/socket.service";
+// import { ICommonGeometricObject } from "../../../../common/model/scene/objects/geometricObjects/geometricObject";
+// import { SocketService } from "../services/socket/socket.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -25,7 +26,7 @@ export class GameViewFreeComponent implements OnInit {
     public constructor(
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
-        //private socketService: SocketService,
+        // private socketService: SocketService,
         public sceneService: SceneService,
         public timerService: TimerService,) {
             this.originalSceneLoader = new SceneLoaderService();
@@ -43,6 +44,7 @@ export class GameViewFreeComponent implements OnInit {
     private getOriginalSceneById(): void {
         this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
             this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
+            // console.log((response.sceneObjects[0] as ICommonGeometricObject).id);
             this.getModifiedSceneById(response);
         });
     }

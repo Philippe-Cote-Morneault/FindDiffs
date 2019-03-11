@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, ElementRef, Input, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
@@ -12,6 +12,7 @@ import { SocketService } from "../services/socket/socket.service";
 export class GamesListViewComponent implements OnInit {
     @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
     @ViewChild("freePOVGamesContainer", { read: ViewContainerRef }) private freePOVContainer: ViewContainerRef;
+    @ViewChild("test") private test: ElementRef;
 
     @Input() public isInAdminView: boolean;
 
@@ -27,7 +28,9 @@ export class GamesListViewComponent implements OnInit {
         this.gameCardLoaderService.setContainer(this.freePOVContainer, POVType.Free);
 
         this.addAllGameCards();
-        this.socketService.newUserConnected();
+        // console.log("===============================");
+        this.socketService.newUserConnected(this.test);
+        // console.log("===============================");
         this.socketService.userDisconnected();
     }
 

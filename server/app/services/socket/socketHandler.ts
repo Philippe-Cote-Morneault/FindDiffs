@@ -1,6 +1,6 @@
 import { Server } from "http";
 import * as socketIo from "socket.io";
-import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { ICommonSocketMessage, ICommonTest } from "../../../../common/communication/webSocket/socketMessage";
 
 export class SocketHandler {
     private static instance: SocketHandler;
@@ -26,12 +26,12 @@ export class SocketHandler {
     private init(): void {
         this.idUsernames = new Map<string, Object>();
         this.io.on("connect", (socket: any) => {
-            console.log("connected");
+            // console.log("connected");
             this.idUsernames.set(socket.id, "");
             socket.on("UserConnected", (message: ICommonSocketMessage) => {
-                console.log(message);
+                // console.log(message);
                 this.idUsernames.set(socket.id, message.data);
-                const welcomeMsg: Object = {
+                const welcomeMsg: ICommonTest = {
                     hi: "Welcome to the game : ",
                     usename: message.data,
                     time: message.timestamp,
