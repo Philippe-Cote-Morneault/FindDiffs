@@ -28,8 +28,7 @@ export class SceneSyncerService {
 
     }
 
-    public syncScenes(camera1: THREE.PerspectiveCamera, controls1: THREE.OrbitControls,
-                      camera2: THREE.PerspectiveCamera, controls2: THREE.OrbitControls): void {
+    public syncScenes(controls1: THREE.OrbitControls, controls2: THREE.OrbitControls): void {
 
         SceneSyncerService.controls1 = controls1;
         SceneSyncerService.controls2 = controls2;
