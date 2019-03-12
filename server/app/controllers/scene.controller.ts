@@ -38,9 +38,27 @@ export class SceneController extends Controller implements ISceneController {
             }
         });
 
+        router.post("/:id/thumbnail", async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const response: string = await this.sceneService.postThumbnail(req);
+                res.send(response);
+            } catch (err) {
+                this.handleError(res, err);
+            }
+        });
+
         router.get("/:id/modified", async (req: Request, res: Response, next: NextFunction) => {
             try {
                 const response: string = await this.sceneService.singleModified(req.params.id);
+                res.send(response);
+            } catch (err) {
+                this.handleError(res, err);
+            }
+        });
+
+        router.get("/:id/thumbnail", async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const response: string = await this.sceneService.singleThumbnail(req.params.id);
                 res.send(response);
             } catch (err) {
                 this.handleError(res, err);
