@@ -23,6 +23,7 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("errorMessage") private errorMessage: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
     @ViewChild("message") private message: ElementRef;
+    @ViewChild("message_container") private messageContainer: ElementRef;
 
     private gameCardId: string;
     private imagePairId: string;
@@ -60,8 +61,8 @@ export class GameViewSimpleComponent implements OnInit {
     }
 
     private socketHandler(): void {
-        this.socketService.newUserConnected(this.message.nativeElement);
-        this.socketService.userDisconnected(this.message.nativeElement);
+        this.socketService.newUserConnected(this.message.nativeElement, this.messageContainer.nativeElement);
+        this.socketService.userDisconnected(this.message.nativeElement, this.messageContainer.nativeElement);
     }
 
     private getGameCardById(): void {

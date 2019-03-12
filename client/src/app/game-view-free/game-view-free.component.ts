@@ -21,6 +21,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
     @ViewChild("message") private message: ElementRef;
+    @ViewChild("message_container") private messageContainer: ElementRef;
 
     private scenePairId: string;
     private gameCardID: string;
@@ -48,8 +49,8 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private socketHandler(): void {
-        this.socketService.newUserConnected(this.message.nativeElement);
-        this.socketService.userDisconnected(this.message.nativeElement);
+        this.socketService.newUserConnected(this.message.nativeElement, this.messageContainer.nativeElement);
+        this.socketService.userDisconnected(this.message.nativeElement, this.messageContainer.nativeElement);
     }
 
     private getGameCardById(): void {
