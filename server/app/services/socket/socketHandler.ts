@@ -5,9 +5,15 @@ import { _e, R } from "../../strings";
 
 export class SocketHandler {
     private static instance: SocketHandler;
+    // tslint:disable:no-any
 
     private io: socketIo.Server;
     private idUsernames: Map<string, Object>;
+    private dateFormat: any;
+
+    public constructor() {
+        this.dateFormat = require("dateformat");
+    }
 
     public static getInstance(): SocketHandler {
         if (!this.instance) {
@@ -26,7 +32,6 @@ export class SocketHandler {
 
     private init(): void {
         this.idUsernames = new Map<string, Object>();
-        // tslint:disable:no-any
         this.io.on("connect", (socket: any) => {
             this.idUsernames.set(socket.id, "");
 
@@ -40,7 +45,7 @@ export class SocketHandler {
             this.idUsernames.set(socket.id, message.data);
             const welcomeMsg: ICommonSocketMessage = {
                 data: _e(R.SOCKET_USERCONNECTED, [message.data]),
-                timestamp: message.timestamp,
+                timestamp: this.dateFormat(message.timestamp, R.SOCKET_DATE),
             };
             socket.broadcast.emit("NewUser", welcomeMsg);
         });
@@ -51,7 +56,7 @@ export class SocketHandler {
             const username: Object | undefined = this.idUsernames.get(socket.id);
             const goodByeMsg: ICommonSocketMessage = {
                 data: _e(R.SOCKET_USERDISCONNECTED, [username]),
-                timestamp: new Date(),
+                timestamp: this.dateFormat(new Date(), R.SOCKET_DATE),
             };
             socket.broadcast.emit("UserDisconnected", goodByeMsg);
         });
