@@ -4,6 +4,7 @@ import { SceneService } from "../services/scene/scene.service";
 import TYPES from "../types";
 import { Controller } from "./controller";
 import { ISceneController } from "./interfaces";
+import { uploads } from "../utils/storage/storage";
 
 @injectable()
 export class SceneController extends Controller implements ISceneController {
@@ -38,7 +39,7 @@ export class SceneController extends Controller implements ISceneController {
             }
         });
 
-        router.post("/:id/thumbnail", async (req: Request, res: Response, next: NextFunction) => {
+        router.post("/:id/thumbnail", uploads.single("thumbnail"), async (req: Request, res: Response, next: NextFunction) => {
             try {
                 const response: string = await this.sceneService.postThumbnail(req);
                 res.send(response);
@@ -58,8 +59,9 @@ export class SceneController extends Controller implements ISceneController {
 
         router.get("/:id/thumbnail", async (req: Request, res: Response, next: NextFunction) => {
             try {
-                const response: string = await this.sceneService.singleThumbnail(req.params.id);
-                res.send(response);
+                const file: ArrayBuffer = await this.sceneService.getThumbnail(req.params.id);
+                res.set("Content-Type", "image/png");
+                res.send(Buffer.from(file));
             } catch (err) {
                 this.handleError(res, err);
             }
