@@ -17,10 +17,6 @@ export class SocketService {
     public init(): void {
         this.socket = io("http://localhost:3000");
         this.id = this.socket.id;
-
-        /*this.socket.on('connect', function () {
-            console.log("connected");
-        });*/
     }
 
     public notifyNewUser(username: string): void {
@@ -33,19 +29,19 @@ export class SocketService {
 
     public newUserConnected(chat: HTMLElement): void {
         this.socket.on("NewUser", (message: ICommonSocketMessage) => {
-
-            const pre: HTMLElement = document.createElement("p");
-            pre.innerText = JSON.stringify(message.data);
-            chat.appendChild(pre);
+            this.sendMessage(message, chat);
         });
     }
 
     public userDisconnected(chat: HTMLElement): void {
         this.socket.on("UserDisconnected", (message: ICommonSocketMessage) => {
-
-            const pre: HTMLElement = document.createElement("p");
-            pre.innerText = JSON.stringify(message.data);
-            chat.appendChild(pre);
+            this.sendMessage(message, chat);
         });
+    }
+
+    private sendMessage(message: ICommonSocketMessage, chat: HTMLElement): void {
+        const pre: HTMLElement = document.createElement("p");
+        pre.innerText = JSON.stringify(message.timestamp + message.data);
+        chat.appendChild(pre);
     }
 }
