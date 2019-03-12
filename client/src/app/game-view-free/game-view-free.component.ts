@@ -7,9 +7,8 @@ import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
+import { SocketService } from "../services/socket/socket.service";
 import { TimerService } from "../services/timer/timer.service";
-// import { ICommonGeometricObject } from "../../../../common/model/scene/objects/geometricObjects/geometricObject";
-// import { SocketService } from "../services/socket/socket.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -21,6 +20,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
+    @ViewChild("message") private message: ElementRef;
 
     private scenePairId: string;
     private gameCardID: string;
@@ -30,7 +30,7 @@ export class GameViewFreeComponent implements OnInit {
     public constructor(
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
-        // private socketService: SocketService,
+        private socketService: SocketService,
         public sceneService: SceneService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService) {
@@ -44,6 +44,12 @@ export class GameViewFreeComponent implements OnInit {
         });
         this.spinnerService.show();
         this.getGameCardById();
+        this.socketHandler();
+    }
+
+    private socketHandler(): void {
+        this.socketService.newUserConnected(this.message.nativeElement);
+        this.socketService.userDisconnected(this.message.nativeElement);
     }
 
     private getGameCardById(): void {
