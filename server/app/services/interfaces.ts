@@ -23,7 +23,7 @@ export interface ISceneService {
     postThumbnail(req: Request): Promise<string>;
     single(id: string): Promise<string>;
     singleModified(id: string): Promise<string>;
-    singleThumbnail(id: string): Promise<string>;
+    getThumbnail(id: string): Promise<ArrayBuffer>;
 }
 
 export interface IGameCardService {

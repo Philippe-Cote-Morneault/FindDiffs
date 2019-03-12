@@ -8,6 +8,7 @@ export interface IScene extends Document {
     scene: ICommonScene;
     grid: Grid;
     modifications: ICommonSceneModifications;
+    url_thumbnail: string;
     creation_date: Date;
 }
 
@@ -15,6 +16,7 @@ export const sceneSchema: Schema = new Schema({
     scene: {type: Object, required: true},
     grid: {type: Object, required: true},
     modifications: {type: Object, required: false},
+    file_thumbnail_id: {type: String, required: false, select: false},
     creation_date: {type: Date, required: true},
 });
 
