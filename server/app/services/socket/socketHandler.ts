@@ -25,26 +25,34 @@ export class SocketHandler {
 
     private init(): void {
         this.idUsernames = new Map<string, Object>();
-        // tslint:disable-next-line:no-any
+        // tslint:disable:no-any
         this.io.on("connect", (socket: any) => {
             this.idUsernames.set(socket.id, "");
-            socket.on("UserConnected", (message: ICommonSocketMessage) => {
-                this.idUsernames.set(socket.id, message.data);
-                const welcomeMsg: ICommonSocketMessage = {
-                    data: "The user " + message.data + " is now online!",
-                    timestamp: message.timestamp,
-                };
-                socket.broadcast.emit("NewUser", welcomeMsg);
-            });
 
-            socket.on("disconnect", () => {
-                const username: Object | undefined = this.idUsernames.get(socket.id);
-                const goodByeMsg: ICommonSocketMessage = {
-                    data: "The user " + username + " is now offline",
-                    timestamp: new Date(),
-                };
-                socket.broadcast.emit("UserDisconnected", goodByeMsg);
-            });
+            this.onUsernameConnected(socket);
+            this.onUserDisconnected(socket);
+        });
+    }
+
+    private onUsernameConnected(socket: any): void {
+        socket.on("UserConnected", (message: ICommonSocketMessage) => {
+            this.idUsernames.set(socket.id, message.data);
+            const welcomeMsg: ICommonSocketMessage = {
+                data: "The user " + message.data + " is now online!",
+                timestamp: message.timestamp,
+            };
+            socket.broadcast.emit("NewUser", welcomeMsg);
+        });
+    }
+
+    private onUserDisconnected(socket: any): void {
+        socket.on("disconnect", () => {
+            const username: Object | undefined = this.idUsernames.get(socket.id);
+            const goodByeMsg: ICommonSocketMessage = {
+                data: "The user " + username + " is now offline",
+                timestamp: new Date(),
+            };
+            socket.broadcast.emit("UserDisconnected", goodByeMsg);
         });
     }
 }
