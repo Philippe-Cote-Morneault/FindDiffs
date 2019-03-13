@@ -20,7 +20,7 @@ export class SceneLoaderService {
     public controls: THREE.OrbitControls;
 
     private renderer: THREE.WebGLRenderer;
-    private scene: THREE.Scene;
+    public scene: THREE.Scene;
 
     public static syncScenes(camera1: THREE.PerspectiveCamera, controls1: THREE.OrbitControls,
                              camera2: THREE.PerspectiveCamera, controls2: THREE.OrbitControls): void {
