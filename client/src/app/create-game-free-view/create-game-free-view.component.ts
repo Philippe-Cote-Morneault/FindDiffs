@@ -96,7 +96,8 @@ export class CreateGameFreeViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement);
+                    this.sceneService.addThumbnail((response as ICommonScene).id,
+                        this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement));
                     this.modifyScenePair((response as ICommonScene).id, gameName, isAddType, isRemoveType, isModifiedType);
                 }
             });
@@ -120,7 +121,7 @@ export class CreateGameFreeViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    this.hideView();
+                    //this.hideView();
                     this.gameCardLoaderService.addDynamicComponent((response as ICommonGameCard), true);
                     this.spinnerService.hide();
                     alert("Free pov game created!");
