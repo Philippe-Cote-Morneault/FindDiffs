@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
+import * as THREE from "three";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
@@ -59,6 +60,11 @@ export class GameViewFreeComponent implements OnInit {
             this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
             this.getModifiedSceneById(response);
         });
+
+        this.clickScene();
+    }
+
+    public clickScene(): void {
     }
 
     private getModifiedSceneById(response: ICommonScene): void {
