@@ -43,6 +43,10 @@
       <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addScenePair()">Submit</button>
       <button class="btn btn-danger" (click)="hideView()">Cancel</button>
     </form>
+
+    <div #renderingCanvas>
+      <canvas style="visibility: hidden; height: 120px; width: 160px"></canvas>
+    </div>
   </div>
 
 </body>

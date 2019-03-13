@@ -7,6 +7,7 @@ import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
+import { SceneCreationService } from "../services/scene/sceneCreation/scene-creation.service";
 
 @Component({
     selector: "app-create-game-free-view",
@@ -24,6 +25,8 @@ export class CreateGameFreeViewComponent {
     @ViewChild("modified") private modified: ElementRef;
     @ViewChild("quantityObject") private quantityObject: ElementRef;
     @ViewChild("objectType") private objectType: ElementRef;
+    @ViewChild("renderingCanvas") private canvas: ElementRef;
+
 
     public canSubmit: boolean;
     public firstNameInput: boolean;
@@ -33,7 +36,8 @@ export class CreateGameFreeViewComponent {
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
         public gamesCardService: GamesCardService,
-        private gameCardLoaderService: GameCardLoaderService) {
+        private gameCardLoaderService: GameCardLoaderService,
+        private sceneCreationService: SceneCreationService) {
             this.canSubmit = false;
             this.firstNameInput = false;
             this.firstQuantityInput = false;
@@ -92,6 +96,7 @@ export class CreateGameFreeViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
+                    this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement);
                     this.modifyScenePair((response as ICommonScene).id, gameName, isAddType, isRemoveType, isModifiedType);
                 }
             });
