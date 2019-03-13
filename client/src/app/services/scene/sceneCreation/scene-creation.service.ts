@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { FileUtils } from "src/app/util/fileUtils";
 import { ICommonScene } from "../../../../../../common/model/scene/scene";
 import { SceneLoaderService } from "../sceneLoader/sceneLoader.service";
 
@@ -10,11 +9,17 @@ export class SceneCreationService {
 
     public constructor(private sceneLoaderService: SceneLoaderService) {}
 
-    public createTumbnail(scene: ICommonScene, canvas: HTMLCanvasElement): File {
+
+    public createTumbnail(scene: ICommonScene, canvas: HTMLCanvasElement): void {
         console.log("createThumbnail");
         this.sceneLoaderService.loadOnCanvas(canvas, scene);
-        const imageData: string = canvas.toDataURL("image/png");
+        /*
+        let file: File;
+        canvas.toBlob((blob: Blob) => {
+            file = new File([blob], "thumbnail.png");
+        }, "image/png");
 
-        return FileUtils.fromDataURL(imageData, "image/png", true);
+        return file;
+        */
     }
 }

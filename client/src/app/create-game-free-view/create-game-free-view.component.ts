@@ -96,8 +96,16 @@ export class CreateGameFreeViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
+                    /*
                     this.sceneService.addThumbnail((response as ICommonScene).id,
-                        this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement));
+                        this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement)).subscribe(response =>{
+                            console.log(response);
+                        })
+                    */
+                    this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement);
+                    (this.canvas.nativeElement as HTMLCanvasElement).toBlob((blob: Blob) => {
+                        this.sceneService.addThumbnail((response as ICommonScene).id, new File([blob], "thumbnail.png"));
+                    }, "image/png");
                     this.modifyScenePair((response as ICommonScene).id, gameName, isAddType, isRemoveType, isModifiedType);
                 }
             });

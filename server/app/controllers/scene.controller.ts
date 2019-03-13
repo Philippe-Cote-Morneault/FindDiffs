@@ -41,6 +41,7 @@ export class SceneController extends Controller implements ISceneController {
 
         router.post("/:id/thumbnail", uploads.single("thumbnail"), async (req: Request, res: Response, next: NextFunction) => {
             try {
+                console.log(req.file);
                 const response: string = await this.sceneService.postThumbnail(req);
                 res.send(response);
             } catch (err) {
