@@ -65,6 +65,16 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     public clickScene(): void {
+        this.originalScene.nativeElement.addEventListener("click", (event) => {
+            const raycaster: THREE.Raycaster = new THREE.Raycaster();
+            const mouse: THREE.Vector2 = new THREE.Vector2();
+            let intersects: THREE.Intersection[];
+            const group: THREE.Object3D[] = [];
+            this.originalSceneLoader.scene.children.forEach((element) => {
+                if (element.type === "Mesh") {
+                    group.push(element);
+                }
+            });
     }
 
     private getModifiedSceneById(response: ICommonScene): void {
