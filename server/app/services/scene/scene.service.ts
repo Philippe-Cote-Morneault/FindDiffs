@@ -92,8 +92,10 @@ export class SceneService extends Service implements ISceneService {
     public async postThumbnail(req: Request): Promise<string> {
         return Scene.findById(req.params.id).then(async(doc: IScene) => {
             const thumbnailId: string = await Storage.saveBuffer(req.file.buffer.buffer);
+            doc.update({ $set: { file_thumbnail_id: thumbnailId }});
             doc.url_thumbnail = thumbnailId;
             await doc.save();
+            console.log(doc);
 
             return thumbnailId;
         });

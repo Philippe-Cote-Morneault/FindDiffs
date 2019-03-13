@@ -125,5 +125,6 @@ export class GameViewSimpleComponent implements OnInit {
         this.timerService.stopTimer();
         this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
         this.isGameOver = true;
+        console.log(this.isGameOver);
     }
 }

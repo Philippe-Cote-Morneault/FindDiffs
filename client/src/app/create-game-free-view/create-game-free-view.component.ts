@@ -109,8 +109,8 @@ export class CreateGameFreeViewComponent {
             });
         }
 
-    private addGameCard(scenePairId: string, gameName: string): void {
-        this.gamesCardService.addGameCard(gameName, scenePairId, POVType.Free)
+    private addGameCard(thumbnailId: string, gameName: string): void {
+        this.gamesCardService.addGameCard(gameName, thumbnailId, POVType.Free)
             .subscribe((response: ICommonGameCard | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);

@@ -35,7 +35,15 @@ export class SceneService extends HTTPService {
         );
     }
 
+    public addThumbnail(sceneId: string, thumbnail: File): void {
+        const formData: FormData = new FormData();
+        formData.append("thumbnail", thumbnail);
+
+        this.http.post(`${SERVER_URL}/scene/${sceneId}/thumbnail`, formData);
+    }
+
     public getSceneById(sceneId: string): Observable<ICommonScene | Message> {
+        console.log(sceneId);
         return this.http.get<ICommonScene>(`${SERVER_URL}/scene/${sceneId}`).pipe(
             catchError((error) => this.handleError(error)),
         );
