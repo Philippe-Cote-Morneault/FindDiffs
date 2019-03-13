@@ -17,8 +17,8 @@ import { TimerService } from "../services/timer/timer.service";
     styleUrls: ["./game-view-free.component.css"],
 })
 export class GameViewFreeComponent implements OnInit {
-    @ViewChild("originalScene") private originalScene: ElementRef;
-    @ViewChild("modifiedScene") private modifiedScene: ElementRef;
+    @ViewChild("originalScene") private originalScene: ElementRef<HTMLElement>;
+    @ViewChild("modifiedScene") private modifiedScene: ElementRef<HTMLElement>;
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
 
