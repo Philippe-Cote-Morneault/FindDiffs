@@ -9,7 +9,6 @@ import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { TimerService } from "../services/timer/timer.service";
-// import { ICommonGeometricObject } from "../../../../common/model/scene/objects/geometricObjects/geometricObject";
 // import { SocketService } from "../services/socket/socket.service";
 
 @Component({
