@@ -75,6 +75,23 @@ export class GameViewFreeComponent implements OnInit {
                     group.push(element);
                 }
             });
+
+            const divBoxInformation: ClientRect | DOMRect = this.originalScene.nativeElement.getBoundingClientRect();
+            const differenceX: number = event.clientX - divBoxInformation.left;
+            const differenceY: number = event.clientY - divBoxInformation.top;
+
+            // tslint:disable:no-magic-numbers
+            mouse.x = (differenceX / this.originalScene.nativeElement.clientWidth) * 2 - 1;
+            mouse.y = -(differenceY / this.originalScene.nativeElement.clientHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, this.originalSceneLoader.camera );
+            intersects = raycaster.intersectObjects( group );
+
+            if (intersects.length > 0) {
+                console.log(intersects[0]);
+            }
+        },
+                                                          false);
     }
 
     private getModifiedSceneById(response: ICommonScene): void {
