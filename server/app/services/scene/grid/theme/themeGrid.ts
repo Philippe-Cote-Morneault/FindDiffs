@@ -8,7 +8,6 @@ export class ThemeGrid extends Grid {
 
     protected generateGrid(): void {
         const availablePositions: IThemeGridPosition = require(ThemeGrid.POSITION_FILE);
-
     }
 
 }
