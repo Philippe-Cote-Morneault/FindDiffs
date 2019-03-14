@@ -49,9 +49,11 @@ export class GameViewFreeComponent implements OnInit {
     @HostListener("document:keydown", ["$event"])
     public toggleCheatMode(event: KeyboardEvent): void {
         if (event.keyCode === GameViewFreeComponent.tKeyCode) {
+            this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
+            this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
             this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene,
                                                   (this.currentModifiedScene as ICommonGeometricModifications),
-                                                  this.modifiedScene.nativeElement);
+                                                  this.originalScene.nativeElement, this.modifiedScene.nativeElement);
         }
     }
 
