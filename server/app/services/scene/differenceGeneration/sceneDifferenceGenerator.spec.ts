@@ -6,7 +6,7 @@ import { ICommonGeometricObject } from "../../../../../common/model/scene/object
 import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
 import { DefaultGrid } from "../grid/grid";
-import { SceneGenerator } from "../sceneGenerator";
+import { SceneGeneratorShape } from "../sceneGeneratorShape";
 import { SceneDifferenceGenerator } from "./sceneDifferenceGenerator";
 
 describe("GeometricObjectGenerator", () => {
@@ -18,7 +18,7 @@ describe("GeometricObjectGenerator", () => {
             const grid: DefaultGrid = new DefaultGrid({x: SCENE_SIZE, y: SCENE_SIZE, z: DEPTH}, SCENE_OBJECT_MARGIN);
 
             // tslint:disable:no-magic-numbers
-            const generateScene: SceneGenerator = new SceneGenerator(100);
+            const generateScene: SceneGeneratorShape = new SceneGeneratorShape(100);
             const sceneObj: ICommonScene = generateScene.generateScene();
 
             const differenceGenerator: SceneDifferenceGenerator = new SceneDifferenceGenerator(sceneObj, grid);
@@ -34,7 +34,7 @@ describe("GeometricObjectGenerator", () => {
             const grid: DefaultGrid = new DefaultGrid({x: SCENE_SIZE, y: SCENE_SIZE, z: DEPTH}, SCENE_OBJECT_MARGIN);
 
             // tslint:disable:no-magic-numbers
-            const generateScene: SceneGenerator = new SceneGenerator(100);
+            const generateScene: SceneGeneratorShape = new SceneGeneratorShape(100);
             const sceneObj: ICommonScene = generateScene.generateScene();
 
             const differenceGenerator: SceneDifferenceGenerator = new SceneDifferenceGenerator(sceneObj, grid);
@@ -50,7 +50,7 @@ describe("GeometricObjectGenerator", () => {
             const grid: DefaultGrid = new DefaultGrid({x: SCENE_SIZE, y: SCENE_SIZE, z: DEPTH}, SCENE_OBJECT_MARGIN);
 
             // tslint:disable:no-magic-numbers
-            const generateScene: SceneGenerator = new SceneGenerator(100);
+            const generateScene: SceneGeneratorShape = new SceneGeneratorShape(100);
             const sceneObj: ICommonScene = generateScene.generateScene();
             const differenceGenerator: SceneDifferenceGenerator = new SceneDifferenceGenerator(sceneObj, grid);
             const differenceObj: ICommonSceneModifications = differenceGenerator.generateModifiedScene(false, false, true);
@@ -82,7 +82,7 @@ describe("GeometricObjectGenerator", () => {
             const grid: DefaultGrid = new DefaultGrid({x: SCENE_SIZE, y: SCENE_SIZE, z: DEPTH}, SCENE_OBJECT_MARGIN);
 
             // tslint:disable:no-magic-numbers
-            const generateScene: SceneGenerator = new SceneGenerator(100);
+            const generateScene: SceneGeneratorShape = new SceneGeneratorShape(100);
             generateScene["scene"].type = ObjectType.Thematic;
             const sceneObj: ICommonScene = generateScene.generateScene();
             const differenceGenerator: SceneDifferenceGenerator = new SceneDifferenceGenerator(sceneObj, grid);

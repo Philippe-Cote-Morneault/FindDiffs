@@ -11,7 +11,7 @@ import { ISceneService } from "../interfaces";
 import { Service } from "../service";
 import { SceneDifferenceGenerator } from "./differenceGeneration/sceneDifferenceGenerator";
 import { Grid } from "./grid/grid";
-import { SceneGenerator } from "./sceneGenerator";
+import { SceneGeneratorShape } from "./sceneGeneratorShape";
 
 export class SceneService extends Service implements ISceneService {
     private static readonly MIN_OBJECT: number = 10;
@@ -39,7 +39,7 @@ export class SceneService extends Service implements ISceneService {
 
     public async post(req: Request): Promise<string> {
         this.validatePost(req);
-        const sceneGenerator: SceneGenerator = new SceneGenerator(req.body.object_qty);
+        const sceneGenerator: SceneGeneratorShape = new SceneGeneratorShape(req.body.object_qty);
         const scene: ICommonScene = sceneGenerator.generateScene();
 
         const sceneSchema: IScene = new Scene({
