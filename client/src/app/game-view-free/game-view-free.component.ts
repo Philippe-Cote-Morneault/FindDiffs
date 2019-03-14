@@ -52,15 +52,15 @@ export class GameViewFreeComponent implements OnInit {
             this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
             this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
             this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene,
-                                                  (this.currentModifiedScene as ICommonGeometricModifications),
-                                                  this.originalScene.nativeElement, this.modifiedScene.nativeElement);
+                                                  (this.currentModifiedScene as ICommonGeometricModifications));
         }
     }
 
     private getOriginalSceneById(): void {
         this.sceneService.getSceneById(this.scenePairID).subscribe((response: ICommonScene) => {
-            this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
             this.currentOriginalScene = response;
+            this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, this.currentOriginalScene, true);
+            this.cheatModeService.saveOriginalMaterial(this.currentOriginalScene);
             this.getModifiedSceneById(this.currentOriginalScene);
         });
     }
@@ -69,6 +69,7 @@ export class GameViewFreeComponent implements OnInit {
         this.sceneService.getModifiedSceneById(this.scenePairID).subscribe((responseModified: ICommonSceneModifications) => {
             this.currentModifiedScene = responseModified;
             this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, this.currentModifiedScene);
+            this.cheatModeService.saveModifiedMaterial(this.currentOriginalScene, this.currentModifiedScene);
             this.spinnerService.hide();
             this.timerService.startTimer(this.chronometer.nativeElement);
         });
