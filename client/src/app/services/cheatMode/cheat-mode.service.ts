@@ -45,6 +45,16 @@ export class CheatModeService {
         });
       });
     }
+
+    if (modifiedScene.addedObjects.length > 0) {
+      modifiedScene.addedObjects.forEach((object: ICommonGeometricObject) => {
+        modifiedSceneThreeJs.children.forEach((objectJs: THREE.Object3D) => {
+          if (objectJs.userData.id === object.id) {
+            object.color = CheatModeService.WHITE - object.color;
+          }
+        });
+      });
+    }
     this.renderScene(this.originalSceneLoaderService, originalSceneThreeJs, this.originalSceneLoaderService.camera);
     this.renderScene(this.modifiedSceneLoaderService, modifiedSceneThreeJs, this.modifiedSceneLoaderService.camera);
   }
