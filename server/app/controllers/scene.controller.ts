@@ -40,14 +40,11 @@ export class SceneController extends Controller implements ISceneController {
             }
         });
 
-        router.post("/:id/thumbnail", uploads.fields([
-            {name: "thumbnail", maxCount: 1},
-        ]), async (req: Request, res: Response, next: NextFunction) => {
-             //console.log(req.files["thumbnail"][0].buffer.toString());
+        router.post("/:id/thumbnail", uploads.fields([{name: "thumbnail", maxCount: 1}]),
+                    async (req: Request, res: Response, next: NextFunction) => {
             try {
-                fs.writeFile("thumbnail.png", Buffer.from(new Uint8Array(req.files["thumbnail"][0].buffer)), () => {});
-                await this.sceneService.postThumbnail(req);
-                res.send("");
+                const response: string = await this.sceneService.postThumbnail(req);
+                res.send(response);
             } catch (err) {
                 this.handleError(res, err);
             }
