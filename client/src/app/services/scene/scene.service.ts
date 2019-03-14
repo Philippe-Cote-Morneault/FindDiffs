@@ -36,12 +36,9 @@ export class SceneService extends HTTPService {
     }
 
     public addThumbnail(sceneId: string, thumbnail: Blob): Observable<any> {
-        console.log(thumbnail);
         const formData: FormData = new FormData();
-        //formData.append("thumbnail", new File([thumbnail], "thumbnail.png"));
         formData.append("thumbnail", thumbnail);
         const headers: HttpHeaders = new HttpHeaders();
-       //headers.append("Content-Type", );
         headers.append("Content-Transfer-Encoding", "base64");
 
 
