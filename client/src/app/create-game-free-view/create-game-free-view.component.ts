@@ -37,7 +37,9 @@ export class CreateGameFreeViewComponent {
         public sceneService: SceneService,
         public gamesCardService: GamesCardService,
         private gameCardLoaderService: GameCardLoaderService,
-        private sceneCreationService: SceneCreationService) {
+        private sceneCreationService: SceneCreationService,
+        //private sceneLoader: SceneLoaderService,
+        ) {
             this.canSubmit = false;
             this.firstNameInput = false;
             this.firstQuantityInput = false;
@@ -96,17 +98,31 @@ export class CreateGameFreeViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    /*
+                    
                     this.sceneService.addThumbnail((response as ICommonScene).id,
-                        this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement)).subscribe(response =>{
-                            console.log(response);
-                        })
-                    */
-                    this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement);
+                        this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement)).subscribe(() => {
+                            this.modifyScenePair((response as ICommonScene).id, gameName, isAddType, isRemoveType, isModifiedType);
+                        });
+                        
+                    
+                    //this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement);
+                    /*
+                    this.sceneLoader.loadOnCanvas(this.canvas.nativeElement, response as ICommonScene);
+                    const data: string = (this.canvas.nativeElement as HTMLCanvasElement).toDataURL();
+                    console.log(data);
+                    console.log(Base64.atob(data.split(",")[1]));
                     (this.canvas.nativeElement as HTMLCanvasElement).toBlob((blob: Blob) => {
-                        this.sceneService.addThumbnail((response as ICommonScene).id, new File([blob], "thumbnail.png"));
+                        console.log("creatingBlob");
+                        console.log(blob);
+                        this.sceneService.addThumbnail((response as ICommonScene).id, blob).subscribe(
+                            (response: Response) => {
+                                
+                            }
+                        );
+                        
                     }, "image/png");
-                    this.modifyScenePair((response as ICommonScene).id, gameName, isAddType, isRemoveType, isModifiedType);
+                    */
+                    
                 }
             });
     }

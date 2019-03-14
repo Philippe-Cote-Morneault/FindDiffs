@@ -65,7 +65,7 @@ export class SceneLoaderService {
             this.renderer = RendererGenerator.generateRenderer(container.clientWidth,
                                                                container.clientHeight);
             container.appendChild(this.renderer.domElement);
-            console.log(container);
+           // console.log(container);
             this.camera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
             this.generateControls(inGameMode, this.camera, this.renderer.domElement);
             this.animate();
