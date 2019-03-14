@@ -23,10 +23,10 @@
     </div>
     <div id="game_image_wrapper">
       <div id="image_original">
-        <div id="original_scene" width="640px" height="480px" style="border:1px solid #000000;" #originalScene (click)="clickOriginalScene($event)" ></div>
+        <div id="original_scene" width="640px" height="480px" style="border:1px solid #000000;" #originalScene (click)="clickOnScene($event, true)" ></div>
       </div>
       <div id="image_modified">
-        <div id="modified_scene" width="640px" height="480px" style="border:1px solid #000000;" #modifiedScene ></div>
+        <div id="modified_scene" width="640px" height="480px" style="border:1px solid #000000;" #modifiedScene (click)="clickOnScene($event, false)" ></div>
       </div>
       <p id="ErrorMessage" #errorMessage>ERROR</p>
     </div>
