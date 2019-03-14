@@ -13,8 +13,14 @@ export class ThemeGrid extends Grid {
     private static readonly GENERATION_FACTOR: number[] = [30, 40, 30];
     private static readonly SUM_GEN_FACTOR: number = 100;
 
+    private static readonly NUMBER_POSITION: number = 250;
+
     protected generateGrid(): void {
         const availablePositions: IThemeGridPosition = require(ThemeGrid.POSITION_FILE);
+
+        for (let i: number = 0; i < ThemeGrid.NUMBER_POSITION; i++) {
+            this.positions.push(this.choosePosition(availablePositions));
+        }
     }
 
     private choosePosition(positions: IThemeGridPosition): ICommon3DPosition {
