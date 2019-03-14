@@ -1,3 +1,4 @@
+import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { EnumUtils } from "../../../../utils/enumUtils";
 import { RandomUtils } from "../../../../utils/randomUtils";
 import { Grid } from "../grid";
@@ -14,6 +15,19 @@ export class ThemeGrid extends Grid {
 
     protected generateGrid(): void {
         const availablePositions: IThemeGridPosition = require(ThemeGrid.POSITION_FILE);
+    }
+
+    private choosePosition(positions: IThemeGridPosition): ICommon3DPosition {
+        const surfaceChoice: SurfaceType = this.chooseSurfaceType();
+        const surfaceName: string = SurfaceType[surfaceChoice].toLowerCase();
+
+        const surfacePositions: ICommon3DPosition[] = positions[surfaceName];
+        const choice: number = RandomUtils.inRange(0, surfacePositions.length - 1);
+
+        const position: ICommon3DPosition = surfacePositions[choice];
+        surfacePositions.splice(choice);
+
+        return position;
     }
 
     private chooseSurfaceType(): SurfaceType {
