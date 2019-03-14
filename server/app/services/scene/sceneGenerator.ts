@@ -2,11 +2,12 @@ import { ICommon3DPosition } from "../../../../common/model/positions";
 import { ICommonSceneObject } from "../../../../common/model/scene/objects/sceneObject";
 import { ICommonGeometricScene, ObjectType } from "../../../../common/model/scene/scene";
 import { ColorUtils } from "../../utils/colorUtils";
+import { ISceneGenerator } from "./ISceneGenerator";
 import { Grid } from "./grid/grid";
 import { RandomGrid } from "./grid/randomGrid";
 import { GeometricObjectGenerator } from "./shapeCreation/geometricObjectGenerator";
 
-export class SceneGenerator {
+export class SceneGenerator implements ISceneGenerator {
     private static readonly SCENE_SIZE: number =  250;
     private static readonly SCENE_HEIGHT: number = 125;
     private static readonly SCENE_OBJECT_MARGIN: number = 9;
