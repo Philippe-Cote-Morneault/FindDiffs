@@ -16,10 +16,10 @@ import { RendererGenerator } from "../sceneRenderer/rendererGenerator";
 })
 
 export class SceneLoaderService {
-    private camera: THREE.PerspectiveCamera;
-    private renderer: THREE.WebGLRenderer;
+    public camera: THREE.PerspectiveCamera;
+    public renderer: THREE.WebGLRenderer;
     private controls: THREE.OrbitControls;
-    private scene: THREE.Scene;
+    public scene: THREE.Scene;
 
     public loadOriginalScene(container: HTMLElement | null, scene: ICommonScene, inGameMode: boolean): void {
         this.scene = new SceneParserService().parseScene(scene);
@@ -33,7 +33,7 @@ export class SceneLoaderService {
         this.renderScene(container, true);
     }
 
-    private renderScene(container: HTMLElement | null, inGameMode: boolean): void {
+    public renderScene(container: HTMLElement | null, inGameMode: boolean): void {
         if (container) {
             this.renderer = RendererGenerator.generateRenderer(container.clientWidth,
                                                                container.clientHeight);
