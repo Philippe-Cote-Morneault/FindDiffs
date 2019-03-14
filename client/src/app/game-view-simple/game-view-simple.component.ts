@@ -16,6 +16,7 @@ import { TimerService } from "../services/timer/timer.service";
 })
 export class GameViewSimpleComponent implements OnInit {
     private static MAX_DIFFERENCES: number = 7;
+    private static readonly DIFFERENCE_SOUND_SRC: string = "../../assets/mario.mp3";
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
@@ -44,7 +45,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.differenceFound = [];
 
         this.differenceSound = new Audio;
-        this.differenceSound.src = "../../assets/mario.mp3";
+        this.differenceSound.src = GameViewSimpleComponent.DIFFERENCE_SOUND_SRC;
         this.differenceSound.load();
     }
 
