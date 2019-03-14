@@ -12,7 +12,6 @@ export class ThemeGrid extends Grid {
     // tslint:disable-next-line:no-magic-numbers
     private static readonly GENERATION_FACTOR: number[] = [30, 40, 30];
     private static readonly SUM_GEN_FACTOR: number = 100;
-
     private static readonly NUMBER_POSITION: number = 250;
 
     protected generateGrid(): void {
