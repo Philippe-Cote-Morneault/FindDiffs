@@ -2,7 +2,7 @@ import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { SceneTransformation } from "../../../../../../common/model/scene/modifications/sceneTransformation";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
-import { Grid } from "../../grid";
+import { Grid } from "../../grid/grid";
 import { GeometricObjectGenerator } from "../../shapeCreation/geometricObjectGenerator";
 
 /**

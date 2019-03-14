@@ -10,7 +10,7 @@ import { EnumUtils } from "../../utils/enumUtils";
 import { ISceneService } from "../interfaces";
 import { Service } from "../service";
 import { SceneDifferenceGenerator } from "./differenceGeneration/sceneDifferenceGenerator";
-import { Grid } from "./grid";
+import { Grid } from "./grid/grid";
 import { SceneGenerator } from "./sceneGenerator";
 
 export class SceneService extends Service implements ISceneService {

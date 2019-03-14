@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { ICommon3DPosition } from "../../../../common/model/positions";
+import { ICommon3DPosition } from "../../../../../common/model/positions";
 import { DefaultGrid, Grid } from "./grid";
 
 describe("DefaultGrid", () => {

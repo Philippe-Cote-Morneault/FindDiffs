@@ -5,7 +5,7 @@ import { ICommonSceneModifications } from "../../../../../common/model/scene/mod
 import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
-import { DefaultGrid } from "../grid";
+import { DefaultGrid } from "../grid/grid";
 import { SceneGenerator } from "../sceneGenerator";
 import { SceneDifferenceGenerator } from "./sceneDifferenceGenerator";
 

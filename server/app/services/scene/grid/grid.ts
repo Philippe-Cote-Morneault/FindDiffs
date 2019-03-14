@@ -1,7 +1,7 @@
-import { StackEmptyException } from "../../../../common/errors/stackEmptyException";
-import { ICommon3DPosition } from "../../../../common/model/positions";
-import { ICommonSceneDimensions } from "../../../../common/model/scene/scene";
-import { RandomUtils } from "../../utils/randomUtils";
+import { StackEmptyException } from "../../../../../common/errors/stackEmptyException";
+import { ICommon3DPosition } from "../../../../../common/model/positions";
+import { ICommonSceneDimensions } from "../../../../../common/model/scene/scene";
+import { RandomUtils } from "../../../utils/randomUtils";
 
 export abstract class Grid {
     public static readonly CENTER: ICommon3DPosition = {x: 0, y: 0, z: 0};

@@ -1,5 +1,5 @@
-import { ICommon3DPosition } from "../../../../common/model/positions";
-import { RandomUtils } from "../../utils/randomUtils";
+import { ICommon3DPosition } from "../../../../../common/model/positions";
+import { RandomUtils } from "../../../utils/randomUtils";
 import { Grid } from "./grid";
 
 export class RandomGrid extends Grid {

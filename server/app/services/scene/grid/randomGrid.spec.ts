@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { ICommon3DPosition } from "../../../../common/model/positions";
-import { NoErrorThrownException } from "../../tests/noErrorThrownException";
+import { ICommon3DPosition } from "../../../../../common/model/positions";
+import { NoErrorThrownException } from "../../../tests/noErrorThrownException";
 import { RandomGrid } from "./randomGrid";
 
 describe("RandomGrid", () => {
