@@ -145,7 +145,7 @@ export class CreateGameFreeViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    //this.hideView();
+                    this.hideView();
                     this.gameCardLoaderService.addDynamicComponent((response as ICommonGameCard), true);
                     this.spinnerService.hide();
                     alert("Free pov game created!");
