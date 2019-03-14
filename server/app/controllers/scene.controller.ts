@@ -5,6 +5,7 @@ import TYPES from "../types";
 import { Controller } from "./controller";
 import { ISceneController } from "./interfaces";
 import { uploads } from "../utils/storage/storage";
+import * as fs from "fs";
 
 @injectable()
 export class SceneController extends Controller implements ISceneController {
@@ -39,11 +40,14 @@ export class SceneController extends Controller implements ISceneController {
             }
         });
 
-        router.post("/:id/thumbnail", uploads.single("thumbnail"), async (req: Request, res: Response, next: NextFunction) => {
+        router.post("/:id/thumbnail", uploads.fields([
+            {name: "thumbnail", maxCount: 1},
+        ]), async (req: Request, res: Response, next: NextFunction) => {
+             //console.log(req.files["thumbnail"][0].buffer.toString());
             try {
-                console.log(req.file);
-                const response: string = await this.sceneService.postThumbnail(req);
-                res.send(response);
+                fs.writeFile("thumbnail.png", Buffer.from(new Uint8Array(req.files["thumbnail"][0].buffer)), () => {});
+                await this.sceneService.postThumbnail(req);
+                res.send("");
             } catch (err) {
                 this.handleError(res, err);
             }
