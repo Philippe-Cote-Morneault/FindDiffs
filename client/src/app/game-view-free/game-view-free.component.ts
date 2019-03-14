@@ -61,31 +61,57 @@ export class GameViewFreeComponent implements OnInit {
         });
     }
 
-    public clickOriginalScene(event: MouseEvent): void {
+    public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
+        const obj: {sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
         const mouse: THREE.Vector2 = new THREE.Vector2();
         let intersects: THREE.Intersection[];
-        const group: THREE.Object3D[] = [];
-        this.originalSceneLoader.scene.children.forEach((element) => {
-            if (element.type === "Mesh") {
-                group.push(element);
-            }
-        });
+        const meshes: THREE.Object3D[] = [];
 
-        const divBoxInformation: ClientRect | DOMRect = this.originalScene.nativeElement.getBoundingClientRect();
-        const differenceX: number = event.clientX - divBoxInformation.left;
-        const differenceY: number = event.clientY - divBoxInformation.top;
+        this.fillMeshes(meshes, obj.sceneLoader);
 
-        // tslint:disable:no-magic-numbers
-        mouse.x = (differenceX / this.originalScene.nativeElement.clientWidth) * 2 - 1;
-        mouse.y = -(differenceY / this.originalScene.nativeElement.clientHeight) * 2 + 1;
+        this.setMousePosition(event, mouse, obj.HTMLElement);
 
         raycaster.setFromCamera(mouse, this.originalSceneLoader.camera );
-        intersects = raycaster.intersectObjects( group );
-
+        intersects = raycaster.intersectObjects( meshes );
         if (intersects.length > 0) {
-            console.log(intersects[0]);
+            console.log(intersects[0]); // call the service instead of console.log
         }
+    }
+
+    private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
+        let sceneLoader: SceneLoaderService;
+        // tslint:disable:variable-name
+        let HTMLElement: ElementRef<HTMLElement>;
+        if (isOriginalScene) {
+            sceneLoader = this.originalSceneLoader;
+            HTMLElement = this.originalScene;
+        } else {
+            sceneLoader = this.modifiedSceneLoader;
+            HTMLElement = this.modifiedScene;
+        }
+
+        return {
+            sceneLoader: sceneLoader,
+            HTMLElement: HTMLElement,
+        };
+    }
+
+    private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
+        sceneLoader.scene.children.forEach((element) => {
+            if (element.type === "Mesh") {
+                meshes.push(element);
+            }
+        });
+    }
+
+    private setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: ElementRef<HTMLElement>): void {
+        const divBoxInformation: ClientRect | DOMRect = HTMLElement.nativeElement.getBoundingClientRect();
+        const differenceX: number = event.clientX - divBoxInformation.left;
+        const differenceY: number = event.clientY - divBoxInformation.top;
+        // tslint:disable:no-magic-numbers
+        mouse.x = (differenceX / HTMLElement.nativeElement.clientWidth) * 2 - 1;
+        mouse.y = -(differenceY / HTMLElement.nativeElement.clientHeight) * 2 + 1;
     }
 
     private getModifiedSceneById(response: ICommonScene): void {
