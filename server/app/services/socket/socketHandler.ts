@@ -2,18 +2,14 @@ import { Server } from "http";
 import * as socketIo from "socket.io";
 import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { _e, R } from "../../strings";
+// tslint:disable:no-any
+const dateFormat: any = require("dateformat");
 
 export class SocketHandler {
     private static instance: SocketHandler;
-    // tslint:disable:no-any
 
     private io: socketIo.Server;
     private idUsernames: Map<string, Object>;
-    private dateFormat: any;
-
-    public constructor() {
-        this.dateFormat = require("dateformat");
-    }
 
     public static getInstance(): SocketHandler {
         if (!this.instance) {
@@ -45,7 +41,7 @@ export class SocketHandler {
             this.idUsernames.set(socket.id, message.data);
             const welcomeMsg: ICommonSocketMessage = {
                 data: _e(R.SOCKET_USERCONNECTED, [message.data]),
-                timestamp: this.dateFormat(message.timestamp, R.SOCKET_DATE),
+                timestamp: dateFormat(message.timestamp, R.SOCKET_DATE),
             };
             socket.broadcast.emit("NewUser", welcomeMsg);
         });
@@ -56,7 +52,7 @@ export class SocketHandler {
             const username: Object | undefined = this.idUsernames.get(socket.id);
             const goodByeMsg: ICommonSocketMessage = {
                 data: _e(R.SOCKET_USERDISCONNECTED, [username]),
-                timestamp: this.dateFormat(new Date(), R.SOCKET_DATE),
+                timestamp: dateFormat(new Date(), R.SOCKET_DATE),
             };
             socket.broadcast.emit("UserDisconnected", goodByeMsg);
         });
