@@ -62,8 +62,10 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
     }
 
     private findChangedColor(key: string, colorChangedObjects: Pair<string, number>[]): number | undefined {
-        return colorChangedObjects.find(
+        const colorPair: Pair<string, number> | undefined = colorChangedObjects.find(
             (x: Pair<string, number>) => x.key === key,
-        ) as (number | undefined);
+        );
+
+        return (colorPair as Pair<string, number>).value;
     }
 }
