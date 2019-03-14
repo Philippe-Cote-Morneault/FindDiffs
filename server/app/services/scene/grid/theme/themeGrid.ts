@@ -45,14 +45,15 @@ export class ThemeGrid extends Grid {
         const choice: number = RandomUtils.random(ThemeGrid.SUM_GEN_FACTOR);
         let factorSum: number = 0;
 
+        let lastIndex: number = 0;
         ThemeGrid.GENERATION_FACTOR.forEach((factor: number, i: number) => {
             if (choice < factorSum) {
-                return EnumUtils.enumFromInt<SurfaceType>(i, SurfaceType);
+                lastIndex = EnumUtils.enumFromInt<SurfaceType>(i, SurfaceType) as SurfaceType;
             } else {
                 factorSum += factor;
             }
         });
-        const lastIndex: number = ThemeGrid.GENERATION_FACTOR.length - 1;
+        lastIndex = ThemeGrid.GENERATION_FACTOR.length - 1;
 
         return lastIndex as SurfaceType;
     }
