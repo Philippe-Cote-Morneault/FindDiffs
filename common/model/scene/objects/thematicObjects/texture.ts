@@ -1,3 +1,5 @@
+import { ThemeSurface } from "./thematicObject";
+
 interface IObjectsProperties {
     lamp: ObjectProperties;
     bench: ObjectProperties;
@@ -14,11 +16,14 @@ interface IObjectsProperties {
     isTextured: boolean;
     texture?: string[];
     color?: number[];
+
+    spawnOnSurface: ThemeSurface[];
  }
  export const ObjectsRefTheme: IObjectsProperties = {
     bench: {
         isTextured: false,
         color: [0xcba345, 0xca1e29, 0x4aca2f],
+        spawnOnSurface: [ThemeSurface.GRASS],
     },
     bin: {
         isTextured: true,
@@ -27,6 +32,7 @@ interface IObjectsProperties {
             "bin_2.jpg",
             "bin_3.jpg",
         ],
+        spawnOnSurface: [ThemeSurface.GRASS, ThemeSurface.PARKING],
     },
     cone: {
         isTextured: true,
@@ -35,6 +41,7 @@ interface IObjectsProperties {
             "cone_2.jpg",
             "cone_3.jpg",
         ],
+        spawnOnSurface: [ThemeSurface.PARKING],
     },
     eclipse: {
         isTextured: true,
@@ -43,6 +50,7 @@ interface IObjectsProperties {
             "eclipse_2.jpg",
             "eclipse_3.jpg",
         ],
+        spawnOnSurface: [ThemeSurface.CAR],
     },
     lambo: {
         isTextured: true,
@@ -51,6 +59,7 @@ interface IObjectsProperties {
             "lambo_2.jpg",
             "lambo_3.jpg",
         ],
+        spawnOnSurface: [ThemeSurface.CAR],
     },
     lamp:{
         isTextured: true,
@@ -59,10 +68,12 @@ interface IObjectsProperties {
             "aluminum_2.png",
             "aluminum_3.png",
         ],
+        spawnOnSurface: [ThemeSurface.GRASS],
     },
     lexus:{
         isTextured: false,
         color:[0xfc151b, 0xffffff, 0x000000],
+        spawnOnSurface: [ThemeSurface.CAR],
     },
     sign_forbidden: {
         isTextured: true,
@@ -71,22 +82,16 @@ interface IObjectsProperties {
             "sign_forbidden_2.jpg",
             "sign_forbidden_3.jpg",
         ],
+        spawnOnSurface: [ThemeSurface.GRASS],
     },
-    sign_skip1: {
+    sign_skip: {
         isTextured: true,
         texture: [
             "sign_skip1_1.jpg",
             "sign_skip1_2.jpg",
             "sign_skip1_3.jpg",
-        ]
- },
-    sign_skip2: {
-        isTextured: true,
-        texture: [
-            "sign_skip2_1.jpg",
-            "sign_skip2_2.jpg",
-            "sign_skip2_3.jpg",
         ],
+        spawnOnSurface: [ThemeSurface.GRASS],
     },
     sign_stop: {
         isTextured: true,
@@ -95,5 +100,6 @@ interface IObjectsProperties {
             "sign_stop_2.jpg",
             "sign_stop_3.jpg",
         ],
+        spawnOnSurface: [ThemeSurface.GRASS],
     }
  }
