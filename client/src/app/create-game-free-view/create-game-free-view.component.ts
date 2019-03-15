@@ -4,6 +4,7 @@ import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
+import { FormVerificationFreePOVService } from "../services/createGame/formVerificationFreePOV.service";
 import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
@@ -14,9 +15,6 @@ import { SceneService } from "../services/scene/scene.service";
     styleUrls: ["./create-game-free-view.component.css"],
 })
 export class CreateGameFreeViewComponent {
-    private static readonly MAX_QTE: number = 201;
-    private static readonly MIN_QTE: number = 9;
-
     @Output() public closed: EventEmitter<boolean>;
     @ViewChild("gameNameInput") private gameNameInput: ElementRef;
     @ViewChild("add") private add: ElementRef;
@@ -33,7 +31,8 @@ export class CreateGameFreeViewComponent {
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
         public gamesCardService: GamesCardService,
-        private gameCardLoaderService: GameCardLoaderService) {
+        private gameCardLoaderService: GameCardLoaderService,
+        public formVerificationFreePOVService: FormVerificationFreePOVService) {
             this.canSubmit = false;
             this.firstNameInput = false;
             this.firstQuantityInput = false;
@@ -49,11 +48,7 @@ export class CreateGameFreeViewComponent {
     }
 
     public isNameValid(): boolean {
-       const gameName: string = this.gameNameInput.nativeElement.value;
-       const validationRegex: string = "^[a-zA-Z0-9]{3,12}$";
-       const nameValidationRegex: RegExp = new RegExp(validationRegex);
-
-       return nameValidationRegex.test(gameName);
+       return this.formVerificationFreePOVService.isNameValid(this.gameNameInput.nativeElement.value);
     }
 
     public isModificationTypeValid(): boolean {
@@ -61,13 +56,12 @@ export class CreateGameFreeViewComponent {
         const isRemoveType: boolean = this.remove.nativeElement.checked;
         const isModifiedType: boolean = this.modified.nativeElement.checked;
 
-        return isAddType || isRemoveType || isModifiedType;
+        return this.formVerificationFreePOVService.isModificationTypeValid(isAddType, isRemoveType, isModifiedType);
     }
 
     public isQuantityValid(): boolean {
-        const quantity: number = Number(this.quantityObject.nativeElement.value);
 
-        return !isNaN(quantity) && quantity > CreateGameFreeViewComponent.MIN_QTE && quantity < CreateGameFreeViewComponent.MAX_QTE;
+        return this.formVerificationFreePOVService.isQuantityValid(Number(this.quantityObject.nativeElement.value));
     }
 
     public verifyInfo(): void {

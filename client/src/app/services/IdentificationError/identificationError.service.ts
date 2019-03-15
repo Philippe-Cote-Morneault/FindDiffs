@@ -4,12 +4,13 @@ import { Injectable } from "@angular/core";
     providedIn: "root",
 })
 export class IdentificationError {
-    private static ONE_SECOND: number = 1000;
-    private static PIXEL: string = "px";
-    private static INLINE: string = "inline";
-    private static NONE: string = "none";
-    private static NOT_ALLOWED: string = "not-allowed";
-    private static CONTEXT_MENU: string = "context-menu";
+    private static readonly ERROR_SOUND_SRC: string = "../../assets/no.mp3";
+    private static readonly ONE_SECOND: number = 1000;
+    private static readonly PIXEL: string = "px";
+    private static readonly INLINE: string = "inline";
+    private static readonly NONE: string = "none";
+    private static readonly NOT_ALLOWED: string = "not-allowed";
+    private static readonly CONTEXT_MENU: string = "context-menu";
 
     public timeout: boolean;
     private errorSound: HTMLAudioElement;
@@ -17,16 +18,16 @@ export class IdentificationError {
     public constructor() {
         this.timeout = false;
         this.errorSound = new Audio;
-        this.errorSound.src = "../../assets/no.mp3";
+        this.errorSound.src = IdentificationError.ERROR_SOUND_SRC;
         this.errorSound.load();
     }
 
-    public showErrorMessage(xPosition: number, yPosition: number,
-                            errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement ): void {
+    public async showErrorMessage(xPosition: number, yPosition: number,
+                                  errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement ): Promise<void> {
         this.timeout = true;
         this.moveClickError(xPosition, yPosition, errorMessage);
         this.showClickError(errorMessage, original, modified);
-        this.errorSound.play();
+        await this.errorSound.play();
 
         setTimeout(() => {
             this.hideClickError(errorMessage, original, modified);
