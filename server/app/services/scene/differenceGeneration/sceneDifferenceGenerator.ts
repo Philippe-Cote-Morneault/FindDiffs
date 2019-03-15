@@ -44,6 +44,7 @@ export class SceneDifferenceGenerator {
         this.chooseRandomModification().applyTransformation(
             this.objectsToTransform,
             this.sceneModif,
+            ObjectType.Geometric,
         );
     }
 
