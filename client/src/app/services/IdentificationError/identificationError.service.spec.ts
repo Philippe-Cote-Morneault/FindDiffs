@@ -9,7 +9,7 @@ describe("TimerService", () => {
         service = TestBed.get(IdentificationError);
     });
 
-    it("Should return the correct values", () => {
+    it("Should return the correct values",  async () => {
         const p: HTMLElement = document.createElement("p");
         const original: HTMLElement = document.createElement("div");
         const modified: HTMLElement = document.createElement("div");
@@ -17,7 +17,7 @@ describe("TimerService", () => {
         const y: number = 50;
         const time: number = 2000;
 
-        service.showErrorMessage(x , y, p, original, modified);
+        await service.showErrorMessage(x , y, p, original, modified);
         expect(p.style.top).to.equal("50px");
         expect(p.style.left).to.equal("50px");
         expect(original.style.cursor).to.equal("not-allowed");
