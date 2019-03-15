@@ -1,5 +1,3 @@
-import { v4 as uuid } from "uuid";
-import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { ICommonEulerAngles } from "../../../../../../common/model/scene/eulerAngles";
 import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ObjectType } from "../../../../../../common/model/scene/scene";
