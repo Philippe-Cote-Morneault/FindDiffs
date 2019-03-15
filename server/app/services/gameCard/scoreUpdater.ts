@@ -6,7 +6,7 @@ export class ScoreUpdater {
 
         let temp: ICommonScoreEntry;
         let score: ICommonScoreEntry = userScore;
-        //scoreTable.forEach((element: ICommonScoreEntry) => {
+
         for (let i: number = 0; i < scoreTable.length; ++i) {
             if (scoreTable[i].score > userScore.score) {
                 temp = scoreTable[i];
@@ -14,7 +14,6 @@ export class ScoreUpdater {
                 score = temp;
             }
         }
-        //});
 
         return scoreTable;
     }
