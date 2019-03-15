@@ -1,9 +1,13 @@
 import { ICommonSceneObject } from "../sceneObject";
 
-export interface ICommonThematicObject extends ICommonSceneObject {
-    texture: Textures;
-    scale: number;
-}
+export enum ObjThemeType {
+    bench, bin, cone, eclipse, lambo, lamp, lexus, sign_forbidden, sign_skip, sign_stop
+};
 
-// TODO: Define what texture to put
-export enum Textures {Test};
+export interface ICommonThematicObject extends ICommonSceneObject {
+    isTextured: boolean;
+    texture?: string;
+    color?: number;
+    scale: number;
+    objectType: ObjThemeType;
+}
