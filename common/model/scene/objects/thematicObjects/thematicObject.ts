@@ -1,7 +1,7 @@
 import { ICommonSceneObject } from "../sceneObject";
 
-export enum ObjThemeType {
-    bench, bin, cone, eclipse, lambo, lamp, lexus, sign_forbidden, sign_skip, sign_stop
+export enum ObjTheme {
+    BENCH, BIN, CONE, ECLIPSE, LAMBO, LAMP, LEXUS, SIGN_FORBIDDEN, SIGN_SKIP, SIGN_STOP
 };
 
 export interface ICommonThematicObject extends ICommonSceneObject {
