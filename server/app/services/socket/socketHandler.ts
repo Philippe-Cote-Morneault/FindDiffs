@@ -1,7 +1,9 @@
 import { Server } from "http";
 import * as socketIo from "socket.io";
 import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { ICommonScoreEntry } from "../../../../common/model/gameCard";
 import { _e, R } from "../../strings";
+import { GameCardService } from "../gameCard/gameCard.service";
 
 export class SocketHandler {
     private static instance: SocketHandler;
@@ -58,6 +60,8 @@ export class SocketHandler {
                 data: _e(R.SOCKET_USERDISCONNECTED, [username]),
                 timestamp: this.dateFormat(new Date(), R.SOCKET_DATE),
             };
+            const newScore: ICommonScoreEntry = {name: "Sam", score: 16};
+            GameCardService.updateScore(undefined, undefined, newScore);
             socket.broadcast.emit("UserDisconnected", goodByeMsg);
         });
     }
