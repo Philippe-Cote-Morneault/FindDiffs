@@ -1,17 +1,15 @@
 import { Injectable } from "@angular/core";
+import { FormNameVerificationService } from "./formNameVerification.service";
 
 @Injectable({
     providedIn: "root",
 })
-export class FormVerificationFreePOVService {
+export class FormVerificationFreePOVService extends FormNameVerificationService {
     private static readonly MAX_QTE: number = 201;
     private static readonly MIN_QTE: number = 9;
-    // tslint:disable:no-any
-    public isNameValid(name: string): boolean {
-        const validationRegex: string = "^[a-zA-Z0-9]{3,12}$";
-        const nameValidationRegex: RegExp = new RegExp(validationRegex);
 
-        return nameValidationRegex.test(name);
+    public constructor() {
+        super();
     }
 
     public isModificationTypeValid(isAddType: boolean, isRemoveType: boolean, isModifiedType: boolean): boolean {
