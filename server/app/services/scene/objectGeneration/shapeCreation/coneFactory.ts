@@ -1,6 +1,6 @@
-import { ICommonCone } from "../../../../../common/model/scene/objects/geometricObjects/cone";
-import { GeometricShapeType, ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { GeometricObjectFactory } from "./geometricObjectFactory";
+import { ICommonCone } from "../../../../../../common/model/scene/objects/geometricObjects/cone";
+import { GeometricShapeType, ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+import { GeometricObjectFactory } from "./GeometricObjectFactory";
 
 export class ConeFactory extends GeometricObjectFactory {
     private static readonly REFERENCE_RADIUS: number = 2;

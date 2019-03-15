@@ -1,6 +1,6 @@
-import { GeometricShapeType, ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { ICommonSphere } from "../../../../../common/model/scene/objects/geometricObjects/sphere";
-import { GeometricObjectFactory } from "./geometricObjectFactory";
+import { GeometricShapeType, ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+import { ICommonSphere } from "../../../../../../common/model/scene/objects/geometricObjects/sphere";
+import { GeometricObjectFactory } from "./GeometricObjectFactory";
 
 export class SphereFactory extends GeometricObjectFactory {
     private static readonly REFERENCE_RADIUS: number = 3;

@@ -1,10 +1,10 @@
-import { ICommon3DPosition } from "../../../../../common/model/positions";
-import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { RandomUtils } from "../../../utils/randomUtils";
+import { ICommon3DPosition } from "../../../../../../common/model/positions";
+import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+import { RandomUtils } from "../../../../utils/randomUtils";
 import { ConeFactory } from "./coneFactory";
 import { CubeFactory } from "./cubeFactory";
 import { CylinderFactory } from "./cylinderFactory";
-import { GeometricObjectFactory } from "./geometricObjectFactory";
+import { GeometricObjectFactory } from "./GeometricObjectFactory";
 import { PyramidFactory } from "./pyramidFactory";
 import { SphereFactory } from "./sphereFactory";
 
@@ -26,7 +26,7 @@ export class GeometricObjectGenerator {
     }
 
     public createObject(position: ICommon3DPosition): ICommonGeometricObject {
-        return this.chooseRandomFactory().createObject(position);
+        return this.chooseRandomFactory().createObject(position) as ICommonGeometricObject;
     }
 
     private setFactories(): void {
