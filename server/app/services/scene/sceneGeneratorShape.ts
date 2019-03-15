@@ -5,7 +5,7 @@ import { ColorUtils } from "../../utils/colorUtils";
 import { ISceneGenerator } from "./ISceneGenerator";
 import { Grid } from "./grid/grid";
 import { RandomGrid } from "./grid/randomGrid";
-import { GeometricObjectGenerator } from "./shapeCreation/geometricObjectGenerator";
+import { GeometricObjectGenerator } from "./objectGeneration/shapeCreation/geometricObjectGenerator";
 
 export class SceneGeneratorShape implements ISceneGenerator {
     private static readonly SCENE_SIZE: number =  250;

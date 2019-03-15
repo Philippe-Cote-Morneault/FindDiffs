@@ -4,7 +4,7 @@ import { SceneTransformation } from "../../../../../../common/model/scene/modifi
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ObjectType } from "../../../../../../common/model/scene/scene";
 import { Grid } from "../../grid/grid";
-import { GeometricObjectGenerator } from "../../shapeCreation/geometricObjectGenerator";
+import { GeometricObjectGenerator } from "../../objectGeneration/shapeCreation/geometricObjectGenerator";
 
 /**
  * In charge of adding a random object to a scene
