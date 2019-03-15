@@ -36,6 +36,10 @@ export abstract class ObjectFactory{
         ) / ObjectFactory.PERCENTAGE_DIVISION;
     }
 
+    protected generateRandomRadianAngle(): number {
+        return RandomUtils.inRange(ObjectFactory.MIN_RADIAN_ANGLE, ObjectFactory.MAX_RADIAN_ANGLE);
+    }
+
     protected abstract getFactoryType(): ObjectType;
     protected abstract generateRandomOrientation(): ICommonEulerAngles;
     protected abstract postCreate(): void;
