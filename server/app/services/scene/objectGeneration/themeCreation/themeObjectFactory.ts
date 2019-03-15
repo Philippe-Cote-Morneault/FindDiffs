@@ -11,12 +11,18 @@ export abstract class ThemeObjectFactory extends ObjectFactory{
     protected getFactoryType(): ObjectType{
         return ObjectType.Thematic;
     }
-    
+
     protected postCreate(): void{
         const thematicObject = this.object as ICommonThematicObject;
+        if(this.isTextured()){
+            thematicObject.texture = this.chooseTexture();
+        }else{
+            thematicObject.color = this.chooseColor();
+        }
 
         this.object = thematicObject;
     }
+
     private chooseTexture(): string {
         const objName = this.getObjectName().toLowerCase();
         const textures: string[] = ObjectProperties[objName].texture;
