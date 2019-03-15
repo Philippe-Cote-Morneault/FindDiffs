@@ -2,10 +2,9 @@ import { NextFunction, Request, Response, Router } from "express";
 import {inject, injectable} from "inversify";
 import { SceneService } from "../services/scene/scene.service";
 import TYPES from "../types";
+import { uploads } from "../utils/storage/storage";
 import { Controller } from "./controller";
 import { ISceneController } from "./interfaces";
-import { uploads } from "../utils/storage/storage";
-import * as fs from "fs";
 
 @injectable()
 export class SceneController extends Controller implements ISceneController {

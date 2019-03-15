@@ -38,11 +38,15 @@ export class SceneService extends HTTPService {
     public addThumbnail(sceneId: string, thumbnail: Blob): Observable<any> {
         const formData: FormData = new FormData();
         formData.append("thumbnail", thumbnail);
-        const headers: HttpHeaders = new HttpHeaders();
-        headers.append("Content-Transfer-Encoding", "base64");
 
+        const options: object = {
+            headers: new HttpHeaders()
+        };
 
-        return this.http.post(`${SERVER_URL}/scene/${sceneId}/thumbnail`, formData, );
+        // @ts-ignore
+        options["responseType"] = "text";
+
+        return this.http.post(`${SERVER_URL}/scene/${sceneId}/thumbnail`, formData, options);
     }
 
     public getSceneById(sceneId: string): Observable<ICommonScene | Message> {
