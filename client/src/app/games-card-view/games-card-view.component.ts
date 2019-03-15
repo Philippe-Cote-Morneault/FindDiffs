@@ -20,7 +20,6 @@ export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
     @ViewChild("image") private image: ElementRef;
-    @ViewChild("scene") private scene: ElementRef;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
@@ -32,7 +31,6 @@ export class GamesCardViewComponent implements OnInit {
         private gamesCardService: GamesCardService,
         private sceneService: SceneService,
         private router: Router,
-        private sceneLoaderService: SceneLoaderService,
         private imagePairService: ImagePairService) {
             this.rightButton = "Create";
             this.leftButton = "Play";
@@ -104,7 +102,8 @@ export class GamesCardViewComponent implements OnInit {
     private getScenePairById(): void {
         this.sceneService.getSceneById(this.gameCard.resource_id).subscribe((scenePair: ICommonScene) => {
             this.scenePair = scenePair;
-            this.sceneLoaderService.loadOriginalScene(this.scene.nativeElement, this.scenePair, false);
+            this.image.nativeElement.src = `http://localhost:3000/scene/${scenePair.id}/thumbnail`;
+            //this.sceneLoaderService.loadOriginalScene(this.scene.nativeElement, this.scenePair, false);
         });
     }
 }
