@@ -17,4 +17,11 @@ export abstract class ThemeObjectFactory extends ObjectFactory{
 
         this.object = thematicObject;
     }
+    private chooseTexture(): string {
+        const objName = this.getObjectName().toLowerCase();
+        const textures: string[] = ObjectProperties[objName].texture;
+        const choice = RandomUtils.inRange(0, textures.length);
+
+        return ObjectProperties[objName].texture[choice];
+    }
 }
