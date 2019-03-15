@@ -26,6 +26,7 @@ export class GameViewFreeComponent implements OnInit {
     private gameCardID: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
+    public differenceCounterUser: number;
 
     public constructor(
         private route: ActivatedRoute,
@@ -36,6 +37,7 @@ export class GameViewFreeComponent implements OnInit {
         public gamesCardService: GamesCardService) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
+        this.differenceCounterUser = 0;
     }
 
     public ngOnInit(): void {
@@ -58,6 +60,16 @@ export class GameViewFreeComponent implements OnInit {
         this.sceneService.getSceneById(this.scenePairId).subscribe((response: ICommonScene) => {
             this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
             this.getModifiedSceneById(response);
+        });
+    }
+
+    private getModifiedSceneById(response: ICommonScene): void {
+        this.sceneService.getModifiedSceneById(this.scenePairId).subscribe((responseModified: ICommonSceneModifications) => {
+            this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, responseModified);
+            SceneLoaderService.syncScenes(this.originalSceneLoader.camera, this.originalSceneLoader.controls,
+                                          this.modifiedSceneLoader.camera, this.modifiedSceneLoader.controls);
+            this.spinnerService.hide();
+            this.timerService.startTimer(this.chronometer.nativeElement);
         });
     }
 
@@ -112,15 +124,5 @@ export class GameViewFreeComponent implements OnInit {
         // tslint:disable:no-magic-numbers
         mouse.x = (differenceX / HTMLElement.nativeElement.clientWidth) * 2 - 1;
         mouse.y = -(differenceY / HTMLElement.nativeElement.clientHeight) * 2 + 1;
-    }
-
-    private getModifiedSceneById(response: ICommonScene): void {
-        this.sceneService.getModifiedSceneById(this.scenePairId).subscribe((responseModified: ICommonSceneModifications) => {
-            this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, responseModified);
-            SceneLoaderService.syncScenes(this.originalSceneLoader.camera, this.originalSceneLoader.controls,
-                                          this.modifiedSceneLoader.camera, this.modifiedSceneLoader.controls);
-            this.spinnerService.hide();
-            this.timerService.startTimer(this.chronometer.nativeElement);
-        });
     }
 }
