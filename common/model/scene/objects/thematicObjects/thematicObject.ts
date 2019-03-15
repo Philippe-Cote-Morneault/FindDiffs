@@ -9,5 +9,5 @@ export interface ICommonThematicObject extends ICommonSceneObject {
     texture?: string;
     color?: number;
     scale: number;
-    objectType: ObjThemeType;
+    objectType: ObjTheme;
 }
