@@ -24,4 +24,11 @@ export abstract class ThemeObjectFactory extends ObjectFactory{
 
         return ObjectProperties[objName].texture[choice];
     }
+    private chooseColor(): number {
+        const objName = this.getObjectName().toLowerCase();
+        const color: number[] = ObjectProperties[objName].color;
+        const choice = RandomUtils.inRange(0, color.length);
+
+        return ObjectProperties[objName].color[choice];
+    }
 }
