@@ -98,31 +98,10 @@ export class CreateGameFreeViewComponent {
                 if ((response as Message).body) {
                     alert((response as Message).body);
                 } else {
-                    
                     this.sceneService.addThumbnail((response as ICommonScene).id,
                         this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement)).subscribe(() => {
                             this.modifyScenePair((response as ICommonScene).id, gameName, isAddType, isRemoveType, isModifiedType);
                         });
-                        
-                    
-                    //this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement);
-                    /*
-                    this.sceneLoader.loadOnCanvas(this.canvas.nativeElement, response as ICommonScene);
-                    const data: string = (this.canvas.nativeElement as HTMLCanvasElement).toDataURL();
-                    console.log(data);
-                    console.log(Base64.atob(data.split(",")[1]));
-                    (this.canvas.nativeElement as HTMLCanvasElement).toBlob((blob: Blob) => {
-                        console.log("creatingBlob");
-                        console.log(blob);
-                        this.sceneService.addThumbnail((response as ICommonScene).id, blob).subscribe(
-                            (response: Response) => {
-                                
-                            }
-                        );
-                        
-                    }, "image/png");
-                    */
-                    
                 }
             });
     }
