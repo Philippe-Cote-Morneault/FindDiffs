@@ -35,7 +35,7 @@ export class SceneService extends HTTPService {
         );
     }
 
-    public addThumbnail(sceneId: string, thumbnail: Blob): Observable<any> {
+    public addThumbnail(sceneId: string, thumbnail: Blob): Observable<string> {
         const formData: FormData = new FormData();
         formData.append("thumbnail", thumbnail);
 
@@ -46,7 +46,7 @@ export class SceneService extends HTTPService {
         // @ts-ignore
         options["responseType"] = "text";
 
-        return this.http.post(`${SERVER_URL}/scene/${sceneId}/thumbnail`, formData, options);
+        return this.http.post<string>(`${SERVER_URL}/scene/${sceneId}/thumbnail`, formData, options);
     }
 
     public getSceneById(sceneId: string): Observable<ICommonScene | Message> {
