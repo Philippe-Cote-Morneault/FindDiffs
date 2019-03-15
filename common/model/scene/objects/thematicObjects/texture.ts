@@ -1,22 +1,21 @@
-interface IObjectsMaterial {
-    lamp: IMaterial;
-    bench: IMaterial;
-    bin: IMaterial;
-    cone: IMaterial;
-    eclipse: IMaterial;
-    lambo: IMaterial;
-    lexus: IMaterial;
-    sign_forbidden: IMaterial;
-    sign_skip1: IMaterial;
-    sign_skip2: IMaterial;
-    sign_stop: IMaterial;
+interface IObjectsProperties {
+    lamp: ObjectProperties;
+    bench: ObjectProperties;
+    bin: ObjectProperties;
+    cone: ObjectProperties;
+    eclipse: ObjectProperties;
+    lambo: ObjectProperties;
+    lexus: ObjectProperties;
+    sign_forbidden: ObjectProperties;
+    sign_skip: ObjectProperties;
+    sign_stop: ObjectProperties;
  }
- interface IMaterial {
+ interface ObjectProperties {
     isTextured: boolean;
     texture?: string[];
     color?: number[];
  }
- export const ObjectsMaterial: IObjectsMaterial = {
+ export const ObjectsRefTheme: IObjectsProperties = {
     bench: {
         isTextured: false,
         color: [0xcba345, 0xca1e29, 0x4aca2f],
