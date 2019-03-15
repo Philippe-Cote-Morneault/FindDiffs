@@ -24,6 +24,12 @@ export abstract class ThemeObjectFactory extends ObjectFactory{
 
         return ObjectProperties[objName].texture[choice];
     }
+
+    private isTextured(): boolean{
+        const objName = this.getObjectName().toLowerCase();
+        return ObjectProperties[objName].isTextured;
+    }
+
     private chooseColor(): number {
         const objName = this.getObjectName().toLowerCase();
         const color: number[] = ObjectProperties[objName].color;
