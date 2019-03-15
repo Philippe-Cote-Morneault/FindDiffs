@@ -7,8 +7,9 @@ import { CylinderFactory } from "./cylinderFactory";
 import { GeometricObjectFactory } from "./GeometricObjectFactory";
 import { PyramidFactory } from "./pyramidFactory";
 import { SphereFactory } from "./sphereFactory";
+import { IObjectGenerator } from "../IObjectGenerator";
 
-export class GeometricObjectGenerator {
+export class GeometricObjectGenerator implements IObjectGenerator {
     private static instance: GeometricObjectGenerator;
     private geometricShapeFactories: GeometricObjectFactory[];
 
