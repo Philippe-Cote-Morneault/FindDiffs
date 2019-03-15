@@ -14,14 +14,7 @@ export abstract class GeometricObjectFactory extends ObjectFactory {
         objectGeometric.color = ColorUtils.generateRandomColor();
         this.object = this.createShape(objectGeometric);
     }
-
-    protected generateRandomPercentage(): number {
-        return RandomUtils.inRange(
-            ObjectFactory.SIZE_MIN_PERCENTAGE,
-            ObjectFactory.SIZE_MAX_PERCENTAGE,
-        ) / ObjectFactory.PERCENTAGE_DIVISION;
-    }
-
+    
     protected generateRandomOrientation(): ICommonEulerAngles {
         return {
             xAngle: this.generateRandomRadianAngle(),
