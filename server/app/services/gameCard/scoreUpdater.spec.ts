@@ -17,37 +17,51 @@ describe("ScoreUpdater", () => {
         const entries: ICommonScoreEntry[] = [{name: "Michel", score: 10},
                                               {name: "Bob", score: 12},
                                               {name: "Simon", score: 14}];
+
         const newScore: ICommonScoreEntry = {name: "Sam", score: 8};
+
+        const expectedResponse: ICommonScoreEntry[] = [{name: "Sam", score: 8},
+                                                       {name: "Michel", score: 10},
+                                                       {name: "Bob", score: 12}];
         const newEntries: ICommonScoreEntry[] = ScoreUpdater.updateScore(entries, newScore);
-        console.log(newEntries[0]);
-        console.log(newScore);
-        expect(newEntries[0]).to.equal(newScore);
-        expect(newEntries[1]).to.equal(entries[0]);
-        expect(newEntries[2]).to.equal(entries[1]);
+
+        expect(newEntries[0].score).to.equal(expectedResponse[0].score);
+        expect(newEntries[1].score).to.equal(expectedResponse[1].score);
+        expect(newEntries[2].score).to.equal(expectedResponse[2].score);
+
     });
 
     it("Should return an array with new second place and other users down-shifted", () => {
         const entries: ICommonScoreEntry[] = [{name: "Michel", score: 10},
                                               {name: "Bob", score: 12},
                                               {name: "Simon", score: 14}];
+
         const newScore: ICommonScoreEntry = {name: "Sam", score: 11};
+
+        const expectedResponse: ICommonScoreEntry[] = [{name: "Michel", score: 10},
+                                                       {name: "Sam", score: 11},
+                                                       {name: "Bob", score: 12}];
         const newEntries: ICommonScoreEntry[] = ScoreUpdater.updateScore(entries, newScore);
-        expect(newEntries[0]).to.equal(entries[0]);
-        expect(newEntries[1]).to.equal(newScore);
-        expect(newEntries[2]).to.equal(entries[1]);
+        expect(newEntries[0].score).to.equal(expectedResponse[0].score);
+        expect(newEntries[1].score).to.equal(expectedResponse[1].score);
+        expect(newEntries[2].score).to.equal(expectedResponse[2].score);
     });
 
     it("Should return an array with new third place and other users down-shifted", () => {
         const entries: ICommonScoreEntry[] = [{name: "Michel", score: 10},
                                               {name: "Bob", score: 12},
                                               {name: "Simon", score: 14}];
+
         const newScore: ICommonScoreEntry = {name: "Sam", score: 13};
+
+        const expectedResponse: ICommonScoreEntry[] = [{name: "Michel", score: 10},
+                                                       {name: "Bob", score: 12},
+                                                       {name: "Sam", score: 13}];
         const newEntries: ICommonScoreEntry[] = ScoreUpdater.updateScore(entries, newScore);
-        console.log(newEntries[2]);
-        console.log(newScore);
-        expect(newEntries[0]).to.equal(entries[0]);
-        expect(newEntries[1]).to.equal(entries[1]);
-        expect(newEntries[2]).to.equal(newScore);
+
+        expect(newEntries[0].score).to.equal(expectedResponse[0].score);
+        expect(newEntries[1].score).to.equal(expectedResponse[1].score);
+        expect(newEntries[2].score).to.equal(expectedResponse[2].score);
     });
 
     it("Should return an array with new user second place", () => {
@@ -55,9 +69,13 @@ describe("ScoreUpdater", () => {
                                               {name: "Bob", score: 12},
                                               {name: "Simon", score: 14}];
         const newScore: ICommonScoreEntry = {name: "Sam", score: 10};
+
+        const expectedResponse: ICommonScoreEntry[] = [{name: "Michel", score: 10},
+                                                       {name: "Sam", score: 10},
+                                                       {name: "Bob", score: 12}];
         const newEntries: ICommonScoreEntry[] = ScoreUpdater.updateScore(entries, newScore);
-        expect(newEntries[0]).to.equal(entries[0]);
-        expect(newEntries[1]).to.equal(newScore);
-        expect(newEntries[2]).to.equal(entries[1]);
+        expect(newEntries[0].score).to.equal(expectedResponse[0].score);
+        expect(newEntries[1].score).to.equal(expectedResponse[1].score);
+        expect(newEntries[2].score).to.equal(expectedResponse[2].score);
     });
 });
