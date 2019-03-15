@@ -1,41 +1,30 @@
 import { v4 as uuid } from "uuid";
-import { ICommon3DPosition } from "../../../../../common/model/positions";
-import { ICommonEulerAngles } from "../../../../../common/model/scene/eulerAngles";
-import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { ObjectType } from "../../../../../common/model/scene/scene";
-import { ColorUtils } from "../../../utils/colorUtils";
-import { RandomUtils } from "../../../utils/randomUtils";
+import { ICommon3DPosition } from "../../../../../../common/model/positions";
+import { ICommonEulerAngles } from "../../../../../../common/model/scene/eulerAngles";
+import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
+import { ObjectType } from "../../../../../../common/model/scene/scene";
+import { ColorUtils } from "../../../../utils/colorUtils";
+import { RandomUtils } from "../../../../utils/randomUtils";
+import { ObjectFactory } from "../objectFactory";
 
-export abstract class GeometricObjectFactory {
-    private static readonly SIZE_MAX_PERCENTAGE: number = 150;
-    private static readonly SIZE_MIN_PERCENTAGE: number = 50;
-    // tslint:disable-next-line:no-magic-numbers
-    private static readonly MAX_RADIAN_ANGLE: number = Math.PI * 2;
-    private static readonly MIN_RADIAN_ANGLE: number = 0;
-    private static readonly PERCENTAGE_DIVISION: number = 100;
-
-    public createObject(position: ICommon3DPosition): ICommonGeometricObject {
-        const geometricObject: ICommonGeometricObject = {
-            id: uuid().replace(/-/g, ""),
-            orientation: this.generateRandomOrientation(),
-            position: position,
-            type: ObjectType.Geometric,
-            color: ColorUtils.generateRandomColor(),
-        };
-
-        return this.createShape(geometricObject);
-    }
+export abstract class GeometricObjectFactory extends ObjectFactory {
 
     protected abstract createShape(geometricObject: ICommonGeometricObject): ICommonGeometricObject;
 
-    protected generateRandomPercentage(): number {
-        return RandomUtils.inRange(
-            GeometricObjectFactory.SIZE_MIN_PERCENTAGE,
-            GeometricObjectFactory.SIZE_MAX_PERCENTAGE,
-        ) / GeometricObjectFactory.PERCENTAGE_DIVISION;
+    protected postCreate(){
+        const objectGeometric = this.object as ICommonGeometricObject;
+        objectGeometric.color = ColorUtils.generateRandomColor();
+        this.object = this.createShape(objectGeometric);
     }
 
-    private generateRandomOrientation(): ICommonEulerAngles {
+    protected generateRandomPercentage(): number {
+        return RandomUtils.inRange(
+            ObjectFactory.SIZE_MIN_PERCENTAGE,
+            ObjectFactory.SIZE_MAX_PERCENTAGE,
+        ) / ObjectFactory.PERCENTAGE_DIVISION;
+    }
+
+    protected generateRandomOrientation(): ICommonEulerAngles {
         return {
             xAngle: this.generateRandomRadianAngle(),
             yAngle: this.generateRandomRadianAngle(),
@@ -44,6 +33,10 @@ export abstract class GeometricObjectFactory {
     }
 
     private generateRandomRadianAngle(): number {
-        return RandomUtils.inRange(GeometricObjectFactory.MIN_RADIAN_ANGLE, GeometricObjectFactory.MAX_RADIAN_ANGLE);
+        return RandomUtils.inRange(ObjectFactory.MIN_RADIAN_ANGLE, ObjectFactory.MAX_RADIAN_ANGLE);
+    }
+
+    protected getFactoryType(): ObjectType{
+        return ObjectType.Geometric
     }
 }
