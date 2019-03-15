@@ -1,10 +1,12 @@
 import { ICommon3DPosition } from "../../../../../../common/model/positions";
-import { EnumUtils } from "../../../../utils/enumUtils";
+import { ThemeSurface } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { RandomUtils } from "../../../../utils/randomUtils";
 import { Grid } from "../grid";
 import { IThemeGridPosition } from "./IThemeGridPosition";
 
-export enum SurfaceType {Grass = 0, Parking = 1, Car = 2}
+export interface IPostionGridTheme extends ICommon3DPosition {
+    surface: ThemeSurface;
+}
 
 export class ThemeGrid extends Grid {
 
@@ -28,33 +30,35 @@ export class ThemeGrid extends Grid {
         }
     }
 
-    private choosePosition(positions: IThemeGridPosition): ICommon3DPosition {
-        const surfaceChoice: SurfaceType = this.chooseSurfaceType();
-        const surfaceName: string = SurfaceType[surfaceChoice].toLowerCase();
+    private choosePosition(positions: IThemeGridPosition): IPostionGridTheme {
+        const surfaceChoice: ThemeSurface = this.chooseSurfaceType();
+        const surfaceName: string = ThemeSurface[surfaceChoice].toLowerCase();
 
         const surfacePositions: ICommon3DPosition[] = positions[surfaceName];
         const choice: number = RandomUtils.inRange(0, surfacePositions.length - 1);
 
-        const position: ICommon3DPosition = surfacePositions[choice];
+        const position: IPostionGridTheme = surfacePositions[choice] as IPostionGridTheme;
+        position.surface = surfaceChoice;
+
         surfacePositions.splice(choice);
 
         return position;
     }
 
-    private chooseSurfaceType(): SurfaceType {
+    private chooseSurfaceType(): ThemeSurface {
         const choice: number = RandomUtils.random(ThemeGrid.SUM_GEN_FACTOR);
         let factorSum: number = 0;
 
         let lastIndex: number = 0;
         ThemeGrid.GENERATION_FACTOR.forEach((factor: number, i: number) => {
             if (choice < factorSum) {
-                lastIndex = EnumUtils.enumFromInt<SurfaceType>(i, SurfaceType) as SurfaceType;
+                lastIndex = i as ThemeSurface;
             } else {
                 factorSum += factor;
             }
         });
         lastIndex = ThemeGrid.GENERATION_FACTOR.length - 1;
 
-        return lastIndex as SurfaceType;
+        return lastIndex as ThemeSurface;
     }
 }
