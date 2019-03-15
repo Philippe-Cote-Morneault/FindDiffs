@@ -91,41 +91,13 @@ export class SceneService extends Service implements ISceneService {
 
     public async postThumbnail(req: Request): Promise<string> {
         const thumbnailId: string = await Storage.saveBuffer(req.files["thumbnail"][0].buffer);
-        await Scene.findOneAndUpdate({_id: req.params.id}, {$set: {file_thumbnail_id: thumbnailId}}, (err, doc) => {
+        await Scene.findOneAndUpdate({_id: req.params.id}, {$set: {file_thumbnail_id: thumbnailId}}, (err, doc: IScene) => {
             if (err) {
-                console.log("error");
-            }
-            else {
-                console.log("no error");
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
         });
+
         return thumbnailId;
-        /*
-        return Scene.findById(req.params.id).then(async(doc: IScene) => {
-            console.log(doc._id);
-            const thumbnailId: string = await Storage.saveBuffer(req.files["thumbnail"][0].buffer);
-            console.log("foundID");
-            const scene: IScene = new Scene({
-                scene: doc.scene,
-                grid: doc.grid,
-                modifications: doc.modifications,
-                file_thumbnail_id: thumbnailId,
-                creation_date: doc.creation_date,
-            });
-
-            //doc.set(scene);
-           // doc.update(scene);
-            console.log(doc.url_thumbnail);
-            doc.set(scene);
-            console.log(doc.url_thumbnail);
-            console.log("beforeSave");
-            console.log(doc._id);
-            //await doc.save();
-            console.log("afterSave");
-
-            return thumbnailId;
-        });
-        */
     }
 
     public async single(id: string): Promise<string> {
