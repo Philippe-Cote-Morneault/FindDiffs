@@ -40,7 +40,7 @@ export class SceneService extends HTTPService {
         formData.append("thumbnail", thumbnail);
 
         const options: object = {
-            headers: new HttpHeaders()
+            headers: new HttpHeaders(),
         };
 
         // @ts-ignore

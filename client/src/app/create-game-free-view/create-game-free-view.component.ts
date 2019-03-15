@@ -38,7 +38,6 @@ export class CreateGameFreeViewComponent {
         public gamesCardService: GamesCardService,
         private gameCardLoaderService: GameCardLoaderService,
         private sceneCreationService: SceneCreationService,
-        //private sceneLoader: SceneLoaderService,
         ) {
             this.canSubmit = false;
             this.firstNameInput = false;
@@ -86,40 +85,53 @@ export class CreateGameFreeViewComponent {
 
     public addScenePair(): void {
         this.spinnerService.show();
-        const isAddType: boolean = this.add.nativeElement.checked;
-        const isRemoveType: boolean = this.remove.nativeElement.checked;
-        const isModifiedType: boolean = this.modified.nativeElement.checked;
         const quantity: string = this.quantityObject.nativeElement.value;
         const objectType: string = this.objectType.nativeElement.value;
-        const gameName: string = this.gameNameInput.nativeElement.value;
 
         this.sceneService.createScene(objectType, Number(quantity))
             .subscribe((response: ICommonScene | Message) => {
                 if ((response as Message).body) {
-                    alert((response as Message).body);
+                    this.failedCreationHandler((response as Message).body);
                 } else {
-                    this.sceneService.addThumbnail((response as ICommonScene).id,
-                        this.sceneCreationService.createTumbnail(response as ICommonScene, this.canvas.nativeElement)).subscribe(() => {
-                            this.modifyScenePair((response as ICommonScene).id, gameName, isAddType, isRemoveType, isModifiedType);
-                        });
+                    this.createThumbnail((response as ICommonScene), this.canvas.nativeElement);
                 }
             });
     }
 
-    public modifyScenePair(idScenePair: string, gameName: string, isAddType: boolean,
-                           isRemoveType: boolean, isModifiedType: boolean): void {
-        this.sceneService.createModifiedScene(idScenePair, isAddType, isRemoveType, isModifiedType)
+    private createThumbnail(scene: ICommonScene, canvas: HTMLCanvasElement): void {
+        const thumbnail: Blob = this.sceneCreationService.createTumbnail(scene, canvas);
+        this.sceneService.addThumbnail(scene.id, thumbnail).subscribe((response: string | Message) => {
+            if ((response as Message).body) {
+                this.failedCreationHandler((response as Message).body);
+            } else {
+                scene.url_thumbnail = response as string;
+                console.log(scene);
+                this.createModifiedScene(scene.id);
+            }
+        })
+
+    }
+
+    private createModifiedScene(sceneId: string): void {
+
+        const isAddType: boolean = this.add.nativeElement.checked;
+        const isRemoveType: boolean = this.remove.nativeElement.checked;
+        const isModifiedType: boolean = this.modified.nativeElement.checked;
+
+        this.sceneService.createModifiedScene(sceneId, isAddType, isRemoveType, isModifiedType)
             .subscribe((response: ICommonSceneModifications | Message) => {
                 if ((response as Message).body) {
-                    alert((response as Message).body);
+                    this.failedCreationHandler((response as Message).body);
                 } else {
-                    this.addGameCard(idScenePair, gameName);
+                    this.addGameCard(sceneId);
                 }
             });
         }
 
-    private addGameCard(thumbnailId: string, gameName: string): void {
-        this.gamesCardService.addGameCard(gameName, thumbnailId, POVType.Free)
+    private addGameCard(ressourceId: string): void {
+        const gameName: string = this.gameNameInput.nativeElement.value;
+
+        this.gamesCardService.addGameCard(gameName, ressourceId, POVType.Free)
             .subscribe((response: ICommonGameCard | Message) => {
                 if ((response as Message).body) {
                     alert((response as Message).body);
@@ -130,5 +142,10 @@ export class CreateGameFreeViewComponent {
                     alert("Free pov game created!");
                 }
             });
+    }
+
+    private failedCreationHandler(message: string): void {
+        alert(message);
+        this.hideView();
     }
 }
