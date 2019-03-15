@@ -19,7 +19,7 @@ interface IObjectsProperties {
 
     spawnSurface: ThemeSurface[];
  }
- export const ObjectsRefTheme: IObjectsProperties = {
+ export const ObjectProperties: IObjectsProperties = {
     bench: {
         isTextured: false,
         color: [0xcba345, 0xca1e29, 0x4aca2f],
