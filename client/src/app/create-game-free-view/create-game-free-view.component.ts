@@ -104,8 +104,6 @@ export class CreateGameFreeViewComponent {
             if ((response as Message).body) {
                 this.failedCreationHandler((response as Message).body);
             } else {
-                scene.url_thumbnail = response as string;
-                console.log(scene);
                 this.createModifiedScene(scene.id);
             }
         })
