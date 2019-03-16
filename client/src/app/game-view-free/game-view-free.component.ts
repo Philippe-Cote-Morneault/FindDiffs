@@ -29,7 +29,7 @@ export class GameViewFreeComponent implements OnInit {
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
     private originalSceneObj: ICommonScene;
-    private modifiedsSceneObj: ICommonSceneModifications;
+    // private modifiedsSceneObj: ICommonSceneModifications;
     public differenceCounterUser: number;
 
     public constructor(
@@ -65,16 +65,6 @@ export class GameViewFreeComponent implements OnInit {
             this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
             this.originalSceneObj = response;
             this.getModifiedSceneById(response);
-        });
-    }
-
-    private getModifiedSceneById(response: ICommonScene): void {
-        this.sceneService.getModifiedSceneById(this.scenePairId).subscribe((responseModified: ICommonSceneModifications) => {
-            this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, responseModified);
-            SceneLoaderService.syncScenes(this.originalSceneLoader.camera, this.originalSceneLoader.controls,
-                                          this.modifiedSceneLoader.camera, this.modifiedSceneLoader.controls);
-            this.spinnerService.hide();
-            this.timerService.startTimer(this.chronometer.nativeElement);
         });
     }
 
@@ -157,7 +147,7 @@ export class GameViewFreeComponent implements OnInit {
                                           this.modifiedSceneLoader.camera, this.modifiedSceneLoader.controls);
             this.spinnerService.hide();
             this.timerService.startTimer(this.chronometer.nativeElement);
-            this.modifiedsSceneObj = responseModified;
+            // this.modifiedsSceneObj = responseModified;
         });
     }
 }
