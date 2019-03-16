@@ -14,8 +14,8 @@ export class ControlsGenerator {
         return controls;
     }
 
-    public static generateGameControls(camera: THREE.PerspectiveCamera, canvas: HTMLElement): THREE.OrbitControls {
-        const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, canvas);
+    public static generateGameControls(camera: THREE.PerspectiveCamera, canvas: HTMLElement): void {
+        /*const controls: THREE.OrbitControls = new THREE.OrbitControls(camera, canvas);
         controls.enableKeys = true;
         controls.target.set(0, ControlsGenerator.TARGET_Y_POSITION, 0);
         controls.enableZoom = false;
@@ -25,7 +25,6 @@ export class ControlsGenerator {
             RIGHT: 68,
             BOTTOM: 83,
         };
-
-        return controls;
+        */
     }
 }

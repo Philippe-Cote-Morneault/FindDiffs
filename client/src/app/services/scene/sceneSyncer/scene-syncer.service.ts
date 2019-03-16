@@ -28,13 +28,38 @@ export class SceneSyncerService {
 
     }
 
-    public syncScenes(controls1: THREE.OrbitControls, controls2: THREE.OrbitControls): void {
+    public syncScenes(camera1: THREE.Camera, canvas1: HTMLCanvasElement, camera2: THREE.Camera): void {
 
-        SceneSyncerService.controls1 = controls1;
-        SceneSyncerService.controls2 = controls2;
+        let isPressed: boolean = false;
+        let mouseX: number = 0;
+        let mouseY: number = 0;
+        camera1.rotation.order = "YXZ"
 
-        controls1.addEventListener("change", SceneSyncerService.controlsChanged);
+        canvas1.addEventListener("mousedown", () => {
+            isPressed = true;
+        });
 
-        controls2.addEventListener("change", SceneSyncerService.controlsChanged);
+        canvas1.addEventListener("mouseup", () => {
+            isPressed = false;
+        });
+
+        canvas1.addEventListener("mousemove", (event) => {
+            if (isPressed) {
+                //mouseX -= ( event.movementX / canvas1.clientWidth) * 2 + 1;
+                //mouseY -= ( event.clientY / canvas1.clientHeight ) * 2 + 1;
+
+                //mouse.x = ( ( event.clientX - rect.left ) / rect.width ) * 2 - 1;
+		        //mouse.y = - ( ( event.clientY - rect.top ) / rect.height ) * 2 + 1;
+                console.log(camera1.rotation);
+               
+                camera1.rotation.y -= event.movementX / 80;
+                if (camera1.rotation.x - event.movementY/80 > -(Math.PI/2) && camera1.rotation.x -  event.movementY/80 < (Math.PI/2) ) {
+                camera1.rotation.x -= event.movementY / 80;
+                }
+            }
+        })
+       
+
+
     }
 }
