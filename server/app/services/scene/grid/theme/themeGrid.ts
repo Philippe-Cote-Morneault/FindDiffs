@@ -1,8 +1,12 @@
 import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { ThemeSurface } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
+import { ICommonSceneDimensions } from "../../../../../../common/model/scene/scene";
 import { RandomUtils } from "../../../../utils/randomUtils";
 import { Grid } from "../grid";
 import { IThemeGridPosition } from "./IThemeGridPosition";
+import * as GamePositions from "./positions.json";
+import { EnumUtils } from "../../../../utils/enumUtils";
+import { StackEmptyException } from "../../../../../../common/errors/stackEmptyException";
 
 export interface IPostionGridTheme extends ICommon3DPosition {
     surface: ThemeSurface;
@@ -15,50 +19,78 @@ export class ThemeGrid extends Grid {
      * positions where the object can be placed. This gives a better result as we can
      * fine tune the exact position of each objects.
      */
-    private static readonly POSITION_FILE: string = "./positions.json";
 
     // tslint:disable-next-line:no-magic-numbers
     private static readonly GENERATION_FACTOR: number[] = [30, 40, 30];
     private static readonly SUM_GEN_FACTOR: number = 100;
     private static readonly NUMBER_POSITION: number = 250;
 
+    private availablePositions: IThemeGridPosition;
+
+    public constructor(dimensions: ICommonSceneDimensions, minDistancePos: number) {
+        super(dimensions, minDistancePos);
+        this.availablePositions = JSON.parse(JSON.stringify(GamePositions));
+    }
+
     protected generateGrid(): void {
-        const availablePositions: IThemeGridPosition = require(ThemeGrid.POSITION_FILE);
+        this.availablePositions = JSON.parse(JSON.stringify(GamePositions));
 
         for (let i: number = 0; i < ThemeGrid.NUMBER_POSITION; i++) {
-            this.positions.push(this.choosePosition(availablePositions));
+            this.positions.push(this.choosePosition());
         }
     }
 
-    private choosePosition(positions: IThemeGridPosition): IPostionGridTheme {
+    private choosePosition(): IPostionGridTheme {
         const surfaceChoice: ThemeSurface = this.chooseSurfaceType();
         const surfaceName: string = ThemeSurface[surfaceChoice].toLowerCase();
 
-        const surfacePositions: ICommon3DPosition[] = positions[surfaceName];
-        const choice: number = RandomUtils.inRange(0, surfacePositions.length - 1);
-
-        const position: IPostionGridTheme = surfacePositions[choice] as IPostionGridTheme;
+        const surfacePositions: ICommon3DPosition[] = this.availablePositions[surfaceName];
+        if (surfacePositions.length < 1) {
+            return this.positionToThemePosition(this.findRemainingPositions());
+        }
+        const choice: number = RandomUtils.inRangeInt(0, surfacePositions.length - 1);
+        const position: IPostionGridTheme = this.positionToThemePosition(surfacePositions[choice]);
         position.surface = surfaceChoice;
 
-        surfacePositions.splice(choice);
+        this.availablePositions[surfaceName].splice(choice, 1);
 
         return position;
+    }
+
+    private findRemainingPositions(): ICommon3DPosition {
+        for (let i: number = 0; i < EnumUtils.enumLength(ThemeSurface); i++) {
+            const surfaceName: string = ThemeSurface[i].toLowerCase();
+            if (this.availablePositions[surfaceName].length > 0) {
+                const choice: number = RandomUtils.inRangeInt(0, this.availablePositions[surfaceName].length - 1);
+
+                return this.availablePositions[surfaceName].splice(choice, 1);
+            }
+        }
+        throw new StackEmptyException();
     }
 
     private chooseSurfaceType(): ThemeSurface {
         const choice: number = RandomUtils.random(ThemeGrid.SUM_GEN_FACTOR);
         let factorSum: number = 0;
 
-        let lastIndex: number = 0;
-        ThemeGrid.GENERATION_FACTOR.forEach((factor: number, i: number) => {
+        let lastIndex: number = ThemeGrid.GENERATION_FACTOR.length - 1;
+        for (let i: number = 0; i < ThemeGrid.GENERATION_FACTOR.length; i++) {
+            factorSum += ThemeGrid.GENERATION_FACTOR[i];
             if (choice < factorSum) {
-                lastIndex = i as ThemeSurface;
-            } else {
-                factorSum += factor;
+                lastIndex = i;
+                break;
             }
-        });
-        lastIndex = ThemeGrid.GENERATION_FACTOR.length - 1;
+        }
 
         return lastIndex as ThemeSurface;
+    }
+
+    private positionToThemePosition(position: ICommon3DPosition): IPostionGridTheme {
+        return {
+            surface: ThemeSurface.CAR,
+            x: position.x,
+            y: position.y,
+            z: position.z,
+        };
     }
 }
