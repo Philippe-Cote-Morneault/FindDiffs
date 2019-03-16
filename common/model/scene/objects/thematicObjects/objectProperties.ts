@@ -14,6 +14,7 @@ interface IObjectsProperties {
  }
  interface ObjectProperties {
     isTextured: boolean;
+    meshName: string;
     texture?: string[];
     color?: number[];
 
@@ -22,11 +23,13 @@ interface IObjectsProperties {
  export const ObjectProperties: IObjectsProperties = {
     bench: {
         isTextured: false,
+        meshName: "support",
         color: [0xcba345, 0xca1e29, 0x4aca2f],
         spawnSurface: [ThemeSurface.GRASS],
     },
     bin: {
         isTextured: true,
+        meshName: "bin",
         texture: [
             "bin_1.jpg",
             "bin_2.jpg",
@@ -36,6 +39,7 @@ interface IObjectsProperties {
     },
     cone: {
         isTextured: true,
+        meshName: "H1",
         texture: [
             "cone_1.jpg",
             "cone_2.jpg",
@@ -45,6 +49,7 @@ interface IObjectsProperties {
     },
     eclipse: {
         isTextured: true,
+        meshName: "2003eclipse",
         texture: [
             "eclipse_1.jpg",
             "eclipse_2.jpg",
@@ -54,6 +59,7 @@ interface IObjectsProperties {
     },
     lambo: {
         isTextured: true,
+        meshName: "Body",
         texture: [
             "lambo_1.jpg",
             "lambo_2.jpg",
@@ -63,6 +69,7 @@ interface IObjectsProperties {
     },
     lamp:{
         isTextured: true,
+        meshName: "lampPost",
         texture: [
             "aluminum_1.png",
             "aluminum_2.png",
@@ -72,11 +79,13 @@ interface IObjectsProperties {
     },
     lexus:{
         isTextured: false,
+        meshName: "body.001_5",
         color:[0xfc151b, 0xffffff, 0x000000],
         spawnSurface: [ThemeSurface.CAR],
     },
     sign_forbidden: {
         isTextured: true,
+        meshName: "fond_panneau_interdit01_0",
         texture: [
             "sign_forbidden_1.jpg",
             "sign_forbidden_2.jpg",
@@ -86,6 +95,7 @@ interface IObjectsProperties {
     },
     sign_skip: {
         isTextured: true,
+        meshName: "Plane04_0",
         texture: [
             "sign_skip1_1.jpg",
             "sign_skip1_2.jpg",
@@ -95,6 +105,7 @@ interface IObjectsProperties {
     },
     sign_stop: {
         isTextured: true,
+        meshName: "Cylinder74_0",
         texture: [
             "sign_stop_1.jpg",
             "sign_stop_2.jpg",
