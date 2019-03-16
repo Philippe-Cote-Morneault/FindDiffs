@@ -12,7 +12,7 @@ import { SceneObjectParser } from "../sceneObjectParser";
 
 export class GeometricObjectParser extends SceneObjectParser {
 
-    public parse(object: ICommonGeometricObject): THREE.Object3D {
+    public async parse(object: ICommonGeometricObject): Promise<THREE.Object3D> {
         switch (object.shapeType) {
             case GeometricShapeType.CONE:
                 return new ConeFactory().parse(object);
