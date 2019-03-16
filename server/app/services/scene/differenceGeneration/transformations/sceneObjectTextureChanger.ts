@@ -1,12 +1,34 @@
 import { SceneTransformation } from "../../../../../../common/model/scene/modifications/sceneTransformation";
 import { ICommonThematicModifications } from "../../../../../../common/model/scene/modifications/thematicModifications";
-import { ICommonThematicObject } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
+import { ObjectProperties } from "../../../../../../common/model/scene/objects/thematicObjects/objectProperties";
+import { ICommonThematicObject, ObjTheme } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ObjectType } from "../../../../../../common/model/scene/scene";
+import { RandomUtils } from "../../../../utils/randomUtils";
 
 export class SceneObjectTextureChanger implements SceneTransformation {
     public applyTransformation(objectsToTransform: ICommonThematicObject[],
                                modifications: ICommonThematicModifications,
                                type: ObjectType): void {
+
+        if (type === ObjectType.Thematic) {
+            const indexOfObject: number = RandomUtils.random(objectsToTransform.length);
+            const modifiedObject: ICommonThematicObject = objectsToTransform[indexOfObject];
+
+            if (modifiedObject.isTextured) {
+                modifications.texturesChangedObjects.push({
+                    key: modifiedObject.id,
+                    value: this.chooseTexture(modifiedObject),
+                });
+            } else {
+                modifications.texturesChangedObjects.push({
+                    key: modifiedObject.id,
+                    value: this.chooseColor(modifiedObject),
+                });
+            }
+
+            objectsToTransform.splice(indexOfObject, 1);
+        }
+    }
 
     private chooseTexture(modifiedObject: ICommonThematicObject): string {
         const objName: string = ObjTheme[modifiedObject.objectType].toLowerCase();
