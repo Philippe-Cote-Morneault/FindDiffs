@@ -43,7 +43,7 @@ export class S3Cache {
         this.initCache();
         const path: string = this.makePath(guid);
 
-        const buf =  fs.readFileSync(path);
+        const buf: Buffer =  fs.readFileSync(path);
 
         return buf.buffer.slice(buf.byteOffset, buf.byteLength + buf.byteOffset);
     }
