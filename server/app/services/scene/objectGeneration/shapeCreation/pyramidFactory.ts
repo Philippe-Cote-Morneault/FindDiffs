@@ -1,6 +1,6 @@
 import { GeometricShapeType, ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ICommonPyramid } from "../../../../../../common/model/scene/objects/geometricObjects/pyramid";
-import { GeometricObjectFactory } from "./GeometricObjectFactory";
+import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class PyramidFactory extends GeometricObjectFactory {
     private static readonly REFERENCE_RADIUS: number = 2;
