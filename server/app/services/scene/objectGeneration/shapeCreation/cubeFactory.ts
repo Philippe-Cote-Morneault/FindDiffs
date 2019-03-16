@@ -1,6 +1,6 @@
 import { ICommonCube } from "../../../../../../common/model/scene/objects/geometricObjects/cube";
 import { GeometricShapeType, ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { GeometricObjectFactory } from "./GeometricObjectFactory";
+import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class CubeFactory extends GeometricObjectFactory {
     private static readonly REFERENCE_WIDTH: number = 3;
