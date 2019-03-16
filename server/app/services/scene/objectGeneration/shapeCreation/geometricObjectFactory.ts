@@ -8,12 +8,12 @@ export abstract class GeometricObjectFactory extends ObjectFactory {
 
     protected abstract createShape(geometricObject: ICommonGeometricObject): ICommonGeometricObject;
 
-    protected postCreate(){
-        const objectGeometric = this.object as ICommonGeometricObject;
+    protected postCreate(): void {
+        const objectGeometric: ICommonGeometricObject = this.object as ICommonGeometricObject;
         objectGeometric.color = ColorUtils.generateRandomColor();
         this.object = this.createShape(objectGeometric);
     }
-    
+
     protected generateRandomOrientation(): ICommonEulerAngles {
         return {
             xAngle: this.generateRandomRadianAngle(),
@@ -22,7 +22,7 @@ export abstract class GeometricObjectFactory extends ObjectFactory {
         } as ICommonEulerAngles;
     }
 
-    protected getFactoryType(): ObjectType{
-        return ObjectType.Geometric
+    protected getFactoryType(): ObjectType {
+        return ObjectType.Geometric;
     }
 }
