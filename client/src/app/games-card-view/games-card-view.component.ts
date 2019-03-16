@@ -103,7 +103,6 @@ export class GamesCardViewComponent implements OnInit {
         this.sceneService.getSceneById(this.gameCard.resource_id).subscribe((scenePair: ICommonScene) => {
             this.scenePair = scenePair;
             this.image.nativeElement.src = `http://localhost:3000/scene/${scenePair.id}/thumbnail`;
-            //this.sceneLoaderService.loadOriginalScene(this.scene.nativeElement, this.scenePair, false);
         });
     }
 }

@@ -25,7 +25,6 @@ export class CreateGameFreeViewComponent {
     @ViewChild("objectType") private objectType: ElementRef;
     @ViewChild("renderingCanvas") private canvas: ElementRef;
 
-
     public canSubmit: boolean;
     public firstNameInput: boolean;
     public firstQuantityInput: boolean;
@@ -99,7 +98,7 @@ export class CreateGameFreeViewComponent {
             } else {
                 this.createModifiedScene(scene.id);
             }
-        })
+        });
 
     }
 

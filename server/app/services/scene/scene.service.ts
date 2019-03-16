@@ -91,7 +91,7 @@ export class SceneService extends Service implements ISceneService {
 
     public async postThumbnail(req: Request): Promise<string> {
         const thumbnailId: string = await Storage.saveBuffer(req.files["thumbnail"][0].buffer);
-        await Scene.findOneAndUpdate({_id: req.params.id}, {$set: {file_thumbnail_id: thumbnailId}}, (err, doc: IScene) => {
+        Scene.findOneAndUpdate({_id: req.params.id}, {$set: {file_thumbnail_id: thumbnailId}}, (err: Error, doc: IScene) => {
             if (err) {
                 throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
