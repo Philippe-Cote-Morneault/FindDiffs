@@ -24,7 +24,7 @@ export class GameViewSimpleComponent implements OnInit {
 
     private gameCardId: string;
     private imagePairId: string;
-    private isGameOver: boolean;
+    public isGameOver: boolean;
     private differenceCounterUser: number;
     private differenceFound: number[];
     private differenceSound: HTMLAudioElement;
