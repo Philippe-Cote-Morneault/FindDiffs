@@ -4,67 +4,58 @@ import { Injectable } from "@angular/core";
     providedIn: "root",
 })
 export class SceneSyncerService {
-    private static controls1: THREE.OrbitControls;
-    private static controls2: THREE.OrbitControls;
+    private static readonly ROTATION_ORDER: string = "YXZ";
+    private static readonly RIGHT_MOUSE_CODE: number = 3;
+    private static readonly MOVEMENT_SCALE: number = 100;
+    // tslint:disable-next-line:no-magic-numbers
+    private static readonly CAMERA_MAX_X_ANGLE: number = Math.PI / 2;
+    private isMousePressed: boolean;
 
-    private static controlsChanged(event: Event| undefined): void {
-        if (event != null && event.target != null) {
-            (((event.target as Object) as THREE.OrbitControls).object.uuid === SceneSyncerService.controls1.object.uuid) ?
-                SceneSyncerService.changeControls(SceneSyncerService.controls1, SceneSyncerService.controls2) :
-                SceneSyncerService.changeControls(SceneSyncerService.controls2, SceneSyncerService.controls1);
-        }
+    public constructor() {
+        this.isMousePressed = false;
     }
-
-    private static changeControls(changedControls: THREE.OrbitControls, toChangeControls: THREE.OrbitControls): void {
-
-        toChangeControls.removeEventListener("change", SceneSyncerService.controlsChanged);
-
-        toChangeControls.object.position.copy(changedControls.object.position);
-        toChangeControls.object.rotation.copy(changedControls.object.rotation);
-        toChangeControls.target.copy(changedControls.target);
-        toChangeControls.update();
-
-        toChangeControls.addEventListener("change", SceneSyncerService.controlsChanged);
-
-    }
-
     // tslint:disable-next-line:max-func-body-length
-    public syncScenes(camera1: THREE.Camera, canvas1: HTMLCanvasElement, camera2: THREE.Camera): void {
+    public syncScenesMovement(camera1: THREE.Camera, canvas1: HTMLCanvasElement, camera2: THREE.Camera, canvas2: HTMLCanvasElement): void {
+        this.addListeners(camera1, canvas1, camera2, canvas2);
+        this.addListeners(camera2, canvas2, camera1, canvas1);
+    }
 
-        let isPressed: boolean = false;
-        let mouseX: number = 0;
-        let mouseY: number = 0;
-        camera1.rotation.order = "YXZ"
+    private addListeners(changedCamera: THREE.Camera, changedCanvas: HTMLCanvasElement,
+                         toChangeCamera: THREE.Camera, toChangeCanvas: HTMLCanvasElement): void {
 
-        canvas1.addEventListener("mousedown", (event) => {
-            if (event.which === 3) {
-                isPressed = true;
+        changedCamera.rotation.order = SceneSyncerService.ROTATION_ORDER;
+
+        changedCanvas.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        });
+
+        changedCanvas.addEventListener("mousedown", (event: MouseEvent) => {
+            if (event.which === SceneSyncerService.RIGHT_MOUSE_CODE) {
+                this.isMousePressed = true;
             }
         });
 
-        canvas1.addEventListener("mouseup", (event) => {
-            if (event.which === 3) {
-                isPressed = false;
+        changedCanvas.addEventListener("mouseup", (event: MouseEvent) => {
+            if (event.which === SceneSyncerService.RIGHT_MOUSE_CODE) {
+                this.isMousePressed = false;
             }
         });
 
-        canvas1.addEventListener("mousemove", (event) => {
-            if (isPressed) {
-                //mouseX -= ( event.movementX / canvas1.clientWidth) * 2 + 1;
-                //mouseY -= ( event.clientY / canvas1.clientHeight ) * 2 + 1;
-
-                //mouse.x = ( ( event.clientX - rect.left ) / rect.width ) * 2 - 1;
-		        //mouse.y = - ( ( event.clientY - rect.top ) / rect.height ) * 2 + 1;
-                console.log(camera1.rotation);
-               
-                camera1.rotation.y -= event.movementX / 80;
-                if (camera1.rotation.x - event.movementY/80 > -(Math.PI/2) && camera1.rotation.x -  event.movementY/80 < (Math.PI/2) ) {
-                camera1.rotation.x -= event.movementY / 80;
-                }
+        changedCanvas.addEventListener("mousemove", (event: MouseEvent) => {
+            if (this.isMousePressed) {
+               this.moveCamera(changedCamera, event);
+               this.moveCamera(toChangeCamera, event);
             }
-        })
-       
+        });
+    }
 
+    private moveCamera(camera: THREE.Camera, mouseEvent: MouseEvent): void {
+        camera.rotation.y -= mouseEvent.movementX / SceneSyncerService.MOVEMENT_SCALE;
 
+        if (camera.rotation.x - mouseEvent.movementY / SceneSyncerService.MOVEMENT_SCALE > -SceneSyncerService.CAMERA_MAX_X_ANGLE
+            && camera.rotation.x - mouseEvent.movementY / SceneSyncerService.MOVEMENT_SCALE < SceneSyncerService.CAMERA_MAX_X_ANGLE) {
+
+            camera.rotation.x -= mouseEvent.movementY / SceneSyncerService.MOVEMENT_SCALE;
+        }
     }
 }
