@@ -13,6 +13,10 @@ export class ThematicObjectParser extends SceneObjectParser {
         object3D.position.y = object.position.y;
         object3D.position.z = object.position.z;
 
+        object3D.scale.x *= object.scale;
+        object3D.scale.y *= object.scale;
+        object3D.scale.z *= object.scale;
+
         if (object3D.rotation.x !== 0) {
             object3D.rotation.z = object.orientation.yAngle;
         } else {
