@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ICommonGameCard, ICommonScoreEntry } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/gameCard/games-card.service";
@@ -13,13 +13,12 @@ export class EndSoloGameComponent implements OnInit {
 
   public gameCard: ICommonGameCard;
   public gameCardId: string;
-  public time: string;
+  @Input() public playerTimeChild: string;
 
   public constructor(
     private route: ActivatedRoute,
     public gamesCardService: GamesCardService,
     private router: Router) {
-      this.time = "00:00";
     }
 
   public ngOnInit(): void {

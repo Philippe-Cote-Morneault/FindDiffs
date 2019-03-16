@@ -27,7 +27,11 @@ export class GameViewFreeComponent implements OnInit {
     private gameCardID: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
+    private differenceFound: string[];
+
+    public playerTime: string;
     public differenceCounterUser: number;
+    public isGameOver: boolean;
 
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
@@ -44,6 +48,8 @@ export class GameViewFreeComponent implements OnInit {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
         this.differenceCounterUser = 0;
+        this.isGameOver = false;
+        this.differenceFound = [];
     }
 
     public ngOnInit(): void {
@@ -69,6 +75,7 @@ export class GameViewFreeComponent implements OnInit {
         });
     }
 
+    // tslint:disable
     public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
         const obj: {sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
@@ -94,10 +101,69 @@ export class GameViewFreeComponent implements OnInit {
             console.log(intersectsModified[0].object.position);
         }
 
+        if (intersectsOriginal.length > 0 && intersectsModified.length > 0) {
+            if (intersectsOriginal[0].object.position.x === intersectsModified[0].object.position.x && 
+                intersectsOriginal[0].object.position.y === intersectsModified[0].object.position.y && 
+                intersectsOriginal[0].object.position.z === intersectsModified[0].object.position.z) {
+                // deux objets couleur differente
+                let intersectedModified: any;
+                let intersectedOriginal: any;
+
+                intersectedOriginal = intersectsOriginal[0].object;
+                intersectedModified = intersectsModified[0].object;
+
+                if (intersectedModified.material.color.getHex() !== intersectedOriginal.material.color.getHex()) {
+                    console.log(this.isANewDifference(intersectsModified[0].object.uuid));
+                    if (this.isANewDifference(intersectsModified[0].object.uuid)) {
+                        intersectedModified.material.color.setHex(intersectedOriginal.material.color.getHex());
+                        this.differenceFound[this.differenceCounterUser] = intersectsModified[0].object.uuid;
+                        this.differenceCounterUser++;
+                        console.log("Changed modified obj!!!!!");
+                    }
+                } else {
+                    console.log("YOU ARE DUMB!");
+                }
+            } else if (intersectsOriginal[0].distance > intersectsModified[0].distance) {
+                // enlever objet modife
+                if (this.isANewDifference(intersectsModified[0].object.uuid)) {
+                    this.modifiedSceneLoader.scene.remove(intersectsModified[0].object);
+                    this.differenceFound[this.differenceCounterUser] = intersectsModified[0].object.uuid;
+                    this.differenceCounterUser++;
+                }
+            } else if (intersectsOriginal[0].distance < intersectsModified[0].distance) {
+                // add objet modifie
+                if (this.isANewDifference(intersectsModified[0].object.uuid)) {
+                    this.modifiedSceneLoader.scene.add(intersectsOriginal[0].object.clone());
+                    this.differenceFound[this.differenceCounterUser] = intersectsModified[0].object.uuid;
+                    this.differenceCounterUser++;
+                }
+            } 
+        } else if (intersectsOriginal.length > 0 && intersectsModified.length === 0) {
+            // add objet modifie
+            if (this.isANewDifference(intersectsModified[0].object.uuid)) {
+                this.modifiedSceneLoader.scene.add(intersectsOriginal[0].object.clone());
+                this.differenceFound[this.differenceCounterUser] = intersectsModified[0].object.uuid;
+                this.differenceCounterUser++;
+            }
+        } else if (intersectsOriginal.length === 0 && intersectsModified.length > 0) {
+            // enlever objet modifie
+            if (this.isANewDifference(intersectsModified[0].object.uuid)) {
+                this.modifiedSceneLoader.scene.remove(intersectsModified[0].object);
+                this.differenceFound[this.differenceCounterUser] = intersectsModified[0].object.uuid;
+                this.differenceCounterUser++;
+            }
+        } else {
+            // afficher ERREUR
+            console.log("YOU ARE DUMB!");
+        }
+
+        if (this.differenceCounterUser === 7) {
+            this.gameOver();
+        }
         // this.originalSceneLoader.scene.remove(intersectsOriginal[0].object);
-        console.log("========================");
-        let test: any = intersectsModified[0].object;
-        this.originalSceneLoader.scene.add(test);
+        // console.log("========================");
+        // let test: any = intersectsOriginal[0].object;
+        // this.modifiedSceneLoader.scene.add(test);
 
         // geometricObjectService.
     }
@@ -148,5 +214,19 @@ export class GameViewFreeComponent implements OnInit {
                 meshes.push(element);
             }
         });
+    }
+
+    public isANewDifference(differenceId: string): boolean {
+        console.log("===================");
+        console.log(differenceId);
+        console.log("===================");
+        console.log(this.differenceFound);
+        return !this.differenceFound.includes(differenceId);
+    }
+
+    private gameOver(): void {
+        this.timerService.stopTimer();
+        this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
+        this.isGameOver = true;
     }
 }
