@@ -35,8 +35,8 @@ export class CreateGameFreeViewComponent {
         public sceneService: SceneService,
         public gamesCardService: GamesCardService,
         private gameCardLoaderService: GameCardLoaderService,
-        public formVerificationFreePOVService: FormVerificationFreePOVService) {
         private sceneCreationService: SceneCreationService,
+        public formVerificationFreePOVService: FormVerificationFreePOVService) {
             this.canSubmit = false;
             this.firstNameInput = false;
             this.firstQuantityInput = false;
