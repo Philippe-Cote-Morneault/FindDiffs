@@ -24,6 +24,27 @@ export class ThematicSceneParser {
         scene.add(ambientLight);
         scene.background = new THREE.Color(0xAAAAAA);
 
+        scene.add(this.createSkybox());
+
         return scene;
     }
+
+    private static createSkybox(): THREE.Object3D {
+        const materials: THREE.Material[] = new Array<THREE.Material>();
+        this.SKYBOX_FILES.forEach((file: string) => {
+            materials.push(new THREE.MeshBasicMaterial({
+                map: THREE.ImageUtils.loadTexture(this.SKYBOX_PATH + file + this.SKYBOX_EXTENSION),
+                side: THREE.BackSide,
+            }));
+        });
+        const skyboxGeometry: THREE.CubeGeometry = new THREE.CubeGeometry(
+            this.SKYBOX_SIZE,
+            this.SKYBOX_SIZE,
+            this.SKYBOX_SIZE,
+        );
+        const skyboxMaterial: THREE.MeshFaceMaterial = new THREE.MeshFaceMaterial(materials);
+
+        return new THREE.Mesh( skyboxGeometry, skyboxMaterial);
+    }
+
 }
