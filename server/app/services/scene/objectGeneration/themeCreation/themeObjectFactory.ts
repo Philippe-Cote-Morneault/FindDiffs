@@ -1,8 +1,9 @@
 import { ObjectFactory } from "../objectFactory";
-import { ICommonThematicObject } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
+import { ICommonThematicObject, ObjTheme } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ObjectType } from "../../../../../../common/model/scene/scene";
 import { ObjectProperties } from "../../../../../../common/model/scene/objects/thematicObjects/objectProperties";
 import { RandomUtils } from "../../../../utils/randomUtils";
+import { EnumUtils } from "../../../../utils/enumUtils";
 
 export abstract class ThemeObjectFactory extends ObjectFactory{
     
@@ -19,7 +20,9 @@ export abstract class ThemeObjectFactory extends ObjectFactory{
         }else{
             thematicObject.color = this.chooseColor();
         }
-
+        thematicObject.objectType = EnumUtils.enumFromString<ObjTheme>(
+            this.getObjectName().toUpperCase(),
+            ObjTheme) as ObjTheme;
         this.object = thematicObject;
     }
 
