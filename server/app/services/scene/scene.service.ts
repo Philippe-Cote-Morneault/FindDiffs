@@ -9,6 +9,7 @@ import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { ISceneService } from "../interfaces";
 import { Service } from "../service";
+import { ISceneGenerator } from "./ISceneGenerator";
 import { SceneDifferenceGenerator } from "./differenceGeneration/sceneDifferenceGenerator";
 import { Grid } from "./grid/grid";
 import { SceneGeneratorShape } from "./sceneGeneratorShape";
@@ -40,12 +41,9 @@ export class SceneService extends Service implements ISceneService {
 
     public async post(req: Request): Promise<string> {
         this.validatePost(req);
-        let sceneGenerator
-        if(req.params.object_type === ObjectType.Geometric){
-            sceneGenerator = new SceneGeneratorShape(req.body.object_qty);
-        }else{
-            sceneGenerator = new SceneGeneratorTheme(req.body.object_qty);
-        }
+        const sceneGenerator: ISceneGenerator = (req.params.object_type === ObjectType.Geometric) ?
+        new SceneGeneratorShape(req.body.object_qty) : new SceneGeneratorTheme(req.body.object_qty);
+
         const scene: ICommonScene = sceneGenerator.generateScene();
 
         const sceneSchema: IScene = new Scene({

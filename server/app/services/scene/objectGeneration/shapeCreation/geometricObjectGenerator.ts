@@ -1,13 +1,13 @@
 import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { RandomUtils } from "../../../../utils/randomUtils";
+import { IObjectGenerator } from "../IObjectGenerator";
+import { GeometricObjectFactory } from "./GeometricObjectFactory";
 import { ConeFactory } from "./coneFactory";
 import { CubeFactory } from "./cubeFactory";
 import { CylinderFactory } from "./cylinderFactory";
-import { GeometricObjectFactory } from "./GeometricObjectFactory";
 import { PyramidFactory } from "./pyramidFactory";
 import { SphereFactory } from "./sphereFactory";
-import { IObjectGenerator } from "../IObjectGenerator";
 
 export class GeometricObjectGenerator implements IObjectGenerator {
     private static instance: GeometricObjectGenerator;

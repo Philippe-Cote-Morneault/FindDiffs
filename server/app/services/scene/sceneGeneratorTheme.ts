@@ -2,7 +2,7 @@ import { ICommonSceneObject } from "../../../../common/model/scene/objects/scene
 import { ICommonThematicScene, ObjectType } from "../../../../common/model/scene/scene";
 import { ISceneGenerator } from "./ISceneGenerator";
 import { Grid } from "./grid/grid";
-import { ThemeGrid, IPostionGridTheme } from "./grid/theme/themeGrid";
+import { IPostionGridTheme, ThemeGrid } from "./grid/theme/themeGrid";
 import { ThemeObjectGenerator } from "./objectGeneration/themeCreation/themeObjectGenerator";
 
 export class SceneGeneratorTheme implements ISceneGenerator {
