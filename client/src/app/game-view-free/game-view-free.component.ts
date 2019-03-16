@@ -3,6 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import * as THREE from "three";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
+// import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
@@ -28,9 +29,12 @@ export class GameViewFreeComponent implements OnInit {
     private gameCardID: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
-    private originalSceneObj: ICommonScene;
-    // private modifiedsSceneObj: ICommonSceneModifications;
+    // private originalSceneObj: ICommonScene;
+    // private modifiedSceneObj: ICommonSceneModifications;
     public differenceCounterUser: number;
+
+    private meshesOriginal: THREE.Object3D[] = [];
+    private meshesModified: THREE.Object3D[] = [];
 
     public constructor(
         private route: ActivatedRoute,
@@ -63,7 +67,7 @@ export class GameViewFreeComponent implements OnInit {
     private getOriginalSceneById(): void {
         this.sceneService.getSceneById(this.scenePairId).subscribe((response: ICommonScene) => {
             this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
-            this.originalSceneObj = response;
+            // this.originalSceneObj = response;
             this.getModifiedSceneById(response);
         });
     }
@@ -73,14 +77,15 @@ export class GameViewFreeComponent implements OnInit {
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
         const mouse: THREE.Vector2 = new THREE.Vector2();
         let intersects: THREE.Intersection[];
-        const meshes: THREE.Object3D[] = [];
 
-        this.fillMeshes(meshes, obj.sceneLoader);
-        this.setUUID(meshes, isOriginalScene);
+        // this.setUUID(meshesOriginal, meshesModified);
         this.setMousePosition(event, mouse, obj.HTMLElement);
 
         raycaster.setFromCamera(mouse, this.originalSceneLoader.camera );
-        intersects = raycaster.intersectObjects( meshes );
+
+        isOriginalScene ?
+            intersects = raycaster.intersectObjects( this.meshesOriginal ) : intersects = raycaster.intersectObjects( this.meshesModified );
+
         if (intersects.length > 0) {
             console.log(intersects[0]); // call the service instead of console.log
         }
@@ -104,32 +109,21 @@ export class GameViewFreeComponent implements OnInit {
         };
     }
 
-    private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
-        sceneLoader.scene.children.forEach((element) => {
-            if (element.type === "Mesh") {
-                meshes.push(element);
-            }
-        });
-    }
+//     private setUUID(meshesOriginal: THREE.Object3D[], meshesModified: THREE.Object3D[]): void {
+//         meshesOriginal.forEach((element, index) => {
+//             element.uuid = this.originalSceneObj.sceneObjects[index].id;
+//         });
 
-    private setUUID(meshes: THREE.Object3D[], isOriginalScene: boolean): void {
-        if (isOriginalScene) {
-            meshes.forEach((element, index) => {
-                element.uuid = this.originalSceneObj.sceneObjects[index].id;
-            });
-        } else {
-        //     meshes.forEach((element, index) => {
-        //         element.uuid = this.originalSceneObj.sceneObjects[index].id;
+//         this.originalSceneObj.sceneObjects.forEach((element, index) => {
+//             if (!this.modifiedSceneObj.addedObjects.includes(element) || !this.modifiedSceneObj.deletedObjects.includes(element.id)) {
+//                 (this.modifiedSceneObj as ICommonGeometricModifications).colorChangedObjects.forEach((pairElement) => {
+//                     if (pairElement.key !== element.id) {
 
-        //         if (this.modifiedsSceneObj.deletedObjects.includes(element.id.toString())) {
-                    // tslint:disable
-        //             if ((this.modifiedsSceneObj as ICommonGeometricModifications).colorChangedObjects.some((object: Pair<string, number>) => 
-        //                 element.id.toString() === object.key)) {  
-        //             }
-        //         }
-        //     });
-        }
-   }
+//                     }
+//                 });
+//             }
+//         });
+//    }
 
     private setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: ElementRef<HTMLElement>): void {
         const divBoxInformation: ClientRect | DOMRect = HTMLElement.nativeElement.getBoundingClientRect();
@@ -147,7 +141,18 @@ export class GameViewFreeComponent implements OnInit {
                                           this.modifiedSceneLoader.camera, this.modifiedSceneLoader.controls);
             this.spinnerService.hide();
             this.timerService.startTimer(this.chronometer.nativeElement);
-            // this.modifiedsSceneObj = responseModified;
+            // this.modifiedSceneObj = responseModified;
+
+            this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
+            this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
+        });
+    }
+
+    private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
+        sceneLoader.scene.children.forEach((element) => {
+            if (element.type === "Mesh") {
+                meshes.push(element);
+            }
         });
     }
 }
