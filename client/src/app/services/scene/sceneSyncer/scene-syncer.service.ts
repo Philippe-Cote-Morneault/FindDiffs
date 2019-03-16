@@ -15,7 +15,7 @@ export class SceneSyncerService {
         }
     }
 
-    private static changeControls(changedControls: THREE.OrbitControls, toChangeControls: THREE.OrbitControls,): void {
+    private static changeControls(changedControls: THREE.OrbitControls, toChangeControls: THREE.OrbitControls): void {
 
         toChangeControls.removeEventListener("change", SceneSyncerService.controlsChanged);
 
