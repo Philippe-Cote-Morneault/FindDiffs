@@ -15,7 +15,8 @@ export abstract class ThemeObjectFactory extends ObjectFactory {
 
     protected postCreate(): void {
         const thematicObject: ICommonThematicObject = this.object as ICommonThematicObject;
-        if (this.isTextured()) {
+        thematicObject.isTextured = this.isTextured();
+        if (thematicObject.isTextured) {
             thematicObject.texture = this.chooseTexture();
         } else {
             thematicObject.color = this.chooseColor();
