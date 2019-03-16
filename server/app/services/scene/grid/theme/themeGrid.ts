@@ -1,12 +1,12 @@
+import { StackEmptyException } from "../../../../../../common/errors/stackEmptyException";
 import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { ThemeSurface } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ICommonSceneDimensions } from "../../../../../../common/model/scene/scene";
+import { EnumUtils } from "../../../../utils/enumUtils";
 import { RandomUtils } from "../../../../utils/randomUtils";
 import { Grid } from "../grid";
 import { IThemeGridPosition } from "./IThemeGridPosition";
 import * as GamePositions from "./positions.json";
-import { EnumUtils } from "../../../../utils/enumUtils";
-import { StackEmptyException } from "../../../../../../common/errors/stackEmptyException";
 
 export interface IPostionGridTheme extends ICommon3DPosition {
     surface: ThemeSurface;
