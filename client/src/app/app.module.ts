@@ -11,6 +11,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { CreateGameFreeViewComponent } from "./create-game-free-view/create-game-free-view.component";
 import { CreateGameSimpleViewComponent } from "./create-game-simple-view/create-game-simple-view.component";
+import { EndSoloGameComponent } from "./end-solo-game/end-solo-game.component";
 import { GameViewFreeComponent } from "./game-view-free/game-view-free.component";
 import { GameViewSimpleComponent } from "./game-view-simple/game-view-simple.component";
 import { GamesCardViewComponent } from "./games-card-view/games-card-view.component";
@@ -18,7 +19,6 @@ import { GamesListViewComponent } from "./games-list-view/games-list-view.compon
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 import { GameCardLoaderService } from "./services/gameCard/game-card-loader.service";
 import { UserService } from "./services/user/user.service";
-import { EndSoloGameComponent } from './end-solo-game/end-solo-game.component';
 
 @NgModule({
     declarations: [

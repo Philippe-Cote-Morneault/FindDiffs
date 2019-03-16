@@ -22,26 +22,6 @@ export class SceneLoaderService {
     private renderer: THREE.WebGLRenderer;
     private scene: THREE.Scene;
 
-    public static syncScenes(camera1: THREE.PerspectiveCamera, controls1: THREE.OrbitControls,
-                             camera2: THREE.PerspectiveCamera, controls2: THREE.OrbitControls): void {
-
-        controls1.addEventListener("change", () => {
-            camera2.position.copy(camera1.position);
-            camera2.rotation.copy(camera1.rotation);
-            controls2.target.copy(controls1.target);
-            controls2.update();
-            },
-        );
-
-        controls2.addEventListener("change", () => {
-            camera1.position.copy(camera2.position);
-            camera1.rotation.copy(camera2.rotation);
-            controls1.target.copy(controls2.target);
-            controls1.update();
-            },
-        );
-    }
-
     public loadOriginalScene(container: HTMLElement | null, scene: ICommonScene, inGameMode: boolean): void {
         this.scene = new SceneParserService().parseScene(scene);
 
@@ -54,13 +34,29 @@ export class SceneLoaderService {
         this.renderScene(container, true);
     }
 
+    public loadOnCanvas(canvas: HTMLCanvasElement, scene: ICommonScene): void {
+        this.scene = new SceneParserService().parseScene(scene);
+
+        this.renderOnCanvas(canvas);
+    }
+
     private renderScene(container: HTMLElement | null, inGameMode: boolean): void {
         if (container) {
             this.renderer = RendererGenerator.generateRenderer(container.clientWidth,
                                                                container.clientHeight);
             container.appendChild(this.renderer.domElement);
+           // console.log(container);
             this.camera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
             this.generateControls(inGameMode, this.camera, this.renderer.domElement);
+            this.animate();
+        }
+    }
+
+    private renderOnCanvas(canvas: HTMLCanvasElement): void {
+        if (canvas) {
+            this.renderer = RendererGenerator.generateRendererOnCanvas(canvas);
+            this.camera = CameraGenerator.createCamera(canvas.width, canvas.height);
+            this.generateControls(false, this.camera, canvas);
             this.animate();
         }
     }

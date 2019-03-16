@@ -7,12 +7,14 @@ import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
+import { SceneSyncerService } from "../services/scene/sceneSyncer/scene-syncer.service";
 import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-free",
     templateUrl: "./game-view-free.component.html",
     styleUrls: ["./game-view-free.component.css"],
+    providers: [SceneSyncerService],
 })
 export class GameViewFreeComponent implements OnInit {
     @ViewChild("originalScene") private originalScene: ElementRef;
@@ -30,7 +32,8 @@ export class GameViewFreeComponent implements OnInit {
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
         public timerService: TimerService,
-        public gamesCardService: GamesCardService) {
+        public gamesCardService: GamesCardService,
+        private sceneSyncer: SceneSyncerService) {
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
     }
@@ -52,20 +55,16 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private getOriginalSceneById(): void {
-        this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
-            this.scenePairId = gameCard.resource_id;
-            this.sceneService.getSceneById(this.scenePairId).subscribe((response: ICommonScene) => {
-                this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
-                this.getModifiedSceneById(response);
-            });
+        this.sceneService.getSceneById(this.scenePairId).subscribe((response: ICommonScene) => {
+            this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, response, true);
+            this.getModifiedSceneById(response);
         });
     }
 
     private getModifiedSceneById(response: ICommonScene): void {
         this.sceneService.getModifiedSceneById(this.scenePairId).subscribe((responseModified: ICommonSceneModifications) => {
             this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, responseModified);
-            SceneLoaderService.syncScenes(this.originalSceneLoader.camera, this.originalSceneLoader.controls,
-                                          this.modifiedSceneLoader.camera, this.modifiedSceneLoader.controls);
+            this.sceneSyncer.syncScenes(this.originalSceneLoader.controls, this.modifiedSceneLoader.controls);
             this.spinnerService.hide();
             this.timerService.startTimer(this.chronometer.nativeElement);
         });

@@ -7,4 +7,8 @@ export class RendererGenerator {
 
         return renderer;
     }
+
+    public static generateRendererOnCanvas(container: HTMLCanvasElement): THREE.WebGLRenderer {
+        return new THREE.WebGLRenderer({canvas: container});
+    }
 }
