@@ -5,7 +5,7 @@ import { Injectable } from "@angular/core";
 })
 export class SceneSyncerService {
     private static readonly ROTATION_ORDER: string = "YXZ";
-    private static readonly RIGHT_MOUSE_CODE: number = 3;
+    private static readonly RIGHT_MOUSE_CODE: number = 2;
     private static readonly MOVEMENT_SCALE: number = 100;
     // tslint:disable-next-line:no-magic-numbers
     private static readonly CAMERA_MAX_X_ANGLE: number = Math.PI / 2;
@@ -30,13 +30,13 @@ export class SceneSyncerService {
         });
 
         changedCanvas.addEventListener("mousedown", (event: MouseEvent) => {
-            if (event.which === SceneSyncerService.RIGHT_MOUSE_CODE) {
+            if (event.button === SceneSyncerService.RIGHT_MOUSE_CODE) {
                 this.isMousePressed = true;
             }
         });
 
         changedCanvas.addEventListener("mouseup", (event: MouseEvent) => {
-            if (event.which === SceneSyncerService.RIGHT_MOUSE_CODE) {
+            if (event.button === SceneSyncerService.RIGHT_MOUSE_CODE) {
                 this.isMousePressed = false;
             }
         });

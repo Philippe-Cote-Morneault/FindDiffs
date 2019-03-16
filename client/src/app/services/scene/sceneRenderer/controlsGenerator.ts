@@ -9,7 +9,7 @@ export class ControlsGenerator {
 
     public static generateGameControls(camera: THREE.PerspectiveCamera, canvas: HTMLElement): void {
         document.addEventListener("keydown", (event: KeyboardEvent) => {
-            switch (event.keyCode) {
+            switch (Number(event.key)) {
                 case ControlsGenerator.W_CODE:
                     camera.translateZ(-ControlsGenerator.DISTANCE_TO_MOVE);
                     break;
