@@ -34,13 +34,29 @@ export class SceneLoaderService {
         this.renderScene(container, true);
     }
 
+    public loadOnCanvas(canvas: HTMLCanvasElement, scene: ICommonScene): void {
+        this.scene = new SceneParserService().parseScene(scene);
+
+        this.renderOnCanvas(canvas);
+    }
+
     private renderScene(container: HTMLElement | null, inGameMode: boolean): void {
         if (container) {
             this.renderer = RendererGenerator.generateRenderer(container.clientWidth,
                                                                container.clientHeight);
             container.appendChild(this.renderer.domElement);
+           // console.log(container);
             this.camera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
             this.generateControls(inGameMode, this.camera, this.renderer.domElement);
+            this.animate();
+        }
+    }
+
+    private renderOnCanvas(canvas: HTMLCanvasElement): void {
+        if (canvas) {
+            this.renderer = RendererGenerator.generateRendererOnCanvas(canvas);
+            this.camera = CameraGenerator.createCamera(canvas.width, canvas.height);
+            this.generateControls(false, this.camera, canvas);
             this.animate();
         }
     }

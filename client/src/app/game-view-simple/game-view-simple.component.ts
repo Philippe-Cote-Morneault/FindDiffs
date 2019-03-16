@@ -16,18 +16,20 @@ import { TimerService } from "../services/timer/timer.service";
 })
 export class GameViewSimpleComponent implements OnInit {
     private static MAX_DIFFERENCES: number = 7;
+    private static readonly DIFFERENCE_SOUND_SRC: string = "../../assets/mario.mp3";
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("errorMessage") private errorMessage: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
 
-    private imagePairId: string;
     private gameCardId: string;
+    private imagePairId: string;
+    public isGameOver: boolean;
     private differenceCounterUser: number;
     private differenceFound: number[];
-
     private differenceSound: HTMLAudioElement;
+    public playerTime: string;
 
     public constructor(
         private route: ActivatedRoute,
@@ -38,11 +40,12 @@ export class GameViewSimpleComponent implements OnInit {
         public gamesCardService: GamesCardService,
         public identificationError: IdentificationError) {
 
+        this.isGameOver = false;
         this.differenceCounterUser = 0;
         this.differenceFound = [];
 
         this.differenceSound = new Audio;
-        this.differenceSound.src = "../../assets/mario.mp3";
+        this.differenceSound.src = GameViewSimpleComponent.DIFFERENCE_SOUND_SRC;
         this.differenceSound.load();
     }
 
@@ -50,7 +53,6 @@ export class GameViewSimpleComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.gameCardId = params["id"];
         });
-        this.gameOver();
         this.getGameCardById();
     }
 
@@ -85,8 +87,8 @@ export class GameViewSimpleComponent implements OnInit {
                         await this.addDifference(response.difference_id);
                     }
                 } else {
-                    this.identificationError.showErrorMessage(e.pageX, e.pageY, this.errorMessage.nativeElement,
-                                                              this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
+                    await this.identificationError.showErrorMessage(e.pageX, e.pageY, this.errorMessage.nativeElement,
+                                                                    this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
                 }
             });
         }
@@ -122,5 +124,7 @@ export class GameViewSimpleComponent implements OnInit {
 
     private gameOver(): void {
         this.timerService.stopTimer();
+        this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
+        this.isGameOver = true;
     }
 }

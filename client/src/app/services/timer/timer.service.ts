@@ -6,7 +6,7 @@ import Timer from "easytimer.js";
 })
 export class TimerService {
     private static MINUTES_POSITION: number = 3;
-    private timer: Timer;
+    public timer: Timer;
 
     public constructor() {
         this.timer = new Timer();
