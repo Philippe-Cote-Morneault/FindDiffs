@@ -6,6 +6,12 @@ import { JSONLoader } from "../sceneLoader/jsonLoader";
 // TODO: Implement this in sprint 3
 export class ThematicSceneParser {
     private static readonly SCENE_MODEL: string = "scene";
+
+    private static readonly SKYBOX_FILES: string[] = ["px", "nx", "py", "ny", "pz", "nz"];
+    private static readonly SKYBOX_EXTENSION: string = ".jpg";
+    private static readonly SKYBOX_PATH: string = "../../assets/theme/textures/skybox/";
+    private static readonly SKYBOX_SIZE: number = 500;
+
     public static async parseScene(originalScene: ICommonThematicScene): Promise<THREE.Scene> {
         const scene: THREE.Scene = new THREE.Scene();
         const object: THREE.Object3D = await JSONLoader.load(this.SCENE_MODEL);
