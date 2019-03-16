@@ -1,7 +1,4 @@
 import { Injectable } from "@angular/core";
-// tslint:disable-next-line:ordered-imports
-import "node_modules/three/examples/js/controls/OrbitControls";
-import "src/js/three";
 import * as THREE from "three";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../../../common/model/scene/scene";

@@ -1,6 +1,3 @@
-import "src/js/three";
-// tslint:disable-next-line:ordered-imports
-import "node_modules/three/examples/js/controls/OrbitControls";
 import * as THREE from "three";
 
 export class ControlsGenerator {
