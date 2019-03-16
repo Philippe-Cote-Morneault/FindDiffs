@@ -41,7 +41,8 @@ export class SceneService extends Service implements ISceneService {
 
     public async post(req: Request): Promise<string> {
         this.validatePost(req);
-        const sceneGenerator: ISceneGenerator = (req.params.object_type === ObjectType.Geometric) ?
+        const objectType: ObjectType = EnumUtils.enumFromString<ObjectType>(req.body.object_type, ObjectType) as ObjectType;
+        const sceneGenerator: ISceneGenerator = (objectType === ObjectType.Geometric) ?
         new SceneGeneratorShape(req.body.object_qty) : new SceneGeneratorTheme(req.body.object_qty);
 
         const scene: ICommonScene = sceneGenerator.generateScene();
@@ -88,6 +89,7 @@ export class SceneService extends Service implements ISceneService {
 
             return JSON.stringify(sceneModifications);
         }).catch((err: Error) => {
+            console.error(err);
             throw new NotFoundException(R.ERROR_UNKNOWN_ID);
         });
     }
