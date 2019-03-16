@@ -11,6 +11,13 @@ export class ThematicSceneParser {
         const object: THREE.Object3D = await JSONLoader.load(this.SCENE_MODEL);
         scene.add(object);
 
+        const ambientLight: THREE.AmbientLight = new THREE.AmbientLight();
+        ambientLight.color = new THREE.Color(0xFFFFFF);
+        ambientLight.intensity = 0.2;
+
+        scene.add(ambientLight);
+        scene.background = new THREE.Color(0xAAAAAA);
+
         return scene;
     }
 }
