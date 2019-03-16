@@ -18,8 +18,8 @@ export class SceneParserService extends AbstractSceneParser {
     }
 
     private parseObjects(scene: THREE.Scene, sceneObjects: ICommonSceneObject[]): void {
-        sceneObjects.forEach((object: ICommonSceneObject) => {
-            scene.add(this.sceneObjectParser.parse(object));
+        sceneObjects.forEach(async (object: ICommonSceneObject) => {
+            scene.add(await this.sceneObjectParser.parse(object));
         });
     }
 
