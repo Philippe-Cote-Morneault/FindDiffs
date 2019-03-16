@@ -21,7 +21,7 @@ export class CarFactory extends ThemeObjectFactory {
             yAngle: 0,
             zAngle: 0,
         };
-        if (RandomUtils.inRange(0, 1) === 1) {
+        if (RandomUtils.inRangeInt(0, 1) === 1) {
             // tslint:disable-next-line:no-magic-numbers
             orientation.yAngle = ObjectFactory.MAX_RADIAN_ANGLE / 2;
         }

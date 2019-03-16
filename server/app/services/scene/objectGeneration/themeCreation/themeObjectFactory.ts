@@ -26,7 +26,7 @@ export abstract class ThemeObjectFactory extends ObjectFactory{
     private chooseTexture(): string {
         const objName = this.getObjectName().toLowerCase();
         const textures: string[] = ObjectProperties[objName].texture;
-        const choice = RandomUtils.inRange(0, textures.length);
+        const choice = RandomUtils.inRangeInt(0, textures.length -1);
 
         return ObjectProperties[objName].texture[choice];
     }
@@ -39,7 +39,7 @@ export abstract class ThemeObjectFactory extends ObjectFactory{
     private chooseColor(): number {
         const objName = this.getObjectName().toLowerCase();
         const color: number[] = ObjectProperties[objName].color;
-        const choice = RandomUtils.inRange(0, color.length);
+        const choice = RandomUtils.inRangeInt(0, color.length -1);
 
         return ObjectProperties[objName].color[choice];
     }
