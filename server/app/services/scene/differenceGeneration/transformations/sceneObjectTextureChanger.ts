@@ -18,5 +18,15 @@ export class SceneObjectTextureChanger implements SceneTransformation {
 
         return availableTextures[choice];
     }
+
+    private chooseColor(modifiedObject: ICommonThematicObject): string {
+        const objName: string = ObjTheme[modifiedObject.objectType].toLowerCase();
+        const availableColors: number[] = (ObjectProperties[objName].color as number[]).filter(
+            (x: number) => x !== modifiedObject.color,
+        );
+
+        const choice: number = RandomUtils.inRangeInt(0, availableColors.length - 1);
+
+        return String(availableColors[choice]);
     }
 }
