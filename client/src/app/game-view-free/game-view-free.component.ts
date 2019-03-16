@@ -27,6 +27,7 @@ export class GameViewFreeComponent implements OnInit {
     private currentModifiedScene: ICommonSceneModifications;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
+    private cheatActivated: boolean;
 
     public constructor(
         private route: ActivatedRoute,
@@ -34,8 +35,9 @@ export class GameViewFreeComponent implements OnInit {
         public sceneService: SceneService,
         public timerService: TimerService,
         public cheatModeService: CheatModeService) {
-            this.originalSceneLoader = new SceneLoaderService();
-            this.modifiedSceneLoader = new SceneLoaderService();
+        this.originalSceneLoader = new SceneLoaderService();
+        this.modifiedSceneLoader = new SceneLoaderService();
+        this.cheatActivated = false;
     }
 
     public ngOnInit(): void {
@@ -49,10 +51,16 @@ export class GameViewFreeComponent implements OnInit {
     @HostListener("document:keydown", ["$event"])
     public toggleCheatMode(event: KeyboardEvent): void {
         if (event.keyCode === GameViewFreeComponent.tKeyCode) {
-            this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
-            this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
-            this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene,
-                                                  (this.currentModifiedScene as ICommonGeometricModifications));
+            this.cheatActivated = !this.cheatActivated;
+            if (this.cheatActivated) {
+
+                this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
+                this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
+                this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene,
+                                                      (this.currentModifiedScene as ICommonGeometricModifications));
+            } else {
+                
+            }
         }
     }
 
