@@ -26,6 +26,7 @@
     "@types/chai": "^4.1.7",
     "@types/sinon": "^7.0.6",
     "@types/three": "^0.93.22",
+    "@types/uuid": "^3.4.4",
     "chai": "^4.2.0",
     "core-js": "2.5.4",
     "easytimer.js": "^3.0.1",

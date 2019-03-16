@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
+// import { GeometricObjectService } from "../services/3DObjects/GeometricObjects/geometricObject.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
@@ -37,7 +38,9 @@ export class GameViewFreeComponent implements OnInit {
         // private socketService: SocketService,
         public sceneService: SceneService,
         public timerService: TimerService,
-        public gamesCardService: GamesCardService) {
+        public gamesCardService: GamesCardService,
+        // public geometricObjectService: GeometricObjectService
+        ) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
         this.differenceCounterUser = 0;
@@ -70,18 +73,33 @@ export class GameViewFreeComponent implements OnInit {
         const obj: {sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
         const mouse: THREE.Vector2 = new THREE.Vector2();
-        let intersects: THREE.Intersection[];
+        let intersectsOriginal: THREE.Intersection[];
+        let intersectsModified: THREE.Intersection[];
 
         this.setMousePosition(event, mouse, obj.HTMLElement);
 
         raycaster.setFromCamera(mouse, this.originalSceneLoader.camera );
 
-        isOriginalScene ?
-            intersects = raycaster.intersectObjects( this.meshesOriginal ) : intersects = raycaster.intersectObjects( this.meshesModified );
+        intersectsOriginal = raycaster.intersectObjects( this.meshesOriginal );
+        intersectsModified = raycaster.intersectObjects( this.meshesModified );
 
-        if (intersects.length > 0) {
-            console.log(intersects[0]); // call the service instead of console.log
+        console.log(intersectsOriginal[0]); // call the service instead of console.log
+        console.log(intersectsModified[0]);
+
+        if (intersectsOriginal.length > 0) {
+            console.log(intersectsOriginal[0].object.position);
         }
+
+        if (intersectsModified.length > 0) {
+            console.log(intersectsModified[0].object.position);
+        }
+
+        // this.originalSceneLoader.scene.remove(intersectsOriginal[0].object);
+        console.log("========================");
+        let test: any = intersectsModified[0].object;
+        this.originalSceneLoader.scene.add(test);
+
+        // geometricObjectService.
     }
 
     private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {

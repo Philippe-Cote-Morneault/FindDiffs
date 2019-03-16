@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { v4 as uuid } from "uuid";
 import { InvalidFormatException } from "../../../../../../common/errors/invalidFormatException";
 import { Pair } from "../../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../../common/model/scene/modifications/geometricModifications";
@@ -59,6 +60,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
             throw new InvalidFormatException("Color not valid!");
         }
         objectToModify.color = color;
+        objectToModify.id = uuid().replace(/-/g, "");
     }
 
     private findChangedColor(key: string, colorChangedObjects: Pair<string, number>[]): number | undefined {
