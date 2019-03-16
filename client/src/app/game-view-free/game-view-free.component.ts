@@ -32,10 +32,10 @@ export class GameViewFreeComponent implements OnInit {
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
         public timerService: TimerService,
-        public gamesCardService: GamesCardService) {
+        public gamesCardService: GamesCardService,
         private sceneSyncer: SceneSyncerService) {
-        this.originalSceneLoader = new SceneLoaderService();
-        this.modifiedSceneLoader = new SceneLoaderService();
+            this.originalSceneLoader = new SceneLoaderService();
+            this.modifiedSceneLoader = new SceneLoaderService();
     }
 
     public ngOnInit(): void {
