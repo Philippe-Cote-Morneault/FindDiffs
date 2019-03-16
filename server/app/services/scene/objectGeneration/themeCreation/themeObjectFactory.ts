@@ -20,6 +20,7 @@ export abstract class ThemeObjectFactory extends ObjectFactory {
         } else {
             thematicObject.color = this.chooseColor();
         }
+        thematicObject.scale = this.generateRandomPercentage();
         thematicObject.objectType = EnumUtils.enumFromString<ObjTheme>(
             this.getObjectName().toUpperCase(),
             ObjTheme) as ObjTheme;
