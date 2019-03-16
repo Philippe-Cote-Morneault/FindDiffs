@@ -13,8 +13,8 @@ import { AbstractSceneParser } from "./abstractSceneParserService";
 })
 export class ModifiedSceneParserService extends AbstractSceneParser {
 
-    public parseModifiedScene(originalSceneModel: ICommonScene, sceneModifications: ICommonSceneModifications): THREE.Scene {
-        const scene: THREE.Scene = this.createScene(originalSceneModel);
+    public async parseModifiedScene(originalSceneModel: ICommonScene, sceneModifications: ICommonSceneModifications): Promise<THREE.Scene> {
+        const scene: THREE.Scene = await this.createScene(originalSceneModel);
 
         originalSceneModel.type === ObjectType.Geometric ?
             this.parseGeometricObjects(scene, sceneModifications as ICommonGeometricModifications,

@@ -9,8 +9,8 @@ import { AbstractSceneParser } from "./abstractSceneParserService";
 })
 export class SceneParserService extends AbstractSceneParser {
 
-    public parseScene(sceneModel: ICommonScene): THREE.Scene {
-        const scene: THREE.Scene = this.createScene(sceneModel);
+    public async parseScene(sceneModel: ICommonScene): Promise<THREE.Scene> {
+        const scene: THREE.Scene = await this.createScene(sceneModel);
 
         this.parseObjects(scene, sceneModel.sceneObjects);
 

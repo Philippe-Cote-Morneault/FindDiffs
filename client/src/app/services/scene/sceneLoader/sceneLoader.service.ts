@@ -42,14 +42,18 @@ export class SceneLoaderService {
         );
     }
 
-    public loadOriginalScene(container: HTMLElement | null, scene: ICommonScene, inGameMode: boolean): void {
-        this.scene = new SceneParserService().parseScene(scene);
+    public async loadOriginalScene(container: HTMLElement | null, scene: ICommonScene, inGameMode: boolean): Promise<void> {
+        this.scene = await new SceneParserService().parseScene(scene);
 
         this.renderScene(container, inGameMode);
     }
 
-    public loadModifiedScene(container: HTMLElement | null, scene: ICommonScene, sceneModifications: ICommonSceneModifications): void {
-        this.scene = new ModifiedSceneParserService().parseModifiedScene(scene, sceneModifications);
+    public async loadModifiedScene(
+            container: HTMLElement | null,
+            scene: ICommonScene,
+            sceneModifications: ICommonSceneModifications,
+        ): Promise<void> {
+        this.scene = await new ModifiedSceneParserService().parseModifiedScene(scene, sceneModifications);
 
         this.renderScene(container, true);
     }
