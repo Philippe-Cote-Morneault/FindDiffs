@@ -23,7 +23,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("gameTitle") private gameTitle: ElementRef;
 
     private scenePairId: string;
-    private gameCardID: string;
+    private gameCardId: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
 
@@ -40,14 +40,14 @@ export class GameViewFreeComponent implements OnInit {
 
     public ngOnInit(): void {
         this.route.params.subscribe((params) => {
-            this.gameCardID = params["id"];
+            this.gameCardId = params["id"];
         });
         this.spinnerService.show();
         this.getGameCardById();
     }
 
     private getGameCardById(): void {
-        this.gamesCardService.getGameById(this.gameCardID).subscribe((gameCard: ICommonGameCard) => {
+        this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
             this.scenePairId = gameCard.resource_id;
             this.gameTitle.nativeElement.innerText = gameCard.title;
             this.getOriginalSceneById();
