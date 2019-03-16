@@ -1,25 +1,21 @@
 import * as THREE from "three";
 
 export class ControlsGenerator {
-    private static readonly W_CODE: number = 87;
-    private static readonly A_CODE: number = 65;
-    private static readonly S_CODE: number = 83;
-    private static readonly D_CODE: number = 68;
     private static readonly DISTANCE_TO_MOVE: number = 1;
 
     public static generateGameControls(camera: THREE.PerspectiveCamera, canvas: HTMLElement): void {
         document.addEventListener("keydown", (event: KeyboardEvent) => {
-            switch (Number(event.key)) {
-                case ControlsGenerator.W_CODE:
+            switch (event.key) {
+                case "w":
                     camera.translateZ(-ControlsGenerator.DISTANCE_TO_MOVE);
                     break;
-                case ControlsGenerator.A_CODE:
+                case "a":
                     camera.translateX(-ControlsGenerator.DISTANCE_TO_MOVE);
                     break;
-                case ControlsGenerator.S_CODE:
+                case "s":
                     camera.translateZ(ControlsGenerator.DISTANCE_TO_MOVE);
                     break;
-                case ControlsGenerator.D_CODE:
+                case "d":
                     camera.translateX(ControlsGenerator.DISTANCE_TO_MOVE);
                     break;
                 default:
