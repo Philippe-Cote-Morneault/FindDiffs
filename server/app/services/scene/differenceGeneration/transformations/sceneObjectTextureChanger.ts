@@ -8,7 +8,15 @@ export class SceneObjectTextureChanger implements SceneTransformation {
                                modifications: ICommonThematicModifications,
                                type: ObjectType): void {
 
-        // tslint:disable-next-line:no-suspicious-comment
-        // TODO: Implement this in sprint 3
+    private chooseTexture(modifiedObject: ICommonThematicObject): string {
+        const objName: string = ObjTheme[modifiedObject.objectType].toLowerCase();
+        const availableTextures: string[] = (ObjectProperties[objName].texture as string[]).filter(
+            (x: string) => x !== modifiedObject.texture,
+        );
+
+        const choice: number = RandomUtils.inRangeInt(0, availableTextures.length - 1);
+
+        return availableTextures[choice];
+    }
     }
 }
