@@ -4,37 +4,58 @@ import { Injectable } from "@angular/core";
     providedIn: "root",
 })
 export class SceneSyncerService {
-    private static controls1: THREE.OrbitControls;
-    private static controls2: THREE.OrbitControls;
+    private static readonly ROTATION_ORDER: string = "YXZ";
+    private static readonly RIGHT_MOUSE_CODE: number = 2;
+    private static readonly MOVEMENT_SCALE: number = 100;
+    // tslint:disable-next-line:no-magic-numbers
+    private static readonly CAMERA_MAX_X_ANGLE: number = Math.PI / 2;
+    private isMousePressed: boolean;
 
-    private static controlsChanged(event: Event| undefined): void {
-        if (event != null && event.target != null) {
-            (((event.target as Object) as THREE.OrbitControls).object.uuid === SceneSyncerService.controls1.object.uuid) ?
-                SceneSyncerService.changeControls(SceneSyncerService.controls1, SceneSyncerService.controls2) :
-                SceneSyncerService.changeControls(SceneSyncerService.controls2, SceneSyncerService.controls1);
+    public constructor() {
+        this.isMousePressed = false;
+    }
+    // tslint:disable-next-line:max-func-body-length
+    public syncScenesMovement(camera1: THREE.Camera, canvas1: HTMLCanvasElement, camera2: THREE.Camera, canvas2: HTMLCanvasElement): void {
+        this.addListeners(camera1, canvas1, camera2, canvas2);
+        this.addListeners(camera2, canvas2, camera1, canvas1);
+    }
+
+    private addListeners(changedCamera: THREE.Camera, changedCanvas: HTMLCanvasElement,
+                         toChangeCamera: THREE.Camera, toChangeCanvas: HTMLCanvasElement): void {
+
+        changedCamera.rotation.order = SceneSyncerService.ROTATION_ORDER;
+
+        changedCanvas.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        });
+
+        changedCanvas.addEventListener("mousedown", (event: MouseEvent) => {
+            if (event.button === SceneSyncerService.RIGHT_MOUSE_CODE) {
+                this.isMousePressed = true;
+            }
+        });
+
+        changedCanvas.addEventListener("mouseup", (event: MouseEvent) => {
+            if (event.button === SceneSyncerService.RIGHT_MOUSE_CODE) {
+                this.isMousePressed = false;
+            }
+        });
+
+        changedCanvas.addEventListener("mousemove", (event: MouseEvent) => {
+            if (this.isMousePressed) {
+               this.moveCamera(changedCamera, event);
+               this.moveCamera(toChangeCamera, event);
+            }
+        });
+    }
+
+    private moveCamera(camera: THREE.Camera, mouseEvent: MouseEvent): void {
+        camera.rotation.y -= mouseEvent.movementX / SceneSyncerService.MOVEMENT_SCALE;
+
+        if (camera.rotation.x - mouseEvent.movementY / SceneSyncerService.MOVEMENT_SCALE > -SceneSyncerService.CAMERA_MAX_X_ANGLE
+            && camera.rotation.x - mouseEvent.movementY / SceneSyncerService.MOVEMENT_SCALE < SceneSyncerService.CAMERA_MAX_X_ANGLE) {
+
+            camera.rotation.x -= mouseEvent.movementY / SceneSyncerService.MOVEMENT_SCALE;
         }
-    }
-
-    private static changeControls(changedControls: THREE.OrbitControls, toChangeControls: THREE.OrbitControls): void {
-
-        toChangeControls.removeEventListener("change", SceneSyncerService.controlsChanged);
-
-        toChangeControls.object.position.copy(changedControls.object.position);
-        toChangeControls.object.rotation.copy(changedControls.object.rotation);
-        toChangeControls.target.copy(changedControls.target);
-        toChangeControls.update();
-
-        toChangeControls.addEventListener("change", SceneSyncerService.controlsChanged);
-
-    }
-
-    public syncScenes(controls1: THREE.OrbitControls, controls2: THREE.OrbitControls): void {
-
-        SceneSyncerService.controls1 = controls1;
-        SceneSyncerService.controls2 = controls2;
-
-        controls1.addEventListener("change", SceneSyncerService.controlsChanged);
-
-        controls2.addEventListener("change", SceneSyncerService.controlsChanged);
     }
 }

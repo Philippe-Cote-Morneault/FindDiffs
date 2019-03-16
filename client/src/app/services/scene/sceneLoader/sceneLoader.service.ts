@@ -1,7 +1,4 @@
 import { Injectable } from "@angular/core";
-import "src/js/three";
-// tslint:disable-next-line:ordered-imports
-import "node_modules/three/examples/js/controls/OrbitControls";
 import * as THREE from "three";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../../../common/model/scene/scene";
@@ -17,7 +14,6 @@ import { RendererGenerator } from "../sceneRenderer/rendererGenerator";
 
 export class SceneLoaderService {
     public camera: THREE.PerspectiveCamera;
-    public controls: THREE.OrbitControls;
 
     private renderer: THREE.WebGLRenderer;
     private scene: THREE.Scene;
@@ -45,9 +41,8 @@ export class SceneLoaderService {
             this.renderer = RendererGenerator.generateRenderer(container.clientWidth,
                                                                container.clientHeight);
             container.appendChild(this.renderer.domElement);
-           // console.log(container);
             this.camera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
-            this.generateControls(inGameMode, this.camera, this.renderer.domElement);
+            ControlsGenerator.generateGameControls(this.camera, container);
             this.animate();
         }
     }
@@ -56,7 +51,6 @@ export class SceneLoaderService {
         if (canvas) {
             this.renderer = RendererGenerator.generateRendererOnCanvas(canvas);
             this.camera = CameraGenerator.createCamera(canvas.width, canvas.height);
-            this.generateControls(false, this.camera, canvas);
             this.animate();
         }
     }
@@ -64,12 +58,5 @@ export class SceneLoaderService {
     private animate: Function = () => {
         requestAnimationFrame(this.animate as FrameRequestCallback);
         this.renderer.render(this.scene, this.camera);
-        this.controls.update();
-    }
-
-    private generateControls(inGameMode: boolean, camera: THREE.PerspectiveCamera, canvas: HTMLCanvasElement): void {
-        this.controls = inGameMode ?
-            ControlsGenerator.generateGameControls(camera, canvas) :
-            ControlsGenerator.generateGameCardControls(camera, canvas);
     }
 }
