@@ -28,6 +28,7 @@ export class SceneSyncerService {
 
     }
 
+    // tslint:disable-next-line:max-func-body-length
     public syncScenes(camera1: THREE.Camera, canvas1: HTMLCanvasElement, camera2: THREE.Camera): void {
 
         let isPressed: boolean = false;
@@ -35,12 +36,16 @@ export class SceneSyncerService {
         let mouseY: number = 0;
         camera1.rotation.order = "YXZ"
 
-        canvas1.addEventListener("mousedown", () => {
-            isPressed = true;
+        canvas1.addEventListener("mousedown", (event) => {
+            if (event.which === 3) {
+                isPressed = true;
+            }
         });
 
-        canvas1.addEventListener("mouseup", () => {
-            isPressed = false;
+        canvas1.addEventListener("mouseup", (event) => {
+            if (event.which === 3) {
+                isPressed = false;
+            }
         });
 
         canvas1.addEventListener("mousemove", (event) => {
