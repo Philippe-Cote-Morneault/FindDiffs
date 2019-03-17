@@ -14,6 +14,7 @@ import { SceneParserService } from "../scene/sceneParser/scene-parser.service";
 })
 export class CheatModeService {
   private static readonly WHITE: number = 0xFFFFFF;
+  private static readonly MESH_TYPE: string = "Mesh";
   public cheatActivated: boolean;
   public originalSceneLoaderService: SceneLoaderService;
   public modifiedSceneLoaderService: SceneLoaderService;
@@ -60,7 +61,7 @@ export class CheatModeService {
                                     originalSceneThreeJs: THREE.Scene): void {
     originalScene.sceneObjects.forEach((object: ICommonGeometricObject) => {
       originalSceneThreeJs.children.forEach((object3D: THREE.Mesh) => {
-        if (object3D.type === "Mesh") {
+        if (object3D.type === CheatModeService.MESH_TYPE) {
           if (object3D.userData.id === object.id && modifiedScene.deletedObjects.includes(object.id)) {
             object3D.material = this.generateNewMaterial(CheatModeService.WHITE - object.color);
           }
@@ -72,7 +73,7 @@ export class CheatModeService {
   private changeAddedObjectsColor(modifiedScene: ICommonGeometricModifications, modifiedSceneThreeJs: THREE.Scene): void {
     modifiedScene.addedObjects.forEach((object: ICommonGeometricObject) => {
       modifiedSceneThreeJs.children.forEach((object3D: THREE.Mesh) => {
-        if (object3D.type === "Mesh") {
+        if (object3D.type === CheatModeService.MESH_TYPE) {
           if (object3D.userData.id === object.id) {
             object3D.material = this.generateNewMaterial(CheatModeService.WHITE - object.color);
           }
@@ -85,7 +86,7 @@ export class CheatModeService {
                                          originalSceneThreeJs: THREE.Scene,
                                          modifiedSceneThreeJs: THREE.Scene): void {
     originalSceneThreeJs.children.forEach((child: THREE.Mesh) => {
-      if (child.type === "Mesh") {
+      if (child.type === CheatModeService.MESH_TYPE) {
         const pair: Pair<string, number> = {
           key: child.userData.id,
           value: (child.material as THREE.MeshPhongMaterial).color.getHex(),
@@ -113,7 +114,7 @@ export class CheatModeService {
   public saveOriginalMaterial(scene: ICommonScene): void {
     const scene3D: THREE.Scene = new SceneParserService().parseScene(scene);
     scene3D.children.forEach((child: THREE.Mesh) => {
-      if (child.type === "Mesh") {
+      if (child.type === CheatModeService.MESH_TYPE) {
         const meshMaterial: THREE.Material | THREE.Material[] = child.material;
         if (meshMaterial instanceof THREE.Material) {
           meshMaterial.userData = { id: child.userData.id };
@@ -130,7 +131,7 @@ export class CheatModeService {
   public saveModifiedMaterial(scene: ICommonScene, modifiedScene: ICommonSceneModifications): void {
     const scene3D: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, modifiedScene);
     scene3D.children.forEach((child: THREE.Mesh) => {
-      if (child.type === "Mesh") {
+      if (child.type === CheatModeService.MESH_TYPE) {
         const meshMaterial: THREE.Material | THREE.Material[] = child.material;
         if (meshMaterial instanceof THREE.Material) {
           meshMaterial.userData = { id: child.userData.id };
@@ -157,7 +158,7 @@ export class CheatModeService {
   private restoreOriginalMaterial(scene: ICommonScene): void {
     const scene3D: THREE.Scene = new SceneParserService().parseScene(scene);
     scene3D.children.forEach((child: THREE.Mesh) => {
-      if (child.type === "Mesh") {
+      if (child.type === CheatModeService.MESH_TYPE) {
         if (child.material instanceof THREE.Material) {
           child.material = (this.originalSceneMaterials.find(
             (material: THREE.Material) => material.userData.id === child.userData.id) as THREE.Material);
@@ -175,7 +176,7 @@ export class CheatModeService {
   private restoreModifiedMaterial(scene: ICommonScene, modifiedScene: ICommonSceneModifications): void {
     const scene3D: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, modifiedScene);
     scene3D.children.forEach((child: THREE.Mesh) => {
-      if (child.type === "Mesh") {
+      if (child.type === CheatModeService.MESH_TYPE) {
         if (child.material instanceof THREE.Material) {
           child.material = (this.modifiedSceneMaterials.find(
             (material: THREE.Material) => material.userData.id === child.userData.id) as THREE.Material);
