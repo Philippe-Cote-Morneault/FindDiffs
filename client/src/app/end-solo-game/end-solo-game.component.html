@@ -1,0 +1,26 @@
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="popuptext" id="myPopup">
+    <div class="global-wrapper">
+      <h1>
+        Game over !
+      </h1>
+      <div class="grid-container">
+        <div>
+          <ol *ngFor='let soloTime of gameCard.best_time_solo; let i = index'>
+              <span> {{gameCard.best_time_solo[i].name}}: </span> {{toMinutes(i, gameCard.best_time_solo)}}
+          </ol>
+        </div>
+        <div class="flex-container">
+          <div class="grid-item">Your time :</div>
+          <div class="grid-item">{{playerTimeChild}}</div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success" (click)="leaveGame()">Continue</button>
+    </div>
+  </div>
+</body>

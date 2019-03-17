@@ -4,6 +4,7 @@ import { Message } from "../../../../common/communication/message";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { HTMLInputEvent } from "../htmlinput-event";
+import { FormVerificationSimplePOVService } from "../services/createGame/formVerificationSimplePOV.service";
 import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
@@ -29,8 +30,11 @@ export class CreateGameSimpleViewComponent {
     public firstOriginalImageInput: boolean;
     public firstModifiedImageInput: boolean;
 
-    public constructor(private gamesCardService: GamesCardService, private imagePairService: ImagePairService,
-                       private spinnerService: Ng4LoadingSpinnerService, private gameCardLoaderService: GameCardLoaderService) {
+    public constructor(private gamesCardService: GamesCardService,
+                       private imagePairService: ImagePairService,
+                       private spinnerService: Ng4LoadingSpinnerService,
+                       private gameCardLoaderService: GameCardLoaderService,
+                       private formVerificationSimplePOVService: FormVerificationSimplePOVService) {
         this.canSubmit = false;
         this.fromValidation = [false, false, false, false, false];
         this.closed = new EventEmitter();
@@ -40,37 +44,18 @@ export class CreateGameSimpleViewComponent {
     }
 
     public isNameValid(): boolean {
-
-        if (this.firstNameInput) {
-            const gameName: string = this.gameNameInput.nativeElement.value;
-
-            const validationRegex: string = "^[a-zA-Z0-9]{3,12}$";
-            const nameValidationRegex: RegExp = new RegExp(validationRegex);
-            this.fromValidation[0] = nameValidationRegex.test(gameName);
-            this.gameName = gameName;
+            this.gameName = this.gameNameInput.nativeElement.value;
+            this.fromValidation[0] = this.formVerificationSimplePOVService.isNameValid(this.gameName);
 
             return this.fromValidation[0];
-        }
-
-        return true;
     }
 
     public isOriginalFileValid(): boolean {
-        const ORIGINAL_FIELD: number = 3;
-        if (this.firstOriginalImageInput) {
-            return this.fromValidation[ORIGINAL_FIELD];
-        }
-
-        return true;
+       return this.formVerificationSimplePOVService.isOriginalFileValid(this.fromValidation);
     }
 
     public isModifiedFileValid(): boolean {
-        const MODIFIED_FIELD: number = 4;
-        if (this.firstModifiedImageInput) {
-            return this.fromValidation[MODIFIED_FIELD];
-        }
-
-        return true;
+        return this.formVerificationSimplePOVService.isModifiedFileValid(this.fromValidation);
     }
 
     public nameInputVisited(): void {
@@ -115,8 +100,7 @@ export class CreateGameSimpleViewComponent {
     }
 
     public verifyInfo(): void {
-        const allEqual: boolean = this.fromValidation.every((value) => value);
-        this.canSubmit = allEqual;
+        this.canSubmit = this.formVerificationSimplePOVService.verifyInfo(this.fromValidation);
     }
 
     public addImagePair(): void {
