@@ -1,7 +1,7 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
-import { NotImplementedException } from "../../../../common/errors/notImplementedException";
+import { ICommonScene } from "../../../../common/model/scene/scene";
 import * as BitmapHeader from "../../model/bitmap/header";
 import { Position } from "../../model/bitmap/pixel";
 import { _e, R } from "../../strings";
@@ -9,6 +9,7 @@ import { ApiRequest } from "../../utils/apiRequest";
 import { IDifferenceService } from "../interfaces";
 import { Service } from "../service";
 import { RevealDifference } from "./revealDifference";
+import { RevealDifference3D } from "./revealDifference3D";
 
 export class DifferenceService extends Service implements IDifferenceService {
 
@@ -41,6 +42,18 @@ export class DifferenceService extends Service implements IDifferenceService {
     }
 
     public async postFree(req: Request): Promise<string> {
-        throw new NotImplementedException();
+        this.validateFree(req);
+
+        const originalScene: ICommonScene = await ApiRequest.getSceneId(req.body.originalSceneId);
+
+        const errorType: RevealDifference3D = new RevealDifference3D(originalScene, req.body.modifiedObjectId);
+
+    }
+
+    private validateFree(req: Request): void {
+
+        if (!(req.body.originalSceneId)) {
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.SCENE_ID_]));
+        }
     }
 }
