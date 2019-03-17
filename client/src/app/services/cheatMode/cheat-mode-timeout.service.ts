@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnInit } from "@angular/core";
 import { ICommonGeometricModifications } from "../../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../../common/model/scene/scene";
@@ -6,9 +6,13 @@ import { CheatModeService } from "./cheat-mode.service";
 @Injectable({
   providedIn: "root",
 })
-export class CheatModeTimeoutService {
+export class CheatModeTimeoutService implements OnInit {
   private static readonly intervalTime: number = 250;
   private timeout: NodeJS.Timeout;
+
+  public ngOnInit(): void {
+    clearTimeout(this.timeout);
+  }
 
   public startCheatMode(cheatModeService: CheatModeService,
                         currentOriginalScene: ICommonScene,
