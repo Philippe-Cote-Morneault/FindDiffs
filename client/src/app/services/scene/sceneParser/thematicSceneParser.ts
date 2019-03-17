@@ -27,19 +27,19 @@ export class ThematicSceneParser {
         scene.add(ambientLight);
         scene.background = new THREE.Color(this.GREY);
 
-        scene.add(this.createSkybox());
+        scene.add(await this.createSkybox());
 
         return scene;
     }
 
-    private static createSkybox(): THREE.Object3D {
+    private static async createSkybox(): Promise<THREE.Object3D> {
         const materials: THREE.Material[] = new Array<THREE.Material>();
-        this.SKYBOX_FILES.forEach(async (file: string) => {
+        for (const file of this.SKYBOX_FILES) {
             materials.push(new THREE.MeshBasicMaterial({
                 map: await TextureLoader.load(this.SKYBOX_PATH + file + this.SKYBOX_EXTENSION),
                 side: THREE.BackSide,
             }));
-        });
+        }
         const skyboxGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(
             this.SKYBOX_SIZE,
             this.SKYBOX_SIZE,

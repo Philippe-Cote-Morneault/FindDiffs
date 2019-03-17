@@ -95,7 +95,7 @@ export class GameViewFreeComponent implements OnInit {
         this.sceneService.getSceneById(this.scenePairID).subscribe(async (response: ICommonScene) => {
             this.currentOriginalScene = response;
             await this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, this.currentOriginalScene, true);
-            this.cheatModeService.saveOriginalMaterial(this.currentOriginalScene);
+            await this.cheatModeService.saveOriginalMaterial(this.currentOriginalScene);
             this.getModifiedSceneById(this.currentOriginalScene);
         });
     }
@@ -104,7 +104,7 @@ export class GameViewFreeComponent implements OnInit {
         this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (responseModified: ICommonSceneModifications) => {
             this.currentModifiedScene = responseModified;
             await this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, this.currentModifiedScene);
-            this.cheatModeService.saveModifiedMaterial(this.currentOriginalScene, this.currentModifiedScene);
+            await this.cheatModeService.saveModifiedMaterial(this.currentOriginalScene, this.currentModifiedScene);
             this.sceneSyncer.syncScenesMovement(this.originalSceneLoader.camera, this.originalScene.nativeElement,
                                                 this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
             this.spinnerService.hide();

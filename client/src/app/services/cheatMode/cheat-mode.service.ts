@@ -33,8 +33,8 @@ export class CheatModeService {
       await this.enableCheats(originalScene, modifiedScene);
     } else {
 
-      this.restoreOriginalMaterial(originalScene);
-      this.restoreModifiedMaterial(originalScene, modifiedScene);
+      await this.restoreOriginalMaterial(originalScene);
+      await this.restoreModifiedMaterial(originalScene, modifiedScene);
 
     }
   }

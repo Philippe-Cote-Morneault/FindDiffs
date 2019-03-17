@@ -21,7 +21,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
                                        originalSceneModel.sceneObjects as ICommonGeometricObject[]) :
             this.parseThematicObjects(scene, sceneModifications, originalSceneModel.sceneObjects);
 
-        this.addAddedObjects(scene, sceneModifications.addedObjects);
+        await this.addAddedObjects(scene, sceneModifications.addedObjects);
 
         return scene;
     }
@@ -33,25 +33,26 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         // TODO: Implement this in sprint 3
     }
 
-    private parseGeometricObjects(scene: THREE.Scene, sceneModifications: ICommonGeometricModifications,
-                                  originalSceneObjects: ICommonGeometricObject[]): void {
+    private async parseGeometricObjects(scene: THREE.Scene, sceneModifications: ICommonGeometricModifications,
+                                        originalSceneObjects: ICommonGeometricObject[]): Promise<void> {
 
-        originalSceneObjects.forEach(async (originalObject: ICommonGeometricObject) => {
+        for (const originalObject of originalSceneObjects) {
             if (!sceneModifications.deletedObjects.includes(originalObject.id)) {
                 if (sceneModifications.colorChangedObjects.some((object: Pair<string, number>) => originalObject.id === object.key)) {
-                    this.changeObjectColor(originalObject,
-                                           this.findChangedColor(originalObject.id, sceneModifications.colorChangedObjects),
+                    this.changeObjectColor(
+                        originalObject,
+                        this.findChangedColor(originalObject.id, sceneModifications.colorChangedObjects),
                     );
                 }
                 scene.add(await this.sceneObjectParser.parse(originalObject));
             }
-        });
+        }
     }
 
-    private addAddedObjects(scene: THREE.Scene, objectsToAdd: ICommonSceneObject[]): void {
-        objectsToAdd.forEach(async (object: ICommonSceneObject) => {
+    private async addAddedObjects(scene: THREE.Scene, objectsToAdd: ICommonSceneObject[]): Promise<void> {
+        for (const object of objectsToAdd) {
             scene.add(await this.sceneObjectParser.parse(object));
-        });
+        }
     }
 
     private changeObjectColor(objectToModify: ICommonGeometricObject, color: number | undefined): void {
