@@ -17,7 +17,7 @@ import { TimerService } from "../services/timer/timer.service";
 })
 
 export class GameViewFreeComponent implements OnInit {
-    private static tKeyCode: number = 84;
+    private static T_KEYCODE: number = 84;
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
@@ -52,7 +52,7 @@ export class GameViewFreeComponent implements OnInit {
 
     @HostListener("document:keydown", ["$event"])
     public toggleCheatMode(event: KeyboardEvent): void {
-        if (event.keyCode === GameViewFreeComponent.tKeyCode) {
+        if (event.keyCode === GameViewFreeComponent.T_KEYCODE) {
             this.cheatActivated = !this.cheatActivated;
             if (this.cheatActivated) {
                 this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
