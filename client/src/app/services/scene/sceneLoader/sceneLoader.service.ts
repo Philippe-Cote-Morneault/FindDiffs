@@ -15,9 +15,7 @@ import { RendererGenerator } from "../sceneRenderer/rendererGenerator";
 export class SceneLoaderService {
     public camera: THREE.PerspectiveCamera;
     public renderer: THREE.WebGLRenderer;
-    private controls: THREE.OrbitControls;
     public scene: THREE.Scene;
-
     public loadOriginalScene(container: HTMLElement | null, scene: ICommonScene, inGameMode: boolean): void {
         this.scene = new SceneParserService().parseScene(scene);
 
