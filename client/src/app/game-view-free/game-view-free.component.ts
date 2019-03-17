@@ -52,15 +52,11 @@ export class GameViewFreeComponent implements OnInit {
     public toggleCheatMode(event: KeyboardEvent): void {
         if (event.keyCode === GameViewFreeComponent.tKeyCode) {
             this.cheatActivated = !this.cheatActivated;
-            if (this.cheatActivated) {
 
-                this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
-                this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
-                this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene,
-                                                      (this.currentModifiedScene as ICommonGeometricModifications));
-            } else {
-                
-            }
+            this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
+            this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
+            this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene,
+                                                  (this.currentModifiedScene as ICommonGeometricModifications));
         }
     }
 
