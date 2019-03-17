@@ -47,6 +47,7 @@ export class GameViewFreeComponent implements OnInit {
         });
         this.spinnerService.show();
         this.getOriginalSceneById();
+        this.cheatModeTimeoutService.ngOnInit();
     }
 
     @HostListener("document:keydown", ["$event"])
