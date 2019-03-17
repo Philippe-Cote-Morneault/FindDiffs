@@ -132,17 +132,17 @@ export class GameViewFreeComponent implements OnInit {
                 }
             } else if (intersectsOriginal[0].distance < intersectsModified[0].distance) {
                 // add objet modifie
-                if (this.isANewDifference(intersectsModified[0].object.uuid)) {
+                if (this.isANewDifference(intersectsOriginal[0].object.uuid)) {
                     this.modifiedSceneLoader.scene.add(intersectsOriginal[0].object.clone());
-                    this.differenceFound[this.differenceCounterUser] = intersectsModified[0].object.uuid;
+                    this.differenceFound[this.differenceCounterUser] = intersectsOriginal[0].object.uuid;
                     this.differenceCounterUser++;
                 }
-            } 
+            }
         } else if (intersectsOriginal.length > 0 && intersectsModified.length === 0) {
             // add objet modifie
-            if (this.isANewDifference(intersectsModified[0].object.uuid)) {
+            if (this.isANewDifference(intersectsOriginal[0].object.uuid)) {
                 this.modifiedSceneLoader.scene.add(intersectsOriginal[0].object.clone());
-                this.differenceFound[this.differenceCounterUser] = intersectsModified[0].object.uuid;
+                this.differenceFound[this.differenceCounterUser] = intersectsOriginal[0].object.uuid;
                 this.differenceCounterUser++;
             }
         } else if (intersectsOriginal.length === 0 && intersectsModified.length > 0) {
