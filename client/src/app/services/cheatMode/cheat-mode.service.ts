@@ -27,7 +27,7 @@ export class CheatModeService {
     this.modifiedSceneMaterials = [];
   }
 
-  public toggleCheatMode(event: KeyboardEvent, originalScene: ICommonScene, modifiedScene: ICommonGeometricModifications): void {
+  public toggleCheatMode(originalScene: ICommonScene, modifiedScene: ICommonGeometricModifications): void {
     this.cheatActivated = !this.cheatActivated;
     if (this.cheatActivated) {
       this.enableCheats(originalScene, modifiedScene);
