@@ -87,8 +87,8 @@ export class GameViewSimpleComponent implements OnInit {
                         await this.addDifference(response.difference_id);
                     }
                 } else {
-                    this.identificationError.showErrorMessage(e.pageX, e.pageY, this.errorMessage.nativeElement,
-                                                              this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
+                    await this.identificationError.showErrorMessage(e.pageX, e.pageY, this.errorMessage.nativeElement,
+                                                                    this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
                 }
             });
         }
