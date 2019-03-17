@@ -55,6 +55,7 @@ export class GameViewFreeComponent implements OnInit {
         });
         this.spinnerService.show();
         this.getOriginalSceneById();
+        this.getGameCardById();
         this.cheatModeTimeoutService.ngOnInit();
     }
 
