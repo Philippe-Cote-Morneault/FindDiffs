@@ -11,6 +11,7 @@ interface IObjectsProperties {
     sign_forbidden: ObjectProperties;
     sign_skip: ObjectProperties;
     sign_stop: ObjectProperties;
+    [key: string]: ObjectProperties;
  }
  interface ObjectProperties {
     isTextured: boolean;
