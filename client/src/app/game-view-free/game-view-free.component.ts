@@ -28,13 +28,13 @@ export class GameViewFreeComponent implements OnInit {
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
     private cheatActivated: boolean;
+    private timer;
 
-    public constructor(
-        private route: ActivatedRoute,
-        private spinnerService: Ng4LoadingSpinnerService,
-        public sceneService: SceneService,
-        public timerService: TimerService,
-        public cheatModeService: CheatModeService) {
+    public constructor( private route: ActivatedRoute,
+                        private spinnerService: Ng4LoadingSpinnerService,
+                        public sceneService: SceneService,
+                        public timerService: TimerService,
+                        public cheatModeService: CheatModeService) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
         this.cheatActivated = false;
@@ -52,16 +52,26 @@ export class GameViewFreeComponent implements OnInit {
     public toggleCheatMode(event: KeyboardEvent): void {
         if (event.keyCode === GameViewFreeComponent.tKeyCode) {
             this.cheatActivated = !this.cheatActivated;
-
-            this.startCheatMode(event);
+            if (this.cheatActivated) {
+                this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
+                this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
+                this.startCheatMode(event);
+            } else {
+                clearTimeout(this.timer);
+                if (this.cheatModeService.cheatActivated === true) {
+                    this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene,
+                                                          (this.currentModifiedScene as ICommonGeometricModifications));
+                }
+            }
         }
     }
 
     private startCheatMode(event: KeyboardEvent): void {
-        this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
-        this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
         this.cheatModeService.toggleCheatMode(event, this.currentOriginalScene,
                                               (this.currentModifiedScene as ICommonGeometricModifications));
+        this.timer = setTimeout(() => {
+            this.startCheatMode(event);
+        }, 250);
     }
 
     private getOriginalSceneById(): void {
