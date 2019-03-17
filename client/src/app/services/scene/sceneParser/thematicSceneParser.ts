@@ -12,17 +12,21 @@ export class ThematicSceneParser {
     private static readonly SKYBOX_PATH: string = "../../assets/theme/textures/skybox/";
     private static readonly SKYBOX_SIZE: number = 500;
 
+    private static readonly WHITE: number = 0xFFFFFF;
+    private static readonly GREY: number = 0xAAAAAA;
+    private static readonly AMBIENT_INTENSITY: number = 0.2;
+
     public static async parseScene(originalScene: ICommonThematicScene): Promise<THREE.Scene> {
         const scene: THREE.Scene = new THREE.Scene();
         const object: THREE.Object3D = await JSONLoader.load(this.SCENE_MODEL);
         scene.add(object);
 
         const ambientLight: THREE.AmbientLight = new THREE.AmbientLight();
-        ambientLight.color = new THREE.Color(0xFFFFFF);
-        ambientLight.intensity = 0.2;
+        ambientLight.color = new THREE.Color(this.WHITE);
+        ambientLight.intensity = this.AMBIENT_INTENSITY;
 
         scene.add(ambientLight);
-        scene.background = new THREE.Color(0xAAAAAA);
+        scene.background = new THREE.Color(this.GREY);
 
         scene.add(this.createSkybox());
 
@@ -37,14 +41,13 @@ export class ThematicSceneParser {
                 side: THREE.BackSide,
             }));
         });
-        const skyboxGeometry: THREE.CubeGeometry = new THREE.CubeGeometry(
+        const skyboxGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(
             this.SKYBOX_SIZE,
             this.SKYBOX_SIZE,
             this.SKYBOX_SIZE,
         );
-        const skyboxMaterial: THREE.MeshFaceMaterial = new THREE.MeshFaceMaterial(materials);
 
-        return new THREE.Mesh( skyboxGeometry, skyboxMaterial);
+        return new THREE.Mesh( skyboxGeometry, materials);
     }
 
 }
