@@ -25,4 +25,15 @@ export class ThematicObjectParser extends SceneObjectParser {
 
         return object3D;
     }
+    private loadColor(object3D: THREE.Object3D, meshName: string, color: number): void {
+        object3D.traverse((child: THREE.Mesh) => {
+            if (child instanceof THREE.Mesh && child.name === meshName) {
+                if (child.material instanceof THREE.MeshStandardMaterial ||
+                    child.material instanceof THREE.MeshPhongMaterial) {
+                        child.material.color = new THREE.Color(color);
+                        child.material.needsUpdate = true;
+                }
+            }
+        });
+    }
 }
