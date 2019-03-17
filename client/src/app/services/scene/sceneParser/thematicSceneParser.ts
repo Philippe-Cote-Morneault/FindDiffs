@@ -3,8 +3,6 @@ import { ICommonThematicScene } from "../../../../../../common/model/scene/scene
 import { JSONLoader } from "../sceneLoader/jsonLoader";
 import { TextureLoader } from "../sceneLoader/textureLoader";
 
-// tslint:disable-next-line:no-suspicious-comment
-// TODO: Implement this in sprint 3
 export class ThematicSceneParser {
     private static readonly SCENE_MODEL: string = "scene";
 
