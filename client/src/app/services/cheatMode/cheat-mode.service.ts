@@ -40,54 +40,69 @@ export class CheatModeService {
     const modifiedSceneThreeJs: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(originalScene, modifiedScene);
     const originalSceneThreeJs: THREE.Scene = new SceneParserService().parseScene(originalScene);
     if (modifiedScene.deletedObjects.length > 0) {
-      originalScene.sceneObjects.forEach((object: ICommonGeometricObject) => {
-        originalSceneThreeJs.children.forEach((object3D: THREE.Mesh) => {
-          if (object3D.type === "Mesh") {
-            if (object3D.userData.id === object.id && modifiedScene.deletedObjects.includes(object.id)) {
-              object3D.material = this.generateNewMaterial(0xFFFFFF - object.color);
-            }
-          }
-        });
-      });
+      this.changeDeletedObjectsColor(originalScene, modifiedScene, originalSceneThreeJs);
     }
     if (modifiedScene.addedObjects.length > 0) {
-      modifiedScene.addedObjects.forEach((object: ICommonGeometricObject) => {
-        modifiedSceneThreeJs.children.forEach((object3D: THREE.Mesh) => {
-          if (object3D.type === "Mesh") {
-            if (object3D.userData.id === object.id) {
-              object3D.material = this.generateNewMaterial(0xFFFFFF - object.color);
-            }
-          }
-        });
-      });
+      this.changeAddedObjectsColor(modifiedScene, modifiedSceneThreeJs);
     }
     if (modifiedScene.colorChangedObjects.length > 0) {
-      originalSceneThreeJs.children.forEach((child: THREE.Mesh) => {
-        if (child.type === "Mesh") {
-          const pair: Pair<string, number> = {
-            key: child.userData.id,
-            value: (child.material as THREE.MeshPhongMaterial).color.getHex(),
-          };
-          if (modifiedScene.colorChangedObjects.find(
-            (element: Pair<string, number>) => this.comparePair(pair, element),
-          )) {
-            const modifiedObject: THREE.Mesh = (modifiedSceneThreeJs.children.find(
-              (element: THREE.Mesh) => element.userData.id === child.userData.id,
-            ) as THREE.Mesh);
-            child.material = this.generateNewMaterial(pair.value);
-            const newMaterial: THREE.Material = this.generateNewMaterial(
-              ~(modifiedObject.material as THREE.MeshPhongMaterial).color.getHex()
-            );
-            modifiedObject.material = newMaterial;
-          }
-        }
-      });
+      this.changeColorChangedObjectsColor(modifiedScene, originalSceneThreeJs, modifiedSceneThreeJs);
     }
 
     this.renderScene(this.originalSceneLoaderService, originalSceneThreeJs, this.originalSceneLoaderService.camera);
     this.renderScene(this.modifiedSceneLoaderService, modifiedSceneThreeJs, this.modifiedSceneLoaderService.camera);
   }
 
+  private changeDeletedObjectsColor(originalScene: ICommonScene,
+                                    modifiedScene: ICommonGeometricModifications,
+                                    originalSceneThreeJs: THREE.Scene): void {
+    originalScene.sceneObjects.forEach((object: ICommonGeometricObject) => {
+      originalSceneThreeJs.children.forEach((object3D: THREE.Mesh) => {
+        if (object3D.type === "Mesh") {
+          if (object3D.userData.id === object.id && modifiedScene.deletedObjects.includes(object.id)) {
+            object3D.material = this.generateNewMaterial(0xFFFFFF - object.color);
+          }
+        }
+      });
+    });
+  }
+
+  private changeAddedObjectsColor(modifiedScene: ICommonGeometricModifications, modifiedSceneThreeJs: THREE.Scene): void {
+    modifiedScene.addedObjects.forEach((object: ICommonGeometricObject) => {
+      modifiedSceneThreeJs.children.forEach((object3D: THREE.Mesh) => {
+        if (object3D.type === "Mesh") {
+          if (object3D.userData.id === object.id) {
+            object3D.material = this.generateNewMaterial(0xFFFFFF - object.color);
+          }
+        }
+      });
+    });
+  }
+
+  private changeColorChangedObjectsColor(modifiedScene: ICommonGeometricModifications,
+                                         originalSceneThreeJs: THREE.Scene,
+                                         modifiedSceneThreeJs: THREE.Scene): void {
+    originalSceneThreeJs.children.forEach((child: THREE.Mesh) => {
+      if (child.type === "Mesh") {
+        const pair: Pair<string, number> = {
+          key: child.userData.id,
+          value: (child.material as THREE.MeshPhongMaterial).color.getHex(),
+        };
+        if (modifiedScene.colorChangedObjects.find(
+          (element: Pair<string, number>) => this.comparePair(pair, element),
+        )) {
+          const modifiedObject: THREE.Mesh = (modifiedSceneThreeJs.children.find(
+            (element: THREE.Mesh) => element.userData.id === child.userData.id,
+          ) as THREE.Mesh);
+          child.material = this.generateNewMaterial(pair.value);
+          const newMaterial: THREE.Material = this.generateNewMaterial(
+            ~(modifiedObject.material as THREE.MeshPhongMaterial).color.getHex()
+          );
+          modifiedObject.material = newMaterial;
+        }
+      }
+    });
+  }
   private renderScene(sceneLoader: SceneLoaderService, scene: THREE.Scene, camera: THREE.PerspectiveCamera): void {
     sceneLoader.scene = scene;
     sceneLoader.renderer.render(scene, camera);
