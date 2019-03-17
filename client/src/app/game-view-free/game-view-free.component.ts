@@ -60,18 +60,24 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     @HostListener("document:keydown", ["$event"])
-    public toggleCheatMode(event: KeyboardEvent): void {
+    public async toggleCheatMode(event: KeyboardEvent): Promise<void> {
         if (event.keyCode === GameViewFreeComponent.T_KEYCODE) {
             this.cheatActivated = !this.cheatActivated;
             if (this.cheatActivated) {
                 this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
                 this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
-                this.cheatModeTimeoutService.startCheatMode(this.cheatModeService, this.currentOriginalScene, this.currentModifiedScene);
+                await this.cheatModeTimeoutService.startCheatMode(
+                    this.cheatModeService,
+                    this.currentOriginalScene,
+                    this.currentModifiedScene,
+                );
             } else {
                 this.cheatModeTimeoutService.stopCheatMode();
-                if (this.cheatModeService.cheatActivated === true) {
-                    this.cheatModeService.toggleCheatMode(this.currentOriginalScene,
-                                                          (this.currentModifiedScene as ICommonGeometricModifications));
+                if (this.cheatModeService.cheatActivated) {
+                    await this.cheatModeService.toggleCheatMode(
+                        this.currentOriginalScene,
+                        (this.currentModifiedScene as ICommonGeometricModifications),
+                    );
                 }
             }
         }

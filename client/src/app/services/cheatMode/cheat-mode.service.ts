@@ -27,10 +27,10 @@ export class CheatModeService {
     this.modifiedSceneMaterials = [];
   }
 
-  public toggleCheatMode(originalScene: ICommonScene, modifiedScene: ICommonGeometricModifications): void {
+  public async toggleCheatMode(originalScene: ICommonScene, modifiedScene: ICommonGeometricModifications): Promise<void> {
     this.cheatActivated = !this.cheatActivated;
     if (this.cheatActivated) {
-      this.enableCheats(originalScene, modifiedScene);
+      await this.enableCheats(originalScene, modifiedScene);
     } else {
 
       this.restoreOriginalMaterial(originalScene);
@@ -39,9 +39,9 @@ export class CheatModeService {
     }
   }
 
-  private enableCheats(originalScene: ICommonScene, modifiedScene: ICommonGeometricModifications): void {
-    const modifiedSceneThreeJs: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(originalScene, modifiedScene);
-    const originalSceneThreeJs: THREE.Scene = new SceneParserService().parseScene(originalScene);
+  private async enableCheats(originalScene: ICommonScene, modifiedScene: ICommonGeometricModifications): Promise<void> {
+    const modifiedSceneThreeJs: THREE.Scene = await new ModifiedSceneParserService().parseModifiedScene(originalScene, modifiedScene);
+    const originalSceneThreeJs: THREE.Scene = await new SceneParserService().parseScene(originalScene);
     if (modifiedScene.deletedObjects.length > 0) {
       this.changeDeletedObjectsColor(originalScene, modifiedScene, originalSceneThreeJs);
     }
@@ -111,8 +111,8 @@ export class CheatModeService {
     sceneLoader.renderer.render(scene, camera);
   }
 
-  public saveOriginalMaterial(scene: ICommonScene): void {
-    const scene3D: THREE.Scene = new SceneParserService().parseScene(scene);
+  public async saveOriginalMaterial(scene: ICommonScene): Promise<void> {
+    const scene3D: THREE.Scene = await new SceneParserService().parseScene(scene);
     scene3D.children.forEach((child: THREE.Mesh) => {
       if (child.type === CheatModeService.MESH_TYPE) {
         const meshMaterial: THREE.Material | THREE.Material[] = child.material;
@@ -128,8 +128,8 @@ export class CheatModeService {
     });
   }
 
-  public saveModifiedMaterial(scene: ICommonScene, modifiedScene: ICommonSceneModifications): void {
-    const scene3D: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, modifiedScene);
+  public async saveModifiedMaterial(scene: ICommonScene, modifiedScene: ICommonSceneModifications): Promise<void> {
+    const scene3D: THREE.Scene = await new ModifiedSceneParserService().parseModifiedScene(scene, modifiedScene);
     scene3D.children.forEach((child: THREE.Mesh) => {
       if (child.type === CheatModeService.MESH_TYPE) {
         const meshMaterial: THREE.Material | THREE.Material[] = child.material;
@@ -155,8 +155,8 @@ export class CheatModeService {
     return (pair1.key === pair2.key && pair1.value === pair2.value);
   }
 
-  private restoreOriginalMaterial(scene: ICommonScene): void {
-    const scene3D: THREE.Scene = new SceneParserService().parseScene(scene);
+  private async restoreOriginalMaterial(scene: ICommonScene): Promise<void> {
+    const scene3D: THREE.Scene = await new SceneParserService().parseScene(scene);
     scene3D.children.forEach((child: THREE.Mesh) => {
       if (child.type === CheatModeService.MESH_TYPE) {
         if (child.material instanceof THREE.Material) {
@@ -173,8 +173,8 @@ export class CheatModeService {
     this.renderScene(this.originalSceneLoaderService, scene3D, this.originalSceneLoaderService.camera);
   }
 
-  private restoreModifiedMaterial(scene: ICommonScene, modifiedScene: ICommonSceneModifications): void {
-    const scene3D: THREE.Scene = new ModifiedSceneParserService().parseModifiedScene(scene, modifiedScene);
+  private async restoreModifiedMaterial(scene: ICommonScene, modifiedScene: ICommonSceneModifications): Promise<void> {
+    const scene3D: THREE.Scene = await new ModifiedSceneParserService().parseModifiedScene(scene, modifiedScene);
     scene3D.children.forEach((child: THREE.Mesh) => {
       if (child.type === CheatModeService.MESH_TYPE) {
         if (child.material instanceof THREE.Material) {

@@ -7,11 +7,11 @@ describe("ModifiedSceneParserService", () => {
     const modifiedSceneParserService: ModifiedSceneParserService = new ModifiedSceneParserService();
     const numberOfLightsInScene: number = 5;
 
-    it("Should create a scene with the right amount of objects.", () => {
+    it("Should create a scene with the right amount of objects.", async () => {
         const sceneChildrenCount: number = numberOfLightsInScene + 1 + scene.sceneObjects.length +
             sceneModifications.addedObjects.length - sceneModifications.deletedObjects.length;
-
-        expect(modifiedSceneParserService.parseModifiedScene(scene, sceneModifications).children.length).
+        const threeScene: THREE.Scene = await modifiedSceneParserService.parseModifiedScene(scene, sceneModifications);
+        expect(threeScene.children.length).
             to.equal(sceneChildrenCount);
     });
 });
