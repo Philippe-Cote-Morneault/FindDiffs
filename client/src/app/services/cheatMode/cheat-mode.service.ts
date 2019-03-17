@@ -13,11 +13,13 @@ import { SceneParserService } from "../scene/sceneParser/scene-parser.service";
   providedIn: "root",
 })
 export class CheatModeService {
+  private static readonly WHITE: number = 0xFFFFFF;
   public cheatActivated: boolean;
   public originalSceneLoaderService: SceneLoaderService;
   public modifiedSceneLoaderService: SceneLoaderService;
   private originalSceneMaterials: THREE.Material[];
   private modifiedSceneMaterials: THREE.Material[];
+
   public constructor() {
     this.cheatActivated = false;
     this.originalSceneMaterials = [];
@@ -60,7 +62,7 @@ export class CheatModeService {
       originalSceneThreeJs.children.forEach((object3D: THREE.Mesh) => {
         if (object3D.type === "Mesh") {
           if (object3D.userData.id === object.id && modifiedScene.deletedObjects.includes(object.id)) {
-            object3D.material = this.generateNewMaterial(0xFFFFFF - object.color);
+            object3D.material = this.generateNewMaterial(CheatModeService.WHITE - object.color);
           }
         }
       });
@@ -72,7 +74,7 @@ export class CheatModeService {
       modifiedSceneThreeJs.children.forEach((object3D: THREE.Mesh) => {
         if (object3D.type === "Mesh") {
           if (object3D.userData.id === object.id) {
-            object3D.material = this.generateNewMaterial(0xFFFFFF - object.color);
+            object3D.material = this.generateNewMaterial(CheatModeService.WHITE - object.color);
           }
         }
       });
@@ -96,7 +98,7 @@ export class CheatModeService {
           ) as THREE.Mesh);
           child.material = this.generateNewMaterial(pair.value);
           const newMaterial: THREE.Material = this.generateNewMaterial(
-            ~(modifiedObject.material as THREE.MeshPhongMaterial).color.getHex()
+            CheatModeService.WHITE - (modifiedObject.material as THREE.MeshPhongMaterial).color.getHex(),
           );
           modifiedObject.material = newMaterial;
         }
