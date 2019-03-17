@@ -50,6 +50,7 @@ export class ThematicObjectParser extends SceneObjectParser {
             }
         });
     }
+
     private loadColor(object3D: THREE.Object3D, meshName: string, color: number): void {
         object3D.traverse((child: THREE.Mesh) => {
             if (child instanceof THREE.Mesh && child.name === meshName) {
