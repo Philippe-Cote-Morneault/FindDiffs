@@ -30,10 +30,10 @@ export abstract class ThemeObjectFactory extends ObjectFactory {
 
     private chooseTexture(): string {
         const objName: string = this.getObjectName().toLowerCase();
-        const textures: string[] = ObjectProperties[objName].texture;
+        const textures: string[] = ObjectProperties[objName].texture as string[];
         const choice: number = RandomUtils.inRangeInt(0, textures.length - 1);
 
-        return ObjectProperties[objName].texture[choice];
+        return textures[choice];
     }
 
     private isTextured(): boolean {
@@ -44,9 +44,9 @@ export abstract class ThemeObjectFactory extends ObjectFactory {
 
     private chooseColor(): number {
         const objName: string = this.getObjectName().toLowerCase();
-        const color: number[] = ObjectProperties[objName].color;
+        const color: number[] = ObjectProperties[objName].color as number[];
         const choice: number = RandomUtils.inRangeInt(0, color.length - 1);
 
-        return ObjectProperties[objName].color[choice];
+        return color[choice];
     }
 }
