@@ -86,28 +86,24 @@ export class GameViewFreeComponent implements OnInit {
         this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
             this.scenePairID = gameCard.resource_id;
             this.gameTitle.nativeElement.innerText = gameCard.title;
-            this.getOriginalSceneById();
+            this.loadScene();
         });
     }
 
-    private getOriginalSceneById(): void {
-        this.sceneService.getSceneById(this.scenePairID).subscribe(async (response: ICommonScene) => {
-            this.currentOriginalScene = response;
-            await this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, this.currentOriginalScene, true);
-            await this.cheatModeService.saveOriginalMaterial(this.currentOriginalScene);
-            this.getModifiedSceneById(this.currentOriginalScene);
-        });
-    }
-
-    private getModifiedSceneById(response: ICommonScene): void {
-        this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (responseModified: ICommonSceneModifications) => {
-            this.currentModifiedScene = responseModified;
-            await this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, this.currentModifiedScene);
-            await this.cheatModeService.saveModifiedMaterial(this.currentOriginalScene, this.currentModifiedScene);
-            this.sceneSyncer.syncScenesMovement(this.originalSceneLoader.camera, this.originalScene.nativeElement,
-                                                this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
-            this.spinnerService.hide();
-            this.timerService.startTimer(this.chronometer.nativeElement);
+    private loadScene(): void {
+        this.sceneService.getSceneById(this.scenePairID).subscribe(async (sceneResponse: ICommonScene) => {
+            this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (sceneModified: ICommonSceneModifications) => {
+                this.currentOriginalScene = sceneResponse;
+                this.currentModifiedScene = sceneModified;
+                await Promise.all([
+                    this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, this.currentOriginalScene, true),
+                    this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, sceneResponse, this.currentModifiedScene),
+                ]);
+                this.sceneSyncer.syncScenesMovement(this.originalSceneLoader.camera, this.originalScene.nativeElement,
+                                                    this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
+                this.spinnerService.hide();
+                this.timerService.startTimer(this.chronometer.nativeElement);
+            });
         });
     }
 }
