@@ -1,7 +1,7 @@
-//import { Game } from "../../model/game/game";
-import { SocketSubscriber } from "../socket/socketSubscriber";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { Game } from "../../model/game/game";
 import { SocketHandler } from "../socket/socketHandler";
+import { SocketSubscriber } from "../socket/socketSubscriber";
 
 export class GameManager implements SocketSubscriber {
     private static instance: GameManager;
