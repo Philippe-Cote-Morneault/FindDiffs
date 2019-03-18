@@ -1,15 +1,19 @@
 import { Server } from "http";
 import * as socketIo from "socket.io";
 import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { ICommonScoreEntry } from "../../../../common/model/gameCard";
 import { _e, R } from "../../strings";
 // tslint:disable:no-any
 const dateFormat: any = require("dateformat");
+import { GameCardService } from "../gameCard/gameCard.service";
+import { SocketSubscriber } from "./socketSubscriber";
 
 export class SocketHandler {
     private static instance: SocketHandler;
 
     private io: socketIo.Server;
     private idUsernames: Map<string, Object>;
+    private subsribers: Map<string, SocketSubscriber[]>;
 
     public static getInstance(): SocketHandler {
         if (!this.instance) {
@@ -40,7 +44,7 @@ export class SocketHandler {
         socket.on("UserConnected", (message: ICommonSocketMessage) => {
             this.idUsernames.set(socket.id, message.data);
             const welcomeMsg: ICommonSocketMessage = {
-                data: message.data,
+                data: _e(R.SOCKET_USERCONNECTED, [message.data]),
                 timestamp: dateFormat(message.timestamp, R.SOCKET_DATE),
             };
             socket.broadcast.emit("NewUser", welcomeMsg);
@@ -51,9 +55,11 @@ export class SocketHandler {
         socket.on("disconnect", () => {
             const username: Object | undefined = this.idUsernames.get(socket.id);
             const goodByeMsg: ICommonSocketMessage = {
-                data: JSON.stringify(username),
+                data: _e(R.SOCKET_USERDISCONNECTED, [username]),
                 timestamp: dateFormat(new Date(), R.SOCKET_DATE),
             };
+            const newScore: ICommonScoreEntry = {name: "Sam", score: 16};
+            GameCardService.updateScore(undefined, undefined, newScore);
             socket.broadcast.emit("UserDisconnected", goodByeMsg);
         });
     }
