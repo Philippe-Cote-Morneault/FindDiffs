@@ -2,10 +2,14 @@ import { Server } from "http";
 import * as socketIo from "socket.io";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../common/communication/webSocket/user";
+import { NotFoundException } from "../../../../common/errors/notFoundException";
+import { _e, R } from "../../strings";
 import { SocketSubscriber } from "./socketSubscriber";
 
 export class SocketHandler {
     private static instance: SocketHandler;
+    private static CONNECT_EVENT: string = "connect";
+    private static DISCONNECT_EVENT: string = "disconnect";
 
     private io: socketIo.Server;
     private idUsernames: Map<string, string>;
@@ -34,13 +38,22 @@ export class SocketHandler {
         sub.push(subscriber);
     }
 
+    public sendMessage(event: Event, message: ICommonSocketMessage, username: string): void {
+        const targetId: string = this.getSocketId(username);
+        this.io.to(targetId).emit(event, message);
+    }
+
+    public broadcastMessage(event: Event, message: ICommonSocketMessage): void {
+        this.io.sockets.emit(event, message);
+    }
+
     private constructor() {
         this.subscribers = new Map<string, SocketSubscriber[]>();
     }
 
     private init(): void {
         this.idUsernames = new Map<string, string>();
-        this.io.on("connect", (socket: SocketIO.Socket) => {
+        this.io.on(SocketHandler.CONNECT_EVENT, (socket: SocketIO.Socket) => {
             this.idUsernames.set(socket.id, "");
             this.setEventListeners(socket);
         });
@@ -63,7 +76,7 @@ export class SocketHandler {
     }
 
     private onUserDisconnected(socket: SocketIO.Socket): void {
-        socket.on("disconnect", () => {
+        socket.on(SocketHandler.DISCONNECT_EVENT, () => {
             const user: ICommonUser = {
                 username: this.getUsername(socket.id),
             };
@@ -103,5 +116,14 @@ export class SocketHandler {
 
     private removeUsername(socketId: string): void {
         this.idUsernames.delete(socketId);
+    }
+
+    private getSocketId(username: string): string {
+        const id: string | undefined =  Object.keys(this.idUsernames).find((key: string) => this.idUsernames[key] === username);
+        if (id === undefined) {
+                throw new NotFoundException(_e(R.ERROR_INVALIDID, [username]));
+        }
+
+        return id;
     }
 }
