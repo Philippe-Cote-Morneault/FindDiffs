@@ -8,19 +8,19 @@ import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { SocketSubscriber } from "../socket/socketSubscriber";
 
-export class GameManager implements SocketSubscriber {
-    private static instance: GameManager;
+export class GameService implements SocketSubscriber {
+    private static instance: GameService;
 
     private activePlayers: Map<string, Game>;
     private activeGames: Game[];
     private socketHandler: SocketHandler;
 
-    public static getInstance(): GameManager {
-        if (!GameManager.instance) {
-            GameManager.instance = new GameManager();
+    public static getInstance(): GameService {
+        if (!GameService.instance) {
+            GameService.instance = new GameService();
         }
 
-        return GameManager.instance;
+        return GameService.instance;
     }
 
     public notify(event: Event, message: ICommonSocketMessage, sender: string): void {
