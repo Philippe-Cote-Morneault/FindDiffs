@@ -8,7 +8,7 @@ import { _e, R } from "../../ressources/strings";
 
 export class SocketStringFormaterService {
 
-    public messageFormater(messageType: string, message: ICommonSocketMessage): string {
+    public messageFormater(messageType: Event, message: ICommonSocketMessage): string {
         switch (messageType) {
             case Event.UserDisconnected: {
                 return this.onUserDisconnected(message);
