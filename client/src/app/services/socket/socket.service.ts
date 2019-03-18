@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
-import { ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { SocketStringFormaterService } from "./socketStringFormater.service";
 
 @Injectable({
@@ -25,18 +25,18 @@ export class SocketService {
             data: username,
             timestamp: new Date(),
         };
-        this.socket.emit("UserConnected", message);
+        this.socket.emit(Event.UserConnected, message);
     }
 
     public newUserConnected(chat: HTMLElement, container: HTMLElement): void {
-        this.socket.on("NewUser", (message: ICommonSocketMessage) => {
-            this.sendMessage("NewUser", message, chat, container);
+        this.socket.on(Event.NewUser, (message: ICommonSocketMessage) => {
+            this.sendMessage(Event.NewUser, message, chat, container);
         });
     }
 
     public userDisconnected(chat: HTMLElement, container: HTMLElement): void {
-        this.socket.on("UserDisconnected", (message: ICommonSocketMessage) => {
-            this.sendMessage("UserDisconnected", message, chat, container);
+        this.socket.on(Event.UserDisconnected, (message: ICommonSocketMessage) => {
+            this.sendMessage(Event.UserDisconnected, message, chat, container);
         });
     }
 
