@@ -34,6 +34,11 @@ export class SocketHandler {
         sub.push(subscriber);
     }
 
+    public sendMessage(event: Event, message: ICommonSocketMessage, username: string): void {
+        const targetId: string = this.getSocketId(username);
+        this.io.to(targetId).emit(event, message);
+    }
+
     private constructor() {
         this.subscribers = new Map<string, SocketSubscriber[]>();
     }
@@ -103,5 +108,9 @@ export class SocketHandler {
 
     private removeUsername(socketId: string): void {
         this.idUsernames.delete(socketId);
+    }
+
+    private getSocketId(username: string): string {
+
     }
 }
