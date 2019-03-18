@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { Event } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
@@ -7,6 +8,8 @@ import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
+import { SocketHandlerService } from "../services/socket/socketHandler.service";
+import { SocketMessageSenderService } from "../services/socket/socketMessageSender.service";
 import { TimerService } from "../services/timer/timer.service";
 
 @Component({
@@ -40,6 +43,7 @@ export class GameViewSimpleComponent implements OnInit {
         public imagePairService: ImagePairService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService,
+        public socket: SocketHandlerService,
         public identificationError: IdentificationError) {
 
         this.isGameOver = false;
@@ -56,6 +60,13 @@ export class GameViewSimpleComponent implements OnInit {
             this.gameCardId = params["id"];
         });
         this.getGameCardById();
+        this.subscribeToSocket();
+    }
+
+    private subscribeToSocket(): void {
+        this.socket.newUserConnected();
+        this.socket.userDisconnected();
+        SocketMessageSenderService.getInstance().subscribeToSocket();
     }
 
     private getGameCardById(): void {
