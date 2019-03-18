@@ -2,58 +2,71 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { Pair } from "../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../common/model/scene/modifications/geometricModifications";
-import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
+import { ICommonThematicModifications } from "../../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ICommonScene } from "../../../../../common/model/scene/scene";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
-import { ModifiedSceneParserService } from "../scene/sceneParser/modified-scene-parser.service";
-import { SceneParserService } from "../scene/sceneParser/scene-parser.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class CheatModeService {
-  private static readonly WHITE: number = 0xFFFFFF;
   private static readonly MESH_TYPE: string = "Mesh";
+  private static readonly SCENE_TYPE: string = "Scene";
   public cheatActivated: boolean;
   public originalSceneLoaderService: SceneLoaderService;
   public modifiedSceneLoaderService: SceneLoaderService;
-  private originalSceneMaterials: THREE.Material[];
-  private modifiedSceneMaterials: THREE.Material[];
 
   public constructor() {
     this.cheatActivated = false;
-    this.originalSceneMaterials = [];
-    this.modifiedSceneMaterials = [];
   }
 
-  public async toggleCheatMode(originalScene: ICommonScene, modifiedScene: ICommonGeometricModifications): Promise<void> {
+  public async toggleCheatMode(originalScene: ICommonScene,
+                               modifiedScene: ICommonGeometricModifications & ICommonThematicModifications): Promise<void> {
     this.cheatActivated = !this.cheatActivated;
     if (this.cheatActivated) {
+
       await this.enableCheats(originalScene, modifiedScene);
     } else {
 
       await this.restoreOriginalMaterial();
       await this.restoreModifiedMaterial();
-
     }
   }
 
-  private async enableCheats(originalScene: ICommonScene, modifiedScene: ICommonGeometricModifications): Promise<void> {
+  private async enableCheats(originalScene: ICommonScene,
+                             modifiedScene: ICommonGeometricModifications & ICommonThematicModifications): Promise<void> {
     const modifiedSceneThreeJs: THREE.Scene = this.modifiedSceneLoaderService.scene;
     const originalSceneThreeJs: THREE.Scene = this.originalSceneLoaderService.scene;
-    if (modifiedScene.deletedObjects.length > 0) {
-      this.changeDeletedObjectsColor(originalScene, modifiedScene, originalSceneThreeJs);
-    }
+
     if (modifiedScene.addedObjects.length > 0) {
       this.changeAddedObjectsColor(modifiedScene, modifiedSceneThreeJs);
     }
-    if (modifiedScene.colorChangedObjects.length > 0) {
+    if (modifiedScene.deletedObjects.length > 0) {
+      this.changeDeletedObjectsColor(originalScene, modifiedScene, originalSceneThreeJs);
+    }
+    if (modifiedScene.colorChangedObjects && modifiedScene.colorChangedObjects.length > 0) {
       this.changeColorChangedObjectsColor(modifiedScene, originalSceneThreeJs, modifiedSceneThreeJs);
+    }
+    if (modifiedScene.texturesChangedObjects && modifiedScene.texturesChangedObjects.length > 0) {
+      this.changeThematicChangedObjects(modifiedScene, originalSceneThreeJs, modifiedSceneThreeJs);
     }
 
     this.renderScene(this.originalSceneLoaderService, originalSceneThreeJs);
     this.renderScene(this.modifiedSceneLoaderService, modifiedSceneThreeJs);
+  }
+
+  private changeAddedObjectsColor(modifiedScene: ICommonGeometricModifications, modifiedSceneThreeJs: THREE.Scene): void {
+    modifiedScene.addedObjects.forEach((object: ICommonGeometricObject) => {
+      const object3D: THREE.Object3D | undefined = modifiedSceneThreeJs.children.find(
+        (element: THREE.Mesh | THREE.Scene) =>
+        (element.type === CheatModeService.MESH_TYPE || element.type === CheatModeService.SCENE_TYPE)
+        && element.userData.id === object.id);
+
+      if (object3D) {
+        object3D.visible = false;
+      }
+    });
   }
 
   private changeDeletedObjectsColor(originalScene: ICommonScene,
@@ -61,22 +74,13 @@ export class CheatModeService {
                                     originalSceneThreeJs: THREE.Scene): void {
     originalScene.sceneObjects.forEach((object: ICommonGeometricObject) => {
       const object3D: THREE.Object3D | undefined = originalSceneThreeJs.children.find(
-        (element: THREE.Mesh) => element.type === CheatModeService.MESH_TYPE &&
+        (element: THREE.Mesh | THREE.Scene) =>
+        (element.type === CheatModeService.MESH_TYPE || element.type === CheatModeService.SCENE_TYPE) &&
         element.userData.id === object.id &&
-        modifiedScene.deletedObjects.includes(object.id),
-      );
-      if (object3D instanceof THREE.Mesh) {
-        object3D.material = this.generateNewMaterial(CheatModeService.WHITE - object.color);
-      }
-    });
-  }
+        modifiedScene.deletedObjects.includes(object.id));
 
-  private changeAddedObjectsColor(modifiedScene: ICommonGeometricModifications, modifiedSceneThreeJs: THREE.Scene): void {
-    modifiedScene.addedObjects.forEach((object: ICommonGeometricObject) => {
-      const object3D: THREE.Object3D | undefined = modifiedSceneThreeJs.children.find(
-        (element: THREE.Mesh) => element.type === CheatModeService.MESH_TYPE && element.userData.id === object.id);
-      if (object3D instanceof THREE.Mesh) {
-        object3D.material = this.generateNewMaterial(CheatModeService.WHITE - object.color);
+      if (object3D) {
+        object3D.visible = false;
       }
     });
   }
@@ -97,50 +101,31 @@ export class CheatModeService {
             (modifiedChild: THREE.Mesh) => modifiedChild.userData.id === child.userData.id,
           ) as THREE.Mesh);
           child.material = this.generateNewMaterial(pair.value);
-          const newMaterial: THREE.Material = this.generateNewMaterial(
-            CheatModeService.WHITE - (modifiedObject.material as THREE.MeshPhongMaterial).color.getHex(),
-          );
-          modifiedObject.material = newMaterial;
+          modifiedObject.visible = false;
         }
+      }
+    });
+  }
+
+  private changeThematicChangedObjects(modifiedScene: ICommonThematicModifications,
+                                       originalSceneThreeJs: THREE.Scene,
+                                       modifiedSceneThreeJs: THREE.Scene): void {
+    modifiedScene.texturesChangedObjects.forEach((modifiedPair: Pair<string, string>) => {
+      const originalObject: THREE.Object3D | undefined = originalSceneThreeJs.children.find(
+        (object: THREE.Object3D) => modifiedPair.key === object.userData.id);
+      if (originalObject) {
+        originalObject.visible = false;
+      }
+
+      const modifiedObject: THREE.Object3D | undefined = modifiedSceneThreeJs.children.find(
+        (object: THREE.Object3D) => modifiedPair.key === object.userData.id);
+      if (modifiedObject) {
+        modifiedObject.visible = false;
       }
     });
   }
   private renderScene(sceneLoader: SceneLoaderService, scene: THREE.Scene): void {
     sceneLoader.scene = scene;
-  }
-
-  public async saveOriginalMaterial(scene: ICommonScene): Promise<void> {
-    const scene3D: THREE.Scene = await new SceneParserService().parseScene(scene);
-    scene3D.children.forEach((child: THREE.Mesh) => {
-      if (child.type === CheatModeService.MESH_TYPE) {
-        const meshMaterial: THREE.Material | THREE.Material[] = child.material;
-        if (meshMaterial instanceof THREE.Material) {
-          meshMaterial.userData = { id: child.userData.id };
-          this.originalSceneMaterials.push(meshMaterial);
-        } else {
-          meshMaterial.forEach((material: THREE.Material) => {
-            this.originalSceneMaterials.push(material);
-          });
-        }
-      }
-    });
-  }
-
-  public async saveModifiedMaterial(scene: ICommonScene, modifiedScene: ICommonSceneModifications): Promise<void> {
-    const scene3D: THREE.Scene = await new ModifiedSceneParserService().parseModifiedScene(scene, modifiedScene);
-    scene3D.children.forEach((child: THREE.Mesh) => {
-      if (child.type === CheatModeService.MESH_TYPE) {
-        const meshMaterial: THREE.Material | THREE.Material[] = child.material;
-        if (meshMaterial instanceof THREE.Material) {
-          meshMaterial.userData = { id: child.userData.id };
-          this.modifiedSceneMaterials.push(meshMaterial);
-        } else {
-          meshMaterial.forEach((material: THREE.Material) => {
-            this.modifiedSceneMaterials.push(material);
-          });
-        }
-      }
-    });
   }
 
   private generateNewMaterial(color: number): THREE.Material {
@@ -155,36 +140,16 @@ export class CheatModeService {
 
   private async restoreOriginalMaterial(): Promise<void> {
     const scene3D: THREE.Scene = this.originalSceneLoaderService.scene;
-    scene3D.children.forEach((child: THREE.Mesh) => {
-      if (child.type === CheatModeService.MESH_TYPE) {
-        if (child.material instanceof THREE.Material) {
-          child.material = (this.originalSceneMaterials.find(
-            (material: THREE.Material) => material.userData.id === child.userData.id) as THREE.Material);
-        } else {
-          child.material.forEach((material: THREE.Material) => {
-            material = (this.originalSceneMaterials.find(
-              (originalMaterial: THREE.Material) => originalMaterial.userData.id === material.userData.id) as THREE.Material);
-          });
-        }
-      }
+    scene3D.children.forEach((child: THREE.Object3D) => {
+      child.visible = true;
     });
     this.renderScene(this.originalSceneLoaderService, scene3D);
   }
 
   private async restoreModifiedMaterial(): Promise<void> {
     const scene3D: THREE.Scene = this.modifiedSceneLoaderService.scene;
-    scene3D.children.forEach((child: THREE.Mesh) => {
-      if (child.type === CheatModeService.MESH_TYPE) {
-        if (child.material instanceof THREE.Material) {
-          child.material = (this.modifiedSceneMaterials.find(
-            (material: THREE.Material) => material.userData.id === child.userData.id) as THREE.Material);
-        } else {
-          child.material.forEach((material: THREE.Material) => {
-            material = (this.originalSceneMaterials.find(
-              (originalMaterial: THREE.Material) => originalMaterial.userData.id === material.userData.id) as THREE.Material);
-          });
-        }
-      }
+    scene3D.children.forEach((child: THREE.Object3D) => {
+      child.visible = true;
     });
     this.renderScene(this.modifiedSceneLoaderService, scene3D);
   }
