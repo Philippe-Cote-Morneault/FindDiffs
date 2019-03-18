@@ -33,6 +33,9 @@ export class SocketHandlerService {
     }
 
     public subscribe(event: Event, subscriber: SocketSubscriber): void {
+        // tslint:disable:no-console
+        console.log(!this.subscribers.has(event));
+        console.log(event);
         if (!this.subscribers.has(event)) {
             this.subscribers.set(event, []);
         }
@@ -41,6 +44,8 @@ export class SocketHandlerService {
     }
 
     private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
+        console.log(this.subscribers.has(event));
+        console.log(event);
         if (this.subscribers.has(event)) {
             const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
             subscribers.forEach((subscriber: SocketSubscriber) => {
@@ -60,14 +65,12 @@ export class SocketHandlerService {
     public newUserConnected(): void {
         this.socket.on(Event.NewUser, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.UserConnected, message);
-            // this.sendMessage(Event.NewUser, message, chat, container);
         });
     }
 
     public userDisconnected(): void {
         this.socket.on(Event.UserDisconnected, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.UserDisconnected, message);
-            // this.sendMessage(Event.UserDisconnected, message, chat, container);
         });
     }
 
