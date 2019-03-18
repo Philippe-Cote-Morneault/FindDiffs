@@ -15,12 +15,19 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
 
     public async parseModifiedScene(originalSceneModel: ICommonScene, sceneModifications: ICommonSceneModifications): Promise<THREE.Scene> {
         const scene: THREE.Scene = await this.createScene(originalSceneModel);
-
-        originalSceneModel.type === ObjectType.Geometric ?
-            this.parseGeometricObjects(scene, sceneModifications as ICommonGeometricModifications,
-                                       originalSceneModel.sceneObjects as ICommonGeometricObject[]) :
-            this.parseThematicObjects(scene, sceneModifications, originalSceneModel.sceneObjects);
-
+        if (originalSceneModel.type === ObjectType.Geometric) {
+            await this.parseGeometricObjects(
+                scene,
+                sceneModifications as ICommonGeometricModifications,
+                originalSceneModel.sceneObjects as ICommonGeometricObject[],
+            );
+        } else {
+            await this.parseThematicObjects(
+                scene,
+                sceneModifications as ICommonThematicModifications,
+                originalSceneModel.sceneObjects as ICommonThematicObject[],
+            );
+        }
         await this.addAddedObjects(scene, sceneModifications.addedObjects);
 
         return scene;
