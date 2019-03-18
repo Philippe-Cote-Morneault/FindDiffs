@@ -112,7 +112,7 @@ export class SocketHandler {
         this.idUsernames.delete(socketId);
     }
 
-    private getSocketId(username: string): string {
-
+    private getSocketId(username: string): string | undefined {
+        return Object.keys(this.idUsernames).find((key: string) => this.idUsernames[key] === username);
     }
 }
