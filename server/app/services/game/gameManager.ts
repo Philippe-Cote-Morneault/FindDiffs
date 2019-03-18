@@ -52,6 +52,7 @@ export class GameManager implements SocketSubscriber {
             ressource_id: game.ressource_id,
             players: [player],
             start_time: undefined,
+            differences_found: 0;
         };
         this.activeGames.push(newGame);
     }
@@ -62,6 +63,6 @@ export class GameManager implements SocketSubscriber {
             throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
         }
 
-
+        game.start_time = new Date();
     }
 }
