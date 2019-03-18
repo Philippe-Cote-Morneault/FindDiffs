@@ -51,6 +51,7 @@ export class SocketHandler {
         this.onUsernameConnected(socket);
         this.onUserDisconnected(socket);
         this.onPlaySoloGame(socket);
+        this.onReadyToPlay(socket);
     }
 
     private onUsernameConnected(socket: SocketIO.Socket): void {
@@ -74,6 +75,12 @@ export class SocketHandler {
     private onPlaySoloGame(socket: SocketIO.Socket): void {
         socket.on(Event.PlaySoloGame, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.PlaySoloGame, message, this.getUsername(socket.id));
+        });
+    }
+
+    private onReadyToPlay(socket: SocketIO.Socket): void {
+        socket.on(Event.ReadyToPlay, (message: ICommonSocketMessage) => {
+            this.notifySubsribers(Event.ReadyToPlay, message, this.getUsername(socket.id));
         });
     }
 
