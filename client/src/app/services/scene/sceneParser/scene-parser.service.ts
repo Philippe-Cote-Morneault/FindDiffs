@@ -18,9 +18,11 @@ export class SceneParserService extends AbstractSceneParser {
     }
 
     private async parseObjects(scene: THREE.Scene, sceneObjects: ICommonSceneObject[]): Promise<void> {
-        for (const object of sceneObjects) {
-            scene.add(await this.sceneObjectParser.parse(object));
-        }
+
+        const promises: Promise<THREE.Object3D>[] = sceneObjects.map((object: ICommonSceneObject) => this.sceneObjectParser.parse(object));
+        await Promise.all(promises).then((v: THREE.Object3D[]) => {
+            scene.add(...v);
+        });
     }
 
 }
