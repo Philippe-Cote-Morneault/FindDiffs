@@ -106,6 +106,7 @@ export class CheatModeService {
       }
     });
   }
+  //TODO remove render as it's not efficient
   private renderScene(sceneLoader: SceneLoaderService, scene: THREE.Scene, camera: THREE.PerspectiveCamera): void {
     sceneLoader.scene = scene;
     sceneLoader.renderer.render(scene, camera);
