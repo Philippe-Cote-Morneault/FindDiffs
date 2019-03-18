@@ -21,7 +21,7 @@ export class ThemeGrid extends Grid {
      */
 
     // tslint:disable-next-line:no-magic-numbers
-    private static readonly GENERATION_FACTOR: number[] = [30, 40, 30];
+    public static readonly GENERATION_FACTOR: number[] = [30, 40, 30];
     private static readonly SUM_GEN_FACTOR: number = 100;
     private static readonly NUMBER_POSITION: number = 250;
 
@@ -46,7 +46,9 @@ export class ThemeGrid extends Grid {
 
         const surfacePositions: ICommon3DPosition[] = this.availablePositions[surfaceName];
         if (surfacePositions.length < 1) {
-            return this.positionToThemePosition(this.findRemainingPositions());
+            const remainingPosition: ICommon3DPosition = this.findRemainingPositions();
+
+            return this.positionToThemePosition(remainingPosition);
         }
         const choice: number = RandomUtils.inRangeInt(0, surfacePositions.length - 1);
         const position: IPostionGridTheme = this.positionToThemePosition(surfacePositions[choice]);
@@ -63,7 +65,7 @@ export class ThemeGrid extends Grid {
             if (this.availablePositions[surfaceName].length > 0) {
                 const choice: number = RandomUtils.inRangeInt(0, this.availablePositions[surfaceName].length - 1);
 
-                return this.availablePositions[surfaceName].splice(choice, 1);
+                return this.availablePositions[surfaceName].splice(choice, 1)[0];
             }
         }
         throw new StackEmptyException();
