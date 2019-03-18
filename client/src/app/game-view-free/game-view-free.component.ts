@@ -7,7 +7,7 @@ import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
-import { SocketHandler } from "../services/socket/socketHandler";
+import { SocketHandlerService } from "../services/socket/socketHandler.service";
 import { TimerService } from "../services/timer/timer.service";
 
 @Component({
@@ -31,7 +31,7 @@ export class GameViewFreeComponent implements OnInit {
     public constructor(
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
-        private socketHandler: SocketHandler,
+        private socketHandlerService: SocketHandlerService,
         public sceneService: SceneService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService) {
@@ -49,8 +49,8 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private socketConnection(): void {
-        this.socketHandler.newUserConnected(this.message.nativeElement, this.messageContainer.nativeElement);
-        this.socketHandler.userDisconnected(this.message.nativeElement, this.messageContainer.nativeElement);
+        this.socketHandlerService.newUserConnected(this.message.nativeElement, this.messageContainer.nativeElement);
+        this.socketHandlerService.userDisconnected(this.message.nativeElement, this.messageContainer.nativeElement);
     }
 
     private getGameCardById(): void {

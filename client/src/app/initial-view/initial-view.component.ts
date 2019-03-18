@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
 import { ICommonUser } from "../../../../common/model/user";
-import { SocketHandler } from "../services/socket/socketHandler";
+import { SocketHandlerService } from "../services/socket/socketHandler.service";
 import { UserService } from "../services/user/user.service";
 
 @Component({
@@ -15,7 +15,7 @@ export class InitialViewComponent implements OnInit {
 
     @ViewChild("usernameInput") private usernameInput: ElementRef;
 
-    public constructor(public userService: UserService, private router: Router, private socketHandler: SocketHandler) {
+    public constructor(public userService: UserService, private router: Router, private socketHandlerService: SocketHandlerService) {
     }
 
     public ngOnInit(): void {
@@ -35,7 +35,7 @@ export class InitialViewComponent implements OnInit {
 
     public async correctUsername(response: ICommonUser | Message): Promise<void> {
         if ((response as ICommonUser).id) {
-            this.socketHandler.notifyNewUser((response as ICommonUser).username);
+            this.socketHandlerService.notifyNewUser((response as ICommonUser).username);
             localStorage.setItem("user", JSON.stringify(response));
             await this.router.navigateByUrl("/gamesList");
         } else {

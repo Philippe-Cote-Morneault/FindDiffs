@@ -7,7 +7,7 @@ import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
-import { SocketHandler } from "../services/socket/socketHandler";
+import { SocketHandlerService } from "../services/socket/socketHandler.service";
 import { TimerService } from "../services/timer/timer.service";
 
 @Component({
@@ -41,7 +41,7 @@ export class GameViewSimpleComponent implements OnInit {
         public imagePairService: ImagePairService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService,
-        public socketHandler: SocketHandler,
+        public socketHandlerService: SocketHandlerService,
         public identificationError: IdentificationError) {
 
         this.isGameOver = false;
@@ -62,8 +62,8 @@ export class GameViewSimpleComponent implements OnInit {
     }
 
     private socketConnection(): void {
-        this.socketHandler.newUserConnected(this.message.nativeElement, this.messageContainer.nativeElement);
-        this.socketHandler.userDisconnected(this.message.nativeElement, this.messageContainer.nativeElement);
+        this.socketHandlerService.newUserConnected(this.message.nativeElement, this.messageContainer.nativeElement);
+        this.socketHandlerService.userDisconnected(this.message.nativeElement, this.messageContainer.nativeElement);
     }
 
     private getGameCardById(): void {

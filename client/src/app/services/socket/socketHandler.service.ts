@@ -9,7 +9,7 @@ import { SocketSubscriber } from "./socketSubscriber";
     providedIn: "root",
 })
 
-export class SocketHandler {
+export class SocketHandlerService {
     public id: string;
     public socket: SocketIOClient.Socket;
     private subscribers: Map<string, SocketSubscriber[]>;
@@ -31,14 +31,14 @@ export class SocketHandler {
         sub.push(subscriber);
     }
 
-    private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
+    /* private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
         if (this.subscribers.has(event)) {
             const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
             subscribers.forEach((subscriber: SocketSubscriber) => {
                 subscriber.notify(event, message);
             });
         }
-    }
+    }*/
 
     public notifyNewUser(username: string): void {
         const message: ICommonSocketMessage = {
