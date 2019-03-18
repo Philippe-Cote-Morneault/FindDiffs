@@ -11,6 +11,8 @@ import { StringFormater } from "../util/stringFormater";
 })
 export class EndSoloGameComponent implements OnInit {
 
+  @Input() public playerTimeChild: string;
+
   public gameCard: ICommonGameCard;
   public gameCardId: string;
   @Input() public playerTimeChild: string;

@@ -5,6 +5,7 @@
         "moduleResolution": "node",
         "sourceRoot": "app",
         "sourceMap": true,
+        "resolveJsonModule": true,
         "outDir": "out",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,

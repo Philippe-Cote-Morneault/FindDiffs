@@ -7,11 +7,14 @@ import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { IScene, Scene} from "../../model/schemas/scene";
 import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
+import { Storage } from "../../utils/storage/storage";
 import { ISceneService } from "../interfaces";
 import { Service } from "../service";
+import { ISceneGenerator } from "./ISceneGenerator";
 import { SceneDifferenceGenerator } from "./differenceGeneration/sceneDifferenceGenerator";
-import { Grid } from "./grid";
-import { SceneGenerator } from "./sceneGenerator";
+import { Grid } from "./grid/grid";
+import { SceneGeneratorShape } from "./sceneGeneratorShape";
+import { SceneGeneratorTheme } from "./sceneGeneratorTheme";
 
 export class SceneService extends Service implements ISceneService {
     private static readonly MIN_OBJECT: number = 10;
@@ -39,7 +42,10 @@ export class SceneService extends Service implements ISceneService {
 
     public async post(req: Request): Promise<string> {
         this.validatePost(req);
-        const sceneGenerator: SceneGenerator = new SceneGenerator(req.body.object_qty);
+        const objectType: ObjectType = EnumUtils.enumFromString<ObjectType>(req.body.object_type, ObjectType) as ObjectType;
+        const sceneGenerator: ISceneGenerator = (objectType === ObjectType.Geometric) ?
+        new SceneGeneratorShape(req.body.object_qty) : new SceneGeneratorTheme(req.body.object_qty);
+
         const scene: ICommonScene = sceneGenerator.generateScene();
 
         const sceneSchema: IScene = new Scene({
@@ -88,6 +94,17 @@ export class SceneService extends Service implements ISceneService {
         });
     }
 
+    public async postThumbnail(req: Request): Promise<string> {
+        const thumbnailId: string = await Storage.saveBuffer(req.files["thumbnail"][0].buffer);
+        Scene.findOneAndUpdate({_id: req.params.id}, {$set: {file_thumbnail_id: thumbnailId}}, (err: Error, doc: IScene) => {
+            if (err) {
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+            }
+        });
+
+        return thumbnailId;
+    }
+
     public async single(id: string): Promise<string> {
         return Scene.findById(id).then(async(doc: IScene) => {
             if (!doc) {
@@ -112,6 +129,25 @@ export class SceneService extends Service implements ISceneService {
         })
         .catch((err: Error) => {
             throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+        });
+    }
+
+    public async getThumbnail(id: string): Promise<ArrayBuffer> {
+        return this.returnFile(id, "file_thumbnail_id");
+    }
+
+    private async returnFile(id: string, fieldName: string): Promise<ArrayBuffer> {
+        return Scene.findById(id).select(`+${fieldName}`)
+        .then(async (doc: IScene) => {
+            const fileId: string = doc.get(fieldName);
+
+            return Storage.openBuffer(fileId);
+        }).catch((error: Error) => {
+            if (error.name === "FileNotFoundException") {
+                throw error;
+            } else {
+                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+            }
         });
     }
 }

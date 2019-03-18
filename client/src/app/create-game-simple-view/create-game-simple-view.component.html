@@ -17,7 +17,7 @@
       <div>
         <input type="text" (blur)="nameInputVisited()" class="form-control" id="gameNameInput" #gameNameInput (change)="isNameValid()" placeholder="Game name"
           required>
-          <p id="errorMessage" *ngIf="!isNameValid()">The name has to be between 3 and 12 alphanumeric characters.</p>
+          <p id="errorMessage" *ngIf="!isNameValid() && this.firstNameInput">The name has to be between 3 and 12 alphanumeric characters.</p>
       </div>
     </form>
     <form class="was-validated">
@@ -26,7 +26,7 @@
         <input type="file" (blur)="originalImageVisited()" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 1)" accept=".bmp"
           required>
         <label class="custom-file-label" for="validatedCustomFile" #originalFile>Choose file...</label>
-        <p id="errorMessage" *ngIf="!isOriginalFileValid()">The file dimensions are not 640x480.</p>
+        <p id="errorMessage" *ngIf="!isOriginalFileValid() && this.firstOriginalImageInput">The file dimensions are not 640x480.</p>
       </div>
 
       Modified image :
@@ -34,7 +34,7 @@
         <input type="file" (blur)="modifiedImageVisited()" class="custom-file-input" id="validatedCustomFile" (change)="fileEvent($event, 2)" accept=".bmp"
           required>
         <label class="custom-file-label" for="validatedCustomFile" #modifiedFile>Choose file...</label>
-        <p id="errorMessage" *ngIf="!isModifiedFileValid()">The file dimensions are not 640x480.</p>
+        <p id="errorMessage" *ngIf="!isModifiedFileValid() && this.firstModifiedImageInput">The file dimensions are not 640x480.</p>
       </div>
       <div *ngIf="verifyInfo()"></div>
       <button type="submit" class="btn btn-success" [disabled]="!canSubmit" id="submitId" (click)="addImagePair()">Submit</button>

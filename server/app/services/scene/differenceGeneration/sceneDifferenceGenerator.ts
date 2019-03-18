@@ -4,7 +4,7 @@ import { SceneTransformation } from "../../../../../common/model/scene/modificat
 import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene, ObjectType } from "../../../../../common/model/scene/scene";
 import { RandomUtils } from "../../../utils/randomUtils";
-import { Grid } from "../grid";
+import { Grid } from "../grid/grid";
 import { SceneObjectAdder } from "./transformations/sceneObjectAdder";
 import { SceneObjectColorChanger } from "./transformations/sceneObjectColorChanger";
 import { SceneObjectRemover } from "./transformations/sceneObjectRemover";
@@ -44,6 +44,7 @@ export class SceneDifferenceGenerator {
         this.chooseRandomModification().applyTransformation(
             this.objectsToTransform,
             this.sceneModif,
+            this.scene.type,
         );
     }
 

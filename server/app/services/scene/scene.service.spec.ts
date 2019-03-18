@@ -99,7 +99,21 @@ describe("SceneService", () => {
             }
         });
 
-        it("Should return a generated scene", async () => {
+        it("Should return a generated scene (Geometric)", async () => {
+            const objectQty: number = 20;
+            const request: object = {
+                body: {
+                    object_type: "Geometric",
+                    object_qty: objectQty,
+                },
+            };
+
+            (Scene.prototype.save as sinon.SinonStub).resolves();
+            const response: string = await service.post(mockReq(request));
+            expect(JSON.parse(response).sceneObjects.length).to.equal(objectQty);
+        });
+
+        it("Should return a generated scene (Thematic)", async () => {
             const objectQty: number = 20;
             const request: object = {
                 body: {
