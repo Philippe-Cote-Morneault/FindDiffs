@@ -62,11 +62,10 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         objectToModify.color = color;
     }
 
-    private findChangedColor(key: string, colorChangedObjects: Pair<string, number>[]): number | undefined {
-        const colorPair: Pair<string, number> | undefined = colorChangedObjects.find(
-            (x: Pair<string, number>) => x.key === key,
-        );
-
-        return (colorPair as Pair<string, number>).value;
+    private changeObjectTexture(objectToModify: ICommonThematicObject, texture: string): void {
+        if (texture === undefined) {
+            throw new InvalidFormatException("Texture not valid!");
+        }
+        objectToModify.texture = texture;
     }
 }
