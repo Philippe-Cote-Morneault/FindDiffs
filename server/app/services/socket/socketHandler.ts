@@ -1,6 +1,6 @@
 import { Server } from "http";
 import * as socketIo from "socket.io";
-import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonScoreEntry } from "../../../../common/model/gameCard";
 import { _e, R } from "../../strings";
 // tslint:disable:no-any
@@ -13,7 +13,7 @@ export class SocketHandler {
 
     private io: socketIo.Server;
     private idUsernames: Map<string, Object>;
-    private subsribers: Map<string, SocketSubscriber[]>;
+    private subscribers: Map<string, SocketSubscriber[]>;
 
     public static getInstance(): SocketHandler {
         if (!this.instance) {
@@ -28,6 +28,14 @@ export class SocketHandler {
         this.init();
 
         return this;
+    }
+
+    public subscribe(event: Event, subscriber: SocketSubscriber): void {
+        if (!this.subscribers.has(event)) {
+            this.subscribers.set(event, []);
+        }
+        const sub: SocketSubscriber[] = this.subscribers.get[event];
+        sub.push(subscriber);
     }
 
     private init(): void {
@@ -62,5 +70,14 @@ export class SocketHandler {
             GameCardService.updateScore(undefined, undefined, newScore);
             socket.broadcast.emit("UserDisconnected", goodByeMsg);
         });
+    }
+
+    private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
+        if (this.subscribers.has(event)) {
+            const subscribers: SocketSubscriber[] = this.subscribers.get[event];
+            subscribers.forEach((subscriber: SocketSubscriber) => {
+                subscriber.notify(event, message);
+            });
+        }
     }
 }
