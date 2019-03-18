@@ -5,6 +5,7 @@ import { ICommonScoreEntry } from "../../../../common/model/gameCard";
 import { _e, R } from "../../strings";
 // tslint:disable:no-any
 const dateFormat: any = require("dateformat");
+import { ICommonUser } from "../../../../common/communication/webSocket/user";
 import { GameCardService } from "../gameCard/gameCard.service";
 import { SocketSubscriber } from "./socketSubscriber";
 
@@ -12,7 +13,7 @@ export class SocketHandler {
     private static instance: SocketHandler;
 
     private io: socketIo.Server;
-    private idUsernames: Map<string, Object>;
+    private idUsernames: Map<string, string>;
     private subscribers: Map<string, SocketSubscriber[]>;
 
     public static getInstance(): SocketHandler {
@@ -43,7 +44,7 @@ export class SocketHandler {
     }
 
     private init(): void {
-        this.idUsernames = new Map<string, Object>();
+        this.idUsernames = new Map<string, string>();
         this.io.on("connect", (socket: SocketIO.Socket) => {
             this.idUsernames.set(socket.id, "");
 
@@ -58,8 +59,9 @@ export class SocketHandler {
 
     private onUsernameConnected(socket: SocketIO.Socket): void {
         socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
-            this.idUsernames.set(socket.id, message.data);
-            this.notifySubsribers(Event.UserConnected, message);
+            const username: string = (message.data as ICommonUser).username;
+            this.addUsername(socket.id, username);
+            this.notifySubsribers(Event.UserConnected, message, username);
         });
     }
 
@@ -78,16 +80,24 @@ export class SocketHandler {
 
     private onPlaySoloGame(socket: SocketIO.Socket): void {
         socket.on(Event.PlaySoloGame, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.PlaySoloGame, message);
+            this.notifySubsribers(Event.PlaySoloGame, message, this.getUsername(socket.id));
         });
     }
 
-    private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
+    private notifySubsribers(event: Event, message: ICommonSocketMessage, username: string): void {
         if (this.subscribers.has(event)) {
             const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
             subscribers.forEach((subscriber: SocketSubscriber) => {
-                subscriber.notify(event, message);
+                subscriber.notify(event, message, username);
             });
         }
+    }
+
+    private addUsername(username: string, socketId: string): void {
+        this.idUsernames.set(socketId, username);
+    }
+
+    private getUsername(socketId: string): string {
+        return (this.idUsernames.get(socketId)) as string;
     }
 }

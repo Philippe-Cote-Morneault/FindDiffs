@@ -1,5 +1,5 @@
 export interface ICommonSocketMessage {
-    data: string,
+    data: Object,
     timestamp: Date,
 }
 
