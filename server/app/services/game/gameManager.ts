@@ -21,7 +21,7 @@ export class GameManager implements SocketSubscriber {
     public notify(event: Event, message: ICommonSocketMessage, sender: string): void {
         switch (event) {
             case Event.PlaySoloGame:
-                this.createSoloGame(message.data as ICommonGame);
+                this.createSoloGame(message.data as ICommonGame, sender);
                 break;
             case Event.ReadyToPlay:
                 break;
@@ -40,11 +40,12 @@ export class GameManager implements SocketSubscriber {
         SocketHandler.getInstance().subscribe(Event.ReadyToPlay, this);
     }
 
-    private createSoloGame(game: ICommonGame): void {
+    private createSoloGame(game: ICommonGame, player: string): void {
         const newGame: Game = {
             id: uuid.v4(),
             ressource_id: game.ressource_id,
-            players: [],
+            players: [player],
+            start_time: undefined,
         };
         this.activeGames.push(newGame);
     }
