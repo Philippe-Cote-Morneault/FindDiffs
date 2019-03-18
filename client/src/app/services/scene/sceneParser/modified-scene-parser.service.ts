@@ -38,10 +38,14 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
 
         for (const originalObject of originalSceneObjects) {
             if (!sceneModifications.deletedObjects.includes(originalObject.id)) {
-                if (sceneModifications.colorChangedObjects.some((object: Pair<string, number>) => originalObject.id === object.key)) {
+                const objectColor: Pair<string, number> | undefined =
+                sceneModifications.colorChangedObjects.find(
+                    (object: Pair<string, number>) => originalObject.id === object.key,
+                );
+                if (objectColor !== undefined) {
                     this.changeObjectColor(
                         originalObject,
-                        this.findChangedColor(originalObject.id, sceneModifications.colorChangedObjects),
+                        objectColor.value,
                     );
                 }
                 scene.add(await this.sceneObjectParser.parse(originalObject));
