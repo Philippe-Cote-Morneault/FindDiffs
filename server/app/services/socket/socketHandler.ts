@@ -1,18 +1,14 @@
 import { Server } from "http";
 import * as socketIo from "socket.io";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
-import { ICommonScoreEntry } from "../../../../common/model/gameCard";
-import { _e, R } from "../../strings";
-// tslint:disable:no-any
-const dateFormat: any = require("dateformat");
-import { GameCardService } from "../gameCard/gameCard.service";
+import { ICommonUser } from "../../../../common/communication/webSocket/user";
 import { SocketSubscriber } from "./socketSubscriber";
 
 export class SocketHandler {
     private static instance: SocketHandler;
 
     private io: socketIo.Server;
-    private idUsernames: Map<string, Object>;
+    private idUsernames: Map<string, string>;
     private subscribers: Map<string, SocketSubscriber[]>;
 
     public static getInstance(): SocketHandler {
@@ -43,48 +39,69 @@ export class SocketHandler {
     }
 
     private init(): void {
-        this.idUsernames = new Map<string, Object>();
-        this.io.on("connect", (socket: any) => {
+        this.idUsernames = new Map<string, string>();
+        this.io.on(Event.UserConnected, (socket: SocketIO.Socket) => {
             this.idUsernames.set(socket.id, "");
 
-            this.onUsernameConnected(socket);
-            this.onUserDisconnected(socket);
+            this.setEventListeners(socket);
         });
     }
 
-    private onUsernameConnected(socket: any): void {
+    private setEventListeners(socket: SocketIO.Socket): void {
+        this.onUsernameConnected(socket);
+        this.onUserDisconnected(socket);
+        this.onPlaySoloGame(socket);
+        this.onReadyToPlay(socket);
+    }
+
+    private onUsernameConnected(socket: SocketIO.Socket): void {
         socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
-            this.idUsernames.set(socket.id, message.data);
-            this.notifySubsribers(Event.UserConnected, message);
-            /*
-            const welcomeMsg: ICommonSocketMessage = {
-                data: _e(R.SOCKET_USERCONNECTED, [message.data]),
-                timestamp: dateFormat(message.timestamp, R.SOCKET_DATE),
-            };
-            socket.broadcast.emit("NewUser", welcomeMsg);
-            */
+            const username: string = (message.data as ICommonUser).username;
+            this.addUsername(socket.id, username);
+            this.notifySubsribers(Event.UserConnected, message, username);
         });
     }
 
-    private onUserDisconnected(socket: any): void {
-        socket.on("disconnect", () => {
-            const username: Object | undefined = this.idUsernames.get(socket.id);
-            const goodByeMsg: ICommonSocketMessage = {
-                data: _e(R.SOCKET_USERDISCONNECTED, [username]),
-                timestamp: dateFormat(new Date(), R.SOCKET_DATE),
+    private onUserDisconnected(socket: SocketIO.Socket): void {
+        socket.on(Event.UserDisconnected, () => {
+            const user: ICommonUser = {
+                username: this.getUsername(socket.id),
             };
-            const newScore: ICommonScoreEntry = {name: "Sam", score: 16};
-            GameCardService.updateScore(undefined, undefined, newScore);
-            socket.broadcast.emit("UserDisconnected", goodByeMsg);
+            this.removeUsername(socket.id);
+            socket.broadcast.emit(Event.UserDisconnected, user);
         });
     }
 
-    private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
+    private onPlaySoloGame(socket: SocketIO.Socket): void {
+        socket.on(Event.PlaySoloGame, (message: ICommonSocketMessage) => {
+            this.notifySubsribers(Event.PlaySoloGame, message, this.getUsername(socket.id));
+        });
+    }
+
+    private onReadyToPlay(socket: SocketIO.Socket): void {
+        socket.on(Event.ReadyToPlay, (message: ICommonSocketMessage) => {
+            this.notifySubsribers(Event.ReadyToPlay, message, this.getUsername(socket.id));
+        });
+    }
+
+    private notifySubsribers(event: Event, message: ICommonSocketMessage, username: string): void {
         if (this.subscribers.has(event)) {
             const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
             subscribers.forEach((subscriber: SocketSubscriber) => {
-                subscriber.notify(event, message);
+                subscriber.notify(event, message, username);
             });
         }
+    }
+
+    private addUsername(username: string, socketId: string): void {
+        this.idUsernames.set(socketId, username);
+    }
+
+    private getUsername(socketId: string): string {
+        return (this.idUsernames.get(socketId)) as string;
+    }
+
+    private removeUsername(socketId: string): void {
+        this.idUsernames.delete(socketId);
     }
 }
