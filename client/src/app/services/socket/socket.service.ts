@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { SERVER_URL } from "../../../../../common/url";
 import { SocketStringFormaterService } from "./socketStringFormater.service";
 
 @Injectable({
@@ -16,7 +17,7 @@ export class SocketService {
     }
 
     public init(): void {
-        this.socket = io("http://localhost:3000");
+        this.socket = io(SERVER_URL);
         this.id = this.socket.id;
     }
 
