@@ -34,8 +34,12 @@ export class SocketHandler {
         if (!this.subscribers.has(event)) {
             this.subscribers.set(event, []);
         }
-        const sub: SocketSubscriber[] = this.subscribers.get[event];
+        const sub: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
         sub.push(subscriber);
+    }
+
+    private constructor() {
+        this.subscribers = new Map<string, SocketSubscriber[]>();
     }
 
     private init(): void {
@@ -49,13 +53,16 @@ export class SocketHandler {
     }
 
     private onUsernameConnected(socket: any): void {
-        socket.on("UserConnected", (message: ICommonSocketMessage) => {
+        socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
             this.idUsernames.set(socket.id, message.data);
+            this.notifySubsribers(Event.UserConnected, message);
+            /*
             const welcomeMsg: ICommonSocketMessage = {
                 data: _e(R.SOCKET_USERCONNECTED, [message.data]),
                 timestamp: dateFormat(message.timestamp, R.SOCKET_DATE),
             };
             socket.broadcast.emit("NewUser", welcomeMsg);
+            */
         });
     }
 
@@ -74,7 +81,7 @@ export class SocketHandler {
 
     private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
         if (this.subscribers.has(event)) {
-            const subscribers: SocketSubscriber[] = this.subscribers.get[event];
+            const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
             subscribers.forEach((subscriber: SocketSubscriber) => {
                 subscriber.notify(event, message);
             });
