@@ -91,10 +91,10 @@ export class CheatModeService {
           value: (child.material as THREE.MeshPhongMaterial).color.getHex(),
         };
         if (modifiedScene.colorChangedObjects.find(
-          (element: Pair<string, number>) => this.comparePair(pair, element),
+          (modifiedPair: Pair<string, number>) => this.comparePair(pair, modifiedPair),
         )) {
           const modifiedObject: THREE.Mesh = (modifiedSceneThreeJs.children.find(
-            (element: THREE.Mesh) => element.userData.id === child.userData.id,
+            (modifiedChild: THREE.Mesh) => modifiedChild.userData.id === child.userData.id,
           ) as THREE.Mesh);
           child.material = this.generateNewMaterial(pair.value);
           const newMaterial: THREE.Material = this.generateNewMaterial(
