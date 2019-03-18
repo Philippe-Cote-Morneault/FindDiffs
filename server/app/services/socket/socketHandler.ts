@@ -40,9 +40,8 @@ export class SocketHandler {
 
     private init(): void {
         this.idUsernames = new Map<string, string>();
-        this.io.on(Event.UserConnected, (socket: SocketIO.Socket) => {
+        this.io.on("connect", (socket: SocketIO.Socket) => {
             this.idUsernames.set(socket.id, "");
-
             this.setEventListeners(socket);
         });
     }
@@ -58,12 +57,13 @@ export class SocketHandler {
         socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
             const username: string = (message.data as ICommonUser).username;
             this.addUsername(socket.id, username);
+            socket.broadcast.emit(Event.NewUser, message);
             this.notifySubsribers(Event.UserConnected, message, username);
         });
     }
 
     private onUserDisconnected(socket: SocketIO.Socket): void {
-        socket.on(Event.UserDisconnected, () => {
+        socket.on("disconnect", () => {
             const user: ICommonUser = {
                 username: this.getUsername(socket.id),
             };
