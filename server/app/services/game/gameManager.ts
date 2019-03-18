@@ -1,5 +1,6 @@
 import * as uuid from "uuid";
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
+import { ICommonGameEnding } from "../../../../common/communication/webSocket/gameEnding";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { Game } from "../../model/game/game";
@@ -72,9 +73,17 @@ export class GameManager implements SocketSubscriber {
         game.start_time = new Date();
     }
 
-    private endGame(game: Game): void {
+    private endGame(game: Game, winner: string): void {
+        const gameEndedMessage: ICommonGameEnding = {
+            winner: winner,
+            time: Date.now() - (game.start_time as Date).valueOf(),
+        }
+        const message: ICommonSocketMessage = {
+            data: gameEndedMessage,
+            timestamp: new Date(),
+        }
         game.players.forEach((player: string) => {
-            this.socketHandler.sendMessage(Event.GameEnded, "", player);
-        })
+            this.socketHandler.sendMessage(Event.GameEnded, message, player);
+        });
     }
 }
