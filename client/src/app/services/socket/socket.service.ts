@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
 import { ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { SocketStringFormaterService } from "./socketStringFormater.service";
 
 @Injectable({
     providedIn: "root",
@@ -10,7 +11,7 @@ export class SocketService {
     public id: string;
     public socket: SocketIOClient.Socket;
 
-    public constructor() {
+    public constructor(public socketStringFormaterService: SocketStringFormaterService) {
         this.init();
     }
 
@@ -29,19 +30,19 @@ export class SocketService {
 
     public newUserConnected(chat: HTMLElement, container: HTMLElement): void {
         this.socket.on("NewUser", (message: ICommonSocketMessage) => {
-            this.sendMessage(message, chat, container);
+            this.sendMessage("NewUser", message, chat, container);
         });
     }
 
     public userDisconnected(chat: HTMLElement, container: HTMLElement): void {
         this.socket.on("UserDisconnected", (message: ICommonSocketMessage) => {
-            this.sendMessage(message, chat, container);
+            this.sendMessage("UserDisconnected", message, chat, container);
         });
     }
 
-    private sendMessage(message: ICommonSocketMessage, chat: HTMLElement, container: HTMLElement): void {
+    private sendMessage(messageType: string, message: ICommonSocketMessage, chat: HTMLElement, container: HTMLElement): void {
         const pre: HTMLElement = document.createElement("p");
-        pre.innerText = JSON.stringify(message.timestamp + message.data);
+        pre.innerText = this.socketStringFormaterService.messageFormater(messageType, message);
         chat.appendChild(pre);
         container.scrollTop = container.scrollHeight;
     }
