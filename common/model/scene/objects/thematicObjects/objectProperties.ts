@@ -80,8 +80,8 @@ interface IObjectsProperties {
     },
     lexus:{
         isTextured: false,
-        meshName: "body.001_5",
-        color:[0xfc151b, 0xffffff, 0x000000],
+        meshName: "ID56_1",
+        color:[0xfc151b, 0x00ff00, 0x000000],
         spawnSurface: [ThemeSurface.CAR],
     },
     sign_forbidden: {
