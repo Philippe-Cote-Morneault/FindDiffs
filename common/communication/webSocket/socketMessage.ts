@@ -3,4 +3,5 @@ export interface ICommonSocketMessage {
     timestamp: Date,
 }
 
-export enum Event {UserConnected = "UserConnected", UserDisconnected = "UserDisconnected", NewUser = "NewUser"};
+export enum Event {UserConnected = "UserConnected", UserDisconnected = "UserDisconnected", GameStarted = "GameStarted",
+                   PlaySoloGame = "PlaySoloGame", ReadyToPlay = "ReadyToPlay", GameClick = "GameClick"};

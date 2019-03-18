@@ -44,12 +44,16 @@ export class SocketHandler {
 
     private init(): void {
         this.idUsernames = new Map<string, Object>();
-        this.io.on("connect", (socket: any) => {
+        this.io.on("connect", (socket: SocketIO.Socket) => {
             this.idUsernames.set(socket.id, "");
 
-            this.onUsernameConnected(socket);
-            this.onUserDisconnected(socket);
+            this.setEventListeners(socket);
         });
+    }
+
+    private setEventListeners(socket: SocketIO.Socket): void {
+        this.onUsernameConnected(socket);
+        this.onUserDisconnected(socket);
     }
 
     private onUsernameConnected(socket: any): void {
