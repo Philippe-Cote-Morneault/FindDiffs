@@ -12,6 +12,7 @@ export class GameManager implements SocketSubscriber {
 
     private activePlayers: Map<string, Game>;
     private activeGames: Game[];
+    private socketHandler: SocketHandler;
 
     public static getInstance(): GameManager {
         if (!GameManager.instance) {
@@ -29,6 +30,11 @@ export class GameManager implements SocketSubscriber {
             case Event.ReadyToPlay:
                 this.startSoloGame(sender);
                 break;
+            case Event.GameClick:
+                // tslint:disable-next-line:no-suspicious-comment
+                // TODO: Make call to indentification service
+
+                break;
             default:
                 break;
         }
@@ -36,12 +42,14 @@ export class GameManager implements SocketSubscriber {
 
     private constructor() {
         this.activeGames = [];
+        this.socketHandler = SocketHandler.getInstance();
         this.subscribeToSocket();
     }
 
     private subscribeToSocket(): void {
-        SocketHandler.getInstance().subscribe(Event.PlaySoloGame, this);
-        SocketHandler.getInstance().subscribe(Event.ReadyToPlay, this);
+        this.socketHandler.subscribe(Event.PlaySoloGame, this);
+        this.socketHandler.subscribe(Event.ReadyToPlay, this);
+        this.socketHandler.subscribe(Event.GameClick, this);
     }
 
     private createSoloGame(game: ICommonGame, player: string): void {
@@ -50,7 +58,7 @@ export class GameManager implements SocketSubscriber {
             ressource_id: game.ressource_id,
             players: [player],
             start_time: undefined,
-            differences_found: 0;
+            differences_found: 0,
         };
         this.activeGames.push(newGame);
     }
@@ -62,5 +70,11 @@ export class GameManager implements SocketSubscriber {
         }
 
         game.start_time = new Date();
+    }
+
+    private endGame(game: Game): void {
+        game.players.forEach((player: string) => {
+            this.socketHandler.sendMessage(Event.GameEnded, "", player);
+        })
     }
 }
