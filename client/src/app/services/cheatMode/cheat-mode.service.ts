@@ -33,15 +33,15 @@ export class CheatModeService {
       await this.enableCheats(originalScene, modifiedScene);
     } else {
 
-      await this.restoreOriginalMaterial(originalScene);
-      await this.restoreModifiedMaterial(originalScene, modifiedScene);
+      await this.restoreOriginalMaterial();
+      await this.restoreModifiedMaterial();
 
     }
   }
 
   private async enableCheats(originalScene: ICommonScene, modifiedScene: ICommonGeometricModifications): Promise<void> {
-    const modifiedSceneThreeJs: THREE.Scene = await new ModifiedSceneParserService().parseModifiedScene(originalScene, modifiedScene);
-    const originalSceneThreeJs: THREE.Scene = await new SceneParserService().parseScene(originalScene);
+    const modifiedSceneThreeJs: THREE.Scene = this.modifiedSceneLoaderService.scene;
+    const originalSceneThreeJs: THREE.Scene = this.originalSceneLoaderService.scene;
     if (modifiedScene.deletedObjects.length > 0) {
       this.changeDeletedObjectsColor(originalScene, modifiedScene, originalSceneThreeJs);
     }
@@ -52,8 +52,8 @@ export class CheatModeService {
       this.changeColorChangedObjectsColor(modifiedScene, originalSceneThreeJs, modifiedSceneThreeJs);
     }
 
-    this.renderScene(this.originalSceneLoaderService, originalSceneThreeJs, this.originalSceneLoaderService.camera);
-    this.renderScene(this.modifiedSceneLoaderService, modifiedSceneThreeJs, this.modifiedSceneLoaderService.camera);
+    this.renderScene(this.originalSceneLoaderService, originalSceneThreeJs);
+    this.renderScene(this.modifiedSceneLoaderService, modifiedSceneThreeJs);
   }
 
   private changeDeletedObjectsColor(originalScene: ICommonScene,
@@ -106,10 +106,8 @@ export class CheatModeService {
       }
     });
   }
-  //TODO remove render as it's not efficient
-  private renderScene(sceneLoader: SceneLoaderService, scene: THREE.Scene, camera: THREE.PerspectiveCamera): void {
+  private renderScene(sceneLoader: SceneLoaderService, scene: THREE.Scene): void {
     sceneLoader.scene = scene;
-    sceneLoader.renderer.render(scene, camera);
   }
 
   public async saveOriginalMaterial(scene: ICommonScene): Promise<void> {
@@ -156,8 +154,8 @@ export class CheatModeService {
     return (pair1.key === pair2.key && pair1.value === pair2.value);
   }
 
-  private async restoreOriginalMaterial(scene: ICommonScene): Promise<void> {
-    const scene3D: THREE.Scene = await new SceneParserService().parseScene(scene);
+  private async restoreOriginalMaterial(): Promise<void> {
+    const scene3D: THREE.Scene = this.originalSceneLoaderService.scene;
     scene3D.children.forEach((child: THREE.Mesh) => {
       if (child.type === CheatModeService.MESH_TYPE) {
         if (child.material instanceof THREE.Material) {
@@ -171,11 +169,11 @@ export class CheatModeService {
         }
       }
     });
-    this.renderScene(this.originalSceneLoaderService, scene3D, this.originalSceneLoaderService.camera);
+    this.renderScene(this.originalSceneLoaderService, scene3D);
   }
 
-  private async restoreModifiedMaterial(scene: ICommonScene, modifiedScene: ICommonSceneModifications): Promise<void> {
-    const scene3D: THREE.Scene = await new ModifiedSceneParserService().parseModifiedScene(scene, modifiedScene);
+  private async restoreModifiedMaterial(): Promise<void> {
+    const scene3D: THREE.Scene = this.modifiedSceneLoaderService.scene;
     scene3D.children.forEach((child: THREE.Mesh) => {
       if (child.type === CheatModeService.MESH_TYPE) {
         if (child.material instanceof THREE.Material) {
@@ -189,6 +187,6 @@ export class CheatModeService {
         }
       }
     });
-    this.renderScene(this.modifiedSceneLoaderService, scene3D, this.modifiedSceneLoaderService.camera);
+    this.renderScene(this.modifiedSceneLoaderService, scene3D);
   }
 }
