@@ -40,7 +40,7 @@ export class SocketHandler {
         socket.on("UserConnected", (message: ICommonSocketMessage) => {
             this.idUsernames.set(socket.id, message.data);
             const welcomeMsg: ICommonSocketMessage = {
-                data: _e(R.SOCKET_USERCONNECTED, [message.data]),
+                data: message.data,
                 timestamp: dateFormat(message.timestamp, R.SOCKET_DATE),
             };
             socket.broadcast.emit("NewUser", welcomeMsg);
@@ -51,7 +51,7 @@ export class SocketHandler {
         socket.on("disconnect", () => {
             const username: Object | undefined = this.idUsernames.get(socket.id);
             const goodByeMsg: ICommonSocketMessage = {
-                data: _e(R.SOCKET_USERDISCONNECTED, [username]),
+                data: JSON.stringify(username),
                 timestamp: dateFormat(new Date(), R.SOCKET_DATE),
             };
             socket.broadcast.emit("UserDisconnected", goodByeMsg);

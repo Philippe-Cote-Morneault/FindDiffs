@@ -64,7 +64,5 @@ export const R: IString = {
     Y: "Y",
     Y_: "y",
 
-    SOCKET_USERCONNECTED: " The user %s is now online!",
-    SOCKET_USERDISCONNECTED: " The user %s is now offline!",
     SOCKET_DATE: "HH:MM:ss",
 };
