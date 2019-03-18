@@ -1,6 +1,8 @@
 import * as THREE from "three";
+import { ObjectProperties } from "../../../../../../../common/model/scene/objects/thematicObjects/objectProperties";
 import { ICommonThematicObject, ObjTheme } from "../../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { JSONLoader } from "../../sceneLoader/jsonLoader";
+import { TextureLoader } from "../../sceneLoader/textureLoader";
 import { SceneObjectParser } from "../sceneObjectParser";
 
 export class ThematicObjectParser extends SceneObjectParser {
@@ -22,6 +24,8 @@ export class ThematicObjectParser extends SceneObjectParser {
         } else {
             object3D.rotation.y = object.orientation.yAngle;
         }
+
+        await this.loadMaterial(object3D, object);
 
         return object3D;
     }
