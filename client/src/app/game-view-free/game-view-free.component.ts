@@ -4,6 +4,7 @@ import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
+import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
 import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
@@ -75,7 +76,7 @@ export class GameViewFreeComponent implements OnInit {
                 if (this.cheatModeService.cheatActivated) {
                     await this.cheatModeService.toggleCheatMode(
                         this.currentOriginalScene,
-                        (this.currentModifiedScene as ICommonGeometricModifications),
+                        (this.currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
                     );
                 }
             }
@@ -100,7 +101,6 @@ export class GameViewFreeComponent implements OnInit {
         this.sceneService.getSceneById(this.scenePairID).subscribe(async (response: ICommonScene) => {
             this.currentOriginalScene = response;
             await this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, this.currentOriginalScene, true);
-            await this.cheatModeService.saveOriginalMaterial(this.currentOriginalScene);
             this.getModifiedSceneById(this.currentOriginalScene);
         });
     }
@@ -109,7 +109,6 @@ export class GameViewFreeComponent implements OnInit {
         this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (responseModified: ICommonSceneModifications) => {
             this.currentModifiedScene = responseModified;
             await this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, this.currentModifiedScene);
-            await this.cheatModeService.saveModifiedMaterial(this.currentOriginalScene, this.currentModifiedScene);
             this.sceneSyncer.syncScenesMovement(this.originalSceneLoader.camera, this.originalScene.nativeElement,
                                                 this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
             this.spinnerService.hide();
