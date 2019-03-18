@@ -56,21 +56,14 @@ export class SocketHandler {
         this.onUserDisconnected(socket);
     }
 
-    private onUsernameConnected(socket: any): void {
+    private onUsernameConnected(socket: SocketIO.Socket): void {
         socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
             this.idUsernames.set(socket.id, message.data);
             this.notifySubsribers(Event.UserConnected, message);
-            /*
-            const welcomeMsg: ICommonSocketMessage = {
-                data: _e(R.SOCKET_USERCONNECTED, [message.data]),
-                timestamp: dateFormat(message.timestamp, R.SOCKET_DATE),
-            };
-            socket.broadcast.emit("NewUser", welcomeMsg);
-            */
         });
     }
 
-    private onUserDisconnected(socket: any): void {
+    private onUserDisconnected(socket: SocketIO.Socket): void {
         socket.on("disconnect", () => {
             const username: Object | undefined = this.idUsernames.get(socket.id);
             const goodByeMsg: ICommonSocketMessage = {
@@ -80,6 +73,12 @@ export class SocketHandler {
             const newScore: ICommonScoreEntry = {name: "Sam", score: 16};
             GameCardService.updateScore(undefined, undefined, newScore);
             socket.broadcast.emit("UserDisconnected", goodByeMsg);
+        });
+    }
+
+    private onPlaySoloGame(socket: SocketIO.Socket): void {
+        socket.on(Event.PlaySoloGame, (message: ICommonSocketMessage) => {
+            this.notifySubsribers(Event.PlaySoloGame, message);
         });
     }
 
