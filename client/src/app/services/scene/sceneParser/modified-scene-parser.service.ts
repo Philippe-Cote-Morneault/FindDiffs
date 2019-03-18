@@ -3,8 +3,10 @@ import { InvalidFormatException } from "../../../../../../common/errors/invalidF
 import { Pair } from "../../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
+import { ICommonThematicModifications } from "../../../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
+import { ICommonThematicObject } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ICommonScene, ObjectType } from "../../../../../../common/model/scene/scene";
 import { AbstractSceneParser } from "./abstractSceneParserService";
 
@@ -33,12 +35,26 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         return scene;
     }
 
-    private parseThematicObjects(scene: THREE.Scene, sceneModifications: ICommonSceneModifications,
-                                 originalSceneObjects: ICommonSceneObject[]): void {
+    private async parseThematicObjects(scene: THREE.Scene, sceneModifications: ICommonThematicModifications,
+                                       originalSceneObjects: ICommonThematicObject[]): Promise<void> {
+        for (const originalObject of originalSceneObjects) {
+            if (!sceneModifications.deletedObjects.includes(originalObject.id)) {
 
-        // tslint:disable-next-line:no-suspicious-comment
-        // TODO: Implement this in sprint 3
-    }
+                const objectTexture: Pair<string, string> | undefined =
+                sceneModifications.texturesChangedObjects.find(
+                    (object: Pair<string, string>) => originalObject.id === object.key,
+                );
+                if (objectTexture !== undefined) {
+                    if (originalObject.isTextured) {
+                        this.changeObjectTexture(originalObject, objectTexture.value);
+                    } else {
+                        this.changeObjectColor(originalObject, Number(objectTexture.value));
+                    }
+                }
+                scene.add(await this.sceneObjectParser.parse(originalObject));
+            }
+        }
+                                 }
 
     private async parseGeometricObjects(scene: THREE.Scene, sceneModifications: ICommonGeometricModifications,
                                         originalSceneObjects: ICommonGeometricObject[]): Promise<void> {
