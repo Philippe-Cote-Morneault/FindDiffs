@@ -66,11 +66,11 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         }
     }
 
-    private changeObjectColor(objectToModify: ICommonGeometricObject, color: number | undefined): void {
+    private changeObjectColor(objectToModify: ICommonGeometricObject | ICommonThematicObject, color: number | undefined): void {
         if (color === undefined) {
             throw new InvalidFormatException("Color not valid!");
         }
-        objectToModify.color = color;
+        objectToModify.color = color as number;
     }
 
     private changeObjectTexture(objectToModify: ICommonThematicObject, texture: string): void {
