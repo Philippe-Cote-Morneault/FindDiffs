@@ -30,6 +30,13 @@ export class ObjectRestoration {
                 differenceType = DifferenceTypeObject3D.addObject;
             }
             // tslint:disable-next-line:prefer-conditional-expression
+        } else if (intersectsOriginal.length > 0 && intersectsModified.length === 0) {
+            differenceType = DifferenceTypeObject3D.addObject;
+        } else if (intersectsOriginal.length === 0 && intersectsModified.length > 0) {
+            differenceType = DifferenceTypeObject3D.removeObject;
+        } else {
+            differenceType = DifferenceTypeObject3D.none;
+        }
 
         return differenceType;
     }
