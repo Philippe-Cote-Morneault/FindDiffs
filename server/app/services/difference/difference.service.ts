@@ -46,8 +46,9 @@ export class DifferenceService extends Service implements IDifferenceService {
 
         const originalScene: ICommonScene = await ApiRequest.getSceneId(req.body.originalSceneId);
 
-        const errorType: RevealDifference3D = new RevealDifference3D(originalScene, req.body.modifiedObjectId);
+        const revealDifference3D: RevealDifference3D = new RevealDifference3D(originalScene, req.body.modifiedObjectId);
 
+        return JSON.stringify(revealDifference3D.reveal());
     }
 
     private validateFree(req: Request): void {
