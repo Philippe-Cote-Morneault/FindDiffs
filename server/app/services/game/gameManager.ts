@@ -23,9 +23,6 @@ export class GameManager implements SocketSubscriber {
             case Event.PlaySoloGame:
                 this.createSoloGame(message.data as ICommonGame);
                 break;
-            case Event.UserConnected:
-                console.log(message.data);
-                break;
             default:
                 break;
         }
@@ -37,7 +34,6 @@ export class GameManager implements SocketSubscriber {
     }
 
     private subscribeToSocket(): void {
-        SocketHandler.getInstance().subscribe(Event.UserConnected, this);
         SocketHandler.getInstance().subscribe(Event.PlaySoloGame, this);
     }
 

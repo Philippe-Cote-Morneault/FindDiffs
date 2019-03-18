@@ -67,14 +67,10 @@ export class SocketHandler {
 
     private onUserDisconnected(socket: SocketIO.Socket): void {
         socket.on("disconnect", () => {
-            const username: Object | undefined = this.idUsernames.get(socket.id);
-            const goodByeMsg: ICommonSocketMessage = {
-                data: _e(R.SOCKET_USERDISCONNECTED, [username]),
-                timestamp: dateFormat(new Date(), R.SOCKET_DATE),
+            const user: ICommonUser = {
+                username: this.getUsername(socket.id),
             };
-            const newScore: ICommonScoreEntry = {name: "Sam", score: 16};
-            GameCardService.updateScore(undefined, undefined, newScore);
-            socket.broadcast.emit("UserDisconnected", goodByeMsg);
+            socket.broadcast.emit(Event.UserDisconnected, user);
         });
     }
 
