@@ -45,7 +45,7 @@ export class SocketHandler {
 
     private init(): void {
         this.idUsernames = new Map<string, string>();
-        this.io.on("connect", (socket: SocketIO.Socket) => {
+        this.io.on(Event.UserConnected, (socket: SocketIO.Socket) => {
             this.idUsernames.set(socket.id, "");
 
             this.setEventListeners(socket);
@@ -55,6 +55,7 @@ export class SocketHandler {
     private setEventListeners(socket: SocketIO.Socket): void {
         this.onUsernameConnected(socket);
         this.onUserDisconnected(socket);
+        this.onPlaySoloGame(socket);
     }
 
     private onUsernameConnected(socket: SocketIO.Socket): void {
@@ -66,10 +67,11 @@ export class SocketHandler {
     }
 
     private onUserDisconnected(socket: SocketIO.Socket): void {
-        socket.on("disconnect", () => {
+        socket.on(Event.UserDisconnected, () => {
             const user: ICommonUser = {
                 username: this.getUsername(socket.id),
             };
+            this.removeUsername(socket.id);
             socket.broadcast.emit(Event.UserDisconnected, user);
         });
     }
@@ -95,5 +97,9 @@ export class SocketHandler {
 
     private getUsername(socketId: string): string {
         return (this.idUsernames.get(socketId)) as string;
+    }
+
+    private removeUsername(socketId: string): void {
+        this.idUsernames.delete(socketId);
     }
 }
