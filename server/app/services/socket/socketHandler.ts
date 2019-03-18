@@ -1,12 +1,7 @@
 import { Server } from "http";
 import * as socketIo from "socket.io";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
-import { ICommonScoreEntry } from "../../../../common/model/gameCard";
-import { _e, R } from "../../strings";
-// tslint:disable:no-any
-const dateFormat: any = require("dateformat");
 import { ICommonUser } from "../../../../common/communication/webSocket/user";
-import { GameCardService } from "../gameCard/gameCard.service";
 import { SocketSubscriber } from "./socketSubscriber";
 
 export class SocketHandler {
