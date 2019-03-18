@@ -60,25 +60,24 @@ export class CheatModeService {
                                     modifiedScene: ICommonGeometricModifications,
                                     originalSceneThreeJs: THREE.Scene): void {
     originalScene.sceneObjects.forEach((object: ICommonGeometricObject) => {
-      originalSceneThreeJs.children.forEach((object3D: THREE.Mesh) => {
-        if (object3D.type === CheatModeService.MESH_TYPE) {
-          if (object3D.userData.id === object.id && modifiedScene.deletedObjects.includes(object.id)) {
-            object3D.material = this.generateNewMaterial(CheatModeService.WHITE - object.color);
-          }
-        }
-      });
+      const object3D: THREE.Object3D | undefined = originalSceneThreeJs.children.find(
+        (element: THREE.Mesh) => element.type === CheatModeService.MESH_TYPE &&
+        element.userData.id === object.id &&
+        modifiedScene.deletedObjects.includes(object.id),
+      );
+      if (object3D instanceof THREE.Mesh) {
+        object3D.material = this.generateNewMaterial(CheatModeService.WHITE - object.color);
+      }
     });
   }
 
   private changeAddedObjectsColor(modifiedScene: ICommonGeometricModifications, modifiedSceneThreeJs: THREE.Scene): void {
     modifiedScene.addedObjects.forEach((object: ICommonGeometricObject) => {
-      modifiedSceneThreeJs.children.forEach((object3D: THREE.Mesh) => {
-        if (object3D.type === CheatModeService.MESH_TYPE) {
-          if (object3D.userData.id === object.id) {
-            object3D.material = this.generateNewMaterial(CheatModeService.WHITE - object.color);
-          }
-        }
-      });
+      const object3D: THREE.Object3D | undefined = modifiedSceneThreeJs.children.find(
+        (element: THREE.Mesh) => element.type === CheatModeService.MESH_TYPE && element.userData.id === object.id);
+      if (object3D instanceof THREE.Mesh) {
+        object3D.material = this.generateNewMaterial(CheatModeService.WHITE - object.color);
+      }
     });
   }
 
