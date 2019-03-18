@@ -2,10 +2,14 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import * as THREE from "three";
+import { v4 as uuid } from "uuid";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
+import { ICommonReveal3D } from "../../../../common/model/reveal";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-// import { GeometricObjectService } from "../services/3DObjects/GeometricObjects/geometricObject.service";
+import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
+import { ObjectRestoration } from "../services/3DObjects/GeometricObjects/object-restoration";
+import { DifferenceTypeObject3D } from "../services/differenceTypeObject3D";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
@@ -35,6 +39,8 @@ export class GameViewFreeComponent implements OnInit {
 
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
+    private intersectsOriginal: THREE.Intersection[];
+    private intersectsModified: THREE.Intersection[];
 
     public constructor(
         private route: ActivatedRoute,
@@ -43,7 +49,8 @@ export class GameViewFreeComponent implements OnInit {
         public sceneService: SceneService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService,
-        // public geometricObjectService: GeometricObjectService
+        public geometricObjectService: GeometricObjectsService,
+        public objectRestoration: ObjectRestoration,
         ) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
@@ -80,86 +87,103 @@ export class GameViewFreeComponent implements OnInit {
         const obj: {sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
         const mouse: THREE.Vector2 = new THREE.Vector2();
-        let intersectsOriginal: THREE.Intersection[];
-        let intersectsModified: THREE.Intersection[];
 
         this.setMousePosition(event, mouse, obj.HTMLElement);
 
         raycaster.setFromCamera(mouse, this.originalSceneLoader.camera );
 
-        intersectsOriginal = raycaster.intersectObjects( this.meshesOriginal );
-        intersectsModified = raycaster.intersectObjects( this.meshesModified );
+        this.intersectsOriginal = raycaster.intersectObjects( this.meshesOriginal );
+        this.intersectsModified = raycaster.intersectObjects( this.meshesModified );
 
-        console.log(intersectsOriginal[0]); // call the service instead of console.log
-        console.log(intersectsModified[0]);
+        let modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.id.toString() : uuid();
 
-        if (intersectsOriginal.length > 0) {
-            console.log(intersectsOriginal[0].object.position);
-        }
+        this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId)
+            .subscribe(async (response: ICommonReveal3D) => {
+                const differenceType: DifferenceTypeObject3D = this.objectRestoration.restoreObject(response.hit, this.intersectsOriginal, this.intersectsModified);
 
-        if (intersectsModified.length > 0) {
-            console.log(intersectsModified[0].object.position);
-        }
-
-        if (intersectsOriginal.length > 0 && intersectsModified.length > 0) {
-            if (intersectsOriginal[0].object.position.x === intersectsModified[0].object.position.x && 
-                intersectsOriginal[0].object.position.y === intersectsModified[0].object.position.y && 
-                intersectsOriginal[0].object.position.z === intersectsModified[0].object.position.z) {
-                // deux objets couleur differente
-                let intersectedModified: any;
-                let intersectedOriginal: any;
-
-                intersectedOriginal = intersectsOriginal[0].object;
-                intersectedModified = intersectsModified[0].object;
-
-                if (intersectedModified.material.color.getHex() !== intersectedOriginal.material.color.getHex()) {
-                    console.log(this.isANewDifference(intersectsModified[0].object.uuid));
-                    if (this.isANewDifference(intersectsModified[0].object.uuid)) {
-                        intersectedModified.material.color.setHex(intersectedOriginal.material.color.getHex());
-                        this.differenceFound[this.differenceCounterUser] = intersectsModified[0].object.uuid;
-                        this.differenceCounterUser++;
-                        console.log("Changed modified obj!!!!!");
+                switch (differenceType){
+                    case DifferenceTypeObject3D.addObject: {
+                        this.addObject(this.intersectsOriginal[0].object);
+                        break;
                     }
-                } else {
-                    console.log("YOU ARE DUMB!");
+                    case DifferenceTypeObject3D.removeObject: {
+                        this.removeObject(this.intersectsModified[0].object);
+                        break;
+                    }
+                    case DifferenceTypeObject3D.colorObject: {
+                        this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                        break;
+                    }
+                    default: {
+                        this.error();
+                        break;
+                    }
                 }
-            } else if (intersectsOriginal[0].distance > intersectsModified[0].distance) {
-                // enlever objet modife
-                if (this.isANewDifference(intersectsModified[0].object.uuid)) {
-                    this.modifiedSceneLoader.scene.remove(intersectsModified[0].object);
-                    this.differenceFound[this.differenceCounterUser] = intersectsModified[0].object.uuid;
-                    this.differenceCounterUser++;
+        
+                if (this.differenceCounterUser === 7) {
+                    this.gameOver();
                 }
-            } else if (intersectsOriginal[0].distance < intersectsModified[0].distance) {
-                // add objet modifie
-                if (this.isANewDifference(intersectsOriginal[0].object.uuid)) {
-                    this.modifiedSceneLoader.scene.add(intersectsOriginal[0].object.clone());
-                    this.differenceFound[this.differenceCounterUser] = intersectsOriginal[0].object.uuid;
-                    this.differenceCounterUser++;
-                }
+                //this.manageDifferences(differenceType, this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+            });
+    }
+/*
+    private manageDifferences (differenceType: DifferenceTypeObject3D, objectOriginal: THREE.Object3D, objectModified: THREE.Object3D) {
+
+        switch (differenceType){
+            case DifferenceTypeObject3D.addObject: {
+                this.addObject(objectOriginal);
+                break;
             }
-        } else if (intersectsOriginal.length > 0 && intersectsModified.length === 0) {
-            // add objet modifie
-            if (this.isANewDifference(intersectsOriginal[0].object.uuid)) {
-                this.modifiedSceneLoader.scene.add(intersectsOriginal[0].object.clone());
-                this.differenceFound[this.differenceCounterUser] = intersectsOriginal[0].object.uuid;
-                this.differenceCounterUser++;
+            case DifferenceTypeObject3D.removeObject: {
+                this.removeObject(objectModified);
+                break;
             }
-        } else if (intersectsOriginal.length === 0 && intersectsModified.length > 0) {
-            // enlever objet modifie
-            if (this.isANewDifference(intersectsModified[0].object.uuid)) {
-                this.modifiedSceneLoader.scene.remove(intersectsModified[0].object);
-                this.differenceFound[this.differenceCounterUser] = intersectsModified[0].object.uuid;
-                this.differenceCounterUser++;
+            case DifferenceTypeObject3D.colorObject: {
+                this.changeColorObject(objectOriginal, objectModified);
+                break;
             }
-        } else {
-            // afficher ERREUR
-            console.log("YOU ARE DUMB!");
+            default: {
+                this.error();
+                break;
+            }
         }
 
         if (this.differenceCounterUser === 7) {
             this.gameOver();
         }
+    }*/
+
+    private addObject(objectOriginal: THREE.Object3D) {
+        if (this.isANewDifference(objectOriginal.uuid)) {
+            this.modifiedSceneLoader.scene.add(objectOriginal.clone());
+            this.differenceFound[this.differenceCounterUser] = objectOriginal.uuid;
+            this.differenceCounterUser++;
+        }
+    }
+
+    private removeObject(objectModified: THREE.Object3D) {
+        if (this.isANewDifference(objectModified.uuid)) {
+            this.modifiedSceneLoader.scene.remove(objectModified);
+            this.differenceFound[this.differenceCounterUser] = objectModified.uuid;
+            this.differenceCounterUser++;
+        }
+    }
+
+    private changeColorObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D) {
+        let intersectedModified: any;
+        let intersectedOriginal: any;
+        intersectedOriginal = objectOriginal;
+        intersectedModified = objectModified;
+
+        if (this.isANewDifference(objectModified.uuid)) {
+            intersectedModified.material.color.setHex(intersectedOriginal.material.color.getHex());
+            this.differenceFound[this.differenceCounterUser] = objectModified.uuid;
+            this.differenceCounterUser++;
+        }
+    }
+
+    private error () {
+
     }
 
     private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
@@ -211,10 +235,6 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     public isANewDifference(differenceId: string): boolean {
-        console.log("===================");
-        console.log(differenceId);
-        console.log("===================");
-        console.log(this.differenceFound);
         return !this.differenceFound.includes(differenceId);
     }
 
