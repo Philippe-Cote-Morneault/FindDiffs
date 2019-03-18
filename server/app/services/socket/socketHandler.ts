@@ -6,6 +6,8 @@ import { SocketSubscriber } from "./socketSubscriber";
 
 export class SocketHandler {
     private static instance: SocketHandler;
+    private static CONNECT_EVENT: string = "connect";
+    private static DISCONNECT_EVENT: string = "disconnect";
 
     private io: socketIo.Server;
     private idUsernames: Map<string, string>;
@@ -45,7 +47,7 @@ export class SocketHandler {
 
     private init(): void {
         this.idUsernames = new Map<string, string>();
-        this.io.on(Event.UserConnected, (socket: SocketIO.Socket) => {
+        this.io.on(SocketHandler.CONNECT_EVENT, (socket: SocketIO.Socket) => {
             this.idUsernames.set(socket.id, "");
 
             this.setEventListeners(socket);
@@ -68,7 +70,7 @@ export class SocketHandler {
     }
 
     private onUserDisconnected(socket: SocketIO.Socket): void {
-        socket.on(Event.UserDisconnected, () => {
+        socket.on(SocketHandler.DISCONNECT_EVENT, () => {
             const user: ICommonUser = {
                 username: this.getUsername(socket.id),
             };
