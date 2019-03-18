@@ -13,7 +13,7 @@ export class ThematicSceneParser {
 
     private static readonly WHITE: number = 0xFFFFFF;
     private static readonly GREY: number = 0xAAAAAA;
-    private static readonly AMBIENT_INTENSITY: number = 0.2;
+    private static readonly AMBIENT_INTENSITY: number = 0.3;
 
     public static async parseScene(originalScene: ICommonThematicScene): Promise<THREE.Scene> {
         const scene: THREE.Scene = new THREE.Scene();
