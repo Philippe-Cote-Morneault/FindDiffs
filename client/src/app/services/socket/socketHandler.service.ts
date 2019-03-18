@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { SERVER_URL } from "../../../../../common/url";
-import { SocketStringFormaterService } from "./socketStringFormater.service";
 import { SocketSubscriber } from "./socketSubscriber";
 
 @Injectable({
@@ -10,11 +9,21 @@ import { SocketSubscriber } from "./socketSubscriber";
 })
 
 export class SocketHandlerService {
+    private static instance: SocketHandlerService;
+
     public id: string;
     public socket: SocketIOClient.Socket;
     private subscribers: Map<string, SocketSubscriber[]>;
 
-    public constructor(public socketStringFormaterService: SocketStringFormaterService) {
+    public static getInstance(): SocketHandlerService {
+        if (!this.instance) {
+            this.instance = new SocketHandlerService();
+        }
+
+        return this.instance;
+    }
+    public constructor() {
+        this.subscribers = new Map<string, SocketSubscriber[]>();
         this.init();
     }
 
@@ -31,14 +40,14 @@ export class SocketHandlerService {
         sub.push(subscriber);
     }
 
-    /* private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
+    private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
         if (this.subscribers.has(event)) {
             const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
             subscribers.forEach((subscriber: SocketSubscriber) => {
                 subscriber.notify(event, message);
             });
         }
-    }*/
+    }
 
     public notifyNewUser(username: string): void {
         const message: ICommonSocketMessage = {
@@ -48,22 +57,24 @@ export class SocketHandlerService {
         this.socket.emit(Event.UserConnected, message);
     }
 
-    public newUserConnected(chat: HTMLElement, container: HTMLElement): void {
+    public newUserConnected(): void {
         this.socket.on(Event.NewUser, (message: ICommonSocketMessage) => {
-            this.sendMessage(Event.NewUser, message, chat, container);
+            this.notifySubsribers(Event.UserConnected, message);
+            // this.sendMessage(Event.NewUser, message, chat, container);
         });
     }
 
-    public userDisconnected(chat: HTMLElement, container: HTMLElement): void {
+    public userDisconnected(): void {
         this.socket.on(Event.UserDisconnected, (message: ICommonSocketMessage) => {
-            this.sendMessage(Event.UserDisconnected, message, chat, container);
+            this.notifySubsribers(Event.UserDisconnected, message);
+            // this.sendMessage(Event.UserDisconnected, message, chat, container);
         });
     }
 
-    private sendMessage(messageType: string, message: ICommonSocketMessage, chat: HTMLElement, container: HTMLElement): void {
+    /*private sendMessage(messageType: string, message: ICommonSocketMessage, chat: HTMLElement, container: HTMLElement): void {
         const pre: HTMLElement = document.createElement("p");
         pre.innerText = this.socketStringFormaterService.messageFormater(messageType, message);
         chat.appendChild(pre);
         container.scrollTop = container.scrollHeight;
-    }
+    }*/
 }
