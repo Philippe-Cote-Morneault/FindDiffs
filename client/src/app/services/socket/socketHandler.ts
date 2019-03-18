@@ -1,23 +1,43 @@
 import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { SERVER_URL } from "../../../../../common/url";
 import { SocketStringFormaterService } from "./socketStringFormater.service";
+import { SocketSubscriber } from "./socketSubscriber";
 
 @Injectable({
     providedIn: "root",
 })
 
-export class SocketService {
+export class SocketHandler {
     public id: string;
     public socket: SocketIOClient.Socket;
+    private subscribers: Map<string, SocketSubscriber[]>;
 
     public constructor(public socketStringFormaterService: SocketStringFormaterService) {
         this.init();
     }
 
     public init(): void {
-        this.socket = io("http://localhost:3000");
+        this.socket = io(SERVER_URL);
         this.id = this.socket.id;
+    }
+
+    public subscribe(event: Event, subscriber: SocketSubscriber): void {
+        if (!this.subscribers.has(event)) {
+            this.subscribers.set(event, []);
+        }
+        const sub: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
+        sub.push(subscriber);
+    }
+
+    private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
+        if (this.subscribers.has(event)) {
+            const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
+            subscribers.forEach((subscriber: SocketSubscriber) => {
+                subscriber.notify(event, message);
+            });
+        }
     }
 
     public notifyNewUser(username: string): void {
