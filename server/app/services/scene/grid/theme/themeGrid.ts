@@ -46,12 +46,11 @@ export class ThemeGrid extends Grid {
 
         const surfacePositions: ICommon3DPosition[] = this.availablePositions[surfaceName];
         if (surfacePositions.length < 1) {
-            const remainingPosition: ICommon3DPosition = this.findRemainingPositions();
 
-            return this.positionToThemePosition(remainingPosition);
+            return this.findRemainingPositions();
         }
         const choice: number = RandomUtils.inRangeInt(0, surfacePositions.length - 1);
-        const position: IPostionGridTheme = this.positionToThemePosition(surfacePositions[choice]);
+        const position: IPostionGridTheme = this.positionToThemePosition(surfacePositions[choice], surfaceChoice);
         position.surface = surfaceChoice;
 
         this.availablePositions[surfaceName].splice(choice, 1);
@@ -59,13 +58,16 @@ export class ThemeGrid extends Grid {
         return position;
     }
 
-    private findRemainingPositions(): ICommon3DPosition {
+    private findRemainingPositions(): IPostionGridTheme {
         for (let i: number = 0; i < EnumUtils.enumLength(ThemeSurface); i++) {
             const surfaceName: string = ThemeSurface[i].toLowerCase();
             if (this.availablePositions[surfaceName].length > 0) {
                 const choice: number = RandomUtils.inRangeInt(0, this.availablePositions[surfaceName].length - 1);
 
-                return this.availablePositions[surfaceName].splice(choice, 1)[0];
+                return this.positionToThemePosition(
+                    this.availablePositions[surfaceName].splice(choice, 1)[0],
+                    i as ThemeSurface,
+                );
             }
         }
         throw new StackEmptyException();
@@ -87,9 +89,9 @@ export class ThemeGrid extends Grid {
         return lastIndex as ThemeSurface;
     }
 
-    private positionToThemePosition(position: ICommon3DPosition): IPostionGridTheme {
+    private positionToThemePosition(position: ICommon3DPosition, surface: ThemeSurface): IPostionGridTheme {
         return {
-            surface: ThemeSurface.CAR,
+            surface: surface,
             x: position.x,
             y: position.y,
             z: position.z,

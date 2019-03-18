@@ -2,7 +2,7 @@ import { ThemeSurface } from "./thematicObject";
 
 interface IObjectsProperties {
     lamp: ObjectProperties;
-    bench: ObjectProperties;
+    meter: ObjectProperties;
     bin: ObjectProperties;
     cone: ObjectProperties;
     eclipse: ObjectProperties;
@@ -22,10 +22,14 @@ interface IObjectsProperties {
     spawnSurface: ThemeSurface[];
  }
  export const ObjectProperties: IObjectsProperties = {
-    bench: {
-        isTextured: false,
-        meshName: "support",
-        color: [0xcba345, 0xca1e29, 0x4aca2f],
+    meter: {
+        isTextured: true,
+        meshName: "ParkingMeter",
+        texture: [
+            "meter_1.jpg",
+            "meter_2.jpg",
+            "meter_3.jpg",
+        ],
         spawnSurface: [ThemeSurface.GRASS],
     },
     bin: {
