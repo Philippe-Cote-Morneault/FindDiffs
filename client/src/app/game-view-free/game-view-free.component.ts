@@ -64,8 +64,7 @@ export class GameViewFreeComponent implements OnInit {
         if (event.keyCode === GameViewFreeComponent.T_KEYCODE) {
             this.cheatActivated = !this.cheatActivated;
             if (this.cheatActivated) {
-                this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
-                this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
+                this.copySceneLoaders();
                 await this.cheatModeTimeoutService.startCheatMode(
                     this.cheatModeService,
                     this.currentOriginalScene,
@@ -81,6 +80,12 @@ export class GameViewFreeComponent implements OnInit {
                 }
             }
         }
+    }
+
+    private copySceneLoaders(): void {
+        this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
+        this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
+
     }
 
     private getGameCardById(): void {
