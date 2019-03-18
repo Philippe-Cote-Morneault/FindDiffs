@@ -25,6 +25,32 @@ export class ThematicObjectParser extends SceneObjectParser {
 
         return object3D;
     }
+
+    private async loadMaterial(object3D: THREE.Object3D, object: ICommonThematicObject): Promise<void> {
+        const objName: string = ObjTheme[object.objectType].toLowerCase();
+        const meshName: string = ObjectProperties[objName].meshName;
+        const isTextured: boolean = ObjectProperties[objName].isTextured;
+        // Check if it is the first texture/color, we don't need to load it since it's the default
+        // texture and already loaded in the json model.
+        if (isTextured) {
+            if ((ObjectProperties[objName].texture as string[])[0] !== object.texture) {
+                await this.loadTexture(object3D, meshName, object.texture as string);
+                if (object.objectType === ObjTheme.SIGN_SKIP) {
+                    const SKIP_SIGN_LOW: string = "Box62_0";
+                    const SIGN_PREFIX: string = "sign_skip1";
+                    const SIGN_PREFIX_NEW: string = "sign_skip2";
+                    const texture: string = (object.texture as string).replace(SIGN_PREFIX, SIGN_PREFIX_NEW);
+
+                    await this.loadTexture(object3D, SKIP_SIGN_LOW, texture);
+                }
+            }
+        } else {
+            if ((ObjectProperties[objName].color as number[])[0] !== object.color) {
+                this.loadColor(object3D, meshName, object.color as number);
+            }
+        }
+    }
+
     private async loadTexture(object3D: THREE.Object3D, meshName: string, textureName: string): Promise<void> {
         const newTexture: THREE.Texture = await TextureLoader.load(textureName);
         object3D.traverse((child: THREE.Mesh) => {
