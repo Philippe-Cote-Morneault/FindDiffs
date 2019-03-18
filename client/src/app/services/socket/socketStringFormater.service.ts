@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { _e, R } from "../../ressources/strings";
 
 @Injectable({
@@ -10,10 +10,10 @@ export class SocketStringFormaterService {
 
     public messageFormater(messageType: string, message: ICommonSocketMessage): string {
         switch (messageType) {
-            case "UserDisconnected": {
+            case Event.UserDisconnected: {
                 return this.onUserDisconnected(message);
             }
-            case "NewUser": {
+            case Event.NewUser: {
                return this.onNewUser(message);
             }
             default: {
