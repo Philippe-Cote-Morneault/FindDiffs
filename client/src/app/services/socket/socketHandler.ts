@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { SERVER_URL } from "../../../../../common/url";
-import { SocketSubscriber } from "./socketSbscriber";
 import { SocketStringFormaterService } from "./socketStringFormater.service";
+import { SocketSubscriber } from "./socketSubscriber";
 
 @Injectable({
     providedIn: "root",
