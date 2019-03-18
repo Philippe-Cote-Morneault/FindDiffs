@@ -15,7 +15,7 @@ export class GeometricObjectsService extends HTTPService {
     }
 
     // tslint:disable:no-any
-    public post3DObject(originalSceneId: string, modifiedObjectId: string | undefined): Observable<any> {
+    public post3DObject(originalSceneId: string, modifiedObjectId: string): Observable<any> {
         const requestBody: Object = {
             "originalSceneId": originalSceneId, "modifiedObjectId": modifiedObjectId};
 
