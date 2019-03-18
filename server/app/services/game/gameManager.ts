@@ -1,12 +1,12 @@
-//import { Game } from "../../model/game/game";
-import { SocketSubscriber } from "../socket/socketSubscriber";
+// import { Game } from "../../model/game/game";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { SocketHandler } from "../socket/socketHandler";
+import { SocketSubscriber } from "../socket/socketSubscriber";
 
 export class GameManager implements SocketSubscriber {
     private static instance: GameManager;
 
-    //private activeGames: Game[];
+    // private activeGames: Game[];
 
     public static getInstance(): GameManager {
         if (!GameManager.instance) {
@@ -16,9 +16,7 @@ export class GameManager implements SocketSubscriber {
         return GameManager.instance;
     }
 
-    public notify(event: Event, message: ICommonSocketMessage): void {
-        
-    }
+    public notify(event: Event, message: ICommonSocketMessage): void { }
 
     private constructor() {
         SocketHandler.getInstance().subscribe(Event.UserConnected, this);
