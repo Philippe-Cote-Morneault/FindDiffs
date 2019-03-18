@@ -160,12 +160,6 @@ export class GameViewFreeComponent implements OnInit {
         if (this.differenceCounterUser === 7) {
             this.gameOver();
         }
-        // this.originalSceneLoader.scene.remove(intersectsOriginal[0].object);
-        // console.log("========================");
-        // let test: any = intersectsOriginal[0].object;
-        // this.modifiedSceneLoader.scene.add(test);
-
-        // geometricObjectService.
     }
 
     private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
