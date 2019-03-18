@@ -2,6 +2,8 @@ import { Server } from "http";
 import * as socketIo from "socket.io";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../common/communication/webSocket/user";
+import { NotFoundException } from "../../../../common/errors/notFoundException";
+import { _e, R } from "../../strings";
 import { SocketSubscriber } from "./socketSubscriber";
 
 export class SocketHandler {
@@ -112,7 +114,12 @@ export class SocketHandler {
         this.idUsernames.delete(socketId);
     }
 
-    private getSocketId(username: string): string | undefined {
-        return Object.keys(this.idUsernames).find((key: string) => this.idUsernames[key] === username);
+    private getSocketId(username: string): string {
+        const id: string | undefined =  Object.keys(this.idUsernames).find((key: string) => this.idUsernames[key] === username);
+        if (id === undefined) {
+                throw new NotFoundException(_e(R.ERROR_INVALIDID, [username]));
+        }
+
+        return id;
     }
 }
