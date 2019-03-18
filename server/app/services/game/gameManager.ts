@@ -6,14 +6,12 @@ import { Game } from "../../model/game/game";
 import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { SocketSubscriber } from "../socket/socketSubscriber";
-import { TimerService } from "./timerService";
 
 export class GameManager implements SocketSubscriber {
     private static instance: GameManager;
 
     private activePlayers: Map<string, Game>;
     private activeGames: Game[];
-    private timerService: TimerService;
 
     public static getInstance(): GameManager {
         if (!GameManager.instance) {
