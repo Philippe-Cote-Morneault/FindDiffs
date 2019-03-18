@@ -43,6 +43,10 @@ export class SocketHandler {
         this.io.to(targetId).emit(event, message);
     }
 
+    public broadcastMessage(event: Event, message: ICommonSocketMessage): void {
+        this.io.sockets.emit(event, message);
+    }
+
     private constructor() {
         this.subscribers = new Map<string, SocketSubscriber[]>();
     }
