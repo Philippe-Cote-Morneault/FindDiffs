@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { NoErrorThrownException } from "../../../../tests/noErrorThrownException";
 import { IPositionGridTheme, ThemeGrid } from "./themeGrid";
 
@@ -60,6 +61,27 @@ describe("ThemeGrid", () => {
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal("The stack cannot be popped since it's empty.");
+            }
+        });
+
+        it("Should not return a position that was already returned", () => {
+            const SIZE: number = 1000;
+            const MARGIN: number = 20;
+            const DEPTH: number = 50;
+
+            const POSITION_TO_GENERATE: number = 200;
+            const ITERATIONS: number = 500;
+
+            for (let i: number = 0; i < ITERATIONS; i++) {
+                const positionsGenerated: ICommon3DPosition[] = [];
+                const themeGrid: ThemeGrid = new ThemeGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
+                for (let j: number = 0 ; j < POSITION_TO_GENERATE; j++) {
+                    positionsGenerated.push(themeGrid.getNextPosition());
+                }
+                const duplicates: ICommon3DPosition[] = positionsGenerated.filter((a: ICommon3DPosition) =>
+                    positionsGenerated.indexOf(a) !== positionsGenerated.lastIndexOf(a),
+                );
+                expect(duplicates).to.eql([]);
             }
         });
 
