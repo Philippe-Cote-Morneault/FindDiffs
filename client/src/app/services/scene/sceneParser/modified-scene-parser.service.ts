@@ -4,11 +4,11 @@ import { Pair } from "../../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonThematicModifications } from "../../../../../../common/model/scene/modifications/thematicModifications";
-import { ICommonGeometricObject } from "../../../../../../common/model/scene/objects/geometricObjects/geometricObject";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonThematicObject } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
-import { ICommonScene, ObjectType } from "../../../../../../common/model/scene/scene";
+import { ObjectType, ICommonScene } from "../../../../../../common/model/scene/scene";
 import { AbstractSceneParser } from "./abstractSceneParserService";
+import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
 
 @Injectable({
     providedIn: "root",
@@ -47,42 +47,43 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         return scene;
     }
 
-    private async parseThematicObjects(scene: THREE.Scene, sceneModifications: ICommonThematicModifications,
-                                       originalSceneObjects: ICommonThematicObject[]): Promise<void> {
-        for (const originalObject of originalSceneObjects) {
-            if (!sceneModifications.deletedObjects.includes(originalObject.id)) {
-
-                const objectTexture: Pair<string, string> | undefined =
-                sceneModifications.texturesChangedObjects.find(
-                    (object: Pair<string, string>) => originalObject.id === object.key,
-                );
-                if (objectTexture !== undefined) {
-                    if (originalObject.isTextured) {
-                        this.changeObjectTexture(originalObject, objectTexture.value);
-                    } else {
-                        this.changeObjectColor(originalObject, Number(objectTexture.value));
+    private async parseThematicObjects(scene: THREE.Scene, sceneModifications: ICommonThematicModifications): Promise<void> {
+        for (const originalObject of scene.children) {
+            if (originalObject.userData.id !== undefined) {
+                if (!sceneModifications.deletedObjects.includes(originalObject.userData.id)) {
+                    const objectTexture: Pair<string, string> | undefined =
+                    sceneModifications.texturesChangedObjects.find(
+                        (object: Pair<string, string>) => originalObject.userData.id === object.key,
+                    );
+                    if (objectTexture !== undefined) {
+                        if (isNaN(Number(objectTexture.value))) {
+                            await this.changeObjectTexture(originalObject, objectTexture.value);
+                        } else {
+                            await this.changeObjectColor(originalObject, Number(objectTexture.value));
+                        }
                     }
+                } else {
+                    scene.remove(originalObject);
                 }
-                scene.add(await this.sceneObjectParser.parse(originalObject));
             }
         }
-                                 }
+    }
 
     private async parseGeometricObjects(scene: THREE.Scene, sceneModifications: ICommonGeometricModifications): Promise<void> {
 
         for (const originalObject of scene.children) {
             if (originalObject.userData.id !== undefined) {
                 if (!sceneModifications.deletedObjects.includes(originalObject.userData.id)) {
-                const objectColor: Pair<string, number> | undefined =
-                sceneModifications.colorChangedObjects.find(
+                    const objectColor: Pair<string, number> | undefined =
+                    sceneModifications.colorChangedObjects.find(
                         (object: Pair<string, number>) => originalObject.userData.id === object.key,
-                );
-                if (objectColor !== undefined) {
-                        await this.changeObjectColor(
-                        originalObject,
-                        objectColor.value,
                     );
-                }
+                    if (objectColor !== undefined) {
+                        await this.changeObjectColor(
+                            originalObject,
+                            objectColor.value,
+                        );
+                    }
                 } else {
                     scene.remove(originalObject);
                 }
@@ -96,7 +97,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         .then((v: THREE.Object3D[]) => {
             for (const object of v) {
                 scene.add(object);
-        }
+            }
         });
     }
 
