@@ -19,7 +19,7 @@ export class SceneObjectColorChanger implements SceneTransformation {
 
         modifications.colorChangedObjects.push({
             key: modifiedObject.id,
-            value: ColorUtils.WHITE - modifiedObject.color,
+            value: ColorUtils.inverseColor(modifiedObject.color),
         });
 
         objectsToTransform.splice(indexOfObject, 1);
