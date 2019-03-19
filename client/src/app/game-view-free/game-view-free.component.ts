@@ -73,8 +73,7 @@ export class GameViewFreeComponent implements OnInit {
             } else {
                 this.cheatModeTimeoutService.stopCheatMode();
                 if (this.cheatModeService.cheatActivated) {
-                    await this.cheatModeService.toggleCheatMode(
-                        this.currentOriginalScene,
+                    this.cheatModeService.toggleCheatMode(
                         (this.currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
                     );
                 }
