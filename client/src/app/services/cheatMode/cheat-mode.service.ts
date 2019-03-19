@@ -125,16 +125,6 @@ export class CheatModeService {
     sceneLoader.scene = scene;
   }
 
-  private generateNewMaterial(color: number): THREE.Material {
-    const parameters: THREE.MeshPhongMaterialParameters = { color };
-
-    return new THREE.MeshPhongMaterial(parameters);
-  }
-
-  private comparePair(pair1: Pair<string, number>, pair2: Pair<string, number>): boolean {
-    return (pair1.key === pair2.key && pair1.value === pair2.value);
-  }
-
   private async restoreOriginalMaterial(): Promise<void> {
     const scene3D: THREE.Scene = this.originalSceneLoaderService.scene;
     scene3D.children.forEach((child: THREE.Object3D) => {
