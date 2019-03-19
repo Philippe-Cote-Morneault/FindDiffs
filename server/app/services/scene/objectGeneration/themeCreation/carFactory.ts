@@ -4,11 +4,16 @@ import { ObjectFactory } from "../objectFactory";
 import { ThemeObjectFactory } from "./themeObjectFactory";
 
 export class CarFactory extends ThemeObjectFactory {
+    private readonly SCALE_MULTIPLIER: number = 0.75;
     private name: string;
 
     public constructor(name: string) {
         super();
         this.name = name;
+    }
+
+    protected getScaleMultiplier(): number {
+        return this.SCALE_MULTIPLIER;
     }
 
     protected getObjectName(): string {
