@@ -68,22 +68,24 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         }
                                  }
 
-    private async parseGeometricObjects(scene: THREE.Scene, sceneModifications: ICommonGeometricModifications,
-                                        originalSceneObjects: ICommonGeometricObject[]): Promise<void> {
+    private async parseGeometricObjects(scene: THREE.Scene, sceneModifications: ICommonGeometricModifications): Promise<void> {
 
-        for (const originalObject of originalSceneObjects) {
-            if (!sceneModifications.deletedObjects.includes(originalObject.id)) {
+        for (const originalObject of scene.children) {
+            if (originalObject.userData.id !== undefined) {
+                if (!sceneModifications.deletedObjects.includes(originalObject.userData.id)) {
                 const objectColor: Pair<string, number> | undefined =
                 sceneModifications.colorChangedObjects.find(
-                    (object: Pair<string, number>) => originalObject.id === object.key,
+                        (object: Pair<string, number>) => originalObject.userData.id === object.key,
                 );
                 if (objectColor !== undefined) {
-                    this.changeObjectColor(
+                        await this.changeObjectColor(
                         originalObject,
                         objectColor.value,
                     );
                 }
-                scene.add(await this.sceneObjectParser.parse(originalObject));
+                } else {
+                    scene.remove(originalObject);
+                }
             }
         }
     }
