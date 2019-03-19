@@ -5,28 +5,32 @@ import { ICommonThematicModifications } from "../../../../../common/model/scene/
 import { ICommonScene } from "../../../../../common/model/scene/scene";
 import { CheatModeService } from "./cheat-mode.service";
 @Injectable({
-  providedIn: "root",
+    providedIn: "root",
 })
 export class CheatModeTimeoutService implements OnInit {
     private readonly INTERVAL_TIME: number = 250;
-  private timeout: NodeJS.Timeout;
+    private timeout: NodeJS.Timeout;
 
-  public ngOnInit(): void {
-    clearTimeout(this.timeout);
-  }
+    public ngOnInit(): void {
+        clearTimeout(this.timeout);
+    }
 
-  public async startCheatMode(cheatModeService: CheatModeService,
-                              currentOriginalScene: ICommonScene,
-                              currentModifiedScene: ICommonSceneModifications): Promise<void> {
+    public startCheatMode(cheatModeService: CheatModeService,
+                          currentOriginalScene: ICommonScene,
+                          currentModifiedScene: ICommonSceneModifications): void {
 
-    await cheatModeService.toggleCheatMode(
-      (currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
-    );
+        cheatModeService.toggleCheatMode(
+            (currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
+        );
+        this.timeout = setTimeout(
+            () => {
+                this.startCheatMode(cheatModeService, currentOriginalScene, currentModifiedScene);
+            },
             this.INTERVAL_TIME);
-  }
+    }
 
-  public stopCheatMode(): void {
-    clearTimeout(this.timeout);
-  }
+    public stopCheatMode(): void {
+        clearTimeout(this.timeout);
+    }
 
 }
