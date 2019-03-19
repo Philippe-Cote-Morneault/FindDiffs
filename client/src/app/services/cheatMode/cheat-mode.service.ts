@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+/*import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { Pair } from "../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../common/model/scene/modifications/geometricModifications";
@@ -40,8 +40,9 @@ export class CheatModeService {
   }
 
   private async enableCheats(originalScene: ICommonScene, modifiedScene: ICommonGeometricModifications): Promise<void> {
-    const modifiedSceneThreeJs: THREE.Scene = await new ModifiedSceneParserService().parseModifiedScene(originalScene, modifiedScene);
     const originalSceneThreeJs: THREE.Scene = await new SceneParserService().parseScene(originalScene);
+    const modifiedSceneThreeJs: THREE.Scene =
+      await new ModifiedSceneParserService().parseModifiedScene(originalSceneThreeJs, modifiedScene);
     if (modifiedScene.deletedObjects.length > 0) {
       this.changeDeletedObjectsColor(originalScene, modifiedScene, originalSceneThreeJs);
     }
@@ -192,3 +193,4 @@ export class CheatModeService {
     this.renderScene(this.modifiedSceneLoaderService, scene3D, this.modifiedSceneLoaderService.camera);
   }
 }
+*/

@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from "@angular/core";
+/* import { Injectable, OnInit } from "@angular/core";
 import { ICommonGeometricModifications } from "../../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../../common/model/scene/scene";
@@ -30,3 +30,4 @@ export class CheatModeTimeoutService implements OnInit {
   }
 
 }
+*/
