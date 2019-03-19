@@ -20,7 +20,6 @@ export class SocketMessageSenderService implements SocketSubscriber {
     public subscribeToSocket(): void {
         SocketHandlerService.getInstance().subscribe(Event.UserConnected, this);
         SocketHandlerService.getInstance().subscribe(Event.UserDisconnected, this);
-        SocketHandlerService.getInstance().subscribe(Event.NewUser, this);
     }
 
     public notify(event: Event, message: ICommonSocketMessage): void {
