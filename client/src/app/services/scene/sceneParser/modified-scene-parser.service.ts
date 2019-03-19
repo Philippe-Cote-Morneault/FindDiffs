@@ -14,6 +14,20 @@ import { AbstractSceneParser } from "./abstractSceneParserService";
     providedIn: "root",
 })
 export class ModifiedSceneParserService extends AbstractSceneParser {
+    public constructor(type: ObjectType) {
+        super(
+            {
+                type: type,
+                id: "",
+                dimensions: {
+                    x: 500,
+                    y: 500,
+                    z: 500,
+                },
+                sceneObjects: [],
+            },
+        );
+    }
 
     public async parseModifiedScene(originalSceneModel: ICommonScene, sceneModifications: ICommonSceneModifications): Promise<THREE.Scene> {
         const scene: THREE.Scene = await this.createScene(originalSceneModel);
