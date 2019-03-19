@@ -30,6 +30,12 @@ export class SocketHandlerService {
     public init(): void {
         this.socket = io(SERVER_URL);
         this.id = this.socket.id;
+        this.setEventListener();
+    }
+
+    private setEventListener(): void {
+        this.onNewUserConnected();
+        this.onUserDisconnected();
     }
 
     public subscribe(event: Event, subscriber: SocketSubscriber): void {
@@ -62,13 +68,13 @@ export class SocketHandlerService {
         this.socket.emit(Event.UserConnected, message);
     }
 
-    public newUserConnected(): void {
+    public onNewUserConnected(): void {
         this.socket.on(Event.NewUser, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.UserConnected, message);
         });
     }
 
-    public userDisconnected(): void {
+    public onUserDisconnected(): void {
         this.socket.on(Event.UserDisconnected, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.UserDisconnected, message);
         });
