@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ICommonGameCard, ICommonScoreEntry } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/gameCard/games-card.service";
@@ -15,7 +15,6 @@ export class EndSoloGameComponent implements OnInit {
 
   public gameCard: ICommonGameCard;
   public gameCardId: string;
-  @Input() public playerTimeChild: string;
 
   public constructor(
     private route: ActivatedRoute,
