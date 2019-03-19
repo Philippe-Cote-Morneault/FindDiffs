@@ -8,7 +8,7 @@ import { CheatModeService } from "./cheat-mode.service";
   providedIn: "root",
 })
 export class CheatModeTimeoutService implements OnInit {
-  private static readonly intervalTime: number = 250;
+    private readonly INTERVAL_TIME: number = 250;
   private timeout: NodeJS.Timeout;
 
   public ngOnInit(): void {
@@ -22,9 +22,7 @@ export class CheatModeTimeoutService implements OnInit {
     await cheatModeService.toggleCheatMode(
       (currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
     );
-    this.timeout = setTimeout(async () => {
-        await this.startCheatMode(cheatModeService, currentOriginalScene, currentModifiedScene);
-    },                        CheatModeTimeoutService.intervalTime);
+            this.INTERVAL_TIME);
   }
 
   public stopCheatMode(): void {
