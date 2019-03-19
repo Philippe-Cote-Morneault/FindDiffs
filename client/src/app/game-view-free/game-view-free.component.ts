@@ -73,8 +73,7 @@ export class GameViewFreeComponent implements OnInit {
             } else {
                 this.cheatModeTimeoutService.stopCheatMode();
                 if (this.cheatModeService.cheatActivated) {
-                    await this.cheatModeService.toggleCheatMode(
-                        this.currentOriginalScene,
+                    this.cheatModeService.toggleCheatMode(
                         (this.currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
                     );
                 }
@@ -83,8 +82,8 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private copySceneLoaders(): void {
-        this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
-        this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
+        this.cheatModeService.originalLoaderService = this.originalSceneLoader;
+        this.cheatModeService.modifiedLoaderService = this.modifiedSceneLoader;
 
     }
 
@@ -92,26 +91,33 @@ export class GameViewFreeComponent implements OnInit {
         this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
             this.scenePairID = gameCard.resource_id;
             this.gameTitle.nativeElement.innerText = gameCard.title;
-            this.getOriginalSceneById();
+            this.loadScene();
         });
     }
 
-    private getOriginalSceneById(): void {
-        this.sceneService.getSceneById(this.scenePairID).subscribe(async (response: ICommonScene) => {
-            this.currentOriginalScene = response;
-            await this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, this.currentOriginalScene, true);
-            this.getModifiedSceneById(this.currentOriginalScene);
-        });
-    }
+    private loadScene(): void {
+        this.sceneService.getSceneById(this.scenePairID).subscribe(async (sceneResponse: ICommonScene) => {
+            this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (sceneModified: ICommonSceneModifications) => {
+                this.currentOriginalScene = sceneResponse;
+                this.currentModifiedScene = sceneModified;
 
-    private getModifiedSceneById(response: ICommonScene): void {
-        this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (responseModified: ICommonSceneModifications) => {
-            this.currentModifiedScene = responseModified;
-            await this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, this.currentModifiedScene);
-            this.sceneSyncer.syncScenesMovement(this.originalSceneLoader.camera, this.originalScene.nativeElement,
-                                                this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
-            this.spinnerService.hide();
-            this.timerService.startTimer(this.chronometer.nativeElement);
+                await this.originalSceneLoader.loadOriginalScene(
+                        this.originalScene.nativeElement,
+                        this.currentOriginalScene,
+                );
+                await this.modifiedSceneLoader.loadModifiedScene(
+                        this.modifiedScene.nativeElement,
+                        this.originalSceneLoader.scene,
+                        this.currentModifiedScene,
+                );
+
+                this.sceneSyncer.syncScenesMovement(
+                    this.originalSceneLoader.camera, this.originalScene.nativeElement,
+                    this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
+                this.spinnerService.hide();
+                this.timerService.startTimer(this.chronometer.nativeElement);
+
+            });
         });
     }
 }

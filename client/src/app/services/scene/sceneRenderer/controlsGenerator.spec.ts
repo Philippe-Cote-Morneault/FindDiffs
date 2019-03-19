@@ -1,8 +1,8 @@
-//import { expect } from "chai";
+// import { expect } from "chai";
 // tslint:disable-next-line:ordered-imports
-//import * as THREE from "three";
-//import { CameraGenerator } from "./cameraGenerator";
-//import { ControlsGenerator } from "./controlsGenerator";
+// import * as THREE from "three";
+// import { CameraGenerator } from "./cameraGenerator";
+// import { ControlsGenerator } from "./controlsGenerator";
 
 describe("ControlsGenerator", () => {
     /*

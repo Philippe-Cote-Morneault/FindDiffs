@@ -9,7 +9,7 @@ describe("SceneLoaderService", () => {
     describe("loadOriginalScene()", () => {
         it("Should add an element to an HTML element", async () => {
             const dummyContainer: HTMLElement = document.createElement("div");
-            await sceneLoaderService.loadOriginalScene(dummyContainer, scene, false);
+            await sceneLoaderService.loadOriginalScene(dummyContainer, scene);
 
             expect(dummyContainer.childElementCount).to.equal(1);
         });
@@ -18,7 +18,7 @@ describe("SceneLoaderService", () => {
     describe("loadModifiedScene()", () => {
         it("Should add an element to an HTML element", async () => {
             const dummyContainer: HTMLElement = document.createElement("div");
-            await sceneLoaderService.loadModifiedScene(dummyContainer, scene, sceneModifications);
+            await sceneLoaderService.loadModifiedScene(dummyContainer, sceneLoaderService.scene, sceneModifications);
 
             expect(dummyContainer.childElementCount).to.equal(1);
         });
