@@ -74,7 +74,7 @@ interface IObjectsProperties {
     },
     lamp:{
         isTextured: false,
-        meshName: "lampPost",
+        meshName: "lampPost001",
         color: [
             0xcccccc,
             0x825912,
