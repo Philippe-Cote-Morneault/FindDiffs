@@ -88,23 +88,20 @@ export class CheatModeService {
   private changeColorChangedObjectsColor(modifiedScene: ICommonGeometricModifications,
                                          originalSceneThreeJs: THREE.Scene,
                                          modifiedSceneThreeJs: THREE.Scene): void {
-    originalSceneThreeJs.children.forEach((child: THREE.Mesh) => {
-      if (child.type === CheatModeService.MESH_TYPE) {
-        const pair: Pair<string, number> = {
-          key: child.userData.id,
-          value: (child.material as THREE.MeshPhongMaterial).color.getHex(),
-        };
-        if (modifiedScene.colorChangedObjects.find(
-          (modifiedPair: Pair<string, number>) => this.comparePair(pair, modifiedPair),
-        )) {
-          const modifiedObject: THREE.Mesh = (modifiedSceneThreeJs.children.find(
-            (modifiedChild: THREE.Mesh) => modifiedChild.userData.id === child.userData.id,
-          ) as THREE.Mesh);
-          child.material = this.generateNewMaterial(pair.value);
+    modifiedScene.colorChangedObjects.forEach(
+      (modifiedPair: Pair<string, number>) => {
+        const originalObject: THREE.Object3D | undefined = originalSceneThreeJs.children.find(
+          (object: THREE.Object3D) => modifiedPair.key === object.userData.id);
+        if (originalObject) {
+          originalObject.visible = false;
+        }
+
+        const modifiedObject: THREE.Object3D | undefined = modifiedSceneThreeJs.children.find(
+          (object: THREE.Object3D) => modifiedPair.key === object.userData.id);
+        if (modifiedObject) {
           modifiedObject.visible = false;
         }
-      }
-    });
+      });
   }
 
   private changeThematicChangedObjects(modifiedScene: ICommonThematicModifications,
