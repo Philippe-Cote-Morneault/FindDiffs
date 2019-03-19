@@ -5,8 +5,8 @@ import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
-import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
+// import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
+// import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
@@ -42,11 +42,12 @@ export class GameViewFreeComponent implements OnInit {
                         public timerService: TimerService,
                         public gamesCardService: GamesCardService,
                         private sceneSyncer: SceneSyncerService,
-                        public cheatModeService: CheatModeService,
-                        private cheatModeTimeoutService: CheatModeTimeoutService) {
+                        // public cheatModeService: CheatModeService,
+                        // private cheatModeTimeoutService: CheatModeTimeoutService
+                        ) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
-        this.cheatActivated = false;
+        // this.cheatActivated = false;
     }
 
     public ngOnInit(): void {
@@ -55,10 +56,10 @@ export class GameViewFreeComponent implements OnInit {
         });
         this.spinnerService.show();
         this.getGameCardById();
-        this.cheatModeTimeoutService.ngOnInit();
+        // this.cheatModeTimeoutService.ngOnInit();
     }
 
-    @HostListener("document:keydown", ["$event"])
+   /* @HostListener("document:keydown", ["$event"])
     public async toggleCheatMode(event: KeyboardEvent): Promise<void> {
         if (event.keyCode === GameViewFreeComponent.T_KEYCODE) {
             this.cheatActivated = !this.cheatActivated;
@@ -81,7 +82,7 @@ export class GameViewFreeComponent implements OnInit {
             }
         }
     }
-
+*/
     private getGameCardById(): void {
         this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
             this.scenePairID = gameCard.resource_id;
