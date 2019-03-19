@@ -73,8 +73,7 @@ export class GameViewFreeComponent implements OnInit {
             } else {
                 this.cheatModeTimeoutService.stopCheatMode();
                 if (this.cheatModeService.cheatActivated) {
-                    await this.cheatModeService.toggleCheatMode(
-                        this.currentOriginalScene,
+                    this.cheatModeService.toggleCheatMode(
                         (this.currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
                     );
                 }
@@ -83,8 +82,8 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private copySceneLoaders(): void {
-        this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
-        this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
+        this.cheatModeService.originalLoaderService = this.originalSceneLoader;
+        this.cheatModeService.modifiedLoaderService = this.modifiedSceneLoader;
 
     }
 
