@@ -105,10 +105,14 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         objectToModify.color = color as number;
     }
 
-    private changeObjectTexture(objectToModify: ICommonThematicObject, texture: string): void {
+    private async changeObjectTexture(objectToModify: THREE.Object3D, texture: string): Promise<void> {
         if (texture === undefined) {
             throw new InvalidFormatException("Texture not valid!");
         }
-        objectToModify.texture = texture;
+        const object: ICommonThematicObject = objectToModify.userData as ICommonThematicObject;
+        object.texture = texture;
+        const objParserThematic: ThematicObjectParser = this.sceneObjectParser as ThematicObjectParser;
+
+        await objParserThematic.loadMaterial(objectToModify, object, true);
     }
 }
