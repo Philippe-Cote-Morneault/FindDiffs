@@ -89,9 +89,13 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
     }
 
     private async addAddedObjects(scene: THREE.Scene, objectsToAdd: ICommonSceneObject[]): Promise<void> {
-        for (const object of objectsToAdd) {
-            scene.add(await this.sceneObjectParser.parse(object));
+        await Promise.all(objectsToAdd.map(async (object: ICommonSceneObject) =>
+        this.sceneObjectParser.parse(object)))
+        .then((v: THREE.Object3D[]) => {
+            for (const object of v) {
+                scene.add(object);
         }
+        });
     }
 
     private changeObjectColor(objectToModify: ICommonGeometricObject | ICommonThematicObject, color: number | undefined): void {
