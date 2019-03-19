@@ -29,7 +29,6 @@ export class ThemeGrid extends Grid {
 
     public constructor(dimensions: ICommonSceneDimensions, minDistancePos: number) {
         super(dimensions, minDistancePos);
-        this.availablePositions = JSON.parse(JSON.stringify(GamePositions));
     }
 
     protected generateGrid(): void {
