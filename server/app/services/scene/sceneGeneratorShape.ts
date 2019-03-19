@@ -8,8 +8,8 @@ import { RandomGrid } from "./grid/randomGrid";
 import { GeometricObjectGenerator } from "./objectGeneration/shapeCreation/geometricObjectGenerator";
 
 export class SceneGeneratorShape implements ISceneGenerator {
-    private static readonly SCENE_SIZE: number =  250;
-    private static readonly SCENE_HEIGHT: number = 125;
+    public static readonly SCENE_SIZE: number =  250;
+    public static readonly SCENE_HEIGHT: number = 125;
     private static readonly SCENE_OBJECT_MARGIN: number = 9;
 
     private objectQty: number;
