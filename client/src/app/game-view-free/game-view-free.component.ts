@@ -82,8 +82,8 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private copySceneLoaders(): void {
-        this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
-        this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
+        this.cheatModeService.originalLoaderService = this.originalSceneLoader;
+        this.cheatModeService.modifiedLoaderService = this.modifiedSceneLoader;
 
     }
 
