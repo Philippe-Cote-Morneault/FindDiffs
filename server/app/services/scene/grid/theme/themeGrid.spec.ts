@@ -1,9 +1,31 @@
 import { expect } from "chai";
+import * as crypto from "crypto";
 import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { NoErrorThrownException } from "../../../../tests/noErrorThrownException";
+import * as GamePositions from "./positions.json";
 import { IPositionGridTheme, ThemeGrid } from "./themeGrid";
 
+const sha1Pos: (pos: ICommon3DPosition) => string =
+(pos: ICommon3DPosition) => crypto.createHash("sha1").update(JSON.stringify(pos)).digest("hex");
+
 describe("ThemeGrid", () => {
+    describe("Positions.json", () => {
+        it("Should not have duplicates value", () => {
+
+            for (const surface of Object.keys(GamePositions)) {
+                const positionsSet: Set<string> = new Set<string>();
+                for (const position of GamePositions[surface]) {
+                    const hasValue: boolean = positionsSet.has(sha1Pos(position));
+                    if (hasValue) {
+                        console.error(position);
+                    }
+                    expect(hasValue).to.equal(false);
+
+                    positionsSet.add(sha1Pos(position));
+                }
+            }
+        });
+    });
     describe("generateGrid()", () => {
         const propertyName: string = "NUMBER_POSITION";
         const themeNumberPositon: number = Number(ThemeGrid[propertyName]);
@@ -73,15 +95,20 @@ describe("ThemeGrid", () => {
             const ITERATIONS: number = 500;
 
             for (let i: number = 0; i < ITERATIONS; i++) {
-                const positionsGenerated: ICommon3DPosition[] = [];
+                const positionsSet: Set<string> = new Set<string>();
+
                 const themeGrid: ThemeGrid = new ThemeGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
                 for (let j: number = 0 ; j < POSITION_TO_GENERATE; j++) {
-                    positionsGenerated.push(themeGrid.getNextPosition());
+                    const position: ICommon3DPosition = themeGrid.getNextPosition();
+                    const hasValue: boolean = positionsSet.has(sha1Pos(position));
+                    if (hasValue) {
+                        console.error(positionsSet);
+                        console.error(position);
+                    }
+                    expect(hasValue).to.equal(false);
+
+                    positionsSet.add(sha1Pos(position));
                 }
-                const duplicates: ICommon3DPosition[] = positionsGenerated.filter((a: ICommon3DPosition) =>
-                    positionsGenerated.indexOf(a) !== positionsGenerated.lastIndexOf(a),
-                );
-                expect(duplicates).to.eql([]);
             }
         });
 
