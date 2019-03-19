@@ -6,7 +6,7 @@ import { ICommonSceneModifications } from "../../../../../../common/model/scene/
 import { ICommonThematicModifications } from "../../../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonThematicObject } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
-import { ObjectType, ICommonScene } from "../../../../../../common/model/scene/scene";
+import { ObjectType } from "../../../../../../common/model/scene/scene";
 import { AbstractSceneParser } from "./abstractSceneParserService";
 import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
 
