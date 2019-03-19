@@ -98,10 +98,6 @@
 			"depthTest": true,
 			"depthWrite": true
 		}],
-	"textures": [],
-	"images": [
-		{
-		}],
 	"object": {
 		"uuid": "E5679961-1F16-4557-B63A-CE2DFBBB3184",
 		"type": "Scene",
