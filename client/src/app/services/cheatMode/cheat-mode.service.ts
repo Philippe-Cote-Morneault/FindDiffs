@@ -40,23 +40,23 @@ export class CheatModeService {
     const originalSceneThreeJs: THREE.Scene = this.originalSceneLoaderService.scene;
 
     if (modifiedScene.addedObjects.length > 0) {
-      this.changeAddedObjectsColor(modifiedScene, modifiedSceneThreeJs);
+      this.changeAddedObjectsVisibility(modifiedScene, modifiedSceneThreeJs);
     }
     if (modifiedScene.deletedObjects.length > 0) {
-      this.changeDeletedObjectsColor(originalScene, modifiedScene, originalSceneThreeJs);
+      this.changeDeletedObjectsVisibility(originalScene, modifiedScene, originalSceneThreeJs);
     }
     if (modifiedScene.colorChangedObjects && modifiedScene.colorChangedObjects.length > 0) {
-      this.changeColorChangedObjectsColor(modifiedScene, originalSceneThreeJs, modifiedSceneThreeJs);
+      this.changeColorChangedObjectsVisibility(modifiedScene, originalSceneThreeJs, modifiedSceneThreeJs);
     }
     if (modifiedScene.texturesChangedObjects && modifiedScene.texturesChangedObjects.length > 0) {
-      this.changeThematicChangedObjects(modifiedScene, originalSceneThreeJs, modifiedSceneThreeJs);
+      this.changeThematicChangedObjectsVisibility(modifiedScene, originalSceneThreeJs, modifiedSceneThreeJs);
     }
 
     this.renderScene(this.originalSceneLoaderService, originalSceneThreeJs);
     this.renderScene(this.modifiedSceneLoaderService, modifiedSceneThreeJs);
   }
 
-  private changeAddedObjectsColor(modifiedScene: ICommonGeometricModifications, modifiedSceneThreeJs: THREE.Scene): void {
+  private changeAddedObjectsVisibility(modifiedScene: ICommonGeometricModifications, modifiedSceneThreeJs: THREE.Scene): void {
     modifiedScene.addedObjects.forEach((object: ICommonGeometricObject) => {
       const object3D: THREE.Object3D | undefined = modifiedSceneThreeJs.children.find(
         (element: THREE.Mesh | THREE.Scene) =>
@@ -69,9 +69,9 @@ export class CheatModeService {
     });
   }
 
-  private changeDeletedObjectsColor(originalScene: ICommonScene,
-                                    modifiedScene: ICommonGeometricModifications,
-                                    originalSceneThreeJs: THREE.Scene): void {
+  private changeDeletedObjectsVisibility(originalScene: ICommonScene,
+                                         modifiedScene: ICommonGeometricModifications,
+                                         originalSceneThreeJs: THREE.Scene): void {
     originalScene.sceneObjects.forEach((object: ICommonGeometricObject) => {
       const object3D: THREE.Object3D | undefined = originalSceneThreeJs.children.find(
         (element: THREE.Mesh | THREE.Scene) =>
@@ -85,9 +85,9 @@ export class CheatModeService {
     });
   }
 
-  private changeColorChangedObjectsColor(modifiedScene: ICommonGeometricModifications,
-                                         originalSceneThreeJs: THREE.Scene,
-                                         modifiedSceneThreeJs: THREE.Scene): void {
+  private changeColorChangedObjectsVisibility(modifiedScene: ICommonGeometricModifications,
+                                              originalSceneThreeJs: THREE.Scene,
+                                              modifiedSceneThreeJs: THREE.Scene): void {
     modifiedScene.colorChangedObjects.forEach(
       (modifiedPair: Pair<string, number>) => {
         const originalObject: THREE.Object3D | undefined = originalSceneThreeJs.children.find(
@@ -104,9 +104,9 @@ export class CheatModeService {
       });
   }
 
-  private changeThematicChangedObjects(modifiedScene: ICommonThematicModifications,
-                                       originalSceneThreeJs: THREE.Scene,
-                                       modifiedSceneThreeJs: THREE.Scene): void {
+  private changeThematicChangedObjectsVisibility(modifiedScene: ICommonThematicModifications,
+                                                 originalSceneThreeJs: THREE.Scene,
+                                                 modifiedSceneThreeJs: THREE.Scene): void {
     modifiedScene.texturesChangedObjects.forEach((modifiedPair: Pair<string, string>) => {
       const originalObject: THREE.Object3D | undefined = originalSceneThreeJs.children.find(
         (object: THREE.Object3D) => modifiedPair.key === object.userData.id);
