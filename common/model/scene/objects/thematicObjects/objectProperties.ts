@@ -77,7 +77,7 @@ interface IObjectsProperties {
         meshName: "lampPost",
         color: [
             0xcccccc,
-            0x474747,
+            0x825912,
             0x8c6900,
         ],
         spawnSurface: [ThemeSurface.GRASS],
