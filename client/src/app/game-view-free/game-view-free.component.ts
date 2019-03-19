@@ -1,11 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
+import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
+import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-// import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
-// import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
+import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
+import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
@@ -20,7 +22,7 @@ import { TimerService } from "../services/timer/timer.service";
 })
 
 export class GameViewFreeComponent implements OnInit {
-    // private static T_KEYCODE: number = 84;
+    private static T_KEYCODE: number = 84;
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
@@ -33,7 +35,7 @@ export class GameViewFreeComponent implements OnInit {
     private gameCardId: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
-    // private cheatActivated: boolean;
+    private cheatActivated: boolean;
 
     public constructor( private route: ActivatedRoute,
                         private spinnerService: Ng4LoadingSpinnerService,
@@ -41,12 +43,11 @@ export class GameViewFreeComponent implements OnInit {
                         public timerService: TimerService,
                         public gamesCardService: GamesCardService,
                         private sceneSyncer: SceneSyncerService,
-                        // public cheatModeService: CheatModeService,
-                        // private cheatModeTimeoutService: CheatModeTimeoutService
-                        ) {
+                        public cheatModeService: CheatModeService,
+                        private cheatModeTimeoutService: CheatModeTimeoutService) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
-        // this.cheatActivated = false;
+        this.cheatActivated = false;
     }
 
     public ngOnInit(): void {
@@ -55,16 +56,15 @@ export class GameViewFreeComponent implements OnInit {
         });
         this.spinnerService.show();
         this.getGameCardById();
-        // this.cheatModeTimeoutService.ngOnInit();
+        this.cheatModeTimeoutService.ngOnInit();
     }
 
-   /* @HostListener("document:keydown", ["$event"])
+    @HostListener("document:keydown", ["$event"])
     public async toggleCheatMode(event: KeyboardEvent): Promise<void> {
         if (event.keyCode === GameViewFreeComponent.T_KEYCODE) {
             this.cheatActivated = !this.cheatActivated;
             if (this.cheatActivated) {
-                this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
-                this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
+                this.copySceneLoaders();
                 await this.cheatModeTimeoutService.startCheatMode(
                     this.cheatModeService,
                     this.currentOriginalScene,
@@ -75,13 +75,19 @@ export class GameViewFreeComponent implements OnInit {
                 if (this.cheatModeService.cheatActivated) {
                     await this.cheatModeService.toggleCheatMode(
                         this.currentOriginalScene,
-                        (this.currentModifiedScene as ICommonGeometricModifications),
+                        (this.currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
                     );
                 }
             }
         }
     }
-*/
+
+    private copySceneLoaders(): void {
+        this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
+        this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
+
+    }
+
     private getGameCardById(): void {
         this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
             this.scenePairID = gameCard.resource_id;

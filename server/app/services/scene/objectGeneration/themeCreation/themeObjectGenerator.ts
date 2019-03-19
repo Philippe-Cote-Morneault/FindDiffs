@@ -1,7 +1,7 @@
 import { ObjectProperties } from "../../../../../../common/model/scene/objects/thematicObjects/objectProperties";
 import { ICommonThematicObject, ThemeSurface } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { RandomUtils } from "../../../../utils/randomUtils";
-import { IPostionGridTheme } from "../../grid/theme/themeGrid";
+import { IPositionGridTheme } from "../../grid/theme/themeGrid";
 import { IObjectGenerator } from "../IObjectGenerator";
 import { CarFactory } from "./carFactory";
 import { SimpleObjectFactory } from "./simpleObjectFactory";
@@ -50,7 +50,7 @@ export class ThemeObjectGenerator implements IObjectGenerator {
     private chooseFactory(factories: ThemeObjectFactory[]): ThemeObjectFactory {
         return factories[RandomUtils.inRangeInt(0, factories.length - 1)];
     }
-    public createObject(position: IPostionGridTheme): ICommonThematicObject {
+    public createObject(position: IPositionGridTheme): ICommonThematicObject {
         let objectFactory: ThemeObjectFactory;
         // tslint:disable-next-line:switch-default
         switch (position.surface) {

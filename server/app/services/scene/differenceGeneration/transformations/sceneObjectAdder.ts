@@ -4,7 +4,7 @@ import { SceneTransformation } from "../../../../../../common/model/scene/modifi
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ObjectType } from "../../../../../../common/model/scene/scene";
 import { Grid } from "../../grid/grid";
-import { IPostionGridTheme } from "../../grid/theme/themeGrid";
+import { IPositionGridTheme } from "../../grid/theme/themeGrid";
 import { GeometricObjectGenerator } from "../../objectGeneration/shapeCreation/geometricObjectGenerator";
 import { ThemeObjectGenerator } from "../../objectGeneration/themeCreation/themeObjectGenerator";
 
@@ -29,7 +29,7 @@ export class SceneObjectAdder implements SceneTransformation {
                 );
             } else {
                 modifications.addedObjects.push(
-                    ThemeObjectGenerator.getInstance().createObject(position as IPostionGridTheme),
+                    ThemeObjectGenerator.getInstance().createObject(position as IPositionGridTheme),
                 );
             }
     }

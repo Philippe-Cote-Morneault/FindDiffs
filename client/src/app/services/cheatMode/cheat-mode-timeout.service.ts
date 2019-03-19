@@ -1,6 +1,7 @@
-/* import { Injectable, OnInit } from "@angular/core";
+import { Injectable, OnInit } from "@angular/core";
 import { ICommonGeometricModifications } from "../../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
+import { ICommonThematicModifications } from "../../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../../common/model/scene/scene";
 import { CheatModeService } from "./cheat-mode.service";
 @Injectable({
@@ -19,7 +20,7 @@ export class CheatModeTimeoutService implements OnInit {
                               currentModifiedScene: ICommonSceneModifications): Promise<void> {
 
     await cheatModeService.toggleCheatMode(currentOriginalScene,
-                                           (currentModifiedScene as ICommonGeometricModifications));
+                                           (currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications));
     this.timeout = setTimeout(async () => {
         await this.startCheatMode(cheatModeService, currentOriginalScene, currentModifiedScene);
     },                        CheatModeTimeoutService.intervalTime);
@@ -30,4 +31,3 @@ export class CheatModeTimeoutService implements OnInit {
   }
 
 }
-*/

@@ -1,6 +1,7 @@
 import { expect } from "chai";
+import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { NoErrorThrownException } from "../../../../tests/noErrorThrownException";
-import { IPostionGridTheme, ThemeGrid } from "./themeGrid";
+import { IPositionGridTheme, ThemeGrid } from "./themeGrid";
 
 describe("ThemeGrid", () => {
     describe("generateGrid()", () => {
@@ -24,7 +25,7 @@ describe("ThemeGrid", () => {
             const maxY: number = minY * -1;
 
             for (let i: number = 0; i < POSITION_TO_GENERATE; i++) {
-                const position: IPostionGridTheme = themeGrid.getNextPosition() as IPostionGridTheme;
+                const position: IPositionGridTheme = themeGrid.getNextPosition() as IPositionGridTheme;
                 expect(position.x).to.be.gte(minX).and.to.be.lte(maxX);
                 expect(position.y).to.be.gte(minY).and.to.be.lte(maxY);
             }
@@ -63,6 +64,27 @@ describe("ThemeGrid", () => {
             }
         });
 
+        it("Should not return a position that was already returned", () => {
+            const SIZE: number = 1000;
+            const MARGIN: number = 20;
+            const DEPTH: number = 50;
+
+            const POSITION_TO_GENERATE: number = 200;
+            const ITERATIONS: number = 500;
+
+            for (let i: number = 0; i < ITERATIONS; i++) {
+                const positionsGenerated: ICommon3DPosition[] = [];
+                const themeGrid: ThemeGrid = new ThemeGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
+                for (let j: number = 0 ; j < POSITION_TO_GENERATE; j++) {
+                    positionsGenerated.push(themeGrid.getNextPosition());
+                }
+                const duplicates: ICommon3DPosition[] = positionsGenerated.filter((a: ICommon3DPosition) =>
+                    positionsGenerated.indexOf(a) !== positionsGenerated.lastIndexOf(a),
+                );
+                expect(duplicates).to.eql([]);
+            }
+        });
+
         it("Should return a number which is approximately between the spawning rate", () => {
             const SIZE: number = 1000;
             const MARGIN: number = 20;
@@ -77,7 +99,7 @@ describe("ThemeGrid", () => {
                 const themeGrid: ThemeGrid = new ThemeGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
 
                 for (let j: number = 0; j < POSITION_TO_GENERATE; j++) {
-                    const position: IPostionGridTheme = themeGrid.getNextPosition() as IPostionGridTheme;
+                    const position: IPositionGridTheme = themeGrid.getNextPosition() as IPositionGridTheme;
                     spawnData[position.surface] += 1;
                 }
             }
