@@ -5,4 +5,4 @@ export interface ICommonSocketMessage {
 
 export enum Event {UserConnected = "UserConnected", NewUser = "NewUser", UserDisconnected = "UserDisconnected", GameStarted = "GameStarted",
                    PlaySoloGame = "PlaySoloGame", ReadyToPlay = "ReadyToPlay", GameClick = "GameClick",
-                   DifferenceFound = "DifferenceFound", InvalidClick = "InvalidClick"};
+                   DifferenceFound = "DifferenceFound", InvalidClick = "InvalidClick", GameEnded = "GameEnded"};
