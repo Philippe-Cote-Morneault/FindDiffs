@@ -3,8 +3,7 @@ import * as THREE from "three";
 import { Pair } from "../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonThematicModifications } from "../../../../../common/model/scene/modifications/thematicModifications";
-import { ICommonGeometricObject } from "../../../../../common/model/scene/objects/geometricObjects/geometricObject";
-import { ICommonScene } from "../../../../../common/model/scene/scene";
+import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
 
 @Injectable({
@@ -12,119 +11,88 @@ import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
 })
 export class CheatModeService {
     public cheatActivated: boolean;
-    public originalSceneLoaderService: SceneLoaderService;
-    public modifiedSceneLoaderService: SceneLoaderService;
+    public originalLoaderService: SceneLoaderService;
+    public modifiedLoaderService: SceneLoaderService;
 
     public constructor() {
         this.cheatActivated = false;
     }
 
-    public async toggleCheatMode(originalScene: ICommonScene,
-                                 modifiedScene: ICommonGeometricModifications & ICommonThematicModifications): Promise<void> {
+    public toggleCheatMode(modifiedScene: ICommonGeometricModifications & ICommonThematicModifications): void {
         this.cheatActivated = !this.cheatActivated;
         if (this.cheatActivated) {
-            await this.enableCheats(originalScene, modifiedScene);
+            this.enableCheats(modifiedScene);
         } else {
-            await this.showOriginal();
-            await this.showModified();
+            this.showAllObjects(this.originalLoaderService.scene);
+            this.showAllObjects(this.modifiedLoaderService.scene);
         }
     }
 
-    private async enableCheats(originalScene: ICommonScene,
-                               modifiedScene: ICommonGeometricModifications & ICommonThematicModifications): Promise<void> {
-        const modifiedSceneThreeJs: THREE.Scene = this.modifiedSceneLoaderService.scene;
-        const originalSceneThreeJs: THREE.Scene = this.originalSceneLoaderService.scene;
+    private enableCheats(modifiedScene: ICommonGeometricModifications & ICommonThematicModifications): void {
+        const modifiedSceneThree: THREE.Scene = this.modifiedLoaderService.scene;
+        const originalSceneThree: THREE.Scene = this.originalLoaderService.scene;
 
         if (modifiedScene.addedObjects.length > 0) {
-            this.changeAddedObjectsColor(modifiedScene, modifiedSceneThreeJs);
+            this.changeAddedObjectsColor(modifiedScene, modifiedSceneThree);
         }
         if (modifiedScene.deletedObjects.length > 0) {
-            this.changeDeletedObjectsColor(modifiedScene, originalSceneThreeJs);
+            this.changeDeletedObjectsColor(modifiedScene, originalSceneThree);
         }
         if (modifiedScene.colorChangedObjects && modifiedScene.colorChangedObjects.length > 0) {
-            this.changeColorChangedObjectsColor(modifiedScene, originalSceneThreeJs, modifiedSceneThreeJs);
+            this.changeColorChangedObjectsColor(modifiedScene, originalSceneThree, modifiedSceneThree);
         }
         if (modifiedScene.texturesChangedObjects && modifiedScene.texturesChangedObjects.length > 0) {
-            this.changeThematicChangedObjects(modifiedScene, originalSceneThreeJs, modifiedSceneThreeJs);
+            this.changeThematicChangedObjects(modifiedScene, originalSceneThree, modifiedSceneThree);
         }
     }
 
     private changeAddedObjectsColor(modifiedScene: ICommonGeometricModifications, modifiedSceneThreeJs: THREE.Scene): void {
-        modifiedScene.addedObjects.forEach((object: ICommonGeometricObject) => {
-            const object3D: THREE.Object3D | undefined = modifiedSceneThreeJs.children.find(
-                (element: THREE.Mesh | THREE.Scene) =>
-                (element instanceof THREE.Mesh || element instanceof THREE.Scene) &&
-                element.userData.id === object.id,
-            );
-
-            if (object3D) {
-                object3D.visible = false;
-            }
-        });
+        const objectsToHide: string[] = modifiedScene.addedObjects.map(
+            (x: ICommonSceneObject) => x.id,
+        );
+        this.hideObjects(modifiedSceneThreeJs, objectsToHide);
     }
 
     private changeDeletedObjectsColor(modifiedScene: ICommonGeometricModifications,
                                       originalSceneThreeJs: THREE.Scene): void {
-        modifiedScene.deletedObjects.forEach((objectId: string) => {
-            const object3D: THREE.Object3D | undefined = originalSceneThreeJs.children.find(
-                (element: THREE.Mesh | THREE.Scene) =>
-                (element instanceof THREE.Mesh || element instanceof THREE.Scene) &&
-                element.userData.id === objectId,
-            );
-
-            if (object3D) {
-                object3D.visible = false;
-            }
-        });
+        this.hideObjects(originalSceneThreeJs, modifiedScene.deletedObjects);
     }
 
     private changeColorChangedObjectsColor(modifiedScene: ICommonGeometricModifications,
                                            originalSceneThreeJs: THREE.Scene,
                                            modifiedSceneThreeJs: THREE.Scene): void {
-        modifiedScene.colorChangedObjects.forEach((objectColor: Pair<string, number>) => {
-            const object3DOriginal: THREE.Object3D | undefined = originalSceneThreeJs.children.find(
-                (element: THREE.Mesh | THREE.Scene) =>
-                (element instanceof THREE.Mesh || element instanceof THREE.Scene) &&
-                element.userData.id === objectColor.key,
-            );
-            const object3DModified: THREE.Object3D | undefined = modifiedSceneThreeJs.children.find(
-                (element: THREE.Mesh | THREE.Scene) =>
-                (element instanceof THREE.Mesh || element instanceof THREE.Scene) &&
-                element.userData.id === objectColor.key,
-            );
-            if (object3DOriginal && object3DModified) {
-                object3DOriginal.visible = false;
-                object3DModified.visible = false;
-            }
-        });
+        const objectsToHide: string[] = modifiedScene.colorChangedObjects.map(
+            (x: Pair<string, number>) => x.key,
+        );
+        this.hideObjects(originalSceneThreeJs, objectsToHide);
+        this.hideObjects(modifiedSceneThreeJs, objectsToHide);
     }
 
     private changeThematicChangedObjects(modifiedScene: ICommonThematicModifications,
                                          originalSceneThreeJs: THREE.Scene,
                                          modifiedSceneThreeJs: THREE.Scene): void {
-        modifiedScene.texturesChangedObjects.forEach((modifiedPair: Pair<string, string>) => {
-            const originalObject: THREE.Object3D | undefined = originalSceneThreeJs.children.find(
-                (object: THREE.Object3D) => modifiedPair.key === object.userData.id);
-            const modifiedObject: THREE.Object3D | undefined = modifiedSceneThreeJs.children.find(
-                (object: THREE.Object3D) => modifiedPair.key === object.userData.id);
+        const objectsToHide: string[] = modifiedScene.texturesChangedObjects.map(
+            (x: Pair<string, string>) => x.key,
+        );
+        this.hideObjects(originalSceneThreeJs, objectsToHide);
+        this.hideObjects(modifiedSceneThreeJs, objectsToHide);
+    }
 
-            if (originalObject && modifiedObject) {
-                originalObject.visible = false;
-                modifiedObject.visible = false;
+    private hideObjects(scene: THREE.Scene, objectsToHide: string[]): void {
+        objectsToHide.forEach((objectId: string) => {
+            const object3D: THREE.Object3D | undefined = scene.children.find(
+                (element: THREE.Mesh | THREE.Scene) =>
+                (element instanceof THREE.Mesh || element instanceof THREE.Scene) &&
+                element.userData.id === objectId,
+            );
+            if (object3D) {
+                object3D.visible = false;
             }
         });
     }
 
-    private async showOriginal(): Promise<void> {
-        const scene3D: THREE.Scene = this.originalSceneLoaderService.scene;
-        scene3D.children.forEach((child: THREE.Object3D) => {
-            child.visible = true;
-        });
-    }
-
-    private async showModified(): Promise<void> {
-        const scene3D: THREE.Scene = this.modifiedSceneLoaderService.scene;
-        scene3D.children.forEach((child: THREE.Object3D) => {
+    private showAllObjects(scene: THREE.Scene): void {
+        scene.children.forEach((child: THREE.Object3D) => {
             child.visible = true;
         });
     }
