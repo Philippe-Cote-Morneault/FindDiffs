@@ -73,12 +73,12 @@ interface IObjectsProperties {
         spawnSurface: [ThemeSurface.CAR],
     },
     lamp:{
-        isTextured: true,
+        isTextured: false,
         meshName: "lampPost",
-        texture: [
-            "aluminum_1.png",
-            "aluminum_2.png",
-            "aluminum_3.png",
+        color: [
+            0xcccccc,
+            0x474747,
+            0x8c6900,
         ],
         spawnSurface: [ThemeSurface.GRASS],
     },
