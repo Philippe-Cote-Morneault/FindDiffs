@@ -10,9 +10,9 @@ import { ICommonSceneModifications } from "../../../../common/model/scene/modifi
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
 import { ObjectRestoration } from "../services/3DObjects/GeometricObjects/object-restoration";
-import { DifferenceTypeObject3D } from "../services/differenceTypeObject3D";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
 import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
+import { DifferenceTypeObject3D } from "../services/differenceTypeObject3D";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
@@ -28,14 +28,14 @@ import { TimerService } from "../services/timer/timer.service";
 })
 
 export class GameViewFreeComponent implements OnInit {
-    @ViewChild("originalScene") private originalScene: ElementRef<HTMLElement>;
-    @ViewChild("modifiedScene") private modifiedScene: ElementRef<HTMLElement>;
     private static T_KEYCODE: number = 84;
 
+    @ViewChild("originalScene") private originalScene: ElementRef;
+    @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
 
-    private scenePairID: string;
+    private scenePairId: string;
     private currentOriginalScene: ICommonScene;
     private currentModifiedScene: ICommonSceneModifications;
     private gameCardId: string;
@@ -62,21 +62,15 @@ export class GameViewFreeComponent implements OnInit {
         public gamesCardService: GamesCardService,
         public geometricObjectService: GeometricObjectsService,
         public objectRestoration: ObjectRestoration,
-        ) {
-    public constructor( private route: ActivatedRoute,
-                        private spinnerService: Ng4LoadingSpinnerService,
-                        public sceneService: SceneService,
-                        public timerService: TimerService,
-                        public gamesCardService: GamesCardService,
-                        private sceneSyncer: SceneSyncerService,
-                        public cheatModeService: CheatModeService,
-                        private cheatModeTimeoutService: CheatModeTimeoutService) {
-        this.originalSceneLoader = new SceneLoaderService();
-        this.modifiedSceneLoader = new SceneLoaderService();
-        this.differenceCounterUser = 0;
-        this.isGameOver = false;
-        this.differenceFound = [];
-        this.cheatActivated = false;
+        private sceneSyncer: SceneSyncerService,
+        public cheatModeService: CheatModeService,
+        private cheatModeTimeoutService: CheatModeTimeoutService) {
+            this.originalSceneLoader = new SceneLoaderService();
+            this.modifiedSceneLoader = new SceneLoaderService();
+            this.differenceCounterUser = 0;
+            this.isGameOver = false;
+            this.differenceFound = [];
+            this.cheatActivated = false;
     }
 
     public ngOnInit(): void {
@@ -115,14 +109,14 @@ export class GameViewFreeComponent implements OnInit {
 
     private getGameCardById(): void {
         this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
-            this.scenePairID = gameCard.resource_id;
+            this.scenePairId = gameCard.resource_id;
             this.gameTitle.nativeElement.innerText = gameCard.title;
             this.getOriginalSceneById();
         });
     }
 
     private getOriginalSceneById(): void {
-        this.sceneService.getSceneById(this.scenePairID).subscribe(async (response: ICommonScene) => {
+        this.sceneService.getSceneById(this.scenePairId).subscribe(async (response: ICommonScene) => {
             this.currentOriginalScene = response;
             await this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, this.currentOriginalScene, true);
             await this.cheatModeService.saveOriginalMaterial(this.currentOriginalScene);
@@ -262,7 +256,7 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private getModifiedSceneById(response: ICommonScene): void {
-        this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (responseModified: ICommonSceneModifications) => {
+        this.sceneService.getModifiedSceneById(this.scenePairId).subscribe(async (responseModified: ICommonSceneModifications) => {
             this.currentModifiedScene = responseModified;
             await this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, this.currentModifiedScene);
             await this.cheatModeService.saveModifiedMaterial(this.currentOriginalScene, this.currentModifiedScene);
