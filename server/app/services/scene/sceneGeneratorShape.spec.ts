@@ -3,7 +3,7 @@ import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { Grid } from "./grid/grid";
 import { SceneGeneratorShape} from "./sceneGeneratorShape";
 
-describe("SceneGenerator", () => {
+describe("SceneGeneratorShape", () => {
     const OBJECT_TO_GENERATE: number = 100;
     describe("generateScene()", () => {
         it("Should generate a scene with a random background color, and should not be the same color", () => {
