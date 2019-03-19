@@ -7,12 +7,13 @@ import { Game } from "../../model/game/game";
 import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { SocketSubscriber } from "../socket/socketSubscriber";
+import { GameManager } from "./gameManager";
 
 export class GameService implements SocketSubscriber {
     private static instance: GameService;
 
-    private activePlayers: Map<string, Game>;
-    private activeGames: Game[];
+    private activePlayers: Map<string, GameManager>;
+    private activeGames: GameManager[];
     private socketHandler: SocketHandler;
 
     public static getInstance(): GameService {

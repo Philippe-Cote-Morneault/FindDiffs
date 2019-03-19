@@ -1,8 +1,13 @@
+import { Game } from "../../model/game/game";
+
 export class GameManager {
+    private game: Game;
     private players: string[];
     private ressourceId: string;
-    public constructor(firstPlayer: string, ressourceId: string) {
-        this.players = [firstPlayer];
-        this.ressourceId = ressourceId;
+    private endGameCallback: (game: Game, winner: string) => void;
+
+    public constructor(game: Game, endGameCallback: (game: Game, winner: string) => void) {
+        this.game = game;
+        this.endGameCallback = endGameCallback;
     }
 }
