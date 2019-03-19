@@ -96,14 +96,23 @@ export class GameViewFreeComponent implements OnInit {
             this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (sceneModified: ICommonSceneModifications) => {
                 this.currentOriginalScene = sceneResponse;
                 this.currentModifiedScene = sceneModified;
-                await Promise.all([
-                    this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, this.currentOriginalScene, true),
-                    this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, sceneResponse, this.currentModifiedScene),
-                ]);
-                this.sceneSyncer.syncScenesMovement(this.originalSceneLoader.camera, this.originalScene.nativeElement,
-                                                    this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
+
+                await this.originalSceneLoader.loadOriginalScene(
+                        this.originalScene.nativeElement,
+                        this.currentOriginalScene,
+                );
+                await this.modifiedSceneLoader.loadModifiedScene(
+                        this.modifiedScene.nativeElement,
+                        this.originalSceneLoader.scene,
+                        this.currentModifiedScene,
+                );
+
+                this.sceneSyncer.syncScenesMovement(
+                    this.originalSceneLoader.camera, this.originalScene.nativeElement,
+                    this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
                 this.spinnerService.hide();
                 this.timerService.startTimer(this.chronometer.nativeElement);
+
             });
         });
     }
