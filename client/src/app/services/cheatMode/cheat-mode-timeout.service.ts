@@ -19,8 +19,9 @@ export class CheatModeTimeoutService implements OnInit {
                               currentOriginalScene: ICommonScene,
                               currentModifiedScene: ICommonSceneModifications): Promise<void> {
 
-    await cheatModeService.toggleCheatMode(currentOriginalScene,
-                                           (currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications));
+    await cheatModeService.toggleCheatMode(
+      (currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
+    );
     this.timeout = setTimeout(async () => {
         await this.startCheatMode(cheatModeService, currentOriginalScene, currentModifiedScene);
     },                        CheatModeTimeoutService.intervalTime);
