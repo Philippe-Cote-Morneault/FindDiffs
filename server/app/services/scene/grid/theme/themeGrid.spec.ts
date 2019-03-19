@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { NoErrorThrownException } from "../../../../tests/noErrorThrownException";
-import { IPostionGridTheme, ThemeGrid } from "./themeGrid";
+import { IPositionGridTheme, ThemeGrid } from "./themeGrid";
 
 describe("ThemeGrid", () => {
     describe("generateGrid()", () => {
@@ -24,7 +24,7 @@ describe("ThemeGrid", () => {
             const maxY: number = minY * -1;
 
             for (let i: number = 0; i < POSITION_TO_GENERATE; i++) {
-                const position: IPostionGridTheme = themeGrid.getNextPosition() as IPostionGridTheme;
+                const position: IPositionGridTheme = themeGrid.getNextPosition() as IPositionGridTheme;
                 expect(position.x).to.be.gte(minX).and.to.be.lte(maxX);
                 expect(position.y).to.be.gte(minY).and.to.be.lte(maxY);
             }
@@ -77,7 +77,7 @@ describe("ThemeGrid", () => {
                 const themeGrid: ThemeGrid = new ThemeGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
 
                 for (let j: number = 0; j < POSITION_TO_GENERATE; j++) {
-                    const position: IPostionGridTheme = themeGrid.getNextPosition() as IPostionGridTheme;
+                    const position: IPositionGridTheme = themeGrid.getNextPosition() as IPositionGridTheme;
                     spawnData[position.surface] += 1;
                 }
             }

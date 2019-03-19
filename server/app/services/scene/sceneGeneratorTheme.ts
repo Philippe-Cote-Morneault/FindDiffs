@@ -2,7 +2,7 @@ import { ICommonSceneObject } from "../../../../common/model/scene/objects/scene
 import { ICommonThematicScene, ObjectType } from "../../../../common/model/scene/scene";
 import { ISceneGenerator } from "./ISceneGenerator";
 import { Grid } from "./grid/grid";
-import { IPostionGridTheme, ThemeGrid } from "./grid/theme/themeGrid";
+import { IPositionGridTheme, ThemeGrid } from "./grid/theme/themeGrid";
 import { ThemeObjectGenerator } from "./objectGeneration/themeCreation/themeObjectGenerator";
 
 export class SceneGeneratorTheme implements ISceneGenerator {
@@ -38,7 +38,7 @@ export class SceneGeneratorTheme implements ISceneGenerator {
         this.grid = new ThemeGrid(this.scene.dimensions, this.SCENE_OBJECT_MARGIN);
 
         for (let i: number = 0; i < this.objectQty; i++) {
-            const position: IPostionGridTheme = this.grid.getNextPosition() as IPostionGridTheme;
+            const position: IPositionGridTheme = this.grid.getNextPosition() as IPositionGridTheme;
             this.scene.sceneObjects.push(ThemeObjectGenerator.getInstance().createObject(position));
         }
 
