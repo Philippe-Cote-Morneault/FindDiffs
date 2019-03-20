@@ -20,7 +20,7 @@ export class RevealDifference3D {
             hit: false,
             differenceType: DifferenceType.none,
         };
-        
+
         for (const element of this.modifiedScene.deletedObjects) {
             if (element === this.originalObjectId) {
                 returnValue.hit = true;
@@ -38,14 +38,6 @@ export class RevealDifference3D {
                 return returnValue;
             }
         }
-
-
-        // this.modifiedScene.sceneObjects.forEach((element: ICommonGeometricObject) => {
-        //     if (element.id === this.modifiedObjectId) {
-        //         returnValue.hit = true;
-        //     }
-        // });
-        // returnValue.hit = false;
 
         return returnValue;
     }
