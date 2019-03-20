@@ -22,7 +22,7 @@ import { TimerService } from "../services/timer/timer.service";
 })
 
 export class GameViewFreeComponent implements OnInit {
-    private static T_KEYCODE: number = 84;
+    private static readonly T_KEYCODE: number = 84;
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;

@@ -7,7 +7,7 @@ import { R } from "../strings";
 
 export class ApiRequest {
 
-    private static BASE_URL: string = `http://${Config.hostname}:${Config.port}`;
+    private static readonly BASE_URL: string = `http://${Config.hostname}:${Config.port}`;
 
     public static async  getImagePairId(id: string): Promise<ICommonImagePair> {
         return Axios.get<ICommonImagePair>(`${ApiRequest.BASE_URL}/image-pair/${id}`)

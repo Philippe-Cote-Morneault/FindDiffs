@@ -7,8 +7,8 @@ import { RgbaPosition } from "../../models/pixelProperties/color";
     providedIn: "root",
 })
 export class PixelRestoration {
-    public static pixelDimension: number = 1;
-    public static imageDataPixelSpace: number = 4;
+    public static readonly pixelDimension: number = 1;
+    public static readonly imageDataPixelSpace: number = 4;
     public originalContext: CanvasRenderingContext2D | null;
     public modifiedContext: CanvasRenderingContext2D | null;
     /**
