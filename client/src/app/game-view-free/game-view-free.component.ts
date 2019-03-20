@@ -4,7 +4,7 @@ import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import * as THREE from "three";
 import { v4 as uuid } from "uuid";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
-import { ICommonReveal3D, DifferenceType } from "../../../../common/model/reveal";
+import { DifferenceType, ICommonReveal3D } from "../../../../common/model/reveal";
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
