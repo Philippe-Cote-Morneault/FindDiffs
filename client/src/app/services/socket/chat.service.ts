@@ -23,6 +23,8 @@ export class ChatService implements SocketSubscriber {
     private subscribeToSocket(): void {
         SocketHandlerService.getInstance().subscribe(Event.UserDisconnected, this);
         SocketHandlerService.getInstance().subscribe(Event.NewUser, this);
+        SocketHandlerService.getInstance().subscribe(Event.InvalidClick, this);
+        SocketHandlerService.getInstance().subscribe(Event.DifferenceFound, this);
     }
 
     public  setChat(chat: HTMLElement, container: HTMLElement): void {
