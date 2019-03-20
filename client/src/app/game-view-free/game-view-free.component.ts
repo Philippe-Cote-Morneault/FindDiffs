@@ -34,6 +34,8 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
 
+    private readonly MAX_DIFFERENCES: number;
+
     private scenePairId: string;
     private currentOriginalScene: ICommonScene;
     private currentModifiedScene: ICommonSceneModifications;
@@ -70,6 +72,9 @@ export class GameViewFreeComponent implements OnInit {
             this.isGameOver = false;
             this.differenceFound = [];
             this.cheatActivated = false;
+
+            // tslint:disable-next-line: no-magic-numbers
+            this.MAX_DIFFERENCES = 7;
     }
 
     public ngOnInit(): void {
@@ -148,7 +153,7 @@ export class GameViewFreeComponent implements OnInit {
                         break;
                 }
 
-                if (this.differenceCounterUser === 7) {
+                if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
                     this.gameOver();
                 }
             });
