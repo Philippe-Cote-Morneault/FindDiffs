@@ -10,6 +10,9 @@ export function _e(format: string, args: any[]): string {
 }
 
 export const R: IString = {
+
+    ZERO: "0",
+    COLON: ":",
     CHAT_DEFAULT: " This message type is not supported: ",
     CHAT_USERCONNECTED: " The user %s is now online!",
     CHAT_USERDISCONNECTED: " The user %s is now offline!",
