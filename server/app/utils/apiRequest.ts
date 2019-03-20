@@ -1,6 +1,7 @@
 import Axios, { AxiosResponse } from "axios";
 import { NotFoundException } from "../../../common/errors/notFoundException";
 import { ICommonImagePair } from "../../../common/model/imagePair";
+import { ICommonSceneModifications } from "../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../common/model/scene/scene";
 import Config from "../config";
 import { R } from "../strings";
@@ -22,6 +23,16 @@ export class ApiRequest {
     public static async getSceneId(id: string): Promise<ICommonScene> {
         return Axios.get<ICommonScene>(`${ApiRequest.BASE_URL}/scene/${id}`)
         .then((response: AxiosResponse<ICommonScene>) => {
+            return response.data;
+        })
+        .catch(() => {
+            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
+        });
+    }
+
+    public static async getModificationsById(id: string): Promise<ICommonSceneModifications> {
+        return Axios.get<ICommonSceneModifications>(`${ApiRequest.BASE_URL}/scene/${id}/modified`)
+        .then((response: AxiosResponse<ICommonSceneModifications>) => {
             return response.data;
         })
         .catch(() => {
