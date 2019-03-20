@@ -92,7 +92,7 @@ describe("ThemeGrid", () => {
             const DEPTH: number = 50;
 
             const POSITION_TO_GENERATE: number = 200;
-            const ITERATIONS: number = 500;
+            const ITERATIONS: number = 10;
 
             for (let i: number = 0; i < ITERATIONS; i++) {
                 const positionsSet: Set<string> = new Set<string>();
