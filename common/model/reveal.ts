@@ -11,4 +11,4 @@ export interface ICommonReveal3D{
     differenceType: DifferenceType;
 }
 
-export enum DifferenceType { addedObject, colorChnaged, removedObject, none };
+export enum DifferenceType { colorChanged, removedObject, none };
