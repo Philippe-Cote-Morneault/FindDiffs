@@ -138,8 +138,9 @@ export class GameViewFreeComponent implements OnInit {
         this.intersectsModified = raycaster.intersectObjects( this.meshesModified );
 
         let modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.id.toString() : uuid();
+        let originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.id.toString() : uuid();
 
-        this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId)
+        this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
             .subscribe(async (response: ICommonReveal3D) => {
                 const differenceType: DifferenceTypeObject3D = this.objectRestoration.restoreObject(response.hit, this.intersectsOriginal, this.intersectsModified);
 

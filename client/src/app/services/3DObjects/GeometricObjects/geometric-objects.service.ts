@@ -15,9 +15,11 @@ export class GeometricObjectsService extends HTTPService {
     }
 
     // tslint:disable:no-any
-    public post3DObject(originalSceneId: string, modifiedObjectId: string): Observable<any> {
+    public post3DObject(originalSceneId: string, modifiedObjectId: string, originalObjectId: string): Observable<any> {
         const requestBody: Object = {
-            "originalSceneId": originalSceneId, "modifiedObjectId": modifiedObjectId};
+            "originalSceneId": originalSceneId,
+            "modifiedObjectId": modifiedObjectId,
+            "originalObjectId": originalObjectId};
 
         return this.http.post<any>(`${SERVER_URL}/difference/free`, requestBody).pipe(
             catchError((error) => this.handleError(error)),
