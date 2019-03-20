@@ -10,7 +10,12 @@ export function _e(format: string, args: any[]): string {
 }
 
 export const R: IString = {
-    SOCKET_DEFAULT: " The message type is not supported.",
-    SOCKET_USERCONNECTED: " The user %s is now online!",
-    SOCKET_USERDISCONNECTED: " The user %s is now offline!",
+    CHAT_DEFAULT: " This message type is not supported: ",
+    CHAT_USERCONNECTED: " The user %s is now online!",
+    CHAT_USERDISCONNECTED: " The user %s is now offline!",
+    CHAT_BESTTIME: " %s is now %d place in the bests time of the game %s in %s.",
+    CHAT_ERROR_SOLO: " Error.",
+    CHAT_ERROR_1v1: " Error by %s.",
+    CHAT_DIFFERENCE_SOLO: " Difference found.",
+    CHAT_DIFFERENCE_1v1: "Difference found by %s.",
 };
