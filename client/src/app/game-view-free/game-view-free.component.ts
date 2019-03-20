@@ -67,15 +67,15 @@ export class GameViewFreeComponent implements OnInit {
         private sceneSyncer: SceneSyncerService,
         public cheatModeService: CheatModeService,
         private cheatModeTimeoutService: CheatModeTimeoutService) {
-            this.originalSceneLoader = new SceneLoaderService();
-            this.modifiedSceneLoader = new SceneLoaderService();
-            this.differenceCounterUser = 0;
-            this.isGameOver = false;
-            this.differenceFound = [];
-            this.cheatActivated = false;
+        this.originalSceneLoader = new SceneLoaderService();
+        this.modifiedSceneLoader = new SceneLoaderService();
+        this.differenceCounterUser = 0;
+        this.isGameOver = false;
+        this.differenceFound = [];
+        this.cheatActivated = false;
 
-            // tslint:disable-next-line: no-magic-numbers
-            this.MAX_DIFFERENCES = 7;
+        // tslint:disable-next-line: no-magic-numbers
+        this.MAX_DIFFERENCES = 7;
     }
 
     public ngOnInit(): void {
@@ -124,50 +124,51 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private loadScene(): void {
-        this.sceneService.getSceneById(this.scenePairID).subscribe(async (sceneResponse: ICommonScene) => {
-            this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (sceneModified: ICommonSceneModifications) => {
+        this.sceneService.getSceneById(this.scenePairId).subscribe(async (sceneResponse: ICommonScene) => {
+            this.sceneService.getModifiedSceneById(this.scenePairId).subscribe(async (sceneModified: ICommonSceneModifications) => {
                 this.currentOriginalScene = sceneResponse;
                 this.currentModifiedScene = sceneModified;
-    private getOriginalSceneById(): void {
-        this.sceneService.getSceneById(this.scenePairId).subscribe(async (response: ICommonScene) => {
-            this.currentOriginalScene = response;
-            await this.originalSceneLoader.loadOriginalScene(this.originalScene.nativeElement, this.currentOriginalScene, true);
-            await this.cheatModeService.saveOriginalMaterial(this.currentOriginalScene);
-            this.getModifiedSceneById(this.currentOriginalScene);
-        });
-    }
 
                 await this.originalSceneLoader.loadOriginalScene(
-                        this.originalScene.nativeElement,
-                        this.currentOriginalScene,
+                    this.originalScene.nativeElement,
+                    this.currentOriginalScene,
                 );
                 await this.modifiedSceneLoader.loadModifiedScene(
-                        this.modifiedScene.nativeElement,
-                        this.originalSceneLoader.scene,
-                        this.currentModifiedScene,
+                    this.modifiedScene.nativeElement,
+                    this.originalSceneLoader.scene,
+                    this.currentModifiedScene,
                 );
 
                 this.sceneSyncer.syncScenesMovement(
                     this.originalSceneLoader.camera, this.originalScene.nativeElement,
                     this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
                 this.spinnerService.hide();
+
+                this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
+                this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
+
                 this.timerService.startTimer(this.chronometer.nativeElement);
 
             });
+        });
+    }
+
+    // tslint:disable-next-line:max-func-body-length
     public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
-        const obj: {sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
+        const obj: { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
         const mouse: THREE.Vector2 = new THREE.Vector2();
         this.setMousePosition(event, mouse, obj.HTMLElement);
-        raycaster.setFromCamera(mouse, this.originalSceneLoader.camera );
-        this.intersectsOriginal = raycaster.intersectObjects( this.meshesOriginal );
-        this.intersectsModified = raycaster.intersectObjects( this.meshesModified );
+        raycaster.setFromCamera(mouse, this.originalSceneLoader.camera);
+        this.intersectsOriginal = raycaster.intersectObjects(this.meshesOriginal);
+        this.intersectsModified = raycaster.intersectObjects(this.meshesModified);
         const modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.uuid.toString() : uuid();
         const originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.uuid.toString() : uuid();
         this.originalSceneClickValidation();
 
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
             .subscribe(async (response: ICommonReveal3D) => {
+                console.log(response);
                 switch (response.differenceType) {
                     case DifferenceType.removedObject:
                         this.addObject(this.intersectsOriginal[0].object);
@@ -253,21 +254,6 @@ export class GameViewFreeComponent implements OnInit {
         // tslint:disable:no-magic-numbers
         mouse.x = (differenceX / HTMLElement.nativeElement.clientWidth) * 2 - 1;
         mouse.y = -(differenceY / HTMLElement.nativeElement.clientHeight) * 2 + 1;
-    }
-
-    private getModifiedSceneById(response: ICommonScene): void {
-        this.sceneService.getModifiedSceneById(this.scenePairId).subscribe(async (responseModified: ICommonSceneModifications) => {
-            this.currentModifiedScene = responseModified;
-            await this.modifiedSceneLoader.loadModifiedScene(this.modifiedScene.nativeElement, response, this.currentModifiedScene);
-            await this.cheatModeService.saveModifiedMaterial(this.currentOriginalScene, this.currentModifiedScene);
-            this.sceneSyncer.syncScenesMovement(this.originalSceneLoader.camera, this.originalScene.nativeElement,
-                                                this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
-            this.spinnerService.hide();
-            this.timerService.startTimer(this.chronometer.nativeElement);
-
-            this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
-            this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
-        });
     }
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
