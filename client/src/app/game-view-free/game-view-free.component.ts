@@ -161,27 +161,6 @@ export class GameViewFreeComponent implements OnInit {
                         break;
                     }
                 }
-
-                // const differenceType: DifferenceTypeObject3D = this.objectRestoration.restoreObject(response.hit, this.intersectsOriginal, this.intersectsModified);
-
-                // switch (differenceType){
-                //     case DifferenceTypeObject3D.addObject: {
-                //         this.addObject(this.intersectsOriginal[0].object);
-                //         break;
-                //     }
-                //     case DifferenceTypeObject3D.removeObject: {
-                //         this.removeObject(this.intersectsModified[0].object);
-                //         break;
-                //     }
-                //     case DifferenceTypeObject3D.colorObject: {
-                //         this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
-                //         break;
-                //     }
-                //     default: {
-                //         this.error();
-                //         break;
-                //     }
-                // }
         
                 if (this.differenceCounterUser === 7) {
                     this.gameOver();
