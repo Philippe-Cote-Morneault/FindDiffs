@@ -2,8 +2,8 @@ import { Server } from "http";
 import * as socketIo from "socket.io";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../common/communication/webSocket/user";
-import { SocketSubscriber } from "./socketSubscriber";
 import { UsernameManager } from "./usernameManager";
+import { SocketCallback } from "./socketCallback";
 
 export class SocketHandler {
     private static instance: SocketHandler;
@@ -12,7 +12,7 @@ export class SocketHandler {
 
     private io: socketIo.Server;
     private usernameManager: UsernameManager;
-    private subscribers: Map<string, SocketSubscriber[]>;
+    private subscribers: Map<string, SocketCallback[]>;
 
     public static getInstance(): SocketHandler {
         if (!this.instance) {
@@ -29,12 +29,12 @@ export class SocketHandler {
         return this;
     }
 
-    public subscribe(event: Event, subscriber: SocketSubscriber): void {
+    public subscribe(event: Event, callback: SocketCallback): void {
         if (!this.subscribers.has(event)) {
             this.subscribers.set(event, []);
         }
-        const sub: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
-        sub.push(subscriber);
+        const sub: SocketCallback[] = this.subscribers.get(event) as [];
+        sub.push(callback);
     }
 
     public sendMessage(event: Event, message: ICommonSocketMessage, username: string): void {
@@ -48,7 +48,7 @@ export class SocketHandler {
 
     private constructor() {
         this.usernameManager = UsernameManager.getInstance();
-        this.subscribers = new Map<string, SocketSubscriber[]>();
+        this.subscribers = new Map();
     }
 
     private init(): void {
@@ -61,21 +61,25 @@ export class SocketHandler {
     private setEventListeners(socket: SocketIO.Socket): void {
         this.onUsernameConnected(socket);
         this.onUserDisconnected(socket);
+        Object.keys(Event).forEach((event: Event) => {
+            socket.on(event, (message: ICommonSocketMessage) => {
+                this.notifySubsribers(event, message, this.usernameManager.getUsername(socket.id));
+            });
+        });
         /*
         for (let event in Event) {
             socket.on(event, (message: ICommonSocketMessage) => {
-                this.notifySubsribers(Event[event], message, this.getUsername(socket.id));
+                this.notifySubsribers(Event[event] as Event, message, this.getUsername(socket.id));
             })
         }
         */
-        this.onPlaySoloGame(socket);
-        this.onReadyToPlay(socket);
+        //this.onPlaySoloGame(socket);
+        //this.onReadyToPlay(socket);
     }
 
     private onUsernameConnected(socket: SocketIO.Socket): void {
         socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
             const username: string = (message.data as ICommonUser).username;
-            // this.addUsername(socket.id, username);
             this.usernameManager.addUsername(socket.id, message.data.toString());
             socket.broadcast.emit(Event.NewUser, message);
             this.notifySubsribers(Event.UserConnected, message, username);
@@ -92,6 +96,7 @@ export class SocketHandler {
         });
     }
 
+    /*
     private onPlaySoloGame(socket: SocketIO.Socket): void {
         socket.on(Event.PlaySoloGame, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.PlaySoloGame, message, this.usernameManager.getUsername(socket.id));
@@ -103,12 +108,13 @@ export class SocketHandler {
             this.notifySubsribers(Event.ReadyToPlay, message, this.usernameManager.getUsername(socket.id));
         });
     }
+    */
 
     private notifySubsribers(event: Event, message: ICommonSocketMessage, username: string): void {
         if (this.subscribers.has(event)) {
-            const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
-            subscribers.forEach((subscriber: SocketSubscriber) => {
-                subscriber.notify(event, message, username);
+            const subscribers: SocketCallback[] = this.subscribers.get(event) as [];
+            subscribers.forEach((callback: SocketCallback) => {
+                callback(message, username);
             });
         }
     }
