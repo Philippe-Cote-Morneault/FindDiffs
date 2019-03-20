@@ -165,35 +165,8 @@ export class GameViewFreeComponent implements OnInit {
                 if (this.differenceCounterUser === 7) {
                     this.gameOver();
                 }
-                //this.manageDifferences(differenceType, this.intersectsOriginal[0].object, this.intersectsModified[0].object);
             });
     }
-/*
-    private manageDifferences (differenceType: DifferenceTypeObject3D, objectOriginal: THREE.Object3D, objectModified: THREE.Object3D) {
-
-        switch (differenceType){
-            case DifferenceTypeObject3D.addObject: {
-                this.addObject(objectOriginal);
-                break;
-            }
-            case DifferenceTypeObject3D.removeObject: {
-                this.removeObject(objectModified);
-                break;
-            }
-            case DifferenceTypeObject3D.colorObject: {
-                this.changeColorObject(objectOriginal, objectModified);
-                break;
-            }
-            default: {
-                this.error();
-                break;
-            }
-        }
-
-        if (this.differenceCounterUser === 7) {
-            this.gameOver();
-        }
-    }*/
 
     private addObject(objectOriginal: THREE.Object3D) {
         if (this.isANewDifference(objectOriginal.uuid)) {
