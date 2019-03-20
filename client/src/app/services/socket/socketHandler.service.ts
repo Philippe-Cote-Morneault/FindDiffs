@@ -74,4 +74,16 @@ export class SocketHandlerService {
             this.notifySubsribers(Event.UserDisconnected, message);
         });
     }
+
+    public onDifferenceFound(): void {
+        this.socket.on(Event.DifferenceFound, (message: ICommonSocketMessage) => {
+            this.notifySubsribers(Event.DifferenceFound, message);
+        });
+    }
+
+    public onInvalidClick(): void {
+        this.socket.on(Event.InvalidClick, (message: ICommonSocketMessage) => {
+            this.notifySubsribers(Event.InvalidClick, message);
+        });
+    }
 }
