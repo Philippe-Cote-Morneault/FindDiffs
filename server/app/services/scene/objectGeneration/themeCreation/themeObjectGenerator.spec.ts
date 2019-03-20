@@ -70,5 +70,24 @@ describe("ThemeObjectGenerator", () => {
             }
             expect(cars.size).to.equal(NUMBER_OF_CARS);
         });
+
+        it("Should return 6 different grass objects", () => {
+            const ITERATIONS: number = 1000;
+            const NUMBER_OBJECTS: number = 6;
+            const position: IPositionGridTheme = {
+                surface: ThemeSurface.GRASS,
+                x: 50,
+                y: 45,
+                z: 34,
+            };
+            const cars: Set<ObjTheme> = new Set<ObjTheme>();
+            for (let i: number = 0; i < ITERATIONS; i++) {
+                if (cars.size === NUMBER_OBJECTS) {
+                    break;
+                }
+                cars.add(ThemeObjectGenerator.getInstance().createObject(position).objectType);
+            }
+            expect(cars.size).to.equal(NUMBER_OBJECTS);
+        });
     });
 });
