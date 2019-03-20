@@ -36,6 +36,8 @@ export class SocketHandlerService {
     private setEventListener(): void {
         this.onNewUserConnected();
         this.onUserDisconnected();
+        this.onDifferenceFound();
+        this.onInvalidClick();
     }
 
     public subscribe(event: Event, subscriber: SocketSubscriber): void {
