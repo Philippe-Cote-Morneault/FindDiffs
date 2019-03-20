@@ -138,16 +138,16 @@ export class GameViewFreeComponent implements OnInit {
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
             .subscribe(async (response: ICommonReveal3D) => {
                 switch (response.differenceType) {
-                    case DifferenceType.removedObject: {
+                    case DifferenceType.removedObject:
                         this.addObject(this.intersectsOriginal[0].object);
                         break;
-                    }
-                    case DifferenceType.colorChanged: {
+                    case DifferenceType.colorChanged:
                         this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
                         break;
-                    }
+                    default:
+                        break;
                 }
-        
+
                 if (this.differenceCounterUser === 7) {
                     this.gameOver();
                 }
