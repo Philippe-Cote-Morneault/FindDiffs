@@ -1,7 +1,8 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
-import { ICommonScene } from "../../../../common/model/scene/scene";
+import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
+// import { ICommonScene } from "../../../../common/model/scene/scene";
 import * as BitmapHeader from "../../model/bitmap/header";
 import { Position } from "../../model/bitmap/pixel";
 import { _e, R } from "../../strings";
@@ -44,9 +45,9 @@ export class DifferenceService extends Service implements IDifferenceService {
     public async postFree(req: Request): Promise<string> {
         this.validateFree(req);
 
-        const originalScene: ICommonScene = await ApiRequest.getSceneId(req.body.originalSceneId);
+        const modifiedScene: ICommonSceneModifications = await ApiRequest.getModificationsById(req.body.originalSceneId);
 
-        const revealDifference3D: RevealDifference3D = new RevealDifference3D(originalScene, req.body.modifiedObjectId);
+        const revealDifference3D: RevealDifference3D = new RevealDifference3D(modifiedScene, req.body.originalObjectId);
 
         return JSON.stringify(revealDifference3D.reveal());
     }
