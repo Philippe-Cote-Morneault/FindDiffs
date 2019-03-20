@@ -121,5 +121,24 @@ describe("ThemeObjectGenerator", () => {
                 expect(object.color).to.not.equal(undefined);
             }
         });
+        it("Should choose a random color or texture", () => {
+            const ITERATIONS: number = 10;
+            const position: IPositionGridTheme = {
+                surface: ThemeSurface.PARKING,
+                x: 50,
+                y: 30,
+                z: 21,
+            };
+            const textures: Set<string> = new Set<string>();
+            for (let i: number = 0; i < ITERATIONS; i++) {
+                const object: ICommonThematicObject = ThemeObjectGenerator.getInstance().createObject(position);
+                if (object.isTextured) {
+                    textures.add(object.texture as string);
+                } else {
+                    textures.add(String(object.color));
+                }
+            }
+            expect(textures.size).to.be.greaterThan(0);
+        });
     });
 });
