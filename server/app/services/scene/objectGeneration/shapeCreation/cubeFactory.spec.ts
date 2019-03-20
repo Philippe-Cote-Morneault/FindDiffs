@@ -6,5 +6,25 @@ import { CubeFactory } from "./cubeFactory";
 import { GeometricObjectGenerator } from "./geometricObjectGenerator";
 describe("CubeFactory", () => {
 
+    beforeEach(() => {
+        sinon.stub(Math, "random");
+    });
+    afterEach(() => {
+        (Math.random as sinon.SinonStub).restore();
+    });
 
+    describe("createShape()", () => {
+        it("Should return a cube", () => {
+            // tslint:disable-next-line:no-magic-numbers
+            (Math.random as sinon.SinonStub).returns(0.1);
+            const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
+            const position: ICommon3DPosition = {
+                x: 0,
+                y: 0,
+                z: 0,
+            };
+            const object: ICommonGeometricObject =  generator.createObject(position);
+            expect(object.shapeType).to.equal(GeometricShapeType.CUBE);
+        });
+    });
 });
