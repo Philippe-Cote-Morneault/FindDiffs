@@ -131,8 +131,8 @@ export class GameViewFreeComponent implements OnInit {
         raycaster.setFromCamera(mouse, this.originalSceneLoader.camera );
         this.intersectsOriginal = raycaster.intersectObjects( this.meshesOriginal );
         this.intersectsModified = raycaster.intersectObjects( this.meshesModified );
-        let modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.uuid.toString() : uuid();
-        let originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.uuid.toString() : uuid();
+        const modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.uuid.toString() : uuid();
+        const originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.uuid.toString() : uuid();
         this.originalSceneClickValidation();
 
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
