@@ -27,4 +27,16 @@ describe("carFactory", () => {
                     // tslint:disable-next-line:no-magic-numbers
                     ObjectFactory.MAX_RADIAN_ANGLE / 2]).to.include.members(Array.from(direction));
         });
+        it("Should return a zero orientation on all axis but y", () => {
+            const position: IPositionGridTheme = {
+                surface: ThemeSurface.CAR,
+                x: 50,
+                y: 45,
+                z: 35,
+            };
+            const object: ICommonThematicObject = ThemeObjectGenerator.getInstance().createObject(position);
+            expect(object.orientation.xAngle).to.equal(0);
+            expect(object.orientation.zAngle).to.equal(0);
+        });
+    });
 });
