@@ -107,5 +107,19 @@ describe("ThemeObjectGenerator", () => {
             }
             expect(cars.size).to.equal(NUMBER_OBJECTS);
         });
+        it("Should choose a random color or texture and have undefined", () => {
+            const position: IPositionGridTheme = {
+                surface: ThemeSurface.PARKING,
+                x: 50,
+                y: 40,
+                z: 20,
+            };
+            const object: ICommonThematicObject = ThemeObjectGenerator.getInstance().createObject(position);
+            if (object.isTextured) {
+                expect(object.texture).to.not.equal(undefined);
+            } else {
+                expect(object.color).to.not.equal(undefined);
+            }
+        });
     });
 });
