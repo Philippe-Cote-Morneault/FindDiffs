@@ -26,5 +26,6 @@ describe("SphereFactory", () => {
             const object: ICommonGeometricObject =  generator.createObject(position);
             expect(object.shapeType).to.equal(GeometricShapeType.SPHERE);
         });
+            const position: ICommon3DPosition = {
     });
 });
