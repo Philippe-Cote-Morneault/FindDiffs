@@ -35,7 +35,7 @@ export class InitialViewComponent implements OnInit {
 
     public async correctUsername(response: ICommonUser | Message): Promise<void> {
         if ((response as ICommonUser).id) {
-            this.socketHandlerService.notifyNewUser((response as ICommonUser).username);
+            this.socketHandlerService.emitUser((response as ICommonUser).username);
             localStorage.setItem("user", JSON.stringify(response));
             await this.router.navigateByUrl("/gamesList");
         } else {

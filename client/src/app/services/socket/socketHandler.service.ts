@@ -57,7 +57,7 @@ export class SocketHandlerService {
         }
     }
 
-    public notifyNewUser(username: string): void {
+    public emitUser(username: string): void {
         const message: ICommonSocketMessage = {
             data: username,
             timestamp: new Date(),
