@@ -123,33 +123,20 @@ export class GameViewFreeComponent implements OnInit {
         });
     }
 
-    // tslint:disable
     public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
         const obj: {sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
         const mouse: THREE.Vector2 = new THREE.Vector2();
-
         this.setMousePosition(event, mouse, obj.HTMLElement);
-
         raycaster.setFromCamera(mouse, this.originalSceneLoader.camera );
-
         this.intersectsOriginal = raycaster.intersectObjects( this.meshesOriginal );
         this.intersectsModified = raycaster.intersectObjects( this.meshesModified );
-
         let modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.uuid.toString() : uuid();
         let originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.uuid.toString() : uuid();
+        this.originalSceneClickValidation();
 
-        if (!this.intersectsOriginal[0]) {
-            if (this.intersectsModified[0]) {
-                console.log("test");
-                this.removeObject(this.intersectsModified[0].object);
-                return;
-            }
-        }
-        
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
             .subscribe(async (response: ICommonReveal3D) => {
-
                 switch (response.differenceType) {
                     case DifferenceType.removedObject: {
                         this.addObject(this.intersectsOriginal[0].object);
@@ -165,6 +152,16 @@ export class GameViewFreeComponent implements OnInit {
                     this.gameOver();
                 }
             });
+    }
+
+    private originalSceneClickValidation(): void {
+        if (!this.intersectsOriginal[0]) {
+            if (this.intersectsModified[0]) {
+                this.removeObject(this.intersectsModified[0].object);
+
+                return;
+            }
+        }
     }
 
     private addObject(objectOriginal: THREE.Object3D) {
