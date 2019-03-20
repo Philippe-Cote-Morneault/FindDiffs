@@ -4,7 +4,7 @@ import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import * as THREE from "three";
 import { v4 as uuid } from "uuid";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
-import { ICommonReveal3D } from "../../../../common/model/reveal";
+import { ICommonReveal3D, DifferenceType } from "../../../../common/model/reveal";
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
@@ -12,7 +12,7 @@ import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/
 import { ObjectRestoration } from "../services/3DObjects/GeometricObjects/object-restoration";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
 import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
-import { DifferenceTypeObject3D } from "../services/differenceTypeObject3D";
+// import { DifferenceTypeObject3D } from "../services/differenceTypeObject3D";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
@@ -137,31 +137,51 @@ export class GameViewFreeComponent implements OnInit {
         this.intersectsOriginal = raycaster.intersectObjects( this.meshesOriginal );
         this.intersectsModified = raycaster.intersectObjects( this.meshesModified );
 
-        let modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.id.toString() : uuid();
-        let originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.id.toString() : uuid();
+        let modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.uuid.toString() : uuid();
+        let originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.uuid.toString() : uuid();
 
+        if (!this.intersectsOriginal[0]) {
+            if (this.intersectsModified[0]) {
+                console.log("test");
+                this.removeObject(this.intersectsModified[0].object);
+                return;
+            }
+        }
+        
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
             .subscribe(async (response: ICommonReveal3D) => {
-                const differenceType: DifferenceTypeObject3D = this.objectRestoration.restoreObject(response.hit, this.intersectsOriginal, this.intersectsModified);
 
-                switch (differenceType){
-                    case DifferenceTypeObject3D.addObject: {
+                switch (response.differenceType) {
+                    case DifferenceType.removedObject: {
                         this.addObject(this.intersectsOriginal[0].object);
                         break;
                     }
-                    case DifferenceTypeObject3D.removeObject: {
-                        this.removeObject(this.intersectsModified[0].object);
-                        break;
-                    }
-                    case DifferenceTypeObject3D.colorObject: {
+                    case DifferenceType.colorChanged: {
                         this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
                         break;
                     }
-                    default: {
-                        this.error();
-                        break;
-                    }
                 }
+
+                // const differenceType: DifferenceTypeObject3D = this.objectRestoration.restoreObject(response.hit, this.intersectsOriginal, this.intersectsModified);
+
+                // switch (differenceType){
+                //     case DifferenceTypeObject3D.addObject: {
+                //         this.addObject(this.intersectsOriginal[0].object);
+                //         break;
+                //     }
+                //     case DifferenceTypeObject3D.removeObject: {
+                //         this.removeObject(this.intersectsModified[0].object);
+                //         break;
+                //     }
+                //     case DifferenceTypeObject3D.colorObject: {
+                //         this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                //         break;
+                //     }
+                //     default: {
+                //         this.error();
+                //         break;
+                //     }
+                // }
         
                 if (this.differenceCounterUser === 7) {
                     this.gameOver();
@@ -178,6 +198,7 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private removeObject(objectModified: THREE.Object3D) {
+        console.log("test");
         if (this.isANewDifference(objectModified.uuid)) {
             this.modifiedSceneLoader.scene.remove(objectModified);
             this.differenceFound[this.differenceCounterUser] = objectModified.uuid;
@@ -198,9 +219,9 @@ export class GameViewFreeComponent implements OnInit {
         }
     }
 
-    private error () {
+    // private error () {
 
-    }
+    // }
 
     private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
         let sceneLoader: SceneLoaderService;
