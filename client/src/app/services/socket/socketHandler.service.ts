@@ -39,9 +39,6 @@ export class SocketHandlerService {
     }
 
     public subscribe(event: Event, subscriber: SocketSubscriber): void {
-        // tslint:disable:no-console
-        console.log(!this.subscribers.has(event));
-        console.log(event);
         if (!this.subscribers.has(event)) {
             this.subscribers.set(event, []);
         }
@@ -50,8 +47,6 @@ export class SocketHandlerService {
     }
 
     private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
-        console.log(this.subscribers.has(event));
-        console.log(event);
         if (this.subscribers.has(event)) {
             const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
             subscribers.forEach((subscriber: SocketSubscriber) => {
@@ -70,7 +65,7 @@ export class SocketHandlerService {
 
     public onNewUserConnected(): void {
         this.socket.on(Event.NewUser, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.UserConnected, message);
+            this.notifySubsribers(Event.NewUser, message);
         });
     }
 
@@ -79,11 +74,4 @@ export class SocketHandlerService {
             this.notifySubsribers(Event.UserDisconnected, message);
         });
     }
-
-    /*private sendMessage(messageType: string, message: ICommonSocketMessage, chat: HTMLElement, container: HTMLElement): void {
-        const pre: HTMLElement = document.createElement("p");
-        pre.innerText = this.socketStringFormaterService.messageFormater(messageType, message);
-        chat.appendChild(pre);
-        container.scrollTop = container.scrollHeight;
-    }*/
 }
