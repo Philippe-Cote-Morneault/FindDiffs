@@ -176,7 +176,6 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private removeObject(objectModified: THREE.Object3D) {
-        console.log("test");
         if (this.isANewDifference(objectModified.uuid)) {
             this.modifiedSceneLoader.scene.remove(objectModified);
             this.differenceFound[this.differenceCounterUser] = objectModified.uuid;
