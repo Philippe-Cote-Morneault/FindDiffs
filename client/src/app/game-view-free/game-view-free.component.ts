@@ -65,7 +65,7 @@ export class GameViewFreeComponent implements OnInit {
             this.cheatActivated = !this.cheatActivated;
             if (this.cheatActivated) {
                 this.copySceneLoaders();
-                await this.cheatModeTimeoutService.startCheatMode(
+                this.cheatModeTimeoutService.startCheatMode(
                     this.cheatModeService,
                     this.currentOriginalScene,
                     this.currentModifiedScene,
