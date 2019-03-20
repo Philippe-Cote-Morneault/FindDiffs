@@ -29,5 +29,16 @@ describe("ThemeObjectGenerator", () => {
                     ObjTheme.SIGN_SKIP,
                     ObjTheme.SIGN_STOP]).to.include.members([object.objectType]);
         });
+        it("Should return an object that goes in parking", () => {
+            const position: IPositionGridTheme = {
+                surface: ThemeSurface.PARKING,
+                x: 50,
+                y: 0,
+                z: 50,
+            };
+            const object: ICommonThematicObject = ThemeObjectGenerator.getInstance().createObject(position);
+            expect([ObjTheme.BIN,
+                    ObjTheme.CONE]).to.include.members([object.objectType]);
+        });
     });
 });
