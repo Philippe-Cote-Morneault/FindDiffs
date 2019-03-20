@@ -26,5 +26,20 @@ describe("CubeFactory", () => {
             const object: ICommonGeometricObject =  generator.createObject(position);
             expect(object.shapeType).to.equal(GeometricShapeType.CUBE);
         });
+
+        it("Should return a cube with a width in range", () => {
+            // tslint:disable-next-line:no-magic-numbers
+            (Math.random as sinon.SinonStub).returns(0.1);
+            const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
+            const position: ICommon3DPosition = {
+                x: 0,
+                y: 0,
+                z: 0,
+            };
+            const object: ICommonGeometricObject =  generator.createObject(position);
+            expect(object["width"]).to.be
+            .lte((CubeFactory.SIZE_MAX_PERCENTAGE / CubeFactory.PERCENTAGE_DIVISION) * CubeFactory.REFERENCE_WIDTH)
+            .and.gte((CubeFactory.SIZE_MIN_PERCENTAGE / CubeFactory.PERCENTAGE_DIVISION) * CubeFactory.REFERENCE_WIDTH);
+        });
     });
 });
