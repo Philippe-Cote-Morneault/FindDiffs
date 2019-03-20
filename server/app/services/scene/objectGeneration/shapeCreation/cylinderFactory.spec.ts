@@ -26,7 +26,7 @@ describe("CylinderFactory", () => {
             const object: ICommonGeometricObject =  generator.createObject(position);
             expect(object.shapeType).to.equal(GeometricShapeType.CYLINDER);
         });
-    
+
         it("Should return a cylinder with a radius in range", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.5);
