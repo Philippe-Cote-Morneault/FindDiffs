@@ -6,13 +6,13 @@ import { ObjectType } from "../../../../../common/model/scene/scene";
 import { RandomUtils } from "../../../utils/randomUtils";
 
 export abstract class ObjectFactory {
-    protected static readonly SIZE_MAX_PERCENTAGE: number = 150;
-    protected static readonly SIZE_MIN_PERCENTAGE: number = 50;
+    public static readonly SIZE_MAX_PERCENTAGE: number = 150;
+    public static readonly SIZE_MIN_PERCENTAGE: number = 50;
 
     // tslint:disable-next-line:no-magic-numbers
-    protected static readonly MAX_RADIAN_ANGLE: number = Math.PI * 2;
-    protected static readonly MIN_RADIAN_ANGLE: number = 0;
-    protected static readonly PERCENTAGE_DIVISION: number = 100;
+    public static readonly MAX_RADIAN_ANGLE: number = Math.PI * 2;
+    public static readonly MIN_RADIAN_ANGLE: number = 0;
+    public static readonly PERCENTAGE_DIVISION: number = 100;
 
     protected object: ICommonSceneObject;
 
