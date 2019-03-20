@@ -67,10 +67,22 @@ describe("simpleObjectFactory", () => {
                 expect(direction).to.be.gte(ObjectFactory.MIN_RADIAN_ANGLE);
             });
         });
-        
+
         it("Should return a zero orientation on all axis but y for grass objects", () => {
             const position: IPositionGridTheme = {
                 surface: ThemeSurface.GRASS,
+                x: 50,
+                y: 45,
+                z: 35,
+            };
+            const object: ICommonThematicObject = ThemeObjectGenerator.getInstance().createObject(position);
+            expect(object.orientation.xAngle).to.equal(0);
+            expect(object.orientation.zAngle).to.equal(0);
+        });
+
+        it("Should return a zero orientation on all axis but y for parking objects", () => {
+            const position: IPositionGridTheme = {
+                surface: ThemeSurface.PARKING,
                 x: 50,
                 y: 45,
                 z: 35,
