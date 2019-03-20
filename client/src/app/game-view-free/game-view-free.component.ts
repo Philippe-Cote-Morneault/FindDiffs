@@ -7,6 +7,7 @@ import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
+import { ChatService } from "../services/socket/chat.service";
 import { TimerService } from "../services/timer/timer.service";
 
 @Component({
@@ -19,8 +20,8 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
-    // @ViewChild("message") private message: ElementRef;
-    // @ViewChild("message_container") private messageContainer: ElementRef;
+    @ViewChild("message") private message: ElementRef;
+    @ViewChild("message_container") private messageContainer: ElementRef;
 
     private scenePairId: string;
     private gameCardID: string;
@@ -43,6 +44,11 @@ export class GameViewFreeComponent implements OnInit {
         });
         this.spinnerService.show();
         this.getGameCardById();
+        this.subscribeToSocket();
+    }
+
+    private subscribeToSocket(): void {
+        ChatService.getInstance().setChat(this.message.nativeElement, this.messageContainer.nativeElement);
     }
 
     private getGameCardById(): void {
