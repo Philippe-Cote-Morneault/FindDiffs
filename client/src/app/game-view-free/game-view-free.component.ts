@@ -12,7 +12,6 @@ import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/
 import { ObjectRestoration } from "../services/3DObjects/GeometricObjects/object-restoration";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
 import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
-// import { DifferenceTypeObject3D } from "../services/differenceTypeObject3D";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
