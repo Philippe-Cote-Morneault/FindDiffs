@@ -9,6 +9,8 @@ export abstract class ThemeObjectFactory extends ObjectFactory {
 
     protected abstract getObjectName(): string;
 
+    protected abstract getScaleMultiplier(): number;
+
     protected getFactoryType(): ObjectType {
         return ObjectType.Thematic;
     }
@@ -21,7 +23,7 @@ export abstract class ThemeObjectFactory extends ObjectFactory {
         } else {
             thematicObject.color = this.chooseColor();
         }
-        thematicObject.scale = this.generateRandomPercentage();
+        thematicObject.scale = this.generateRandomPercentage() * this.getScaleMultiplier();
         thematicObject.objectType = EnumUtils.enumFromString<ObjTheme>(
             this.getObjectName().toUpperCase(),
             ObjTheme) as ObjTheme;

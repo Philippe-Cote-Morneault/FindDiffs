@@ -8,7 +8,7 @@ import { Grid } from "../grid";
 import { IThemeGridPosition } from "./IThemeGridPosition";
 import * as GamePositions from "./positions.json";
 
-export interface IPostionGridTheme extends ICommon3DPosition {
+export interface IPositionGridTheme extends ICommon3DPosition {
     surface: ThemeSurface;
 }
 
@@ -29,7 +29,6 @@ export class ThemeGrid extends Grid {
 
     public constructor(dimensions: ICommonSceneDimensions, minDistancePos: number) {
         super(dimensions, minDistancePos);
-        this.availablePositions = JSON.parse(JSON.stringify(GamePositions));
     }
 
     protected generateGrid(): void {
@@ -40,18 +39,17 @@ export class ThemeGrid extends Grid {
         }
     }
 
-    private choosePosition(): IPostionGridTheme {
+    private choosePosition(): IPositionGridTheme {
         const surfaceChoice: ThemeSurface = this.chooseSurfaceType();
         const surfaceName: string = ThemeSurface[surfaceChoice].toLowerCase();
 
         const surfacePositions: ICommon3DPosition[] = this.availablePositions[surfaceName];
         if (surfacePositions.length < 1) {
-            const remainingPosition: ICommon3DPosition = this.findRemainingPositions();
 
-            return this.positionToThemePosition(remainingPosition);
+            return this.findRemainingPositions();
         }
         const choice: number = RandomUtils.inRangeInt(0, surfacePositions.length - 1);
-        const position: IPostionGridTheme = this.positionToThemePosition(surfacePositions[choice]);
+        const position: IPositionGridTheme = this.positionToThemePosition(surfacePositions[choice], surfaceChoice);
         position.surface = surfaceChoice;
 
         this.availablePositions[surfaceName].splice(choice, 1);
@@ -59,13 +57,16 @@ export class ThemeGrid extends Grid {
         return position;
     }
 
-    private findRemainingPositions(): ICommon3DPosition {
+    private findRemainingPositions(): IPositionGridTheme {
         for (let i: number = 0; i < EnumUtils.enumLength(ThemeSurface); i++) {
             const surfaceName: string = ThemeSurface[i].toLowerCase();
             if (this.availablePositions[surfaceName].length > 0) {
                 const choice: number = RandomUtils.inRangeInt(0, this.availablePositions[surfaceName].length - 1);
 
-                return this.availablePositions[surfaceName].splice(choice, 1)[0];
+                return this.positionToThemePosition(
+                    this.availablePositions[surfaceName].splice(choice, 1)[0],
+                    i as ThemeSurface,
+                );
             }
         }
         throw new StackEmptyException();
@@ -87,9 +88,9 @@ export class ThemeGrid extends Grid {
         return lastIndex as ThemeSurface;
     }
 
-    private positionToThemePosition(position: ICommon3DPosition): IPostionGridTheme {
+    private positionToThemePosition(position: ICommon3DPosition, surface: ThemeSurface): IPositionGridTheme {
         return {
-            surface: ThemeSurface.CAR,
+            surface: surface,
             x: position.x,
             y: position.y,
             z: position.z,

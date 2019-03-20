@@ -16,28 +16,29 @@ export class SceneLoaderService {
     public camera: THREE.PerspectiveCamera;
     public renderer: THREE.WebGLRenderer;
     public scene: THREE.Scene;
-    public async loadOriginalScene(container: HTMLElement | null, scene: ICommonScene, inGameMode: boolean): Promise<void> {
-        this.scene = await new SceneParserService().parseScene(scene);
-        this.renderScene(container, inGameMode);
+
+    public async loadOriginalScene(container: HTMLElement | null, scene: ICommonScene): Promise<void> {
+        this.scene = await new SceneParserService(scene).parseScene();
+        this.renderScene(container);
     }
 
     public async loadModifiedScene(
             container: HTMLElement | null,
-            scene: ICommonScene,
+            scene: THREE.Scene,
             sceneModifications: ICommonSceneModifications,
         ): Promise<void> {
-        this.scene = await new ModifiedSceneParserService().parseModifiedScene(scene, sceneModifications);
+        this.scene = await new ModifiedSceneParserService(sceneModifications.type).parseModifiedScene(scene, sceneModifications);
 
-        this.renderScene(container, true);
+        this.renderScene(container);
     }
 
     public async loadOnCanvas(canvas: HTMLCanvasElement, scene: ICommonScene): Promise<void> {
-        this.scene = await new SceneParserService().parseScene(scene);
+        this.scene = await new SceneParserService(scene).parseScene();
 
         this.renderOnCanvas(canvas);
     }
 
-    private renderScene(container: HTMLElement | null, inGameMode: boolean): void {
+    private renderScene(container: HTMLElement | null): void {
         if (container) {
             this.renderer = RendererGenerator.generateRenderer(container.clientWidth,
                                                                container.clientHeight);
@@ -55,7 +56,7 @@ export class SceneLoaderService {
             this.animate();
         }
     }
-
+    // Weird
     private animate: Function = () => {
         requestAnimationFrame(this.animate as FrameRequestCallback);
         this.renderer.render(this.scene, this.camera);

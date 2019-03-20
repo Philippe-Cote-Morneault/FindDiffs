@@ -1,8 +1,31 @@
 import { expect } from "chai";
+import * as crypto from "crypto";
+import { ICommon3DPosition } from "../../../../../../common/model/positions";
 import { NoErrorThrownException } from "../../../../tests/noErrorThrownException";
-import { IPostionGridTheme, ThemeGrid } from "./themeGrid";
+import * as GamePositions from "./positions.json";
+import { IPositionGridTheme, ThemeGrid } from "./themeGrid";
+
+const sha1Pos: (pos: ICommon3DPosition) => string =
+(pos: ICommon3DPosition) => crypto.createHash("sha1").update(JSON.stringify(pos)).digest("hex");
 
 describe("ThemeGrid", () => {
+    describe("Positions.json", () => {
+        it("Should not have duplicates value", () => {
+
+            for (const surface of Object.keys(GamePositions)) {
+                const positionsSet: Set<string> = new Set<string>();
+                for (const position of GamePositions[surface]) {
+                    const hasValue: boolean = positionsSet.has(sha1Pos(position));
+                    if (hasValue) {
+                        console.error(position);
+                    }
+                    expect(hasValue).to.equal(false);
+
+                    positionsSet.add(sha1Pos(position));
+                }
+            }
+        });
+    });
     describe("generateGrid()", () => {
         const propertyName: string = "NUMBER_POSITION";
         const themeNumberPositon: number = Number(ThemeGrid[propertyName]);
@@ -24,7 +47,7 @@ describe("ThemeGrid", () => {
             const maxY: number = minY * -1;
 
             for (let i: number = 0; i < POSITION_TO_GENERATE; i++) {
-                const position: IPostionGridTheme = themeGrid.getNextPosition() as IPostionGridTheme;
+                const position: IPositionGridTheme = themeGrid.getNextPosition() as IPositionGridTheme;
                 expect(position.x).to.be.gte(minX).and.to.be.lte(maxX);
                 expect(position.y).to.be.gte(minY).and.to.be.lte(maxY);
             }
@@ -63,6 +86,32 @@ describe("ThemeGrid", () => {
             }
         });
 
+        it("Should not return a position that was already returned", () => {
+            const SIZE: number = 1000;
+            const MARGIN: number = 20;
+            const DEPTH: number = 50;
+
+            const POSITION_TO_GENERATE: number = 200;
+            const ITERATIONS: number = 10;
+
+            for (let i: number = 0; i < ITERATIONS; i++) {
+                const positionsSet: Set<string> = new Set<string>();
+
+                const themeGrid: ThemeGrid = new ThemeGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
+                for (let j: number = 0 ; j < POSITION_TO_GENERATE; j++) {
+                    const position: ICommon3DPosition = themeGrid.getNextPosition();
+                    const hasValue: boolean = positionsSet.has(sha1Pos(position));
+                    if (hasValue) {
+                        console.error(positionsSet);
+                        console.error(position);
+                    }
+                    expect(hasValue).to.equal(false);
+
+                    positionsSet.add(sha1Pos(position));
+                }
+            }
+        });
+
         it("Should return a number which is approximately between the spawning rate", () => {
             const SIZE: number = 1000;
             const MARGIN: number = 20;
@@ -77,7 +126,7 @@ describe("ThemeGrid", () => {
                 const themeGrid: ThemeGrid = new ThemeGrid({x: SIZE, y: SIZE, z: DEPTH}, MARGIN);
 
                 for (let j: number = 0; j < POSITION_TO_GENERATE; j++) {
-                    const position: IPostionGridTheme = themeGrid.getNextPosition() as IPostionGridTheme;
+                    const position: IPositionGridTheme = themeGrid.getNextPosition() as IPositionGridTheme;
                     spawnData[position.surface] += 1;
                 }
             }

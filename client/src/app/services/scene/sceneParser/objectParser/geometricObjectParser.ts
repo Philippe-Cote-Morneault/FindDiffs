@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { NotFoundException } from "../../../../../../../common/errors/notFoundException";
 import {
     GeometricShapeType,
@@ -42,5 +43,23 @@ export class GeometricObjectParser extends SceneObjectParser {
             default:
                 throw new NotFoundException("This shape does not exist");
         }
+    }
+
+    public async loadMaterial(objectToModify: THREE.Object3D, object: ICommonGeometricObject,
+                              forceUpdate: boolean = false): Promise<void> {
+        objectToModify.traverse((child: THREE.Mesh) => {
+            if (child instanceof THREE.Mesh) {
+                if (child.material instanceof THREE.MeshStandardMaterial ||
+                    child.material instanceof THREE.MeshPhongMaterial) {
+
+                    if (forceUpdate) {
+                        child.material = child.material.clone();
+                    }
+
+                    (child.material as THREE.MeshStandardMaterial|THREE.MeshPhongMaterial).color = new THREE.Color(object.color);
+                    child.material.needsUpdate = true;
+                }
+            }
+        });
     }
 }

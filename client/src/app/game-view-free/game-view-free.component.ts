@@ -7,6 +7,7 @@ import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { DifferenceType, ICommonReveal3D } from "../../../../common/model/reveal";
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
+import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
 import { ObjectRestoration } from "../services/3DObjects/GeometricObjects/object-restoration";
@@ -27,7 +28,7 @@ import { TimerService } from "../services/timer/timer.service";
 })
 
 export class GameViewFreeComponent implements OnInit {
-    private static T_KEYCODE: number = 84;
+    private static readonly T_KEYCODE: number = 84;
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
@@ -82,7 +83,6 @@ export class GameViewFreeComponent implements OnInit {
             this.gameCardId = params["id"];
         });
         this.spinnerService.show();
-        this.getOriginalSceneById();
         this.getGameCardById();
         this.cheatModeTimeoutService.ngOnInit();
     }
@@ -92,9 +92,8 @@ export class GameViewFreeComponent implements OnInit {
         if (event.keyCode === GameViewFreeComponent.T_KEYCODE) {
             this.cheatActivated = !this.cheatActivated;
             if (this.cheatActivated) {
-                this.cheatModeService.originalSceneLoaderService = this.originalSceneLoader;
-                this.cheatModeService.modifiedSceneLoaderService = this.modifiedSceneLoader;
-                await this.cheatModeTimeoutService.startCheatMode(
+                this.copySceneLoaders();
+                this.cheatModeTimeoutService.startCheatMode(
                     this.cheatModeService,
                     this.currentOriginalScene,
                     this.currentModifiedScene,
@@ -102,23 +101,33 @@ export class GameViewFreeComponent implements OnInit {
             } else {
                 this.cheatModeTimeoutService.stopCheatMode();
                 if (this.cheatModeService.cheatActivated) {
-                    await this.cheatModeService.toggleCheatMode(
-                        this.currentOriginalScene,
-                        (this.currentModifiedScene as ICommonGeometricModifications),
+                    this.cheatModeService.toggleCheatMode(
+                        (this.currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
                     );
                 }
             }
         }
     }
 
+    private copySceneLoaders(): void {
+        this.cheatModeService.originalLoaderService = this.originalSceneLoader;
+        this.cheatModeService.modifiedLoaderService = this.modifiedSceneLoader;
+
+    }
+
     private getGameCardById(): void {
         this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
             this.scenePairId = gameCard.resource_id;
             this.gameTitle.nativeElement.innerText = gameCard.title;
-            this.getOriginalSceneById();
+            this.loadScene();
         });
     }
 
+    private loadScene(): void {
+        this.sceneService.getSceneById(this.scenePairID).subscribe(async (sceneResponse: ICommonScene) => {
+            this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (sceneModified: ICommonSceneModifications) => {
+                this.currentOriginalScene = sceneResponse;
+                this.currentModifiedScene = sceneModified;
     private getOriginalSceneById(): void {
         this.sceneService.getSceneById(this.scenePairId).subscribe(async (response: ICommonScene) => {
             this.currentOriginalScene = response;
@@ -128,6 +137,23 @@ export class GameViewFreeComponent implements OnInit {
         });
     }
 
+                await this.originalSceneLoader.loadOriginalScene(
+                        this.originalScene.nativeElement,
+                        this.currentOriginalScene,
+                );
+                await this.modifiedSceneLoader.loadModifiedScene(
+                        this.modifiedScene.nativeElement,
+                        this.originalSceneLoader.scene,
+                        this.currentModifiedScene,
+                );
+
+                this.sceneSyncer.syncScenesMovement(
+                    this.originalSceneLoader.camera, this.originalScene.nativeElement,
+                    this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
+                this.spinnerService.hide();
+                this.timerService.startTimer(this.chronometer.nativeElement);
+
+            });
     public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
         const obj: {sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
         const raycaster: THREE.Raycaster = new THREE.Raycaster();

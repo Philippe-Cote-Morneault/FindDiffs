@@ -11,7 +11,7 @@ import { UserService } from "../services/user/user.service";
     styleUrls: ["./initial-view.component.css"],
 })
 export class InitialViewComponent implements OnInit {
-    private static enterKeyCode: number = 13;
+    private static readonly enterKeyCode: number = 13;
 
     @ViewChild("usernameInput") private usernameInput: ElementRef;
 
