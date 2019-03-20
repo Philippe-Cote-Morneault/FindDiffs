@@ -5,6 +5,7 @@ import { ICommonUser } from "../../../../common/communication/webSocket/user";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { _e, R } from "../../strings";
 import { SocketSubscriber } from "./socketSubscriber";
+import { UsernameManager } from "./usernameManager";
 
 export class SocketHandler {
     private static instance: SocketHandler;
@@ -12,7 +13,7 @@ export class SocketHandler {
     private static DISCONNECT_EVENT: string = "disconnect";
 
     private io: socketIo.Server;
-    private idUsernames: Map<string, string>;
+    private usernameManager: UsernameManager;
     private subscribers: Map<string, SocketSubscriber[]>;
 
     public static getInstance(): SocketHandler {
@@ -48,13 +49,14 @@ export class SocketHandler {
     }
 
     private constructor() {
+        this.usernameManager = UsernameManager.getInstance();
         this.subscribers = new Map<string, SocketSubscriber[]>();
     }
 
     private init(): void {
-        this.idUsernames = new Map<string, string>();
         this.io.on(SocketHandler.CONNECT_EVENT, (socket: SocketIO.Socket) => {
-            this.idUsernames.set(socket.id, "");
+            //this.usernameManager
+            //this.idUsernames.set(socket.id, "");
             this.setEventListeners(socket);
         });
     }
@@ -62,20 +64,22 @@ export class SocketHandler {
     private setEventListeners(socket: SocketIO.Socket): void {
         this.onUsernameConnected(socket);
         this.onUserDisconnected(socket);
+        /*
         for (let event in Event) {
             socket.on(event, (message: ICommonSocketMessage) => {
                 this.notifySubsribers(Event[event], message, this.getUsername(socket.id));
             })
         }
+        */
         this.onPlaySoloGame(socket);
         this.onReadyToPlay(socket);
     }
 
     private onUsernameConnected(socket: SocketIO.Socket): void {
         socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
-            console.log("connected");
             const username: string = (message.data as ICommonUser).username;
-            this.addUsername(socket.id, username);
+           // this.addUsername(socket.id, username);
+            this.usernameManager
             socket.broadcast.emit(Event.NewUser, message);
             this.notifySubsribers(Event.UserConnected, message, username);
         });
@@ -110,26 +114,5 @@ export class SocketHandler {
                 subscriber.notify(event, message, username);
             });
         }
-    }
-
-    private addUsername(username: string, socketId: string): void {
-        this.idUsernames.set(socketId, username);
-    }
-
-    private getUsername(socketId: string): string {
-        return (this.idUsernames.get(socketId)) as string;
-    }
-
-    private removeUsername(socketId: string): void {
-        this.idUsernames.delete(socketId);
-    }
-
-    private getSocketId(username: string): string {
-        const id: string | undefined =  Object.keys(this.idUsernames).find((key: string) => this.idUsernames[key] === username);
-        if (id === undefined) {
-                throw new NotFoundException(_e(R.ERROR_INVALIDID, [username]));
-        }
-
-        return id;
     }
 }
