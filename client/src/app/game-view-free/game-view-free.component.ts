@@ -164,7 +164,7 @@ export class GameViewFreeComponent implements OnInit {
         }
     }
 
-    private addObject(objectOriginal: THREE.Object3D) {
+    private addObject(objectOriginal: THREE.Object3D): void {
         if (this.isANewDifference(objectOriginal.uuid)) {
             this.modifiedSceneLoader.scene.add(objectOriginal.clone());
             this.differenceFound[this.differenceCounterUser] = objectOriginal.uuid;
@@ -172,7 +172,7 @@ export class GameViewFreeComponent implements OnInit {
         }
     }
 
-    private removeObject(objectModified: THREE.Object3D) {
+    private removeObject(objectModified: THREE.Object3D): void {
         if (this.isANewDifference(objectModified.uuid)) {
             this.modifiedSceneLoader.scene.remove(objectModified);
             this.differenceFound[this.differenceCounterUser] = objectModified.uuid;
@@ -180,7 +180,7 @@ export class GameViewFreeComponent implements OnInit {
         }
     }
 
-    private changeColorObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D) {
+    private changeColorObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
         let intersectedModified: any;
         let intersectedOriginal: any;
         intersectedOriginal = objectOriginal;
