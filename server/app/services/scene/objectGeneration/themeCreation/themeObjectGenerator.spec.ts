@@ -89,5 +89,23 @@ describe("ThemeObjectGenerator", () => {
             }
             expect(cars.size).to.equal(NUMBER_OBJECTS);
         });
+        it("Should return 2 different parking objects", () => {
+            const ITERATIONS: number = 1000;
+            const NUMBER_OBJECTS: number = 2;
+            const position: IPositionGridTheme = {
+                surface: ThemeSurface.PARKING,
+                x: 50,
+                y: 45,
+                z: 34,
+            };
+            const cars: Set<ObjTheme> = new Set<ObjTheme>();
+            for (let i: number = 0; i < ITERATIONS; i++) {
+                if (cars.size === NUMBER_OBJECTS) {
+                    break;
+                }
+                cars.add(ThemeObjectGenerator.getInstance().createObject(position).objectType);
+            }
+            expect(cars.size).to.equal(NUMBER_OBJECTS);
+        });
     });
 });
