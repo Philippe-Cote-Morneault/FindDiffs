@@ -91,8 +91,12 @@ export class SocketHandler {
             const user: ICommonUser = {
                 username: this.usernameManager.getUsername(socket.id),
             };
+            const message: ICommonSocketMessage = {
+                data: user,
+                timestamp: new Date(),
+            };
             this.usernameManager.removeUsername(socket.id);
-            socket.broadcast.emit(Event.UserDisconnected, user);
+            socket.broadcast.emit(Event.UserDisconnected, message);
         });
     }
 

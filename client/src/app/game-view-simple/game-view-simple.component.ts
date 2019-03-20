@@ -7,7 +7,7 @@ import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
-import { SocketMessageSenderService } from "../services/socket/socketMessageSender.service";
+import { ChatService } from "../services/socket/chat.service";
 import { TimerService } from "../services/timer/timer.service";
 
 @Component({
@@ -23,8 +23,8 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("errorMessage") private errorMessage: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
-    // @ViewChild("message") private message: ElementRef;
-    // @ViewChild("message_container") private messageContainer: ElementRef;
+    @ViewChild("message") private message: ElementRef;
+    @ViewChild("message_container") private messageContainer: ElementRef;
 
     private gameCardId: string;
     private imagePairId: string;
@@ -61,7 +61,7 @@ export class GameViewSimpleComponent implements OnInit {
     }
 
     private subscribeToSocket(): void {
-        SocketMessageSenderService.getInstance().subscribeToSocket();
+        ChatService.getInstance().setChat(this.message.nativeElement, this.messageContainer.nativeElement);
     }
 
     private getGameCardById(): void {
