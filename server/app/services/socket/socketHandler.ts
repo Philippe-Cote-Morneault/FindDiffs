@@ -2,7 +2,6 @@ import { Server } from "http";
 import * as socketIo from "socket.io";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../common/communication/webSocket/user";
-import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { _e, R } from "../../strings";
 import { SocketSubscriber } from "./socketSubscriber";
 import { UsernameManager } from "./usernameManager";
@@ -40,7 +39,7 @@ export class SocketHandler {
     }
 
     public sendMessage(event: Event, message: ICommonSocketMessage, username: string): void {
-        const targetId: string = this.getSocketId(username);
+        const targetId: string = this.usernameManager.getSocketId(username);
         this.io.to(targetId).emit(event, message);
     }
 
@@ -79,7 +78,7 @@ export class SocketHandler {
         socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
             const username: string = (message.data as ICommonUser).username;
            // this.addUsername(socket.id, username);
-            this.usernameManager
+            this.usernameManager.addUsername(socket.id, username);
             socket.broadcast.emit(Event.NewUser, message);
             this.notifySubsribers(Event.UserConnected, message, username);
         });
@@ -88,22 +87,22 @@ export class SocketHandler {
     private onUserDisconnected(socket: SocketIO.Socket): void {
         socket.on(SocketHandler.DISCONNECT_EVENT, () => {
             const user: ICommonUser = {
-                username: this.getUsername(socket.id),
+                username: this.usernameManager.getUsername(socket.id),
             };
-            this.removeUsername(socket.id);
+            this.usernameManager.removeUsername(socket.id);
             socket.broadcast.emit(Event.UserDisconnected, user);
         });
     }
 
     private onPlaySoloGame(socket: SocketIO.Socket): void {
         socket.on(Event.PlaySoloGame, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.PlaySoloGame, message, this.getUsername(socket.id));
+            this.notifySubsribers(Event.PlaySoloGame, message, this.usernameManager.getUsername(socket.id));
         });
     }
 
     private onReadyToPlay(socket: SocketIO.Socket): void {
         socket.on(Event.ReadyToPlay, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.ReadyToPlay, message, this.getUsername(socket.id));
+            this.notifySubsribers(Event.ReadyToPlay, message, this.usernameManager.getUsername(socket.id));
         });
     }
 
