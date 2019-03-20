@@ -6,7 +6,6 @@ export class UsernameManager {
 
     private idUsernames: Map<string, string>;
 
-
     public static getInstance(): UsernameManager {
         if (!UsernameManager.instance) {
             UsernameManager.instance = new UsernameManager();
@@ -15,7 +14,7 @@ export class UsernameManager {
         return UsernameManager.instance;
     }
 
-    public addUsername(username: string, socketId: string): void {
+    public addUsername(socketId: string, username: string): void {
         this.idUsernames.set(socketId, username);
     }
 

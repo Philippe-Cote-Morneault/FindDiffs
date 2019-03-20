@@ -2,7 +2,6 @@ import { Server } from "http";
 import * as socketIo from "socket.io";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../common/communication/webSocket/user";
-import { _e, R } from "../../strings";
 import { SocketSubscriber } from "./socketSubscriber";
 import { UsernameManager } from "./usernameManager";
 
@@ -54,7 +53,6 @@ export class SocketHandler {
 
     private init(): void {
         this.io.on(SocketHandler.CONNECT_EVENT, (socket: SocketIO.Socket) => {
-            //this.usernameManager
             //this.idUsernames.set(socket.id, "");
             this.setEventListeners(socket);
         });
@@ -77,8 +75,8 @@ export class SocketHandler {
     private onUsernameConnected(socket: SocketIO.Socket): void {
         socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
             const username: string = (message.data as ICommonUser).username;
-           // this.addUsername(socket.id, username);
-            this.usernameManager.addUsername(socket.id, username);
+            // this.addUsername(socket.id, username);
+            this.usernameManager.addUsername(socket.id, message.data.toString());
             socket.broadcast.emit(Event.NewUser, message);
             this.notifySubsribers(Event.UserConnected, message, username);
         });
