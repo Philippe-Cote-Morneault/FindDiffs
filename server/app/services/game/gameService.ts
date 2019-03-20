@@ -62,16 +62,16 @@ export class GameService implements SocketSubscriber {
             start_time: undefined,
             differences_found: 0,
         };
-        this.activeGames.push(newGame);
+        this.activeGames.push(new GameManager(newGame, this.endGame));
     }
 
     private startSoloGame(player: string): void {
-        const game: Game | undefined = this.activePlayers.get(player);
+        const game: GameManager | undefined = this.activePlayers.get(player);
         if (game === undefined) {
             throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
         }
 
-        game.start_time = new Date();
+        game.startGame();
     }
 
     private endGame(game: Game, winner: string): void {

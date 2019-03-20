@@ -62,12 +62,18 @@ export class SocketHandler {
     private setEventListeners(socket: SocketIO.Socket): void {
         this.onUsernameConnected(socket);
         this.onUserDisconnected(socket);
+        for (let event in Event) {
+            socket.on(event, (message: ICommonSocketMessage) => {
+                this.notifySubsribers(Event[event], message, this.getUsername(socket.id));
+            })
+        }
         this.onPlaySoloGame(socket);
         this.onReadyToPlay(socket);
     }
 
     private onUsernameConnected(socket: SocketIO.Socket): void {
         socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
+            console.log("connected");
             const username: string = (message.data as ICommonUser).username;
             this.addUsername(socket.id, username);
             socket.broadcast.emit(Event.NewUser, message);
