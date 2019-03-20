@@ -40,5 +40,17 @@ describe("ThemeObjectGenerator", () => {
             expect([ObjTheme.BIN,
                     ObjTheme.CONE]).to.include.members([object.objectType]);
         });
+        it("Should return an object that as the same position specified in the method", () => {
+            const position: IPositionGridTheme = {
+                surface: ThemeSurface.CAR,
+                x: 50,
+                y: 45,
+                z: 34,
+            };
+            const object: ICommonThematicObject = ThemeObjectGenerator.getInstance().createObject(position);
+            expect(object.position.x).to.equal(position.x);
+            expect(object.position.y).to.equal(position.y);
+            expect(object.position.z).to.equal(position.z);
+        });
     });
 });
