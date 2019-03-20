@@ -3,7 +3,7 @@ import { GeometricShapeType, ICommonGeometricObject } from "../../../../../../co
 import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class CubeFactory extends GeometricObjectFactory {
-    private static readonly REFERENCE_WIDTH: number = 3;
+    public static readonly REFERENCE_WIDTH: number = 3;
 
     protected createShape(geometricObject: ICommonGeometricObject): ICommonGeometricObject {
         const cubeObject: ICommonCube = geometricObject as ICommonCube;
