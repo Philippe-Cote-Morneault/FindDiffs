@@ -176,7 +176,7 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string, gameType: ObjectType): void {
-        this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
+        this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId, gameType)
         .subscribe(async (response: ICommonReveal3D) => {
             switch (response.differenceType) {
                 case DifferenceType.removedObject:
