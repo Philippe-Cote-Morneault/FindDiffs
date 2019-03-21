@@ -8,7 +8,7 @@ import { FormVerificationFreePOVService } from "../services/createGame/formVerif
 import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
-import { SceneCreationService } from "../services/scene/sceneCreation/scene-creation.service";
+import { SceneCreationService } from "../services/scene/sceneCreation/sceneCreation.service";
 
 @Component({
     selector: "app-create-game-free-view",
