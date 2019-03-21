@@ -1,0 +1,105 @@
+#%RAML 1.0 Score
+get:
+  description: "Return the scores associated with the gamecard"
+  responses: 
+    200:
+      body:
+        application/json:
+          example: |
+            {
+              "best_time_solo":
+              [
+                {
+                  "name":"Michel",
+                  "score":"1254512"
+                },
+                {
+                  "name":"Michel",
+                  "score":"1282445"
+                },
+                {
+                  "name":"Michel",
+                  "score":"544512"
+                },
+              ],
+              "best_time_online":
+              [
+                {
+                  "name":"Michel",
+                  "score":"1254512"
+                },
+                {
+                  "name":"Michel",
+                  "score":"1282445"
+                },
+                {
+                  "name":"Michel",
+                  "score":"544512"
+                },
+              ]
+            }
+post:
+  description: "Generate new scores"
+  body:
+    application/json:
+      properties:
+        best_time_solo:
+          required: false
+          type: string
+        best_time_online:
+          required: false
+          type: string
+      example: | 
+        {
+          "best_time_online":"new value",
+          "best_time_solo":"new value",
+        }
+  responses: 
+    200:
+      body:
+        application/json:
+          example: |
+            {
+              "title":"Success",
+              "body":"Scores were updated successfully"
+            }
+    400:
+      body:
+        application/json:
+          example: |
+            {
+              "title":"Error",
+              "body":"The request is not valid"
+            }
+put: 
+  description: "Update the scores if the score is in the top 3"
+  body:
+    application/json:
+      properties: 
+        username: string
+        time: number
+        type: 
+          required: true
+          enum: [Solo, Online]
+  responses: 
+    200:
+      body:
+        application/json - inTop3:
+          example: |
+            {
+              "is_top_score": true,
+              "details": {
+                "best_score": true,
+                "place": 1,
+                "game_name": "name of the game",
+                "username": "Michel",
+                "game_type": "Solo"
+              }
+            }
+        application/json - notTop3:
+          example: |
+            {
+              "is_top_score": false,
+              "details": null
+            }
+  
