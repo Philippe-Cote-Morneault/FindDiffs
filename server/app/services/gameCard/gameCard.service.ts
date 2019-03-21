@@ -9,12 +9,12 @@ import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { Validation } from "../../utils/validation";
 import { IGameCardService } from "../interfaces";
+import { ScoreService } from "../score/score.service";
+import { ScoreGenerator } from "../score/scoreGenerator";
 import { Service } from "../service";
-import { ScoreGenerator } from "./scoreGenerator";
 
 export class GameCardService extends Service implements IGameCardService {
 
-    public static readonly DEFAULT_SCORE_NUMBER: number = 3;
     public static readonly NUMBER_OF_DIFFERENCES: number = 7;
 
     private async validatePost(req: Request): Promise<void> {
@@ -46,54 +46,13 @@ export class GameCardService extends Service implements IGameCardService {
             pov: req.body.pov,
             title: req.body.name,
             resource_id: req.body.resource_id,
-            best_time_solo: ScoreGenerator.generateScore(GameCardService.DEFAULT_SCORE_NUMBER),
-            best_time_online: ScoreGenerator.generateScore(GameCardService.DEFAULT_SCORE_NUMBER),
+            best_time_solo: ScoreGenerator.generateScore(ScoreService.DEFAULT_SCORE_NUMBER),
+            best_time_online: ScoreGenerator.generateScore(ScoreService.DEFAULT_SCORE_NUMBER),
             creation_date: new Date(),
         });
         await gameCard.save();
 
         return JSON.stringify(this.getCommonGameCard(gameCard));
-    }
-
-    private async generateScore(req: Request, doc: IGameCard): Promise<void> {
-        let changed: boolean = false;
-        if (req.body.best_time_solo) {
-            changed = true;
-            doc.best_time_solo = ScoreGenerator.generateScore(GameCardService.DEFAULT_SCORE_NUMBER);
-        }
-        if (req.body.best_time_online) {
-            changed = true;
-            doc.best_time_online = ScoreGenerator.generateScore(GameCardService.DEFAULT_SCORE_NUMBER);
-        }
-        if (!changed) {
-            throw new InvalidFormatException(R.ERROR_NO_CHANGES);
-        }
-        await doc.save();
-    }
-
-    public async update(req: Request): Promise<string> {
-        const id: string = req.params.id;
-
-        return GameCard.findById(id).then(async (doc: IGameCard) => {
-            if (!doc) {
-                throw new NotFoundException(R.ERROR_UNKNOWN_ID);
-            }
-
-            await this.generateScore(req, doc);
-
-            const message: Message = {
-                title: R.SUCCESS,
-                body: R.SUCCESS_GAME_CARD_UPDATED,
-            };
-
-            return JSON.stringify(message);
-        }).catch((err: Error) => {
-            if (err.name === "InvalidFormatException") {
-                throw err;
-            }
-            throw new NotFoundException(R.ERROR_UNKNOWN_ID);
-        });
-
     }
 
     public async index(): Promise<string> {
