@@ -24,6 +24,7 @@ export const R: IString = {
     ERROR_WRONG_TYPE: "The %s type is not recognized.",
     ERROR_NOT_BMP_FILE: "Not a bmp file.",
     ERROR_N_A_N: "The field %s is not a number.",
+    ERROR_MORE_ZERO: "The field %s should be more than zero",
     ERROR_INVALID: "The %s is invalid.",
     ERROR_INVALID_USERNAME: "The username is invalid, it must be between 3 and 12 alpha numeric characters.",
     ERROR_INVALID_GAMENAME: "The game name is invalid, it must be between 3 and 12 alpha numeric characters.",
@@ -32,6 +33,9 @@ export const R: IString = {
     ERROR_INVALID_FILE: "%s is not a file.",
     ERROR_USERNAME_TAKEN: "The username is already taken.",
     ERROR_DIFFERENCE_INVALID: "The game card should have 7 differences. It has %d differences.",
+
+    GAME_TYPE: "Game type",
+    GAME_TYPE_: "game type",
 
     IMAGE_PAIR: "Image Pair",
     IMAGE_PAIR_: "image pair",
@@ -56,6 +60,8 @@ export const R: IString = {
     RESOURCE_ID_: "resource_id",
 
     SUCCESS: "Success",
+    TIME: "Time",
+    TIME_: "time",
     SUCCESS_GAME_CARD_UPDATED: "The gamecard was updated.",
     SUCCESS_GAME_CARD_DELETED: "The gamecard was deleted.",
     SUCCESS_USER_DELETED: "The user was deleted.",
