@@ -48,7 +48,7 @@ export class DifferenceService extends Service implements IDifferenceService {
         const modifiedScene: ICommonSceneModifications = await ApiRequest.getModificationsById(req.body.originalSceneId);
 
         const revealDifference3D: RevealDifference3D =
-            new RevealDifference3D(modifiedScene, req.body.modifiedObjectId, req.body.originalObjectId);
+            new RevealDifference3D(modifiedScene, req.body.modifiedObjectId, req.body.originalObjectId, req.body.gameType);
 
         return JSON.stringify(revealDifference3D.reveal());
     }
