@@ -5,7 +5,13 @@ import * as sinon from "sinon";
 import { ICommonGeometricModifications } from "../../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonThematicModifications } from "../../../../../common/model/scene/modifications/thematicModifications";
 import { ObjectType } from "../../../../../common/model/scene/scene";
+import { sceneModifications } from "../../tests/scene/geometricSceneModificationsMock";
+import { scene } from "../../tests/scene/sceneMock";
+import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
+import { ModifiedSceneParserService } from "../scene/sceneParser/modified-scene-parser.service";
+import { SceneParserService } from "../scene/sceneParser/scene-parser.service";
 import { CheatModeService } from "./cheat-mode.service";
+
 // tslint:disable
 describe("Tests for CheatModeService", () => {
 
@@ -48,6 +54,38 @@ describe("Tests for CheatModeService", () => {
       cheatModeService.toggleCheatMode(blankModifiedScene);
       expect(cheatModeService.cheatActivated).to.be.false;
       stub.restore();
+    });
+  });
+
+  describe("testing toggleCheatMode method", () => {
+
+    describe("when scene is geometric", () => {
+
+      let modifiedScene: ICommonGeometricModifications & ICommonThematicModifications;
+      beforeEach(async () => {
+        modifiedScene = (sceneModifications as ICommonGeometricModifications & ICommonThematicModifications);
+
+        cheatModeService.originalLoaderService = new SceneLoaderService();
+        cheatModeService.modifiedLoaderService = new SceneLoaderService();
+
+        cheatModeService.originalLoaderService.scene = await new SceneParserService(scene).parseScene();
+        cheatModeService.modifiedLoaderService.scene = 
+          await new ModifiedSceneParserService(ObjectType.Geometric).parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
+
+      });
+
+      it("should change the added objects visibility to false in the modified scene", () => {
+        cheatModeService.toggleCheatMode(modifiedScene);
+        const addedObjectsId: string[] = modifiedScene.addedObjects.map((object) => object.id);
+        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+        addedObjectsId.forEach((id: string) => {
+          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+          expect(object3D).to.not.be.undefined;
+          if (object3D) {
+            expect(object3D.visible).to.be.false;
+          }
+        })
+      });
     });
   });
 });
