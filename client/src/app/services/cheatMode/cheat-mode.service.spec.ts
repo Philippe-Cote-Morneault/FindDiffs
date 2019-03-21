@@ -16,6 +16,14 @@ describe("Tests for CheatModeService", () => {
   });
 
   describe("testing the value of cheatActivated attribute in various situations", () => {
+    const blankModifiedScene: ICommonGeometricModifications & ICommonThematicModifications = {
+      id: "",
+      type: ObjectType.Geometric,
+      addedObjects: [],
+      deletedObjects: [],
+      colorChangedObjects: [],
+      texturesChangedObjects: [],
+    };
 
     it("should be false on creation of the service", () => {
       expect(cheatModeService.cheatActivated).to.be.false;
@@ -25,14 +33,7 @@ describe("Tests for CheatModeService", () => {
       const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode").callsFake(
         () => {cheatModeService.cheatActivated = !cheatModeService.cheatActivated;
       });
-      const blankModifiedScene: ICommonGeometricModifications & ICommonThematicModifications = {
-        id: "",
-        type: ObjectType.Geometric,
-        addedObjects: [],
-        deletedObjects: [],
-        colorChangedObjects: [],
-        texturesChangedObjects: [],
-      };
+
       cheatModeService.toggleCheatMode(blankModifiedScene);
       expect(cheatModeService.cheatActivated).to.be.true;
       stub.restore();
@@ -42,19 +43,11 @@ describe("Tests for CheatModeService", () => {
       const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode").callsFake(
         () => {cheatModeService.cheatActivated = !cheatModeService.cheatActivated;
       });
-      const blankModifiedScene: ICommonGeometricModifications & ICommonThematicModifications = {
-        id: "",
-        type: ObjectType.Geometric,
-        addedObjects: [],
-        deletedObjects: [],
-        colorChangedObjects: [],
-        texturesChangedObjects: [],
-      };
+      
       cheatModeService.toggleCheatMode(blankModifiedScene);
       cheatModeService.toggleCheatMode(blankModifiedScene);
       expect(cheatModeService.cheatActivated).to.be.false;
       stub.restore();
-  
     });
   });
 });
