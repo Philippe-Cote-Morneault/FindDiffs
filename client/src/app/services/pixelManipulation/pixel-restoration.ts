@@ -1,20 +1,49 @@
 import { Injectable } from "@angular/core";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { ICommonReveal } from "../../../../../common/model/reveal";
 import { RgbaPosition } from "../../models/pixelProperties/color";
+import { SocketHandlerService } from "../socket/socketHandler.service";
+import { SocketSubscriber } from "../socket/socketSubscriber";
 
 @Injectable({
     providedIn: "root",
 })
-export class PixelRestoration {
+export class PixelRestoration implements SocketSubscriber {
+    private static instance: PixelRestoration;
     public static pixelDimension: number = 1;
     public static imageDataPixelSpace: number = 4;
     public originalContext: CanvasRenderingContext2D | null;
     public modifiedContext: CanvasRenderingContext2D | null;
-    /**
-     * name
-     */
-    // tslint:disable:no-magic-numbers
+    private originalCanvas: HTMLCanvasElement;
+    private modifiedCanvas: HTMLCanvasElement;
+
+    public static getInstance(): PixelRestoration {
+        if (!PixelRestoration.instance) {
+            PixelRestoration.instance = new PixelRestoration();
+        }
+
+        return PixelRestoration.instance;
+    }
+
+    public constructor() {
+        this.subscribeToSocket();
+    }
+
+    private subscribeToSocket(): void {
+        SocketHandlerService.getInstance().subscribe(Event.DifferenceFound, this);
+    }
+
+    public notify(event: Event, message: ICommonSocketMessage): void {
+        // Call RestoreImage
+        // tslint:disable-next-line:no-console
+        console.log(event + message + this.modifiedCanvas + this.originalCanvas);
+    }
+
+    public setPixelRestoration(originalCanvas: HTMLCanvasElement, modifiedCanvas: HTMLCanvasElement): void {
+        this.originalCanvas = originalCanvas;
+        this.modifiedCanvas = modifiedCanvas;
+    }
 
     public restoreImage(response: ICommonReveal,
                         originalCanvas: HTMLCanvasElement,
