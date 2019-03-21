@@ -5,8 +5,11 @@ import { CheatModeService } from "./cheat-mode.service";
 // tslint:disable
 describe("Tests pour le service: CheatModeService", () => {
 
-  const cheatModeService: CheatModeService = new CheatModeService();
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let cheatModeService: CheatModeService;
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    cheatModeService = new CheatModeService();
+  });
 
   it("should be false on creation", () => {
     expect(cheatModeService.cheatActivated).to.be.false;
