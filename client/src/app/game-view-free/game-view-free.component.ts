@@ -154,7 +154,6 @@ export class GameViewFreeComponent implements OnInit {
         });
     }
 
-    // tslint:disable-next-line:max-func-body-length
     public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
         const obj: { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
