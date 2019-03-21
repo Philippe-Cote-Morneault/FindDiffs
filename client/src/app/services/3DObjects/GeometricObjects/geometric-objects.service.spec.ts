@@ -41,8 +41,8 @@ describe("GeometricObjectsService", () => {
             );
         });
 
-        it("should return expected message on post3DObject request (HttpClient called once)", () => {
-            const expectedResponse: Object = { "hit": false, "differenceType": DifferenceType.none};
+        it("should return hit true with DifferenceType none on post3DObject request (HttpClient called once)", () => {
+            const expectedResponse: Object = { "hit": true, "differenceType": DifferenceType.colorChanged};
             const mockSceneID: string = "128392";
             const mockModifiedObjectId: string = "123";
             const mockOriginalObjectId: string = "123";
@@ -50,11 +50,37 @@ describe("GeometricObjectsService", () => {
 
             geometricObjectsService.post3DObject(mockSceneID, mockModifiedObjectId, mockOriginalObjectId).subscribe(
                 (response: ICommonReveal3D) => {
-                    expect(response.hit).to.equal(false);
-                    expect(response.differenceType).to.equal(DifferenceType.none);
+                    expect(response.hit).to.equal(true);
+                    expect(response.differenceType).to.equal(DifferenceType.colorChanged);
                 },
                 fail,
             );
+        });
+
+        it("should return an error if no differences were found", () => {
+            const mockSceneID: string = "128392";
+            const mockModifiedObjectId: string = "123";
+            const mockOriginalObjectId: string = "123";
+            const expectedMessageError: Message = { title: "Error", body: "No difference was found at the specified position" };
+
+            service.post3DObject(mockSceneID, mockModifiedObjectId, mockOriginalObjectId).subscribe((message: Message) => {
+                expect(message.title).to.equal(expectedMessageError.title);
+                expect(message.body).to.equal(expectedMessageError.body);
+            });
+
+            const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/difference/free");
+            const mockHttpError: Object = {status: 404, statusText: "Bad Request"} ;
+            expect(testRequest.request.method).to.equal("POST");
+
+            testRequest.flush(
+                {
+                    "title": "Error",
+                    "body": "No difference was found at the specified position",
+                },
+                mockHttpError,
+            );
+
+            httpMock.verify();
         });
     });
 });
