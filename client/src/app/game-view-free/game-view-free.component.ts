@@ -56,6 +56,8 @@ export class GameViewFreeComponent implements OnInit {
     private intersectsOriginal: THREE.Intersection[];
     private intersectsModified: THREE.Intersection[];
 
+    private gameType: ObjectType;
+
     public constructor(
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
@@ -149,7 +151,7 @@ export class GameViewFreeComponent implements OnInit {
                 this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
 
                 this.timerService.startTimer(this.chronometer.nativeElement);
-
+                this.gameType  = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
             });
         });
     }
@@ -162,21 +164,24 @@ export class GameViewFreeComponent implements OnInit {
         raycaster.setFromCamera(mouse, this.originalSceneLoader.camera);
         this.intersectsOriginal = raycaster.intersectObjects(this.meshesOriginal);
         this.intersectsModified = raycaster.intersectObjects(this.meshesModified);
-        const modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.uuid.toString() : uuid();
-        const originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.uuid.toString() : uuid();
+        const modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.userData.id : uuid();
+        const originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.userData.id : uuid();
 
-        const gameType: ObjectType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
+        console.log("=======================");
+        console.log(originalObjectId);
+        console.log("=======================");
 
-        this.postDifference(event, originalObjectId, modifiedObjectId, gameType);
+        console.log(this.intersectsOriginal[0]);
+
+        console.log("=======================");
+        console.log(this.currentOriginalScene);
+        console.log("=======================");
+
+        this.postDifference(event, originalObjectId, modifiedObjectId);
     }
 
-    private isGameThematic(): boolean {
-        return (this.currentModifiedScene as ICommonThematicModifications).texturesChangedObjects &&
-                (this.currentModifiedScene as ICommonThematicModifications).texturesChangedObjects.length > 0;
-    }
-
-    private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string, gameType: ObjectType): void {
-        this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId, gameType)
+    private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string): void {
+        this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId, this.gameType)
         .subscribe(async (response: ICommonReveal3D) => {
             switch (response.differenceType) {
                 case DifferenceType.removedObject:
@@ -274,5 +279,9 @@ export class GameViewFreeComponent implements OnInit {
         this.timerService.stopTimer();
         this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
         this.isGameOver = true;
+    }
+
+    private isGameThematic(): boolean {
+        return this.currentModifiedScene.type === ObjectType.Thematic;
     }
 }
