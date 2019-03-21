@@ -13,6 +13,12 @@ export const R: IString = {
 
     ZERO: "0",
     COLON: ":",
+    PIXEL: "px",
+    INLINE: "inline",
+    NONE: "none",
+    NOT_ALLOWED: "not-allowed",
+    CONTEXT_MENU: "context-menu",
+
     CHAT_DEFAULT: " This message type is not supported: ",
     CHAT_USERCONNECTED: " The user %s is now online!",
     CHAT_USERDISCONNECTED: " The user %s is now offline!",
