@@ -162,16 +162,19 @@ export class GameViewFreeComponent implements OnInit {
         this.intersectsModified = raycaster.intersectObjects(this.meshesModified);
         const modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.uuid.toString() : uuid();
         const originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.uuid.toString() : uuid();
-        this.originalSceneClickValidation();
 
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
             .subscribe(async (response: ICommonReveal3D) => {
+                console.log(response);
                 switch (response.differenceType) {
                     case DifferenceType.removedObject:
                         this.addObject(this.intersectsOriginal[0].object);
                         break;
                     case DifferenceType.colorChanged:
                         this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                        break;
+                    case DifferenceType.addedObject:
+                        this.removeObject(this.intersectsModified[0].object);
                         break;
                     default:
                         break;
@@ -181,16 +184,6 @@ export class GameViewFreeComponent implements OnInit {
                     this.gameOver();
                 }
             });
-    }
-
-    private originalSceneClickValidation(): void {
-        if (!this.intersectsOriginal[0]) {
-            if (this.intersectsModified[0]) {
-                this.removeObject(this.intersectsModified[0].object);
-
-                return;
-            }
-        }
     }
 
     private addObject(objectOriginal: THREE.Object3D): void {
