@@ -86,6 +86,20 @@ describe("Tests for CheatModeService", () => {
           }
         })
       });
+
+      it("should change the added objects visibility to true in the modified scene", () => {
+        cheatModeService.toggleCheatMode(modifiedScene);
+        cheatModeService.toggleCheatMode(modifiedScene);
+        const addedObjectsId: string[] = modifiedScene.addedObjects.map((object) => object.id);
+        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+        addedObjectsId.forEach((id: string) => {
+          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+          expect(object3D).to.not.be.undefined;
+          if (object3D) {
+            expect(object3D.visible).to.be.true;
+          }
+        })
+      });
     });
   });
 });
