@@ -22,7 +22,8 @@ export class GeometricObjectsService extends HTTPService {
         const requestBody: Object = {
             "originalSceneId": originalSceneId,
             "modifiedObjectId": modifiedObjectId,
-            "originalObjectId": originalObjectId};
+            "originalObjectId": originalObjectId,
+            "gameType": gameType};
 
         return this.http.post<any>(`${SERVER_URL}/difference/free`, requestBody).pipe(
             catchError((error) => this.handleError(error)),
