@@ -3,15 +3,15 @@ import { Header, InfoHeader } from "../../model/bitmap/header";
 import { Pixel } from "../../model/bitmap/pixel";
 
 export class BitmapEncoder {
-    private static SIGNATURE_DECIMAL_CODE: number = 16973;
-    private static RESERVED_DECIMAL_CODE: number = 0;
-    private static INFO_HEADER_SIZE: number = 40;
-    private static PLANES_NUMBER: number = 1;
-    private static BITS_PER_PIXEL: number = 24;
-    private static COMPRESSION: number = 0;
-    private static IMAGE_SIZE: number = 0;
-    private static COLORS_USED: number = 0;
-    private static IMPORTANT_COLORS: number = 0;
+    private static readonly SIGNATURE_DECIMAL_CODE: number = 16973;
+    private static readonly RESERVED_DECIMAL_CODE: number = 0;
+    private static readonly INFO_HEADER_SIZE: number = 40;
+    private static readonly PLANES_NUMBER: number = 1;
+    private static readonly BITS_PER_PIXEL: number = 24;
+    private static readonly COMPRESSION: number = 0;
+    private static readonly IMAGE_SIZE: number = 0;
+    private static readonly COLORS_USED: number = 0;
+    private static readonly IMPORTANT_COLORS: number = 0;
 
     public static encodeBitmap(bitmap: Bitmap): ArrayBuffer {
         const buffer: ArrayBuffer = new ArrayBuffer(bitmap.header.fileSize[0]);

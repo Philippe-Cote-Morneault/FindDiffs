@@ -56,7 +56,7 @@ export class SceneLoaderService {
             this.animate();
         }
     }
-
+    // Weird
     private animate: Function = () => {
         requestAnimationFrame(this.animate as FrameRequestCallback);
         this.renderer.render(this.scene, this.camera);

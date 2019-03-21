@@ -15,7 +15,7 @@ import { TimerService } from "../services/timer/timer.service";
     styleUrls: ["./game-view-simple.component.css"],
 })
 export class GameViewSimpleComponent implements OnInit {
-    private static MAX_DIFFERENCES: number = 7;
+    private static readonly MAX_DIFFERENCES: number = 7;
     private static readonly DIFFERENCE_SOUND_SRC: string = "../../assets/mario.mp3";
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
