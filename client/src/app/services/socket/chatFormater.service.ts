@@ -39,15 +39,11 @@ export class ChatFormaterService {
     }
 
     private onDifferenceFound(message: ICommonSocketMessage): string {
-        // Check if solo or 1v1, then return correct string.
-
-        return message + " not implemented yet";
+        return this.formatDate(message.timestamp) + R.CHAT_ERROR_SOLO;
     }
 
     private onInvalidClick(message: ICommonSocketMessage): string {
-        // Check if solo or 1v1, then return correct string.
-
-        return message + " not implemented yet";
+        return this.formatDate(message.timestamp) + R.CHAT_DIFFERENCE_SOLO;
     }
 
     private onDefault(event: Event): string {
