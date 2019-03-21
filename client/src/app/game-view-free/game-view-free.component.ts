@@ -172,7 +172,6 @@ export class GameViewFreeComponent implements OnInit {
     private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string): void {
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
         .subscribe(async (response: ICommonReveal3D) => {
-            console.log(response);
             switch (response.differenceType) {
                 case DifferenceType.removedObject:
                     this.addObject(this.intersectsOriginal[0].object);
