@@ -5,8 +5,8 @@ import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { FormVerificationFreePOVService } from "../services/createGame/formVerificationFreePOV.service";
-import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
-import { GamesCardService } from "../services/gameCard/games-card.service";
+import { GameCardLoaderService } from "../services/gameCard/gameCardLoader.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneCreationService } from "../services/scene/sceneCreation/sceneCreation.service";
 
