@@ -3,7 +3,7 @@ import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
 import { CheatModeService } from "./cheat-mode.service";
 // tslint:disable
-describe("Tests pour le service: CheatModeService", () => {
+describe("Tests for CheatModeService", () => {
 
   let cheatModeService: CheatModeService;
   beforeEach(() => {
@@ -11,7 +11,9 @@ describe("Tests pour le service: CheatModeService", () => {
     cheatModeService = new CheatModeService();
   });
 
-  it("should be false on creation", () => {
-    expect(cheatModeService.cheatActivated).to.be.false;
+  describe("testing the value of cheatActivated attribute in various situations", () => {
+    it("should be false on creation of the service", () => {
+      expect(cheatModeService.cheatActivated).to.be.false;
+    });
   });
 });
