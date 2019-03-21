@@ -2,16 +2,16 @@ import * as uuid from "uuid";
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
 import { ICommonGameEnding } from "../../../../common/communication/webSocket/gameEnding";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
-import { NotFoundException } from "../../../../common/errors/notFoundException";
+//import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { Game } from "../../model/game/game";
-import { _e, R } from "../../strings";
+import { _e } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { GameManager } from "./gameManager";
 
 export class GameService {
     private static instance: GameService;
 
-    private activePlayers: Map<string, GameManager>;
+    //private activePlayers: Map<string, GameManager>;
     private activeGames: GameManager[];
     private socketHandler: SocketHandler;
 
@@ -51,6 +51,7 @@ export class GameService {
         this.activeGames.push(new GameManager(newGame, this.endGame));
     }
 
+    /*
     private startSoloGame(player: string): void {
         const game: GameManager | undefined = this.activePlayers.get(player);
         if (game === undefined) {
@@ -60,6 +61,7 @@ export class GameService {
         game.startGame();
     }
 
+    */
     private endGame(game: Game, winner: string): void {
         const gameEndedMessage: ICommonGameEnding = {
             winner: winner,
