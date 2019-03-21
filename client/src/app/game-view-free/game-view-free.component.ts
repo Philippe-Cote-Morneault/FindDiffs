@@ -185,6 +185,8 @@ export class GameViewFreeComponent implements OnInit {
                 case DifferenceType.colorChanged:
                     this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
                     break;
+                case DifferenceType.textureObjectChanged:
+                    break;
                 case DifferenceType.addedObject:
                     this.removeObject(this.intersectsModified[0].object);
                     break;
