@@ -10,12 +10,15 @@ import { R } from "../../strings";
 export class RevealDifference3D {
     private modifiedScene: ICommonSceneModifications;
     private originalObjectId: string;
+    private modfifiedObjectId: string;
 
-    public constructor(modifiedScene: ICommonSceneModifications, originalObjectId: string) {
+    public constructor(modifiedScene: ICommonSceneModifications, modfifiedObjectId: string, originalObjectId: string) {
         this.modifiedScene = modifiedScene;
         this.originalObjectId = originalObjectId;
+        this.modfifiedObjectId = modfifiedObjectId;
     }
 
+    // tslint:disable-next-line:max-func-body-length
     public reveal(): ICommonReveal3D {
         const returnValue: ICommonReveal3D = {
             hit: false,
@@ -35,6 +38,15 @@ export class RevealDifference3D {
             if (element.key === this.originalObjectId) {
                 returnValue.hit = true;
                 returnValue.differenceType = DifferenceType.colorChanged;
+
+                return returnValue;
+            }
+        }
+
+        for (const element of this.modifiedScene.addedObjects) {
+            if (element.id === this.modfifiedObjectId) {
+                returnValue.hit = true;
+                returnValue.differenceType = DifferenceType.addedObject;
 
                 return returnValue;
             }
