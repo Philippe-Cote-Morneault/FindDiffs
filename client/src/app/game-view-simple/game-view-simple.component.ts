@@ -8,6 +8,7 @@ import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
 import { ChatService } from "../services/socket/chat.service";
+import { SocketHandlerService } from "../services/socket/socketHandler.service";
 import { TimerService } from "../services/timer/timer.service";
 
 @Component({
@@ -41,6 +42,7 @@ export class GameViewSimpleComponent implements OnInit {
         public imagePairService: ImagePairService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService,
+        public socket: SocketHandlerService,
         public identificationError: IdentificationError) {
 
         this.isGameOver = false;
@@ -62,6 +64,9 @@ export class GameViewSimpleComponent implements OnInit {
 
     private subscribeToSocket(): void {
         ChatService.getInstance().setChat(this.message.nativeElement, this.messageContainer.nativeElement);
+        PixelRestoration.getInstance().setPixelRestoration(this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
+        IdentificationError.getInstance().setIdentificationError(
+            this.errorMessage.nativeElement, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
     }
 
     private getGameCardById(): void {
@@ -83,9 +88,8 @@ export class GameViewSimpleComponent implements OnInit {
     // tslint:disable-next-line:no-any
     public getClickPosition(e: any): void {
         if (!this.identificationError.timeout) {
-            const xPosition: number = e.layerX;
-            const yPosition: number = e.layerY;
-            this.pixelPositionService.postPixelPosition(this.imagePairId, xPosition, yPosition).subscribe(async (response) => {
+            this.socket.emitClick(e.layerX, e.layerY);
+            this.pixelPositionService.postPixelPosition(this.imagePairId, e.layerX, e.layerY).subscribe(async (response) => {
                 if (response.hit) {
                     if (this.isANewDifference(response.difference_id)) {
                         this.pixelRestoration.restoreImage(
