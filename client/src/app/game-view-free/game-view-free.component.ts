@@ -63,10 +63,10 @@ export class GameViewFreeComponent implements OnInit {
         this.getGameCardById();
         this.cheatModeTimeoutService.ngOnInit();
         this.chat = new Chat(new ChatFormaterService, this.message.nativeElement, this.messageContainer.nativeElement);
-        this.subscribeToSocket();
+        this.subscribeToServices();
     }
 
-    private subscribeToSocket(): void {
+    private subscribeToServices(): void {
         this.chat.subscribeToSocket();
     }
 

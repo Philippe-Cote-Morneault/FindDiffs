@@ -65,10 +65,10 @@ export class GameViewSimpleComponent implements OnInit {
         this.identificationError = new IdentificationError(
             this.errorMessage.nativeElement, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
         this.getGameCardById();
-        this.subscribeToSocket();
+        this.subscribeToServices();
     }
 
-    private subscribeToSocket(): void {
+    private subscribeToServices(): void {
         this.chat.subscribeToSocket();
         this.pixelRestoration.subscribeToSocket();
         this.identificationError.subscribeToSocket();
