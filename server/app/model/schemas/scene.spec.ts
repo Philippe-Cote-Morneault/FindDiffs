@@ -8,7 +8,7 @@ describe("Scene Schema", () => {
 
     propertiesToTest.forEach((propertyToTest: string) => {
         describe(`.${propertyToTest}`, () => {
-            it("Should return a properly formatted url", () => {
+            it("Should return a properly formatted url that is validated with valid-url module", () => {
                 const scene: IScene = new Scene({
                     scene: undefined,
                     grid: undefined,
@@ -20,7 +20,7 @@ describe("Scene Schema", () => {
 
             });
 
-            it("Should not have a tralling slash", () => {
+            it("Should not have a tralling slash at the end of the url", () => {
                 const scene: IScene = new Scene({
                     scene: undefined,
                     grid: undefined,

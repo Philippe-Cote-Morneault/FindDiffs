@@ -14,7 +14,7 @@ describe("CubeFactory", () => {
     });
 
     describe("createShape()", () => {
-        it("Should return a cube", () => {
+        it("Should create an object which is a cube", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.1);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
@@ -27,7 +27,7 @@ describe("CubeFactory", () => {
             expect(object.shapeType).to.equal(GeometricShapeType.CUBE);
         });
 
-        it("Should return a cube with a width in range", () => {
+        it("Should create a cube with a width in the specified range", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.1);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();

@@ -22,7 +22,7 @@ describe("SceneService", () => {
     });
 
     describe("post()", () => {
-        it("Should return an error if the object type is not specified", async () => {
+        it("Should throw an error if the object type is not specified", async () => {
             const request: object = {
                 body: {
 
@@ -37,7 +37,7 @@ describe("SceneService", () => {
 
         });
 
-        it("Should return an error if the object type is invalid", async () => {
+        it("Should throw an error if the object type is not a known type", async () => {
             const request: object = {
                 body: {
                     object_type: "unknown",
@@ -51,7 +51,7 @@ describe("SceneService", () => {
             }
         });
 
-        it("Should return an error if the object qty is not a number", async () => {
+        it("Should throw an error if the object qty is not a number", async () => {
             const request: object = {
                 body: {
                     object_type: "Thematic",
@@ -67,7 +67,7 @@ describe("SceneService", () => {
             }
         });
 
-        it("Should return an error if the object qty is higher than 200", async () => {
+        it("Should throw an error if the object qty is higher than 200", async () => {
             const request: object = {
                 body: {
                     object_type: "Thematic",
@@ -83,7 +83,7 @@ describe("SceneService", () => {
             }
         });
 
-        it("Should return an error if the object qty is lower than 10", async () => {
+        it("Should throw an error if the object qty is lower than 10", async () => {
             const request: object = {
                 body: {
                     object_type: "Thematic",
@@ -99,7 +99,7 @@ describe("SceneService", () => {
             }
         });
 
-        it("Should return a generated scene (Geometric)", async () => {
+        it("Should create a generated scene geometric with the specified amount of object requested", async () => {
             const objectQty: number = 20;
             const request: object = {
                 body: {
@@ -113,7 +113,7 @@ describe("SceneService", () => {
             expect(JSON.parse(response).sceneObjects.length).to.equal(objectQty);
         });
 
-        it("Should return a generated scene (Thematic)", async () => {
+        it("Should create a generated scene (Thematic) with the specified amount of object requested", async () => {
             const objectQty: number = 20;
             const request: object = {
                 body: {
@@ -137,7 +137,7 @@ describe("SceneService", () => {
             (SceneDifferenceGenerator.prototype.generateModifiedScene as sinon.SinonStub).restore();
         });
 
-        it("Should return an error if no modification is detected", async () => {
+        it("Should throw an error if no modification is detected", async () => {
             const request: object = {
                 body: {
                 },
@@ -151,7 +151,7 @@ describe("SceneService", () => {
             }
         });
 
-        it("Should return an error if the id is not found", async () => {
+        it("Should throw an error if the scene id is not found in the database", async () => {
             const request: object = {
                 body: {
                     add: true,
@@ -170,7 +170,7 @@ describe("SceneService", () => {
         });
 
         // tslint:disable-next-line:max-func-body-length
-        it("Should return a modified scene", async () => {
+        it("Should create a modified scene with the modifications requested", async () => {
             const request: object = {
                 body: {
                     add: true,
@@ -212,7 +212,7 @@ describe("SceneService", () => {
     });
 
     describe("single()", () => {
-        it("Should return an error if the id is not in the db", async () => {
+        it("Should throw an error if the id is not in the db", async () => {
             (Scene.findById as sinon.SinonStub).rejects({});
             try {
                 await service.single("an id");
@@ -221,7 +221,7 @@ describe("SceneService", () => {
                 expect(err.message).to.equal("The id could not be found.");
             }
         });
-        it("Should return an error if the id is not in the db but returns undefined", async () => {
+        it("Should throw an error if the id is not in the db but db returns invalid data", async () => {
             (Scene.findById as sinon.SinonStub).resolves(undefined);
             try {
                 await service.single("an id");
@@ -231,7 +231,7 @@ describe("SceneService", () => {
             }
         });
 
-        it("Should return a scene if the id is valid.", async () => {
+        it("Should list a scene if the id is in the database", async () => {
             const realSceneId: string = "the real id";
             (Scene.findById as sinon.SinonStub).resolves({
                 scene: {
@@ -245,7 +245,7 @@ describe("SceneService", () => {
     });
 
     describe("singleModified()", () => {
-        it("Should return an error if the id is not in the db", async () => {
+        it("Should throw an error if the id is not in the db", async () => {
             (Scene.findById as sinon.SinonStub).rejects({});
             try {
                 await service.singleModified("an id");
@@ -254,7 +254,7 @@ describe("SceneService", () => {
                 expect(err.message).to.equal("The id could not be found.");
             }
         });
-        it("Should return an error if the id is not in the db but returns undefined", async () => {
+        it("Should throw an error if the id is not in the db but the db returns invalid data", async () => {
             (Scene.findById as sinon.SinonStub).resolves(undefined);
             try {
                 await service.singleModified("an id");
@@ -264,7 +264,7 @@ describe("SceneService", () => {
             }
         });
 
-        it("Should return a modified scene if the id is valid.", async () => {
+        it("Should create a modified scene if the id is valid.", async () => {
             const realSceneId: string = "the real id";
             (Scene.findById as sinon.SinonStub).resolves({
                 modifications: {

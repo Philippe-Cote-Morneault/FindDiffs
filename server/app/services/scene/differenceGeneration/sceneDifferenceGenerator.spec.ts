@@ -10,10 +10,10 @@ import { SceneGeneratorShape } from "../sceneGeneratorShape";
 import { SceneGeneratorTheme } from "../sceneGeneratorTheme";
 import { SceneDifferenceGenerator } from "./sceneDifferenceGenerator";
 
-describe("GeometricObjectGenerator", () => {
+describe("SceneDifferenceGenerator", () => {
     describe("generateModifiedScene()", () => {
         describe("Geometric", () => {
-            it("Should return an array of objects which is bigger than the original", () => {
+            it("Should create an array of objects which is bigger than the original when the modification is add", () => {
                 const SCENE_SIZE: number = 1000;
                 const DEPTH: number = 50;
                 const SCENE_OBJECT_MARGIN: number = 20;
@@ -29,7 +29,7 @@ describe("GeometricObjectGenerator", () => {
                 expect(differenceObj.addedObjects.length + sceneObj.sceneObjects.length).to.be.gte(sceneObj.sceneObjects.length);
             });
 
-            it("Should return an array of objects which is lower than the original", () => {
+            it("Should create an array of objects which is lower than the original when the modification is removed", () => {
                 const SCENE_SIZE: number = 1000;
                 const DEPTH: number = 50;
                 const SCENE_OBJECT_MARGIN: number = 20;
@@ -45,7 +45,7 @@ describe("GeometricObjectGenerator", () => {
                 expect(sceneObj.sceneObjects.length - differenceObj.deletedObjects.length).to.be.lte(sceneObj.sceneObjects.length);
             });
 
-            it("Should return an array of objects with different colors than the original", () => {
+            it("Should create an array of objects with different colors than the original when the modification is color", () => {
                 const SCENE_SIZE: number = 1000;
                 const DEPTH: number = 50;
                 const SCENE_OBJECT_MARGIN: number = 20;
@@ -78,7 +78,7 @@ describe("GeometricObjectGenerator", () => {
             });
         });
         describe("Thematic", () => {
-            it("Should return an array of objects which is bigger than the original", () => {
+            it("Should create an array of objects which is bigger than the original when the modification is add", () => {
                 const SCENE_SIZE: number = 1000;
                 const DEPTH: number = 50;
                 const SCENE_OBJECT_MARGIN: number = 20;
@@ -94,7 +94,7 @@ describe("GeometricObjectGenerator", () => {
                 expect(differenceObj.addedObjects.length + sceneObj.sceneObjects.length).to.be.gte(sceneObj.sceneObjects.length);
             });
 
-            it("Should return an array of objects which is lower than the original", () => {
+            it("Should create an array of objects which is lower than the original when the modification is removed", () => {
                 const SCENE_SIZE: number = 1000;
                 const DEPTH: number = 50;
                 const SCENE_OBJECT_MARGIN: number = 20;
@@ -110,8 +110,9 @@ describe("GeometricObjectGenerator", () => {
                 expect(sceneObj.sceneObjects.length - differenceObj.deletedObjects.length).to.be.lte(sceneObj.sceneObjects.length);
             });
 
+            it("Should create an array of objects with different textures/color than the original when the modification is color/texture",
             // tslint:disable-next-line:max-func-body-length
-            it("Should return an array of objects with different textures/color than the original", () => {
+               () => {
                 const SCENE_SIZE: number = 1000;
                 const DEPTH: number = 50;
                 const SCENE_OBJECT_MARGIN: number = 20;

@@ -20,7 +20,7 @@ describe("DefaultGrid", () => {
             (Grid.prototype.isInSafeZone as sinon.SinonStub).restore();
             safeZoneCall = maxSafeZoneCall;
         });
-        it("Should generate a grid with a bunch of random positions, and call itself back if in safezone", () => {
+        it("Should generate a grid with a bunch of random positions, and avoid generating in the spawnarea", () => {
             const SIZE: number = 500;
             const MARGIN: number = 20;
             const DEPTH: number = 50;
@@ -65,7 +65,7 @@ describe("DefaultGrid", () => {
     });
 
     describe("isInSafeZone()", () => {
-        it("Should return true if the position is in the SafeZone", () => {
+        it("Should detect if the position is in the SafeZone (spawnarea)", () => {
             const SIZE: number = 50;
             const DEPTH: number = 50;
             const MIN_DISTANCE: number = 5;
@@ -78,7 +78,7 @@ describe("DefaultGrid", () => {
             expect(grid.isInSafeZone(position)).to.equal(true);
         });
 
-        it("Should return false if the position is in the SafeZone", () => {
+        it("Should detect if the position is in the SafeZone (spawnarea)", () => {
             const SIZE: number = 50;
             const DEPTH: number = 50;
             const MIN_DISTANCE: number = 5;
