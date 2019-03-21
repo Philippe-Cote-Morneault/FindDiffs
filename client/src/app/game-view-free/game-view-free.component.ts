@@ -166,29 +166,33 @@ export class GameViewFreeComponent implements OnInit {
         const modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.uuid.toString() : uuid();
         const originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.uuid.toString() : uuid();
 
-        this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
-            .subscribe(async (response: ICommonReveal3D) => {
-                console.log(response);
-                switch (response.differenceType) {
-                    case DifferenceType.removedObject:
-                        this.addObject(this.intersectsOriginal[0].object);
-                        break;
-                    case DifferenceType.colorChanged:
-                        this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
-                        break;
-                    case DifferenceType.addedObject:
-                        this.removeObject(this.intersectsModified[0].object);
-                        break;
-                    default:
-                        await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
-                                                                        this.originalScene.nativeElement, this.modifiedScene.nativeElement);
-                        break;
-                }
+        this.postDifference(event, originalObjectId, modifiedObjectId);
+    }
 
-                if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
-                    this.gameOver();
-                }
-            });
+    private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string): void {
+        this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
+        .subscribe(async (response: ICommonReveal3D) => {
+            console.log(response);
+            switch (response.differenceType) {
+                case DifferenceType.removedObject:
+                    this.addObject(this.intersectsOriginal[0].object);
+                    break;
+                case DifferenceType.colorChanged:
+                    this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                    break;
+                case DifferenceType.addedObject:
+                    this.removeObject(this.intersectsModified[0].object);
+                    break;
+                default:
+                    await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
+                                                                    this.originalScene.nativeElement, this.modifiedScene.nativeElement);
+                    break;
+            }
+
+            if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
+                this.gameOver();
+            }
+        });
     }
 
     private addObject(objectOriginal: THREE.Object3D): void {
