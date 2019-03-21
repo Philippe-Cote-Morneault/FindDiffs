@@ -7,7 +7,8 @@ import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
-import { ChatService } from "../services/socket/chat.service";
+import { Chat } from "../services/socket/chat";
+import { ChatFormaterService } from "../services/socket/chatFormater.service";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
 import { TimerService } from "../services/timer/timer.service";
 
@@ -34,16 +35,17 @@ export class GameViewSimpleComponent implements OnInit {
     private differenceFound: number[];
     private differenceSound: HTMLAudioElement;
     public playerTime: string;
+    private chat: Chat;
+    private pixelRestoration: PixelRestoration;
+    private identificationError: IdentificationError;
 
     public constructor(
         private route: ActivatedRoute,
         public pixelPositionService: PixelPositionService,
-        public pixelRestoration: PixelRestoration,
         public imagePairService: ImagePairService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService,
-        public socket: SocketHandlerService,
-        public identificationError: IdentificationError) {
+        public socket: SocketHandlerService) {
 
         this.isGameOver = false;
         this.differenceCounterUser = 0;
@@ -58,15 +60,18 @@ export class GameViewSimpleComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.gameCardId = params["id"];
         });
+        this.pixelRestoration = new PixelRestoration(this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
+        this.chat = new Chat(new ChatFormaterService, this.message.nativeElement, this.messageContainer.nativeElement);
+        this.identificationError = new IdentificationError(
+            this.errorMessage.nativeElement, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
         this.getGameCardById();
         this.subscribeToSocket();
     }
 
     private subscribeToSocket(): void {
-        ChatService.getInstance().setChat(this.message.nativeElement, this.messageContainer.nativeElement);
-        PixelRestoration.getInstance().setPixelRestoration(this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
-        IdentificationError.getInstance().setIdentificationError(
-            this.errorMessage.nativeElement, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
+        this.chat.subscribeToSocket();
+        this.pixelRestoration.subscribeToSocket();
+        this.identificationError.subscribeToSocket();
     }
 
     private getGameCardById(): void {
@@ -88,8 +93,9 @@ export class GameViewSimpleComponent implements OnInit {
     // tslint:disable-next-line:no-any
     public getClickPosition(e: any): void {
         if (!this.identificationError.timeout) {
+            this.identificationError.moveClickError(e.pageX, e.pageY);
             this.socket.emitClick(e.layerX, e.layerY);
-            this.pixelPositionService.postPixelPosition(this.imagePairId, e.layerX, e.layerY).subscribe(async (response) => {
+            /*this.pixelPositionService.postPixelPosition(this.imagePairId, e.layerX, e.layerY).subscribe(async (response) => {
                 if (response.hit) {
                     if (this.isANewDifference(response.difference_id)) {
                         this.pixelRestoration.restoreImage(
@@ -102,7 +108,7 @@ export class GameViewSimpleComponent implements OnInit {
                     await this.identificationError.showErrorMessage(e.pageX, e.pageY, this.errorMessage.nativeElement,
                                                                     this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
                 }
-            });
+            });*/
         }
     }
 
