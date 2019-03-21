@@ -13,8 +13,8 @@ import { RendererGenerator } from "../sceneRenderer/rendererGenerator";
 })
 
 export class SceneLoaderService {
-    public camera: THREE.PerspectiveCamera;
-    public renderer: THREE.WebGLRenderer;
+    private camera: THREE.PerspectiveCamera;
+    private renderer: THREE.WebGLRenderer;
     public scene: THREE.Scene;
 
     public async loadOriginalScene(container: HTMLElement | null, scene: ICommonScene): Promise<void> {
