@@ -5,6 +5,7 @@ export class UsernameManager  {
     private static instance: UsernameManager;
 
     private idUsernames: Map<string, string>;
+    private authentifiedUsers: Map<string, string>;
 
     public static getInstance(): UsernameManager {
         if (!UsernameManager.instance) {
