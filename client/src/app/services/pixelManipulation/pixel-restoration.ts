@@ -10,7 +10,6 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
     providedIn: "root",
 })
 export class PixelRestoration implements SocketSubscriber {
-    private static instance: PixelRestoration;
     public static pixelDimension: number = 1;
     public static imageDataPixelSpace: number = 4;
     public originalContext: CanvasRenderingContext2D | null;
@@ -18,26 +17,20 @@ export class PixelRestoration implements SocketSubscriber {
     private originalCanvas: HTMLCanvasElement;
     private modifiedCanvas: HTMLCanvasElement;
 
-    public static getInstance(): PixelRestoration {
-        if (!PixelRestoration.instance) {
-            PixelRestoration.instance = new PixelRestoration();
-        }
-
-        return PixelRestoration.instance;
+    public constructor(originalCanvas: HTMLCanvasElement, modifiedCanvas: HTMLCanvasElement) {
+        this.originalCanvas = originalCanvas;
+        this.modifiedCanvas = modifiedCanvas;
     }
 
-    public constructor() {
-        this.subscribeToSocket();
-    }
-
-    private subscribeToSocket(): void {
+    public subscribeToSocket(): void {
         SocketHandlerService.getInstance().subscribe(Event.DifferenceFound, this);
     }
 
     public notify(event: Event, message: ICommonSocketMessage): void {
-        // Call RestoreImage
-        // tslint:disable-next-line:no-console
-        console.log(event + message + this.modifiedCanvas + this.originalCanvas);
+        if (event === Event.DifferenceFound) {
+            const response: ICommonReveal = message.data as ICommonReveal;
+            this.restoreImage(response);
+        }
     }
 
     public setPixelRestoration(originalCanvas: HTMLCanvasElement, modifiedCanvas: HTMLCanvasElement): void {
@@ -45,19 +38,18 @@ export class PixelRestoration implements SocketSubscriber {
         this.modifiedCanvas = modifiedCanvas;
     }
 
-    public restoreImage(response: ICommonReveal,
-                        originalCanvas: HTMLCanvasElement,
-                        modifiedCanvas: HTMLCanvasElement): void {
-
-        this.originalContext = originalCanvas.getContext("2d");
+    public restoreImage(response: ICommonReveal): void {
+        this.originalContext = this.originalCanvas.getContext("2d");
         if (this.originalContext) {
-            const originalImageData: ImageData = this.originalContext.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
-            this.modifiedContext = modifiedCanvas.getContext("2d");
+            const originalImageData: ImageData = this.originalContext.getImageData(
+                0, 0, this.originalCanvas.width, this.originalCanvas.height);
+            this.modifiedContext = this.modifiedCanvas.getContext("2d");
             if (this.modifiedContext) {
-                const modifiedImageData: ImageData = this.modifiedContext.getImageData(0, 0, modifiedCanvas.width, modifiedCanvas.height);
+                const modifiedImageData: ImageData = this.modifiedContext.getImageData(
+                    0, 0, this.modifiedCanvas.width, this.modifiedCanvas.height);
                 let pos: number;
                 response.pixels_affected.forEach((pixel) => {
-                    pos = this.pixelPositionInImageData(pixel, originalCanvas.width);
+                    pos = this.pixelPositionInImageData(pixel, this.originalCanvas.width);
                     this.changePixelColor(pos, originalImageData, modifiedImageData);
                 });
                 this.modifiedContext.putImageData(modifiedImageData, 0, 0);
