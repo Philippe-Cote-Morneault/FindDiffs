@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
+import { ICommonGame } from "../../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { SERVER_URL } from "../../../../../common/url";
 import { SocketSubscriber } from "./socketSubscriber";
 
@@ -63,6 +65,29 @@ export class SocketHandlerService {
             timestamp: new Date(),
         };
         this.socket.emit(Event.UserConnected, message);
+    }
+
+    public emitClick(xPos: number, yPos: number): void {
+        const pixel: ICommon2DPosition = {
+            x: xPos,
+            y: yPos,
+        };
+        const message: ICommonSocketMessage = {
+            data: pixel,
+            timestamp: new Date(),
+        };
+        this.socket.emit(Event.GameClick, message);
+    }
+
+    public emitPlayerSoloGame(id: string): void {
+        const game: ICommonGame = {
+            ressource_id: id,
+        };
+        const message: ICommonSocketMessage = {
+            data: game,
+            timestamp: new Date(),
+        };
+        this.socket.emit(Event.PlaySoloGame, message);
     }
 
     public onNewUserConnected(): void {
