@@ -13,7 +13,7 @@ import { RendererGenerator } from "../sceneRenderer/rendererGenerator";
 })
 
 export class SceneLoaderService {
-    private camera: THREE.PerspectiveCamera;
+    public camera: THREE.PerspectiveCamera;
     private renderer: THREE.WebGLRenderer;
     public scene: THREE.Scene;
 
