@@ -72,8 +72,24 @@ describe("UserService", () => {
             } catch (err) {
                 expect(err.message).to.equal(alreadyTakenError);
             }
-
         });
+
+        it("Should regsister the user if its name is valid", async () => {
+            const testUsername: string = "MonNomCGab";
+            const request: Object = {
+                body: { username : testUsername, },
+            };
+            (User.prototype.save as sinon.SinonStub).resolves({
+                username: testUsername,
+                creation_date: "2019-02-03T00:33:58.958Z",
+                id: "5c5636f68f786067b76d6b3e",
+            });
+            (User.countDocuments as sinon.SinonStub).resolves(0);
+
+            const data: string = await userService.post(mockReq(request));
+            expect(JSON.parse(data).username).to.equal(testUsername);
+        });
+
     });
 
     describe("delete()", () => {
