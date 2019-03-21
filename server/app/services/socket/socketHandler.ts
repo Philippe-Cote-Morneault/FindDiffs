@@ -2,7 +2,7 @@ import { Server } from "http";
 import * as socketIo from "socket.io";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../common/communication/webSocket/user";
-import { UsernameManager } from "./usernameManager";
+import { UserManager } from "./userManager";
 import { SocketCallback } from "./socketCallback";
 
 export class SocketHandler {
@@ -11,7 +11,7 @@ export class SocketHandler {
     private static DISCONNECT_EVENT: string = "disconnect";
 
     private io: socketIo.Server;
-    private usernameManager: UsernameManager;
+    private usernameManager: UserManager;
     private subscribers: Map<string, SocketCallback[]>;
 
     public static getInstance(): SocketHandler {
@@ -47,15 +47,12 @@ export class SocketHandler {
     }
 
     private constructor() {
-        this.usernameManager = UsernameManager.getInstance();
+        this.usernameManager = UserManager.getInstance();
         this.subscribers = new Map();
     }
 
     private init(): void {
-        this.io.on(SocketHandler.CONNECT_EVENT, (socket: SocketIO.Socket) => {
-            //this.idUsernames.set(socket.id, "");
-            this.setEventListeners(socket);
-        });
+        this.io.on(SocketHandler.CONNECT_EVENT, this.authenticateUser);
     }
 
     private setEventListeners(socket: SocketIO.Socket): void {
@@ -121,5 +118,9 @@ export class SocketHandler {
                 callback(message, username);
             });
         }
+    }
+
+    private authenticateUser(socket: SocketIO.Socket): void {
+        this.setEventListeners(socket);
     }
 }
