@@ -5,20 +5,27 @@ import { ICommonSceneModifications } from "../../../../common/model/scene/modifi
 import { ObjectType } from "../../../../common/model/scene/scene";
 import { Scene } from "../../model/schemas/scene";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
+import { Storage } from "../../utils/storage/storage";
 import { SceneDifferenceGenerator } from "./differenceGeneration/sceneDifferenceGenerator";
 import { SceneService } from "./scene.service";
+
+// tslint:disable max-file-line-count
 
 describe("SceneService", () => {
     const service: SceneService = new SceneService();
 
     beforeEach(() => {
         sinon.stub(Scene.prototype, "save");
+        sinon.stub(Scene, "findOneAndUpdate");
         sinon.stub(Scene, "findById");
+        sinon.stub(Storage, "saveBuffer");
     });
 
     afterEach(() => {
         (Scene.prototype.save as sinon.SinonStub).restore();
+        (Scene.findOneAndUpdate as sinon.SinonStub).restore();
         (Scene.findById as sinon.SinonStub).restore();
+        (Storage.saveBuffer as sinon.SinonStub).restore();
     });
 
     describe("post()", () => {
@@ -273,6 +280,49 @@ describe("SceneService", () => {
             });
             const response: string = await service.singleModified("an id");
             expect(JSON.parse(response).id).to.equal(realSceneId);
+        });
+    });
+    describe("postThumbnail", () => {
+        it("Should throw an error if the scene id is not present in the database", async () => {
+            const request: object = {
+                params: {
+                    id: "an id",
+                },
+                files: {
+                    thumbnail: [{
+                        originalname: "checker.bmp",
+                        buffer: Buffer.alloc(1),
+                    }],
+                },
+            };
+            (Storage.saveBuffer as sinon.SinonStub).resolves("a file id");
+            // tslint:disable-next-line:no-magic-numbers
+            (Scene.findOneAndUpdate as sinon.SinonStub).callsArgWith(2, new Error(), undefined);
+            try {
+                await service.postThumbnail(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The id could not be found.");
+            }
+        });
+
+        it("Should save the thumbnail if it is uploaded to the server", async () => {
+            const request: object = {
+                params: {
+                    id: "an id",
+                },
+                files: {
+                    thumbnail: [{
+                        originalname: "checker.bmp",
+                        buffer: Buffer.alloc(1),
+                    }],
+                },
+            };
+            (Storage.saveBuffer as sinon.SinonStub).resolves("a file id");
+            // tslint:disable-next-line:no-magic-numbers
+            (Scene.findOneAndUpdate as sinon.SinonStub).callsArgWith(2, null, undefined);
+            const response: string = await service.postThumbnail(mockReq(request));
+            expect(response).to.equal("a file id");
         });
     });
 });
