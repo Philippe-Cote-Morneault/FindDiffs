@@ -8,7 +8,7 @@ import { DifferenceType, ICommonReveal3D } from "../../../../common/model/reveal
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
-import { ICommonScene } from "../../../../common/model/scene/scene";
+import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
@@ -165,10 +165,17 @@ export class GameViewFreeComponent implements OnInit {
         const modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.uuid.toString() : uuid();
         const originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.uuid.toString() : uuid();
 
-        this.postDifference(event, originalObjectId, modifiedObjectId);
+        const gameType: ObjectType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
+
+        this.postDifference(event, originalObjectId, modifiedObjectId, gameType);
     }
 
-    private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string): void {
+    private isGameThematic(): boolean {
+        return (this.currentModifiedScene as ICommonThematicModifications).texturesChangedObjects &&
+                (this.currentModifiedScene as ICommonThematicModifications).texturesChangedObjects.length > 0;
+    }
+
+    private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string, gameType: ObjectType): void {
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
         .subscribe(async (response: ICommonReveal3D) => {
             switch (response.differenceType) {
