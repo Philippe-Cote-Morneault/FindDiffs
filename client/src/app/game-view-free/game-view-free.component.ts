@@ -10,7 +10,6 @@ import { ICommonSceneModifications } from "../../../../common/model/scene/modifi
 import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
-import { ObjectRestoration } from "../services/3DObjects/GeometricObjects/object-restoration";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
 import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
@@ -63,7 +62,6 @@ export class GameViewFreeComponent implements OnInit {
         public timerService: TimerService,
         public gamesCardService: GamesCardService,
         public geometricObjectService: GeometricObjectsService,
-        public objectRestoration: ObjectRestoration,
         private sceneSyncer: SceneSyncerService,
         public cheatModeService: CheatModeService,
         private cheatModeTimeoutService: CheatModeTimeoutService) {
@@ -168,7 +166,6 @@ export class GameViewFreeComponent implements OnInit {
 
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId)
             .subscribe(async (response: ICommonReveal3D) => {
-                console.log(response);
                 switch (response.differenceType) {
                     case DifferenceType.removedObject:
                         this.addObject(this.intersectsOriginal[0].object);
