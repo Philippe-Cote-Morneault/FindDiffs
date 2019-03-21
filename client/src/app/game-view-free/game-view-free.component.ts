@@ -10,6 +10,7 @@ import { ICommonSceneModifications } from "../../../../common/model/scene/modifi
 import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
+import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
 import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
@@ -33,6 +34,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
+    @ViewChild("errorMessage") private errorMessage: ElementRef;
 
     private readonly MAX_DIFFERENCES: number;
 
@@ -64,7 +66,8 @@ export class GameViewFreeComponent implements OnInit {
         public geometricObjectService: GeometricObjectsService,
         private sceneSyncer: SceneSyncerService,
         public cheatModeService: CheatModeService,
-        private cheatModeTimeoutService: CheatModeTimeoutService) {
+        private cheatModeTimeoutService: CheatModeTimeoutService,
+        public identificationError: IdentificationError) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
         this.differenceCounterUser = 0;
@@ -177,6 +180,8 @@ export class GameViewFreeComponent implements OnInit {
                         this.removeObject(this.intersectsModified[0].object);
                         break;
                     default:
+                        await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
+                                                                        this.originalScene.nativeElement, this.modifiedScene.nativeElement);
                         break;
                 }
 
@@ -214,10 +219,6 @@ export class GameViewFreeComponent implements OnInit {
             this.differenceCounterUser++;
         }
     }
-
-    // private error () {
-
-    // }
 
     private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
         let sceneLoader: SceneLoaderService;
