@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ICommonGameCard, ICommonScoreEntry } from "../../../../common/model/gameCard";
 import { GamesCardService } from "../services/gameCard/games-card.service";
@@ -11,16 +11,15 @@ import { StringFormater } from "../util/stringFormater";
 })
 export class EndSoloGameComponent implements OnInit {
 
+  @Input() public playerTimeChild: string;
+
   public gameCard: ICommonGameCard;
   public gameCardId: string;
-  public time: string;
 
   public constructor(
     private route: ActivatedRoute,
     public gamesCardService: GamesCardService,
-    private router: Router) {
-      this.time = "00:00";
-    }
+    private router: Router) {    }
 
   public ngOnInit(): void {
     this.route.params.subscribe((params) => {

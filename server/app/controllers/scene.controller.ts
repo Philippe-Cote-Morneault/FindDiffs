@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import {inject, injectable} from "inversify";
 import { SceneService } from "../services/scene/scene.service";
 import TYPES from "../types";
+import { uploads } from "../utils/storage/storage";
 import { Controller } from "./controller";
 import { ISceneController } from "./interfaces";
 
@@ -38,10 +39,30 @@ export class SceneController extends Controller implements ISceneController {
             }
         });
 
+        router.post("/:id/thumbnail", uploads.fields([{name: "thumbnail", maxCount: 1}]),
+                    async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const response: string = await this.sceneService.postThumbnail(req);
+                res.send(response);
+            } catch (err) {
+                this.handleError(res, err);
+            }
+        });
+
         router.get("/:id/modified", async (req: Request, res: Response, next: NextFunction) => {
             try {
                 const response: string = await this.sceneService.singleModified(req.params.id);
                 res.send(response);
+            } catch (err) {
+                this.handleError(res, err);
+            }
+        });
+
+        router.get("/:id/thumbnail", async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const file: ArrayBuffer = await this.sceneService.getThumbnail(req.params.id);
+                res.set("Content-Type", "image/png");
+                res.send(Buffer.from(file));
             } catch (err) {
                 this.handleError(res, err);
             }

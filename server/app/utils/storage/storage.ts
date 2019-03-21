@@ -56,10 +56,11 @@ export class Storage {
                 Key: path,
             },
         ).promise().then((object: AWS.S3.GetObjectOutput) => {
-            const buffer: ArrayBuffer = (object.Body as Buffer).buffer;
-            S3Cache.updateCache(guid, buffer);
+            const buffer: Buffer = (object.Body as Buffer);
+            const arrayBuffer: ArrayBuffer = buffer.buffer.slice(buffer.byteOffset, buffer.byteLength + buffer.byteOffset);
+            S3Cache.updateCache(guid, arrayBuffer);
 
-            return buffer;
+            return arrayBuffer;
         }).catch(() => {
             throw new FileNotFoundException(path);
         });

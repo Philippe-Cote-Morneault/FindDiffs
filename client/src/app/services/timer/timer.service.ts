@@ -5,7 +5,7 @@ import Timer from "easytimer.js";
     providedIn: "root",
 })
 export class TimerService {
-    private static MINUTES_POSITION: number = 3;
+    private static readonly MINUTES_POSITION: number = 3;
     public timer: Timer;
 
     public constructor() {

@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
@@ -33,6 +33,20 @@ export class SceneService extends HTTPService {
         return this.http.post<ICommonSceneModifications>(`${SERVER_URL}/scene/${sceneId}/modified`, requestBody).pipe(
             catchError((error) => this.handleError(error)),
         );
+    }
+
+    public addThumbnail(sceneId: string, thumbnail: Blob): Observable<string> {
+        const formData: FormData = new FormData();
+        formData.append("thumbnail", thumbnail);
+
+        const options: object = {
+            headers: new HttpHeaders(),
+        };
+
+        // @ts-ignore
+        options["responseType"] = "text";
+
+        return this.http.post<string>(`${SERVER_URL}/scene/${sceneId}/thumbnail`, formData, options);
     }
 
     public getSceneById(sceneId: string): Observable<ICommonScene | Message> {

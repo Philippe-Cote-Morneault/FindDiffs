@@ -3,9 +3,9 @@ export enum COLOR {
 }
 
 export class Pixel {
-    public static BLACK_PIXEL_VALUE: number = 0;
-    public static WHITE_PIXEL_VALUE: number = 255;
-    public static BYTES_PER_PIXEL: number = 3;
+    public static readonly BLACK_PIXEL_VALUE: number = 0;
+    public static readonly WHITE_PIXEL_VALUE: number = 255;
+    public static readonly BYTES_PER_PIXEL: number = 3;
 
     public red: Uint8Array;
     public green: Uint8Array;
