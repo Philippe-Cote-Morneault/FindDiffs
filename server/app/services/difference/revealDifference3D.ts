@@ -1,6 +1,8 @@
+import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { DifferenceType, ICommonReveal3D } from "../../../../common/model/reveal";
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
+import { R } from "../../strings";
 // import { ICommonSceneObject } from "../../../../common/model/scene/objects/sceneObject";
 // import { ICommonGeometricObject } from "../../../../common/model/scene/objects/geometricObjects/geometricObject";
 // import { ICommonScene } from "../../../../common/model/scene/scene";
@@ -14,7 +16,6 @@ export class RevealDifference3D {
         this.originalObjectId = originalObjectId;
     }
 
-    // tslint:disable
     public reveal(): ICommonReveal3D {
         const returnValue: ICommonReveal3D = {
             hit: false,
@@ -39,6 +40,6 @@ export class RevealDifference3D {
             }
         }
 
-        return returnValue;
+        throw new NotFoundException(R.ERROR_NO_DIFFERENCE_FOUND);
     }
 }
