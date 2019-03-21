@@ -16,6 +16,7 @@ describe("Tests for CheatModeService", () => {
   });
 
   describe("testing the value of cheatActivated attribute in various situations", () => {
+
     it("should be false on creation of the service", () => {
       expect(cheatModeService.cheatActivated).to.be.false;
     });
@@ -35,6 +36,25 @@ describe("Tests for CheatModeService", () => {
       cheatModeService.toggleCheatMode(blankModifiedScene);
       expect(cheatModeService.cheatActivated).to.be.true;
       stub.restore();
+    });
+
+    it("should change cheatActivated to true then to false when the method toggleCheatMode is called twice", () => {
+      const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode").callsFake(
+        () => {cheatModeService.cheatActivated = !cheatModeService.cheatActivated;
+      });
+      const blankModifiedScene: ICommonGeometricModifications & ICommonThematicModifications = {
+        id: "",
+        type: ObjectType.Geometric,
+        addedObjects: [],
+        deletedObjects: [],
+        colorChangedObjects: [],
+        texturesChangedObjects: [],
+      };
+      cheatModeService.toggleCheatMode(blankModifiedScene);
+      cheatModeService.toggleCheatMode(blankModifiedScene);
+      expect(cheatModeService.cheatActivated).to.be.false;
+      stub.restore();
+  
     });
   });
 });
