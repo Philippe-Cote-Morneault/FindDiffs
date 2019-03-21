@@ -20,8 +20,10 @@ export interface IUserService {
 export interface ISceneService {
     post(req: Request): Promise<string>;
     postModified(req: Request): Promise<string>;
+    postThumbnail(req: Request): Promise<string>;
     single(id: string): Promise<string>;
     singleModified(id: string): Promise<string>;
+    getThumbnail(id: string): Promise<ArrayBuffer>;
 }
 
 export interface IGameCardService {

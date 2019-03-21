@@ -25,6 +25,7 @@
       ".ts"
     ],
     "exclude": [
+      "**/I*.ts",
       "**/*.spec.ts",
       "app/services/interfaces.ts"
     ],

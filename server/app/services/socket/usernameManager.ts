@@ -1,7 +1,7 @@
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { _e, R } from "../../strings";
 
-export class UsernameManager {
+export class UsernameManager  {
     private static instance: UsernameManager;
 
     private idUsernames: Map<string, string>;
@@ -15,6 +15,7 @@ export class UsernameManager {
     }
 
     public addUsername(socketId: string, username: string): void {
+        console.log("adding userName: " + username);
         this.idUsernames.set(socketId, username);
     }
 

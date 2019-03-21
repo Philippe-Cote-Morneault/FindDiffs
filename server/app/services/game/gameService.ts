@@ -2,17 +2,16 @@ import * as uuid from "uuid";
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
 import { ICommonGameEnding } from "../../../../common/communication/webSocket/gameEnding";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
-import { NotFoundException } from "../../../../common/errors/notFoundException";
+//import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { Game } from "../../model/game/game";
-import { _e, R } from "../../strings";
+import { _e } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
-import { SocketSubscriber } from "../socket/socketSubscriber";
 import { GameManager } from "./gameManager";
 
-export class GameService implements SocketSubscriber {
+export class GameService {
     private static instance: GameService;
 
-    private activePlayers: Map<string, GameManager>;
+    //private activePlayers: Map<string, GameManager>;
     private activeGames: GameManager[];
     private socketHandler: SocketHandler;
 
@@ -24,24 +23,6 @@ export class GameService implements SocketSubscriber {
         return GameService.instance;
     }
 
-    public notify(event: Event, message: ICommonSocketMessage, sender: string): void {
-        switch (event) {
-            case Event.PlaySoloGame:
-                this.createSoloGame(message.data as ICommonGame, sender);
-                break;
-            case Event.ReadyToPlay:
-                this.startSoloGame(sender);
-                break;
-            case Event.GameClick:
-                // tslint:disable-next-line:no-suspicious-comment
-                // TODO: Make call to indentification service
-
-                break;
-            default:
-                break;
-        }
-    }
-
     private constructor() {
         this.activeGames = [];
         this.socketHandler = SocketHandler.getInstance();
@@ -49,15 +30,20 @@ export class GameService implements SocketSubscriber {
     }
 
     private subscribeToSocket(): void {
-        this.socketHandler.subscribe(Event.PlaySoloGame, this);
-        this.socketHandler.subscribe(Event.ReadyToPlay, this);
-        this.socketHandler.subscribe(Event.GameClick, this);
+        this.socketHandler.subscribe(Event.PlaySoloGame, this.createSoloGame);
+        //this.socketHandler.subscribe(Event.ReadyToPlay, this.startSoloGame);
+        //this.socketHandler.subscribe(Event.GameClick, );
+        this.socketHandler.subscribe(Event.UserConnected, (message, sender) => {
+            console.log(JSON.stringify(message));
+            console.log(sender);
+        });
     }
 
-    private createSoloGame(game: ICommonGame, player: string): void {
+    private createSoloGame(message: ICommonSocketMessage, player: string): void {
+        const data: ICommonGame = message.data as ICommonGame;
         const newGame: Game = {
             id: uuid.v4(),
-            ressource_id: game.ressource_id,
+            ressource_id: data.ressource_id,
             players: [player],
             start_time: undefined,
             differences_found: 0,
@@ -65,6 +51,7 @@ export class GameService implements SocketSubscriber {
         this.activeGames.push(new GameManager(newGame, this.endGame));
     }
 
+    /*
     private startSoloGame(player: string): void {
         const game: GameManager | undefined = this.activePlayers.get(player);
         if (game === undefined) {
@@ -74,6 +61,7 @@ export class GameService implements SocketSubscriber {
         game.startGame();
     }
 
+    */
     private endGame(game: Game, winner: string): void {
         const gameEndedMessage: ICommonGameEnding = {
             winner: winner,

@@ -1,14 +1,17 @@
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { SceneTransformation } from "../../../../../../common/model/scene/modifications/sceneTransformation";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
+import { ObjectType } from "../../../../../../common/model/scene/scene";
 import { RandomUtils } from "../../../../utils/randomUtils";
 
 /**
  * In charge of removing a random object from a scene
  */
 export class SceneObjectRemover implements SceneTransformation {
+
     public applyTransformation(objectsToTransform: ICommonSceneObject[],
-                               modifications: ICommonSceneModifications): void {
+                               modifications: ICommonSceneModifications,
+                               type: ObjectType): void {
 
         const indexOfObjectToRemove: number = RandomUtils.random(objectsToTransform.length);
         const removedObject: ICommonSceneObject = objectsToTransform[indexOfObjectToRemove];
