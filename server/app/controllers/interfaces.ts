@@ -16,6 +16,10 @@ export interface IDifferenceController {
     router: Router;
 }
 
+export interface IScoreController {
+    router: Router;
+}
+
 export interface ISceneController {
     router: Router;
 }

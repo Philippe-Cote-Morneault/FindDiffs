@@ -31,10 +31,15 @@ export interface IGameCardService {
     index(): Promise<string>;
     single(id: string): Promise<string>;
     delete(id: string): Promise<string>;
-    update(req: Request): Promise<string>;
 }
 
 export interface IDifferenceService {
     postSimple(req: Request): Promise<string>;
     postFree(req: Request): Promise<string>;
+}
+
+export interface IScoreService {
+    post(req: Request): Promise<string>;
+    update(req: Request): Promise<string>;
+    single(id: string): Promise<string>;
 }
