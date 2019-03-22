@@ -180,7 +180,7 @@ export class GameViewFreeComponent implements OnInit {
 
         const originalObject: THREE.Object3D = this.intersectsOriginal[0] ?
                 this.getParent(this.intersectsOriginal[0].object, this.originalSceneLoader.scene) : new THREE.Object3D;
-        const modifiedObject: THREE.Object3D = this.intersectsModified[0] ? 
+        const modifiedObject: THREE.Object3D = this.intersectsModified[0] ?
                 this.getParent(this.intersectsModified[0].object, this.modifiedSceneLoader.scene) : new THREE.Object3D;
 
         this.postDifference(event, originalObject.userData.id, modifiedObject.userData.id);
