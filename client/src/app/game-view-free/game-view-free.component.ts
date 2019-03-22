@@ -252,10 +252,10 @@ export class GameViewFreeComponent implements OnInit {
         }
     }
 
-    private changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
+    private async changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
         if (this.isANewDifference(objectModified.userData.id)) {
             if (objectModified.userData.isTextured) {
-                this.thematicObjectParser.loadTexture(objectModified, objectOriginal.name, objectOriginal.userData.texture);
+                await this.thematicObjectParser.loadTexture(objectModified, objectOriginal.name, objectOriginal.userData.texture);
             } else {
                 // TODO: Peut-etre inutile
                 this.thematicObjectParser.loadColor(objectModified, objectOriginal.name, objectOriginal.userData.color);
