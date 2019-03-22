@@ -17,18 +17,22 @@ export class IdentificationError implements SocketSubscriber {
     public timeout: boolean;
     private errorSound: HTMLAudioElement;
 
-    public constructor(errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement) {
-        this.errorMessage = errorMessage;
-        this.original = original;
-        this.modified = modified;
+    public constructor(private socketService: SocketHandlerService ) {
         this.timeout = false;
         this.errorSound = new Audio;
         this.errorSound.src = IdentificationError.ERROR_SOUND_SRC;
         this.errorSound.load();
+        this.subscribeToSocket();
     }
 
-    public subscribeToSocket(): void {
-        SocketHandlerService.getInstance().subscribe(Event.InvalidClick, this);
+    public setContainers(errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement): void {
+        this.errorMessage = errorMessage;
+        this.original = original;
+        this.modified = modified;
+    }
+
+    private subscribeToSocket(): void {
+        this.socketService.subscribe(Event.InvalidClick, this);
     }
 
     public notify(event: Event): void {
