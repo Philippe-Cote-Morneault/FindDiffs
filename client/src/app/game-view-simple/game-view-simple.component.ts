@@ -69,6 +69,7 @@ export class GameViewSimpleComponent implements OnInit {
                                                this.originalCanvas.nativeElement,
                                                this.modifiedCanvas.nativeElement);
         this.differenceFoundManager.setContainers(this.differenceCounterUser);
+        this.pixelRestoration.setContainers(this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
     }
 
     private getGameCardById(): void {
