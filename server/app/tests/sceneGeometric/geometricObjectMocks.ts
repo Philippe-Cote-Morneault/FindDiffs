@@ -174,6 +174,63 @@ export const cylinder3: ICommonCylinder =  {
     height: 13,
 };
 
+export const pyramid1: ICommonPyramid = {
+    id: "hgfhgfhfhds",
+    position: {
+        x: 104,
+        y: 40,
+        z: 60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x123,
+    shapeType: GeometricShapeType.TRIANGULAR_BASE_PYRAMID,
+    radiusBase: 5,
+    height: 8,
+};
+
+export const pyramid2: ICommonPyramid = {
+    id: "tgffdfdsfsdfsfdg4353",
+    position: {
+        x: -150,
+        y: 24,
+        z: 60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x43343,
+    shapeType: GeometricShapeType.TRIANGULAR_BASE_PYRAMID,
+    radiusBase: 4,
+    height: 7,
+};
+
+export const pyramid3: ICommonPyramid = {
+    id: "fdsfdsfs",
+    position: {
+        x: -150,
+        y: 24,
+        z: 60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x43346663,
+    shapeType: GeometricShapeType.TRIANGULAR_BASE_PYRAMID,
+    radiusBase: 8,
+    height: 7,
+};
+
 export const sphere1: ICommonSphere =  {
     id: "tgfd345trgg4353",
     position: {
