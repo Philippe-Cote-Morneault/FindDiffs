@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { Event } from "../../../../../common/communication/webSocket/socketMessage";
 import { R } from "../../ressources/strings";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
@@ -31,16 +31,10 @@ export class IdentificationError implements SocketSubscriber {
         SocketHandlerService.getInstance().subscribe(Event.InvalidClick, this);
     }
 
-    public notify(event: Event, message: ICommonSocketMessage): void {
-        // tslint:disable-next-line:no-console
-        console.log(event + message);
-        this.showErrorMessage();
-    }
-
-    public setIdentificationError(errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement): void {
-        this.errorMessage = errorMessage;
-        this.original = original;
-        this.modified = modified;
+    public notify(event: Event): void {
+        if (event === Event.InvalidClick) {
+            this.showErrorMessage();
+        }
     }
 
     public async showErrorMessage(): Promise<void> {
