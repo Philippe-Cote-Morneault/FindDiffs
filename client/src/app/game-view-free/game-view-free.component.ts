@@ -16,8 +16,10 @@ import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
+import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/scene-syncer.service";
 import { TimerService } from "../services/timer/timer.service";
+// import { ICommonThematicObject } from "../../../../common/model/scene/objects/thematicObjects/thematicObject";
 // import { SocketService } from "../services/socket/socket.service";
 
 @Component({
@@ -44,6 +46,7 @@ export class GameViewFreeComponent implements OnInit {
     private gameCardId: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
+    private thematicObjectParser: ThematicObjectParser;
     private differenceFound: string[];
     private cheatActivated: boolean;
 
@@ -72,6 +75,8 @@ export class GameViewFreeComponent implements OnInit {
         public identificationError: IdentificationError) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
+        this.thematicObjectParser = new ThematicObjectParser();
+
         this.differenceCounterUser = 0;
         this.isGameOver = false;
         this.differenceFound = [];
@@ -151,60 +156,53 @@ export class GameViewFreeComponent implements OnInit {
                 this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
 
                 this.timerService.startTimer(this.chronometer.nativeElement);
-                this.gameType  = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
+                this.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
             });
         });
     }
 
     public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
-        const obj: { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
+        const obj: { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } = this.isOriginalSceneClick(isOriginalScene);
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
         const mouse: THREE.Vector2 = new THREE.Vector2();
         this.setMousePosition(event, mouse, obj.HTMLElement);
         raycaster.setFromCamera(mouse, this.originalSceneLoader.camera);
+
         this.intersectsOriginal = raycaster.intersectObjects(this.meshesOriginal);
         this.intersectsModified = raycaster.intersectObjects(this.meshesModified);
+
         const modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.userData.id : uuid();
         const originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.userData.id : uuid();
-
-        console.log("=======================");
-        console.log(originalObjectId);
-        console.log("=======================");
-
-        console.log(this.intersectsOriginal[0]);
-
-        console.log("=======================");
-        console.log(this.currentOriginalScene);
-        console.log("=======================");
 
         this.postDifference(event, originalObjectId, modifiedObjectId);
     }
 
     private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string): void {
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId, this.gameType)
-        .subscribe(async (response: ICommonReveal3D) => {
-            switch (response.differenceType) {
-                case DifferenceType.removedObject:
-                    this.addObject(this.intersectsOriginal[0].object);
-                    break;
-                case DifferenceType.colorChanged:
-                    this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
-                    break;
-                case DifferenceType.textureObjectChanged:
-                    break;
-                case DifferenceType.addedObject:
-                    this.removeObject(this.intersectsModified[0].object);
-                    break;
-                default:
-                    await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
-                                                                    this.originalScene.nativeElement, this.modifiedScene.nativeElement);
-                    break;
-            }
+            .subscribe(async (response: ICommonReveal3D) => {
+                switch (response.differenceType) {
+                    case DifferenceType.removedObject:
+                        this.addObject(this.intersectsOriginal[0].object);
+                        break;
+                    case DifferenceType.colorChanged:
+                        this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                        break;
+                    case DifferenceType.textureObjectChanged:
+                        this.changeTextureObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                        break;
+                    case DifferenceType.addedObject:
+                        this.removeObject(this.intersectsModified[0].object);
+                        break;
+                    default:
+                        await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
+                                                                        this.originalScene.nativeElement, this.modifiedScene.nativeElement);
+                        break;
+                }
 
-            if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
-                this.gameOver();
-            }
-        });
+                if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
+                    this.gameOver();
+                }
+            });
     }
 
     private addObject(objectOriginal: THREE.Object3D): void {
@@ -234,6 +232,20 @@ export class GameViewFreeComponent implements OnInit {
             this.differenceFound[this.differenceCounterUser] = objectModified.uuid;
             this.differenceCounterUser++;
         }
+    }
+
+    private changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
+        if (this.isANewDifference(objectModified.userData.id)) {
+            if (objectModified.userData.isTextured) {
+                this.thematicObjectParser.loadTexture(objectModified, objectOriginal.name, objectOriginal.userData.texture);
+            } else {
+                // TODO: Peut-etre inutile
+                this.thematicObjectParser.loadColor(objectModified, objectOriginal.name, objectOriginal.userData.color);
+            }
+            this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
+            this.differenceCounterUser++;
+        }
+
     }
 
     private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
