@@ -14,7 +14,7 @@ export class PixelRestoration {
     private originalCanvas: HTMLCanvasElement;
     private modifiedCanvas: HTMLCanvasElement;
 
-    public constructor(originalCanvas: HTMLCanvasElement, modifiedCanvas: HTMLCanvasElement) {
+    public setContainers(originalCanvas: HTMLCanvasElement, modifiedCanvas: HTMLCanvasElement): void {
         this.originalCanvas = originalCanvas;
         this.modifiedCanvas = modifiedCanvas;
     }
