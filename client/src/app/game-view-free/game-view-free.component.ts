@@ -40,6 +40,9 @@ export class GameViewFreeComponent implements OnInit {
 
     private readonly MAX_DIFFERENCES: number;
 
+    private originalObject: THREE.Object3D;
+    private modifiedObject: THREE.Object3D;
+
     private scenePairId: string;
     private currentOriginalScene: ICommonScene;
     private currentModifiedScene: ICommonSceneModifications;
@@ -85,6 +88,9 @@ export class GameViewFreeComponent implements OnInit {
 
         // tslint:disable-next-line: no-magic-numbers
         this.MAX_DIFFERENCES = 7;
+
+        this.originalObject = new THREE.Object3D;
+        this.modifiedObject = new THREE.Object3D;
     }
 
     public ngOnInit(): void {
@@ -162,6 +168,7 @@ export class GameViewFreeComponent implements OnInit {
         });
     }
 
+    // tslint:disable-next-line:max-func-body-length
     public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
         const raycaster2: THREE.Raycaster = new THREE.Raycaster();
@@ -178,12 +185,12 @@ export class GameViewFreeComponent implements OnInit {
         this.intersectsOriginal = raycaster.intersectObjects(this.meshesOriginal, true);
         this.intersectsModified = raycaster2.intersectObjects(this.meshesModified, true);
 
-        const originalObject: THREE.Object3D = this.intersectsOriginal[0] ?
-                this.getParent(this.intersectsOriginal[0].object, this.originalSceneLoader.scene) : new THREE.Object3D;
-        const modifiedObject: THREE.Object3D = this.intersectsModified[0] ?
-                this.getParent(this.intersectsModified[0].object, this.modifiedSceneLoader.scene) : new THREE.Object3D;
+        this.originalObject = this.intersectsOriginal[0] ?
+            this.getParent(this.intersectsOriginal[0].object, this.originalSceneLoader.scene) : new THREE.Object3D;
+        this.modifiedObject = this.intersectsModified[0] ?
+            this.getParent(this.intersectsModified[0].object, this.modifiedSceneLoader.scene) : new THREE.Object3D;
 
-        this.postDifference(event, originalObject.userData.id, modifiedObject.userData.id);
+        this.postDifference(event, this.originalObject.userData.id, this.modifiedObject.userData.id);
     }
 
     private getParent(obj: THREE.Object3D, scene: THREE.Scene): THREE.Object3D {
@@ -206,14 +213,14 @@ export class GameViewFreeComponent implements OnInit {
                         this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
                         break;
                     case DifferenceType.textureObjectChanged:
-                        await this.changeTextureObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                        await this.changeTextureObject(this.originalObject, this.modifiedObject);
                         break;
                     case DifferenceType.addedObject:
                         this.removeObject(this.intersectsModified[0].object);
                         break;
                     default:
                         await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
-                                                                        this.originalScene.nativeElement, this.modifiedScene.nativeElement);
+                            this.originalScene.nativeElement, this.modifiedScene.nativeElement);
                         break;
                 }
 
@@ -264,10 +271,15 @@ export class GameViewFreeComponent implements OnInit {
     private async changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): Promise<void> {
         if (this.isANewDifference(objectModified.userData.id)) {
             if (objectModified.userData.isTextured) {
-                await this.thematicObjectParser.loadTexture(objectModified, objectOriginal.name, objectOriginal.userData.texture);
-            }
-            // else {
-            //     // Peut-etre inutile
+                if (objectModified.type === "Mesh") {
+                    await this.thematicObjectParser.loadTexture(objectModified, objectModified.name, objectOriginal.userData.texture);
+                } else {
+                    objectModified.traverse(async (child: THREE.Mesh) => {
+                        await this.thematicObjectParser.loadTexture(child, child.name, child.userData.texture);
+                    });
+                }
+            } // else {
+            // Peut-etre inutile
             //     this.thematicObjectParser.loadColor(objectModified, objectOriginal.name, objectOriginal.userData.color);
             // }
             this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
