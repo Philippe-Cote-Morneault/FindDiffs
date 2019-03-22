@@ -174,7 +174,6 @@ export class GameViewFreeComponent implements OnInit {
         const modifiedObject: THREE.Object3D = this.intersectsModified[0] ? 
                 this.getParent(this.intersectsModified[0].object, this.modifiedSceneLoader.scene) : new THREE.Object3D;
 
-
         this.postDifference(event, originalObject.userData.id, modifiedObject.userData.id);
     }
 
@@ -224,10 +223,7 @@ export class GameViewFreeComponent implements OnInit {
 
     private removeObject(objectModified: THREE.Object3D): void {
         if (this.isANewDifference(objectModified.userData.id)) {
-            console.log(objectModified);
-            console.log(this.modifiedSceneLoader.scene.children.length);
             this.modifiedSceneLoader.scene.remove(objectModified);
-            console.log(this.modifiedSceneLoader.scene.children.length);
             this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
             this.differenceCounterUser++;
         }
