@@ -7,16 +7,20 @@ export class Chat implements SocketSubscriber {
     private chat: HTMLElement;
     private container: HTMLElement;
 
-    public constructor(public chatFormaterService: ChatFormaterService, chat: HTMLElement, container: HTMLElement) {
+    public constructor(private socketService: SocketHandlerService, public chatFormaterService: ChatFormaterService) {
+        this.subscribeToSocket();
+    }
+
+    public setContainers(chat: HTMLElement, container: HTMLElement): void {
         this.chat = chat;
         this.container = container;
     }
 
-    public subscribeToSocket(): void {
-        SocketHandlerService.getInstance().subscribe(Event.UserDisconnected, this);
-        SocketHandlerService.getInstance().subscribe(Event.NewUser, this);
-        SocketHandlerService.getInstance().subscribe(Event.InvalidClick, this);
-        SocketHandlerService.getInstance().subscribe(Event.DifferenceFound, this);
+    private subscribeToSocket(): void {
+        this.socketService.subscribe(Event.UserDisconnected, this);
+        this.socketService.subscribe(Event.NewUser, this);
+        this.socketService.subscribe(Event.InvalidClick, this);
+        this.socketService.subscribe(Event.DifferenceFound, this);
     }
 
     public notify(event: Event, message: ICommonSocketMessage): void {
