@@ -5,7 +5,7 @@ import { Canvas } from "./canvas";
 /* tslint:disable no-shadowed-variable no-magic-numbers */
 describe("DifferenceGenerator - Canvas", () => {
     describe("drawPixel()", () => {
-        it("Should be a black pixel on the canvas", () => {
+        it("Should be a black pixel on the canvas when painting a black pixel", () => {
             const pixel: Pixel[] = new Array<Pixel>(1);
             pixel.fill(Pixel.fromColor(COLOR.WHITE));
 
@@ -15,7 +15,7 @@ describe("DifferenceGenerator - Canvas", () => {
             // Is the pixel black ?
             expect(pixel[0].equals(Pixel.fromColor(COLOR.BLACK))).to.equal(true);
         });
-        it("Should have many black pixels on the canvas (bigger)", () => {
+        it("Should have many black pixels on the canvas (bigger) when painting a few pixels", () => {
             const width: number = 5;
             const height: number = 5;
             const pixels: Pixel[] = new Array<Pixel>(width * height);
@@ -34,7 +34,7 @@ describe("DifferenceGenerator - Canvas", () => {
         whitePixels.fill(Pixel.fromColor(COLOR.WHITE));
         const whitePixelsRef: Pixel[] = whitePixels.slice();
 
-        it("Should not paint the pixel if not in bound", () => {
+        it("Should not paint the pixel if not inbound", () => {
             whitePixels.fill(Pixel.fromColor(COLOR.WHITE));
 
             const canvas: Canvas = new Canvas(width, height);
@@ -45,7 +45,7 @@ describe("DifferenceGenerator - Canvas", () => {
 
     });
     describe("enlargePixel()", () => {
-        it("Should validate brush pattern 1", () => {
+        it("Should be able to reproduce brush pattern 1", () => {
             const width: number = 5;
             const height: number = 5;
             const pixels: Pixel[] = new Array<Pixel>(width * height);
@@ -60,7 +60,7 @@ describe("DifferenceGenerator - Canvas", () => {
             expect(pixels).to.eql(pixelsRef);
         });
 
-        it("Should validate brush pattern 2", () => {
+        it("Should be able to reproduce brush pattern 2", () => {
             const width: number = 7;
             const height: number = 7;
             const pixels: Pixel[] = new Array<Pixel>(width * height);

@@ -10,7 +10,7 @@ describe("ImagePair Schema", () => {
 
     propertiesToTest.forEach((propertyToTest: string) => {
         describe(`.${propertyToTest}`, () => {
-            it("Should return a properly formatted url", () => {
+            it("Should create a properly formatted url that is validated with valid-url module", () => {
                 const imagePair: IImagePair = new ImagePair({
                     name: "a funny name",
                     creation_date: new Date(),
@@ -23,7 +23,7 @@ describe("ImagePair Schema", () => {
 
             });
 
-            it("Should not have a tralling slash", () => {
+            it("Should not have a tralling slash at the end of the url", () => {
                 const user: IImagePair = new ImagePair({
                     name: "a funny name",
                     creation_date: new Date(),

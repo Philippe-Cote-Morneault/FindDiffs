@@ -49,7 +49,7 @@ describe("ImagePairService", () => {
     });
 
     describe("post()", () => {
-        it("Should return an error if body is empty", async () => {
+        it("Should throw an error if the request is empty", async () => {
             const request: Object = {
                 body: {
                 },
@@ -63,7 +63,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("Should return an error if body does not contain an original image", async () => {
+        it("Should throw an error if the request does not contain an original image", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -79,7 +79,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("Should return an error if body does not contain a modified image", async () => {
+        it("Should throw an error if the request does not contain a modified image", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -97,7 +97,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("Should return an error if body contains images but invalid ", async () => {
+        it("Should throw an error if the request contains images but are not valid files", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -116,7 +116,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("Should return an error if body contains images but still invalid ", async () => {
+        it("Should throw an error if the request contains images but are empty files", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -135,7 +135,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("Should return an error if body contains a valid original image but an invalid modified image", async () => {
+        it("Should throw an error if the request contains a valid original image but an invalid modified image", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -156,7 +156,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("Should return an objet with the image pair if the request is valid.", async () => {
+        it("Should create an objet that represents the image pair if the request is valid.", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -184,7 +184,7 @@ describe("ImagePairService", () => {
         });
     });
     describe("index()", () => {
-        it("Should return an image pair array", async () => {
+        it("Should list all the image pair on server", async () => {
             const DIFFERENCES_COUNT: number = 4;
             (ImagePair.find as sinon.SinonStub).resolves([{
                 file_difference_id: "a file id",
@@ -198,7 +198,7 @@ describe("ImagePairService", () => {
             expect(JSON.parse(result)[0].differences_count).to.equal(DIFFERENCES_COUNT);
         });
 
-        it("Should throw an error when returning an image pair", async() => {
+        it("Should throw an error when returning an image pair if they are not available", async() => {
             const ERROR_MESSAGE: string = "my error";
             (ImagePair.find as sinon.SinonStub).rejects(new Error(ERROR_MESSAGE));
             try {
@@ -210,7 +210,7 @@ describe("ImagePairService", () => {
         });
     });
     describe("single()", () => {
-        it("Should return a single image pair", async() => {
+        it("Should list a single image pair", async() => {
             const DIFFERENCES_COUNT: number = 4;
             (ImagePair.findById as sinon.SinonStub).resolves({
                 file_difference_id: "a file id",
@@ -234,7 +234,7 @@ describe("ImagePairService", () => {
             }
         });
 
-        it("Should throw an error if the id is not in the db but mongoose returns null", async() => {
+        it("Should throw an error if the id is not in the db but the database responds with null data", async() => {
             (ImagePair.findById as sinon.SinonStub).resolves(undefined);
             try {
                 await imagePairService.single("an unkonw id");
@@ -275,7 +275,7 @@ describe("ImagePairService", () => {
     // tslint:disable-next-line:max-func-body-length
     methodsToTest.forEach((method: FilesFetchMock) => {
         describe(`${method.name}()`, () => {
-            it("Should return an arraybuffer of the file", async () => {
+            it("Should create an arraybuffer of the file", async () => {
 
                 (ImagePair.findById as sinon.SinonStub).returns(new MongooseMock.Query(
                     new MongooseMock.Schema(queryResponse, false), true));
@@ -288,7 +288,7 @@ describe("ImagePairService", () => {
                 }
             });
 
-            it("Should throw an error if the id is not valid", async () => {
+            it("Should throw an error if the id is not in the database", async () => {
                 (ImagePair.findById as sinon.SinonStub).returns(new MongooseMock.Query({}, false));
                 try {
                     await imagePairService[method.name]("id");

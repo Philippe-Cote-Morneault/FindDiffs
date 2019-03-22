@@ -43,25 +43,10 @@ describe("DiffenceDetector", () => {
     describe("countDifferences()", () => {
 
         bitmapTests.forEach((bmp: BmpTests) => {
-            it("Should return " + bmp.differenceCount + " for " + bmp.path, () => {
+            it("Should count " + bmp.differenceCount + " difference for the bitmap " + bmp.path, () => {
                 const detector: DifferenceDetector = new DifferenceDetector(bmp.bitmap as Bitmap);
                 expect(detector.countDifferences()).to.equal(bmp.differenceCount);
             });
         });
     });
-    /*
-    describe("getPixelIndexes()", () => {
-        it("Should return expected values for the blacked pixels", () => {
-            const BITMAP_CHOICE: number = 1;
-            const bitmap: Bitmap = bitmapTests[BITMAP_CHOICE].bitmap as Bitmap;
-            const X_POS: number = 228;
-            const Y_POS: number = 302;
-
-            const detector: DifferenceDetector = new DifferenceDetector(bitmap as Bitmap);
-            const numbers: number[] = detector.getPixelIndexes(
-                    new Position(X_POS, Y_POS).getIndex(bitmap.width),
-                );
-            expect(numbers).to.eql(DIFF_COUNT_PIXELS_INDEX);
-        });
-    });*/
 });

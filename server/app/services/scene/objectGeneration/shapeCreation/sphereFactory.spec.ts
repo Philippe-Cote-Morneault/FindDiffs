@@ -14,7 +14,7 @@ describe("SphereFactory", () => {
     });
 
     describe("createShape()", () => {
-        it("Should return a sphere", () => {
+        it("Should create a sphere", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.8);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
@@ -27,7 +27,7 @@ describe("SphereFactory", () => {
             expect(object.shapeType).to.equal(GeometricShapeType.SPHERE);
         });
 
-        it("Should return a sphere with a radius in range", () => {
+        it("Should create a sphere with a radius in the specified range", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.5);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();

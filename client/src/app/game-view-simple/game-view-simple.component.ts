@@ -3,10 +3,10 @@ import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
-import { GamesCardService } from "../services/gameCard/games-card.service";
-import { ImagePairService } from "../services/image-pair/image-pair.service";
-import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
-import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
+import { ImagePairService } from "../services/image-pair/imagePair.service";
+import { PixelPositionService } from "../services/pixelManipulation/pixelPosition.service";
+import { PixelRestoration } from "../services/pixelManipulation/pixelRestoration";
 import { SocketService } from "../services/socket/socket.service";
 import { TimerService } from "../services/timer/timer.service";
 

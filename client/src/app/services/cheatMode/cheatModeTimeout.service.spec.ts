@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 
-import { CheatModeTimeoutService } from "./cheat-mode-timeout.service";
+import { CheatModeTimeoutService } from "./cheatModeTimeout.service";
 
 describe("TimerService", () => {
   beforeEach(() => TestBed.configureTestingModule({}));

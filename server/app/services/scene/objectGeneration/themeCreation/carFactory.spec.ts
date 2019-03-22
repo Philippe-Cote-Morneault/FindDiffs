@@ -6,7 +6,7 @@ import { ThemeObjectGenerator } from "./themeObjectGenerator";
 
 describe("carFactory", () => {
     describe("createObject()", () => {
-        it("Should return a car with the orientation facing north or south", () => {
+        it("Should create a car with the orientation facing north or south", () => {
             const NUMBER_DIRECTION: number = 2;
             const ITERATIONS: number = 50;
             const position: IPositionGridTheme = {
@@ -27,7 +27,7 @@ describe("carFactory", () => {
                     // tslint:disable-next-line:no-magic-numbers
                     ObjectFactory.MAX_RADIAN_ANGLE / 2]).to.include.members(Array.from(direction));
         });
-        it("Should return a zero orientation on all axis but y", () => {
+        it("Should create a car that has a zero orientation on all axis but y", () => {
             const position: IPositionGridTheme = {
                 surface: ThemeSurface.CAR,
                 x: 50,

@@ -10,13 +10,15 @@ import { ICommonThematicModifications } from "../../../../common/model/scene/mod
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
-import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
-import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
-import { GamesCardService } from "../services/gameCard/games-card.service";
+import { CheatModeService } from "../services/cheatMode/cheatMode.service";
+import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
-import { SceneSyncerService } from "../services/scene/sceneSyncer/scene-syncer.service";
+import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
+import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { TimerService } from "../services/timer/timer.service";
+// import { ICommonThematicObject } from "../../../../common/model/scene/objects/thematicObjects/thematicObject";
 // import { SocketService } from "../services/socket/socket.service";
 
 @Component({
@@ -27,7 +29,7 @@ import { TimerService } from "../services/timer/timer.service";
 })
 
 export class GameViewFreeComponent implements OnInit {
-    private static readonly T_KEYCODE: number = 84;
+    private static readonly T_STRING: string = "t";
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
@@ -43,6 +45,7 @@ export class GameViewFreeComponent implements OnInit {
     private gameCardId: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
+    private thematicObjectParser: ThematicObjectParser;
     private differenceFound: string[];
     private cheatActivated: boolean;
 
@@ -71,6 +74,8 @@ export class GameViewFreeComponent implements OnInit {
         public identificationError: IdentificationError) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
+        this.thematicObjectParser = new ThematicObjectParser();
+
         this.differenceCounterUser = 0;
         this.isGameOver = false;
         this.differenceFound = [];
@@ -91,7 +96,7 @@ export class GameViewFreeComponent implements OnInit {
 
     @HostListener("document:keydown", ["$event"])
     public async toggleCheatMode(event: KeyboardEvent): Promise<void> {
-        if (event.keyCode === GameViewFreeComponent.T_KEYCODE) {
+        if (event.key === GameViewFreeComponent.T_STRING) {
             this.cheatActivated = !this.cheatActivated;
             if (this.cheatActivated) {
                 this.copySceneLoaders();
@@ -150,7 +155,7 @@ export class GameViewFreeComponent implements OnInit {
                 this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
 
                 this.timerService.startTimer(this.chronometer.nativeElement);
-                this.gameType  = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
+                this.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
             });
         });
     }
@@ -188,29 +193,30 @@ export class GameViewFreeComponent implements OnInit {
 
     private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string): void {
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId, this.gameType)
-        .subscribe(async (response: ICommonReveal3D) => {
-            switch (response.differenceType) {
-                case DifferenceType.removedObject:
-                    this.addObject(this.intersectsOriginal[0].object);
-                    break;
-                case DifferenceType.colorChanged:
-                    this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
-                    break;
-                case DifferenceType.textureObjectChanged:
-                    break;
-                case DifferenceType.addedObject:
-                    this.removeObject(this.intersectsModified[0].object);
-                    break;
-                default:
-                    await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
-                                                                    this.originalScene.nativeElement, this.modifiedScene.nativeElement);
-                    break;
-            }
+            .subscribe(async (response: ICommonReveal3D) => {
+                switch (response.differenceType) {
+                    case DifferenceType.removedObject:
+                        this.addObject(this.intersectsOriginal[0].object);
+                        break;
+                    case DifferenceType.colorChanged:
+                        this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                        break;
+                    case DifferenceType.textureObjectChanged:
+                        this.changeTextureObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                        break;
+                    case DifferenceType.addedObject:
+                        this.removeObject(this.intersectsModified[0].object);
+                        break;
+                    default:
+                        await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
+                                                                        this.originalScene.nativeElement, this.modifiedScene.nativeElement);
+                        break;
+                }
 
-            if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
-                this.gameOver();
-            }
-        });
+                if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
+                    this.gameOver();
+                }
+            });
     }
 
     private addObject(objectOriginal: THREE.Object3D): void {
@@ -240,6 +246,38 @@ export class GameViewFreeComponent implements OnInit {
             this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
             this.differenceCounterUser++;
         }
+    }
+
+    private changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
+        if (this.isANewDifference(objectModified.userData.id)) {
+            if (objectModified.userData.isTextured) {
+                this.thematicObjectParser.loadTexture(objectModified, objectOriginal.name, objectOriginal.userData.texture);
+            } else {
+                // TODO: Peut-etre inutile
+                this.thematicObjectParser.loadColor(objectModified, objectOriginal.name, objectOriginal.userData.color);
+            }
+            this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
+            this.differenceCounterUser++;
+        }
+
+    }
+
+    private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
+        let sceneLoader: SceneLoaderService;
+        // tslint:disable:variable-name
+        let HTMLElement: ElementRef<HTMLElement>;
+        if (isOriginalScene) {
+            sceneLoader = this.originalSceneLoader;
+            HTMLElement = this.originalScene;
+        } else {
+            sceneLoader = this.modifiedSceneLoader;
+            HTMLElement = this.modifiedScene;
+        }
+
+        return {
+            sceneLoader: sceneLoader,
+            HTMLElement: HTMLElement,
+        };
     }
 
     private setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: ElementRef<HTMLElement>): void {
