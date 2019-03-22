@@ -261,10 +261,11 @@ export class GameViewFreeComponent implements OnInit {
         if (this.isANewDifference(objectModified.userData.id)) {
             if (objectModified.userData.isTextured) {
                 await this.thematicObjectParser.loadTexture(objectModified, objectOriginal.name, objectOriginal.userData.texture);
-            } else {
-                // TODO: Peut-etre inutile
-                this.thematicObjectParser.loadColor(objectModified, objectOriginal.name, objectOriginal.userData.color);
             }
+            // else {
+            //     // Peut-etre inutile
+            //     this.thematicObjectParser.loadColor(objectModified, objectOriginal.name, objectOriginal.userData.color);
+            // }
             this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
             this.differenceCounterUser++;
         }
