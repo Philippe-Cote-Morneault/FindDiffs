@@ -11,13 +11,13 @@ import { ICommonThematicModifications } from "../../../../common/model/scene/mod
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
-import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
-import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
-import { GamesCardService } from "../services/gameCard/games-card.service";
+import { CheatModeService } from "../services/cheatMode/cheatMode.service";
+import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
-import { SceneSyncerService } from "../services/scene/sceneSyncer/scene-syncer.service";
+import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { TimerService } from "../services/timer/timer.service";
 // import { ICommonThematicObject } from "../../../../common/model/scene/objects/thematicObjects/thematicObject";
 // import { SocketService } from "../services/socket/socket.service";
