@@ -266,24 +266,6 @@ export class GameViewFreeComponent implements OnInit {
 
     }
 
-    // private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
-    //     let sceneLoader: SceneLoaderService;
-    //     // tslint:disable:variable-name
-    //     let HTMLElement: ElementRef<HTMLElement>;
-    //     if (isOriginalScene) {
-    //         sceneLoader = this.originalSceneLoader;
-    //         HTMLElement = this.originalScene;
-    //     } else {
-    //         sceneLoader = this.modifiedSceneLoader;
-    //         HTMLElement = this.modifiedScene;
-    //     }
-
-    //     return {
-    //         sceneLoader: sceneLoader,
-    //         HTMLElement: HTMLElement,
-    //     };
-    // }
-
     private setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: ElementRef<HTMLElement>): void {
         const divBoxInformation: ClientRect | DOMRect = HTMLElement.nativeElement.getBoundingClientRect();
         const differenceX: number = event.clientX - divBoxInformation.left;
