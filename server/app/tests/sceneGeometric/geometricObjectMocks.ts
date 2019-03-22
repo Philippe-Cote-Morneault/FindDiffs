@@ -135,3 +135,41 @@ export const cylinder1: ICommonCylinder = {
     radius: 4,
     height: 8,
 };
+
+export const cylinder2: ICommonCylinder =  {
+    id: "retetreretre",
+    position: {
+        x: 104,
+        y: -40,
+        z: 60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x123,
+    shapeType: GeometricShapeType.CYLINDER,
+    radius: 5,
+    height: 13,
+};
+
+export const cylinder3: ICommonCylinder =  {
+    id: "retetreretre",
+    position: {
+        x: -104,
+        y: -40,
+        z: 60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x123,
+    shapeType: GeometricShapeType.CYLINDER,
+    radius: 2,
+    height: 13,
+};
