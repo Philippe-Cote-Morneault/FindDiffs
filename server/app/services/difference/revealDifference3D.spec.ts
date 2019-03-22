@@ -87,6 +87,18 @@ describe("RevealDifference3D", () => {
                 expect(expectedReveal.hit).to.equal(true);
                 expect(expectedReveal.differenceType).to.equal(DifferenceType.addedObject);
             });
+
+            it("Should have a ICommonReveal3D with a hit and removedObject if the originalId sent is in the sceneModification", () => {
+                const mockSceneModifications: ICommonGeometricModifications = sceneModifications;
+                const originalObjectId: string = "TODO";
+                const modifiedObjectId: string = "TODO";
+
+                const expectedReveal: ICommonReveal3D =
+                    new RevealDifference3D(mockSceneModifications, originalObjectId, modifiedObjectId, ObjectType.Thematic).reveal();
+
+                expect(expectedReveal.hit).to.equal(true);
+                expect(expectedReveal.differenceType).to.equal(DifferenceType.removedObject);
+            });
         });
     });
 });
