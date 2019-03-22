@@ -3,7 +3,6 @@ import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
 import { ICommonUser } from "../../../../common/model/user";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
-import { UserService } from "../services/user/user.service";
 
 @Component({
     selector: "app-initial-view",
@@ -15,7 +14,7 @@ export class InitialViewComponent implements OnInit {
 
     @ViewChild("usernameInput") private usernameInput: ElementRef;
 
-    public constructor(public userService: UserService, private router: Router, private socketHandlerService: SocketHandlerService) {
+    public constructor(private router: Router, private socketHandlerService: SocketHandlerService) {
     }
 
     public ngOnInit(): void {
@@ -28,15 +27,18 @@ export class InitialViewComponent implements OnInit {
           });
     }
 
-    public verifyUsername(): void {
+    public async verifyUsername(): Promise<void> {
         const username: string = this.usernameInput.nativeElement.value;
-        this.userService.postUsernameValidation(username).subscribe(this.correctUsername.bind(this));
+        this.socketHandlerService.sendNewUser(username);
+        await this.router.navigateByUrl("/gamesList");
+        //this.userService.postUsernameValidation(username).subscribe(this.correctUsername.bind(this));
+        //SocketHandlerService.getInstance().socket.emit()
     }
 
     public async correctUsername(response: ICommonUser | Message): Promise<void> {
         if ((response as ICommonUser).id) {
             this.socketHandlerService.emitUser((response as ICommonUser).username);
-            localStorage.setItem("user", JSON.stringify(response));
+            sessionStorage.setItem("user", JSON.stringify(response));
             await this.router.navigateByUrl("/gamesList");
         } else {
             alert((response as Message).body);
