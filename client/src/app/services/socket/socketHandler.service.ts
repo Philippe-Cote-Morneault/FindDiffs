@@ -131,6 +131,10 @@ export class SocketHandlerService {
         this.socket.emit(Event.PlaySoloGame, message);
     }
 
+    public emitReadyToPlay(): void {
+        this.socket.emit(Event.ReadyToPlay);
+    }
+
     private setEventListeners(socket: SocketIOClient.Socket): void {
         this.onAuthenticate();
         Object.keys(Event).forEach((event: Event) => {
@@ -147,9 +151,14 @@ export class SocketHandlerService {
         });
     }
 
+    public onDisconnected(): void {
+        this.socket.on("disconnect", () => {
+            console.log("disconnectEvent");
+        });
+    }
+
     public onUserDisconnected(): void {
         this.socket.on(Event.UserDisconnected, (message: ICommonSocketMessage) => {
-            console.log("disconnectEvent");
             this.notifySubsribers(Event.UserDisconnected, message);
         });
     }

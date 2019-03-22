@@ -1,12 +1,15 @@
 import { Injectable } from "@angular/core";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { ICommonReveal } from "../../../../../common/model/reveal";
 import { RgbaPosition } from "../../models/pixelProperties/color";
+import { SocketHandlerService } from "../socket/socketHandler.service";
+import { SocketSubscriber } from "../socket/socketSubscriber";
 
 @Injectable({
     providedIn: "root",
 })
-export class PixelRestoration {
+export class PixelRestoration  implements SocketSubscriber {
     public static pixelDimension: number = 1;
     public static imageDataPixelSpace: number = 4;
     public originalContext: CanvasRenderingContext2D | null;
@@ -14,9 +17,24 @@ export class PixelRestoration {
     private originalCanvas: HTMLCanvasElement;
     private modifiedCanvas: HTMLCanvasElement;
 
+    public constructor(private socketService: SocketHandlerService) {
+        this.subscribeToSocket();
+    }
+
     public setContainers(originalCanvas: HTMLCanvasElement, modifiedCanvas: HTMLCanvasElement): void {
         this.originalCanvas = originalCanvas;
         this.modifiedCanvas = modifiedCanvas;
+    }
+
+    private subscribeToSocket(): void {
+        this.socketService.subscribe(Event.DifferenceFound, this);
+    }
+
+    public notify(event: Event, message: ICommonSocketMessage): void {
+        if (event === Event.DifferenceFound) {
+            const response: ICommonReveal = message.data as ICommonReveal;
+            this.restoreImage(response);
+        }
     }
 
     public restoreImage(response: ICommonReveal): void {
