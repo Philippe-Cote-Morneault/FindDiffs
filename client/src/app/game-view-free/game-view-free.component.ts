@@ -47,7 +47,8 @@ export class GameViewFreeComponent implements OnInit {
                         public gamesCardService: GamesCardService,
                         private sceneSyncer: SceneSyncerService,
                         public cheatModeService: CheatModeService,
-                        private cheatModeTimeoutService: CheatModeTimeoutService) {
+                        private cheatModeTimeoutService: CheatModeTimeoutService,
+                        private chatService: ChatService) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
         this.cheatActivated = false;
@@ -64,7 +65,7 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private subscribeToSocket(): void {
-        ChatService.getInstance().setChat(this.message.nativeElement, this.messageContainer.nativeElement);
+        this.chatService.setChat(this.message.nativeElement, this.messageContainer.nativeElement);
     }
 
     @HostListener("document:keydown", ["$event"])
