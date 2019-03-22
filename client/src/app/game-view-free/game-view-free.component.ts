@@ -2,7 +2,6 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import * as THREE from "three";
-import { v4 as uuid } from "uuid";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { DifferenceType, ICommonReveal3D } from "../../../../common/model/reveal";
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
@@ -157,27 +156,35 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
-        const obj: { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement>} = this.isOriginalSceneClick(isOriginalScene);
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
+        const raycaster2: THREE.Raycaster = new THREE.Raycaster();
+
         const mouse: THREE.Vector2 = new THREE.Vector2();
-        this.setMousePosition(event, mouse, obj.HTMLElement);
+
+        isOriginalScene ? this.setMousePosition(event, mouse, this.originalScene) : this.setMousePosition(event, mouse, this.modifiedScene);
+
         raycaster.setFromCamera(mouse, this.originalSceneLoader.camera);
-        this.intersectsOriginal = raycaster.intersectObjects(this.meshesOriginal);
-        this.intersectsModified = raycaster.intersectObjects(this.meshesModified);
-        const modifiedObjectId: string = this.intersectsModified[0] ? this.intersectsModified[0].object.userData.id : uuid();
-        const originalObjectId: string = this.intersectsOriginal[0] ? this.intersectsOriginal[0].object.userData.id : uuid();
+        raycaster2.setFromCamera(mouse, this.modifiedSceneLoader.camera);
 
-        console.log("=======================");
-        console.log(originalObjectId);
-        console.log("=======================");
+        this.intersectsOriginal = raycaster.intersectObjects(this.meshesOriginal, true);
+        this.intersectsModified = raycaster2.intersectObjects(this.meshesModified, true);
 
-        console.log(this.intersectsOriginal[0]);
+        const originalObject: THREE.Object3D = this.intersectsOriginal[0] ?
+                this.getParent(this.intersectsOriginal[0].object, this.originalSceneLoader.scene) : new THREE.Object3D;
+        const modifiedObject: THREE.Object3D = this.intersectsModified[0] ? 
+                this.getParent(this.intersectsModified[0].object, this.modifiedSceneLoader.scene) : new THREE.Object3D;
 
-        console.log("=======================");
-        console.log(this.currentOriginalScene);
-        console.log("=======================");
 
-        this.postDifference(event, originalObjectId, modifiedObjectId);
+        this.postDifference(event, originalObject.userData.id, modifiedObject.userData.id);
+    }
+
+    private getParent(obj: THREE.Object3D, scene: THREE.Scene): THREE.Object3D {
+        if (obj.parent !== scene as THREE.Object3D) {
+            obj = obj.parent as THREE.Object3D;
+            obj = this.getParent(obj, scene);
+        }
+
+        return obj;
     }
 
     private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string): void {
@@ -208,17 +215,20 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private addObject(objectOriginal: THREE.Object3D): void {
-        if (this.isANewDifference(objectOriginal.uuid)) {
+        if (this.isANewDifference(objectOriginal.userData.id)) {
             this.modifiedSceneLoader.scene.add(objectOriginal.clone());
-            this.differenceFound[this.differenceCounterUser] = objectOriginal.uuid;
+            this.differenceFound[this.differenceCounterUser] = objectOriginal.userData.id;
             this.differenceCounterUser++;
         }
     }
 
     private removeObject(objectModified: THREE.Object3D): void {
-        if (this.isANewDifference(objectModified.uuid)) {
+        if (this.isANewDifference(objectModified.userData.id)) {
+            console.log(objectModified);
+            console.log(this.modifiedSceneLoader.scene.children.length);
             this.modifiedSceneLoader.scene.remove(objectModified);
-            this.differenceFound[this.differenceCounterUser] = objectModified.uuid;
+            console.log(this.modifiedSceneLoader.scene.children.length);
+            this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
             this.differenceCounterUser++;
         }
     }
@@ -229,29 +239,11 @@ export class GameViewFreeComponent implements OnInit {
         intersectedOriginal = objectOriginal;
         intersectedModified = objectModified;
 
-        if (this.isANewDifference(objectModified.uuid)) {
+        if (this.isANewDifference(objectModified.userData.id)) {
             intersectedModified.material.color.setHex(intersectedOriginal.material.color.getHex());
-            this.differenceFound[this.differenceCounterUser] = objectModified.uuid;
+            this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
             this.differenceCounterUser++;
         }
-    }
-
-    private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
-        let sceneLoader: SceneLoaderService;
-        // tslint:disable:variable-name
-        let HTMLElement: ElementRef<HTMLElement>;
-        if (isOriginalScene) {
-            sceneLoader = this.originalSceneLoader;
-            HTMLElement = this.originalScene;
-        } else {
-            sceneLoader = this.modifiedSceneLoader;
-            HTMLElement = this.modifiedScene;
-        }
-
-        return {
-            sceneLoader: sceneLoader,
-            HTMLElement: HTMLElement,
-        };
     }
 
     private setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: ElementRef<HTMLElement>): void {
@@ -265,7 +257,7 @@ export class GameViewFreeComponent implements OnInit {
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
         sceneLoader.scene.children.forEach((element) => {
-            if (element.type === "Mesh") {
+            if (element.type === "Mesh" || element.type === "Scene") {
                 meshes.push(element);
             }
         });
