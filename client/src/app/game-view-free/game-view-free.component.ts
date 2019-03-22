@@ -41,11 +41,11 @@ export class GameViewFreeComponent implements OnInit {
     private modifiedSceneLoader: SceneLoaderService;
     private cheatActivated: boolean;
     private chat: Chat;
+    private timerService: TimerService;
 
     public constructor( private route: ActivatedRoute,
                         private spinnerService: Ng4LoadingSpinnerService,
                         public sceneService: SceneService,
-                        public timerService: TimerService,
                         public gamesCardService: GamesCardService,
                         private sceneSyncer: SceneSyncerService,
                         public cheatModeService: CheatModeService,
@@ -63,10 +63,12 @@ export class GameViewFreeComponent implements OnInit {
         this.getGameCardById();
         this.cheatModeTimeoutService.ngOnInit();
         this.chat = new Chat(new ChatFormaterService, this.message.nativeElement, this.messageContainer.nativeElement);
+        this.timerService = new TimerService(this.chronometer.nativeElement);
         this.subscribeToServices();
     }
 
     private subscribeToServices(): void {
+        this.timerService.subscribeToSocket();
         this.chat.subscribeToSocket();
     }
 
@@ -126,7 +128,7 @@ export class GameViewFreeComponent implements OnInit {
                     this.originalSceneLoader.camera, this.originalScene.nativeElement,
                     this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
                 this.spinnerService.hide();
-                this.timerService.startTimer(this.chronometer.nativeElement);
+                // this.timerService.startTimer(this.chronometer.nativeElement);
 
             });
         });
