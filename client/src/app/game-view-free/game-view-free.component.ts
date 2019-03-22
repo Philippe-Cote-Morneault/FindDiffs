@@ -202,7 +202,7 @@ export class GameViewFreeComponent implements OnInit {
                         this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
                         break;
                     case DifferenceType.textureObjectChanged:
-                        this.changeTextureObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                        await this.changeTextureObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
                         break;
                     case DifferenceType.addedObject:
                         this.removeObject(this.intersectsModified[0].object);
