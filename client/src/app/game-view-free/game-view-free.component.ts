@@ -12,9 +12,9 @@ import { GamesCardService } from "../services/gameCard/games-card.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/scene-syncer.service";
-import { Chat } from "../services/socket/chat";
-import { ChatFormaterService } from "../services/socket/chatFormater.service";
-import { TimerService } from "../services/timer/timer.service";
+// import { Chat } from "../services/socket/chat";
+// import { ChatFormaterService } from "../services/socket/chatFormater.service";
+// import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -28,10 +28,10 @@ export class GameViewFreeComponent implements OnInit {
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
-    @ViewChild("chronometer") private chronometer: ElementRef;
+    // @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
-    @ViewChild("message") private message: ElementRef;
-    @ViewChild("message_container") private messageContainer: ElementRef;
+    // @ViewChild("message") private message: ElementRef;
+    // @ViewChild("message_container") private messageContainer: ElementRef;
 
     private scenePairID: string;
     private currentOriginalScene: ICommonScene;
@@ -40,8 +40,8 @@ export class GameViewFreeComponent implements OnInit {
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
     private cheatActivated: boolean;
-    private chat: Chat;
-    private timerService: TimerService;
+    // private chat: Chat;
+    // private timerService: TimerService;
 
     public constructor( private route: ActivatedRoute,
                         private spinnerService: Ng4LoadingSpinnerService,
@@ -62,14 +62,6 @@ export class GameViewFreeComponent implements OnInit {
         this.spinnerService.show();
         this.getGameCardById();
         this.cheatModeTimeoutService.ngOnInit();
-        this.chat = new Chat(new ChatFormaterService, this.message.nativeElement, this.messageContainer.nativeElement);
-        this.timerService = new TimerService(this.chronometer.nativeElement);
-        this.subscribeToServices();
-    }
-
-    private subscribeToServices(): void {
-        this.timerService.subscribeToSocket();
-        this.chat.subscribeToSocket();
     }
 
     @HostListener("document:keydown", ["$event"])
