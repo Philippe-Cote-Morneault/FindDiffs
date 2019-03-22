@@ -64,6 +64,7 @@ export class SocketHandlerService {
                 */
             }
 
+            this.onDisconnected();
             this.onAuthenticate();
             this.onNewUserConnected();
             this.onUserDisconnected();
@@ -125,15 +126,24 @@ export class SocketHandlerService {
         this.socket.emit(Event.PlaySoloGame, message);
     }
 
+    public emitReadyToPlay(): void {
+        this.socket.emit(Event.ReadyToPlay);
+    }
+
     public onNewUserConnected(): void {
         this.socket.on(Event.NewUser, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.NewUser, message);
         });
     }
 
-    public onUserDisconnected(): void {
-        this.socket.on("disconnect", (message: ICommonSocketMessage) => {
+    public onDisconnected(): void {
+        this.socket.on("disconnect", () => {
             console.log("disconnectEvent");
+        });
+    }
+
+    public onUserDisconnected(): void {
+        this.socket.on(Event.UserDisconnected, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.UserDisconnected, message);
         });
     }
