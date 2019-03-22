@@ -93,26 +93,6 @@ export class ScoreService extends Service implements IScoreService {
         const lastScore: ICommonScoreEntry = scoreEntry[numberOfScores - 1];
         let response: INewScore = { is_top_score: false };
 
-        if (lastScore.score > newScore) {
-            let position: number = numberOfScores - 1;
-            for (let i: number = numberOfScores - 1; i >= -1; i--) {
-                if (scoreEntry[i].score < newScore) {
-                    scoreEntry[i + 1].score = newScore;
-                    scoreEntry[i + 1].name = req.body.username;
-                    position = i + ScoreService.POSITION_MODIFIER;
-                    break;
-                }
-            }
-            response = {
-                is_top_score: true,
-                details: {
-                    place: position,
-                    username: req.body.username,
-                    game_name: doc.title,
-                    game_type: req.body.type,
-                },
-            };
-        }
 
         return response;
     }
