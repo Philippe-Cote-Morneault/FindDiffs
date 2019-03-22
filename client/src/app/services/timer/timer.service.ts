@@ -12,14 +12,18 @@ export class TimerService implements SocketSubscriber {
     private timer: Timer;
     private chronometer: HTMLElement;
 
-    public constructor(chronometer: HTMLElement) {
+    public constructor(private socketService: SocketHandlerService) {
         this.timer = new Timer();
+        this.subscribeToSocket();
+    }
+
+    public setContainers(chronometer: HTMLElement): void {
         this.chronometer = chronometer;
     }
 
-    public subscribeToSocket(): void {
-        SocketHandlerService.getInstance().subscribe(Event.GameEnded, this);
-        SocketHandlerService.getInstance().subscribe(Event.GameStarted, this);
+    private subscribeToSocket(): void {
+        this.socketService.subscribe(Event.GameEnded, this);
+        this.socketService.subscribe(Event.GameStarted, this);
     }
 
     public notify(event: Event): void {
