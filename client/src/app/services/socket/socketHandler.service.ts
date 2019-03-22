@@ -8,7 +8,6 @@ import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { SERVER_URL } from "../../../../../common/url";
 import { SocketSubscriber } from "./socketSubscriber";
 import { POVType } from "../../../../../common/model/gameCard";
-import { Socket } from "dgram";
 
 @Injectable()
 
