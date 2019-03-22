@@ -276,16 +276,6 @@ export class GameViewFreeComponent implements OnInit {
 
     }
 
-    // tslint:disable-next-line: variable-name
-    // private setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: ElementRef<HTMLElement>): void {
-    //     const divBoxInformation: ClientRect | DOMRect = HTMLElement.nativeElement.getBoundingClientRect();
-    //     const differenceX: number = event.clientX - divBoxInformation.left;
-    //     const differenceY: number = event.clientY - divBoxInformation.top;
-    //     // tslint:disable:no-magic-numbers
-    //     mouse.x = (differenceX / HTMLElement.nativeElement.clientWidth) * 2 - 1;
-    //     mouse.y = -(differenceY / HTMLElement.nativeElement.clientHeight) * 2 + 1;
-    // }
-
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
         sceneLoader.scene.children.forEach((element) => {
             if (element.type === "Mesh" || element.type === "Scene") {
