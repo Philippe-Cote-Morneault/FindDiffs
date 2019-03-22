@@ -12,17 +12,22 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
 export class DifferenceFoundManager implements SocketSubscriber {
     private differenceFound: number[];
     private differenceSound: HTMLAudioElement;
-    private differenceCounterUser: number;
+    private differenceUser: number;
 
-    public constructor(public pixelRestoration: PixelRestoration, differenceCounterUser: number) {
-        this.differenceCounterUser = differenceCounterUser;
+    public constructor(private socketService: SocketHandlerService,
+                       private pixelRestoration: PixelRestoration) {
         this.differenceSound = new Audio;
         this.differenceSound.src = R.DIFFERENCE_SOUND_SRC;
         this.differenceFound = [];
+        this.subscribeToSocket();
     }
 
-    public subscribeToSocket(): void {
-        SocketHandlerService.getInstance().subscribe(Event.DifferenceFound, this);
+    public setContainers(differenceCounterUser: number): void {
+        this.differenceUser = differenceCounterUser;
+    }
+
+    private subscribeToSocket(): void {
+        this.socketService.subscribe(Event.DifferenceFound, this);
     }
 
     public async notify(event: Event, message: ICommonSocketMessage): Promise<void> {
@@ -37,7 +42,7 @@ export class DifferenceFoundManager implements SocketSubscriber {
 
     private async addDifference(differenceId: number): Promise<void> {
         this.differenceFound[this.differenceFound.length++] = differenceId;
-        this.differenceCounterUser = this.differenceCounterUser + 1;
+        this.differenceUser = this.differenceUser + 1;
         await this.differenceSound.play();
     }
 
