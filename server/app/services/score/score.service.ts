@@ -71,7 +71,7 @@ export class ScoreService extends Service implements IScoreService {
         }
         if (!EnumUtils.isStringInEnum(req.body.type, GameType)) {
             throw new InvalidFormatException(_e(R.ERROR_WRONG_TYPE, [R.GAME_TYPE_]));
-    }
+        }
     }
 
     // tslint:disable-next-line:max-func-body-length
