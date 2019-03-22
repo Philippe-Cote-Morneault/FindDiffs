@@ -173,3 +173,57 @@ export const cylinder3: ICommonCylinder =  {
     radius: 2,
     height: 13,
 };
+
+export const sphere1: ICommonSphere =  {
+    id: "tgfd345trgg4353",
+    position: {
+        x: 104,
+        y: 40,
+        z: 60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 200,
+        zAngle: 1,
+    },
+    color: 0x34324,
+    shapeType: GeometricShapeType.SPHERE,
+    radius: 9,
+};
+
+export const sphere2: ICommonSphere = {
+    id: "gdfgdg",
+    position: {
+        x: 0,
+        y: 0,
+        z: 0,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x16543,
+    shapeType: GeometricShapeType.SPHERE,
+    radius: 10,
+};
+
+export const sphere3: ICommonSphere = {
+    id: "gdfgretredg",
+    position: {
+        x: 100,
+        y: 0,
+        z: 0,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x163343,
+    shapeType: GeometricShapeType.SPHERE,
+    radius: 50,
+};
