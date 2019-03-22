@@ -4,6 +4,7 @@ import { Event, ICommonSocketMessage } from "../../../../common/communication/we
 import { AuthentificationService } from "./authentificationService";
 import { SocketCallback } from "./socketCallback";
 import { UserManager } from "./userManager";
+import { SocketDispatcher } from "./socketDispatcher";
 
 export class SocketHandler {
     private static instance: SocketHandler;
@@ -14,6 +15,7 @@ export class SocketHandler {
     private usernameManager: UserManager;
     private authentificationService: AuthentificationService;
     private subscribers: Map<string, SocketCallback[]>;
+    private socketDispatcher: SocketDispatcher;
 
     public static getInstance(): SocketHandler {
         if (!this.instance) {
@@ -51,6 +53,7 @@ export class SocketHandler {
         this.usernameManager = UserManager.getInstance();
         this.authentificationService = AuthentificationService.getInstance();
         this.subscribers = new Map();
+        this.socketDispatcher = new SocketDispatcher(this);
     }
 
     private init(): void {
@@ -68,17 +71,6 @@ export class SocketHandler {
             });
         });
     }
-
-    /*
-    private onUsernameConnected(socket: SocketIO.Socket): void {
-        socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
-            const username: string = (message.data as ICommonUser).username;
-            this.usernameManager.addUsername(socket.id, message.data.toString());
-            socket.broadcast.emit(Event.NewUser, message);
-            this.notifySubsribers(Event.UserConnected, message, username);
-        });
-    }
-    */
 
     private onUserDisconnected(socket: SocketIO.Socket): void {
         socket.on(SocketHandler.DISCONNECT_EVENT, (reason) => {
@@ -100,6 +92,7 @@ export class SocketHandler {
         console.log("authenticateUser");
         this.authentificationService.authenticateUser(socket, () => {
             this.setEventListeners(socket);
+            this.io.emit(Event.UserConnected, "fsfds");
         });
     }
 }

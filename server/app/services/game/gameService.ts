@@ -34,6 +34,7 @@ export class GameService {
         //this.socketHandler.subscribe(Event.ReadyToPlay, this.startSoloGame);
         //this.socketHandler.subscribe(Event.GameClick, );
         this.socketHandler.subscribe(Event.UserConnected, (message, sender) => {
+            console.log("inGameService");
             console.log(JSON.stringify(message));
             console.log(sender);
         });

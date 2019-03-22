@@ -132,7 +132,7 @@ export class SocketHandlerService {
     }
 
     public onUserDisconnected(): void {
-        this.socket.on("disconnect", (message: ICommonSocketMessage) => {
+        this.socket.on(Event.UserDisconnected, (message: ICommonSocketMessage) => {
             console.log("disconnectEvent");
             this.notifySubsribers(Event.UserDisconnected, message);
         });
