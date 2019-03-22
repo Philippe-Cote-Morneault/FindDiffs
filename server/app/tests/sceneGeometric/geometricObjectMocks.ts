@@ -98,3 +98,40 @@ export const cube2: ICommonCube = {
     shapeType: GeometricShapeType.CUBE,
     width: 5,
 };
+
+export const cube3: ICommonCube = {
+    id: "kjhdhgfdsfdsf",
+    position: {
+        x: -104,
+        y: -40,
+        z: 60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x12311,
+    shapeType: GeometricShapeType.CUBE,
+    width: 2,
+};
+
+export const cylinder1: ICommonCylinder = {
+    id: "hgfhfsadfsf",
+    position: {
+        x: 104,
+        y: 40,
+        z: 60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x123,
+    shapeType: GeometricShapeType.CYLINDER,
+    radius: 4,
+    height: 8,
+};
