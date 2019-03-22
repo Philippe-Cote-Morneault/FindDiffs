@@ -76,6 +76,45 @@ export class ScoreService extends Service implements IScoreService {
             if (!doc) {
                 throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
+            this.validateUpdate(req, doc);
+
+            const newScore: number = Number(req.body.time);
+            const gameType: GameType = EnumUtils.enumFromString(req.body.type, GameType) as GameType;
+            const numberOfScores: number = doc.best_time_online.length;
+            if (gameType === GameType.Online) {
+                const lastScore: ICommonScoreEntry = doc.best_time_online[numberOfScores - 1];
+                if (lastScore.score > newScore) {
+                    let position: number = numberOfScores - 1;
+                    for (let i: number = numberOfScores - 1; i >= -1; i--) {
+                        if (doc.best_time_online[i].score < newScore) {
+                            doc.best_time_online[i + 1].score = newScore;
+                            doc.best_time_online[i + 1].name = req.body.username;
+                            // tslint:disable-next-line:no-magic-numbers
+                            position = i + 2;
+                            break;
+                        }
+                    }
+                    const response: INewScore = {
+                        is_top_score: true,
+                        details: {
+                            place: position,
+                            username: req.body.username,
+                            game_name: doc.title,
+                            game_type: gameType,
+                        },
+                    };
+
+                    return JSON.stringify(response);
+                } else {
+                    const response: INewScore = {
+                        is_top_score: false,
+                    };
+
+                    return JSON.stringify(response);
+                }
+            }
+
+            return "";
         });
     }
 
