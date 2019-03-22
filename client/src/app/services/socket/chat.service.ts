@@ -4,10 +4,10 @@ import { SocketHandlerService } from "./socketHandler.service";
 import { SocketSubscriber } from "./socketSubscriber";
 
 export class ChatService implements SocketSubscriber {
-    private static instance: ChatService;
+   // private static instance: ChatService;
     private chat: HTMLElement;
     private container: HTMLElement;
-
+/*
     public static getInstance(): ChatService {
         if (!ChatService.instance) {
             ChatService.instance = new ChatService(new ChatFormaterService);
@@ -15,16 +15,17 @@ export class ChatService implements SocketSubscriber {
 
         return ChatService.instance;
     }
+    */
 
-    private constructor(public chatFormaterService: ChatFormaterService) {
+    public constructor(public chatFormaterService: ChatFormaterService, private socketService: SocketHandlerService) {
         this.subscribeToSocket();
     }
 
     private subscribeToSocket(): void {
-        SocketHandlerService.getInstance().subscribe(Event.UserDisconnected, this);
-        SocketHandlerService.getInstance().subscribe(Event.NewUser, this);
-        SocketHandlerService.getInstance().subscribe(Event.InvalidClick, this);
-        SocketHandlerService.getInstance().subscribe(Event.DifferenceFound, this);
+        this.socketService.subscribe(Event.UserDisconnected, this);
+        this.socketService.subscribe(Event.NewUser, this);
+        this.socketService.subscribe(Event.InvalidClick, this);
+        this.socketService.subscribe(Event.DifferenceFound, this);
     }
 
     public  setChat(chat: HTMLElement, container: HTMLElement): void {
