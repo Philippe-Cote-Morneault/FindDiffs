@@ -50,7 +50,7 @@ export class ScoreService extends Service implements IScoreService {
         });
     }
 
-    private updateScore(req: Request, doc: IGameCard): void {
+    private validateUpdate(req: Request, doc: IGameCard): void {
         if (!req.body.username) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.USERNAME_]));
         }
@@ -66,7 +66,9 @@ export class ScoreService extends Service implements IScoreService {
         if (!req.body.type) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.GAME_TYPE_]));
         }
-        
+        if (!EnumUtils.isStringInEnum(req.body.type, GameType)) {
+            throw new InvalidFormatException(_e(R.ERROR_WRONG_TYPE, [R.GAME_TYPE_]));
+    }
     }
 
     public async update(req: Request): Promise<string> {
