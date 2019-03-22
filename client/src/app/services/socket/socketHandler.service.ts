@@ -7,6 +7,7 @@ import { ICommonUser } from "../../../../../common/communication/webSocket/user"
 import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { SERVER_URL } from "../../../../../common/url";
 import { SocketSubscriber } from "./socketSubscriber";
+import { POVType } from "../../../../../common/model/gameCard";
 
 @Injectable()
 
@@ -118,6 +119,7 @@ export class SocketHandlerService {
     public emitPlayerSoloGame(id: string): void {
         const game: ICommonGame = {
             ressource_id: id,
+            pov: POVType.Free,
         };
         const message: ICommonSocketMessage = {
             data: game,

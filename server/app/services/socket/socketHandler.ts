@@ -69,17 +69,6 @@ export class SocketHandler {
         });
     }
 
-    /*
-    private onUsernameConnected(socket: SocketIO.Socket): void {
-        socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
-            const username: string = (message.data as ICommonUser).username;
-            this.usernameManager.addUsername(socket.id, message.data.toString());
-            socket.broadcast.emit(Event.NewUser, message);
-            this.notifySubsribers(Event.UserConnected, message, username);
-        });
-    }
-    */
-
     private onUserDisconnected(socket: SocketIO.Socket): void {
         socket.on(SocketHandler.DISCONNECT_EVENT, (reason) => {
             console.log("disconnectEvent " + reason);
@@ -98,8 +87,9 @@ export class SocketHandler {
 
     private authenticateUser(socket: SocketIO.Socket): void {
         console.log("authenticateUser");
-        this.authentificationService.authenticateUser(socket, () => {
+        this.authentificationService.authenticateUser(socket, (username: string) => {
             this.setEventListeners(socket);
+            this.io.emit(Event.UserConnected, username);
         });
     }
 }

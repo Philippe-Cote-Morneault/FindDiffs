@@ -56,7 +56,7 @@ export class AuthentificationService {
         SocketHandler.getInstance().broadcastMessage(Event.UserDisconnected, message);
     }
 
-    public authenticateUser(socket: SocketIO.Socket, successCallback: () => void): void {
+    public authenticateUser(socket: SocketIO.Socket, successCallback: (newUsername: string) => void): void {
         socket.on(Event.Authenticate, (message: ICommonSocketMessage) => {
             const receivedToken: string = (message.data as ICommonToken).token;
             console.log("validating existing user token: " + receivedToken);
@@ -65,7 +65,7 @@ export class AuthentificationService {
             if (username) {
                 this.stopCleanupTimer(receivedToken);
                 this.usernameManager.addUsername(socket.id, username);
-                successCallback();
+                successCallback(username);
             }
         });
         socket.on(Event.NewUser, (message: ICommonSocketMessage) => {
@@ -75,7 +75,7 @@ export class AuthentificationService {
                 this.usernameManager.addUsername(socket.id, (message.data as ICommonUser).username);
                 const token: string = this.sendValidationToken(socket);
                 this.authentifiedUsers.set(token, username);
-                successCallback();
+                successCallback(username);
             }
         });
     }
