@@ -44,6 +44,11 @@ export class GameViewSimpleComponent implements OnInit {
         public gamesCardService: GamesCardService,
         public socket: SocketHandlerService) {
 
+        this.chat = new Chat(new SocketHandlerService, new ChatFormaterService);
+        this.identificationError = new IdentificationError(new SocketHandlerService);
+        this.pixelRestoration = new PixelRestoration();
+        this.differenceFoundManager = new DifferenceFoundManager(new SocketHandlerService, this.pixelRestoration);
+        this.timerService = new TimerService(new SocketHandlerService);
         this.isGameOver = false;
         this.differenceCounterUser = 0;
     }
@@ -52,21 +57,18 @@ export class GameViewSimpleComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.gameCardId = params["id"];
         });
-        this.pixelRestoration = new PixelRestoration(this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
-        this.chat = new Chat(new ChatFormaterService, this.message.nativeElement, this.messageContainer.nativeElement);
-        this.identificationError = new IdentificationError(
-            this.errorMessage.nativeElement, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
-        this.timerService = new TimerService(this.chronometer.nativeElement);
-        this.differenceFoundManager = new DifferenceFoundManager(this.pixelRestoration, this.differenceCounterUser);
+
         this.getGameCardById();
         this.subscribeToServices();
     }
 
     private subscribeToServices(): void {
-        this.timerService.subscribeToSocket();
-        this.chat.subscribeToSocket();
-        this.identificationError.subscribeToSocket();
-        this.differenceFoundManager.subscribeToSocket();
+        this.timerService.setContainers(this.chronometer.nativeElement);
+        this.chat.setContainers(this.message.nativeElement, this.messageContainer.nativeElement);
+        this.identificationError.setContainers(this.errorMessage.nativeElement,
+                                               this.originalCanvas.nativeElement,
+                                               this.modifiedCanvas.nativeElement);
+        this.differenceFoundManager.setContainers(this.differenceCounterUser);
     }
 
     private getGameCardById(): void {
@@ -89,6 +91,7 @@ export class GameViewSimpleComponent implements OnInit {
         if (!this.identificationError.timeout) {
             this.identificationError.moveClickError(e.pageX, e.pageY);
             this.socket.emitClick(e.layerX, e.layerY);
+            this.identificationError.showErrorMessage();
             /*this.pixelPositionService.postPixelPosition(this.imagePairId, e.layerX, e.layerY).subscribe(async (response) => {
                 if (response.hit) {
                     if (this.isANewDifference(response.difference_id)) {
