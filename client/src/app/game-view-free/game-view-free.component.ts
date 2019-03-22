@@ -252,6 +252,7 @@ export class GameViewFreeComponent implements OnInit {
         }
     }
 
+    // tslint:disable-next-line: variable-name
     private async changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
         if (this.isANewDifference(objectModified.userData.id)) {
             if (objectModified.userData.isTextured) {
