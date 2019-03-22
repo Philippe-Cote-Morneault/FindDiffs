@@ -24,3 +24,41 @@ export const cone1: ICommonCone = {
     radius: 5,
     height: 10,
 };
+
+export const cone2: ICommonCone = {
+    id: "435435wdc",
+    position: {
+        x: 104,
+        y: 140,
+        z: 60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x123,
+    shapeType: GeometricShapeType.CONE,
+    radius: 3,
+    height: 7,
+};
+
+export const cone3: ICommonCone = {
+    id: "fsdfsf34536uyjh",
+    position: {
+        x: 174,
+        y: 140,
+        z: -60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x1211113,
+    shapeType: GeometricShapeType.CONE,
+    radius: 7,
+    height: 7,
+};
