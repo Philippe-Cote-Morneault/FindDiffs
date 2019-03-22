@@ -29,7 +29,7 @@ export class InitialViewComponent implements OnInit {
 
     public async verifyUsername(): Promise<void> {
         const username: string = this.usernameInput.nativeElement.value;
-        this.socketHandlerService.sendNewUser(username);
+        this.socketHandlerService.emitUser(username);
         await this.router.navigateByUrl("/gamesList");
         //this.userService.postUsernameValidation(username).subscribe(this.correctUsername.bind(this));
         //SocketHandlerService.getInstance().socket.emit()
