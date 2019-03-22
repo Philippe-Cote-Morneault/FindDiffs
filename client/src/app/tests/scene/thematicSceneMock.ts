@@ -14,7 +14,7 @@ export const thematicScene: ICommonThematicScene = {
         y: 200,
         z: 300,
     },
-    type: ObjectType.Geometric,
+    type: ObjectType.Thematic,
     sceneObjects: sceneObjects,
     texture: "default",
 };
