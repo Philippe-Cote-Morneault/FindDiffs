@@ -71,7 +71,9 @@ export class ScoreService extends Service implements IScoreService {
     }
     }
 
+    // tslint:disable-next-line:max-func-body-length
     public async update(req: Request): Promise<string> {
+        // tslint:disable-next-line:max-func-body-length
         return GameCard.findById(req.params.id).then(async (doc: IGameCard) => {
             if (!doc) {
                 throw new NotFoundException(R.ERROR_UNKNOWN_ID);
