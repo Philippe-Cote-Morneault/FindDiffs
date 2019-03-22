@@ -40,6 +40,8 @@ export class SocketHandlerService {
         this.onUserDisconnected();
         this.onDifferenceFound();
         this.onInvalidClick();
+        this.onGameStarted();
+        this.onGameEnded();
     }
 
     public subscribe(event: Event, subscriber: SocketSubscriber): void {
@@ -111,6 +113,18 @@ export class SocketHandlerService {
     public onInvalidClick(): void {
         this.socket.on(Event.InvalidClick, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.InvalidClick, message);
+        });
+    }
+
+    public onGameStarted(): void {
+        this.socket.on(Event.GameStarted, (message: ICommonSocketMessage) => {
+            this.notifySubsribers(Event.GameStarted, message);
+        });
+    }
+
+    public onGameEnded(): void {
+        this.socket.on(Event.GameEnded, (message: ICommonSocketMessage) => {
+            this.notifySubsribers(Event.GameEnded, message);
         });
     }
 }
