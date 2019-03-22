@@ -4,14 +4,18 @@ import { ICommonGameEnding } from "../../../../common/communication/webSocket/ga
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 //import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { Game } from "../../model/game/game";
-import { _e } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { GameManager } from "./gameManager";
+import { NotFoundException } from "../../../../common/errors/notFoundException";
+import { _e, R } from "../../strings";
+import { POVType } from "../../../../common/model/gameCard";
+import { SimplePOVGameManager } from "./simplePOVGameManager";
+import { FreePOVGameManager } from "./freePOVGameManager";
 
 export class GameService {
     private static instance: GameService;
 
-    //private activePlayers: Map<string, GameManager>;
+    private activePlayers: Map<string, GameManager>;
     private activeGames: GameManager[];
     private socketHandler: SocketHandler;
 
@@ -26,13 +30,14 @@ export class GameService {
     private constructor() {
         this.activeGames = [];
         this.socketHandler = SocketHandler.getInstance();
+        this.activePlayers = new Map();
         this.subscribeToSocket();
     }
 
     private subscribeToSocket(): void {
         this.socketHandler.subscribe(Event.PlaySoloGame, this.createSoloGame);
-        //this.socketHandler.subscribe(Event.ReadyToPlay, this.startSoloGame);
-        //this.socketHandler.subscribe(Event.GameClick, );
+        this.socketHandler.subscribe(Event.ReadyToPlay, this.startSoloGame);
+        this.socketHandler.subscribe(Event.GameClick, this.gameClick);
         this.socketHandler.subscribe(Event.UserConnected, (message, sender) => {
             console.log("inGameService");
             console.log(JSON.stringify(message));
@@ -49,11 +54,17 @@ export class GameService {
             start_time: undefined,
             differences_found: 0,
         };
-        this.activeGames.push(new GameManager(newGame, this.endGame));
+        let gameManager: GameManager;
+        if (data.pov === POVType.Simple) {
+            gameManager = new SimplePOVGameManager(newGame, this.endGame);
+        } else {
+            gameManager = new FreePOVGameManager(newGame, this.endGame);
+        }
+        this.activeGames.push(gameManager);
+        this.activePlayers.set(player, gameManager);
     }
 
-    /*
-    private startSoloGame(player: string): void {
+    private startSoloGame(message: ICommonSocketMessage, player: string): void {
         const game: GameManager | undefined = this.activePlayers.get(player);
         if (game === undefined) {
             throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
@@ -62,7 +73,6 @@ export class GameService {
         game.startGame();
     }
 
-    */
     private endGame(game: Game, winner: string): void {
         const gameEndedMessage: ICommonGameEnding = {
             winner: winner,
@@ -75,5 +85,14 @@ export class GameService {
         game.players.forEach((player: string) => {
             this.socketHandler.sendMessage(Event.GameEnded, message, player);
         });
+    }
+
+    private gameClick(message: ICommonSocketMessage, player: string): void {
+        const game: GameManager | undefined = this.activePlayers.get(player);
+        if (game === undefined) {
+            throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
+        }
+
+       // game.
     }
 }
