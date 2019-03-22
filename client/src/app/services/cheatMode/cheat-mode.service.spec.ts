@@ -9,6 +9,7 @@ import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sc
 import { ObjectType } from "../../../../../common/model/scene/scene";
 import { sceneModifications } from "../../tests/scene/geometricSceneModificationsMock";
 import { scene } from "../../tests/scene/sceneMock";
+import { thematicScene } from "../../tests/scene/thematicSceneMock";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
 import { ModifiedSceneParserService } from "../scene/sceneParser/modified-scene-parser.service";
 import { SceneParserService } from "../scene/sceneParser/scene-parser.service";
@@ -155,7 +156,7 @@ describe("Tests for CheatModeService", () => {
         });
       });
 
-      it("should change the color changed objects visibility to false in the original scene", () => {
+      it("should change the color changed objects visibility to false in the modified scene", () => {
         cheatModeService.toggleCheatMode(modifiedScene);
         const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
         const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
@@ -168,7 +169,7 @@ describe("Tests for CheatModeService", () => {
         });
       });
 
-      it("should change the color changed objects visibility to true in the original scene", () => {
+      it("should change the color changed objects visibility to true in the modified scene", () => {
         cheatModeService.toggleCheatMode(modifiedScene);
         cheatModeService.toggleCheatMode(modifiedScene);
         const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
@@ -180,6 +181,21 @@ describe("Tests for CheatModeService", () => {
             expect(object3D.visible).to.be.true;
           }
         });
+      });
+    });
+
+    describe("when scene is thematic", () => {
+      let modifiedScene: ICommonGeometricModifications & ICommonThematicModifications;
+      beforeEach(async () => {
+        modifiedScene = (sceneModifications as ICommonGeometricModifications & ICommonThematicModifications);
+
+        cheatModeService.originalLoaderService = new SceneLoaderService();
+        cheatModeService.modifiedLoaderService = new SceneLoaderService();
+
+        cheatModeService.originalLoaderService.scene = await new SceneParserService(thematicScene).parseScene();
+        cheatModeService.modifiedLoaderService.scene = 
+          await new ModifiedSceneParserService(ObjectType.Thematic).parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
+
       });
     });
   });
