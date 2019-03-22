@@ -18,6 +18,7 @@ export const R: IString = {
     NONE: "none",
     NOT_ALLOWED: "not-allowed",
     CONTEXT_MENU: "context-menu",
+    DIFFERENCE_SOUND_SRC: "../../assets/mario.mp3",
 
     CHAT_DEFAULT: " This message type is not supported: ",
     CHAT_USERCONNECTED: " The user %s is now online!",
