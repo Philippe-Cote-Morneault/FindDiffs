@@ -11,9 +11,11 @@ export class TimerService implements SocketSubscriber {
     private static readonly MINUTES_POSITION: number = 3;
     private timer: Timer;
     private chronometer: HTMLElement;
+    public gameStarted: boolean;
 
     public constructor(private socketService: SocketHandlerService) {
         this.timer = new Timer();
+        this.gameStarted = false;
         this.subscribeToSocket();
     }
 
@@ -43,6 +45,7 @@ export class TimerService implements SocketSubscriber {
     public startTimer(): void {
         this.timer.reset();
         this.timer.start();
+        this.gameStarted = true;
         this.timer.addEventListener("secondsUpdated", () =>
             this.chronometer.innerText = this.getTimeValues());
     }
