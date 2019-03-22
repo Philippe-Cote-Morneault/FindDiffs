@@ -221,7 +221,12 @@ export class GameViewFreeComponent implements OnInit {
 
     private addObject(objectOriginal: THREE.Object3D): void {
         if (this.isANewDifference(objectOriginal.userData.id)) {
-            this.modifiedSceneLoader.scene.add(objectOriginal.clone());
+
+            this.originalSceneLoader.scene.children.forEach((element) => {
+                if (element.userData.id === objectOriginal.userData.id) {
+                    this.modifiedSceneLoader.scene.add(element.clone());
+                }
+            });
             this.differenceFound[this.differenceCounterUser] = objectOriginal.userData.id;
             this.differenceCounterUser++;
         }
