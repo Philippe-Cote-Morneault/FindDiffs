@@ -8,6 +8,7 @@ import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { SERVER_URL } from "../../../../../common/url";
 import { SocketSubscriber } from "./socketSubscriber";
 import { POVType } from "../../../../../common/model/gameCard";
+import { Socket } from "dgram";
 
 @Injectable()
 
@@ -65,6 +66,8 @@ export class SocketHandlerService {
                 */
             }
 
+            this.setEventListeners(this.socket);
+            /*
             this.onAuthenticate();
             this.onNewUserConnected();
             this.onUserDisconnected();
@@ -72,6 +75,7 @@ export class SocketHandlerService {
             this.onInvalidClick();
             this.onGameStarted();
             this.onGameEnded();
+            */
         });
     }
 
@@ -127,9 +131,19 @@ export class SocketHandlerService {
         this.socket.emit(Event.PlaySoloGame, message);
     }
 
+    private setEventListeners(socket: SocketIOClient.Socket): void {
+        this.onAuthenticate();
+        Object.keys(Event).forEach((event: Event) => {
+            socket.on(event, (message: ICommonSocketMessage) => {
+                this.notifySubsribers(event, message);
+            });
+        });
+    }
+
+    /*
     public onNewUserConnected(): void {
-        this.socket.on(Event.NewUser, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.NewUser, message);
+        this.socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
+            this.notifySubsribers(Event.UserConnected, message);
         });
     }
 
@@ -163,6 +177,7 @@ export class SocketHandlerService {
             this.notifySubsribers(Event.GameEnded, message);
         });
     }
+    */
     // tslint:disable-next-line:max-func-body-length
     public onAuthenticate(): void {
         this.socket.on(Event.Authenticate, (message: ICommonSocketMessage) => {
