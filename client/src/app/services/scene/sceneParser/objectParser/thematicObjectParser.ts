@@ -64,7 +64,7 @@ export class ThematicObjectParser extends SceneObjectParser {
         }
     }
 
-    private async loadTexture(object3D: THREE.Object3D, meshName: string, textureName: string): Promise<void> {
+    public async loadTexture(object3D: THREE.Object3D, meshName: string, textureName: string): Promise<void> {
         const newTexture: THREE.Texture = await TextureLoader.load(textureName);
         object3D.traverse((child: THREE.Mesh) => {
             if (child instanceof THREE.Mesh && child.name === meshName) {
@@ -92,7 +92,7 @@ export class ThematicObjectParser extends SceneObjectParser {
         });
     }
 
-    private loadColor(object3D: THREE.Object3D, meshName: string, color: number): void {
+    public loadColor(object3D: THREE.Object3D, meshName: string, color: number): void {
         object3D.traverse((child: THREE.Mesh) => {
             if (child instanceof THREE.Mesh && child.name === meshName) {
                 if (child.material instanceof THREE.MeshStandardMaterial ||
