@@ -14,6 +14,7 @@ export class ThematicObjectParser extends SceneObjectParser {
         this.forceUpdate = false;
     }
 
+    // tslint:disable
     public async parse(object: ICommonThematicObject): Promise<THREE.Object3D> {
         const objectName: string = ObjTheme[object.objectType].toLowerCase();
         const object3D: THREE.Object3D = await JSONLoader.load(objectName);
@@ -27,6 +28,11 @@ export class ThematicObjectParser extends SceneObjectParser {
         object3D.scale.z *= object.scale;
 
         object3D.userData = object;
+
+        object3D.children.forEach((element: any) => {
+            element.userData = object;
+        });
+
 
         if (object3D.rotation.x !== 0) {
             object3D.rotation.z = object.orientation.yAngle;

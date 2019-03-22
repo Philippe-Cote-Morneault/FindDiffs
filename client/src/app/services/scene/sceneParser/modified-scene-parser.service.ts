@@ -95,6 +95,9 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         await Promise.all(objectsToAdd.map(async (object: ICommonSceneObject) =>
         this.sceneObjectParser.parse(object)))
         .then((v: THREE.Object3D[]) => {
+            v.forEach((object: THREE.Object3D, index: number) => {
+                object.userData = objectsToAdd[index];
+            });
             for (const object of v) {
                 scene.add(object);
             }
