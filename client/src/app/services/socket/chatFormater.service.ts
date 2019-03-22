@@ -35,7 +35,7 @@ export class ChatFormaterService {
     }
 
     private onNewUser(message: ICommonSocketMessage): string {
-        return this.formatDate(message.timestamp) + _e(R.CHAT_USERCONNECTED, [message.data]);
+        return this.formatDate(message.timestamp) + _e(R.CHAT_USERCONNECTED, [(message.data as ICommonUser).username]);
     }
 
     private onDifferenceFound(message: ICommonSocketMessage): string {
