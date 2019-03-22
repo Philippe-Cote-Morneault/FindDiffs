@@ -55,6 +55,7 @@
     overflow-wrap: break-word;
     font-family: Arial;
     margin-left: 1%;
+    text-align: left;
     float: left;
   }
   #title {
