@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 
-import { CheatModeService } from "./cheat-mode.service";
+import { CheatModeService } from "./cheatMode.service";
 
 describe("CheatModeService", () => {
   beforeEach(() => TestBed.configureTestingModule({}));

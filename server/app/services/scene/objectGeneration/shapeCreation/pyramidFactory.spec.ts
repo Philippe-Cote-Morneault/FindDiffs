@@ -14,7 +14,7 @@ describe("PyramidFactory", () => {
     });
 
     describe("createShape()", () => {
-        it("Should return a pyramid", () => {
+        it("Should create an object which is a pyramid", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.6);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
@@ -27,7 +27,7 @@ describe("PyramidFactory", () => {
             expect(object.shapeType).to.equal(GeometricShapeType.TRIANGULAR_BASE_PYRAMID);
         });
 
-        it("Should return a pyramid with a radius in range", () => {
+        it("Should create a pyramid with a radius in the specified range", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.5);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
@@ -42,7 +42,7 @@ describe("PyramidFactory", () => {
             .and.gte((PyramidFactory.SIZE_MIN_PERCENTAGE / PyramidFactory.PERCENTAGE_DIVISION) * PyramidFactory.REFERENCE_RADIUS);
         });
 
-        it("Should return a pyramid with a height in range", () => {
+        it("Should create a pyramid with a height in the specifed range", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.5);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();

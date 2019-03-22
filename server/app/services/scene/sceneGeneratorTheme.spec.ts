@@ -12,17 +12,17 @@ describe("SceneGeneratorTheme", () => {
             const texture: string = (generator.generateScene() as ICommonThematicScene).texture;
             expect(texture).to.equal("default");
         });
-        it("Should have the number of objects specified in the constructor", () => {
+        it("Should create the number of objects specified in the constructor", () => {
             const generator: SceneGeneratorTheme = new SceneGeneratorTheme(OBJECT_TO_GENERATE);
             const scene: ICommonScene = generator.generateScene();
             expect(scene.sceneObjects.length).to.equal(OBJECT_TO_GENERATE);
         });
-        it("Should have the type Thematic", () => {
+        it("Should create a scene with the type Thematic", () => {
             const generator: SceneGeneratorTheme = new SceneGeneratorTheme(OBJECT_TO_GENERATE);
             const scene: ICommonScene = generator.generateScene();
             expect(scene.type).to.equal(ObjectType.Thematic);
         });
-        it("Should have the dimensions specified", () => {
+        it("Should create a scene with the dimensions specified", () => {
             const generator: SceneGeneratorTheme = new SceneGeneratorTheme(OBJECT_TO_GENERATE);
             const scene: ICommonScene = generator.generateScene();
             expect(scene.dimensions.x).to.equal(SceneGeneratorShape.SCENE_SIZE);
@@ -31,7 +31,7 @@ describe("SceneGeneratorTheme", () => {
         });
     });
     describe("getGrid()", () => {
-        it("Should return an undefined grid", () => {
+        it("Should return an undefined grid if the scene was not generated before", () => {
             // tslint:disable-next-line:no-magic-numbers
             const generator: SceneGeneratorTheme = new SceneGeneratorTheme(OBJECT_TO_GENERATE);
             expect(generator.getGrid()).to.equal(undefined);

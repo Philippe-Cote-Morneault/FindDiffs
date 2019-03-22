@@ -14,7 +14,7 @@ describe("ConeFactory", () => {
     });
 
     describe("createShape()", () => {
-        it("Should return a cone", () => {
+        it("Should create an object which is a cone", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.2);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
@@ -27,7 +27,7 @@ describe("ConeFactory", () => {
             expect(object.shapeType).to.equal(GeometricShapeType.CONE);
         });
 
-        it("Should return a cone with a radius in range", () => {
+        it("Should create a cone with a radius in the specified range", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.2);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
@@ -42,7 +42,7 @@ describe("ConeFactory", () => {
             .and.gte((ConeFactory.SIZE_MIN_PERCENTAGE / ConeFactory.PERCENTAGE_DIVISION) * ConeFactory.REFERENCE_RADIUS);
         });
 
-        it("Should return a cone with a height in range", () => {
+        it("Should create a cone with a height in the specified range", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.2);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();

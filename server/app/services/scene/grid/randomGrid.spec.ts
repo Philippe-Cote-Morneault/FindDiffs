@@ -27,7 +27,7 @@ describe("RandomGrid", () => {
             }
         });
 
-        it("Should return an error if the stack is popped to much", () => {
+        it("Should return an error if too many positions are requested from the grid", () => {
             const SIZE: number = 1000;
             const MARGIN: number = 20;
             const DEPTH: number = 50;
@@ -43,7 +43,7 @@ describe("RandomGrid", () => {
                 expect(err.message).to.equal("The stack cannot be popped since it's empty.");
             }
         });
-        it("Should return the asked number of generations", () => {
+        it("Should generate the number of positions requested by the user", () => {
             const SIZE: number = 1000;
             const DEPTH: number = 50;
             const MARGIN: number = 20;
