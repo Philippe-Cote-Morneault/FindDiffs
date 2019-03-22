@@ -252,8 +252,7 @@ export class GameViewFreeComponent implements OnInit {
         }
     }
 
-    // tslint:disable-next-line: variable-name
-    private async changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
+    private async changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): Promise<void> {
         if (this.isANewDifference(objectModified.userData.id)) {
             if (objectModified.userData.isTextured) {
                 await this.thematicObjectParser.loadTexture(objectModified, objectOriginal.name, objectOriginal.userData.texture);
@@ -267,6 +266,7 @@ export class GameViewFreeComponent implements OnInit {
 
     }
 
+    // tslint:disable-next-line: variable-name
     private setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: ElementRef<HTMLElement>): void {
         const divBoxInformation: ClientRect | DOMRect = HTMLElement.nativeElement.getBoundingClientRect();
         const differenceX: number = event.clientX - divBoxInformation.left;
