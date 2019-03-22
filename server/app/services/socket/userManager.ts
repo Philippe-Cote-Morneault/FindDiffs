@@ -1,5 +1,3 @@
-import { NotFoundException } from "../../../../common/errors/notFoundException";
-import { _e, R } from "../../strings";
 import { UsernameValidator } from "../user/usernameValidator";
 
 export class UserManager  {
@@ -24,8 +22,13 @@ export class UserManager  {
     }
 
     public addUsername(socketId: string, username: string): void {
+        const oldUsername: string | undefined = this.getUsername(socketId)
+        if (oldUsername) {
+            this.idUsernames.delete(oldUsername);
+        }
         console.log("adding userName: " + username);
         this.idUsernames.set(username, socketId);
+        console.log("printing usernames and sockets");
         this.idUsernames.forEach((val: string, key) => {
             console.log(key + " : " + val);
         });
@@ -35,28 +38,27 @@ export class UserManager  {
         return (this.idUsernames.get(username)) as string;
     }
 
-    public removeUsername(socketId: string): string {
+    public removeUsername(socketId: string): string | undefined {
         console.log("removingUsername");
-        const removedUsername: string = this.getUsername(socketId);
-        this.idUsernames.delete(removedUsername);
+        const removedUsername: string | undefined = this.getUsername(socketId);
+        if (removedUsername) {
+            this.idUsernames.delete(removedUsername);
+        }
         console.log("removedUsername: " + removedUsername);
 
         return removedUsername;
     }
 
-    public getUsername(socketId: string): string {
+    public getUsername(socketId: string): string | undefined {
         console.log(this.idUsernames);
         let id: string | undefined;
         this.idUsernames.forEach((val: string, key) => {
+            console.log("printing usernames and sockets");
             console.log(key + " : " + val);
             if (val === socketId) {
                 id = key;
             }
         });
-        
-        if (id === undefined) {
-                throw new NotFoundException(_e(R.ERROR_INVALIDID, [socketId]));
-        }
 
         return id;
     }

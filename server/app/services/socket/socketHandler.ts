@@ -64,7 +64,7 @@ export class SocketHandler {
         this.onUserDisconnected(socket);
         Object.keys(Event).forEach((event: Event) => {
             socket.on(event, (message: ICommonSocketMessage) => {
-                this.notifySubsribers(event, message, this.usernameManager.getUsername(socket.id));
+                this.notifySubsribers(event, message, this.usernameManager.getUsername(socket.id) as string);
             });
         });
     }

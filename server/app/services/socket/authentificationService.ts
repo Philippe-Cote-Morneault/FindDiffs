@@ -31,7 +31,9 @@ export class AuthentificationService {
 
     public startCleanupTimer(socket: SocketIO.Socket): void {
         console.log("removing id: " + socket.id);
-        const removedUsername: string = this.usernameManager.removeUsername(socket.id);
+        const removedUsername: string | undefined = this.usernameManager.removeUsername(socket.id);
+        console.log("trie to startCleanup, but undefinde uesr");
+        if (removedUsername) {
         const token: string = this.getTokenFromUsername(removedUsername);
         const timeout: NodeJS.Timeout = setTimeout(() => {
             console.log("timerExpired");
@@ -39,6 +41,7 @@ export class AuthentificationService {
         }, AuthentificationService.MAX_CLIENT_DISCONNECT_TIME);
 
         this.activeCleanupTimers.set(token, timeout);
+    }
     }
 
     private removeUser(token: string, socketServer: SocketIO.Server, username: string): void {
@@ -72,9 +75,15 @@ export class AuthentificationService {
             const username: string = (message.data as ICommonUser).username;
             console.log("newUser: " + username);
             if (this.usernameManager.validateUsername(username)) {
+                const oldUsername: string | undefined = this.usernameManager.getUsername(socket.id);
+                if (oldUsername) {
+                    this.deleteOldUsername(oldUsername);
+                }
                 this.usernameManager.addUsername(socket.id, (message.data as ICommonUser).username);
                 const token: string = this.sendValidationToken(socket);
                 this.authentifiedUsers.set(token, username);
+                console.log("authehtifiedUsers token");
+                console.log(this.authentifiedUsers);
                 successCallback(username);
             }
         });
@@ -120,5 +129,15 @@ export class AuthentificationService {
         if (timeout) {
             clearTimeout(timeout);
         }
+    }
+
+    private deleteOldUsername(oldUsername: string): void {
+        this.authentifiedUsers.forEach((username: string, token: string) => {
+            if (username === oldUsername) {
+                this.authentifiedUsers.delete(token);
+
+                return;
+            }
+        });
     }
 }
