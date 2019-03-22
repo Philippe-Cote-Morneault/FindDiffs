@@ -7,12 +7,14 @@ import { ICommonGeometricModifications } from "../../../../../common/model/scene
 import { ICommonThematicModifications } from "../../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
 import { ObjectType } from "../../../../../common/model/scene/scene";
+import { thematicSceneModifications } from "../../tests/scene/ThematicSceneModificationsMock";
 import { sceneModifications } from "../../tests/scene/geometricSceneModificationsMock";
 import { scene } from "../../tests/scene/sceneMock";
 import { thematicScene } from "../../tests/scene/thematicSceneMock";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
 import { ModifiedSceneParserService } from "../scene/sceneParser/modified-scene-parser.service";
 import { SceneParserService } from "../scene/sceneParser/scene-parser.service";
+import { ThematicSceneParser } from "../scene/sceneParser/thematicSceneParser";
 import { CheatModeService } from "./cheat-mode.service";
 
 // tslint:disable
@@ -187,15 +189,41 @@ describe("Tests for CheatModeService", () => {
     describe("when scene is thematic", () => {
       let modifiedScene: ICommonGeometricModifications & ICommonThematicModifications;
       beforeEach(async () => {
-        modifiedScene = (sceneModifications as ICommonGeometricModifications & ICommonThematicModifications);
+        modifiedScene = (thematicSceneModifications as ICommonGeometricModifications & ICommonThematicModifications);
 
         cheatModeService.originalLoaderService = new SceneLoaderService();
         cheatModeService.modifiedLoaderService = new SceneLoaderService();
 
-        cheatModeService.originalLoaderService.scene = await new SceneParserService(thematicScene).parseScene();
+        cheatModeService.originalLoaderService.scene = await ThematicSceneParser.parseScene(thematicScene);
         cheatModeService.modifiedLoaderService.scene = 
           await new ModifiedSceneParserService(ObjectType.Thematic).parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
+      });
 
+      it("should change the added objects visibility to false in the modified scene", () => {
+        cheatModeService.toggleCheatMode(modifiedScene);
+        const addedObjectsId: string[] = modifiedScene.addedObjects.map((object) => object.id);
+        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+        addedObjectsId.forEach((id: string) => {
+          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+          expect(object3D).to.not.be.undefined;
+          if (object3D) {
+            expect(object3D.visible).to.be.false;
+          }
+        })
+      });
+      
+      it("should change the added objects visibility to true in the modified scene", () => {
+        cheatModeService.toggleCheatMode(modifiedScene);
+        cheatModeService.toggleCheatMode(modifiedScene);
+        const addedObjectsId: string[] = modifiedScene.addedObjects.map((object: ICommonSceneObject) => object.id);
+        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+        addedObjectsId.forEach((id: string) => {
+          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+          expect(object3D).to.not.be.undefined;
+          if (object3D) {
+            expect(object3D.visible).to.be.true;
+          }
+        })
       });
     });
   });
