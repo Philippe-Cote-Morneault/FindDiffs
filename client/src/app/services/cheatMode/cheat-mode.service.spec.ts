@@ -153,6 +153,19 @@ describe("Tests for CheatModeService", () => {
           }
         });
       });
+
+      it("should change the color changed objects visibility to false in the original scene", () => {
+        cheatModeService.toggleCheatMode(modifiedScene);
+        const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
+        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+        colorChangedObjectsId.forEach((id: string) => {
+          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+          expect(object3D).to.not.be.undefined;
+          if (object3D) {
+            expect(object3D.visible).to.be.false;
+          }
+        });
+      });
     });
   });
 });
