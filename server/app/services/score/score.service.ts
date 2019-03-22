@@ -13,6 +13,7 @@ import { ScoreGenerator } from "./scoreGenerator";
 
 export class ScoreService extends Service implements IScoreService {
     public static readonly DEFAULT_SCORE_NUMBER: number = 3;
+    public static readonly POSITION_MODIFIER: number = 2;
 
     private async generateScore(req: Request, doc: IGameCard): Promise<void> {
         let changed: boolean = false;
@@ -74,56 +75,50 @@ export class ScoreService extends Service implements IScoreService {
         }
     }
 
-    // tslint:disable-next-line:max-func-body-length
     public async update(req: Request): Promise<string> {
-        // tslint:disable-next-line:max-func-body-length
         return GameCard.findById(req.params.id).then(async (doc: IGameCard) => {
             if (!doc) {
                 throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
             this.validateUpdate(req, doc);
 
-            const newScore: number = Number(req.body.time);
-            const gameType: GameType = EnumUtils.enumFromString(req.body.type, GameType) as GameType;
-            const numberOfScores: number = doc.best_time_online.length;
-            if (gameType === GameType.Online) {
-                const lastScore: ICommonScoreEntry = doc.best_time_online[numberOfScores - 1];
-                if (lastScore.score > newScore) {
-                    let position: number = numberOfScores - 1;
-                    for (let i: number = numberOfScores - 1; i >= -1; i--) {
-                        if (doc.best_time_online[i].score < newScore) {
-                            doc.best_time_online[i + 1].score = newScore;
-                            doc.best_time_online[i + 1].name = req.body.username;
-                            // tslint:disable-next-line:no-magic-numbers
-                            position = i + 2;
-                            break;
-                        }
-                    }
-                    const response: INewScore = {
-                        is_top_score: true,
-                        details: {
-                            place: position,
-                            username: req.body.username,
-                            game_name: doc.title,
-                            game_type: gameType,
-                        },
-                    };
+            return JSON.stringify(this.verifyScore(req, doc));
+        });
+    }
 
-                    return JSON.stringify(response);
-                } else {
-                    const response: INewScore = {
-                        is_top_score: false,
-                    };
+    public verifyScore(req: Request, doc: IGameCard): INewScore {
+        const newScore: number = Number(req.body.time);
+        const numberOfScores: number = doc.best_time_online.length;
+        const scoreEntry: ICommonScoreEntry[] = req.body.type === GameType.Online ? doc.best_time_online : doc.best_time_solo;
+        const lastScore: ICommonScoreEntry = scoreEntry[numberOfScores - 1];
+        let response: INewScore = { is_top_score: false };
 
-                    return JSON.stringify(response);
+        if (lastScore.score > newScore) {
+            let position: number = numberOfScores - 1;
+            for (let i: number = numberOfScores - 1; i >= -1; i--) {
+                if (scoreEntry[i].score < newScore) {
+                    scoreEntry[i + 1].score = newScore;
+                    scoreEntry[i + 1].name = req.body.username;
+                    position = i + ScoreService.POSITION_MODIFIER;
+                    break;
                 }
             }
+            response = {
+                is_top_score: true,
+                details: {
+                    place: position,
+                    username: req.body.username,
+                    game_name: doc.title,
+                    game_type: req.body.type,
+                },
+            };
+        }
 
-            return "";
-        });
+        return response;
     }
 
     public single(id: string): Promise<string> {
         throw new Error("Method not implemented.");
     }
+
 }
