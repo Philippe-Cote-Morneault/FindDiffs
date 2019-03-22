@@ -229,7 +229,11 @@ export class GameViewFreeComponent implements OnInit {
 
     private removeObject(objectModified: THREE.Object3D): void {
         if (this.isANewDifference(objectModified.userData.id)) {
-            this.modifiedSceneLoader.scene.remove(objectModified);
+            this.modifiedSceneLoader.scene.children.forEach((element) => {
+                if (element.userData.id === objectModified.userData.id) {
+                    this.modifiedSceneLoader.scene.remove(element);
+                }
+            });
             this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
             this.differenceCounterUser++;
         }
@@ -262,23 +266,23 @@ export class GameViewFreeComponent implements OnInit {
 
     }
 
-    private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
-        let sceneLoader: SceneLoaderService;
-        // tslint:disable:variable-name
-        let HTMLElement: ElementRef<HTMLElement>;
-        if (isOriginalScene) {
-            sceneLoader = this.originalSceneLoader;
-            HTMLElement = this.originalScene;
-        } else {
-            sceneLoader = this.modifiedSceneLoader;
-            HTMLElement = this.modifiedScene;
-        }
+    // private isOriginalSceneClick(isOriginalScene: boolean): { sceneLoader: SceneLoaderService, HTMLElement: ElementRef<HTMLElement> } {
+    //     let sceneLoader: SceneLoaderService;
+    //     // tslint:disable:variable-name
+    //     let HTMLElement: ElementRef<HTMLElement>;
+    //     if (isOriginalScene) {
+    //         sceneLoader = this.originalSceneLoader;
+    //         HTMLElement = this.originalScene;
+    //     } else {
+    //         sceneLoader = this.modifiedSceneLoader;
+    //         HTMLElement = this.modifiedScene;
+    //     }
 
-        return {
-            sceneLoader: sceneLoader,
-            HTMLElement: HTMLElement,
-        };
-    }
+    //     return {
+    //         sceneLoader: sceneLoader,
+    //         HTMLElement: HTMLElement,
+    //     };
+    // }
 
     private setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: ElementRef<HTMLElement>): void {
         const divBoxInformation: ClientRect | DOMRect = HTMLElement.nativeElement.getBoundingClientRect();
