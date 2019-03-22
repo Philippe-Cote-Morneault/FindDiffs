@@ -27,12 +27,11 @@ export class ThematicObjectParser extends SceneObjectParser {
         object3D.scale.y *= object.scale;
         object3D.scale.z *= object.scale;
 
-        object3D.userData = object;
+        object3D.userData = object;        
 
-        object3D.children.forEach((element: any) => {
-            element.userData = object;
-        });
-
+        object3D.traverse(function (child) {
+            child.userData = object;
+        })
 
         if (object3D.rotation.x !== 0) {
             object3D.rotation.z = object.orientation.yAngle;
@@ -44,6 +43,7 @@ export class ThematicObjectParser extends SceneObjectParser {
 
         return object3D;
     }
+
 
     public async loadMaterial(object3D: THREE.Object3D, object: ICommonThematicObject, forceUpdate: boolean = false): Promise<void> {
         const objName: string = ObjTheme[object.objectType].toLowerCase();
