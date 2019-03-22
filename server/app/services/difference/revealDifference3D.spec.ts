@@ -36,6 +36,18 @@ describe("RevealDifference3D", () => {
                 expect(expectedReveal.hit).to.equal(true);
                 expect(expectedReveal.differenceType).to.equal(DifferenceType.colorChanged);
             });
+
+            it("Should have a ICommonReveal3D with a hit and addedObject if the modifiedId sent is in the sceneModification", () => {
+                const mockSceneModifications: ICommonGeometricModifications = sceneModifications;
+                const originalObjectId: string = "kjhdhgfdsfdsf";
+                const modifiedObjectId: string = "kjhdhgfdsfdsf";
+
+                const expectedReveal: ICommonReveal3D =
+                    new RevealDifference3D(mockSceneModifications, originalObjectId, modifiedObjectId, ObjectType.Geometric).reveal();
+
+                expect(expectedReveal.hit).to.equal(true);
+                expect(expectedReveal.differenceType).to.equal(DifferenceType.addedObject);
+            });
         });
     });
 });
