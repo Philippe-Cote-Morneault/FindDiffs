@@ -4,7 +4,6 @@ import { Event, ICommonSocketMessage } from "../../../../common/communication/we
 import { AuthentificationService } from "./authentificationService";
 import { SocketCallback } from "./socketCallback";
 import { UserManager } from "./userManager";
-import { SocketDispatcher } from "./socketDispatcher";
 
 export class SocketHandler {
     private static instance: SocketHandler;
@@ -15,7 +14,6 @@ export class SocketHandler {
     private usernameManager: UserManager;
     private authentificationService: AuthentificationService;
     private subscribers: Map<string, SocketCallback[]>;
-    private socketDispatcher: SocketDispatcher;
 
     public static getInstance(): SocketHandler {
         if (!this.instance) {
@@ -53,7 +51,6 @@ export class SocketHandler {
         this.usernameManager = UserManager.getInstance();
         this.authentificationService = AuthentificationService.getInstance();
         this.subscribers = new Map();
-        this.socketDispatcher = new SocketDispatcher(this);
     }
 
     private init(): void {
@@ -90,9 +87,9 @@ export class SocketHandler {
 
     private authenticateUser(socket: SocketIO.Socket): void {
         console.log("authenticateUser");
-        this.authentificationService.authenticateUser(socket, () => {
+        this.authentificationService.authenticateUser(socket, (username: string) => {
             this.setEventListeners(socket);
-            this.io.emit(Event.UserConnected, "fsfds");
+            this.io.emit(Event.UserConnected, username);
         });
     }
 }
