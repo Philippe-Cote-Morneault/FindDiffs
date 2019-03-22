@@ -14,11 +14,10 @@ import { thematicScene } from "../../tests/scene/thematicSceneMock";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
 import { ModifiedSceneParserService } from "../scene/sceneParser/modified-scene-parser.service";
 import { SceneParserService } from "../scene/sceneParser/scene-parser.service";
-import { ThematicSceneParser } from "../scene/sceneParser/thematicSceneParser";
 import { CheatModeService } from "./cheat-mode.service";
 
 // tslint:disable
-describe("Tests for CheatModeService", () => {
+describe("CheatModeService", () => {
 
   let cheatModeService: CheatModeService;
   beforeEach(() => {
@@ -194,7 +193,7 @@ describe("Tests for CheatModeService", () => {
         cheatModeService.originalLoaderService = new SceneLoaderService();
         cheatModeService.modifiedLoaderService = new SceneLoaderService();
 
-        cheatModeService.originalLoaderService.scene = await ThematicSceneParser.parseScene(thematicScene);
+        cheatModeService.originalLoaderService.scene = await new SceneParserService(thematicScene).parseScene();
         cheatModeService.modifiedLoaderService.scene = 
           await new ModifiedSceneParserService(ObjectType.Thematic).parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
       });
@@ -224,6 +223,18 @@ describe("Tests for CheatModeService", () => {
             expect(object3D.visible).to.be.true;
           }
         })
+      });
+
+      it("should change the deleted objects visibility to false in the original scene", () => {
+        cheatModeService.toggleCheatMode(modifiedScene);
+        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+        modifiedScene.deletedObjects.forEach((id: string) => {
+          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+          expect(object3D).to.not.be.undefined;
+          if (object3D) {
+            expect(object3D.visible).to.be.false;
+          }
+        });
       });
     });
   });
