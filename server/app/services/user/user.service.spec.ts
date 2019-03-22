@@ -1,13 +1,14 @@
+/*
 import {expect} from "chai";
 import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
 import { User } from "../../model/schemas/user";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
-import { UserService } from "./user.service";
+import { UsernameValidator } from "./usernameValidator";
 
 // tslint:disable:no-magic-numbers
 describe("UserService", () => {
-    const userService: UserService = new UserService();
+    const userService: UsernameValidator = new UsernameValidator();
     const notSetError: string = "The field username is not present.";
     const notValidError: string = "The username is invalid, it must be between 3 and 12 alpha numeric characters.";
     const alreadyTakenError: string = "The username is already taken.";
@@ -257,4 +258,4 @@ describe("UserService", () => {
         });
     });
 
-});
+});*/

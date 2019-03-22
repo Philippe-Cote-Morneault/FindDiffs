@@ -12,6 +12,7 @@ import { IGameCardService } from "../interfaces";
 import { Service } from "../service";
 import { ScoreGenerator } from "./scoreGenerator";
 import { ScoreUpdater } from "./scoreUpdater";
+import { UsernameValidator } from "../user/usernameValidator";
 
 export class GameCardService extends Service implements IGameCardService {
 
@@ -40,7 +41,7 @@ export class GameCardService extends Service implements IGameCardService {
         if (!req.body.name) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.NAME_]));
         }
-        if (!Validation.isValidName(req.body.name)) {
+        if (!UsernameValidator.validateUsername(req.body.name)) {
             throw new InvalidFormatException(R.ERROR_INVALID_GAMENAME);
         }
         if (!req.body.resource_id) {
