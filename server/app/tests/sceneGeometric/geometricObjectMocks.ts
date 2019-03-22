@@ -62,3 +62,39 @@ export const cone3: ICommonCone = {
     radius: 7,
     height: 7,
 };
+
+export const cube1: ICommonCube = {
+    id: "sddsdsdsdsddsfdsfsfds",
+    position: {
+        x: 104,
+        y: 40,
+        z: -60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x123,
+    shapeType: GeometricShapeType.CUBE,
+    width: 6,
+};
+
+export const cube2: ICommonCube = {
+    id: "kjhdhgf",
+    position: {
+        x: -104,
+        y: 40,
+        z: 60,
+    },
+    type: ObjectType.Geometric,
+    orientation: {
+        xAngle: 4,
+        yAngle: 0,
+        zAngle: 1,
+    },
+    color: 0x123,
+    shapeType: GeometricShapeType.CUBE,
+    width: 5,
+};
