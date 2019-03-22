@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
+import { DifferenceFoundManager } from "../services/IdentificationError/DifferenceFoundManager.service";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
@@ -18,8 +19,6 @@ import { TimerService } from "../services/timer/timer.service";
     styleUrls: ["./game-view-simple.component.css"],
 })
 export class GameViewSimpleComponent implements OnInit {
-    private static readonly MAX_DIFFERENCES: number = 7;
-    private static readonly DIFFERENCE_SOUND_SRC: string = "../../assets/mario.mp3";
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
@@ -32,28 +31,21 @@ export class GameViewSimpleComponent implements OnInit {
     private imagePairId: string;
     public isGameOver: boolean;
     private differenceCounterUser: number;
-    private differenceFound: number[];
-    private differenceSound: HTMLAudioElement;
-    public playerTime: string;
     private chat: Chat;
     private pixelRestoration: PixelRestoration;
     private identificationError: IdentificationError;
+    private timerService: TimerService;
+    private differenceFoundManager: DifferenceFoundManager;
 
     public constructor(
         private route: ActivatedRoute,
         public pixelPositionService: PixelPositionService,
         public imagePairService: ImagePairService,
-        public timerService: TimerService,
         public gamesCardService: GamesCardService,
         public socket: SocketHandlerService) {
 
         this.isGameOver = false;
         this.differenceCounterUser = 0;
-        this.differenceFound = [];
-
-        this.differenceSound = new Audio;
-        this.differenceSound.src = GameViewSimpleComponent.DIFFERENCE_SOUND_SRC;
-        this.differenceSound.load();
     }
 
     public ngOnInit(): void {
@@ -64,14 +56,17 @@ export class GameViewSimpleComponent implements OnInit {
         this.chat = new Chat(new ChatFormaterService, this.message.nativeElement, this.messageContainer.nativeElement);
         this.identificationError = new IdentificationError(
             this.errorMessage.nativeElement, this.originalCanvas.nativeElement, this.modifiedCanvas.nativeElement);
+        this.timerService = new TimerService(this.chronometer.nativeElement);
+        this.differenceFoundManager = new DifferenceFoundManager(this.pixelRestoration, this.differenceCounterUser);
         this.getGameCardById();
         this.subscribeToServices();
     }
 
     private subscribeToServices(): void {
+        this.timerService.subscribeToSocket();
         this.chat.subscribeToSocket();
-        this.pixelRestoration.subscribeToSocket();
         this.identificationError.subscribeToSocket();
+        this.differenceFoundManager.subscribeToSocket();
     }
 
     private getGameCardById(): void {
@@ -86,7 +81,6 @@ export class GameViewSimpleComponent implements OnInit {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
             this.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
             this.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
-            this.timerService.startTimer(this.chronometer.nativeElement);
         });
     }
 
@@ -126,7 +120,7 @@ export class GameViewSimpleComponent implements OnInit {
         };
     }
 
-    public async addDifference(differenceId: number): Promise<void> {
+    /*public async addDifference(differenceId: number): Promise<void> {
         this.differenceFound[this.differenceFound.length++] = differenceId;
         this.differenceCounterUser = this.differenceCounterUser + 1;
         await this.differenceSound.play();
@@ -141,8 +135,7 @@ export class GameViewSimpleComponent implements OnInit {
     }
 
     private gameOver(): void {
-        this.timerService.stopTimer();
         this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
         this.isGameOver = true;
-    }
+    }*/
 }
