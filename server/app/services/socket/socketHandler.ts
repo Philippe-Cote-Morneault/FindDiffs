@@ -1,9 +1,9 @@
 import { Server } from "http";
 import * as socketIo from "socket.io";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
-import { ICommonUser } from "../../../../common/communication/webSocket/user";
-import { UserManager } from "./userManager";
+import { AuthentificationService } from "./authentificationService";
 import { SocketCallback } from "./socketCallback";
+import { UserManager } from "./userManager";
 
 export class SocketHandler {
     private static instance: SocketHandler;
@@ -12,6 +12,7 @@ export class SocketHandler {
 
     private io: socketIo.Server;
     private usernameManager: UserManager;
+    private authentificationService: AuthentificationService;
     private subscribers: Map<string, SocketCallback[]>;
 
     public static getInstance(): SocketHandler {
@@ -48,32 +49,27 @@ export class SocketHandler {
 
     private constructor() {
         this.usernameManager = UserManager.getInstance();
+        this.authentificationService = AuthentificationService.getInstance();
         this.subscribers = new Map();
     }
 
     private init(): void {
-        this.io.on(SocketHandler.CONNECT_EVENT, this.authenticateUser);
+        this.io.on(SocketHandler.CONNECT_EVENT, (socket: SocketIO.Socket) => {
+            this.authenticateUser(socket);
+        });
     }
 
     private setEventListeners(socket: SocketIO.Socket): void {
-        this.onUsernameConnected(socket);
+        //this.onUsernameConnected(socket);
         this.onUserDisconnected(socket);
         Object.keys(Event).forEach((event: Event) => {
             socket.on(event, (message: ICommonSocketMessage) => {
                 this.notifySubsribers(event, message, this.usernameManager.getUsername(socket.id));
             });
         });
-        /*
-        for (let event in Event) {
-            socket.on(event, (message: ICommonSocketMessage) => {
-                this.notifySubsribers(Event[event] as Event, message, this.getUsername(socket.id));
-            })
-        }
-        */
-        //this.onPlaySoloGame(socket);
-        //this.onReadyToPlay(socket);
     }
 
+    /*
     private onUsernameConnected(socket: SocketIO.Socket): void {
         socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
             const username: string = (message.data as ICommonUser).username;
@@ -82,34 +78,14 @@ export class SocketHandler {
             this.notifySubsribers(Event.UserConnected, message, username);
         });
     }
+    */
 
     private onUserDisconnected(socket: SocketIO.Socket): void {
-        socket.on(SocketHandler.DISCONNECT_EVENT, () => {
-            const user: ICommonUser = {
-                username: this.usernameManager.getUsername(socket.id),
-            };
-            const message: ICommonSocketMessage = {
-                data: user,
-                timestamp: new Date(),
-            };
-            this.usernameManager.removeUsername(socket.id);
-            socket.broadcast.emit(Event.UserDisconnected, message);
+        socket.on(SocketHandler.DISCONNECT_EVENT, (reason) => {
+            console.log("disconnectEvent " + reason);
+            this.authentificationService.startCleanupTimer(socket);
         });
     }
-
-    /*
-    private onPlaySoloGame(socket: SocketIO.Socket): void {
-        socket.on(Event.PlaySoloGame, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.PlaySoloGame, message, this.usernameManager.getUsername(socket.id));
-        });
-    }
-
-    private onReadyToPlay(socket: SocketIO.Socket): void {
-        socket.on(Event.ReadyToPlay, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.ReadyToPlay, message, this.usernameManager.getUsername(socket.id));
-        });
-    }
-    */
 
     private notifySubsribers(event: Event, message: ICommonSocketMessage, username: string): void {
         if (this.subscribers.has(event)) {
@@ -121,6 +97,9 @@ export class SocketHandler {
     }
 
     private authenticateUser(socket: SocketIO.Socket): void {
-        this.setEventListeners(socket);
+        console.log("authenticateUser");
+        this.authentificationService.authenticateUser(socket, () => {
+            this.setEventListeners(socket);
+        });
     }
 }
