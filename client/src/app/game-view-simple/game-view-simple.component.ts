@@ -41,7 +41,8 @@ export class GameViewSimpleComponent implements OnInit {
         public imagePairService: ImagePairService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService,
-        public identificationError: IdentificationError) {
+        public identificationError: IdentificationError,
+        private chatService: ChatService) {
 
         this.isGameOver = false;
         this.differenceCounterUser = 0;
@@ -61,7 +62,7 @@ export class GameViewSimpleComponent implements OnInit {
     }
 
     private subscribeToSocket(): void {
-        ChatService.getInstance().setChat(this.message.nativeElement, this.messageContainer.nativeElement);
+        this.chatService.setChat(this.message.nativeElement, this.messageContainer.nativeElement);
     }
 
     private getGameCardById(): void {
