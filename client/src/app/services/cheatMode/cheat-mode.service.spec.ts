@@ -236,6 +236,19 @@ describe("CheatModeService", () => {
           }
         });
       });
+
+      it("should change the deleted objects visibility to true in the original scene", () => {
+        cheatModeService.toggleCheatMode(modifiedScene);
+        cheatModeService.toggleCheatMode(modifiedScene);
+        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+        modifiedScene.deletedObjects.forEach((id: string) => {
+          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+          expect(object3D).to.not.be.undefined;
+          if (object3D) {
+            expect(object3D.visible).to.be.true;
+          }
+        });
+      });
     });
   });
 });
