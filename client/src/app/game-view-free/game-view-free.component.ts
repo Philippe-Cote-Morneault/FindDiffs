@@ -9,6 +9,7 @@ import { ICommonSceneModifications } from "../../../../common/model/scene/modifi
 import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
+import { MousePositionService } from "../services/3DObjects/mousePosition.service";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeService } from "../services/cheatMode/cheatMode.service";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
@@ -71,7 +72,8 @@ export class GameViewFreeComponent implements OnInit {
         private sceneSyncer: SceneSyncerService,
         public cheatModeService: CheatModeService,
         private cheatModeTimeoutService: CheatModeTimeoutService,
-        public identificationError: IdentificationError) {
+        public identificationError: IdentificationError,
+        public mousePositionService: MousePositionService) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
         this.thematicObjectParser = new ThematicObjectParser();
@@ -166,7 +168,9 @@ export class GameViewFreeComponent implements OnInit {
 
         const mouse: THREE.Vector2 = new THREE.Vector2();
 
-        isOriginalScene ? this.setMousePosition(event, mouse, this.originalScene) : this.setMousePosition(event, mouse, this.modifiedScene);
+        isOriginalScene ?
+            this.mousePositionService.setMousePosition(event, mouse, this.originalScene) :
+            this.mousePositionService.setMousePosition(event, mouse, this.modifiedScene);
 
         raycaster.setFromCamera(mouse, this.originalSceneLoader.camera);
         raycaster2.setFromCamera(mouse, this.modifiedSceneLoader.camera);
@@ -273,14 +277,14 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     // tslint:disable-next-line: variable-name
-    private setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: ElementRef<HTMLElement>): void {
-        const divBoxInformation: ClientRect | DOMRect = HTMLElement.nativeElement.getBoundingClientRect();
-        const differenceX: number = event.clientX - divBoxInformation.left;
-        const differenceY: number = event.clientY - divBoxInformation.top;
-        // tslint:disable:no-magic-numbers
-        mouse.x = (differenceX / HTMLElement.nativeElement.clientWidth) * 2 - 1;
-        mouse.y = -(differenceY / HTMLElement.nativeElement.clientHeight) * 2 + 1;
-    }
+    // private setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: ElementRef<HTMLElement>): void {
+    //     const divBoxInformation: ClientRect | DOMRect = HTMLElement.nativeElement.getBoundingClientRect();
+    //     const differenceX: number = event.clientX - divBoxInformation.left;
+    //     const differenceY: number = event.clientY - divBoxInformation.top;
+    //     // tslint:disable:no-magic-numbers
+    //     mouse.x = (differenceX / HTMLElement.nativeElement.clientWidth) * 2 - 1;
+    //     mouse.y = -(differenceY / HTMLElement.nativeElement.clientHeight) * 2 + 1;
+    // }
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
         sceneLoader.scene.children.forEach((element) => {
