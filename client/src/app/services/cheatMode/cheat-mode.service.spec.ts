@@ -2,8 +2,10 @@
 import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
 import * as sinon from "sinon";
+import { Pair } from "../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonThematicModifications } from "../../../../../common/model/scene/modifications/thematicModifications";
+import { ICommonSceneObject } from "../../../../../common/model/scene/objects/sceneObject";
 import { ObjectType } from "../../../../../common/model/scene/scene";
 import { sceneModifications } from "../../tests/scene/geometricSceneModificationsMock";
 import { scene } from "../../tests/scene/sceneMock";
@@ -90,7 +92,7 @@ describe("Tests for CheatModeService", () => {
       it("should change the added objects visibility to true in the modified scene", () => {
         cheatModeService.toggleCheatMode(modifiedScene);
         cheatModeService.toggleCheatMode(modifiedScene);
-        const addedObjectsId: string[] = modifiedScene.addedObjects.map((object) => object.id);
+        const addedObjectsId: string[] = modifiedScene.addedObjects.map((object: ICommonSceneObject) => object.id);
         const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
         addedObjectsId.forEach((id: string) => {
           const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
@@ -124,6 +126,20 @@ describe("Tests for CheatModeService", () => {
             expect(object3D.visible).to.be.true;
           }
         });
+      });
+
+      it("should change the color changed objects visibility to false in the original scene", () => {
+        cheatModeService.toggleCheatMode(modifiedScene);
+        const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
+        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+        colorChangedObjectsId.forEach((id: string) => {
+          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);¸
+          expect(object3D).to.not.be.undefined;
+          if (object3D) {
+            expect(object3D.visible).to.be.false;
+          }
+        });
+
       });
     });
   });
