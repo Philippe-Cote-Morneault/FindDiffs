@@ -60,7 +60,6 @@ export class SocketHandler {
     }
 
     private setEventListeners(socket: SocketIO.Socket): void {
-        //this.onUsernameConnected(socket);
         this.onUserDisconnected(socket);
         Object.keys(Event).forEach((event: Event) => {
             socket.on(event, (message: ICommonSocketMessage) => {

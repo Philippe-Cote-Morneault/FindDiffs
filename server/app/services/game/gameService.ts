@@ -54,12 +54,10 @@ export class GameService {
             start_time: undefined,
             differences_found: 0,
         };
-        let gameManager: GameManager;
-        if (data.pov === POVType.Simple) {
-            gameManager = new SimplePOVGameManager(newGame, this.endGame);
-        } else {
-            gameManager = new FreePOVGameManager(newGame, this.endGame);
-        }
+        const gameManager: GameManager = data.pov === POVType.Simple ?
+            new SimplePOVGameManager(newGame, this.endGame) :
+            new FreePOVGameManager(newGame, this.endGame)
+        
         this.activeGames.push(gameManager);
         this.activePlayers.set(player, gameManager);
     }
