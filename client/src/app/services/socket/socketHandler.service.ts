@@ -92,11 +92,14 @@ export class SocketHandlerService {
     }
 
     public emitUser(username: string): void {
+        const user: ICommonUser = {
+            username: username,
+        };
         const message: ICommonSocketMessage = {
-            data: username,
+            data: user,
             timestamp: new Date(),
         };
-        this.socket.emit(Event.UserConnected, message);
+        this.socket.emit(Event.NewUser, message);
     }
 
     public emitClick(xPos: number, yPos: number): void {
@@ -187,17 +190,5 @@ export class SocketHandlerService {
             console.log("Token doesn't exist, one received is " + token);
             sessionStorage.setItem("token", token);
         });
-    }
-
-    public sendNewUser(username: string): void {
-        console.log("sernding username");
-        const user: ICommonUser = {
-            username: username,
-        };
-        const response: ICommonSocketMessage = {
-            data: user,
-            timestamp: new Date(),
-        };
-        this.socket.emit(Event.NewUser, response);
     }
 }
