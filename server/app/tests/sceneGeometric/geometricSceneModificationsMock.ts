@@ -22,7 +22,7 @@ const deletedObjects: string[] = [
     "kjhdhgf", "hgfhfsadfsf",
 ];
 
-export const sceneModifications: ICommonGeometricModifications = {
+export const sceneGeometricModifications: ICommonGeometricModifications = {
     id: "dsgskfds32",
     colorChangedObjects: colorChangedObjects,
     type: ObjectType.Geometric,
