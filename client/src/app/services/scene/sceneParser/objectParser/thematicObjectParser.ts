@@ -31,7 +31,11 @@ export class ThematicObjectParser extends SceneObjectParser {
 
         object3D.traverse(function (child) {
             child.userData = object;
-        })
+        });
+
+        object3D.children.forEach((element) => {
+            element.userData = object;
+        });
 
         if (object3D.rotation.x !== 0) {
             object3D.rotation.z = object.orientation.yAngle;
@@ -68,6 +72,10 @@ export class ThematicObjectParser extends SceneObjectParser {
                 this.loadColor(object3D, meshName, object.color as number);
             }
         }
+
+        object3D.traverse((child) => {
+            child.userData = object;
+        });
     }
 
     public async loadTexture(object3D: THREE.Object3D, meshName: string, textureName: string): Promise<void> {

@@ -8,8 +8,11 @@ import { ICommonGeometricModifications } from "../../../../common/model/scene/mo
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { IThreeObject, IThreeScene } from "../services/3DObjects/GeometricObjects/IThreeObject";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
 import { MousePositionService } from "../services/3DObjects/mousePosition.service";
+import { ObjectDetectionService } from "../services/3DObjects/object-detection.service";
+import { RestoreObjectsService} from "../services/3DObjects/restore-objects.service";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeService } from "../services/cheatMode/cheatMode.service";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
@@ -18,7 +21,10 @@ import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
-import { TimerService } from "../services/timer/timer.service";
+// import { TimerService } from "../services/timer/timer.service";
+// import { Chat } from "../services/socket/chat";
+// import { ChatFormaterService } from "../services/socket/chatFormater.service";
+// import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -34,13 +40,13 @@ export class GameViewFreeComponent implements OnInit {
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
-    @ViewChild("chronometer") private chronometer: ElementRef;
+    // @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
-    @ViewChild("errorMessage") private errorMessage: ElementRef;
+    // @ViewChild("message") private message: ElementRef;
+    // @ViewChild("message_container") private messageContainer: ElementRef;
+    // @ViewChild("errorMessage") private errorMessage: ElementRef;
 
     private differenceSound: HTMLAudioElement;
-    private originalObject: THREE.Object3D;
-    private modifiedObject: THREE.Object3D;
     private scenePairId: string;
     private currentOriginalScene: ICommonScene;
     private currentModifiedScene: ICommonSceneModifications;
@@ -52,27 +58,27 @@ export class GameViewFreeComponent implements OnInit {
     private cheatActivated: boolean;
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
-    private intersectsOriginal: THREE.Intersection[];
-    private intersectsModified: THREE.Intersection[];
     private gameType: ObjectType;
     public playerTime: string;
     public differenceCounterUser: number;
     public isGameOver: boolean;
+    private detectedObjects: IThreeObject;
 
     public constructor(
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
-        public timerService: TimerService,
+        // public timerService: TimerService,
         public gamesCardService: GamesCardService,
         public geometricObjectService: GeometricObjectsService,
         private sceneSyncer: SceneSyncerService,
         public cheatModeService: CheatModeService,
         private cheatModeTimeoutService: CheatModeTimeoutService,
         public identificationError: IdentificationError,
-        public mousePositionService: MousePositionService) {
+        public mousePositionService: MousePositionService,
+        public objectDetectionService: ObjectDetectionService,
+        public restoreObjectsService: RestoreObjectsService) {
             this.differenceCounterUser = 0;
-            // tslint:disable-next-line: no-magic-numbers
             this.differenceSound = new Audio;
             this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
             this.differenceSound.load();
@@ -82,8 +88,6 @@ export class GameViewFreeComponent implements OnInit {
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
             this.thematicObjectParser = new ThematicObjectParser();
-            this.originalObject = new THREE.Object3D;
-            this.modifiedObject = new THREE.Object3D;
     }
 
     public ngOnInit(): void {
@@ -155,113 +159,54 @@ export class GameViewFreeComponent implements OnInit {
                 this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
                 this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
 
-                this.timerService.startTimer(this.chronometer.nativeElement);
+                // this.timerService.startTimer(this.chronometer.nativeElement);
                 this.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
             });
         });
     }
 
-    // tslint:disable-next-line:max-func-body-length
     public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
-        const raycaster: THREE.Raycaster = new THREE.Raycaster();
-        const raycaster2: THREE.Raycaster = new THREE.Raycaster();
-
         const mouse: THREE.Vector2 = new THREE.Vector2();
 
         isOriginalScene ?
             this.mousePositionService.setMousePosition(event, mouse, this.originalScene) :
             this.mousePositionService.setMousePosition(event, mouse, this.modifiedScene);
 
-        raycaster.setFromCamera(mouse, this.originalSceneLoader.camera);
-        raycaster2.setFromCamera(mouse, this.modifiedSceneLoader.camera);
+        this.detectedObjects = this.objectDetectionService.rayCasting(mouse,
+                                                                      this.originalSceneLoader.camera, this.modifiedSceneLoader.camera,
+                                                                      this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
+                                                                      this.meshesOriginal, this.meshesModified);
 
-        this.intersectsOriginal = raycaster.intersectObjects(this.meshesOriginal, true);
-        this.intersectsModified = raycaster2.intersectObjects(this.meshesModified, true);
-
-        this.originalObject = this.intersectsOriginal[0] ?
-            this.getParent(this.intersectsOriginal[0].object, this.originalSceneLoader.scene) : new THREE.Object3D;
-        this.modifiedObject = this.intersectsModified[0] ?
-            this.getParent(this.intersectsModified[0].object, this.modifiedSceneLoader.scene) : new THREE.Object3D;
-
-        this.postDifference(event, this.originalObject.userData.id, this.modifiedObject.userData.id);
-    }
-
-    private getParent(obj: THREE.Object3D, scene: THREE.Scene): THREE.Object3D {
-        if (obj.parent !== scene as THREE.Object3D) {
-            obj = obj.parent as THREE.Object3D;
-            obj = this.getParent(obj, scene);
-        }
-
-        return obj;
+        this.postDifference(event, this.detectedObjects.original.userData.id, this.detectedObjects.modified.userData.id);
     }
 
     private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string): void {
+        const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId, this.gameType)
             .subscribe(async (response: ICommonReveal3D) => {
                 switch (response.differenceType) {
                     case DifferenceType.removedObject:
-                        this.addObject(this.intersectsOriginal[0].object);
+                        this.restoreObjectsService.addObject(this.detectedObjects.original, scenes);
+                        await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.colorChanged:
-                        this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                        this.restoreObjectsService.changeColorObject(this.detectedObjects.original, this.detectedObjects.modified);
+                        await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.textureObjectChanged:
-                        await this.changeTextureObject(this.originalObject, this.modifiedObject);
+                        // tslint:disable-next-line: max-line-length
+                        await this.restoreObjectsService.changeTextureObject(this.detectedObjects.original, this.detectedObjects.modified, this.thematicObjectParser);
+                        await this.addDifference(this.detectedObjects.original.userData.id)
                         break;
                     case DifferenceType.addedObject:
-                        this.removeObject(this.intersectsModified[0].object);
+                        this.restoreObjectsService.removeObject(this.detectedObjects.modified, scenes);
+                        await this.addDifference(this.detectedObjects.modified.userData.id);
                         break;
                     default:
-                        await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
-                                                                        this.originalScene.nativeElement, this.modifiedScene.nativeElement);
+                        await this.identificationError.showErrorMessage();
                         break;
                 }
             });
-    }
-
-    private addObject(objectOriginal: THREE.Object3D): void {
-        if (this.isANewDifference(objectOriginal.userData.id)) {
-            this.originalSceneLoader.scene.children.forEach((element) => {
-                if (element.userData.id === objectOriginal.userData.id) {
-                    this.modifiedSceneLoader.scene.add(element.clone());
-                }
-            });
-            this.addDifference(objectOriginal.userData.id);
-        }
-    }
-
-    private removeObject(objectModified: THREE.Object3D): void {
-        if (this.isANewDifference(objectModified.userData.id)) {
-            this.modifiedSceneLoader.scene.children.forEach((element) => {
-                if (element.userData.id === objectModified.userData.id) {
-                    this.modifiedSceneLoader.scene.remove(element);
-                }
-            });
-            this.addDifference(objectModified.userData.id);
-        }
-    }
-
-    private changeColorObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
-        if (this.isANewDifference(objectModified.userData.id)) {
-            // tslint:disable-next-line:no-any
-            (objectModified as any).material.color.setHex((objectOriginal as any).material.color.getHex());
-            this.addDifference(objectOriginal.userData.id);
-        }
-    }
-
-    private async changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): Promise<void> {
-        if (this.isANewDifference(objectModified.userData.id)) {
-            if (objectModified.userData.isTextured) {
-                if (objectModified.type === "Mesh") {
-                    await this.thematicObjectParser.loadTexture(objectModified, objectModified.name, objectOriginal.userData.texture);
-                } else {
-                    objectModified.traverse(async (child: THREE.Mesh) => {
-                        await this.thematicObjectParser.loadTexture(child, child.name, child.userData.texture);
-                    });
-                }
-            }
-            this.addDifference(objectOriginal.userData.id);
-        }
     }
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
@@ -286,8 +231,8 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private gameOver(): void {
-        this.timerService.stopTimer();
-        this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
+        // this.timerService.stopTimer();
+        // this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
         this.isGameOver = true;
     }
 

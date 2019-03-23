@@ -4,6 +4,7 @@ import { AddressInfo } from "net";
 import { Application } from "./app";
 import Config from "./config";
 import { IServer } from "./interfaces";
+import { GameService } from "./services/game/gameService";
 import { SocketHandler } from "./services/socket/socketHandler";
 import Types from "./types";
 
@@ -20,11 +21,11 @@ export class Server implements IServer {
         this.server = http.createServer(this.application.app);
 
         SocketHandler.getInstance().setServer(this.server);
+        GameService.getInstance();
 
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());
-
     }
 
     private normalizePort(val: number | string): number | string | boolean {
