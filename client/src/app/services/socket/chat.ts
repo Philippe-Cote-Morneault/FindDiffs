@@ -11,7 +11,7 @@ export class Chat implements SocketSubscriber {
     private chat: HTMLElement;
     private container: HTMLElement;
 
-    public constructor(public socketService: SocketHandlerService, public chatFormaterService: ChatFormaterService) {
+    public constructor(private socketService: SocketHandlerService, public chatFormaterService: ChatFormaterService) {
         this.subscribeToSocket();
     }
 

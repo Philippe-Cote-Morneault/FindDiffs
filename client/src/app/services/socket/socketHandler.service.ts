@@ -14,20 +14,13 @@ import { SocketSubscriber } from "./socketSubscriber";
 })
 
 export class SocketHandlerService {
-    private static instance: SocketHandlerService;
 
     public id: string;
     public socket: SocketIOClient.Socket;
     private subscribers: Map<string, SocketSubscriber[]>;
 
-    public static getInstance(): SocketHandlerService {
-        if (!this.instance) {
-            this.instance = new SocketHandlerService();
-        }
-
-        return this.instance;
-    }
     public constructor() {
+        console.log("constructor");
         this.subscribers = new Map<string, SocketSubscriber[]>();
         this.init();
     }

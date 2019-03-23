@@ -33,7 +33,7 @@ export class GameViewSimpleComponent implements OnInit {
     public constructor(
         private route: ActivatedRoute,
         public imagePairService: ImagePairService,
-        public gamesCardService: GamesCardService,
+        private gamesCardService: GamesCardService,
         public socket: SocketHandlerService,
         public chat: Chat,
         public pixelRestoration: PixelRestoration,

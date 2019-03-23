@@ -16,7 +16,7 @@ export class GameService implements SocketSubscriber {
     public isGameOver: boolean;
     public gameEnded: Subject<boolean>;
 
-    public constructor(public socketService: SocketHandlerService) {
+    public constructor(private socketService: SocketHandlerService) {
         this.timer = new Timer();
         this.gameStarted = false;
         this.gameEnded = new Subject<boolean>();

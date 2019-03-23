@@ -17,7 +17,7 @@ export class IdentificationError implements SocketSubscriber {
     public timeout: boolean;
     private errorSound: HTMLAudioElement;
 
-    public constructor(public socketService: SocketHandlerService ) {
+    public constructor(private socketService: SocketHandlerService ) {
         this.timeout = false;
         this.errorSound = new Audio;
         this.errorSound.src = IdentificationError.ERROR_SOUND_SRC;
