@@ -189,6 +189,25 @@ describe("DifferenceService", () => {
             }
         });
 
+        it("Should create an ICommonReveal3D represents the differences", async () => {
+            const request: Object = {
+                body: {
+                    originalSceneId: "qweqwe",
+                    modifiedObjectId: "asdasd",
+                    originalObjectId: "asdasd",
+                    gameType: ObjectType.Thematic,
+                },
+            };
 
+            (ApiRequest.getModificationsById as sinon.SinonStub).resolves();
+            const reveal: ICommonReveal3D = {
+                hit: true,
+                differenceType: DifferenceType.removedObject,
+            };
+
+            (RevealDifference3D.prototype.reveal as sinon.SinonStub).returns(reveal);
+            const response: string = await service.postFree(mockReq(request));
+            expect(response).to.equal(JSON.stringify(reveal));
+        });
     });
 });
