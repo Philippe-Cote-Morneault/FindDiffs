@@ -2,15 +2,14 @@ import * as uuid from "uuid";
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
 import { ICommonGameEnding } from "../../../../common/communication/webSocket/gameEnding";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
-//import { NotFoundException } from "../../../../common/errors/notFoundException";
-import { Game } from "../../model/game/game";
-import { SocketHandler } from "../socket/socketHandler";
-import { GameManager } from "./gameManager";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
-import { _e, R } from "../../strings";
 import { POVType } from "../../../../common/model/gameCard";
-import { SimplePOVGameManager } from "./simplePOVGameManager";
+import { Game } from "../../model/game/game";
+import { _e, R } from "../../strings";
+import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
+import { GameManager } from "./gameManager";
+import { SimplePOVGameManager } from "./simplePOVGameManager";
 
 export class GameService {
     private static instance: GameService;
@@ -28,6 +27,7 @@ export class GameService {
     }
 
     private constructor() {
+        console.log("created gameservice");
         this.activeGames = [];
         this.socketHandler = SocketHandler.getInstance();
         this.activePlayers = new Map();
@@ -35,17 +35,25 @@ export class GameService {
     }
 
     private subscribeToSocket(): void {
-        this.socketHandler.subscribe(Event.PlaySoloGame, this.createSoloGame);
-        this.socketHandler.subscribe(Event.ReadyToPlay, this.startSoloGame);
-        this.socketHandler.subscribe(Event.GameClick, this.gameClick);
+        this.socketHandler.subscribe(Event.PlaySoloGame, (message: ICommonSocketMessage, player: string) => {
+            this.createSoloGame(message, player);
+        });
+        this.socketHandler.subscribe(Event.ReadyToPlay, (message: ICommonSocketMessage, player: string) => {
+            this.startSoloGame(message, player);
+        });
+        this.socketHandler.subscribe(Event.GameClick, (message: ICommonSocketMessage, player: string) => {
+            this.gameClick(message, player);
+        }
+            );
         this.socketHandler.subscribe(Event.UserConnected, (message, sender) => {
-            console.log("inGameService");
+            console.log("INGAMESERVICE");
             console.log(JSON.stringify(message));
             console.log(sender);
         });
     }
 
     private createSoloGame(message: ICommonSocketMessage, player: string): void {
+        console.log("createdSoleGame");
         const data: ICommonGame = message.data as ICommonGame;
         const newGame: Game = {
             id: uuid.v4(),
@@ -56,8 +64,8 @@ export class GameService {
         };
         const gameManager: GameManager = data.pov === POVType.Simple ?
             new SimplePOVGameManager(newGame, this.endGame) :
-            new FreePOVGameManager(newGame, this.endGame)
-        
+            new FreePOVGameManager(newGame, this.endGame);
+
         this.activeGames.push(gameManager);
         this.activePlayers.set(player, gameManager);
     }
