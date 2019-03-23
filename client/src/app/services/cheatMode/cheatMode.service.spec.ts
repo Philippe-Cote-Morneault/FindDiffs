@@ -322,4 +322,16 @@ describe("CheatModeService", () => {
       });
     });
   });
+
+  describe("arrayNotEmpty()", () => {
+    it("should return false if the array is empty", () => {
+      const emptyArray: number[] = [];
+      expect(cheatModeService.arrayNotEmpty(emptyArray.length)).to.be.false;
+    });
+
+    it("should return true if the array is not empty", () => {
+      const array: number[] = [1];
+      expect(cheatModeService.arrayNotEmpty(array.length)).to.be.true;
+    });
+  });
 });
