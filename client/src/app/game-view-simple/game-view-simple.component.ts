@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
@@ -17,7 +17,7 @@ import { SocketHandlerService } from "../services/socket/socketHandler.service";
     templateUrl: "./game-view-simple.component.html",
     styleUrls: ["./game-view-simple.component.css"],
 })
-export class GameViewSimpleComponent implements OnInit, OnDestroy {
+export class GameViewSimpleComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
@@ -63,10 +63,6 @@ export class GameViewSimpleComponent implements OnInit, OnDestroy {
         this.getGameCardById();
         this.setServicesContainers();
     }
-
-    public ngOnDestroy(): void {
-         this.game.gameEnded.unsubscribe();
-       }
 
     private setServicesContainers(): void {
         this.game.setContainers(this.chronometer.nativeElement);
