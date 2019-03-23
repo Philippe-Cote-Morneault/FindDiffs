@@ -6,8 +6,8 @@ import { ICommonGeometricModifications } from "../../../../common/model/scene/mo
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
 import { CheatModeService } from "../services/cheatMode/cheatMode.service";
+import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
