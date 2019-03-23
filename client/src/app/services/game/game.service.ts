@@ -12,8 +12,8 @@ export class GameService implements SocketSubscriber {
     private static readonly MINUTES_POSITION: number = 3;
     private timer: Timer;
     private chronometer: HTMLElement;
-    public gameStarted: boolean;
-    public isGameOver: boolean;
+    private gameStarted: boolean;
+    private isGameOver: boolean;
     public gameEnded: Subject<boolean>;
 
     public constructor(private socketService: SocketHandlerService) {
@@ -62,5 +62,9 @@ export class GameService implements SocketSubscriber {
 
     public getTimeValues(): string {
         return this.timer.getTimeValues().toString().slice(GameService.MINUTES_POSITION);
+    }
+
+    public getGameStarted(): boolean {
+        return this.gameStarted;
     }
 }
