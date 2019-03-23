@@ -8,8 +8,10 @@ import { ICommonGeometricModifications } from "../../../../common/model/scene/mo
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { IThreeObject } from "../services/3DObjects/GeometricObjects/IThreeObject";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
 import { MousePositionService } from "../services/3DObjects/mousePosition.service";
+import { ObjectDetectionService } from "../services/3DObjects/object-detection.service";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeService } from "../services/cheatMode/cheatMode.service";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
@@ -19,8 +21,6 @@ import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.se
 import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { TimerService } from "../services/timer/timer.service";
-import { ObjectDetectionService } from "../services/3DObjects/object-detection.service";
-import { IThreeObject } from "../services/3DObjects/GeometricObjects/IThreeObject";
 
 @Component({
     selector: "app-game-view-free",
