@@ -4,7 +4,7 @@ import { expect } from "chai";
 import { Message } from "../../../../../common/communication/message";
 import { ICommonReveal } from "../../../../../common/model/reveal";
 import { TestHelper } from "../../../test.helper";
-import { PixelPositionService } from "./pixel-position.service";
+import { PixelPositionService } from "./pixelPosition.service";
 
 // tslint:disable:no-magic-numbers
 // tslint:disable:no-any Used to mock the http call
