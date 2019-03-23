@@ -43,12 +43,6 @@ export class GameService {
         });
         this.socketHandler.subscribe(Event.GameClick, (message: ICommonSocketMessage, player: string) => {
             this.gameClick(message, player);
-        }
-            );
-        this.socketHandler.subscribe(Event.UserConnected, (message, sender) => {
-            console.log("INGAMESERVICE");
-            console.log(JSON.stringify(message));
-            console.log(sender);
         });
     }
 

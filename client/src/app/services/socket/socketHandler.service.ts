@@ -33,8 +33,8 @@ export class SocketHandlerService {
 
     public init(): void {
         this.socket = io.connect(SERVER_URL, {
-            forceNew: true,
-            reconnection: false,
+            //forceNew: true,
+            //reconnection: false,
         });
         this.id = this.socket.id;
         this.setEventListener();
@@ -121,7 +121,7 @@ export class SocketHandlerService {
     public emitPlayerSoloGame(id: string): void {
         const game: ICommonGame = {
             ressource_id: id,
-            pov: POVType.Free,
+            pov: POVType.Simple,
         };
         const message: ICommonSocketMessage = {
             data: game,
