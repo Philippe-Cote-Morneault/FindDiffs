@@ -32,16 +32,16 @@ export class CheatModeService {
         const modifiedSceneThree: THREE.Scene = this.modifiedLoaderService.scene;
         const originalSceneThree: THREE.Scene = this.originalLoaderService.scene;
 
-        if (modifiedScene.addedObjects.length > 0) {
+        if (this.arrayNotEmpty(modifiedScene.addedObjects.length)) {
             this.changeAddedObjectsColor(modifiedScene, modifiedSceneThree);
         }
-        if (modifiedScene.deletedObjects.length > 0) {
+        if (this.arrayNotEmpty(modifiedScene.deletedObjects.length)) {
             this.changeDeletedObjectsColor(modifiedScene, originalSceneThree);
         }
-        if (modifiedScene.colorChangedObjects && modifiedScene.colorChangedObjects.length > 0) {
+        if (modifiedScene.colorChangedObjects && this.arrayNotEmpty(modifiedScene.colorChangedObjects.length)) {
             this.changeColorChangedObjectsColor(modifiedScene, originalSceneThree, modifiedSceneThree);
         }
-        if (modifiedScene.texturesChangedObjects && modifiedScene.texturesChangedObjects.length > 0) {
+        if (modifiedScene.texturesChangedObjects && this.arrayNotEmpty(modifiedScene.texturesChangedObjects.length)) {
             this.changeThematicChangedObjects(modifiedScene, originalSceneThree, modifiedSceneThree);
         }
     }
@@ -95,5 +95,9 @@ export class CheatModeService {
         scene.children.forEach((child: THREE.Object3D) => {
             child.visible = true;
         });
+    }
+
+    public arrayNotEmpty(length: number): boolean {
+        return length > 0;
     }
 }
