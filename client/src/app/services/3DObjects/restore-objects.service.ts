@@ -41,7 +41,7 @@ export class RestoreObjectsService {
   }
 
   public async changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D,
-                                    thematicObjectParser: ThematicObjectParser): Promise<void> {
+                                   thematicObjectParser: ThematicObjectParser): Promise<void> {
       if (this.isANewDifference(objectModified.userData.id)) {
           if (objectModified.userData.isTextured) {
               if (objectModified.type === "Mesh") {
