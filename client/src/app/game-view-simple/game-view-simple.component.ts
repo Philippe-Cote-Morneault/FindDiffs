@@ -9,7 +9,6 @@ import { CanvasLoaderService } from "../services/image-pair/canvasLoader.service
 import { ImagePairService } from "../services/image-pair/image-pair.service";
 import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
 import { Chat } from "../services/socket/chat";
-import { ChatFormaterService } from "../services/socket/chatFormater.service";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
 
 @Component({
@@ -30,23 +29,17 @@ export class GameViewSimpleComponent implements OnInit {
     private imagePairId: string;
     public isGameOver: boolean;
     // private differenceCounterUser: number;
-    private chat: Chat;
-    private pixelRestoration: PixelRestoration;
-    private identificationError: IdentificationError;
-    private game: GameService;
-    private canvasLoader: CanvasLoaderService;
 
     public constructor(
         private route: ActivatedRoute,
         public imagePairService: ImagePairService,
         public gamesCardService: GamesCardService,
-        public socket: SocketHandlerService) {
-
-        this.chat = new Chat(new SocketHandlerService, new ChatFormaterService);
-        this.identificationError = new IdentificationError(new SocketHandlerService);
-        this.pixelRestoration = new PixelRestoration(new SocketHandlerService);
-        this.game = new GameService(new SocketHandlerService);
-        this.canvasLoader = new CanvasLoaderService(this.identificationError, this.socket, this.game);
+        public socket: SocketHandlerService,
+        public chat: Chat,
+        public pixelRestoration: PixelRestoration,
+        public identificationError: IdentificationError,
+        public game: GameService,
+        public canvasLoader: CanvasLoaderService) {
 
         this.isGameOver = false;
         this.game.gameEnded.subscribe((value) => {
