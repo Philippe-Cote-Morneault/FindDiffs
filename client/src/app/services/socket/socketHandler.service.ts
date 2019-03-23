@@ -4,10 +4,10 @@ import { ICommonGame } from "../../../../../common/communication/webSocket/game"
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonToken } from "../../../../../common/communication/webSocket/token";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
+import { POVType } from "../../../../../common/model/gameCard";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { SERVER_URL } from "../../../../../common/url";
 import { SocketSubscriber } from "./socketSubscriber";
-import { POVType } from "../../../../../common/model/gameCard";
 
 @Injectable()
 
@@ -66,15 +66,15 @@ export class SocketHandlerService {
             }
 
             this.setEventListeners(this.socket);
-            /*
+
             this.onAuthenticate();
-            this.onNewUserConnected();
+            /*this.onNewUserConnected();
             this.onUserDisconnected();
             this.onDifferenceFound();
             this.onInvalidClick();
             this.onGameStarted();
-            this.onGameEnded();
-            */
+            this.onGameEnded();*/
+
         });
     }
 
@@ -142,8 +142,7 @@ export class SocketHandlerService {
             });
         });
     }
-
-    /*
+/*
     public onNewUserConnected(): void {
         this.socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.UserConnected, message);
@@ -184,8 +183,8 @@ export class SocketHandlerService {
         this.socket.on(Event.GameEnded, (message: ICommonSocketMessage) => {
             this.notifySubsribers(Event.GameEnded, message);
         });
-    }
-    */
+    }*/
+
     // tslint:disable-next-line:max-func-body-length
     public onAuthenticate(): void {
         this.socket.on(Event.Authenticate, (message: ICommonSocketMessage) => {
