@@ -1,13 +1,15 @@
 import { expect } from "chai";
 import sinon = require("sinon");
 import { mockReq } from "sinon-express-mock";
-import { ICommonReveal } from "../../../../common/model/reveal";
+import { ICommonReveal, ICommonReveal3D, DifferenceType } from "../../../../common/model/reveal";
+import { ObjectType } from "../../../../common/model/scene/scene";
 import { R } from "../../strings";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { ApiRequest } from "../../utils/apiRequest";
 import { BitmapDecoder } from "../../utils/bitmap/bitmapDecoder";
 import { DifferenceService } from "./difference.service";
 import { RevealDifference } from "./revealDifference";
+import { RevealDifference3D } from "./revealDifference3D";
 
 describe("DifferenceService", () => {
     const service: DifferenceService = new DifferenceService();
@@ -53,10 +55,10 @@ describe("DifferenceService", () => {
         it("Should throw an error if the the position is out of bound", async () => {
 
             const requests: Object[] = [
-                {body: {x: 480, y: 480}},
-                {body: {x: -1, y: 480}},
-                {body: {x: 0, y: -1}},
-                {body: {x: 479, y: 640}},
+                { body: { x: 480, y: 480 } },
+                { body: { x: -1, y: 480 } },
+                { body: { x: 0, y: -1 } },
+                { body: { x: 479, y: 640 } },
             ];
 
             requests.forEach(async (request: Object) => {
@@ -102,21 +104,23 @@ describe("DifferenceService", () => {
             };
 
             (RevealDifference.prototype.reveal as sinon.SinonStub).returns(reveal);
-            const response: string =  await service.postSimple(mockReq(request));
+            const response: string = await service.postSimple(mockReq(request));
             expect(response).to.equal(JSON.stringify(reveal));
 
         });
     });
 
     describe("postFree()", () => {
-        // TODO Implement this
-        it("Should return a not implemented exception", async () => {
-            try {
-                await service.postFree(mockReq({}));
-                throw new NoErrorThrownException();
-            } catch (err) {
-                expect(err.message).to.equal("Method not implemented.");
-            }
+        beforeEach(() => {
+            sinon.stub(RevealDifference3D.prototype, "reveal");
+            sinon.stub(ApiRequest, "getModificationsById");
         });
+
+        afterEach(() => {
+            (RevealDifference3D.prototype.reveal as sinon.SinonStub).restore();
+            (ApiRequest.getModificationsById as sinon.SinonStub).restore();
+        });
+
+
     });
 });
