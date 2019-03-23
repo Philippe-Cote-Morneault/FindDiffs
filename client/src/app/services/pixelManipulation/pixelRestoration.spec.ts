@@ -24,96 +24,98 @@ describe("PixelRestoration", () => {
 
   });
 
-  it("should add a pixel to the canvas", () => {
+  describe("restoreImage()", () => {
+    it("should add a pixel to the canvas", () => {
 
-    const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
-    const expectedImageData: ImageData = new ImageData(data, 1, 1);
-    if (originalContext) {
-      originalContext.putImageData(expectedImageData, 0, 0);
-    }
-    const posPixel: ICommon2DPosition = {x: 0, y: 0};
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
-    expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
+      const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
+      const expectedImageData: ImageData = new ImageData(data, 1, 1);
+      if (originalContext) {
+        originalContext.putImageData(expectedImageData, 0, 0);
+      }
+      const posPixel: ICommon2DPosition = {x: 0, y: 0};
+      const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
+      pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+      expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
 
-  });
+    });
 
-  it("should add a black pixel to the canvas", () => {
+    it("should add a black pixel to the canvas", () => {
 
-    const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
-    const expectedImageData: ImageData = new ImageData(data, 1, 1);
-    if (originalContext) {
-      originalContext.putImageData(expectedImageData, 0, 0);
-    }
-    const posPixel: ICommon2DPosition = {x: 0, y: 0};
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
-    expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
+      const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
+      const expectedImageData: ImageData = new ImageData(data, 1, 1);
+      if (originalContext) {
+        originalContext.putImageData(expectedImageData, 0, 0);
+      }
+      const posPixel: ICommon2DPosition = {x: 0, y: 0};
+      const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
+      pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+      expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
 
-  });
+    });
 
-  it("should add a red pixel to the canvas", () => {
+    it("should add a red pixel to the canvas", () => {
 
-    const data: Uint8ClampedArray = new Uint8ClampedArray([255, 0, 0, 255]);
-    const expectedImageData: ImageData = new ImageData(data, 1, 1);
-    if (originalContext) {
-      originalContext.putImageData(expectedImageData, 0, 0);
-    }
-    const posPixel: ICommon2DPosition = {x: 0, y: 0};
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+      const data: Uint8ClampedArray = new Uint8ClampedArray([255, 0, 0, 255]);
+      const expectedImageData: ImageData = new ImageData(data, 1, 1);
+      if (originalContext) {
+        originalContext.putImageData(expectedImageData, 0, 0);
+      }
+      const posPixel: ICommon2DPosition = {x: 0, y: 0};
+      const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
+      pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
 
-    expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
+      expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
 
-  });
+    });
 
-  it("should add multiple red pixels to the canvas", () => {
-    const data: Uint8ClampedArray = new Uint8ClampedArray([255, 0, 0, 255,
-                                                           255, 0, 0, 255,
-                                                           255, 0, 0, 255,
-                                                           255, 0, 0, 255]);
-    const expectedImageData: ImageData = new ImageData(data, 4, 1);
+    it("should add multiple red pixels to the canvas", () => {
+      const data: Uint8ClampedArray = new Uint8ClampedArray([255, 0, 0, 255,
+                                                             255, 0, 0, 255,
+                                                             255, 0, 0, 255,
+                                                             255, 0, 0, 255]);
+      const expectedImageData: ImageData = new ImageData(data, 4, 1);
 
-    if (modifiedContext && originalContext) {
-      originalContext.putImageData(expectedImageData, 0, 0);
-    }
+      if (modifiedContext && originalContext) {
+        originalContext.putImageData(expectedImageData, 0, 0);
+      }
 
-    const posPixel: ICommon2DPosition[] = [{x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}, {x: 3, y: 0}];
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: posPixel, difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+      const posPixel: ICommon2DPosition[] = [{x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}, {x: 3, y: 0}];
+      const responseServer: ICommonReveal = {hit: true, pixels_affected: posPixel, difference_id: 1};
+      pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
 
-    expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
-  });
+      expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
+    });
 
-  it("should not add a pixel because originalContext is null", () => {
-    const stub: sinon.SinonStub = sinon.stub(originalCanvas, "getContext");
-    stub.returns(null);
+    it("should not add a pixel because originalContext is null", () => {
+      const stub: sinon.SinonStub = sinon.stub(originalCanvas, "getContext");
+      stub.returns(null);
 
-    const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
-    const expectedImageData: ImageData = new ImageData(data, 1, 1);
-    if (originalContext) {
-      originalContext.putImageData(expectedImageData, 0, 0);
-    }
-    const posPixel: ICommon2DPosition = {x: 0, y: 0};
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
-    expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
-    stub.restore();
-  });
+      const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
+      const expectedImageData: ImageData = new ImageData(data, 1, 1);
+      if (originalContext) {
+        originalContext.putImageData(expectedImageData, 0, 0);
+      }
+      const posPixel: ICommon2DPosition = {x: 0, y: 0};
+      const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
+      pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+      expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
+      stub.restore();
+    });
 
-  it("should not add a pixel because modifiedContext is null", () => {
-    const stub: sinon.SinonStub = sinon.stub(modifiedCanvas, "getContext");
-    stub.returns(null);
+    it("should not add a pixel because modifiedContext is null", () => {
+      const stub: sinon.SinonStub = sinon.stub(modifiedCanvas, "getContext");
+      stub.returns(null);
 
-    const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
-    const expectedImageData: ImageData = new ImageData(data, 1, 1);
-    if (originalContext) {
-      originalContext.putImageData(expectedImageData, 0, 0);
-    }
-    const posPixel: ICommon2DPosition = {x: 0, y: 0};
-    const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
-    expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
-    stub.restore();
+      const data: Uint8ClampedArray = new Uint8ClampedArray([0, 0, 0, 255]);
+      const expectedImageData: ImageData = new ImageData(data, 1, 1);
+      if (originalContext) {
+        originalContext.putImageData(expectedImageData, 0, 0);
+      }
+      const posPixel: ICommon2DPosition = {x: 0, y: 0};
+      const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
+      pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+      expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
+      stub.restore();
+    });
   });
 });
