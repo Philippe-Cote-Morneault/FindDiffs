@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import * as THREE from "three";
+import { v4 as uuid } from "uuid";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { DifferenceType, ICommonReveal3D } from "../../../../common/model/reveal";
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
@@ -19,9 +20,6 @@ import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.se
 import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { TimerService } from "../services/timer/timer.service";
-import {v4 as uuid }from "uuid";
-// import { ICommonThematicObject } from "../../../../common/model/scene/objects/thematicObjects/thematicObject";
-// import { SocketService } from "../services/socket/socket.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -32,6 +30,8 @@ import {v4 as uuid }from "uuid";
 
 export class GameViewFreeComponent implements OnInit {
     private static readonly T_STRING: string = "t";
+    private static readonly DIFFERENCE_SOUND_SRC: string = "../../assets/mario.mp3";
+    private static readonly MAX_DIFFERENCES: number = 7;
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
@@ -39,8 +39,9 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("gameTitle") private gameTitle: ElementRef;
     @ViewChild("errorMessage") private errorMessage: ElementRef;
 
-    private readonly MAX_DIFFERENCES: number;
-
+    private differenceSound: HTMLAudioElement;
+    private originalObject: THREE.Object3D;
+    private modifiedObject: THREE.Object3D;
     private scenePairId: string;
     private currentOriginalScene: ICommonScene;
     private currentModifiedScene: ICommonSceneModifications;
@@ -50,22 +51,18 @@ export class GameViewFreeComponent implements OnInit {
     private thematicObjectParser: ThematicObjectParser;
     private differenceFound: string[];
     private cheatActivated: boolean;
-
-    public playerTime: string;
-    public differenceCounterUser: number;
-    public isGameOver: boolean;
-
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
     private intersectsOriginal: THREE.Intersection[];
     private intersectsModified: THREE.Intersection[];
-
     private gameType: ObjectType;
+    public playerTime: string;
+    public differenceCounterUser: number;
+    public isGameOver: boolean;
 
     public constructor(
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
-        // private socketService: SocketService,
         public sceneService: SceneService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService,
@@ -75,17 +72,19 @@ export class GameViewFreeComponent implements OnInit {
         private cheatModeTimeoutService: CheatModeTimeoutService,
         public identificationError: IdentificationError,
         public mousePositionService: MousePositionService) {
-        this.originalSceneLoader = new SceneLoaderService();
-        this.modifiedSceneLoader = new SceneLoaderService();
-        this.thematicObjectParser = new ThematicObjectParser();
-
-        this.differenceCounterUser = 0;
-        this.isGameOver = false;
-        this.differenceFound = [];
-        this.cheatActivated = false;
-
-        // tslint:disable-next-line: no-magic-numbers
-        this.MAX_DIFFERENCES = 7;
+            this.differenceCounterUser = 0;
+            // tslint:disable-next-line: no-magic-numbers
+            this.differenceSound = new Audio;
+            this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
+            this.differenceSound.load();
+            this.isGameOver = false;
+            this.differenceFound = [];
+            this.cheatActivated = false;
+            this.originalSceneLoader = new SceneLoaderService();
+            this.modifiedSceneLoader = new SceneLoaderService();
+            this.thematicObjectParser = new ThematicObjectParser();
+            this.originalObject = new THREE.Object3D;
+            this.modifiedObject = new THREE.Object3D;
     }
 
     public ngOnInit(): void {
@@ -163,6 +162,7 @@ export class GameViewFreeComponent implements OnInit {
         });
     }
 
+    // tslint:disable-next-line:max-func-body-length
     public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
         const raycaster2: THREE.Raycaster = new THREE.Raycaster();
@@ -208,8 +208,7 @@ export class GameViewFreeComponent implements OnInit {
                         this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
                         break;
                     case DifferenceType.textureObjectChanged:
-                        console.log(originalObjectId);
-                        await this.changeTextureObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
+                        await this.changeTextureObject(this.originalObject, this.modifiedObject);
                         break;
                     case DifferenceType.addedObject:
                         this.removeObject(this.intersectsModified[0].object);
@@ -219,23 +218,17 @@ export class GameViewFreeComponent implements OnInit {
                                                                         this.originalScene.nativeElement, this.modifiedScene.nativeElement);
                         break;
                 }
-
-                if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
-                    this.gameOver();
-                }
             });
     }
 
     private addObject(objectOriginal: THREE.Object3D): void {
         if (this.isANewDifference(objectOriginal.userData.id)) {
-
             this.originalSceneLoader.scene.children.forEach((element) => {
                 if (element.userData.id === objectOriginal.userData.id) {
                     this.modifiedSceneLoader.scene.add(element.clone());
                 }
             });
-            this.differenceFound[this.differenceCounterUser] = objectOriginal.userData.id;
-            this.differenceCounterUser++;
+            this.addDifference(objectOriginal.userData.id);
         }
     }
 
@@ -246,37 +239,31 @@ export class GameViewFreeComponent implements OnInit {
                     this.modifiedSceneLoader.scene.remove(element);
                 }
             });
-            this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
-            this.differenceCounterUser++;
+            this.addDifference(objectModified.userData.id);
         }
     }
 
     private changeColorObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
-        let intersectedModified: any;
-        let intersectedOriginal: any;
-        intersectedOriginal = objectOriginal;
-        intersectedModified = objectModified;
-
         if (this.isANewDifference(objectModified.userData.id)) {
-            intersectedModified.material.color.setHex(intersectedOriginal.material.color.getHex());
-            this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
-            this.differenceCounterUser++;
+            // tslint:disable-next-line:no-any
+            (objectModified as any).material.color.setHex((objectOriginal as any).material.color.getHex());
+            this.addDifference(objectOriginal.userData.id);
         }
     }
 
     private async changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): Promise<void> {
         if (this.isANewDifference(objectModified.userData.id)) {
             if (objectModified.userData.isTextured) {
-                await this.thematicObjectParser.loadTexture(objectModified, objectOriginal.name, objectOriginal.userData.texture);
+                if (objectModified.type === "Mesh") {
+                    await this.thematicObjectParser.loadTexture(objectModified, objectModified.name, objectOriginal.userData.texture);
+                } else {
+                    objectModified.traverse(async (child: THREE.Mesh) => {
+                        await this.thematicObjectParser.loadTexture(child, child.name, child.userData.texture);
+                    });
+                }
             }
-            // else {
-            //     // Peut-etre inutile
-            //     this.thematicObjectParser.loadColor(objectModified, objectOriginal.name, objectOriginal.userData.color);
-            // }
-            this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
-            this.differenceCounterUser++;
+            this.addDifference(objectOriginal.userData.id);
         }
-
     }
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
@@ -289,6 +276,15 @@ export class GameViewFreeComponent implements OnInit {
 
     public isANewDifference(differenceId: string): boolean {
         return !this.differenceFound.includes(differenceId);
+    }
+
+    public async addDifference(differenceId: string): Promise<void> {
+        this.differenceFound[this.differenceFound.length++] = differenceId;
+        this.differenceCounterUser = this.differenceCounterUser + 1;
+        await this.differenceSound.play();
+        if (this.differenceCounterUser === GameViewFreeComponent.MAX_DIFFERENCES) {
+            this.gameOver();
+        }
     }
 
     private gameOver(): void {
