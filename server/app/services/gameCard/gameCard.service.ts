@@ -10,9 +10,9 @@ import { EnumUtils } from "../../utils/enumUtils";
 import { Validation } from "../../utils/validation";
 import { IGameCardService } from "../interfaces";
 import { Service } from "../service";
+import { UsernameValidator } from "../user/usernameValidator";
 import { ScoreGenerator } from "./scoreGenerator";
 import { ScoreUpdater } from "./scoreUpdater";
-import { UsernameValidator } from "../user/usernameValidator";
 
 export class GameCardService extends Service implements IGameCardService {
 
