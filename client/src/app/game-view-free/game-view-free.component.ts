@@ -22,6 +22,9 @@ import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.se
 import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { TimerService } from "../services/timer/timer.service";
+// import { Chat } from "../services/socket/chat";
+// import { ChatFormaterService } from "../services/socket/chatFormater.service";
+// import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -37,8 +40,10 @@ export class GameViewFreeComponent implements OnInit {
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
-    @ViewChild("chronometer") private chronometer: ElementRef;
+    // @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
+    // @ViewChild("message") private message: ElementRef;
+    // @ViewChild("message_container") private messageContainer: ElementRef;
     @ViewChild("errorMessage") private errorMessage: ElementRef;
 
     private differenceSound: HTMLAudioElement;

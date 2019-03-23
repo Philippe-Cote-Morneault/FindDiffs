@@ -1,12 +1,19 @@
 import { Server } from "http";
 import * as socketIo from "socket.io";
-import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { AuthentificationService } from "./authentificationService";
+import { SocketCallback } from "./socketCallback";
+import { UserManager } from "./userManager";
 
 export class SocketHandler {
     private static instance: SocketHandler;
+    private static CONNECT_EVENT: string = "connect";
+    private static DISCONNECT_EVENT: string = "disconnect";
 
     private io: socketIo.Server;
-    private idUsernames: Map<string, Object>;
+    private usernameManager: UserManager;
+    private authentificationService: AuthentificationService;
+    private subscribers: Map<string, SocketCallback[]>;
 
     public static getInstance(): SocketHandler {
         if (!this.instance) {
@@ -23,28 +30,63 @@ export class SocketHandler {
         return this;
     }
 
-    private init(): void {
-        this.idUsernames = new Map<string, Object>();
-        // tslint:disable-next-line:no-any
-        this.io.on("connect", (socket: any) => {
-            this.idUsernames.set(socket.id, "");
-            socket.on("UserConnected", (message: ICommonSocketMessage) => {
-                this.idUsernames.set(socket.id, message.data);
-                const welcomeMsg: ICommonSocketMessage = {
-                    data: "The user " + message.data + " is now online!",
-                    timestamp: message.timestamp,
-                };
-                socket.broadcast.emit("NewUser", welcomeMsg);
-            });
+    public subscribe(event: Event, callback: SocketCallback): void {
+        if (!this.subscribers.has(event)) {
+            this.subscribers.set(event, []);
+        }
+        const sub: SocketCallback[] = this.subscribers.get(event) as [];
+        sub.push(callback);
+    }
 
-            socket.on("disconnect", () => {
-                const username: Object | undefined = this.idUsernames.get(socket.id);
-                const goodByeMsg: ICommonSocketMessage = {
-                    data: "The user " + username + " is now offline",
-                    timestamp: new Date(),
-                };
-                socket.broadcast.emit("UserDisconnected", goodByeMsg);
+    public sendMessage(event: Event, message: ICommonSocketMessage, username: string): void {
+        const targetId: string = this.usernameManager.getSocketId(username);
+        this.io.to(targetId).emit(event, message);
+    }
+
+    public broadcastMessage(event: Event, message: ICommonSocketMessage): void {
+        this.io.sockets.emit(event, message);
+    }
+
+    private constructor() {
+        this.usernameManager = UserManager.getInstance();
+        this.authentificationService = AuthentificationService.getInstance();
+        this.subscribers = new Map();
+    }
+
+    private init(): void {
+        this.io.on(SocketHandler.CONNECT_EVENT, (socket: SocketIO.Socket) => {
+            this.authenticateUser(socket);
+        });
+    }
+
+    private setEventListeners(socket: SocketIO.Socket): void {
+        this.onUserDisconnected(socket);
+        Object.keys(Event).forEach((event: Event) => {
+            socket.on(event, (message: ICommonSocketMessage) => {
+                this.notifySubsribers(event, message, this.usernameManager.getUsername(socket.id) as string);
             });
+        });
+    }
+
+    private onUserDisconnected(socket: SocketIO.Socket): void {
+        socket.on(SocketHandler.DISCONNECT_EVENT, () => {
+            this.authentificationService.startCleanupTimer(socket);
+        });
+    }
+
+    private notifySubsribers(event: Event, message: ICommonSocketMessage, username: string): void {
+        if (this.subscribers.has(event)) {
+            const subscribers: SocketCallback[] = this.subscribers.get(event) as [];
+            subscribers.forEach((callback: SocketCallback) => {
+                callback(message, username);
+            });
+        }
+    }
+
+    private authenticateUser(socket: SocketIO.Socket): void {
+        this.authentificationService.authenticateUser(socket, (username: string) => {
+            this.setEventListeners(socket);
+            this.io.emit(Event.UserConnected, username);
         });
     }
 }

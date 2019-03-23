@@ -8,6 +8,7 @@ import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { ImagePairService } from "../services/image-pair/imagePair.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
+import { SocketHandlerService } from "../services/socket/socketHandler.service";
 import { StringFormater } from "../util/stringFormater";
 
 @Component({
@@ -31,6 +32,7 @@ export class GamesCardViewComponent implements OnInit {
         private gamesCardService: GamesCardService,
         private sceneService: SceneService,
         private router: Router,
+        private socketHandlerService: SocketHandlerService,
         private imagePairService: ImagePairService) {
             this.rightButton = "Create";
             this.leftButton = "Play";
@@ -60,6 +62,7 @@ export class GamesCardViewComponent implements OnInit {
             this.deleteGameCard();
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
+            this.socketHandlerService.emitPlayerSoloGame(this.gameCard.resource_id);
             await this.router.navigateByUrl(gameUrl + this.gameCard.id);
         }
     }
