@@ -58,7 +58,7 @@ describe("TimerService", () => {
     });
   });
 
-  describe("stopCheatMode", () => {
+  describe("stopCheatMode()", () => {
     it("should stop calling toggleCheatMode", () => {
       const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
       stub.callsFake(() => {});
