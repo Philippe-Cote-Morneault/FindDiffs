@@ -12,7 +12,7 @@ export class CheatModeTimeoutService implements OnInit {
     private timeout: NodeJS.Timeout;
 
     public ngOnInit(): void {
-        clearTimeout(this.timeout);
+        this.stopCheatMode();
     }
 
     public startCheatMode(cheatModeService: CheatModeService,
