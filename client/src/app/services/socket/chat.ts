@@ -1,13 +1,17 @@
+import { Injectable } from "@angular/core";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ChatFormaterService } from "./chatFormater.service";
 import { SocketHandlerService } from "./socketHandler.service";
 import { SocketSubscriber } from "./socketSubscriber";
 
+@Injectable({
+    providedIn: "root",
+})
 export class Chat implements SocketSubscriber {
     private chat: HTMLElement;
     private container: HTMLElement;
 
-    public constructor(private socketService: SocketHandlerService, public chatFormaterService: ChatFormaterService) {
+    public constructor(public socketService: SocketHandlerService, public chatFormaterService: ChatFormaterService) {
         this.subscribeToSocket();
     }
 
