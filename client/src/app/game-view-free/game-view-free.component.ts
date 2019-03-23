@@ -19,6 +19,7 @@ import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.se
 import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { TimerService } from "../services/timer/timer.service";
+import {v4 as uuid }from "uuid";
 // import { ICommonThematicObject } from "../../../../common/model/scene/objects/thematicObjects/thematicObject";
 // import { SocketService } from "../services/socket/socket.service";
 
@@ -178,26 +179,27 @@ export class GameViewFreeComponent implements OnInit {
         this.intersectsOriginal = raycaster.intersectObjects(this.meshesOriginal, true);
         this.intersectsModified = raycaster2.intersectObjects(this.meshesModified, true);
 
-        const originalObject: THREE.Object3D = this.intersectsOriginal[0] ?
-                this.getParent(this.intersectsOriginal[0].object, this.originalSceneLoader.scene) : new THREE.Object3D;
-        const modifiedObject: THREE.Object3D = this.intersectsModified[0] ?
-                this.getParent(this.intersectsModified[0].object, this.modifiedSceneLoader.scene) : new THREE.Object3D;
+        const originalObject: string = this.intersectsOriginal[0] ?
+                this.intersectsOriginal[0].object.userData.id : uuid();
+        const modifiedObject: string = this.intersectsModified[0] ?
+                this.intersectsModified[0].object.userData.id : uuid();
 
-        this.postDifference(event, originalObject.userData.id, modifiedObject.userData.id);
+        this.postDifference(event, originalObject, modifiedObject);
     }
 
-    private getParent(obj: THREE.Object3D, scene: THREE.Scene): THREE.Object3D {
-        if (obj.parent !== scene as THREE.Object3D) {
-            obj = obj.parent as THREE.Object3D;
-            obj = this.getParent(obj, scene);
-        }
+    // private getParent(obj: THREE.Object3D, scene: THREE.Scene): THREE.Object3D {
+    //     if (obj.parent !== scene as THREE.Object3D) {
+    //         obj = obj.parent as THREE.Object3D;
+    //         obj = this.getParent(obj, scene);
+    //     }
 
-        return obj;
-    }
+    //     return obj;
+    // }
 
     private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string): void {
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId, this.gameType)
             .subscribe(async (response: ICommonReveal3D) => {
+                console.log(response);
                 switch (response.differenceType) {
                     case DifferenceType.removedObject:
                         this.addObject(this.intersectsOriginal[0].object);
@@ -206,6 +208,7 @@ export class GameViewFreeComponent implements OnInit {
                         this.changeColorObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
                         break;
                     case DifferenceType.textureObjectChanged:
+                        console.log(originalObjectId);
                         await this.changeTextureObject(this.intersectsOriginal[0].object, this.intersectsModified[0].object);
                         break;
                     case DifferenceType.addedObject:
