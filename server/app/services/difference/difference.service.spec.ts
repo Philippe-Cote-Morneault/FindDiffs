@@ -138,5 +138,39 @@ describe("DifferenceService", () => {
             }
         });
 
+        it("Should throw an error if the modifiedObjectId is not set", async () => {
+            const request: Object = {
+                body: {
+                    originalSceneId: "qweqwe",
+                    originalObjectId: "asdasd",
+                    gameType: ObjectType.Thematic,
+                },
+            };
+
+            try {
+                await service.postFree(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The field modifiedObjectId is not present.");
+            }
+        });
+
+        it("Should throw an error if the originalObjectId is not set", async () => {
+            const request: Object = {
+                body: {
+                    originalSceneId: "qweqwe",
+                    modifiedObjectId: "asdasd",
+                    gameType: ObjectType.Thematic,
+                },
+            };
+
+            try {
+                await service.postFree(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The field originalObjectId is not present.");
+            }
+        });
+
     });
 });
