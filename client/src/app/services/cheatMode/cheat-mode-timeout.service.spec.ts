@@ -26,24 +26,35 @@ describe("TimerService", () => {
       stub.restore();
     });
 
-  it("should call toggleCheatMode once", () => {
-    const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode").callsFake(() => {});
-    cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
-    cheatModeTimeoutService.stopCheatMode();
-    sinon.assert.calledOnce(stub);
-    stub.restore();
-  });
+    it("should make the objects flash by changing cheatActivated to false", () => {
+      const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
+      stub.callsFake(() => {});
+      jasmine.clock().install();
+      cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
+      jasmine.clock().tick(125);
+      cheatModeTimeoutService.stopCheatMode();
+      expect(cheatModeService.cheatActivated).to.be.false;
+      stub.restore();
+      jasmine.clock().uninstall();
+    })
+    it("should call toggleCheatMode once when startCheatMode is called", () => {
+      const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode").callsFake(() => {});
+      cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
+      cheatModeTimeoutService.stopCheatMode();
+      sinon.assert.calledOnce(stub);
+      stub.restore();
+    });
 
-  it("should call toggleCheatMode four times in one second", () => {
-    const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
-    stub.callsFake(() => {});
-    jasmine.clock().install();
-    cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
-    jasmine.clock().tick(999);
-    cheatModeTimeoutService.stopCheatMode();
-    sinon.assert.callCount(stub, 4);
-    stub.restore();
-    jasmine.clock().uninstall();
-  });
+    it("should call toggleCheatMode four times in one second", () => {
+      const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
+      stub.callsFake(() => {});
+      jasmine.clock().install();
+      cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
+      jasmine.clock().tick(999);
+      cheatModeTimeoutService.stopCheatMode();
+      sinon.assert.callCount(stub, 8);
+      stub.restore();
+      jasmine.clock().uninstall();
+    });
   });
 });
