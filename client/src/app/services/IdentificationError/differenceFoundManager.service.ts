@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { R } from "src/app/ressources/strings";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonReveal } from "../../../../../common/model/reveal";
-import { PixelRestoration } from "../pixelManipulation/pixel-restoration";
+import { PixelRestoration } from "../pixelManipulation/pixelRestoration";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
 

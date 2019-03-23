@@ -21,7 +21,7 @@ import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
-import { TimerService } from "../services/timer/timer.service";
+// import { TimerService } from "../services/timer/timer.service";
 // import { Chat } from "../services/socket/chat";
 // import { ChatFormaterService } from "../services/socket/chatFormater.service";
 // import { TimerService } from "../services/timer/timer.service";
@@ -44,7 +44,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("gameTitle") private gameTitle: ElementRef;
     // @ViewChild("message") private message: ElementRef;
     // @ViewChild("message_container") private messageContainer: ElementRef;
-    @ViewChild("errorMessage") private errorMessage: ElementRef;
+    // @ViewChild("errorMessage") private errorMessage: ElementRef;
 
     private differenceSound: HTMLAudioElement;
     private scenePairId: string;
@@ -68,7 +68,7 @@ export class GameViewFreeComponent implements OnInit {
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
-        public timerService: TimerService,
+        // public timerService: TimerService,
         public gamesCardService: GamesCardService,
         public geometricObjectService: GeometricObjectsService,
         private sceneSyncer: SceneSyncerService,
@@ -159,7 +159,7 @@ export class GameViewFreeComponent implements OnInit {
                 this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
                 this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
 
-                this.timerService.startTimer(this.chronometer.nativeElement);
+                // this.timerService.startTimer(this.chronometer.nativeElement);
                 this.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
             });
         });
@@ -203,8 +203,7 @@ export class GameViewFreeComponent implements OnInit {
                         await this.addDifference(this.detectedObjects.modified.userData.id);
                         break;
                     default:
-                        await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
-                                                                        this.originalScene.nativeElement, this.modifiedScene.nativeElement);
+                        await this.identificationError.showErrorMessage();
                         break;
                 }
             });
@@ -232,8 +231,8 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private gameOver(): void {
-        this.timerService.stopTimer();
-        this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
+        // this.timerService.stopTimer();
+        // this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
         this.isGameOver = true;
     }
 
