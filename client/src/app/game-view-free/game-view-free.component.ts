@@ -72,7 +72,6 @@ export class GameViewFreeComponent implements OnInit {
         public mousePositionService: MousePositionService,
         public objectDetectionService: ObjectDetectionService) {
             this.differenceCounterUser = 0;
-            // tslint:disable-next-line: no-magic-numbers
             this.differenceSound = new Audio;
             this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
             this.differenceSound.load();
