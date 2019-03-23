@@ -121,6 +121,22 @@ describe("DifferenceService", () => {
             (ApiRequest.getModificationsById as sinon.SinonStub).restore();
         });
 
+        it("Should throw an error if the originalSceneId is not set", async () => {
+            const request: Object = {
+                body: {
+                    modifiedObjectId: "asdasd",
+                    originalObjectId: "asdasd",
+                    gameType: ObjectType.Thematic,
+                },
+            };
+
+            try {
+                await service.postFree(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The field Scene_id is not present.");
+            }
+        });
 
     });
 });
