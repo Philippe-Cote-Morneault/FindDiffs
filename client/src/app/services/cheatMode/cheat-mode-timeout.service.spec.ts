@@ -72,4 +72,33 @@ describe("TimerService", () => {
       jasmine.clock().uninstall();
     });
   });
+
+  describe("ngOnInit()", () => {
+    it("should call stopCheatMode() on initialisation", () => {
+      const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
+      stub.callsFake(() => {});
+      const spy: sinon.SinonSpy = sinon.spy(cheatModeTimeoutService, "stopCheatMode");
+      jasmine.clock().install();
+      cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
+      cheatModeTimeoutService.ngOnInit();
+      jasmine.clock().tick(999);
+      sinon.assert.calledOnce(spy);
+      stub.restore();
+      spy.restore();
+      jasmine.clock().uninstall();
+    });
+
+    it("should stop an active timer on initialisation", () => {
+      const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
+      stub.callsFake(() => {});
+      jasmine.clock().install();
+      cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
+      cheatModeTimeoutService.ngOnInit();
+      stub.resetHistory();
+      jasmine.clock().tick(999);
+      sinon.assert.callCount(stub, 0);
+      stub.restore();
+      jasmine.clock().uninstall();
+    });
+  });
 });
