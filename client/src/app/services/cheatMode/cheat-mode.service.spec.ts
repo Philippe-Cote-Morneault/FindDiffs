@@ -1,4 +1,3 @@
-
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { Pair } from "../../../../../common/model/pair";
@@ -59,7 +58,7 @@ describe("CheatModeService", () => {
     });
   });
 
-  describe("testing toggleCheatMode method", () => {
+  describe("toggleCheatMode()", () => {
 
     describe("when scene is geometric", () => {
 
