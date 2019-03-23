@@ -1,12 +1,25 @@
-import { TestBed } from "@angular/core/testing";
-
+import { expect } from "chai";
+import * as sinon from "sinon";
+import { sceneModifications } from "../../tests/scene/geometricSceneModificationsMock";
+import { scene } from "../../tests/scene/sceneMock";
 import { CheatModeTimeoutService } from "./cheat-mode-timeout.service";
+import { CheatModeService } from "./cheat-mode.service";
 
+// tslint:disable
 describe("TimerService", () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
 
-  it("should be created", () => {
-    const service: CheatModeTimeoutService = TestBed.get(CheatModeTimeoutService);
-    expect(service).toBeTruthy();
+  let cheatModeTimeoutService: CheatModeTimeoutService;
+  let cheatModeService: CheatModeService;
+  beforeEach(() => {
+    cheatModeTimeoutService = new CheatModeTimeoutService;
+    cheatModeService = new CheatModeService;
+  });
+
+  it("should call toggleCheatMode once", () => {
+    const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
+    stub.callsFake(() => {});
+    cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
+    cheatModeTimeoutService.stopCheatMode();
+    expect(stub.calledOnce).to.be.true;
   });
 });
