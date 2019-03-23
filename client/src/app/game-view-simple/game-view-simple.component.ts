@@ -3,10 +3,10 @@ import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
-import { GamesCardService } from "../services/gameCard/games-card.service";
-import { ImagePairService } from "../services/image-pair/image-pair.service";
-import { PixelPositionService } from "../services/pixelManipulation/pixel-position.service";
-import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
+import { ImagePairService } from "../services/image-pair/imagePair.service";
+import { PixelPositionService } from "../services/pixelManipulation/pixelPosition.service";
+import { PixelRestoration } from "../services/pixelManipulation/pixelRestoration";
 import { TimerService } from "../services/timer/timer.service";
 
 @Component({
@@ -15,7 +15,7 @@ import { TimerService } from "../services/timer/timer.service";
     styleUrls: ["./game-view-simple.component.css"],
 })
 export class GameViewSimpleComponent implements OnInit {
-    private static MAX_DIFFERENCES: number = 7;
+    private static readonly MAX_DIFFERENCES: number = 7;
     private static readonly DIFFERENCE_SOUND_SRC: string = "../../assets/mario.mp3";
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;

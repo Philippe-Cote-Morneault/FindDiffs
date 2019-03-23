@@ -3,7 +3,7 @@ import { ICommonGeometricModifications } from "../../../../../common/model/scene
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonThematicModifications } from "../../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../../common/model/scene/scene";
-import { CheatModeService } from "./cheat-mode.service";
+import { CheatModeService } from "./cheatMode.service";
 @Injectable({
     providedIn: "root",
 })

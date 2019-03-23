@@ -3,7 +3,7 @@ import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { Grid } from "./grid/grid";
 import { SceneGeneratorShape} from "./sceneGeneratorShape";
 
-describe("SceneGenerator", () => {
+describe("SceneGeneratorShape", () => {
     const OBJECT_TO_GENERATE: number = 100;
     describe("generateScene()", () => {
         it("Should generate a scene with a random background color, and should not be the same color", () => {
@@ -16,17 +16,17 @@ describe("SceneGenerator", () => {
             // tslint:disable-next-line:no-magic-numbers
             expect(data.size).to.be.greaterThan(7).and.to.be.lte(ITERATION_NUMBER);
         });
-        it("Should have the number of objects specified in the constructor", () => {
+        it("Should create the number of objects specified in the constructor", () => {
             const generator: SceneGeneratorShape = new SceneGeneratorShape(OBJECT_TO_GENERATE);
             const scene: ICommonScene = generator.generateScene();
             expect(scene.sceneObjects.length).to.equal(OBJECT_TO_GENERATE);
         });
-        it("Should have the type Geometric", () => {
+        it("Should create a scene of the type Geometric", () => {
             const generator: SceneGeneratorShape = new SceneGeneratorShape(OBJECT_TO_GENERATE);
             const scene: ICommonScene = generator.generateScene();
             expect(scene.type).to.equal(ObjectType.Geometric);
         });
-        it("Should have the dimensions specified", () => {
+        it("Should create a scene with the dimensions specified", () => {
             const generator: SceneGeneratorShape = new SceneGeneratorShape(OBJECT_TO_GENERATE);
             const scene: ICommonScene = generator.generateScene();
             expect(scene.dimensions.x).to.equal(SceneGeneratorShape.SCENE_SIZE);
@@ -35,7 +35,7 @@ describe("SceneGenerator", () => {
         });
     });
     describe("getGrid()", () => {
-        it("Should return an undefined grid", () => {
+        it("Should return an undefined grid if the grid is not initialised", () => {
             // tslint:disable-next-line:no-magic-numbers
             const generator: SceneGeneratorShape = new SceneGeneratorShape(OBJECT_TO_GENERATE);
             expect(generator.getGrid()).to.equal(undefined);

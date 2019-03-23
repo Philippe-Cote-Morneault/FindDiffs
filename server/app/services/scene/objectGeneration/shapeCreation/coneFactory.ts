@@ -3,8 +3,8 @@ import { GeometricShapeType, ICommonGeometricObject } from "../../../../../../co
 import { GeometricObjectFactory } from "./geometricObjectFactory";
 
 export class ConeFactory extends GeometricObjectFactory {
-    private static readonly REFERENCE_RADIUS: number = 2;
-    private static readonly REFERENCE_HEIGHT: number = 3;
+    public static readonly REFERENCE_RADIUS: number = 2;
+    public static readonly REFERENCE_HEIGHT: number = 3;
 
     protected createShape(geometricObject: ICommonGeometricObject): ICommonCone {
         const scalePercentage: number = this.generateRandomPercentage();

@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../../../common/model/scene/scene";
-import { ModifiedSceneParserService } from "../../../services/scene/sceneParser/modified-scene-parser.service";
-import { SceneParserService } from "../../../services/scene/sceneParser/scene-parser.service";
+import { ModifiedSceneParserService } from "../sceneParser/modifiedSceneParser.service";
+import { SceneParserService } from "../sceneParser/sceneParser.service";
 import { CameraGenerator } from "../../../services/scene/sceneRenderer/cameraGenerator";
 import { ControlsGenerator } from "../sceneRenderer/controlsGenerator";
 import { RendererGenerator } from "../sceneRenderer/rendererGenerator";
@@ -56,7 +56,7 @@ export class SceneLoaderService {
             this.animate();
         }
     }
-
+    // Weird
     private animate: Function = () => {
         requestAnimationFrame(this.animate as FrameRequestCallback);
         this.renderer.render(this.scene, this.camera);

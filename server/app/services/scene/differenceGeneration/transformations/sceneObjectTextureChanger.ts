@@ -9,25 +9,22 @@ export class SceneObjectTextureChanger implements SceneTransformation {
     public applyTransformation(objectsToTransform: ICommonThematicObject[],
                                modifications: ICommonThematicModifications,
                                type: ObjectType): void {
+        const indexOfObject: number = RandomUtils.random(objectsToTransform.length);
+        const modifiedObject: ICommonThematicObject = objectsToTransform[indexOfObject];
 
-        if (type === ObjectType.Thematic) {
-            const indexOfObject: number = RandomUtils.random(objectsToTransform.length);
-            const modifiedObject: ICommonThematicObject = objectsToTransform[indexOfObject];
-
-            if (modifiedObject.isTextured) {
-                modifications.texturesChangedObjects.push({
-                    key: modifiedObject.id,
-                    value: this.chooseTexture(modifiedObject),
-                });
-            } else {
-                modifications.texturesChangedObjects.push({
-                    key: modifiedObject.id,
-                    value: this.chooseColor(modifiedObject),
-                });
-            }
-
-            objectsToTransform.splice(indexOfObject, 1);
+        if (modifiedObject.isTextured) {
+            modifications.texturesChangedObjects.push({
+                key: modifiedObject.id,
+                value: this.chooseTexture(modifiedObject),
+            });
+        } else {
+            modifications.texturesChangedObjects.push({
+                key: modifiedObject.id,
+                value: this.chooseColor(modifiedObject),
+            });
         }
+
+        objectsToTransform.splice(indexOfObject, 1);
     }
 
     private chooseTexture(modifiedObject: ICommonThematicObject): string {

@@ -6,12 +6,12 @@ import { ICommonGeometricModifications } from "../../../../common/model/scene/mo
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { CheatModeTimeoutService } from "../services/cheatMode/cheat-mode-timeout.service";
-import { CheatModeService } from "../services/cheatMode/cheat-mode.service";
-import { GamesCardService } from "../services/gameCard/games-card.service";
+import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
+import { CheatModeService } from "../services/cheatMode/cheatMode.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
-import { SceneSyncerService } from "../services/scene/sceneSyncer/scene-syncer.service";
+import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { TimerService } from "../services/timer/timer.service";
 
 @Component({
@@ -66,9 +66,9 @@ export class GameViewFreeComponent implements OnInit {
             if (this.cheatActivated) {
                 this.copySceneLoaders();
                 this.cheatModeTimeoutService.startCheatMode(
-                                                            this.cheatModeService,
-                                                            this.currentOriginalScene,
-                                                            this.currentModifiedScene,
+                    this.cheatModeService,
+                    this.currentOriginalScene,
+                    this.currentModifiedScene,
                 );
             } else {
                 this.cheatModeTimeoutService.stopCheatMode();

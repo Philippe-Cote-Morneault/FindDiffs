@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ICommonGameCard, ICommonScoreEntry } from "../../../../common/model/gameCard";
-import { GamesCardService } from "../services/gameCard/games-card.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { StringFormater } from "../util/stringFormater";
 
 @Component({
