@@ -196,7 +196,7 @@ export class GameViewFreeComponent implements OnInit {
                     case DifferenceType.textureObjectChanged:
                         // tslint:disable-next-line: max-line-length
                         await this.restoreObjectsService.changeTextureObject(this.detectedObjects.original, this.detectedObjects.modified, this.thematicObjectParser);
-                        await this.addDifference(this.detectedObjects.original.userData.id)
+                        await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.addedObject:
                         this.restoreObjectsService.removeObject(this.detectedObjects.modified, scenes);
