@@ -57,4 +57,19 @@ describe("TimerService", () => {
       jasmine.clock().uninstall();
     });
   });
+
+  describe("stopCheatMode", () => {
+    it("should stop calling toggleCheatMode", () => {
+      const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
+      stub.callsFake(() => {});
+      jasmine.clock().install();
+      cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
+      cheatModeTimeoutService.stopCheatMode();
+      stub.resetHistory();
+      jasmine.clock().tick(999);
+      sinon.assert.callCount(stub, 0);
+      stub.restore();
+      jasmine.clock().uninstall();
+    });
+  });
 });
