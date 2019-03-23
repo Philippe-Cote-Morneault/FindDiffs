@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import * as sinon from "sinon";
 import { sceneModifications } from "../../tests/scene/geometricSceneModificationsMock";
 import { scene } from "../../tests/scene/sceneMock";
@@ -20,6 +19,19 @@ describe("TimerService", () => {
     stub.callsFake(() => {});
     cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
     cheatModeTimeoutService.stopCheatMode();
-    expect(stub.calledOnce).to.be.true;
+    sinon.assert.calledOnce(stub);
+    stub.restore();
+  });
+
+  it("should call toggleCheatMode four times in one second", () => {
+    const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
+    stub.callsFake(() => {});
+    jasmine.clock().install();
+    cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
+    jasmine.clock().tick(999);
+    cheatModeTimeoutService.stopCheatMode();
+    sinon.assert.callCount(stub, 4);
+    stub.restore();
+    jasmine.clock().uninstall();
   });
 });
