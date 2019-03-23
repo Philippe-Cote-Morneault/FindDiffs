@@ -58,16 +58,16 @@ export class DifferenceService extends Service implements IDifferenceService {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.SCENE_ID_]));
         }
 
-        if (!(req.body.modifiedObjectId)) {
-            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.MODIFIED_OBJECT_ID]));
-        }
+        // if (!(req.body.modifiedObjectId)) {
+        //     throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.MODIFIED_OBJECT_ID]));
+        // }
 
-        if (!(req.body.originalObjectId)) {
-            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.ORIGINAL_OBJECT_ID]));
-        }
+        // if (!(req.body.originalObjectId)) {
+        //     throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.ORIGINAL_OBJECT_ID]));
+        // }
 
-        if (!(req.body.gameType)) {
-            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.GAME_TYPE]));
-        }
+        // if (!(req.body.gameType)) {
+        //     throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.GAME_TYPE]));
+        // }
     }
 }
