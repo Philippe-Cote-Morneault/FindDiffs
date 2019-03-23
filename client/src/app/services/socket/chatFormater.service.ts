@@ -39,11 +39,11 @@ export class ChatFormaterService {
     }
 
     private onDifferenceFound(message: ICommonSocketMessage): string {
-        return this.formatDate(message.timestamp) + R.CHAT_ERROR_SOLO;
+        return this.formatDate(message.timestamp) + R.CHAT_DIFFERENCE_SOLO;
     }
 
     private onInvalidClick(message: ICommonSocketMessage): string {
-        return this.formatDate(message.timestamp) + R.CHAT_DIFFERENCE_SOLO;
+        return this.formatDate(message.timestamp) + R.CHAT_ERROR_SOLO;
     }
 
     private onDefault(event: Event): string {

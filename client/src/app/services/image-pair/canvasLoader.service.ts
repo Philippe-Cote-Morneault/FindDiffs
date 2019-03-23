@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IdentificationError } from "../IdentificationError/identificationError.service";
+import { GameService } from "../game/game.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
-import { TimerService } from "../timer/timer.service";
 
 @Injectable({
     providedIn: "root",
@@ -11,7 +11,7 @@ export class CanvasLoaderService {
 
     public constructor(private identificationError: IdentificationError,
                        private socket: SocketHandlerService,
-                       private timerService: TimerService) {}
+                       private game: GameService) {}
     // tslint:disable:no-any
     public loadCanvas(canvas: any, imageSrc: string): void {
         canvas.addEventListener("click", (e: any) => this.getClickPosition(e));
@@ -35,6 +35,6 @@ export class CanvasLoaderService {
     }
 
     private clickAreAllowed(): boolean {
-        return !this.identificationError.timeout && this.timerService.gameStarted;
+        return !this.identificationError.timeout && this.game.gameStarted;
     }
 }

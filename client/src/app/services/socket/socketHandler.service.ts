@@ -9,7 +9,9 @@ import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { SERVER_URL } from "../../../../../common/url";
 import { SocketSubscriber } from "./socketSubscriber";
 
-@Injectable()
+@Injectable({
+    providedIn: "root",
+})
 
 export class SocketHandlerService {
     private static instance: SocketHandlerService;
