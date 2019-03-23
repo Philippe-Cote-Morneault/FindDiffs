@@ -19,8 +19,6 @@ import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.se
 import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { TimerService } from "../services/timer/timer.service";
-// import { ICommonThematicObject } from "../../../../common/model/scene/objects/thematicObjects/thematicObject";
-// import { SocketService } from "../services/socket/socket.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -31,6 +29,7 @@ import { TimerService } from "../services/timer/timer.service";
 
 export class GameViewFreeComponent implements OnInit {
     private static readonly T_STRING: string = "t";
+    private readonly MAX_DIFFERENCES: number;
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
@@ -38,11 +37,8 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("gameTitle") private gameTitle: ElementRef;
     @ViewChild("errorMessage") private errorMessage: ElementRef;
 
-    private readonly MAX_DIFFERENCES: number;
-
     private originalObject: THREE.Object3D;
     private modifiedObject: THREE.Object3D;
-
     private scenePairId: string;
     private currentOriginalScene: ICommonScene;
     private currentModifiedScene: ICommonSceneModifications;
@@ -52,22 +48,18 @@ export class GameViewFreeComponent implements OnInit {
     private thematicObjectParser: ThematicObjectParser;
     private differenceFound: string[];
     private cheatActivated: boolean;
-
-    public playerTime: string;
-    public differenceCounterUser: number;
-    public isGameOver: boolean;
-
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
     private intersectsOriginal: THREE.Intersection[];
     private intersectsModified: THREE.Intersection[];
-
     private gameType: ObjectType;
+    public playerTime: string;
+    public differenceCounterUser: number;
+    public isGameOver: boolean;
 
     public constructor(
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
-        // private socketService: SocketService,
         public sceneService: SceneService,
         public timerService: TimerService,
         public gamesCardService: GamesCardService,
@@ -77,20 +69,17 @@ export class GameViewFreeComponent implements OnInit {
         private cheatModeTimeoutService: CheatModeTimeoutService,
         public identificationError: IdentificationError,
         public mousePositionService: MousePositionService) {
-        this.originalSceneLoader = new SceneLoaderService();
-        this.modifiedSceneLoader = new SceneLoaderService();
-        this.thematicObjectParser = new ThematicObjectParser();
-
-        this.differenceCounterUser = 0;
-        this.isGameOver = false;
-        this.differenceFound = [];
-        this.cheatActivated = false;
-
-        // tslint:disable-next-line: no-magic-numbers
-        this.MAX_DIFFERENCES = 7;
-
-        this.originalObject = new THREE.Object3D;
-        this.modifiedObject = new THREE.Object3D;
+            this.differenceCounterUser = 0;
+            // tslint:disable-next-line: no-magic-numbers
+            this.MAX_DIFFERENCES = 7;
+            this.isGameOver = false;
+            this.differenceFound = [];
+            this.cheatActivated = false;
+            this.originalSceneLoader = new SceneLoaderService();
+            this.modifiedSceneLoader = new SceneLoaderService();
+            this.thematicObjectParser = new ThematicObjectParser();
+            this.originalObject = new THREE.Object3D;
+            this.modifiedObject = new THREE.Object3D;
     }
 
     public ngOnInit(): void {
@@ -220,26 +209,20 @@ export class GameViewFreeComponent implements OnInit {
                         break;
                     default:
                         await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
-                            this.originalScene.nativeElement, this.modifiedScene.nativeElement);
+                                                                        this.originalScene.nativeElement, this.modifiedScene.nativeElement);
                         break;
                 }
-
-                if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
-                    this.gameOver();
-                }
+                this.checkDifferenceCounter();
             });
     }
 
     private addObject(objectOriginal: THREE.Object3D): void {
         if (this.isANewDifference(objectOriginal.userData.id)) {
-
             this.originalSceneLoader.scene.children.forEach((element) => {
                 if (element.userData.id === objectOriginal.userData.id) {
                     this.modifiedSceneLoader.scene.add(element.clone());
                 }
             });
-            this.differenceFound[this.differenceCounterUser] = objectOriginal.userData.id;
-            this.differenceCounterUser++;
         }
     }
 
@@ -250,21 +233,13 @@ export class GameViewFreeComponent implements OnInit {
                     this.modifiedSceneLoader.scene.remove(element);
                 }
             });
-            this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
-            this.differenceCounterUser++;
         }
     }
 
     private changeColorObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
-        let intersectedModified: any;
-        let intersectedOriginal: any;
-        intersectedOriginal = objectOriginal;
-        intersectedModified = objectModified;
-
         if (this.isANewDifference(objectModified.userData.id)) {
-            intersectedModified.material.color.setHex(intersectedOriginal.material.color.getHex());
-            this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
-            this.differenceCounterUser++;
+            // tslint:disable-next-line:no-any
+            (objectModified as any).material.color.setHex((objectOriginal as any).material.color.getHex());
         }
     }
 
@@ -278,14 +253,13 @@ export class GameViewFreeComponent implements OnInit {
                         await this.thematicObjectParser.loadTexture(child, child.name, child.userData.texture);
                     });
                 }
-            } // else {
-            // Peut-etre inutile
-            //     this.thematicObjectParser.loadColor(objectModified, objectOriginal.name, objectOriginal.userData.color);
-            // }
-            this.differenceFound[this.differenceCounterUser] = objectModified.userData.id;
-            this.differenceCounterUser++;
+            }
         }
-
+    }
+    private checkDifferenceCounter(): void {
+        if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
+            this.gameOver();
+        }
     }
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
@@ -297,7 +271,14 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     public isANewDifference(differenceId: string): boolean {
-        return !this.differenceFound.includes(differenceId);
+        if (!this.differenceFound.includes(differenceId)) {
+            this.differenceFound[this.differenceCounterUser] = differenceId;
+            this.differenceCounterUser++;
+
+            return true;
+        }
+
+        return false;
     }
 
     private gameOver(): void {
