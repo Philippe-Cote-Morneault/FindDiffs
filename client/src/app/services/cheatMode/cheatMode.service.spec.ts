@@ -10,9 +10,9 @@ import { sceneModifications } from "../../tests/scene/geometricSceneModification
 import { scene } from "../../tests/scene/sceneMock";
 import { thematicScene } from "../../tests/scene/thematicSceneMock";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
-import { ModifiedSceneParserService } from "../scene/sceneParser/modified-scene-parser.service";
-import { SceneParserService } from "../scene/sceneParser/scene-parser.service";
-import { CheatModeService } from "./cheat-mode.service";
+import { ModifiedSceneParserService } from "../scene/sceneParser/modifiedSceneParser.service";
+import { SceneParserService } from "../scene/sceneParser/sceneParser.service";
+import { CheatModeService } from "./cheatMode.service";
 
 // tslint:disable
 describe("CheatModeService", () => {

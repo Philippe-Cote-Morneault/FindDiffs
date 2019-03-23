@@ -2,8 +2,8 @@ import { expect } from "chai";
 import * as sinon from "sinon";
 import { sceneModifications } from "../../tests/scene/geometricSceneModificationsMock";
 import { scene } from "../../tests/scene/sceneMock";
-import { CheatModeTimeoutService } from "./cheat-mode-timeout.service";
-import { CheatModeService } from "./cheat-mode.service";
+import { CheatModeService } from "./cheatMode.service";
+import { CheatModeTimeoutService } from "./cheatModeTimeout.service";
 
 // tslint:disable
 describe("TimerService", () => {
