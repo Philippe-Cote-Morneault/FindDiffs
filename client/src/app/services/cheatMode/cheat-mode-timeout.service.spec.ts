@@ -1,3 +1,4 @@
+import { expect } from "chai";
 import * as sinon from "sinon";
 import { sceneModifications } from "../../tests/scene/geometricSceneModificationsMock";
 import { scene } from "../../tests/scene/sceneMock";
@@ -14,9 +15,19 @@ describe("TimerService", () => {
     cheatModeService = new CheatModeService;
   });
 
+  describe("startCheatMode()", () => {
+    it("should start the cheat mode by changing cheatActivated to true", () => {
+      const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode").callsFake(
+        () => {cheatModeService.cheatActivated = !cheatModeService.cheatActivated;
+      });
+      cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
+      expect(cheatModeService.cheatActivated).to.be.true;
+      cheatModeTimeoutService.stopCheatMode();
+      stub.restore();
+    });
+
   it("should call toggleCheatMode once", () => {
-    const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
-    stub.callsFake(() => {});
+    const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode").callsFake(() => {});
     cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
     cheatModeTimeoutService.stopCheatMode();
     sinon.assert.calledOnce(stub);
@@ -33,5 +44,6 @@ describe("TimerService", () => {
     sinon.assert.callCount(stub, 4);
     stub.restore();
     jasmine.clock().uninstall();
+  });
   });
 });
