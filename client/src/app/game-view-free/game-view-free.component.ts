@@ -8,10 +8,11 @@ import { ICommonGeometricModifications } from "../../../../common/model/scene/mo
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
-import { IThreeObject } from "../services/3DObjects/GeometricObjects/IThreeObject";
+import { IThreeObject, IThreeScene } from "../services/3DObjects/GeometricObjects/IThreeObject";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
 import { MousePositionService } from "../services/3DObjects/mousePosition.service";
 import { ObjectDetectionService } from "../services/3DObjects/object-detection.service";
+import { RestoreObjectsService} from "../services/3DObjects/restore-objects.service";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeService } from "../services/cheatMode/cheatMode.service";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
@@ -70,7 +71,8 @@ export class GameViewFreeComponent implements OnInit {
         private cheatModeTimeoutService: CheatModeTimeoutService,
         public identificationError: IdentificationError,
         public mousePositionService: MousePositionService,
-        public objectDetectionService: ObjectDetectionService) {
+        public objectDetectionService: ObjectDetectionService,
+        public restoreObjectsService: RestoreObjectsService) {
             this.differenceCounterUser = 0;
             this.differenceSound = new Audio;
             this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
@@ -174,20 +176,26 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private postDifference(event: MouseEvent, originalObjectId: string, modifiedObjectId: string): void {
+        const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId, this.gameType)
             .subscribe(async (response: ICommonReveal3D) => {
                 switch (response.differenceType) {
                     case DifferenceType.removedObject:
-                        this.addObject(this.detectedObjects.original);
+                        this.restoreObjectsService.addObject(this.detectedObjects.original, scenes);
+                        await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.colorChanged:
-                        this.changeColorObject(this.detectedObjects.original, this.detectedObjects.modified);
+                        this.restoreObjectsService.changeColorObject(this.detectedObjects.original, this.detectedObjects.modified);
+                        await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.textureObjectChanged:
-                        await this.changeTextureObject(this.detectedObjects.original, this.detectedObjects.modified);
+                        // tslint:disable-next-line: max-line-length
+                        await this.restoreObjectsService.changeTextureObject(this.detectedObjects.original, this.detectedObjects.modified, this.thematicObjectParser);
+                        await this.addDifference(this.detectedObjects.original.userData.id)
                         break;
                     case DifferenceType.addedObject:
-                        this.removeObject(this.detectedObjects.modified);
+                        this.restoreObjectsService.removeObject(this.detectedObjects.modified, scenes);
+                        await this.addDifference(this.detectedObjects.modified.userData.id);
                         break;
                     default:
                         await this.identificationError.showErrorMessage(event.pageX, event.pageY, this.errorMessage.nativeElement,
@@ -195,52 +203,6 @@ export class GameViewFreeComponent implements OnInit {
                         break;
                 }
             });
-    }
-
-    private addObject(objectOriginal: THREE.Object3D): void {
-        if (this.isANewDifference(objectOriginal.userData.id)) {
-            this.originalSceneLoader.scene.children.forEach((element) => {
-                if (element.userData.id === objectOriginal.userData.id) {
-                    this.modifiedSceneLoader.scene.add(element.clone());
-                }
-            });
-            this.addDifference(objectOriginal.userData.id);
-        }
-    }
-
-    private removeObject(objectModified: THREE.Object3D): void {
-        if (this.isANewDifference(objectModified.userData.id)) {
-            this.modifiedSceneLoader.scene.children.forEach((element) => {
-                if (element.userData.id === objectModified.userData.id) {
-                    this.modifiedSceneLoader.scene.remove(element);
-                }
-            });
-            this.addDifference(objectModified.userData.id);
-        }
-    }
-
-    private changeColorObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
-        if (this.isANewDifference(objectModified.userData.id)) {
-            // tslint:disable-next-line:no-any
-            (objectModified as any).material.color.setHex((objectOriginal as any).material.color.getHex());
-            this.addDifference(objectOriginal.userData.id);
-        }
-    }
-
-    private async changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): Promise<void> {
-        if (this.isANewDifference(objectModified.userData.id)) {
-            if (objectModified.userData.isTextured) {
-                if (objectModified.type === "Mesh") {
-                    await this.thematicObjectParser.loadTexture(objectModified, objectModified.name, objectOriginal.userData.texture);
-                } else {
-                    console.log(objectModified);
-                    objectModified.traverse(async (child: THREE.Mesh) => {
-                        await this.thematicObjectParser.loadTexture(child, child.name, objectOriginal.userData.texture);
-                    });
-                }
-            }
-            this.addDifference(objectOriginal.userData.id);
-        }
     }
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
