@@ -35,6 +35,6 @@ export class CanvasLoaderService {
     }
 
     private clickAreAllowed(): boolean {
-        return !this.identificationError.timeout && this.game.gameStarted;
+        return !this.identificationError.getTimeout() && this.game.getGameStarted();
     }
 }
