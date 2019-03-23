@@ -4,10 +4,10 @@ import { ICommonGame } from "../../../../../common/communication/webSocket/game"
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonToken } from "../../../../../common/communication/webSocket/token";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
+import { POVType } from "../../../../../common/model/gameCard";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { SERVER_URL } from "../../../../../common/url";
 import { SocketSubscriber } from "./socketSubscriber";
-import { POVType } from "../../../../../common/model/gameCard";
 
 @Injectable()
 
@@ -26,26 +26,20 @@ export class SocketHandlerService {
         return this.instance;
     }
     public constructor() {
-        console.log("constructo");
         this.subscribers = new Map<string, SocketSubscriber[]>();
         this.init();
     }
 
     public init(): void {
-        this.socket = io.connect(SERVER_URL, {
-            //forceNew: true,
-            //reconnection: false,
-        });
+        this.socket = io.connect(SERVER_URL);
         this.id = this.socket.id;
         this.setEventListener();
     }
 
     private setEventListener(): void {
         this.socket.on("connect", () => {
-            console.log("onConnect");
             const token: string | null = sessionStorage.getItem("token");
             if (token) {
-                console.log("Token already exists = " + token);
                 const tokendata: ICommonToken = {
                     token: token,
                 };
@@ -55,26 +49,10 @@ export class SocketHandlerService {
                 };
 
                 this.socket.emit(Event.Authenticate, response);
-
+                this.setEventListeners(this.socket);
             } else {
-                console.log("token doesnt exist");
-                /*
-                token = (message.data as ICommonToken).token;
-                console.log("Token doesn't exist, one received is " + token);
-                sessionStorage.setItem("token", token);
-                */
+                this.onAuthenticate();
             }
-
-            this.setEventListeners(this.socket);
-            /*
-            this.onAuthenticate();
-            this.onNewUserConnected();
-            this.onUserDisconnected();
-            this.onDifferenceFound();
-            this.onInvalidClick();
-            this.onGameStarted();
-            this.onGameEnded();
-            */
         });
     }
 
@@ -143,77 +121,14 @@ export class SocketHandlerService {
         });
     }
 
-    /*
-    public onNewUserConnected(): void {
-        this.socket.on(Event.UserConnected, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.UserConnected, message);
-        });
-    }
-
-    public onDisconnected(): void {
-        this.socket.on("disconnect", () => {
-            console.log("disconnectEvent");
-        });
-    }
-
-    public onUserDisconnected(): void {
-        this.socket.on(Event.UserDisconnected, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.UserDisconnected, message);
-        });
-    }
-
-    public onDifferenceFound(): void {
-        this.socket.on(Event.DifferenceFound, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.DifferenceFound, message);
-        });
-    }
-
-    public onInvalidClick(): void {
-        this.socket.on(Event.InvalidClick, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.InvalidClick, message);
-        });
-    }
-
-    public onGameStarted(): void {
-        this.socket.on(Event.GameStarted, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.GameStarted, message);
-        });
-    }
-
-    public onGameEnded(): void {
-        this.socket.on(Event.GameEnded, (message: ICommonSocketMessage) => {
-            this.notifySubsribers(Event.GameEnded, message);
-        });
-    }
-    */
     // tslint:disable-next-line:max-func-body-length
     public onAuthenticate(): void {
         this.socket.on(Event.Authenticate, (message: ICommonSocketMessage) => {
             console.log(JSON.stringify(message));
-
-            /*
-            let token: string | null = sessionStorage.getItem("token");
-            if(token) {
-                console.log("Token already exists = " + token);
-                const tokendata: ICommonToken = {
-                    token: token,
-                };
-                const response: ICommonSocketMessage = {
-                    data: tokendata,
-                    timestamp: new Date(),
-                };
-
-                this.socket.emit(Event.Authenticate, response);
-
-            } else {
-                token = (message.data as ICommonToken).token;
-                console.log("Token doesn't exist, one received is " + token);
-                sessionStorage.setItem("token", token);
-            }
-            */
             const token: string = (message.data as ICommonToken).token;
             console.log("Token doesn't exist, one received is " + token);
             sessionStorage.setItem("token", token);
+            this.setEventListeners(this.socket);
         });
     }
 }

@@ -69,8 +69,7 @@ export class SocketHandler {
     }
 
     private onUserDisconnected(socket: SocketIO.Socket): void {
-        socket.on(SocketHandler.DISCONNECT_EVENT, (reason) => {
-            console.log("disconnectEvent " + reason);
+        socket.on(SocketHandler.DISCONNECT_EVENT, () => {
             this.authentificationService.startCleanupTimer(socket);
         });
     }
@@ -85,7 +84,6 @@ export class SocketHandler {
     }
 
     private authenticateUser(socket: SocketIO.Socket): void {
-        console.log("authenticateUser");
         this.authentificationService.authenticateUser(socket, (username: string) => {
             this.setEventListeners(socket);
             this.io.emit(Event.UserConnected, username);

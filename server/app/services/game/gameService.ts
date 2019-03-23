@@ -56,9 +56,12 @@ export class GameService {
             start_time: undefined,
             differences_found: 0,
         };
+        const endGameCallback = (game: Game, winner: string) => {
+            this.endGame(game, winner);
+        }
         const gameManager: GameManager = data.pov === POVType.Simple ?
-            new SimplePOVGameManager(newGame, this.endGame) :
-            new FreePOVGameManager(newGame, this.endGame);
+            new SimplePOVGameManager(newGame, endGameCallback) :
+            new FreePOVGameManager(newGame, endGameCallback);
 
         this.activeGames.push(gameManager);
         this.activePlayers.set(player, gameManager);
@@ -71,6 +74,11 @@ export class GameService {
         }
 
         game.startGame();
+        const socketMessage: ICommonSocketMessage = {
+            data: "",
+            timestamp: new Date(),
+        }
+        this.socketHandler.sendMessage(Event.GameStarted, socketMessage, player);
     }
 
     private endGame(game: Game, winner: string): void {
@@ -88,6 +96,8 @@ export class GameService {
     }
 
     private gameClick(message: ICommonSocketMessage, player: string): void {
+        console.log("GAMECLICK");
+        console.log(JSON.stringify(message));
         const game: GameManager | undefined = this.activePlayers.get(player);
         if (game === undefined) {
             throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));

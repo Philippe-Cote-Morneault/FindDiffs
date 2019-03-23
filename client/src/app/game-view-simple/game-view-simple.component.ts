@@ -42,10 +42,10 @@ export class GameViewSimpleComponent implements OnInit {
         public gamesCardService: GamesCardService,
         public socket: SocketHandlerService) {
 
-        this.chat = new Chat(new SocketHandlerService, new ChatFormaterService);
-        this.identificationError = new IdentificationError(new SocketHandlerService);
-        this.pixelRestoration = new PixelRestoration(new SocketHandlerService);
-        this.timerService = new TimerService(new SocketHandlerService);
+        this.chat = new Chat(socket, new ChatFormaterService);
+        this.identificationError = new IdentificationError(socket);
+        this.pixelRestoration = new PixelRestoration(socket);
+        this.timerService = new TimerService(socket);
         this.canvasLoader = new CanvasLoaderService(this.identificationError, this.socket, this.timerService);
 
         this.isGameOver = false;

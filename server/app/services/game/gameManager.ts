@@ -11,7 +11,8 @@ export abstract class GameManager {
 
     public startGame(): void {
         this.game.start_time = new Date();
-        this.endGameCallback(this.game, "changeTHIS");
+        //this.endGameCallback(this.game, "changeTHIS");
+        console.log(this.endGameCallback);
     }
 
     public abstract playerClick(): void;
