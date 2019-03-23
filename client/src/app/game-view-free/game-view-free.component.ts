@@ -29,7 +29,8 @@ import { TimerService } from "../services/timer/timer.service";
 
 export class GameViewFreeComponent implements OnInit {
     private static readonly T_STRING: string = "t";
-    private readonly MAX_DIFFERENCES: number;
+    private static readonly DIFFERENCE_SOUND_SRC: string = "../../assets/mario.mp3";
+    private static readonly MAX_DIFFERENCES: number = 7;
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
@@ -37,6 +38,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("gameTitle") private gameTitle: ElementRef;
     @ViewChild("errorMessage") private errorMessage: ElementRef;
 
+    private differenceSound: HTMLAudioElement;
     private originalObject: THREE.Object3D;
     private modifiedObject: THREE.Object3D;
     private scenePairId: string;
@@ -71,7 +73,9 @@ export class GameViewFreeComponent implements OnInit {
         public mousePositionService: MousePositionService) {
             this.differenceCounterUser = 0;
             // tslint:disable-next-line: no-magic-numbers
-            this.MAX_DIFFERENCES = 7;
+            this.differenceSound = new Audio;
+            this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
+            this.differenceSound.load();
             this.isGameOver = false;
             this.differenceFound = [];
             this.cheatActivated = false;
@@ -212,7 +216,6 @@ export class GameViewFreeComponent implements OnInit {
                                                                         this.originalScene.nativeElement, this.modifiedScene.nativeElement);
                         break;
                 }
-                this.checkDifferenceCounter();
             });
     }
 
@@ -223,6 +226,7 @@ export class GameViewFreeComponent implements OnInit {
                     this.modifiedSceneLoader.scene.add(element.clone());
                 }
             });
+            this.addDifference(objectOriginal.userData.id);
         }
     }
 
@@ -233,6 +237,7 @@ export class GameViewFreeComponent implements OnInit {
                     this.modifiedSceneLoader.scene.remove(element);
                 }
             });
+            this.addDifference(objectModified.userData.id);
         }
     }
 
@@ -240,6 +245,7 @@ export class GameViewFreeComponent implements OnInit {
         if (this.isANewDifference(objectModified.userData.id)) {
             // tslint:disable-next-line:no-any
             (objectModified as any).material.color.setHex((objectOriginal as any).material.color.getHex());
+            this.addDifference(objectOriginal.userData.id);
         }
     }
 
@@ -254,11 +260,7 @@ export class GameViewFreeComponent implements OnInit {
                     });
                 }
             }
-        }
-    }
-    private checkDifferenceCounter(): void {
-        if (this.differenceCounterUser === this.MAX_DIFFERENCES) {
-            this.gameOver();
+            this.addDifference(objectOriginal.userData.id);
         }
     }
 
@@ -271,14 +273,16 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     public isANewDifference(differenceId: string): boolean {
-        if (!this.differenceFound.includes(differenceId)) {
-            this.differenceFound[this.differenceCounterUser] = differenceId;
-            this.differenceCounterUser++;
+        return !this.differenceFound.includes(differenceId);
+    }
 
-            return true;
+    public async addDifference(differenceId: string): Promise<void> {
+        this.differenceFound[this.differenceFound.length++] = differenceId;
+        this.differenceCounterUser = this.differenceCounterUser + 1;
+        await this.differenceSound.play();
+        if (this.differenceCounterUser === GameViewFreeComponent.MAX_DIFFERENCES) {
+            this.gameOver();
         }
-
-        return false;
     }
 
     private gameOver(): void {
