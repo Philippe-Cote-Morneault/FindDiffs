@@ -1,5 +1,4 @@
 
-import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { Pair } from "../../../../../common/model/pair";
@@ -21,7 +20,6 @@ describe("CheatModeService", () => {
 
   let cheatModeService: CheatModeService;
   beforeEach(() => {
-    TestBed.configureTestingModule({});
     cheatModeService = new CheatModeService();
   });
 
