@@ -172,5 +172,23 @@ describe("DifferenceService", () => {
             }
         });
 
+        it("Should throw an error if the gameType is not set", async () => {
+            const request: Object = {
+                body: {
+                    originalSceneId: "qweqwe",
+                    modifiedObjectId: "asdasd",
+                    originalObjectId: "asdasd",
+                },
+            };
+
+            try {
+                await service.postFree(mockReq(request));
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal("The field gameType is not present.");
+            }
+        });
+
+
     });
 });
