@@ -1,8 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
+import { GameService } from "../services/game/game.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { CanvasLoaderService } from "../services/image-pair/canvasLoader.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
@@ -10,14 +11,13 @@ import { PixelRestoration } from "../services/pixelManipulation/pixel-restoratio
 import { Chat } from "../services/socket/chat";
 import { ChatFormaterService } from "../services/socket/chatFormater.service";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
-import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-simple",
     templateUrl: "./game-view-simple.component.html",
     styleUrls: ["./game-view-simple.component.css"],
 })
-export class GameViewSimpleComponent implements OnInit {
+export class GameViewSimpleComponent implements OnInit, OnDestroy {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
     @ViewChild("modifiedCanvas") private modifiedCanvas: ElementRef;
     @ViewChild("chronometer") private chronometer: ElementRef;
@@ -33,7 +33,7 @@ export class GameViewSimpleComponent implements OnInit {
     private chat: Chat;
     private pixelRestoration: PixelRestoration;
     private identificationError: IdentificationError;
-    private timerService: TimerService;
+    private game: GameService;
     private canvasLoader: CanvasLoaderService;
 
     public constructor(
@@ -45,10 +45,13 @@ export class GameViewSimpleComponent implements OnInit {
         this.chat = new Chat(new SocketHandlerService, new ChatFormaterService);
         this.identificationError = new IdentificationError(new SocketHandlerService);
         this.pixelRestoration = new PixelRestoration(new SocketHandlerService);
-        this.timerService = new TimerService(new SocketHandlerService);
-        this.canvasLoader = new CanvasLoaderService(this.identificationError, this.socket, this.timerService);
+        this.game = new GameService(new SocketHandlerService);
+        this.canvasLoader = new CanvasLoaderService(this.identificationError, this.socket, this.game);
 
         this.isGameOver = false;
+        this.game.gameEnded.subscribe((value) => {
+            this.isGameOver = value;
+          });
         // this.differenceCounterUser = 0;
     }
 
@@ -61,8 +64,12 @@ export class GameViewSimpleComponent implements OnInit {
         this.setServicesContainers();
     }
 
+    public ngOnDestroy(): void {
+         this.game.gameEnded.unsubscribe();
+       }
+
     private setServicesContainers(): void {
-        this.timerService.setContainers(this.chronometer.nativeElement);
+        this.game.setContainers(this.chronometer.nativeElement);
         this.chat.setContainers(this.message.nativeElement, this.messageContainer.nativeElement);
         this.identificationError.setContainers(this.errorMessage.nativeElement,
                                                this.originalCanvas.nativeElement,
