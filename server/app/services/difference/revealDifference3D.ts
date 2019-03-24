@@ -28,12 +28,14 @@ export class RevealDifference3D {
         const returnValue: ICommonReveal3D = {
             hit: false,
             differenceType: DifferenceType.none,
+            difference_id: "",
         };
 
         for (const element of this.modifiedScene.deletedObjects) {
             if (element === this.originalObjectId) {
                 returnValue.hit = true;
                 returnValue.differenceType = DifferenceType.removedObject;
+                returnValue.difference_id = this.originalObjectId;
 
                 return returnValue;
             }
@@ -44,6 +46,7 @@ export class RevealDifference3D {
                 if (element.key === this.originalObjectId) {
                     returnValue.hit = true;
                     returnValue.differenceType = DifferenceType.textureObjectChanged;
+                    returnValue.difference_id = this.originalObjectId;
 
                     return returnValue;
                 }
@@ -53,6 +56,7 @@ export class RevealDifference3D {
                 if (element.key === this.originalObjectId) {
                     returnValue.hit = true;
                     returnValue.differenceType = DifferenceType.colorChanged;
+                    returnValue.difference_id = this.originalObjectId;
 
                     return returnValue;
                 }
@@ -63,6 +67,7 @@ export class RevealDifference3D {
             if (element.id === this.modfifiedObjectId) {
                 returnValue.hit = true;
                 returnValue.differenceType = DifferenceType.addedObject;
+                returnValue.difference_id = this.modfifiedObjectId;
 
                 return returnValue;
             }
