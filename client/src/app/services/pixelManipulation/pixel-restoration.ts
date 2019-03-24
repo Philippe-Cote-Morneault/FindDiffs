@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
+import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
-import { ICommonReveal } from "../../../../../common/model/reveal";
 import { RgbaPosition } from "../../models/pixelProperties/color";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
@@ -32,12 +32,12 @@ export class PixelRestoration  implements SocketSubscriber {
 
     public notify(event: Event, message: ICommonSocketMessage): void {
         if (event === Event.DifferenceFound) {
-            const response: ICommonReveal = message.data as ICommonReveal;
+            const response: ICommonDifferenceFound = message.data as ICommonDifferenceFound;
             this.restoreImage(response);
         }
     }
 
-    public restoreImage(response: ICommonReveal): void {
+    public restoreImage(response: ICommonDifferenceFound): void {
         this.originalContext = this.originalCanvas.getContext("2d");
         if (this.originalContext) {
             const originalImageData: ImageData = this.originalContext.getImageData(

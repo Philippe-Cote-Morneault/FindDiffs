@@ -3,7 +3,9 @@ import Timer from "easytimer.js";
 import { Subject } from "rxjs";
 import { R } from "src/app/ressources/strings";
 import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
+import { ICommonGameEnding } from "../../../../../common/communication/webSocket/gameEnding";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { GameEnding } from "../../models/game/gameEnding";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
 
@@ -11,19 +13,21 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
     providedIn: "root",
 })
 export class GameService implements SocketSubscriber {
+    private static readonly MAX_TWO_DIGITS: number = 10;
+    private static readonly MS_IN_SEC: number = 1000;
+    private static readonly SEC_IN_MIN: number = 60;
     private static readonly MINUTES_POSITION: number = 3;
     private timer: Timer;
     private chronometer: HTMLElement;
     private gameStarted: boolean;
-    private isGameOver: boolean;
     private differenceSound: HTMLAudioElement;
     private differenceUser: HTMLElement;
-    public gameEnded: Subject<boolean>;
+    public gameEnded: Subject<GameEnding>;
 
     public constructor(private socketService: SocketHandlerService) {
         this.timer = new Timer();
         this.gameStarted = false;
-        this.gameEnded = new Subject<boolean>();
+        this.gameEnded = new Subject<GameEnding>();
         this.differenceSound = new Audio;
         this.differenceSound.src = R.DIFFERENCE_SOUND_SRC;
         this.subscribeToSocket();
@@ -46,7 +50,7 @@ export class GameService implements SocketSubscriber {
                 return this.startGame();
             }
             case Event.GameEnded: {
-                return this.stopGame();
+                return this.stopGame(message);
             }
             case Event.DifferenceFound: {
                 return this.differenceFound(message);
@@ -65,10 +69,13 @@ export class GameService implements SocketSubscriber {
             this.chronometer.innerText = this.getTimeValues());
     }
 
-    private stopGame(): void {
+    private stopGame(message: ICommonSocketMessage): void {
         this.timer.stop();
-        this.isGameOver = true;
-        this.gameEnded.next(this.isGameOver);
+        const game: GameEnding = {
+            isGameOver: true,
+            time: this.formatPlayerTimer(message),
+        };
+        this.gameEnded.next(game);
     }
 
     private  differenceFound(message: ICommonSocketMessage): void {
@@ -83,5 +90,20 @@ export class GameService implements SocketSubscriber {
 
     public getGameStarted(): boolean {
         return this.gameStarted;
+    }
+
+    private formatPlayerTimer(message: ICommonSocketMessage): string {
+        let seconds: number | string = (message.data as ICommonGameEnding).time / GameService.MS_IN_SEC;
+
+        // tslint:disable:radix
+        const minutes: number | string = this.format_two_digits(Math.round(seconds / GameService.SEC_IN_MIN));
+        seconds = this.format_two_digits(Math.round(seconds % GameService.SEC_IN_MIN));
+
+        return minutes + R.COLON + seconds;
+    }
+
+    private format_two_digits(n: number): number | string {
+
+        return n < GameService.MAX_TWO_DIGITS ? R.ZERO + n : n;
     }
 }
