@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { Event } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
@@ -24,17 +25,17 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("gameTitle") private gameTitle: ElementRef;
     @ViewChild("message") private message: ElementRef;
     @ViewChild("message_container") private messageContainer: ElementRef;
+    @ViewChild("userDifferenceFound") private userDifferenceFound: ElementRef;
 
     private gameCardId: string;
     private imagePairId: string;
     public isGameOver: boolean;
-    // private differenceCounterUser: number;
 
     public constructor(
         private route: ActivatedRoute,
         public imagePairService: ImagePairService,
         private gamesCardService: GamesCardService,
-        public socket: SocketHandlerService,
+        public socketHandler: SocketHandlerService,
         public chat: Chat,
         public pixelRestoration: PixelRestoration,
         public identificationError: IdentificationError,
@@ -45,7 +46,6 @@ export class GameViewSimpleComponent implements OnInit {
         this.game.gameEnded.subscribe((value) => {
             this.isGameOver = value;
           });
-        // this.differenceCounterUser = 0;
     }
 
     public ngOnInit(): void {
@@ -53,12 +53,13 @@ export class GameViewSimpleComponent implements OnInit {
             this.gameCardId = params["id"];
         });
 
+        this.userDifferenceFound.nativeElement.innerText = 0;
         this.getGameCardById();
         this.setServicesContainers();
     }
 
     private setServicesContainers(): void {
-        this.game.setContainers(this.chronometer.nativeElement);
+        this.game.setContainers(this.chronometer.nativeElement, this.userDifferenceFound.nativeElement);
         this.chat.setContainers(this.message.nativeElement, this.messageContainer.nativeElement);
         this.identificationError.setContainers(this.errorMessage.nativeElement,
                                                this.originalCanvas.nativeElement,
@@ -78,7 +79,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
             this.canvasLoader.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
             this.canvasLoader.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
-            this.socket.emitReadyToPlay();
+            this.socketHandler.emitMessage(Event.ReadyToPlay, null);
         });
     }
 }

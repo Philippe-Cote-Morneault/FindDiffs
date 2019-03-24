@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import Timer from "easytimer.js";
 import { Subject } from "rxjs";
+import { R } from "src/app/ressources/strings";
 import { Event } from "../../../../../common/communication/webSocket/socketMessage";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
@@ -14,22 +15,28 @@ export class GameService implements SocketSubscriber {
     private chronometer: HTMLElement;
     private gameStarted: boolean;
     private isGameOver: boolean;
+    private differenceSound: HTMLAudioElement;
+    private differenceUser: HTMLElement;
     public gameEnded: Subject<boolean>;
 
     public constructor(private socketService: SocketHandlerService) {
         this.timer = new Timer();
         this.gameStarted = false;
         this.gameEnded = new Subject<boolean>();
+        this.differenceSound = new Audio;
+        this.differenceSound.src = R.DIFFERENCE_SOUND_SRC;
         this.subscribeToSocket();
     }
 
-    public setContainers(chronometer: HTMLElement): void {
+    public setContainers(chronometer: HTMLElement, differenceCounterUser: HTMLElement): void {
         this.chronometer = chronometer;
+        this.differenceUser = differenceCounterUser;
     }
 
     private subscribeToSocket(): void {
         this.socketService.subscribe(Event.GameEnded, this);
         this.socketService.subscribe(Event.GameStarted, this);
+        this.socketService.subscribe(Event.DifferenceFound, this);
     }
 
     public notify(event: Event): void {
@@ -39,6 +46,9 @@ export class GameService implements SocketSubscriber {
             }
             case Event.GameEnded: {
                 return this.stopGame();
+            }
+            case Event.DifferenceFound: {
+                return this.differenceFound();
             }
             default: {
                 break;
@@ -58,6 +68,11 @@ export class GameService implements SocketSubscriber {
         this.timer.stop();
         this.isGameOver = true;
         this.gameEnded.next(this.isGameOver);
+    }
+
+    private  differenceFound(): void {
+        this.differenceUser.innerText = "+1";
+        this.differenceSound.play();
     }
 
     public getTimeValues(): string {
