@@ -1,4 +1,5 @@
 import { TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
@@ -7,7 +8,10 @@ import { ChatFormaterService } from "./chatFormater.service";
 describe("ChatFormater", () => {
     let service: ChatFormaterService;
     const time: number = 9;
-    beforeEach(() => {
+    beforeEach(async() => {
+        TestBed.configureTestingModule({
+            imports: [RouterTestingModule],
+        });
         service = TestBed.get(ChatFormaterService);
     });
 
@@ -25,10 +29,10 @@ describe("ChatFormater", () => {
         expect(result.slice(time)).to.equal("Difference found.");
     });
 
-    it("Should return the correct string after NewUser Event", () => {
+    it("Should return the correct string after UserConnected Event", () => {
         const user: ICommonUser = { username: "Daddy"};
         const msg: ICommonSocketMessage = {data: user, timestamp: new Date()};
-        const result: string = service.formatMessage(Event.NewUser, msg);
+        const result: string = service.formatMessage(Event.UserConnected, msg);
 
         expect(result.slice(time)).to.equal("The user Daddy is now online!");
     });
