@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
-// import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
+import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameService } from "./game.service";
 
@@ -39,7 +39,7 @@ describe("GameService", () => {
             expect(service.getTimeValues()).to.equal("00:00");
                 }, time);
     });
-/*
+
     it("Should return the correct count after a difference is found", async () => {
         const timer: HTMLElement = document.createElement("p");
         const userDifference: HTMLElement = document.createElement("p");
