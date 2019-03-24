@@ -2,12 +2,9 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
-import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { CheatModeService } from "../services/cheatMode/cheatMode.service";
-import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
+import { CheatModeHandlerService } from "../services/cheatMode/cheatModeHandler.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
@@ -22,7 +19,6 @@ import { TimerService } from "../services/timer/timer.service";
 })
 
 export class GameViewFreeComponent implements OnInit {
-    private static readonly T_STRING: string = "t";
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
@@ -35,7 +31,6 @@ export class GameViewFreeComponent implements OnInit {
     private gameCardId: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
-    private cheatActivated: boolean;
 
     public constructor( private route: ActivatedRoute,
                         private spinnerService: Ng4LoadingSpinnerService,
@@ -43,11 +38,10 @@ export class GameViewFreeComponent implements OnInit {
                         public timerService: TimerService,
                         public gamesCardService: GamesCardService,
                         private sceneSyncer: SceneSyncerService,
-                        public cheatModeService: CheatModeService,
-                        private cheatModeTimeoutService: CheatModeTimeoutService) {
+                        public cheatModeHandlerService: CheatModeHandlerService) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
-        this.cheatActivated = false;
+
     }
 
     public ngOnInit(): void {
@@ -56,35 +50,11 @@ export class GameViewFreeComponent implements OnInit {
         });
         this.spinnerService.show();
         this.getGameCardById();
-        this.cheatModeTimeoutService.ngOnInit();
     }
 
     @HostListener("document:keydown", ["$event"])
     public async toggleCheatMode(event: KeyboardEvent): Promise<void> {
-        if (event.key === GameViewFreeComponent.T_STRING) {
-            this.cheatActivated = !this.cheatActivated;
-            if (this.cheatActivated) {
-                this.copySceneLoaders();
-                this.cheatModeTimeoutService.startCheatMode(
-                    this.cheatModeService,
-                    this.currentOriginalScene,
-                    this.currentModifiedScene,
-                );
-            } else {
-                this.cheatModeTimeoutService.stopCheatMode();
-                if (this.cheatModeService.cheatActivated) {
-                    this.cheatModeService.toggleCheatMode(
-                        (this.currentModifiedScene as ICommonGeometricModifications & ICommonThematicModifications),
-                    );
-                }
-            }
-        }
-    }
-
-    private copySceneLoaders(): void {
-        this.cheatModeService.originalLoaderService = this.originalSceneLoader;
-        this.cheatModeService.modifiedLoaderService = this.modifiedSceneLoader;
-
+        this.cheatModeHandlerService.keyPressed(event, this.originalSceneLoader, this.modifiedSceneLoader);
     }
 
     private getGameCardById(): void {
@@ -100,6 +70,8 @@ export class GameViewFreeComponent implements OnInit {
             this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (sceneModified: ICommonSceneModifications) => {
                 this.currentOriginalScene = sceneResponse;
                 this.currentModifiedScene = sceneModified;
+                this.cheatModeHandlerService.currentOriginalScene = this.currentOriginalScene;
+                this.cheatModeHandlerService.currentModifiedScene = this.currentModifiedScene;
 
                 await this.originalSceneLoader.loadOriginalScene(
                         this.originalScene.nativeElement,
