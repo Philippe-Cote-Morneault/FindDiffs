@@ -1,10 +1,14 @@
 import { TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
 import { CanvasLoaderService } from "./canvasLoader.service";
 
 describe("CanvasLoaderService", () => {
     let service: CanvasLoaderService;
-    beforeEach(() => {
+    beforeEach(async() => {
+        TestBed.configureTestingModule({
+            imports: [RouterTestingModule],
+        });
         service = TestBed.get(CanvasLoaderService);
     });
 

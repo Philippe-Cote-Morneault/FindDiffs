@@ -1,4 +1,5 @@
 import { TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
@@ -7,7 +8,10 @@ import { Chat } from "./chat";
 describe("Chat", () => {
     let service: Chat;
     const time: number = 9;
-    beforeEach(() => {
+    beforeEach(async() => {
+        TestBed.configureTestingModule({
+            imports: [RouterTestingModule],
+        });
         service = TestBed.get(Chat);
     });
 
