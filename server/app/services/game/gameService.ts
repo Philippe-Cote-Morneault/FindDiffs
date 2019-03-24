@@ -1,20 +1,18 @@
 import * as uuid from "uuid";
+import { ICommonDifferenceFound } from "../../../../common/communication/webSocket/differenceFound";
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
 import { ICommonGameEnding } from "../../../../common/communication/webSocket/gameEnding";
+import { ICommonIdentificationError } from "../../../../common/communication/webSocket/identificationError";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { POVType } from "../../../../common/model/gameCard";
+import { ICommonReveal } from "../../../../common/model/reveal";
 import { Game } from "../../model/game/game";
 import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
-import { ICommonReveal } from "../../../../common/model/reveal";
-import { ICommonDifferenceFound } from "../../../../common/communication/webSocket/differenceFound";
-import { ICommonIdentificationError } from "../../../../common/communication/webSocket/identificationError";
-
-
 
 export class GameService {
     private static instance: GameService;
@@ -100,7 +98,6 @@ export class GameService {
 
     }
 
-    // tslint:disable-next-line:max-func-body-length
     private gameClick(message: ICommonSocketMessage, clickedPlayer: string): void {
         const gameManager: GameManager | undefined = this.activePlayers.get(clickedPlayer);
         if (gameManager === undefined) {
