@@ -17,7 +17,6 @@ import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.se
 import { Chat } from "../services/socket/chat";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
 
-
 @Component({
     selector: "app-game-view-free",
     templateUrl: "./game-view-free.component.html",
@@ -44,6 +43,8 @@ export class GameViewFreeComponent implements OnInit {
     private modifiedSceneLoader: SceneLoaderService;
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
+    public isGameOver: boolean;
+    public playerTime: string;
 
     public constructor( private route: ActivatedRoute,
                         private spinnerService: Ng4LoadingSpinnerService,
@@ -59,6 +60,12 @@ export class GameViewFreeComponent implements OnInit {
                         public socketHandler: SocketHandlerService) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
+
+        this.isGameOver = false;
+        this.game.gameEnded.subscribe((value) => {
+            this.playerTime = value.time;
+            this.isGameOver = value.isGameOver;
+        });
         // this.objectHandler = new ObjectHandler(this.mousePositionService,
         //                                        this.objectDetectionService,
         //                                        this.originalSceneLoader,
@@ -74,6 +81,7 @@ export class GameViewFreeComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.gameCardId = params["id"];
         });
+        this.userDifferenceFound.nativeElement.innerText = 0;
         this.spinnerService.show();
         this.getGameCardById();
         this.setServicesContainers();
@@ -130,7 +138,6 @@ export class GameViewFreeComponent implements OnInit {
                 this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
                 this.setRestoreObjectService();
                 this.clickEvent();
-                // this.timerService.startTimer(this.chronometer.nativeElement);
 
                 this.socketHandler.emitMessage(Event.ReadyToPlay, null);
             });
