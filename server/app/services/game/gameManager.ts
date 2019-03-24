@@ -1,9 +1,11 @@
 import { Game } from "../../model/game/game";
 
 export abstract class GameManager {
-    protected endGameCallback: (game: Game, winner: string) => void;
+    protected static SOLO_WINNING_DIFFERENCES_COUNT: number = 7;
 
     public game: Game;
+
+    protected endGameCallback: (game: Game, winner: string) => void;
     protected differencesFound: Map<number, boolean>;
     protected identificationErrorCallback: (game: Game) => void;
 
@@ -16,16 +18,13 @@ export abstract class GameManager {
 
     public startGame(): void {
         this.game.start_time = new Date();
-        //this.endGameCallback(this.game, "changeTHIS");
-        console.log(this.endGameCallback);
     }
 
     public abstract playerClick(position: Object, callBack: (data: Object | null) => void): void;
 
     private populateDifferencesMap(): void {
-        for (let i = 0; i < 7; ++i) {
+        for (let i: number = 0; i < GameManager.SOLO_WINNING_DIFFERENCES_COUNT; ++i) {
             this.differencesFound.set(i, false);
         }
-
     }
 }
