@@ -1,8 +1,7 @@
 import { ElementRef, Injectable } from "@angular/core";
+import { ICommonDifferenceFound } from "../../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../../common/communication/webSocket/socketMessage";
 import { DifferenceType, ICommonReveal3D } from "../../../../../../common/model/reveal";
-// import { ICommonReveal3D } from "../../../../../../common/model/reveal";
-// import { DifferenceType, ICommonReveal3D } from "../../../../../../common/model/reveal";
 import { SceneLoaderService } from "../../scene/sceneLoader/sceneLoader.service";
 import { SocketHandlerService } from "../../socket/socketHandler.service";
 import { SocketSubscriber } from "../../socket/socketSubscriber";
@@ -42,7 +41,7 @@ export class ObjectRestorationService implements SocketSubscriber {
 
   public notify(event: Event, message: ICommonSocketMessage): void {
     if (event === Event.DifferenceFound) {
-        const response: ICommonReveal3D = message.data as ICommonReveal3D;
+        const response: ICommonReveal3D = (message.data as ICommonDifferenceFound).reveal as ICommonReveal3D;
         this.restoreObject(response);
     }
   }
@@ -72,8 +71,6 @@ export class ObjectRestorationService implements SocketSubscriber {
             break;
       }
   }
-
-  // Verify without promises !
 
   public addObject(objectOriginal: THREE.Object3D, scene: IThreeScene, isTexture: boolean): void {
         if (this.isANewDifference(objectOriginal.userData.id) || isTexture) {

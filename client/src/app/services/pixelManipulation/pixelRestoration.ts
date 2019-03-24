@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
+import { ICommonReveal } from "../../../../../common/model/reveal";
 import { RgbaPosition } from "../../models/pixelProperties/color";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
@@ -47,7 +48,7 @@ export class PixelRestoration  implements SocketSubscriber {
                 const modifiedImageData: ImageData = this.modifiedContext.getImageData(
                     0, 0, this.modifiedCanvas.width, this.modifiedCanvas.height);
                 let pos: number;
-                response.pixels_affected.forEach((pixel) => {
+                (response.reveal as ICommonReveal).pixels_affected.forEach((pixel) => {
                     pos = this.pixelPositionInImageData(pixel, this.originalCanvas.width);
                     this.changePixelColor(pos, originalImageData, modifiedImageData);
                 });

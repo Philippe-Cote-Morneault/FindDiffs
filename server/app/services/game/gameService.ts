@@ -6,7 +6,6 @@ import { ICommonIdentificationError } from "../../../../common/communication/web
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { POVType } from "../../../../common/model/gameCard";
-import { ICommonReveal } from "../../../../common/model/reveal";
 import { Game } from "../../model/game/game";
 import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
@@ -106,18 +105,18 @@ export class GameService {
         }
         gameManager.playerClick(message.data,
                                 (data: Object | null) => {
-                                    this.differenceFound(gameManager, clickedPlayer, data as ICommonReveal);
+                                    this.differenceFound(gameManager, clickedPlayer, data as Object);
         },                      () => {
                                     this.invalidClick(gameManager, clickedPlayer);
         });
     }
 
-    private differenceFound(gameManager: GameManager, clickedPlayer: string, reveal: ICommonReveal): void {
+    private differenceFound(gameManager: GameManager, clickedPlayer: string, reveal: Object): void {
         gameManager.game.players.forEach((player: string) => {
                 const differenceFound: ICommonDifferenceFound = {
                     player: clickedPlayer,
                     difference_count: gameManager.game.differences_found,
-                    pixels_affected: reveal.pixels_affected,
+                    reveal: reveal,
                 };
                 const response: ICommonSocketMessage = {
                     data: differenceFound,

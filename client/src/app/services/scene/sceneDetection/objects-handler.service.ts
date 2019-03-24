@@ -20,10 +20,10 @@ export class ObjectHandler {
     public detectedObjects: IThreeObject;
     public meshesOriginal: THREE.Object3D[];
     public meshesModified: THREE.Object3D[];
-    public gameType: ObjectType;
-    public scenePairId: string;
     public originalGame: ElementRef<HTMLElement>;
     public modifiedGame: ElementRef<HTMLElement>;
+    public scenePairId: string;
+    public gameType: ObjectType;
 
     public constructor( public mousePositionService: MousePositionService,
                         public objectDetectionService: ObjectDetectionService,
@@ -48,16 +48,12 @@ export class ObjectHandler {
                                                                     this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
                                                                     this.meshesOriginal, this.meshesModified);
       this.objectRestorationService.set(this.originalSceneLoader, this.modifiedSceneLoader, this.detectedObjects);
-      // await this.objectRestorationService = new ObjectRestorationService(this.socket,
-      //                                                              this.originalSceneLoader,
-      //                                                              this.modifiedSceneLoader);
 
       this.emitDifference(event, this.scenePairId, this.detectedObjects.original.userData.id,
                           this.detectedObjects.modified.userData.id, this.gameType);
     }
 
-    private emitDifference(event: MouseEvent,
-                           scenePairId: string, originalObjectId: string,
+    private emitDifference(event: MouseEvent, scenePairId: string, originalObjectId: string,
                            modifiedObjectId: string, gameType: ObjectType): void {
         if (this.clickAreAllowed()) {
             this.identificationError.moveClickError(event.pageX, event.pageY);
