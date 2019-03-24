@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
+import { Event } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
@@ -14,6 +15,7 @@ import { ObjectHandler } from "../services/scene/sceneDetection/objects-handler.
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { Chat } from "../services/socket/chat";
+import { SocketHandlerService } from "../services/socket/socketHandler.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -52,7 +54,8 @@ export class GameViewFreeComponent implements OnInit {
                         private game: GameService,
                         private identificationError: IdentificationError,
                         public objectHandler: ObjectHandler,
-                        public objectRestoration: ObjectRestorationService) {
+                        public objectRestoration: ObjectRestorationService,
+                        public socketHandler: SocketHandlerService) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
         // this.objectHandler = new ObjectHandler(this.mousePositionService,
@@ -127,7 +130,8 @@ export class GameViewFreeComponent implements OnInit {
                 this.setRestoreObjectService();
                 this.clickEvent();
                 // this.timerService.startTimer(this.chronometer.nativeElement);
-
+                
+                this.socketHandler.emitMessage(Event.ReadyToPlay, null);
             });
         });
     }
