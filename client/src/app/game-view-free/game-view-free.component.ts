@@ -4,7 +4,7 @@ import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Event } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { ICommonScene } from "../../../../common/model/scene/scene";
 import { R } from "../ressources/strings";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeHandlerService } from "../services/cheatMode/cheatModeHandler.service";
@@ -68,16 +68,6 @@ export class GameViewFreeComponent implements OnInit {
             this.isGameOver = value.isGameOver;
         });
         this.game.resetTime();
-
-        // this.objectHandler = new ObjectHandler(this.mousePositionService,
-        //                                        this.objectDetectionService,
-        //                                        this.originalSceneLoader,
-        //                                        this.modifiedSceneLoader,
-        //                                        this.geometricObjectService,
-        //                                        this.socket,
-        //                                        this.identificationError,
-        //                                        this.game,
-        //                                        this.objectRestoration);
     }
 
     public ngOnInit(): void {
@@ -152,10 +142,8 @@ export class GameViewFreeComponent implements OnInit {
     private setRestoreObjectService(): void {
         this.objectHandler.meshesOriginal = this.meshesOriginal;
         this.objectHandler.meshesModified = this.meshesModified;
-        this.objectHandler.scenePairId = this.scenePairID;
         this.objectHandler.originalGame = this.originalScene;
         this.objectHandler.modifiedGame = this.modifiedScene;
-        this.objectHandler.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
         this.objectHandler.originalSceneLoader = this.originalSceneLoader;
         this.objectHandler.modifiedSceneLoader = this.modifiedSceneLoader;
     }
@@ -163,10 +151,6 @@ export class GameViewFreeComponent implements OnInit {
     private clickEvent(scene: HTMLElement): void {
         scene.addEventListener("click", (event: MouseEvent) =>
                     this.objectHandler.clickOnScene(event, true));
-    }
-
-    private isGameThematic(): boolean {
-        return this.currentModifiedScene.type === ObjectType.Thematic;
     }
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
