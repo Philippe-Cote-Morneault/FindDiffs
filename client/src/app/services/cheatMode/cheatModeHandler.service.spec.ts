@@ -56,5 +56,19 @@ describe("CheatModeHandlerService", () => {
             startStub.restore();
             stopStub.restore();
         });
+
+        it("should call toggleCheatMode if cheatActivated is true", () => {
+            const startStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "startCheatMode").callsFake(() => {});
+            const stopStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "stopCheatMode").callsFake(() => {});
+            const cheatModeStub: sinon.SinonStub = sinon.stub(cheatModeHandlerService.cheatModeService, "toggleCheatMode").callsFake(() => {});
+            const event: KeyboardEvent = new KeyboardEvent("KeyboardEvent", {key: "t"});
+            cheatModeHandlerService.keyPressed(event, originalLoaderService, modifiedLoaderService);
+            cheatModeHandlerService.cheatModeService.cheatActivated = true;
+            cheatModeHandlerService.keyPressed(event, originalLoaderService, modifiedLoaderService);
+            expect(cheatModeStub.calledOnce).to.be.true;
+            startStub.restore();
+            stopStub.restore();
+            cheatModeStub.restore();
+        });
     });
 });
