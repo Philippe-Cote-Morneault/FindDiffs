@@ -17,7 +17,7 @@ export class SimplePOVGameManager extends GameManager {
         this.pixelPositionService.postPixelPosition(this.game.ressource_id, position.x, position.y)
             .then((value: ICommonReveal | null) => {
                 console.log(value);
-                if (value) {
+                if (value && !this.differencesFound.get(value.difference_id)) {
                     console.log("isIcommonreveal");
                     this.differenceFound((value as ICommonReveal).difference_id);
 
