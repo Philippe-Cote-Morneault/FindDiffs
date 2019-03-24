@@ -1,10 +1,10 @@
 import Axios, { AxiosResponse } from "axios";
 import { NotFoundException } from "../../../common/errors/notFoundException";
 import { ICommonImagePair } from "../../../common/model/imagePair";
+import { ICommonSceneModifications } from "../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../common/model/scene/scene";
 import Config from "../config";
 import { R } from "../strings";
-import { ICommonSceneModifications } from "../../../common/model/scene/modifications/sceneModifications";
 
 export class ApiRequest {
 
