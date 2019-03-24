@@ -15,7 +15,7 @@ export class ChatFormaterService {
             case Event.UserDisconnected: {
                 return this.onUserDisconnected(message);
             }
-            case Event.NewUser: {
+            case Event.UserConnected: {
                 return this.onNewUser(message);
             }
             case Event.DifferenceFound: {
