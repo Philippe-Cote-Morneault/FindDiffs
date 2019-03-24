@@ -1,5 +1,5 @@
 import * as axios from "axios";
-import { ICommon } from "../../../../common/model/reveal";
+import { ICommonReveal } from "../../../../common/model/reveal";
 
 export class ScenePositionService {
     private static instance: ScenePositionService;
