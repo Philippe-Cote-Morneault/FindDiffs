@@ -2,13 +2,13 @@ import * as uuid from "uuid";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonToken } from "../../../../common/communication/webSocket/token";
 import { ICommonUser } from "../../../../common/communication/webSocket/user";
-import { UsernameManager } from "./usernameManager";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { _e, R } from "../../strings";
 import { SocketHandler } from "./socketHandler";
+import { UsernameManager } from "./usernameManager";
 
 export class AuthentificationService {
-    private static readonly MAX_CLIENT_DISCONNECT_TIME: number = 30000;
+    private static readonly MAX_CLIENT_DISCONNECT_TIME: number = 1500;
     private static instance: AuthentificationService;
 
     private usernameManager: UsernameManager;
@@ -32,13 +32,13 @@ export class AuthentificationService {
     public startCleanupTimer(socket: SocketIO.Socket): void {
         const removedUsername: string | undefined = this.usernameManager.removeUsername(socket.id);
         if (removedUsername) {
-        const token: string = this.getTokenFromUsername(removedUsername);
-        const timeout: NodeJS.Timeout = setTimeout(() => {
-            this.removeUser(token, socket.server, removedUsername);
-        }, AuthentificationService.MAX_CLIENT_DISCONNECT_TIME);
+            const token: string = this.getTokenFromUsername(removedUsername);
+            const timeout: NodeJS.Timeout = setTimeout(() => {
+                this.removeUser(token, socket.server, removedUsername);
+            },                                         AuthentificationService.MAX_CLIENT_DISCONNECT_TIME);
 
-        this.activeCleanupTimers.set(token, timeout);
-    }
+            this.activeCleanupTimers.set(token, timeout);
+        }
     }
 
     private removeUser(token: string, socketServer: SocketIO.Server, username: string): void {
@@ -54,41 +54,47 @@ export class AuthentificationService {
         SocketHandler.getInstance().broadcastMessage(Event.UserDisconnected, message);
     }
 
-    // tslint:disable-next-line:max-func-body-length
     public authenticateUser(socket: SocketIO.Socket, successCallback: (newUsername: string) => void): void {
-        socket.on(Event.Authenticate, (message: ICommonSocketMessage) => {
+        socket.on(Event.Authenticate, (message: ICommonSocketMessage, response: (data: Object) => void) => {
             const receivedToken: string = (message.data as ICommonToken).token;
-            const username: string | undefined = this.validateExistingUser(receivedToken);
+            const username: string | undefined = this.authentifiedUsers.get(receivedToken);
             if (username) {
                 this.stopCleanupTimer(receivedToken);
                 this.usernameManager.addUsername(socket.id, username);
+                response({
+                    username: username,
+                });
                 successCallback(username);
+            } else {
+                response({
+                    error_message: R.ERROR_TOKEN,
+                });
             }
         });
         socket.on(Event.NewUser, (message: ICommonSocketMessage, response: (data: Object) => void) => {
-            const username: string = (message.data as ICommonUser).username;
+           response(this.newUser((message.data as ICommonUser).username, socket, successCallback));
+        });
+    }
+
+    private newUser(username: string, socket: SocketIO.Socket, successCallback: (newUsername: string) => void): Object {
             if (this.usernameManager.validateUsername(username)) {
                 const oldUsername: string | undefined = this.usernameManager.getUsername(socket.id);
                 if (oldUsername) {
                     this.deleteOldUsername(oldUsername);
                 }
-                this.usernameManager.addUsername(socket.id, (message.data as ICommonUser).username);
+                this.usernameManager.addUsername(socket.id, username);
                 const token: string = this.sendValidationToken(socket);
                 this.authentifiedUsers.set(token, username);
-                response({
-                    token: token,
-                });
                 successCallback(username);
-            } else {
-                response({
-                    error_message: "failed to create",
-                });
-            }
-        });
-    }
 
-    private validateExistingUser(token: string): string | undefined {
-        return this.authentifiedUsers.get(token);
+                return {
+                    token: token,
+                };
+            } else {
+                return {
+                    error_message: "failed to create",
+                };
+            }
     }
 
     private sendValidationToken(socket: SocketIO.Socket): string {
@@ -108,7 +114,7 @@ export class AuthentificationService {
 
     private getTokenFromUsername(username: string): string {
         let token: string | undefined;
-        this.authentifiedUsers.forEach((val: string, key) => { 
+        this.authentifiedUsers.forEach((val: string, key: string) => {
             if (val === username) {
                 token = key;
             }
