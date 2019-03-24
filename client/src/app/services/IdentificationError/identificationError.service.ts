@@ -35,10 +35,8 @@ export class IdentificationError implements SocketSubscriber {
         this.socketService.subscribe(Event.InvalidClick, this);
     }
 
-    public notify(event: Event): void {
-        if (event === Event.InvalidClick) {
-            this.showErrorMessage();
-        }
+    public notify(): void {
+        this.showErrorMessage();
     }
 
     public async showErrorMessage(): Promise<void> {
