@@ -50,6 +50,7 @@ export const R: IString = {
     NAME_: "name",
     POV: "POV",
     POV_: "pov",
+    SCENE_PAIR_ID_: "scene_pair_id",
     USERNAME: "Username",
     USERNAME_: "username",
     RESOURCE: "Resource",
