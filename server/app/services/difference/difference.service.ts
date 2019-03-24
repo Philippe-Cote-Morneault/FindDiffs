@@ -44,7 +44,7 @@ export class DifferenceService extends Service implements IDifferenceService {
     public async postFree(req: Request): Promise<string> {
         this.validateFree(req);
 
-        const modifiedScene: ICommonSceneModifications = await ApiRequest.getModificationsById(req.body.originalSceneId);
+        const modifiedScene: ICommonSceneModifications = await ApiRequest.getModificationsById(req.body.scenePairId);
 
         const revealDifference3D: RevealDifference3D =
             new RevealDifference3D(modifiedScene, req.body.modifiedObjectId, req.body.originalObjectId, req.body.gameType);
@@ -53,7 +53,7 @@ export class DifferenceService extends Service implements IDifferenceService {
     }
 
     private validateFree(req: Request): void {
-        if (!(req.body.originalSceneId)) {
+        if (!(req.body.scenePairId)) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.SCENE_ID_]));
         }
     }

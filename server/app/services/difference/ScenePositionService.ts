@@ -14,7 +14,7 @@ export class ScenePositionService {
         return ScenePositionService.instance;
     }
 
-    public async post3DClick(scenePairId: string, originalObjectId: string, modifiedObjectId: string, 
+    public async post3DClick(scenePairId: string, originalObjectId: string, modifiedObjectId: string,
                              gameType: ObjectType): Promise<ICommonReveal3D | null> {
         const requestBody: ICommon3DObject = {
             scenePairId: scenePairId,
