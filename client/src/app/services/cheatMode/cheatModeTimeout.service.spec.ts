@@ -6,7 +6,7 @@ import { CheatModeService } from "./cheatMode.service";
 import { CheatModeTimeoutService } from "./cheatModeTimeout.service";
 
 // tslint:disable
-describe("TimerService", () => {
+describe("CheatModeTimeoutService", () => {
 
   let cheatModeTimeoutService: CheatModeTimeoutService;
   let cheatModeService: CheatModeService;
