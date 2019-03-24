@@ -12,9 +12,6 @@ export class PixelPositionService {
         return PixelPositionService.instance;
     }
 
-    public constructor() {
-    }
-
     public async postPixelPosition(imagePairId: string, x: number, y: number): Promise<ICommonReveal | null> {
         const requestBody: Object = { "image_pair_id": imagePairId, "x": x, "y": y};
         try {
