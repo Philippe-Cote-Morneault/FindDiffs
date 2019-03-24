@@ -57,7 +57,7 @@ describe("CheatModeHandlerService", () => {
             stopStub.restore();
         });
 
-        it("should call toggleCheatMode if cheatActivated is true", () => {
+        it("should call toggleCheatMode if cheatActivated is true when the cheat mode is disabled", () => {
             const startStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "startCheatMode").callsFake(() => {});
             const stopStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "stopCheatMode").callsFake(() => {});
             const cheatModeStub: sinon.SinonStub = sinon.stub(cheatModeHandlerService.cheatModeService, "toggleCheatMode").callsFake(() => {});
