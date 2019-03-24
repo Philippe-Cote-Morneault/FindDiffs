@@ -64,6 +64,7 @@ export class GameService {
         const endGameCallback = (game: Game, winner: string) => {
             this.endGame(game, winner);
         }
+        console.log(message);
         const gameManager: GameManager = data.pov === POVType.Simple ?
             new SimplePOVGameManager(newGame, endGameCallback) :
             new FreePOVGameManager(newGame, endGameCallback);

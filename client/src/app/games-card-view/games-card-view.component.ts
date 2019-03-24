@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
-import { ICommonGameCard, ICommonScoreEntry } from "../../../../common/model/gameCard";
+import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/games-card.service";
@@ -71,9 +71,11 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     private emitPlaySoloGame(): void {
+        console.log(this.gameCard.pov);
+        console.log(POVType[this.gameCard.pov]);
         const game: ICommonGame = {
             ressource_id: this.gameCard.resource_id,
-            pov: +this.gameCard.pov,
+            pov: +POVType[this.gameCard.pov],
         };
         const message: ICommonSocketMessage = {
             data: game,
