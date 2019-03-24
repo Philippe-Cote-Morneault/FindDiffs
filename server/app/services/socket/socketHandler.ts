@@ -1,10 +1,10 @@
 import { Server } from "http";
 import * as socketIo from "socket.io";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { ICommonUser } from "../../../../common/communication/webSocket/user";
 import { AuthentificationService } from "./authentificationService";
 import { SocketCallback } from "./socketCallback";
-import { UserManager } from "./userManager";
-import { ICommonUser } from "../../../../common/communication/webSocket/user";
+import { UsernameManager } from "./usernameManager";
 
 export class SocketHandler {
     private static instance: SocketHandler;
@@ -12,7 +12,7 @@ export class SocketHandler {
     private static DISCONNECT_EVENT: string = "disconnect";
 
     private io: socketIo.Server;
-    private usernameManager: UserManager;
+    private usernameManager: UsernameManager;
     private authentificationService: AuthentificationService;
     private subscribers: Map<string, SocketCallback[]>;
 
@@ -49,7 +49,7 @@ export class SocketHandler {
     }
 
     private constructor() {
-        this.usernameManager = UserManager.getInstance();
+        this.usernameManager = UsernameManager.getInstance();
         this.authentificationService = AuthentificationService.getInstance();
         this.subscribers = new Map();
     }

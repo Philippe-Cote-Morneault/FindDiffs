@@ -1,16 +1,16 @@
 import { UsernameValidator } from "../user/usernameValidator";
 
-export class UserManager  {
-    private static instance: UserManager;
+export class UsernameManager  {
+    private static instance: UsernameManager;
 
     private idUsernames: Map<string, string>;
 
-    public static getInstance(): UserManager {
-        if (!UserManager.instance) {
-            UserManager.instance = new UserManager();
+    public static getInstance(): UsernameManager {
+        if (!UsernameManager.instance) {
+            UsernameManager.instance = new UsernameManager();
         }
 
-        return UserManager.instance;
+        return UsernameManager.instance;
     }
 
     public validateUsername(username: string): boolean {

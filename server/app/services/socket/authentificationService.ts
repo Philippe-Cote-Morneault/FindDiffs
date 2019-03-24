@@ -2,7 +2,7 @@ import * as uuid from "uuid";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonToken } from "../../../../common/communication/webSocket/token";
 import { ICommonUser } from "../../../../common/communication/webSocket/user";
-import { UserManager } from "./userManager";
+import { UsernameManager } from "./usernameManager";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { _e, R } from "../../strings";
 import { SocketHandler } from "./socketHandler";
@@ -11,7 +11,7 @@ export class AuthentificationService {
     private static readonly MAX_CLIENT_DISCONNECT_TIME: number = 30000;
     private static instance: AuthentificationService;
 
-    private usernameManager: UserManager;
+    private usernameManager: UsernameManager;
     private authentifiedUsers: Map<string, string>;
     private activeCleanupTimers: Map<string, NodeJS.Timeout>;
 
@@ -24,7 +24,7 @@ export class AuthentificationService {
     }
 
     private constructor() {
-        this.usernameManager = UserManager.getInstance();
+        this.usernameManager = UsernameManager.getInstance();
         this.authentifiedUsers = new Map();
         this.activeCleanupTimers = new Map();
     }
