@@ -13,7 +13,6 @@ export abstract class GameManager {
         this.game = game;
         this.endGameCallback = endGameCallback;
         this.differencesFound = new Map();
-        this.populateDifferencesMap();
     }
 
     public startGame(): void {
@@ -22,9 +21,4 @@ export abstract class GameManager {
 
     public abstract playerClick(position: Object, callBack: (data: Object | null) => void): void;
 
-    private populateDifferencesMap(): void {
-        for (let i: number = 0; i < GameManager.SOLO_WINNING_DIFFERENCES_COUNT; ++i) {
-            this.differencesFound.set(i, false);
-        }
-    }
 }

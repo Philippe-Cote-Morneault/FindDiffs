@@ -32,7 +32,6 @@ export class GameService {
     }
 
     private constructor() {
-        console.log("created gameservice");
         this.activeGames = [];
         this.socketHandler = SocketHandler.getInstance();
         this.activePlayers = new Map();
@@ -52,7 +51,6 @@ export class GameService {
     }
 
     private createSoloGame(message: ICommonSocketMessage, player: string): void {
-        console.log("createdSoleGame");
         const data: ICommonGame = message.data as ICommonGame;
         const newGame: Game = {
             id: uuid.v4(),
@@ -64,7 +62,6 @@ export class GameService {
         const endGameCallback = (game: Game, winner: string) => {
             this.endGame(game, winner);
         }
-        console.log(message);
         const gameManager: GameManager = data.pov === POVType.Simple ?
             new SimplePOVGameManager(newGame, endGameCallback) :
             new FreePOVGameManager(newGame, endGameCallback);
@@ -91,27 +88,26 @@ export class GameService {
         const gameEndedMessage: ICommonGameEnding = {
             winner: winner,
             time: Date.now() - (game.start_time as Date).valueOf(),
-        }
+        };
         const message: ICommonSocketMessage = {
             data: gameEndedMessage,
             timestamp: new Date(),
-        }
+        };
         game.players.forEach((player: string) => {
             this.socketHandler.sendMessage(Event.GameEnded, message, player);
+            this.activePlayers.delete(player);
         });
+
     }
 
     // tslint:disable-next-line:max-func-body-length
     private gameClick(message: ICommonSocketMessage, clickedPlayer: string): void {
-        console.log("GAMECLICK");
-        console.log(JSON.stringify(message));
         const gameManager: GameManager | undefined = this.activePlayers.get(clickedPlayer);
         if (gameManager === undefined) {
             throw new NotFoundException(_e(R.ERROR_INVALIDID, [clickedPlayer]));
         }
         gameManager.playerClick(message.data, (data: Object | null) => {
             gameManager.game.players.forEach((player: string) => {
-                console.log(data);
                 if (data as ICommonReveal) {
                     const differenceFound: ICommonDifferenceFound = {
                         player: clickedPlayer,
@@ -136,6 +132,5 @@ export class GameService {
             });
         });
 
-       // game.
     }
 }
