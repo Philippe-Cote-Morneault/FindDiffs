@@ -1,7 +1,9 @@
 import { ElementRef, Injectable } from "@angular/core";
 import * as THREE from "three";
-import { DifferenceType, ICommonReveal3D } from "../../../../../common/model/reveal";
+// import { DifferenceType, ICommonReveal3D } from "../../../../../common/model/reveal";
 import { ObjectType } from "../../../../../common/model/scene/scene";
+import { IdentificationError } from "../IdentificationError/identificationError.service";
+import { GameService } from "../game/game.service";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { IThreeObject, IThreeScene } from "./GeometricObjects/IThreeObject";
@@ -29,7 +31,9 @@ export class RestoreObjectsService {
                        public modifiedSceneLoader: SceneLoaderService,
                        public restoreObjectsService: RestoreObjectsService,
                        public geometricObjectService: GeometricObjectsService,
-                       public socketHandlerService: SocketHandlerService) {
+                       public socket: SocketHandlerService,
+                       private identificationError: IdentificationError,
+                       private game: GameService) {
         this.differenceFound = [];
         this.meshesOriginal = [];
         this.meshesModified = [];
@@ -47,37 +51,46 @@ export class RestoreObjectsService {
                                                                       this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
                                                                       this.meshesOriginal, this.meshesModified);
 
-        this.emitDifference(this.scenePairId, this.detectedObjects.original.userData.id,
+        this.emitDifference(event, this.scenePairId, this.detectedObjects.original.userData.id,
                             this.detectedObjects.modified.userData.id, this.gameType);
     }
 
-    private emitDifference(scenePairId: string, originalObjectId: string, modifiedObjectId: string, gameType: ObjectType): void {
-        const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
-        this.socketHandlerService.emitClick3D(scenePairId, modifiedObjectId, originalObjectId, gameType)
-            .subscribe(async (response: ICommonReveal3D) => {
-                switch (response.differenceType) {
-                    case DifferenceType.removedObject:
-                        this.addObject(this.detectedObjects.original, scenes, false);
-                        // await this.addDifference(this.detectedObjects.original.userData.id);
-                        break;
-                    case DifferenceType.colorChanged:
-                        this.changeColorObject(this.detectedObjects.original, this.detectedObjects.modified);
-                        // await this.addDifference(this.detectedObjects.original.userData.id);
-                        break;
-                    case DifferenceType.textureObjectChanged:
-                        // tslint:disable-next-line: max-line-length
-                        await this.changeTextureObject(this.detectedObjects.original,
-                                                       this.detectedObjects.modified, scenes);
-                        // await this.addDifference(this.detectedObjects.original.userData.id);
-                        break;
-                    case DifferenceType.addedObject:
-                        this.removeObject(this.detectedObjects.modified, scenes);
-                        // await this.addDifference(this.detectedObjects.modified.userData.id);
-                        break;
-                    default:
-                        break;
-                }
-            });
+    private emitDifference(event: MouseEvent,
+                           scenePairId: string, originalObjectId: string,
+                           modifiedObjectId: string, gameType: ObjectType): void {
+        // const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
+        if (this.clickAreAllowed()) {
+            this.identificationError.moveClickError(event.pageX, event.pageY);
+            this.socket.emitClick3D(scenePairId, modifiedObjectId, originalObjectId, gameType);
+        }
+            // .subscribe(async (response: ICommonReveal3D) => {
+            //     switch (response.differenceType) {
+            //         case DifferenceType.removedObject:
+            //             this.addObject(this.detectedObjects.original, scenes, false);
+            //             // await this.addDifference(this.detectedObjects.original.userData.id);
+            //             break;
+            //         case DifferenceType.colorChanged:
+            //             this.changeColorObject(this.detectedObjects.original, this.detectedObjects.modified);
+            //             // await this.addDifference(this.detectedObjects.original.userData.id);
+            //             break;
+            //         case DifferenceType.textureObjectChanged:
+            //             // tslint:disable-next-line: max-line-length
+            //             await this.changeTextureObject(this.detectedObjects.original,
+            //                                            this.detectedObjects.modified, scenes);
+            //             // await this.addDifference(this.detectedObjects.original.userData.id);
+            //             break;
+            //         case DifferenceType.addedObject:
+            //             this.removeObject(this.detectedObjects.modified, scenes);
+            //             // await this.addDifference(this.detectedObjects.modified.userData.id);
+            //             break;
+            //         default:
+            //             break;
+            //     }
+            // });
+    }
+
+    private clickAreAllowed(): boolean {
+        return !this.identificationError.timeout && this.game.gameStarted;
     }
 
     public addObject(objectOriginal: THREE.Object3D, scene: IThreeScene, isTexture: boolean): void {

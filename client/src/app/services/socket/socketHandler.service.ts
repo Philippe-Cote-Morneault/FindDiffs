@@ -5,7 +5,8 @@ import { Event, ICommonSocketMessage } from "../../../../../common/communication
 import { ICommonToken } from "../../../../../common/communication/webSocket/token";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
 import { POVType } from "../../../../../common/model/gameCard";
-import { ICommon2DPosition } from "../../../../../common/model/positions";
+import { ICommon2DPosition, ICommon3DObject } from "../../../../../common/model/positions";
+import { ObjectType } from "../../../../../common/model/scene/scene";
 import { SERVER_URL } from "../../../../../common/url";
 import { SocketSubscriber } from "./socketSubscriber";
 
@@ -86,6 +87,20 @@ export class SocketHandlerService {
         };
         const message: ICommonSocketMessage = {
             data: pixel,
+            timestamp: new Date(),
+        };
+        this.socket.emit(Event.GameClick, message);
+    }
+
+    public emitClick3D(scenePairId: string, originalObjectId: string, modifiedObjectId: string, gameType: ObjectType): void {
+        const clickInfo: ICommon3DObject = {
+            scenePairId: scenePairId,
+            originalObjectId: originalObjectId,
+            modifiedObjectId: modifiedObjectId,
+            gameType: gameType,
+        };
+        const message: ICommonSocketMessage = {
+            data: clickInfo,
             timestamp: new Date(),
         };
         this.socket.emit(Event.GameClick, message);

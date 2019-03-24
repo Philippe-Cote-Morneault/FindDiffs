@@ -14,6 +14,7 @@ import { RestoreObjectsService} from "../services/3DObjects/restore-objects.serv
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeService } from "../services/cheatMode/cheatMode.service";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
+import { GameService } from "../services/game/game.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
@@ -72,7 +73,8 @@ export class GameViewFreeComponent implements OnInit {
         public mousePositionService: MousePositionService,
         public objectDetectionService: ObjectDetectionService,
         public restoreObjectsService: RestoreObjectsService,
-        public socket: SocketHandlerService) {
+        public socket: SocketHandlerService,
+        private game: GameService) {
             this.differenceCounterUser = 0;
             this.differenceSound = new Audio;
             this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
@@ -87,7 +89,10 @@ export class GameViewFreeComponent implements OnInit {
                                                                    this.originalSceneLoader,
                                                                    this.modifiedSceneLoader,
                                                                    this.restoreObjectsService,
-                                                                   this.geometricObjectService);
+                                                                   this.geometricObjectService,
+                                                                   this.socket,
+                                                                   this.identificationError,
+                                                                   this.game);
     }
 
     public ngOnInit(): void {
