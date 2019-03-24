@@ -31,14 +31,14 @@ describe("Chat", () => {
         expect(p.innerText.slice(time)).to.equal("Difference found.");
     });
 
-    it("Should return the correct message in chat after NewUser Event", () => {
+    it("Should return the correct message in chat after UserConnected Event", () => {
         const p: HTMLElement = document.createElement("p");
         const container: HTMLElement = document.createElement("div");
         const user: ICommonUser = { username: "Daddy"};
         const msg: ICommonSocketMessage = {data: user, timestamp: new Date()};
 
         service.setContainers(p, container);
-        service.notify(Event.NewUser, msg);
+        service.notify(Event.UserConnected, msg);
         expect(p.innerText.slice(time)).to.equal("The user Daddy is now online!");
     });
 
