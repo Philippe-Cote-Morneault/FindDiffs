@@ -1,7 +1,9 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
-import { ICommonGameCard, ICommonScoreEntry } from "../../../../common/model/gameCard";
+import { ICommonGame } from "../../../../common/communication/webSocket/game";
+import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
@@ -62,9 +64,24 @@ export class GamesCardViewComponent implements OnInit {
             this.deleteGameCard();
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
-            this.socketHandlerService.emitPlayerSoloGame(this.gameCard.resource_id);
+
+            this.emitPlaySoloGame();
             await this.router.navigateByUrl(gameUrl + this.gameCard.id);
         }
+    }
+
+    private emitPlaySoloGame(): void {
+        console.log(this.gameCard.pov);
+        console.log(POVType[this.gameCard.pov]);
+        const game: ICommonGame = {
+            ressource_id: this.gameCard.resource_id,
+            pov: +POVType[this.gameCard.pov],
+        };
+        const message: ICommonSocketMessage = {
+            data: game,
+            timestamp: new Date(),
+        };
+        this.socketHandlerService.emitMessage(Event.PlaySoloGame, message);
     }
 
     public onRightButtonClick(): void {

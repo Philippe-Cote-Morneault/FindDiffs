@@ -9,6 +9,8 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
 @Injectable({
     providedIn: "root",
 })
+
+// CLASSE MORTE
 export class DifferenceFoundManager implements SocketSubscriber {
     private differenceFound: number[];
     private differenceSound: HTMLAudioElement;

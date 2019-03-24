@@ -1,26 +1,26 @@
-/*
-import * as request from "request";
+import * as axios from "axios";
+import { ICommonReveal } from "../../../../common/model/reveal";
+
 export class PixelPositionService {
+    private static instance: PixelPositionService;
+
+    public static getInstance(): PixelPositionService {
+        if (!PixelPositionService.instance) {
+            PixelPositionService.instance = new PixelPositionService();
+        }
+
+        return PixelPositionService.instance;
+    }
 
     public constructor() {
     }
 
-
-    // tslint:disable-next-line:no-any
-    public postPixelPosition<Pixel>(imagePairId: string, x: number, y: number): Observal<any> {
+    public async postPixelPosition(imagePairId: string, x: number, y: number): Promise<ICommonReveal | null> {
         const requestBody: Object = { "image_pair_id": imagePairId, "x": x, "y": y};
-        const clientServerOptions = {
-            uri: 'http://localhost:3000/difference/simple',
-            body: JSON.stringify(postData),
-            method: "POST",
+        try {
+            return (await axios.default.post("http://localhost:3000/difference/simple", requestBody)).data as ICommonReveal;
+        } catch (error) {
+            return null;
         }
-         request(clientServerOptions, function (error, response) {
-            console.log(response.body);
-        });
-
-        return this.http.post<Pixel>(`${SERVER_URL}/difference/simple`, requestBody).pipe(
-            catchError((error) => this.handleError(error)),
-        );
     }
 }
-*/

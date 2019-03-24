@@ -1,12 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
-import { ICommonGame } from "../../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonToken } from "../../../../../common/communication/webSocket/token";
-import { ICommonUser } from "../../../../../common/communication/webSocket/user";
-import { POVType } from "../../../../../common/model/gameCard";
-import { ICommon2DPosition, ICommon3DObject } from "../../../../../common/model/positions";
-import { ObjectType } from "../../../../../common/model/scene/scene";
 import { SERVER_URL } from "../../../../../common/url";
 import { SocketSubscriber } from "./socketSubscriber";
 
@@ -69,57 +64,8 @@ export class SocketHandlerService {
         }
     }
 
-    public emitUser(username: string): void {
-        const user: ICommonUser = {
-            username: username,
-        };
-        const message: ICommonSocketMessage = {
-            data: user,
-            timestamp: new Date(),
-        };
-        this.socket.emit(Event.NewUser, message);
-    }
-
-    public emitClick(xPos: number, yPos: number): void {
-        const pixel: ICommon2DPosition = {
-            x: xPos,
-            y: yPos,
-        };
-        const message: ICommonSocketMessage = {
-            data: pixel,
-            timestamp: new Date(),
-        };
-        this.socket.emit(Event.GameClick, message);
-    }
-
-    public emitClick3D(scenePairId: string, originalObjectId: string, modifiedObjectId: string, gameType: ObjectType): void {
-        const clickInfo: ICommon3DObject = {
-            scenePairId: scenePairId,
-            originalObjectId: originalObjectId,
-            modifiedObjectId: modifiedObjectId,
-            gameType: gameType,
-        };
-        const message: ICommonSocketMessage = {
-            data: clickInfo,
-            timestamp: new Date(),
-        };
-        this.socket.emit(Event.GameClick, message);
-    }
-
-    public emitPlayerSoloGame(id: string): void {
-        const game: ICommonGame = {
-            ressource_id: id,
-            pov: POVType.Simple,
-        };
-        const message: ICommonSocketMessage = {
-            data: game,
-            timestamp: new Date(),
-        };
-        this.socket.emit(Event.PlaySoloGame, message);
-    }
-
-    public emitReadyToPlay(): void {
-        this.socket.emit(Event.ReadyToPlay);
+    public emitMessage(event: Event, message: ICommonSocketMessage | null): void {
+        this.socket.emit(event, message);
     }
 
     private setEventListeners(socket: SocketIOClient.Socket): void {

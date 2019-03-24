@@ -14,7 +14,7 @@ export class IdentificationError implements SocketSubscriber {
     private original: HTMLElement;
     private modified: HTMLElement;
 
-    public timeout: boolean;
+    private timeout: boolean;
     private errorSound: HTMLAudioElement;
 
     public constructor(private socketService: SocketHandlerService ) {
@@ -35,10 +35,8 @@ export class IdentificationError implements SocketSubscriber {
         this.socketService.subscribe(Event.InvalidClick, this);
     }
 
-    public notify(event: Event): void {
-        if (event === Event.InvalidClick) {
-            this.showErrorMessage();
-        }
+    public notify(): void {
+        this.showErrorMessage();
     }
 
     public async showErrorMessage(): Promise<void> {
@@ -68,5 +66,9 @@ export class IdentificationError implements SocketSubscriber {
         this.original.style.cursor = R.CONTEXT_MENU;
         this.modified.style.cursor = R.CONTEXT_MENU;
         this.errorMessage.style.cursor = R.CONTEXT_MENU;
+    }
+
+    public getTimeout(): boolean {
+        return this.timeout;
     }
 }

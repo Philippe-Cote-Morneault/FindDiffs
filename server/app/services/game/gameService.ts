@@ -10,6 +10,11 @@ import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
+import { ICommonReveal } from "../../../../common/model/reveal";
+import { ICommonDifferenceFound } from "../../../../common/communication/webSocket/differenceFound";
+import { ICommonIdentificationError } from "../../../../common/communication/webSocket/identificationError";
+
+
 
 export class GameService {
     private static instance: GameService;
@@ -59,6 +64,7 @@ export class GameService {
         const endGameCallback = (game: Game, winner: string) => {
             this.endGame(game, winner);
         }
+        console.log(message);
         const gameManager: GameManager = data.pov === POVType.Simple ?
             new SimplePOVGameManager(newGame, endGameCallback) :
             new FreePOVGameManager(newGame, endGameCallback);
@@ -95,13 +101,40 @@ export class GameService {
         });
     }
 
-    private gameClick(message: ICommonSocketMessage, player: string): void {
+    // tslint:disable-next-line:max-func-body-length
+    private gameClick(message: ICommonSocketMessage, clickedPlayer: string): void {
         console.log("GAMECLICK");
         console.log(JSON.stringify(message));
-        const game: GameManager | undefined = this.activePlayers.get(player);
-        if (game === undefined) {
-            throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
+        const gameManager: GameManager | undefined = this.activePlayers.get(clickedPlayer);
+        if (gameManager === undefined) {
+            throw new NotFoundException(_e(R.ERROR_INVALIDID, [clickedPlayer]));
         }
+        gameManager.playerClick(message.data, (data: Object | null) => {
+            gameManager.game.players.forEach((player: string) => {
+                console.log(data);
+                if (data as ICommonReveal) {
+                    const differenceFound: ICommonDifferenceFound = {
+                        player: clickedPlayer,
+                        difference_count: gameManager.game.differences_found,
+                        pixels_affected: (data as ICommonReveal).pixels_affected,
+                    }
+                    const response: ICommonSocketMessage = {
+                        data: differenceFound,
+                        timestamp: new Date(),
+                    };
+                    this.socketHandler.sendMessage(Event.DifferenceFound, response, player);
+                } else {
+                    const identificationError: ICommonIdentificationError = {
+                        player: clickedPlayer,
+                    };
+                    const response: ICommonSocketMessage = {
+                        data: identificationError,
+                        timestamp: new Date(),
+                    };
+                    this.socketHandler.sendMessage(Event.InvalidClick, response, player);
+                }
+            });
+        });
 
        // game.
     }
