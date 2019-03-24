@@ -1,7 +1,7 @@
 import { Game } from "../../model/game/game";
 
 export abstract class GameManager {
-    private endGameCallback: (game: Game, winner: string) => void;
+    protected endGameCallback: (game: Game, winner: string) => void;
 
     public game: Game;
     protected differencesFound: Map<number, boolean>;
