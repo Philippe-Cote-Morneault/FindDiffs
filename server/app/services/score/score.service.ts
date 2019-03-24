@@ -64,8 +64,8 @@ export class ScoreService extends Service implements IScoreService {
         if (isNaN(Number(req.body.time))) {
             throw new InvalidFormatException(_e(R.ERROR_N_A_N, [R.TIME_]));
         }
-        if (Number(req.body.time) > 0) {
-            throw new InvalidFormatException(_e(R.ERROR_MORE_ZERO, [R.TIME_]));
+        if (Number(req.body.time) < 0) {
+            throw new InvalidFormatException(_e(R.ERROR_LESS_ZERO, [R.TIME_]));
         }
         if (!req.body.type) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.GAME_TYPE_]));

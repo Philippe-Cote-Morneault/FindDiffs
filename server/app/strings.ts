@@ -24,7 +24,7 @@ export const R: IString = {
     ERROR_WRONG_TYPE: "The %s type is not recognized.",
     ERROR_NOT_BMP_FILE: "Not a bmp file.",
     ERROR_N_A_N: "The field %s is not a number.",
-    ERROR_MORE_ZERO: "The field %s should be more than zero",
+    ERROR_LESS_ZERO: "The field %s should be more than zero",
     ERROR_INVALID: "The %s is invalid.",
     ERROR_INVALID_USERNAME: "The username is invalid, it must be between 3 and 12 alpha numeric characters.",
     ERROR_INVALID_GAMENAME: "The game name is invalid, it must be between 3 and 12 alpha numeric characters.",
