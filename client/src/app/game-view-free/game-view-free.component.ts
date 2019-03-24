@@ -4,7 +4,7 @@ import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { Event } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonScene } from "../../../../common/model/scene/scene";
+import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { R } from "../ressources/strings";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeHandlerService } from "../services/cheatMode/cheatModeHandler.service";
@@ -36,7 +36,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("message_container") private messageContainer: ElementRef;
     @ViewChild("userDifferenceFound") private userDifferenceFound: ElementRef;
 
-    private scenePairID: string;
+    private scenePairId: string;
     private currentOriginalScene: ICommonScene;
     private currentModifiedScene: ICommonSceneModifications;
     private gameCardId: string;
@@ -98,7 +98,7 @@ export class GameViewFreeComponent implements OnInit {
 
     private getGameCardById(): void {
         this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
-            this.scenePairID = gameCard.resource_id;
+            this.scenePairId = gameCard.resource_id;
             this.gameTitle.nativeElement.innerText = gameCard.title;
             this.loadScene();
         });
@@ -106,8 +106,8 @@ export class GameViewFreeComponent implements OnInit {
 
     // tslint:disable
     private loadScene(): void {
-        this.sceneService.getSceneById(this.scenePairID).subscribe(async (sceneResponse: ICommonScene) => {
-            this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (sceneModified: ICommonSceneModifications) => {
+        this.sceneService.getSceneById(this.scenePairId).subscribe(async (sceneResponse: ICommonScene) => {
+            this.sceneService.getModifiedSceneById(this.scenePairId).subscribe(async (sceneModified: ICommonSceneModifications) => {
                 this.currentOriginalScene = sceneResponse;
                 this.currentModifiedScene = sceneModified;
                 this.cheatModeHandlerService.currentOriginalScene = this.currentOriginalScene;
@@ -131,8 +131,8 @@ export class GameViewFreeComponent implements OnInit {
                 this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
                 this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
                 this.setRestoreObjectService();
-                this.clickEvent(this.originalScene.nativeElement);
-                this.clickEvent(this.modifiedScene.nativeElement);
+                this.clickEvent(this.originalScene.nativeElement, true);
+                this.clickEvent(this.modifiedScene.nativeElement, false);
 
                 this.socketHandler.emitMessage(Event.ReadyToPlay, null);
             });
@@ -146,11 +146,14 @@ export class GameViewFreeComponent implements OnInit {
         this.objectHandler.modifiedGame = this.modifiedScene;
         this.objectHandler.originalSceneLoader = this.originalSceneLoader;
         this.objectHandler.modifiedSceneLoader = this.modifiedSceneLoader;
+        this.objectHandler.scenePairId = this.scenePairId;
+        this.objectHandler.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
+        console.log(this.isGameThematic());
     }
 
-    private clickEvent(scene: HTMLElement): void {
+    private clickEvent(scene: HTMLElement, isOriginalScene: boolean): void {
         scene.addEventListener("click", (event: MouseEvent) =>
-                    this.objectHandler.clickOnScene(event, true));
+                    this.objectHandler.clickOnScene(event, isOriginalScene));
     }
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
@@ -159,6 +162,10 @@ export class GameViewFreeComponent implements OnInit {
                 meshes.push(element);
             }
         });
+    }
+
+    private isGameThematic(): boolean {
+        return this.currentModifiedScene.type === ObjectType.Thematic;
     }
 
 }

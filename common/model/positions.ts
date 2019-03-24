@@ -1,3 +1,4 @@
+import { ObjectType } from "./scene/scene";
 
 export interface ICommon3DPosition {
     x: number;
@@ -11,6 +12,8 @@ export interface ICommon2DPosition{
 }
 
 export interface ICommon3DObject {
+    scenePairId: string;
     originalObjectId: string;
     modifiedObjectId: string;
+    gameType: ObjectType;
 }
