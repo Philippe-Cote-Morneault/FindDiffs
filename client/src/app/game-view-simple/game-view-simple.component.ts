@@ -79,7 +79,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
             this.canvasLoader.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
             this.canvasLoader.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
-            this.socketHandler.socket.emit(Event.ReadyToPlay);
+            this.socketHandler.emitMessage(Event.ReadyToPlay, null);
         });
     }
 }
