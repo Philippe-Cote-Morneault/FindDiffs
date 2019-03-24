@@ -30,13 +30,10 @@ export class AuthentificationService {
     }
 
     public startCleanupTimer(socket: SocketIO.Socket): void {
-        console.log("removing id: " + socket.id);
         const removedUsername: string | undefined = this.usernameManager.removeUsername(socket.id);
-        console.log("trie to startCleanup, but undefinde uesr");
         if (removedUsername) {
         const token: string = this.getTokenFromUsername(removedUsername);
         const timeout: NodeJS.Timeout = setTimeout(() => {
-            console.log("timerExpired");
             this.removeUser(token, socket.server, removedUsername);
         }, AuthentificationService.MAX_CLIENT_DISCONNECT_TIME);
 
@@ -45,7 +42,6 @@ export class AuthentificationService {
     }
 
     private removeUser(token: string, socketServer: SocketIO.Server, username: string): void {
-        console.log("removingUser");
         this.authentifiedUsers.delete(token);
         const user: ICommonUser = {
             username: username,
@@ -54,7 +50,6 @@ export class AuthentificationService {
             data: user,
             timestamp: new Date(),
         };
-        console.log(this.authentifiedUsers);
 
         SocketHandler.getInstance().broadcastMessage(Event.UserDisconnected, message);
     }
@@ -63,9 +58,7 @@ export class AuthentificationService {
     public authenticateUser(socket: SocketIO.Socket, successCallback: (newUsername: string) => void): void {
         socket.on(Event.Authenticate, (message: ICommonSocketMessage) => {
             const receivedToken: string = (message.data as ICommonToken).token;
-            console.log("validating existing user token: " + receivedToken);
             const username: string | undefined = this.validateExistingUser(receivedToken);
-            console.log("validating existing user: " + username);
             if (username) {
                 this.stopCleanupTimer(receivedToken);
                 this.usernameManager.addUsername(socket.id, username);
@@ -74,7 +67,6 @@ export class AuthentificationService {
         });
         socket.on(Event.NewUser, (message: ICommonSocketMessage, response: (data: Object) => void) => {
             const username: string = (message.data as ICommonUser).username;
-            console.log("newUser: " + username);
             if (this.usernameManager.validateUsername(username)) {
                 const oldUsername: string | undefined = this.usernameManager.getUsername(socket.id);
                 if (oldUsername) {
@@ -83,8 +75,6 @@ export class AuthentificationService {
                 this.usernameManager.addUsername(socket.id, (message.data as ICommonUser).username);
                 const token: string = this.sendValidationToken(socket);
                 this.authentifiedUsers.set(token, username);
-                console.log("authehtifiedUsers token");
-                console.log(this.authentifiedUsers);
                 response({
                     token: token,
                 });
@@ -132,7 +122,6 @@ export class AuthentificationService {
     }
 
     private stopCleanupTimer(token: string): void {
-        console.log("stoped cleanup timer");
         const timeout: NodeJS.Timeout | undefined = this.activeCleanupTimers.get(token);
         if (timeout) {
             clearTimeout(timeout);
