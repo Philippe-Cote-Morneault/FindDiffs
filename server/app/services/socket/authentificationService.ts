@@ -59,6 +59,7 @@ export class AuthentificationService {
         SocketHandler.getInstance().broadcastMessage(Event.UserDisconnected, message);
     }
 
+    // tslint:disable-next-line:max-func-body-length
     public authenticateUser(socket: SocketIO.Socket, successCallback: (newUsername: string) => void): void {
         socket.on(Event.Authenticate, (message: ICommonSocketMessage) => {
             const receivedToken: string = (message.data as ICommonToken).token;
@@ -71,7 +72,7 @@ export class AuthentificationService {
                 successCallback(username);
             }
         });
-        socket.on(Event.NewUser, (message: ICommonSocketMessage) => {
+        socket.on(Event.NewUser, (message: ICommonSocketMessage, response: (data: Object) => void) => {
             const username: string = (message.data as ICommonUser).username;
             console.log("newUser: " + username);
             if (this.usernameManager.validateUsername(username)) {
@@ -84,7 +85,14 @@ export class AuthentificationService {
                 this.authentifiedUsers.set(token, username);
                 console.log("authehtifiedUsers token");
                 console.log(this.authentifiedUsers);
+                response({
+                    token: token,
+                });
                 successCallback(username);
+            } else {
+                response({
+                    error_message: "failed to create",
+                });
             }
         });
     }
