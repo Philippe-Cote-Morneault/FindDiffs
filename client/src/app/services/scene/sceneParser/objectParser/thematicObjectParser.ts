@@ -33,10 +33,6 @@ export class ThematicObjectParser extends SceneObjectParser {
             child.userData = object;
         });
 
-        object3D.children.forEach((element) => {
-            element.userData = object;
-        });
-
         if (object3D.rotation.x !== 0) {
             object3D.rotation.z = object.orientation.yAngle;
         } else {
