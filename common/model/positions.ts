@@ -10,3 +10,10 @@ export interface ICommon2DPosition{
     x: number;
     y: number;
 }
+
+export interface ICommon3DObject {
+    scenePairId: string;
+    originalObjectId: string;
+    modifiedObjectId: string;
+    gameType: ObjectType;
+}
