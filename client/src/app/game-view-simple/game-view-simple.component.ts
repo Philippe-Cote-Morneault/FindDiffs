@@ -30,6 +30,7 @@ export class GameViewSimpleComponent implements OnInit {
     private gameCardId: string;
     private imagePairId: string;
     public isGameOver: boolean;
+    public playerTime: string;
 
     public constructor(
         private route: ActivatedRoute,
@@ -44,8 +45,9 @@ export class GameViewSimpleComponent implements OnInit {
 
         this.isGameOver = false;
         this.game.gameEnded.subscribe((value) => {
-            this.isGameOver = value;
-          });
+            this.playerTime = value.time;
+            this.isGameOver = value.isGameOver;
+        });
     }
 
     public ngOnInit(): void {
