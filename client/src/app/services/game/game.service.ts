@@ -2,7 +2,8 @@ import { Injectable } from "@angular/core";
 import Timer from "easytimer.js";
 import { Subject } from "rxjs";
 import { R } from "src/app/ressources/strings";
-import { Event } from "../../../../../common/communication/webSocket/socketMessage";
+import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
 
@@ -39,7 +40,7 @@ export class GameService implements SocketSubscriber {
         this.socketService.subscribe(Event.DifferenceFound, this);
     }
 
-    public notify(event: Event): void {
+    public notify(event: Event, message: ICommonSocketMessage): void {
         switch (event) {
             case Event.GameStarted: {
                 return this.startGame();
@@ -48,7 +49,7 @@ export class GameService implements SocketSubscriber {
                 return this.stopGame();
             }
             case Event.DifferenceFound: {
-                return this.differenceFound();
+                return this.differenceFound(message);
             }
             default: {
                 break;
@@ -70,8 +71,9 @@ export class GameService implements SocketSubscriber {
         this.gameEnded.next(this.isGameOver);
     }
 
-    private  differenceFound(): void {
-        this.differenceUser.innerText = "+1";
+    private  differenceFound(message: ICommonSocketMessage): void {
+        const difference: number = (message.data as ICommonDifferenceFound).difference_count;
+        this.differenceUser.innerText = JSON.stringify(difference);
         this.differenceSound.play();
     }
 
