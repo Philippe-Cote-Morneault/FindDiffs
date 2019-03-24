@@ -4,12 +4,10 @@ import * as sinon from "sinon";
 import * as THREE from "three";
 import { MousePositionService } from "./mouse-position.service";
 
-
 describe("MousePositionService", () => {
 
   let mousePositionService: MousePositionService;
   let originalScene: HTMLElement;
-  // let modifiedScene: ElementRef<HTMLElement>;
   let event: MouseEvent;
 
   beforeEach(() => {
@@ -26,7 +24,6 @@ describe("MousePositionService", () => {
   });
 
   it("Should normalize the mouse position between -1 and 1", () => {
-    // const service: MousePositionService = TestBed.get(MousePositionService);
     let mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
     const stub: sinon.SinonStub = sinon.stub(mousePositionService, "setMousePosition");
     mouse = mousePositionService.setMousePosition(event, mouse, originalScene);
@@ -35,7 +32,7 @@ describe("MousePositionService", () => {
     stub.restore();
   });
 
-  it("Should call the function getBoundingClientRect at least once", async() => {
+  it("Should give the same result when we call getBoundingClient function from HTMLElement", async() => {
     const stub: sinon.SinonStub = sinon.stub(originalScene, "getBoundingClientRect");
     const returnValue: ClientRect | DOMRect = { width: 100, height: 100, top: 5, bottom: 5, right: 15, left: 15};
     stub.returns(returnValue);

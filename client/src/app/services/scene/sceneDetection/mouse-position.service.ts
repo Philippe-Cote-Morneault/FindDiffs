@@ -4,15 +4,17 @@ import { Injectable } from "@angular/core";
     providedIn: "root",
 })
 export class MousePositionService {
-
+    public divBoxInformation: ClientRect | DOMRect;
+    public differenceX: number;
+    public differenceY: number;
     // tslint:disable-next-line: variable-name
     public setMousePosition(event: MouseEvent, mouse: THREE.Vector2, HTMLElement: HTMLElement): THREE.Vector2 {
-        const divBoxInformation: ClientRect | DOMRect = HTMLElement.getBoundingClientRect();
-        const differenceX: number = event.clientX - divBoxInformation.left;
-        const differenceY: number = event.clientY - divBoxInformation.top;
+        this.divBoxInformation = HTMLElement.getBoundingClientRect();
+        this.differenceX = event.clientX - this.divBoxInformation.left;
+        this.differenceY = event.clientY - this.divBoxInformation.top;
         // tslint:disable:no-magic-numbers
-        mouse.x = (differenceX / HTMLElement.clientWidth) * 2 - 1;
-        mouse.y = -(differenceY / HTMLElement.clientHeight) * 2 + 1;
+        mouse.x = (this.differenceX / HTMLElement.clientWidth) * 2 - 1;
+        mouse.y = -(this.differenceY / HTMLElement.clientHeight) * 2 + 1;
 
         return mouse;
     }
