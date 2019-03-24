@@ -1,4 +1,5 @@
 import { ElementRef, Injectable } from "@angular/core";
+import { ICommonDifferenceFound } from "../../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../../common/communication/webSocket/socketMessage";
 import { DifferenceType, ICommonReveal3D } from "../../../../../../common/model/reveal";
 // import { ICommonReveal3D } from "../../../../../../common/model/reveal";
@@ -42,7 +43,7 @@ export class ObjectRestorationService implements SocketSubscriber {
 
   public notify(event: Event, message: ICommonSocketMessage): void {
     if (event === Event.DifferenceFound) {
-        const response: ICommonReveal3D = message.data as ICommonReveal3D;
+        const response: ICommonReveal3D = (message.data as ICommonDifferenceFound).reveal as ICommonReveal3D;
         this.restoreObject(response);
     }
   }
