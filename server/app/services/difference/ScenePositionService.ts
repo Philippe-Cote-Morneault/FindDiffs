@@ -1,15 +1,15 @@
 import * as axios from "axios";
 import { ICommon } from "../../../../common/model/reveal";
 
-export class PixelPositionService {
-    private static instance: PixelPositionService;
+export class ScenePositionService {
+    private static instance: ScenePositionService;
 
-    public static getInstance(): PixelPositionService {
-        if (!PixelPositionService.instance) {
-            PixelPositionService.instance = new PixelPositionService();
+    public static getInstance(): ScenePositionService {
+        if (!ScenePositionService.instance) {
+            ScenePositionService.instance = new ScenePositionService();
         }
 
-        return PixelPositionService.instance;
+        return ScenePositionService.instance;
     }
 
     public async post3DClick(imagePairId: string, x: number, y: number): Promise<ICommonReveal | null> {
