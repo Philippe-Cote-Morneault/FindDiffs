@@ -43,11 +43,11 @@ describe("GameService", () => {
     it("Should return the correct count after a difference is found", async () => {
         const timer: HTMLElement = document.createElement("p");
         const userDifference: HTMLElement = document.createElement("p");
-        const diff: ICommonDifferenceFound = { player: "", difference_count: 2, pixels_affected: []};
+        const diff: ICommonDifferenceFound = { player: "", difference_count: 2, reveal: []};
         const msg: ICommonSocketMessage = { data: diff, timestamp: new Date()};
         service.setContainers(timer, userDifference);
         alert(userDifference);
         await service.notify(Event.DifferenceFound, msg);
-        // expect(userDifference.innerText).to.equal("2");
-    });*/
+        expect(userDifference.innerText).to.equal("2");
+    });
 });
