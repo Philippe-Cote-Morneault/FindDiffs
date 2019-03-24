@@ -1,7 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
+import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { ICommonToken } from "../../../../common/communication/webSocket/token";
+import { ICommonUser } from "../../../../common/communication/webSocket/user";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
-import { UserService } from "../services/user/user.service";
 
 @Component({
     selector: "app-initial-view",
@@ -14,8 +16,7 @@ export class InitialViewComponent implements OnInit {
     @ViewChild("usernameInput") private usernameInput: ElementRef;
 
     public constructor(private router: Router,
-                       private socketHandlerService: SocketHandlerService,
-                       private userService: UserService) {
+                       private socketHandlerService: SocketHandlerService) {
     }
 
     public ngOnInit(): void {
@@ -26,11 +27,20 @@ export class InitialViewComponent implements OnInit {
               this.verifyUsername();
             }
           });
-        this.userService.setContainers(this.router);
     }
 
     public async verifyUsername(): Promise<void> {
         const username: string = this.usernameInput.nativeElement.value;
-        this.socketHandlerService.emitUser(username);
+        const user: ICommonUser = {
+            username: username,
+        };
+        const message: ICommonSocketMessage = {
+            data: user,
+            timestamp: new Date(),
+        };
+        this.socketHandlerService.socket.emit(Event.NewUser, message, (response: ICommonToken | ICommonError) => {
+            ((response as ICommonToken).token) ?
+            this.router.navigateByUrl("/gamesList") : alert((response as ICommonError).error_message);
+        });
     }
 }
