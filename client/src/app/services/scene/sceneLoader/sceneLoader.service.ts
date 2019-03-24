@@ -2,9 +2,9 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../../../common/model/scene/scene";
+import { CameraGenerator } from "../../../services/scene/sceneRenderer/cameraGenerator";
 import { ModifiedSceneParserService } from "../sceneParser/modifiedSceneParser.service";
 import { SceneParserService } from "../sceneParser/sceneParser.service";
-import { CameraGenerator } from "../../../services/scene/sceneRenderer/cameraGenerator";
 import { ControlsGenerator } from "../sceneRenderer/controlsGenerator";
 import { RendererGenerator } from "../sceneRenderer/rendererGenerator";
 
