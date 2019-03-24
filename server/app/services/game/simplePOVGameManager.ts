@@ -3,7 +3,6 @@ import { PixelPositionService } from "../difference/pixelPosition.service";
 import { Game } from "../../model/game/game";
 import { ICommon2DPosition } from "../../../../common/model/positions";
 import { ICommonReveal } from "../../../../common/model/reveal";
-import { Message } from "../../../../common/communication/message";
 
 export class SimplePOVGameManager extends GameManager {
     private pixelPositionService: PixelPositionService;
@@ -14,13 +13,17 @@ export class SimplePOVGameManager extends GameManager {
     }
 
     public playerClick(position: ICommon2DPosition, callBack: (data: Object | null) => void): void {
+        console.log("inOnPlayerClick");
         this.pixelPositionService.postPixelPosition(this.game.ressource_id, position.x, position.y)
-            .then((value: ICommonReveal | Message) => {
-                if (value as ICommonReveal) {
+            .then((value: ICommonReveal | null) => {
+                console.log(value);
+                if (value) {
+                    console.log("isIcommonreveal");
                     this.differenceFound((value as ICommonReveal).difference_id);
 
                     callBack(value);
                 } else {
+                    console.log("isNull");
                     callBack(null);
                 }
             });

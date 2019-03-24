@@ -1,5 +1,4 @@
 import { Game } from "../../model/game/game";
-import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 
 export abstract class GameManager {
     private endGameCallback: (game: Game, winner: string) => void;
