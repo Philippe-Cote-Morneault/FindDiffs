@@ -33,6 +33,7 @@ export const R: IString = {
     ERROR_INVALID_FILE: "%s is not a file.",
     ERROR_USERNAME_TAKEN: "The username is already taken.",
     ERROR_DIFFERENCE_INVALID: "The game card should have 7 differences. It has %d differences.",
+    ERROR_TOKEN: "Your authentification token has timed out or is invalid",
 
     GAME_TYPE: "Game type",
     GAME_TYPE_: "game type",
@@ -69,4 +70,6 @@ export const R: IString = {
     X_: "x",
     Y: "Y",
     Y_: "y",
+
+    SOCKET_DATE: "HH:MM:ss",
 };

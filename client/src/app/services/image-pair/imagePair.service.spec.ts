@@ -27,106 +27,110 @@ describe("InitialViewService", () => {
             httpMock = TestBed.get(HttpTestingController);
         });
 
-        it("Should return expected message on addImagePair request (HttpClient called once)", () => {
-            const expectedImage: ICommonImagePair = {
-                id: "1",
-                url_difference: "/diff",
-                url_modified: "/modif",
-                url_original: "/origin",
-                name: "image",
-                creation_date: new Date(),
-                differences_count: 7,
-            };
-            const mockImageName: string = "user1";
-            const mockImageFile: File = {
-                lastModified: 1000,
-                size: 1000,
-                name: "qasdas",
-                type: "bmp",
-                slice: (start: 0, end: 0, contentType: "aw") => new Blob,
-            };
+        describe("addImagePair()", () => {
+            it("Should return expected message on addImagePair request (HttpClient called once)", () => {
+                const expectedImage: ICommonImagePair = {
+                    id: "1",
+                    url_difference: "/diff",
+                    url_modified: "/modif",
+                    url_original: "/origin",
+                    name: "image",
+                    creation_date: new Date(),
+                    differences_count: 7,
+                };
+                const mockImageName: string = "user1";
+                const mockImageFile: File = {
+                    lastModified: 1000,
+                    size: 1000,
+                    name: "qasdas",
+                    type: "bmp",
+                    slice: (start: 0, end: 0, contentType: "aw") => new Blob,
+                };
 
-            httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedImage));
+                httpClientSpyPost.post.and.returnValue(TestHelper.asyncData(expectedImage));
 
-            initialViewServiceGet.addImagePair(mockImageName, mockImageFile, mockImageFile).subscribe(
-                (response: ICommonImagePair) => {
-                    expect(response.id).to.equal(expectedImage.id);
-                    expect(response.name).to.equal(expectedImage.name);
-                },
-            );
-        });
-
-        it("should return an error if the image pair isn't added", () => {
-            const mockImageName: string = "user1";
-            const mockImageFile: File = {
-                lastModified: 1000,
-                size: 1000,
-                name: "qasdas",
-                type: "bmp",
-                slice: (start: 0, end: 0, contentType: "aw") => new Blob,
-            };
-            service.addImagePair(mockImageName, mockImageFile, mockImageFile).subscribe((message: Message) => {
-                expect(message.title).to.equal("Error");
-                expect(message.body).to.equal("The image pair was not added");
+                initialViewServiceGet.addImagePair(mockImageName, mockImageFile, mockImageFile).subscribe(
+                    (response: ICommonImagePair) => {
+                        expect(response.id).to.equal(expectedImage.id);
+                        expect(response.name).to.equal(expectedImage.name);
+                    },
+                );
             });
 
-            const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/image-pair/");
-            const mockErrorResponse: Object = { status: 400, statusText: "Bad Request" };
-            expect(testRequest.request.method).to.equal("POST");
+            it("should return an error if the image pair isn't added", () => {
+                const mockImageName: string = "user1";
+                const mockImageFile: File = {
+                    lastModified: 1000,
+                    size: 1000,
+                    name: "qasdas",
+                    type: "bmp",
+                    slice: (start: 0, end: 0, contentType: "aw") => new Blob,
+                };
+                service.addImagePair(mockImageName, mockImageFile, mockImageFile).subscribe((message: Message) => {
+                    expect(message.title).to.equal("Error");
+                    expect(message.body).to.equal("The image pair was not added");
+                });
 
-            testRequest.flush(
-                {
-                    "title": "Error",
-                    "body": "The image pair was not added",
-                },
-                mockErrorResponse,
-            );
+                const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/image-pair/");
+                const mockErrorResponse: Object = { status: 400, statusText: "Bad Request" };
+                expect(testRequest.request.method).to.equal("POST");
 
-            httpMock.verify();
+                testRequest.flush(
+                    {
+                        "title": "Error",
+                        "body": "The image pair was not added",
+                    },
+                    mockErrorResponse,
+                );
+
+                httpMock.verify();
+            });
         });
 
-        it("Should return an image pair", () => {
-            const expectedImage: ICommonImagePair = {
-                id: "1",
-                url_difference: "/diff",
-                url_modified: "/modif",
-                url_original: "/origin",
-                name: "image",
-                creation_date: new Date(),
-                differences_count: 7,
-            };
+        describe("getImagePairById()", () => {
+            it("Should return an image pair", () => {
+                const expectedImage: ICommonImagePair = {
+                    id: "1",
+                    url_difference: "/diff",
+                    url_modified: "/modif",
+                    url_original: "/origin",
+                    name: "image",
+                    creation_date: new Date(),
+                    differences_count: 7,
+                };
 
-            service.getImagePairById("1").subscribe((imagePair: ICommonImagePair) => {
-                expect(imagePair).to.equal(expectedImage);
+                service.getImagePairById("1").subscribe((imagePair: ICommonImagePair) => {
+                    expect(imagePair).to.equal(expectedImage);
+                });
+
+                const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/image-pair/1");
+                expect(testRequest.request.method).to.equal("GET");
+
+                testRequest.flush(expectedImage);
+
+                httpMock.verify();
+
             });
 
-            const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/image-pair/1");
-            expect(testRequest.request.method).to.equal("GET");
+            it("Should return an error if there is no image pair with the specified id", () => {
+                service.getImagePairById("1").subscribe((message: Message) => {
+                    expect(message.title).to.equal("Error");
+                    expect(message.body).to.equal("There is no image pair with the specified id");
+                });
 
-            testRequest.flush(expectedImage);
+                const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/image-pair/1");
+                const mockErrorResponse: Object = { status: 400, statusText: "Bad Request" };
+                expect(testRequest.request.method).to.equal("GET");
 
-            httpMock.verify();
+                testRequest.flush(
+                    {
+                        "title": "Error",
+                        "body": "There is no image pair with the specified id",
+                    },
+                    mockErrorResponse,
+                );
 
-        });
-
-        it("Should return an error if there is no image pair with the specified id", () => {
-            service.getImagePairById("1").subscribe((message: Message) => {
-                expect(message.title).to.equal("Error");
-                expect(message.body).to.equal("There is no image pair with the specified id");
+                httpMock.verify();
             });
-
-            const testRequest: TestRequest = httpMock.expectOne("http://localhost:3000/image-pair/1");
-            const mockErrorResponse: Object = { status: 400, statusText: "Bad Request" };
-            expect(testRequest.request.method).to.equal("GET");
-
-            testRequest.flush(
-                {
-                    "title": "Error",
-                    "body": "There is no image pair with the specified id",
-                },
-                mockErrorResponse,
-            );
-
-            httpMock.verify();
         });
   });

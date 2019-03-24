@@ -1,56 +1,74 @@
 import { Injectable } from "@angular/core";
+import { Event } from "../../../../../common/communication/webSocket/socketMessage";
+import { R } from "../../ressources/strings";
+import { SocketHandlerService } from "../socket/socketHandler.service";
+import { SocketSubscriber } from "../socket/socketSubscriber";
 
 @Injectable({
     providedIn: "root",
 })
-export class IdentificationError {
+export class IdentificationError implements SocketSubscriber {
     private static readonly ERROR_SOUND_SRC: string = "../../assets/no.mp3";
     private static readonly ONE_SECOND: number = 1000;
-    private static readonly PIXEL: string = "px";
-    private static readonly INLINE: string = "inline";
-    private static readonly NONE: string = "none";
-    private static readonly NOT_ALLOWED: string = "not-allowed";
-    private static readonly CONTEXT_MENU: string = "context-menu";
+    private errorMessage: HTMLElement;
+    private original: HTMLElement;
+    private modified: HTMLElement;
 
-    public timeout: boolean;
+    private timeout: boolean;
     private errorSound: HTMLAudioElement;
 
-    public constructor() {
+    public constructor(private socketService: SocketHandlerService ) {
         this.timeout = false;
         this.errorSound = new Audio;
         this.errorSound.src = IdentificationError.ERROR_SOUND_SRC;
         this.errorSound.load();
+        this.subscribeToSocket();
     }
 
-    public async showErrorMessage(xPosition: number, yPosition: number,
-                                  errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement ): Promise<void> {
-        this.timeout = true;
-        this.moveClickError(xPosition, yPosition, errorMessage);
-        this.showClickError(errorMessage, original, modified);
-        await this.errorSound.play();
+    public setContainers(errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement): void {
+        this.errorMessage = errorMessage;
+        this.original = original;
+        this.modified = modified;
+    }
 
+    private subscribeToSocket(): void {
+        this.socketService.subscribe(Event.InvalidClick, this);
+    }
+
+    public async notify(): Promise<void> {
+        await this.showErrorMessage();
+    }
+
+    public async showErrorMessage(): Promise<void> {
+        this.timeout = true;
+        this.showClickError();
+        await this.errorSound.play();
         setTimeout(() => {
-            this.hideClickError(errorMessage, original, modified);
+            this.hideClickError();
             this.timeout = false;
                 }, IdentificationError.ONE_SECOND);
     }
 
-    private moveClickError(xPosition: number, yPosition: number, errorMessage: HTMLElement): void {
-        errorMessage.style.top = yPosition + IdentificationError.PIXEL;
-        errorMessage.style.left = xPosition + IdentificationError.PIXEL;
+    public moveClickError(xPosition: number, yPosition: number): void {
+        this.errorMessage.style.top = yPosition + R.PIXEL;
+        this.errorMessage.style.left = xPosition + R.PIXEL;
     }
 
-    private showClickError(errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement): void {
-        errorMessage.style.display = IdentificationError.INLINE;
-        original.style.cursor = IdentificationError.NOT_ALLOWED;
-        modified.style.cursor = IdentificationError.NOT_ALLOWED;
-        errorMessage.style.cursor = IdentificationError.NOT_ALLOWED;
+    private showClickError(): void {
+        this.errorMessage.style.display = R.INLINE;
+        this.original.style.cursor = R.NOT_ALLOWED;
+        this.modified.style.cursor = R.NOT_ALLOWED;
+        this.errorMessage.style.cursor = R.NOT_ALLOWED;
     }
 
-    private hideClickError(errorMessage: HTMLElement, original: HTMLElement, modified: HTMLElement): void {
-        errorMessage.style.display = IdentificationError.NONE;
-        original.style.cursor = IdentificationError.CONTEXT_MENU;
-        modified.style.cursor = IdentificationError.CONTEXT_MENU;
-        errorMessage.style.cursor = IdentificationError.CONTEXT_MENU;
+    private hideClickError(): void {
+        this.errorMessage.style.display = R.NONE;
+        this.original.style.cursor = R.CONTEXT_MENU;
+        this.modified.style.cursor = R.CONTEXT_MENU;
+        this.errorMessage.style.cursor = R.CONTEXT_MENU;
+    }
+
+    public getTimeout(): boolean {
+        return this.timeout;
     }
 }

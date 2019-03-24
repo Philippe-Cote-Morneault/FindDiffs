@@ -11,12 +11,12 @@
 }
 
 .button-wrapper {
-    display: flex;
     justify-content: center;
-    margin-left: 67px;
+    width: 60%;
+    margin-left: 36%;
 }
 .container-fluid {
-    width:450px;
+    width:90%;
     color:#9d9d9d;
 }
 
@@ -41,4 +41,8 @@ body {
 
 #leaveButton{
     float: right;
+}
+
+.leave-wrapper{
+    width: 20%
 }

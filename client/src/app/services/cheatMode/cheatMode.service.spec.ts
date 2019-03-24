@@ -75,109 +75,119 @@ describe("CheatModeService", () => {
 
       });
 
-      it("should change the added objects visibility to false in the modified scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const addedObjectsId: string[] = modifiedScene.addedObjects.map((object) => object.id);
-        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
-        addedObjectsId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.false;
-          }
-        })
-      });
+      describe("enableCheats()", () => {
+        describe("changeAddedOjectsColor()", () => {
+          it("should change the added objects visibility to false in the modified scene", () => {
+            cheatModeService.toggleCheatMode(modifiedScene);
+            const addedObjectsId: string[] = modifiedScene.addedObjects.map((object) => object.id);
+            const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+            addedObjectsId.forEach((id: string) => {
+              const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+              expect(object3D).to.not.be.undefined;
+              if (object3D) {
+                expect(object3D.visible).to.be.false;
+              }
+            });
+          });
+        });
 
-      it("should change the added objects visibility to true in the modified scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const addedObjectsId: string[] = modifiedScene.addedObjects.map((object: ICommonSceneObject) => object.id);
-        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
-        addedObjectsId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.true;
-          }
-        })
-      });
-      
-      it("should change the deleted objects visibility to false in the original scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
-        modifiedScene.deletedObjects.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.false;
-          }
+        describe("changeDeletedObjectsColor()", () => {
+          it("should change the deleted objects visibility to false in the original scene", () => {
+            cheatModeService.toggleCheatMode(modifiedScene);
+            const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+            modifiedScene.deletedObjects.forEach((id: string) => {
+              const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+              expect(object3D).to.not.be.undefined;
+              if (object3D) {
+                expect(object3D.visible).to.be.false;
+              }
+            });
+          });
+        });
+
+        describe("changeColorChangedObjectsColor()", () => {
+          it("should change the color changed objects visibility to false in the original scene", () => {
+            cheatModeService.toggleCheatMode(modifiedScene);
+            const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
+            const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+            colorChangedObjectsId.forEach((id: string) => {
+              const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+              expect(object3D).to.not.be.undefined;
+              if (object3D) {
+                expect(object3D.visible).to.be.false;
+              }
+            });
+          });
+
+          it("should change the color changed objects visibility to false in the modified scene", () => {
+            cheatModeService.toggleCheatMode(modifiedScene);
+            const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
+            const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+            colorChangedObjectsId.forEach((id: string) => {
+              const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+              expect(object3D).to.not.be.undefined;
+              if (object3D) {
+                expect(object3D.visible).to.be.false;
+              }
+            });
+          });
         });
       });
 
-      it("should change the deleted objects visibility to true in the original scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
-        modifiedScene.deletedObjects.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.true;
-          }
+      describe("showAllObjects()", () => {
+        it("should change the added objects visibility to true in the modified scene", () => {
+          cheatModeService.toggleCheatMode(modifiedScene);
+          cheatModeService.toggleCheatMode(modifiedScene);
+          const addedObjectsId: string[] = modifiedScene.addedObjects.map((object: ICommonSceneObject) => object.id);
+          const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+          addedObjectsId.forEach((id: string) => {
+            const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+            expect(object3D).to.not.be.undefined;
+            if (object3D) {
+              expect(object3D.visible).to.be.true;
+            }
+          });
         });
-      });
 
-      it("should change the color changed objects visibility to false in the original scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
-        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
-        colorChangedObjectsId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.false;
-          }
+        it("should change the deleted objects visibility to true in the original scene", () => {
+          cheatModeService.toggleCheatMode(modifiedScene);
+          cheatModeService.toggleCheatMode(modifiedScene);
+          const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+          modifiedScene.deletedObjects.forEach((id: string) => {
+            const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+            expect(object3D).to.not.be.undefined;
+            if (object3D) {
+              expect(object3D.visible).to.be.true;
+            }
+          });
         });
-      });
 
-      it("should change the color changed objects visibility to true in the original scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
-        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
-        colorChangedObjectsId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);         expect(object3D).to.not.be.undefined;
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.true;
-          }
+        it("should change the color changed objects visibility to true in the original scene", () => {
+          cheatModeService.toggleCheatMode(modifiedScene);
+          cheatModeService.toggleCheatMode(modifiedScene);
+          const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
+          const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+          colorChangedObjectsId.forEach((id: string) => {
+            const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);         expect(object3D).to.not.be.undefined;
+            expect(object3D).to.not.be.undefined;
+            if (object3D) {
+              expect(object3D.visible).to.be.true;
+            }
+          });
         });
-      });
 
-      it("should change the color changed objects visibility to false in the modified scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
-        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
-        colorChangedObjectsId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.false;
-          }
-        });
-      });
-
-      it("should change the color changed objects visibility to true in the modified scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
-        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
-        colorChangedObjectsId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);         expect(object3D).to.not.be.undefined;
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.true;
-          }
+        it("should change the color changed objects visibility to true in the modified scene", () => {
+          cheatModeService.toggleCheatMode(modifiedScene);
+          cheatModeService.toggleCheatMode(modifiedScene);
+          const colorChangedObjectsId: string[] = modifiedScene.colorChangedObjects.map((object: Pair<string, number>) => object.key);
+          const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+          colorChangedObjectsId.forEach((id: string) => {
+            const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);         expect(object3D).to.not.be.undefined;
+            expect(object3D).to.not.be.undefined;
+            if (object3D) {
+              expect(object3D.visible).to.be.true;
+            }
+          });
         });
       });
     });
@@ -195,111 +205,133 @@ describe("CheatModeService", () => {
           await new ModifiedSceneParserService(ObjectType.Thematic).parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
       });
 
-      it("should change the added objects visibility to false in the modified scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const addedObjectsId: string[] = modifiedScene.addedObjects.map((object) => object.id);
-        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
-        addedObjectsId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.false;
-          }
-        })
-      });
-      
-      it("should change the added objects visibility to true in the modified scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const addedObjectsId: string[] = modifiedScene.addedObjects.map((object: ICommonSceneObject) => object.id);
-        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
-        addedObjectsId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.true;
-          }
-        })
-      });
+      describe("enableCheats()", () => {
+        describe("changeAddedOjectsColor()", () => {
+          it("should change the added objects visibility to false in the modified scene", () => {
+            cheatModeService.toggleCheatMode(modifiedScene);
+            const addedObjectsId: string[] = modifiedScene.addedObjects.map((object) => object.id);
+            const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+            addedObjectsId.forEach((id: string) => {
+              const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+              expect(object3D).to.not.be.undefined;
+              if (object3D) {
+                expect(object3D.visible).to.be.false;
+              }
+            })
+          });
+        });
 
-      it("should change the deleted objects visibility to false in the original scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
-        modifiedScene.deletedObjects.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.false;
-          }
+        describe("changeDeletedObjectsColor()", () => {
+          it("should change the deleted objects visibility to false in the original scene", () => {
+            cheatModeService.toggleCheatMode(modifiedScene);
+            const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+            modifiedScene.deletedObjects.forEach((id: string) => {
+              const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+              expect(object3D).to.not.be.undefined;
+              if (object3D) {
+                expect(object3D.visible).to.be.false;
+              }
+            });
+          });
+        });
+
+        describe("changeThematicChangedObjects()", () => {
+          it("should change the texture changed object visibility to false in the original scene", () => {
+            cheatModeService.toggleCheatMode(modifiedScene);
+            const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+            const textureChangedObjectId: string[] = modifiedScene.texturesChangedObjects.map((pair: Pair<string, string>) => pair.key);
+            textureChangedObjectId.forEach((id: string) => {
+              const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+              expect(object3D).to.not.be.undefined;
+              if (object3D) {
+                expect(object3D.visible).to.be.false;
+              } 
+            });
+          });
+
+          it("should change the texture changed object visibility to false in the modified scene", () => {
+            cheatModeService.toggleCheatMode(modifiedScene);
+            const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+            const textureChangedObjectId: string[] = modifiedScene.texturesChangedObjects.map((pair: Pair<string, string>) => pair.key);
+            textureChangedObjectId.forEach((id: string) => {
+              const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+              expect(object3D).to.not.be.undefined;
+              if (object3D) {
+                expect(object3D.visible).to.be.false;
+              } 
+            });
+          });
         });
       });
 
-      it("should change the deleted objects visibility to true in the original scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
-        modifiedScene.deletedObjects.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.true;
-          }
+      describe("showAllObjects()", () => {
+        it("should change the added objects visibility to true in the modified scene", () => {
+          cheatModeService.toggleCheatMode(modifiedScene);
+          cheatModeService.toggleCheatMode(modifiedScene);
+          const addedObjectsId: string[] = modifiedScene.addedObjects.map((object: ICommonSceneObject) => object.id);
+          const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+          addedObjectsId.forEach((id: string) => {
+            const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+            expect(object3D).to.not.be.undefined;
+            if (object3D) {
+              expect(object3D.visible).to.be.true;
+            }
+          })
         });
-      });
 
-      it("should change the texture changed object visibility to false in the original scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
-        const textureChangedObjectId: string[] = modifiedScene.texturesChangedObjects.map((pair: Pair<string, string>) => pair.key);
-        textureChangedObjectId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.false;
-          } 
+        it("should change the deleted objects visibility to true in the original scene", () => {
+          cheatModeService.toggleCheatMode(modifiedScene);
+          cheatModeService.toggleCheatMode(modifiedScene);
+          const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+          modifiedScene.deletedObjects.forEach((id: string) => {
+            const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+            expect(object3D).to.not.be.undefined;
+            if (object3D) {
+              expect(object3D.visible).to.be.true;
+            }
+          });
         });
-      });
 
-      it("should change the texture changed object visibility to true in the original scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
-        const textureChangedObjectId: string[] = modifiedScene.texturesChangedObjects.map((pair: Pair<string, string>) => pair.key);
-        textureChangedObjectId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.true;
-          } 
+        it("should change the texture changed object visibility to true in the original scene", () => {
+          cheatModeService.toggleCheatMode(modifiedScene);
+          cheatModeService.toggleCheatMode(modifiedScene);
+          const objectThree: THREE.Object3D[] = cheatModeService.originalLoaderService.scene.children;
+          const textureChangedObjectId: string[] = modifiedScene.texturesChangedObjects.map((pair: Pair<string, string>) => pair.key);
+          textureChangedObjectId.forEach((id: string) => {
+            const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+            expect(object3D).to.not.be.undefined;
+            if (object3D) {
+              expect(object3D.visible).to.be.true;
+            } 
+          });
         });
-      });
 
-      it("should change the texture changed object visibility to false in the modified scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
-        const textureChangedObjectId: string[] = modifiedScene.texturesChangedObjects.map((pair: Pair<string, string>) => pair.key);
-        textureChangedObjectId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.false;
-          } 
+        it("should change the texture changed object visibility to true in the modified scene", () => {
+          cheatModeService.toggleCheatMode(modifiedScene);
+          cheatModeService.toggleCheatMode(modifiedScene);
+          const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
+          const textureChangedObjectId: string[] = modifiedScene.texturesChangedObjects.map((pair: Pair<string, string>) => pair.key);
+          textureChangedObjectId.forEach((id: string) => {
+            const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
+            expect(object3D).to.not.be.undefined;
+            if (object3D) {
+              expect(object3D.visible).to.be.true;
+            } 
+          });
         });
       });
+    });
+  });
 
-      it("should change the texture changed object visibility to true in the modified scene", () => {
-        cheatModeService.toggleCheatMode(modifiedScene);
-        cheatModeService.toggleCheatMode(modifiedScene);
-        const objectThree: THREE.Object3D[] = cheatModeService.modifiedLoaderService.scene.children;
-        const textureChangedObjectId: string[] = modifiedScene.texturesChangedObjects.map((pair: Pair<string, string>) => pair.key);
-        textureChangedObjectId.forEach((id: string) => {
-          const object3D: THREE.Object3D | undefined = objectThree.find((object: THREE.Object3D) => object.userData.id === id);
-          expect(object3D).to.not.be.undefined;
-          if (object3D) {
-            expect(object3D.visible).to.be.true;
-          } 
-        });
-      });
+  describe("arrayNotEmpty()", () => {
+    it("should return false if the array is empty", () => {
+      const emptyArray: number[] = [];
+      expect(cheatModeService.arrayNotEmpty(emptyArray.length)).to.be.false;
+    });
+
+    it("should return true if the array is not empty", () => {
+      const array: number[] = [1];
+      expect(cheatModeService.arrayNotEmpty(array.length)).to.be.true;
     });
   });
 });
