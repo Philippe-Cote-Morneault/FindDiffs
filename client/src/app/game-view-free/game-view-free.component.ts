@@ -2,10 +2,6 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import * as THREE from "three";
-// import { TimerService } from "../services/timer/timer.service";
-// import { Chat } from "../services/socket/chat";
-// import { ChatFormaterService } from "../services/socket/chatFormater.service";
-// import { TimerService } from "../services/timer/timer.service";
 import { Event } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
@@ -15,7 +11,7 @@ import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
 import { MousePositionService } from "../services/3DObjects/mousePosition.service";
 import { ObjectDetectionService } from "../services/3DObjects/object-detection.service";
-import { RestoreObjectsService} from "../services/3DObjects/restore-objects.service";
+import { ObjectHandler} from "../services/3DObjects/objectsHandler.service";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeService } from "../services/cheatMode/cheatMode.service";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
@@ -26,6 +22,7 @@ import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.se
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { Chat } from "../services/socket/chat";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
+import { ObjectRestorationService } from "../services/3DObjects/object-restoration.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -57,7 +54,6 @@ export class GameViewFreeComponent implements OnInit {
     private cheatActivated: boolean;
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
-    // private gameType: ObjectType;
     public playerTime: string;
     public differenceCounterUser: number;
     public isGameOver: boolean;
@@ -66,7 +62,6 @@ export class GameViewFreeComponent implements OnInit {
         private route: ActivatedRoute,
         private spinnerService: Ng4LoadingSpinnerService,
         public sceneService: SceneService,
-        // public timerService: TimerService,
         public gamesCardService: GamesCardService,
         public geometricObjectService: GeometricObjectsService,
         private sceneSyncer: SceneSyncerService,
@@ -75,10 +70,11 @@ export class GameViewFreeComponent implements OnInit {
         public identificationError: IdentificationError,
         public mousePositionService: MousePositionService,
         public objectDetectionService: ObjectDetectionService,
-        public restoreObjectsService: RestoreObjectsService,
+        public objectHandler: ObjectHandler,
         public socket: SocketHandlerService,
         private game: GameService,
-        public chat: Chat) {
+        public chat: Chat,
+        public objectRestoration: ObjectRestorationService) {
             this.differenceCounterUser = 0;
             this.differenceSound = new Audio;
             this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
@@ -88,15 +84,15 @@ export class GameViewFreeComponent implements OnInit {
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
 
-            this.restoreObjectsService = new RestoreObjectsService(this.mousePositionService,
-                                                                   this.objectDetectionService,
-                                                                   this.originalSceneLoader,
-                                                                   this.modifiedSceneLoader,
-                                                                   this.restoreObjectsService,
-                                                                   this.geometricObjectService,
-                                                                   this.socket,
-                                                                   this.identificationError,
-                                                                   this.game);
+            this.objectHandler = new ObjectHandler(this.mousePositionService,
+                                                   this.objectDetectionService,
+                                                   this.originalSceneLoader,
+                                                   this.modifiedSceneLoader,
+                                                   this.geometricObjectService,
+                                                   this.socket,
+                                                   this.identificationError,
+                                                   this.game,
+                                                   this.objectRestoration);
     }
 
     public ngOnInit(): void {
@@ -115,6 +111,8 @@ export class GameViewFreeComponent implements OnInit {
         this.identificationError.setContainers(this.errorMessage.nativeElement,
                                                this.originalScene.nativeElement,
                                                this.modifiedScene.nativeElement);
+
+        this.objectRestoration.setContainers(this.originalScene.nativeElement, this.modifiedScene.nativeElement);
     }
 
     @HostListener("document:keydown", ["$event"])
@@ -187,21 +185,21 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private setRestoreObjectService(): void {
-        this.restoreObjectsService.meshesOriginal = this.meshesOriginal;
-        this.restoreObjectsService.meshesModified = this.meshesModified;
-        this.restoreObjectsService.scenePairId = this.scenePairId;
-        this.restoreObjectsService.originalGame = this.originalScene;
-        this.restoreObjectsService.modifiedGame = this.modifiedScene;
-        this.restoreObjectsService.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
-        this.restoreObjectsService.originalSceneLoader = this.originalSceneLoader;
-        this.restoreObjectsService.modifiedSceneLoader = this.modifiedSceneLoader;
+        this.objectHandler.meshesOriginal = this.meshesOriginal;
+        this.objectHandler.meshesModified = this.meshesModified;
+        this.objectHandler.scenePairId = this.scenePairId;
+        this.objectHandler.originalGame = this.originalScene;
+        this.objectHandler.modifiedGame = this.modifiedScene;
+        this.objectHandler.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
+        this.objectHandler.originalSceneLoader = this.originalSceneLoader;
+        this.objectHandler.modifiedSceneLoader = this.modifiedSceneLoader;
     }
 
     private clickEvent(): void {
         this.originalScene.nativeElement.addEventListener("click", (event: MouseEvent) =>
-                    this.restoreObjectsService.clickOnScene(event, true));
+                    this.objectHandler.clickOnScene(event, true));
         this.modifiedScene.nativeElement.addEventListener("click", (event: MouseEvent) =>
-                    this.restoreObjectsService.clickOnScene(event, false));
+                    this.objectHandler.clickOnScene(event, false));
     }
 
     private isGameThematic(): boolean {
