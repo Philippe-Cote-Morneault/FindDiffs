@@ -16,7 +16,7 @@ export class CheatModeHandlerService {
     public currentOriginalScene: ICommonScene;
     public currentModifiedScene: ICommonSceneModifications;
 
-    public constructor(private cheatModeService: CheatModeService,
+    public constructor(public cheatModeService: CheatModeService,
                        private cheatModeTimeoutService: CheatModeTimeoutService) {
         this.cheatModeService = new CheatModeService();
         this.toggleCheatMode = false;
