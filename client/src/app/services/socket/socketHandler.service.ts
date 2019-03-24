@@ -3,7 +3,7 @@ import * as io from "socket.io-client";
 import { ICommonGame } from "../../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonToken } from "../../../../../common/communication/webSocket/token";
-import { ICommonUser } from "../../../../../common/communication/webSocket/user";
+// import { ICommonUser } from "../../../../../common/communication/webSocket/user";
 import { POVType } from "../../../../../common/model/gameCard";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { SERVER_URL } from "../../../../../common/url";
@@ -66,17 +66,6 @@ export class SocketHandlerService {
                 subscriber.notify(event, message);
             });
         }
-    }
-
-    public emitUser(username: string): void {
-        const user: ICommonUser = {
-            username: username,
-        };
-        const message: ICommonSocketMessage = {
-            data: user,
-            timestamp: new Date(),
-        };
-        this.socket.emit(Event.NewUser, message);
     }
 
     public emitClick(xPos: number, yPos: number): void {
