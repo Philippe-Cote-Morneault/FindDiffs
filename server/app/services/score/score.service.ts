@@ -67,9 +67,12 @@ export class ScoreService extends Service implements IScoreService {
         if (Number(req.body.time) < 0) {
             throw new InvalidFormatException(_e(R.ERROR_LESS_ZERO, [R.TIME_]));
         }
+        /*
         if (!req.body.type) {
+            console.log("notyp");
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.GAME_TYPE_]));
         }
+        */
         if (!EnumUtils.isStringInEnum(req.body.type, GameType)) {
             throw new InvalidFormatException(_e(R.ERROR_WRONG_TYPE, [R.GAME_TYPE_]));
         }

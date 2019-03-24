@@ -14,13 +14,14 @@ import {    IDifferenceController,
             ISceneController,
             IScoreController} from "./controllers/interfaces";
 import { IApplication, IServer } from "./interfaces";
-import { IDifferenceService, IGameCardService, IImagePairService, ISceneService} from "./services/interfaces";
+import { IDifferenceService, IGameCardService, IImagePairService, ISceneService, IScoreService} from "./services/interfaces";
 
 import { ScoreController } from "./controllers/scoreController";
 import { DifferenceService } from "./services/difference/difference.service";
 import { GameCardService } from "./services/gameCard/gameCard.service";
 import { ImagePairService } from "./services/imagePair/imagePair.service";
 import { SceneService } from "./services/scene/scene.service";
+import { ScoreService } from "./services/score/score.service";
 
 const container: Container = new Container();
 
@@ -37,5 +38,6 @@ container.bind<IGameCardService>(TYPES.IGameCardService).to(GameCardService);
 container.bind<IImagePairService>(TYPES.IImagePairService).to(ImagePairService);
 container.bind<ISceneService>(TYPES.ISceneService).to(SceneService);
 container.bind<IDifferenceService>(TYPES.IDifferenceService).to(DifferenceService);
+container.bind<IScoreService>(TYPES.IScoreService).to(ScoreService);
 
 export { container };
