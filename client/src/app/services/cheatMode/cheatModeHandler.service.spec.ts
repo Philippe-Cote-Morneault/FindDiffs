@@ -37,12 +37,24 @@ describe("CheatModeHandlerService", () => {
             modifiedLoaderService.scene = 
               await new ModifiedSceneParserService(ObjectType.Geometric).parseModifiedScene(originalLoaderService.scene, modifiedScene);
         });
+
         it("should call startCheatMode once", () => {
             const stub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "startCheatMode").callsFake(() => {});
             const event: KeyboardEvent = new KeyboardEvent("KeyboardEvent", {key: "t"});
             cheatModeHandlerService.keyPressed(event, originalLoaderService, modifiedLoaderService);
             expect(stub.calledOnce).to.be.true;
             stub.restore();
+        });
+
+        it("should call stopCheatMode once", () => {
+            const startStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "startCheatMode").callsFake(() => {});
+            const stopStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "stopCheatMode").callsFake(() => {});
+            const event: KeyboardEvent = new KeyboardEvent("KeyboardEvent", {key: "t"});
+            cheatModeHandlerService.keyPressed(event, originalLoaderService, modifiedLoaderService);
+            cheatModeHandlerService.keyPressed(event, originalLoaderService, modifiedLoaderService);
+            expect(stopStub.calledOnce).to.be.true;
+            startStub.restore();
+            stopStub.restore();
         });
     });
 });
