@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { Event } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
@@ -34,7 +35,7 @@ export class GameViewSimpleComponent implements OnInit {
         private route: ActivatedRoute,
         public imagePairService: ImagePairService,
         private gamesCardService: GamesCardService,
-        public socket: SocketHandlerService,
+        public socketHandler: SocketHandlerService,
         public chat: Chat,
         public pixelRestoration: PixelRestoration,
         public identificationError: IdentificationError,
@@ -78,7 +79,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.imagePairService.getImagePairById(this.imagePairId).subscribe((imagePair: ICommonImagePair) => {
             this.canvasLoader.loadCanvas(this.modifiedCanvas.nativeElement, imagePair.url_modified);
             this.canvasLoader.loadCanvas(this.originalCanvas.nativeElement, imagePair.url_original);
-            this.socket.emitReadyToPlay();
+            this.socketHandler.socket.emit(Event.ReadyToPlay);
         });
     }
 }

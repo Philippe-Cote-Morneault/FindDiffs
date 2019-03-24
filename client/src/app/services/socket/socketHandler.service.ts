@@ -3,7 +3,6 @@ import * as io from "socket.io-client";
 import { ICommonGame } from "../../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonToken } from "../../../../../common/communication/webSocket/token";
-// import { ICommonUser } from "../../../../../common/communication/webSocket/user";
 import { POVType } from "../../../../../common/model/gameCard";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { SERVER_URL } from "../../../../../common/url";
@@ -90,10 +89,6 @@ export class SocketHandlerService {
             timestamp: new Date(),
         };
         this.socket.emit(Event.PlaySoloGame, message);
-    }
-
-    public emitReadyToPlay(): void {
-        this.socket.emit(Event.ReadyToPlay);
     }
 
     private setEventListeners(socket: SocketIOClient.Socket): void {
