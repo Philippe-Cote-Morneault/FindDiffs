@@ -21,6 +21,7 @@ import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { ThematicObjectParser } from "../services/scene/sceneParser/objectParser/thematicObjectParser";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
+import { SocketHandlerService } from "../services/socket/socketHandler.service";
 // import { TimerService } from "../services/timer/timer.service";
 // import { Chat } from "../services/socket/chat";
 // import { ChatFormaterService } from "../services/socket/chatFormater.service";
@@ -36,7 +37,6 @@ import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.se
 export class GameViewFreeComponent implements OnInit {
     private static readonly T_STRING: string = "t";
     private static readonly DIFFERENCE_SOUND_SRC: string = "../../assets/mario.mp3";
-    private static readonly MAX_DIFFERENCES: number = 7;
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
@@ -54,7 +54,6 @@ export class GameViewFreeComponent implements OnInit {
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
     private thematicObjectParser: ThematicObjectParser;
-    private differenceFound: string[];
     private cheatActivated: boolean;
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
@@ -77,17 +76,24 @@ export class GameViewFreeComponent implements OnInit {
         public identificationError: IdentificationError,
         public mousePositionService: MousePositionService,
         public objectDetectionService: ObjectDetectionService,
-        public restoreObjectsService: RestoreObjectsService) {
+        public restoreObjectsService: RestoreObjectsService,
+        public socket: SocketHandlerService) {
             this.differenceCounterUser = 0;
             this.differenceSound = new Audio;
             this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
             this.differenceSound.load();
             this.isGameOver = false;
-            this.differenceFound = [];
             this.cheatActivated = false;
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
             this.thematicObjectParser = new ThematicObjectParser();
+
+            this.restoreObjectsService = new RestoreObjectsService(this.mousePositionService,
+                                                                   this.objectDetectionService,
+                                                                   this.originalSceneLoader,
+                                                                   this.modifiedSceneLoader,
+                                                                   this.restoreObjectsService,
+                                                                   this.geometricObjectService);
     }
 
     public ngOnInit(): void {
@@ -155,12 +161,14 @@ export class GameViewFreeComponent implements OnInit {
                     this.originalSceneLoader.camera, this.originalScene.nativeElement,
                     this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
                 this.spinnerService.hide();
-
                 this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
                 this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
 
-                // this.timerService.startTimer(this.chronometer.nativeElement);
+                // tslint:disable: max-line-length
+                // this.originalScene.nativeElement.addEventListener("click", (event: MouseEvent) => this.restoreObjectsService.clickOnScene(event, this.scenePairId, true, this.originalScene, this.modifiedScene, this.originalSceneLoader, this.modifiedSceneLoader)); 
+                // this.originalScene.nativeElement.addEventListener("click", (event: MouseEvent) => this.restoreObjectsService.clickOnScene(event, this.scenePairId, false, this.originalScene, this.modifiedScene, this.originalSceneLoader, this.modifiedSceneLoader)); 
                 this.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
+                this.socket.emitReadyToPlay();
             });
         });
     }
@@ -187,20 +195,20 @@ export class GameViewFreeComponent implements OnInit {
                 switch (response.differenceType) {
                     case DifferenceType.removedObject:
                         this.restoreObjectsService.addObject(this.detectedObjects.original, scenes);
-                        await this.addDifference(this.detectedObjects.original.userData.id);
+                        // await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.colorChanged:
                         this.restoreObjectsService.changeColorObject(this.detectedObjects.original, this.detectedObjects.modified);
-                        await this.addDifference(this.detectedObjects.original.userData.id);
+                        // await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.textureObjectChanged:
                         // tslint:disable-next-line: max-line-length
                         await this.restoreObjectsService.changeTextureObject(this.detectedObjects.original, this.detectedObjects.modified, this.thematicObjectParser);
-                        await this.addDifference(this.detectedObjects.original.userData.id);
+                        // await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.addedObject:
                         this.restoreObjectsService.removeObject(this.detectedObjects.modified, scenes);
-                        await this.addDifference(this.detectedObjects.modified.userData.id);
+                        // await this.addDifference(this.detectedObjects.modified.userData.id);
                         break;
                     default:
                         await this.identificationError.showErrorMessage();
@@ -215,25 +223,6 @@ export class GameViewFreeComponent implements OnInit {
                 meshes.push(element);
             }
         });
-    }
-
-    public isANewDifference(differenceId: string): boolean {
-        return !this.differenceFound.includes(differenceId);
-    }
-
-    public async addDifference(differenceId: string): Promise<void> {
-        this.differenceFound[this.differenceFound.length++] = differenceId;
-        this.differenceCounterUser = this.differenceCounterUser + 1;
-        await this.differenceSound.play();
-        if (this.differenceCounterUser === GameViewFreeComponent.MAX_DIFFERENCES) {
-            this.gameOver();
-        }
-    }
-
-    private gameOver(): void {
-        // this.timerService.stopTimer();
-        // this.playerTime = ((this.chronometer.nativeElement) as HTMLElement).innerText;
-        this.isGameOver = true;
     }
 
     private isGameThematic(): boolean {
