@@ -1,11 +1,15 @@
 import { TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
 import { IdentificationError } from "./identificationError.service";
 
 describe("IdentificationError", () => {
     let service: IdentificationError;
 
-    beforeEach(() => {
+    beforeEach(async() => {
+        TestBed.configureTestingModule({
+            imports: [RouterTestingModule],
+        });
         service = TestBed.get(IdentificationError);
     });
 

@@ -54,7 +54,7 @@ export class DifferenceService extends Service implements IDifferenceService {
 
     private validateFree(req: Request): void {
         if (!(req.body.scenePairId)) {
-            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.SCENE_ID_]));
+            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.SCENE_PAIR_ID_]));
         }
     }
 }
