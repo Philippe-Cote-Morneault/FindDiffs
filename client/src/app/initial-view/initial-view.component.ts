@@ -39,8 +39,12 @@ export class InitialViewComponent implements OnInit {
             timestamp: new Date(),
         };
         this.socketHandlerService.socket.emit(Event.NewUser, message, (response: ICommonToken | ICommonError) => {
-            ((response as ICommonToken).token) ?
-            this.router.navigateByUrl("/gamesList") : alert((response as ICommonError).error_message);
+            if ((response as ICommonToken).token) {
+                localStorage.setItem("user", username);
+                this.router.navigateByUrl("/gamesList");
+            } else {
+                alert((response as ICommonError).error_message);
+            }
         });
     }
 }
