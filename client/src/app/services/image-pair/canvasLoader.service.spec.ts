@@ -8,10 +8,10 @@ describe("CanvasLoaderService", () => {
         service = TestBed.get(CanvasLoaderService);
     });
 
-    it("Should add an eventListner to an HTML canvas", async () => {
+    it("Should add an eventListner to an HTML canvas", () => {
         const dummyContainer: HTMLCanvasElement = (document.createElement("canvas") as HTMLCanvasElement);
         expect(JSON.stringify(dummyContainer)).to.equal("{}");
-        await service.loadCanvas(dummyContainer, "345345345");
+        service.loadCanvas(dummyContainer, "345345345");
 
         expect(JSON.stringify(dummyContainer)).to.not.equal("{}");
     });
