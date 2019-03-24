@@ -3,16 +3,16 @@ import { ICommonGeometricModifications } from "../../../../../common/model/scene
 import { ICommonSceneModifications } from "../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonThematicModifications } from "../../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene } from "../../../../../common/model/scene/scene";
-import { CheatModeService } from "./cheat-mode.service";
+import { CheatModeService } from "./cheatMode.service";
 @Injectable({
     providedIn: "root",
 })
 export class CheatModeTimeoutService implements OnInit {
-    private readonly INTERVAL_TIME: number = 250;
+    private readonly INTERVAL_TIME: number = 125;
     private timeout: NodeJS.Timeout;
 
     public ngOnInit(): void {
-        clearTimeout(this.timeout);
+        this.stopCheatMode();
     }
 
     public startCheatMode(cheatModeService: CheatModeService,

@@ -56,14 +56,14 @@ export class PixelRestoration  implements SocketSubscriber {
 
         }
     }
-    public changePixelColor(pos: number, originalImageData: ImageData, modifiedImageData: ImageData): void {
+    private changePixelColor(pos: number, originalImageData: ImageData, modifiedImageData: ImageData): void {
         modifiedImageData.data[pos + RgbaPosition.R] = originalImageData.data[pos + RgbaPosition.R];
         modifiedImageData.data[pos + RgbaPosition.G] = originalImageData.data[pos + RgbaPosition.G];
         modifiedImageData.data[pos + RgbaPosition.B] = originalImageData.data[pos + RgbaPosition.B];
         modifiedImageData.data[pos + RgbaPosition.A] = originalImageData.data[pos + RgbaPosition.A];
     }
 
-    public pixelPositionInImageData(pos: ICommon2DPosition, width: number): number {
+    private pixelPositionInImageData(pos: ICommon2DPosition, width: number): number {
         return ((width * pos.y + pos.x) * PixelRestoration.imageDataPixelSpace);
     }
 }

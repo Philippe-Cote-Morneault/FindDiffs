@@ -51,7 +51,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the field name is not valid", async () => {
+        it("Should throw an error if the field name is not between 3 and 12 alpha numeric characters", async () => {
             const request: Object = {
                 body: {
                     name: "mn",
@@ -97,7 +97,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the field pov is not in enum POVTypes", async () => {
+        it("Should throw an error if the field pov is not a valid pov", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -114,7 +114,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the field pov is not in enum POVTypes, but enters switch case", async () => {
+        it("Should throw an error if the field pov is not not a valid pov but passes extra validation", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -136,7 +136,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the resource_id is not in storage", async () => {
+        it("Should throw an error if the resource_id is not in storage or the database", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -157,7 +157,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the resource_id is not in storage Simple", async () => {
+        it("Should throw an error if the resource_id is not in storage for simple point of view", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -178,7 +178,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the resource_id is not in storage Free", async () => {
+        it("Should throw an error if the resource_id is not in storage for free point of view", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -199,7 +199,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should return an error since there is not 7 differences.", async () => {
+        it("Should throw an error if they aren't 7 differences in the picture", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -226,7 +226,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should return the correct response if all the fields are valid simple", async () => {
+        it("Should create a gamecard if all the fields are valid and there are 7 differences in simple pov", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -253,7 +253,7 @@ describe("GameCardService", () => {
             expect(response.pov).to.equal(request["body"]["pov"]);
         });
 
-        it("Should return the correct response if all the fields are valid free", async () => {
+        it("Should create a gamecard if all the fields are valid and nothing went wrong in free pov", async () => {
             const request: Object = {
                 body: {
                     name: "bob",
@@ -285,7 +285,7 @@ describe("GameCardService", () => {
     });
 
     describe("index()", () => {
-        it("Should return an array of game cards", async () => {
+        it("Should list all the gamecards on the server", async () => {
             const imagepair: ICommonImagePair = {
                 id: "an id",
                 url_difference: "differences",
@@ -314,7 +314,7 @@ describe("GameCardService", () => {
     });
 
     describe("single()", () => {
-        it("Should return throw an error if the id is not in the database", async () => {
+        it("Should throw an error if the id of the gamecard is not in the database", async () => {
             (GameCard.findById as sinon.SinonStub).rejects();
             try {
                 await service.single("invalid id");
@@ -324,7 +324,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the id is not in the database and mongoose returns null", async () => {
+        it("Should throw an error if the id is not in the database but receives an invalid response from db", async () => {
             (GameCard.findById as sinon.SinonStub).resolves(undefined);
             try {
                 await service.single("invalid id");
@@ -334,7 +334,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should return a game card", async () => {
+        it("Should list one game card", async () => {
             const imagepair: ICommonImagePair = {
                 id: "an id",
                 url_difference: "differences",
@@ -368,7 +368,7 @@ describe("GameCardService", () => {
             expect(JSON.parse(response).body).to.equal("The gamecard was deleted.");
         });
 
-        it("Should throw an error if the id is invalid", async() => {
+        it("Should throw an error if the id is not in the database", async() => {
             (GameCard.findById as sinon.SinonStub).rejects();
             try {
                 await service.delete("invalid id");
@@ -377,7 +377,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should throw an error if the id is invalid and mongoose returns null", async() => {
+        it("Should throw an error if the id is not in the database, but receives invalid response from db", async() => {
             (GameCard.findById as sinon.SinonStub).resolves(undefined);
             try {
                 await service.delete("invalid id");
@@ -433,7 +433,7 @@ describe("GameCardService", () => {
             }
         });
 
-        it("Should update the field best_time_solo", async() => {
+        it("Should regenerate new best time for solo scores", async() => {
             const request: Object = {
                 params: {
                     id: "invalid id",
@@ -448,7 +448,7 @@ describe("GameCardService", () => {
             await service.update(mockReq(request));
         });
 
-        it("Should update the field best_time_online", async() => {
+        it("Should regenerate new best time for online scores", async() => {
             const request: Object = {
                 params: {
                     id: "invalid id",
@@ -463,7 +463,7 @@ describe("GameCardService", () => {
             await service.update(mockReq(request));
         });
 
-        it("Should update the two fields", async() => {
+        it("Should regenerate the two best time online and solo", async() => {
             const request: Object = {
                 params: {
                     id: "invalid id",
@@ -481,7 +481,7 @@ describe("GameCardService", () => {
             await service.update(mockReq(request));
         });
 
-        it("Should return a success message", async() => {
+        it("Should respond with success if the score were generated properly", async() => {
             const request: Object = {
                 params: {
                     id: "invalid id",

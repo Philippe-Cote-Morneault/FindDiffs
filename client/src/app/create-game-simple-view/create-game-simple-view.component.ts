@@ -5,9 +5,9 @@ import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { HTMLInputEvent } from "../htmlinput-event";
 import { FormVerificationSimplePOVService } from "../services/createGame/formVerificationSimplePOV.service";
-import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
-import { GamesCardService } from "../services/gameCard/games-card.service";
-import { ImagePairService } from "../services/image-pair/image-pair.service";
+import { GameCardLoaderService } from "../services/gameCard/gameCardLoader.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
+import { ImagePairService } from "../services/image-pair/imagePair.service";
 
 @Component({
     selector: "app-create-game-simple-view",

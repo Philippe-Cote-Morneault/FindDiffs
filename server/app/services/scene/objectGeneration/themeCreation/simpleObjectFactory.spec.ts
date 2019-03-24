@@ -6,7 +6,7 @@ import { ThemeObjectGenerator } from "./themeObjectGenerator";
 
 describe("simpleObjectFactory", () => {
     describe("createObject()", () => {
-        it("Should return an with the orientation facing various direction", () => {
+        it("Should create an object with the orientation facing various direction", () => {
             const NUMBER_DIRECTION_MIN: number = 5;
             const ITERATIONS: number = 50;
             const position: IPositionGridTheme = {
@@ -24,7 +24,7 @@ describe("simpleObjectFactory", () => {
             }
             expect(direction.size).to.equal(NUMBER_DIRECTION_MIN);
         });
-        it("Should return values with orientation less than max radian and superior to zero for grass objects", () => {
+        it("Should return values for orientation less than max radian and superior to zero for grass objects", () => {
             const ITERATIONS: number = 50;
             const NUMBER_DIRECTION_MIN: number = 5;
             const position: IPositionGridTheme = {
@@ -46,7 +46,7 @@ describe("simpleObjectFactory", () => {
             });
         });
 
-        it("Should return values with orientation less than max radian and superior to zero for parking objects", () => {
+        it("Should return values for orientation less than max radian and superior to zero for parking objects", () => {
             const ITERATIONS: number = 50;
             const NUMBER_DIRECTION_MIN: number = 5;
             const position: IPositionGridTheme = {

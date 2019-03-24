@@ -23,7 +23,7 @@ describe("Difference", () => {
             (Storage.saveBuffer as sinon.SinonStub).restore();
         });
 
-        it("Should save the image to the storage and return an id", async () => {
+        it("Should save the image to the storage and return an id for it", async () => {
             const responseId: string = "an id";
 
             (Storage.saveBuffer as sinon.SinonStub).resolves(responseId);
@@ -44,7 +44,7 @@ describe("Difference", () => {
         afterEach(() => {
             (Storage.saveBuffer as sinon.SinonStub).restore();
         });
-        it("Should save the JSON structure and return an id", async() => {
+        it("Should save a JSON structure and return an id for it", async() => {
             const responseId: string = "an id";
 
             (Storage.saveBuffer as sinon.SinonStub).resolves(responseId);
@@ -56,7 +56,7 @@ describe("Difference", () => {
             expect(await difference.saveJson()).to.equal(responseId);
         });
     });
-    describe("countDifferences", () => {
+    describe("countDifferences()", () => {
         let bitmap: Bitmap;
         beforeEach(() => {
             bitmap = BitmapDecoder.FromArrayBuffer(
@@ -64,7 +64,7 @@ describe("Difference", () => {
             );
         });
 
-        it("Should return the number of differences", () => {
+        it("Should give the number of differences in a picture", () => {
             const difference: Difference = new Difference(bitmap, bitmap);
             difference["differenceImg"] = bitmap;
             difference.compute();

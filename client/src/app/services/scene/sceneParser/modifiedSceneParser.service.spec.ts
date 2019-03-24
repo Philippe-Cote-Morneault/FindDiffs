@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { ObjectType } from "../../../../../../common/model/scene/scene";
 import { sceneModifications } from "../../../tests/scene/geometricSceneModificationsMock";
 import { scene } from "../../../tests/scene/sceneMock";
-import { ModifiedSceneParserService } from "./modified-scene-parser.service";
+import { ModifiedSceneParserService } from "./modifiedSceneParser.service";
 
 describe("ModifiedSceneParserService", () => {
     const modifiedSceneParserService: ModifiedSceneParserService = new ModifiedSceneParserService(ObjectType.Geometric);

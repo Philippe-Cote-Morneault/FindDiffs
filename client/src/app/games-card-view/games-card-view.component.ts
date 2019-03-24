@@ -6,8 +6,8 @@ import { Event, ICommonSocketMessage } from "../../../../common/communication/we
 import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { GamesCardService } from "../services/gameCard/games-card.service";
-import { ImagePairService } from "../services/image-pair/image-pair.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
+import { ImagePairService } from "../services/image-pair/imagePair.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";

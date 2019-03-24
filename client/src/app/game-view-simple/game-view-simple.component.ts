@@ -8,8 +8,8 @@ import { GameService } from "../services/game/game.service";
 import { GamesCardService } from "../services/gameCard/games-card.service";
 import { CanvasLoaderService } from "../services/image-pair/canvasLoader.service";
 import { ImagePairService } from "../services/image-pair/image-pair.service";
-import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
 import { Chat } from "../services/socket/chat";
+import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
 
 @Component({

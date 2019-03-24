@@ -16,19 +16,19 @@ describe("S3Cache", () => {
         del.sync([TEST_PATH  + "**"]);
     });
     describe("isInCache()", () => {
-        it("Should return false if the file does not exist", () => {
+        it("Should detect if the file does not exist", () => {
             del.sync([TEST_PATH  + "**"]);
             const guid: string = "myguid";
             expect(S3Cache.isInCache(guid)).to.equal(false);
         });
 
-        it("Should return true if a file already exists in the folder and not expired", () => {
+        it("Should detect if a file already exists in the folder and is not expired from cache", () => {
             const guid: string = "myguid";
             fs.writeFileSync(TEST_PATH + guid, "data");
             expect(S3Cache.isInCache(guid)).to.equal(true);
         });
 
-        it("Should return false if a file already exists in the folder and expired", () => {
+        it("Should detect if a file already exists in the folder and is expired from cache", () => {
             sinon.stub(fs, "statSync");
             (fs.statSync as sinon.SinonStub).returns({
                 // tslint:disable-next-line:no-magic-numbers
@@ -55,7 +55,7 @@ describe("S3Cache", () => {
     });
 
     describe("getCache()", () => {
-        it("Should return the file from the cache", () => {
+        it("Should read the file from the cache", () => {
             const guid: string = "myoriginalguidname";
             const data: ArrayBuffer = Buffer.from("data to write").buffer;
 

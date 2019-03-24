@@ -14,7 +14,7 @@ describe("CylinderFactory", () => {
     });
 
     describe("createShape()", () => {
-        it("Should return a cylinder", () => {
+        it("Should create an object which is a cylinder", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.5);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
@@ -27,7 +27,7 @@ describe("CylinderFactory", () => {
             expect(object.shapeType).to.equal(GeometricShapeType.CYLINDER);
         });
 
-        it("Should return a cylinder with a radius in range", () => {
+        it("Should create a cylinder with a radius in the specified range", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.5);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
@@ -42,7 +42,7 @@ describe("CylinderFactory", () => {
             .and.gte((CylinderFactory.SIZE_MIN_PERCENTAGE / CylinderFactory.PERCENTAGE_DIVISION) * CylinderFactory.REFERENCE_RADIUS);
         });
 
-        it("Should return a cylinder with a height in range", () => {
+        it("Should create a cylinder with a height in the specified range", () => {
             // tslint:disable-next-line:no-magic-numbers
             (Math.random as sinon.SinonStub).returns(0.5);
             const generator: GeometricObjectGenerator = new GeometricObjectGenerator();
