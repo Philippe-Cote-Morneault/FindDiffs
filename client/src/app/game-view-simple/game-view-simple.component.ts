@@ -24,11 +24,11 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("gameTitle") private gameTitle: ElementRef;
     @ViewChild("message") private message: ElementRef;
     @ViewChild("message_container") private messageContainer: ElementRef;
+    @ViewChild("userDifferenceFound") private userDifferenceFound: ElementRef;
 
     private gameCardId: string;
     private imagePairId: string;
     public isGameOver: boolean;
-    // private differenceCounterUser: number;
 
     public constructor(
         private route: ActivatedRoute,
@@ -45,7 +45,6 @@ export class GameViewSimpleComponent implements OnInit {
         this.game.gameEnded.subscribe((value) => {
             this.isGameOver = value;
           });
-        // this.differenceCounterUser = 0;
     }
 
     public ngOnInit(): void {
@@ -53,12 +52,13 @@ export class GameViewSimpleComponent implements OnInit {
             this.gameCardId = params["id"];
         });
 
+        this.userDifferenceFound.nativeElement.innerText = 0;
         this.getGameCardById();
         this.setServicesContainers();
     }
 
     private setServicesContainers(): void {
-        this.game.setContainers(this.chronometer.nativeElement);
+        this.game.setContainers(this.chronometer.nativeElement, this.userDifferenceFound.nativeElement);
         this.chat.setContainers(this.message.nativeElement, this.messageContainer.nativeElement);
         this.identificationError.setContainers(this.errorMessage.nativeElement,
                                                this.originalCanvas.nativeElement,
