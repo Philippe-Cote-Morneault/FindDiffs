@@ -79,7 +79,6 @@ export class GameViewFreeComponent implements OnInit {
             this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
             this.differenceSound.load();
             this.isGameOver = false;
-            this.cheatActivated = false;
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
 
