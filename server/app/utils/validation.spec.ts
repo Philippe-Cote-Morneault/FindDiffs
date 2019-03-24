@@ -1,4 +1,3 @@
-/*
 import { expect } from "chai";
 import { Validation } from "./validation";
 describe("Validation", () => {
@@ -7,7 +6,7 @@ describe("Validation", () => {
             const name: string = "ab";
             expect(Validation.isValidName(name)).to.equal(false);
         });
-        it("Should detect if the name lenght is over 12 and mark it as invalid", () => {
+        it("Should detect if the name length is over 12 and mark it as invalid", () => {
             const name: string = "aaaaaaaaaaaaa";
             expect(Validation.isValidName(name)).to.equal(false);
         });
@@ -29,4 +28,3 @@ describe("Validation", () => {
         });
     });
 });
-*/

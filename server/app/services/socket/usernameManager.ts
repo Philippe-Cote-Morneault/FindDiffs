@@ -1,4 +1,4 @@
-import { UsernameValidator } from "../user/usernameValidator";
+import { Validation } from "../../utils/validation";
 
 export class UsernameManager  {
     private static instance: UsernameManager;
@@ -14,7 +14,7 @@ export class UsernameManager  {
     }
 
     public validateUsername(username: string): boolean {
-        return !this.idUsernames.has(username) && UsernameValidator.validateUsername(username);
+        return !this.idUsernames.has(username) && Validation.isValidName(username);
     }
 
     public hasUsername(username: string): boolean {
@@ -22,7 +22,7 @@ export class UsernameManager  {
     }
 
     public addUsername(socketId: string, username: string): void {
-        const oldUsername: string | undefined = this.getUsername(socketId)
+        const oldUsername: string | undefined = this.getUsername(socketId);
         if (oldUsername) {
             this.idUsernames.delete(oldUsername);
         }
