@@ -67,28 +67,8 @@ export class SocketHandlerService {
         }
     }
 
-    public emitClick(xPos: number, yPos: number): void {
-        const pixel: ICommon2DPosition = {
-            x: xPos,
-            y: yPos,
-        };
-        const message: ICommonSocketMessage = {
-            data: pixel,
-            timestamp: new Date(),
-        };
-        this.socket.emit(Event.GameClick, message);
-    }
-
-    public emitPlayerSoloGame(id: string, POV: POVType): void {
-        const game: ICommonGame = {
-            ressource_id: id,
-            pov: POV,
-        };
-        const message: ICommonSocketMessage = {
-            data: game,
-            timestamp: new Date(),
-        };
-        this.socket.emit(Event.PlaySoloGame, message);
+    public emitMessage(event: Event, message: ICommonSocketMessage | null): void {
+        this.socket.emit(event, message);
     }
 
     private setEventListeners(socket: SocketIOClient.Socket): void {
