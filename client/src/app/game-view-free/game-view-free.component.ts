@@ -8,8 +8,8 @@ import { CheatModeHandlerService } from "../services/cheatMode/cheatModeHandler.
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
-import { SceneSyncerService } from "../services/scene/sceneSyncer/scene-syncer.service";
-import { TimerService } from "../services/timer/timer.service";
+import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
+//import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -33,7 +33,6 @@ export class GameViewFreeComponent implements OnInit {
     private gameCardId: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
-    private cheatActivated: boolean;
 
     public constructor( private route: ActivatedRoute,
                         private spinnerService: Ng4LoadingSpinnerService,
