@@ -5,14 +5,16 @@ import * as THREE from "three";
 import { Event } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
-import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
+// import { ICommonThematicModifications } from "../../../../common/model/scene/modifications/thematicModifications";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
 import { GeometricObjectsService } from "../services/3DObjects/GeometricObjects/geometric-objects.service";
 import { MousePositionService } from "../services/3DObjects/mousePosition.service";
 import { ObjectDetectionService } from "../services/3DObjects/object-detection.service";
+import { ObjectRestorationService } from "../services/3DObjects/object-restoration.service";
 import { ObjectHandler} from "../services/3DObjects/objectsHandler.service";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeService } from "../services/cheatMode/cheatMode.service";
+import { CheatModeHandlerService } from "../services/cheatMode/cheatModeHandler.service";
 import { CheatModeTimeoutService } from "../services/cheatMode/cheatModeTimeout.service";
 import { GameService } from "../services/game/game.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
@@ -21,7 +23,6 @@ import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.se
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
 import { Chat } from "../services/socket/chat";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
-import { ObjectRestorationService } from "../services/3DObjects/object-restoration.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -31,7 +32,6 @@ import { ObjectRestorationService } from "../services/3DObjects/object-restorati
 })
 
 export class GameViewFreeComponent implements OnInit {
-    private static readonly T_STRING: string = "t";
     private static readonly DIFFERENCE_SOUND_SRC: string = "../../assets/mario.mp3";
 
     @ViewChild("originalScene") private originalScene: ElementRef;
@@ -50,7 +50,6 @@ export class GameViewFreeComponent implements OnInit {
     private gameCardId: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
-    private cheatActivated: boolean;
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
     public playerTime: string;
@@ -73,7 +72,8 @@ export class GameViewFreeComponent implements OnInit {
         public socket: SocketHandlerService,
         private game: GameService,
         public chat: Chat,
-        public objectRestoration: ObjectRestorationService) {
+        public objectRestoration: ObjectRestorationService,
+        public cheatModeHandlerService: CheatModeHandlerService) {
             this.differenceCounterUser = 0;
             this.differenceSound = new Audio;
             this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
