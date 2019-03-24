@@ -16,13 +16,13 @@ describe("Storage", () => {
     });
 
     describe("getPath()", () => {
-        it("Should return a path with an id", () => {
+        it("Should create a path string with an id at the end", () => {
             const guid: string = "an id";
             expect(`${Storage.STORAGE_PATH}/${guid}`).to.equal(Storage.getPath(guid));
         });
     });
     describe("generateGUID()", () => {
-        it("Should return an id without an hyphen", () => {
+        it("Should create a unique id without an hyphen from the uuid package", () => {
             expect(Storage.generateGUID().split("-").length).to.equal(1);
         });
     });
@@ -40,7 +40,7 @@ describe("Storage", () => {
             (S3Cache.getCache as sinon.SinonStub).restore();
         });
 
-        it("Should return an error if the id does not exists", async() => {
+        it("Should throw an error if the id does not exists in S3 Object Storage", async() => {
             (S3Cache.isInCache as sinon.SinonStub).returns(false);
             (s3.getObject as sinon.SinonStub).returns({
                 promise: async () => {
@@ -58,7 +58,7 @@ describe("Storage", () => {
             }
         });
 
-        it("Should return a buffer if the id exists", async() => {
+        it("Should create a buffer of the file if the id exists in the storage", async() => {
             const BUFF_SIZE: number = 4;
             (S3Cache.isInCache as sinon.SinonStub).returns(false);
             (s3.getObject as sinon.SinonStub).returns({
@@ -73,7 +73,7 @@ describe("Storage", () => {
             expect(response.byteLength).to.equal(BUFF_SIZE);
         });
 
-        it("Should return a buffer if the id exists in cache", async() => {
+        it("Should create a buffer if the id exists in the storage and in cache", async() => {
             const BUFF_SIZE: number = 4;
             (S3Cache.isInCache as sinon.SinonStub).returns(true);
             (S3Cache.getCache as sinon.SinonStub).returns(Buffer.alloc(BUFF_SIZE));
@@ -96,7 +96,7 @@ describe("Storage", () => {
             (Storage.generateGUID as sinon.SinonStub).restore();
         });
 
-        it("Should return an error if there is an error with S3", async () => {
+        it("Should throw an error if there is an error with S3", async () => {
             const s3ErrorMessage: string = "An error occured with S3.";
 
             (s3.upload as sinon.SinonStub).returns({
@@ -113,7 +113,7 @@ describe("Storage", () => {
             }
         });
 
-        it("Should return a guid if everything went smoothly", async () => {
+        it("Should create a guid if the file was stored successfully", async () => {
 
             const guid: string = "a simple guid";
             (s3.upload as sinon.SinonStub).returns({

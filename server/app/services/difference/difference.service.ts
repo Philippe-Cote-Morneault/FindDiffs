@@ -1,7 +1,8 @@
 import { Request } from "express";
 import "reflect-metadata";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
-import { ICommonScene } from "../../../../common/model/scene/scene";
+import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
+// import { ICommonScene } from "../../../../common/model/scene/scene";
 import * as BitmapHeader from "../../model/bitmap/header";
 import { Position } from "../../model/bitmap/pixel";
 import { _e, R } from "../../strings";
@@ -44,17 +45,29 @@ export class DifferenceService extends Service implements IDifferenceService {
     public async postFree(req: Request): Promise<string> {
         this.validateFree(req);
 
-        const originalScene: ICommonScene = await ApiRequest.getSceneId(req.body.originalSceneId);
+        const modifiedScene: ICommonSceneModifications = await ApiRequest.getModificationsById(req.body.originalSceneId);
 
-        const revealDifference3D: RevealDifference3D = new RevealDifference3D(originalScene, req.body.modifiedObjectId);
+        const revealDifference3D: RevealDifference3D =
+            new RevealDifference3D(modifiedScene, req.body.modifiedObjectId, req.body.originalObjectId, req.body.gameType);
 
         return JSON.stringify(revealDifference3D.reveal());
     }
 
     private validateFree(req: Request): void {
-
         if (!(req.body.originalSceneId)) {
             throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.SCENE_ID_]));
         }
+
+        // if (!(req.body.modifiedObjectId)) {
+        //     throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.MODIFIED_OBJECT_ID]));
+        // }
+
+        // if (!(req.body.originalObjectId)) {
+        //     throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.ORIGINAL_OBJECT_ID]));
+        // }
+
+        // if (!(req.body.gameType)) {
+        //     throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.GAME_TYPE]));
+        // }
     }
 }

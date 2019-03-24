@@ -2,6 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { catchError } from "rxjs/operators";
+import { ObjectType } from "../../../../../../common/model/scene/scene";
+// import { ICommonReveal3D } from "../../../../../../common/model/reveal";
 import { SERVER_URL } from "../../../../../../common/url";
 import { HTTPService } from "../../HTTP.service";
 
@@ -15,9 +17,13 @@ export class GeometricObjectsService extends HTTPService {
     }
 
     // tslint:disable:no-any
-    public post3DObject(originalSceneId: string, modifiedObjectId: string): Observable<any> {
+    public post3DObject(originalSceneId: string, modifiedObjectId: string,
+                        originalObjectId: string, gameType: ObjectType): Observable<any> {
         const requestBody: Object = {
-            "originalSceneId": originalSceneId, "modifiedObjectId": modifiedObjectId};
+            "originalSceneId": originalSceneId,
+            "modifiedObjectId": modifiedObjectId,
+            "originalObjectId": originalObjectId,
+            "gameType": gameType};
 
         return this.http.post<any>(`${SERVER_URL}/difference/free`, requestBody).pipe(
             catchError((error) => this.handleError(error)),

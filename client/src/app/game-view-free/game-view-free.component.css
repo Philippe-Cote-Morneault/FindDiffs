@@ -50,11 +50,12 @@
     margin-bottom: 1%;
     margin-right: 100%;
     padding:2px;
-    width: 80%;
+    width: 98%;
     max-height: none;
     overflow-wrap: break-word;
     font-family: Arial;
-    margin-left: 3%;
+    margin-left: 1%;
+    text-align: left;
     float: left;
   }
   #title {

@@ -33,6 +33,7 @@ export const R: IString = {
     ERROR_USERNAME_TAKEN: "The username is already taken.",
     ERROR_DIFFERENCE_INVALID: "The game card should have 7 differences. It has %d differences.",
 
+    GAME_TYPE: "gameType",
     IMAGE_PAIR: "Image Pair",
     IMAGE_PAIR_: "image pair",
     OBJECT_TYPE: "Object type",
@@ -42,9 +43,11 @@ export const R: IString = {
     ORIGINAL_IMAGE: "Original image",
     ORIGINAL_IMAGE_FIELD: "originalImage",
     ORIGINAL_IMAGE_: "original image",
+    ORIGINAL_OBJECT_ID: "originalObjectId",
     MODIFIED_IMAGE: "Modified image",
     MODIFIED_IMAGE_FIELD: "modifiedImage",
     MODIFIED_IMAGE_: "modified image",
+    MODIFIED_OBJECT_ID: "modifiedObjectId",
     NAME: "Name",
     NAME_: "name",
     POV: "POV",
@@ -64,4 +67,6 @@ export const R: IString = {
     X_: "x",
     Y: "Y",
     Y_: "y",
+
+    SOCKET_DATE: "HH:MM:ss",
 };

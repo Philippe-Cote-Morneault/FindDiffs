@@ -1,5 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import * as sinon from "sinon";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { ICommonReveal } from "../../../../../common/model/reveal";
 import { PixelRestoration } from "./pixel-restoration";
@@ -8,7 +9,7 @@ import { PixelRestoration } from "./pixel-restoration";
 
 describe("PixelRestoration", () => {
 
-  const pixelRestoration: PixelRestoration = new PixelRestoration();
+  let pixelRestoration: PixelRestoration;
   let originalCanvas: HTMLCanvasElement;
   let originalContext: CanvasRenderingContext2D | null;
   let modifiedCanvas: HTMLCanvasElement;
@@ -16,6 +17,7 @@ describe("PixelRestoration", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
+    pixelRestoration = TestBed.get(PixelRestoration);
     originalCanvas  = (document.createElement("canvas") as HTMLCanvasElement);
     originalContext = originalCanvas.getContext("2d");
 
@@ -33,7 +35,9 @@ describe("PixelRestoration", () => {
     }
     const posPixel: ICommon2DPosition = {x: 0, y: 0};
     const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+    const msg: ICommonSocketMessage = { data: responseServer, timestamp: new Date()};
+    pixelRestoration.setContainers(originalCanvas, modifiedCanvas);
+    pixelRestoration.notify(Event.DifferenceFound, msg);
     expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
 
   });
@@ -47,7 +51,9 @@ describe("PixelRestoration", () => {
     }
     const posPixel: ICommon2DPosition = {x: 0, y: 0};
     const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+    const msg: ICommonSocketMessage = { data: responseServer, timestamp: new Date()};
+    pixelRestoration.setContainers(originalCanvas, modifiedCanvas);
+    pixelRestoration.notify(Event.DifferenceFound, msg);
     expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
 
   });
@@ -61,7 +67,9 @@ describe("PixelRestoration", () => {
     }
     const posPixel: ICommon2DPosition = {x: 0, y: 0};
     const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+    const msg: ICommonSocketMessage = { data: responseServer, timestamp: new Date()};
+    pixelRestoration.setContainers(originalCanvas, modifiedCanvas);
+    pixelRestoration.notify(Event.DifferenceFound, msg);
 
     expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
 
@@ -80,7 +88,9 @@ describe("PixelRestoration", () => {
 
     const posPixel: ICommon2DPosition[] = [{x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}, {x: 3, y: 0}];
     const responseServer: ICommonReveal = {hit: true, pixels_affected: posPixel, difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
+    const msg: ICommonSocketMessage = { data: responseServer, timestamp: new Date()};
+    pixelRestoration.setContainers(originalCanvas, modifiedCanvas);
+    pixelRestoration.notify(Event.DifferenceFound, msg);
 
     expect(modifiedCanvas.toDataURL()).toEqual(originalCanvas.toDataURL());
   });
@@ -96,8 +106,9 @@ describe("PixelRestoration", () => {
     }
     const posPixel: ICommon2DPosition = {x: 0, y: 0};
     const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
-    expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
+    const msg: ICommonSocketMessage = { data: responseServer, timestamp: new Date()};
+    pixelRestoration.setContainers(originalCanvas, modifiedCanvas);
+    pixelRestoration.notify(Event.DifferenceFound, msg);    expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
     stub.restore();
   });
 
@@ -112,8 +123,9 @@ describe("PixelRestoration", () => {
     }
     const posPixel: ICommon2DPosition = {x: 0, y: 0};
     const responseServer: ICommonReveal = {hit: true, pixels_affected: [posPixel], difference_id: 1};
-    pixelRestoration.restoreImage(responseServer, originalCanvas, modifiedCanvas);
-    expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
+    const msg: ICommonSocketMessage = { data: responseServer, timestamp: new Date()};
+    pixelRestoration.setContainers(originalCanvas, modifiedCanvas);
+    pixelRestoration.notify(Event.DifferenceFound, msg);    expect(modifiedCanvas.toDataURL()).not.toEqual(originalCanvas.toDataURL());
     stub.restore();
   });
 });

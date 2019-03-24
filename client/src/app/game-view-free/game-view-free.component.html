@@ -8,25 +8,25 @@
           <p id="timer_title">Timer</p><p id="timer" #chronometer>00:00</p>
       </div>
       <div class="differences_container">
-        <p id="differences_title">Differences found</p><p id="differences">{{differenceCounterUser}}</p>
+        <p id="differences_title">Differences found</p><p id="differences" #userDifferenceFound></p>
       </div>
       <div class="differences_container" *ngIf="false" >
-          <p *ngIf="false" id="differences_title"> Opponent's differences found</p><p *ngIf="false" id="differences">{{differenceCounterUser}}</p>
+          <p *ngIf="false" id="differences_title"> Opponent's differences found</p><p *ngIf="false" id="differences"></p>
       </div>
       <div id="title_wrapper">
         <p id="title" #gameTitle></p>
         <p id="POV">free point of view</p>
       </div>
-      <div id="message_container">
+      <div #message_container id="message_container">
           <p #message class="message"></p>
       </div>
     </div>
     <div id="game_image_wrapper">
       <div id="image_original">
-        <div id="original_scene" width="640px" height="480px" style="border:1px solid #000000;" #originalScene (click)="clickOnScene($event, true)" ></div>
+        <div id="original_scene" width="640px" height="480px" style="border:1px solid #000000;" #originalScene></div>
       </div>
       <div id="image_modified">
-        <div id="modified_scene" width="640px" height="480px" style="border:1px solid #000000;" #modifiedScene (click)="clickOnScene($event, false)" ></div>
+        <div id="modified_scene" width="640px" height="480px" style="border:1px solid #000000;" #modifiedScene></div>
       </div>
       <p id="ErrorMessage" #errorMessage>ERROR</p>
     </div>

@@ -8,4 +8,7 @@ export interface ICommonReveal{
 
 export interface ICommonReveal3D{
     hit: boolean; 
+    differenceType: DifferenceType;
 }
+
+export enum DifferenceType { colorChanged, removedObject, addedObject, textureObjectChanged, none };
