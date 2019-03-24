@@ -1,6 +1,5 @@
 import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
-import { Event } from "../../../../../common/communication/webSocket/socketMessage";
 import { IdentificationError } from "./identificationError.service";
 
 describe("IdentificationError", () => {
@@ -17,7 +16,7 @@ describe("IdentificationError", () => {
         const time: number = 2000;
 
         service.setContainers(p, original, modified);
-        service.notify(Event.InvalidClick);
+        service.notify();
 
         expect(original.style.cursor).to.equal("not-allowed");
         expect(modified.style.cursor).to.equal("not-allowed");

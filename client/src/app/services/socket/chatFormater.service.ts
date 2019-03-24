@@ -15,7 +15,7 @@ export class ChatFormaterService {
             case Event.UserDisconnected: {
                 return this.onUserDisconnected(message);
             }
-            case Event.NewUser: {
+            case Event.UserConnected: {
                 return this.onNewUser(message);
             }
             case Event.DifferenceFound: {
@@ -23,6 +23,9 @@ export class ChatFormaterService {
             }
             case Event.InvalidClick: {
                 return this.onInvalidClick(message);
+            }
+            case Event.BestTime: {
+                return this.onBestTime(message);
             }
             default: {
                 return this.onDefault(event);
@@ -44,6 +47,10 @@ export class ChatFormaterService {
 
     private onInvalidClick(message: ICommonSocketMessage): string {
         return this.formatDate(message.timestamp) + R.CHAT_ERROR_SOLO;
+    }
+
+    private onBestTime(message: ICommonSocketMessage): string {
+        return this.formatDate(message.timestamp) + _e(R.CHAT_BESTTIME, [ ]);
     }
 
     private onDefault(event: Event): string {

@@ -22,9 +22,10 @@ export class Chat implements SocketSubscriber {
 
     private subscribeToSocket(): void {
         this.socketService.subscribe(Event.UserDisconnected, this);
-        this.socketService.subscribe(Event.NewUser, this);
+        this.socketService.subscribe(Event.UserConnected, this);
         this.socketService.subscribe(Event.InvalidClick, this);
         this.socketService.subscribe(Event.DifferenceFound, this);
+        this.socketService.subscribe(Event.BestTime, this);
     }
 
     public notify(event: Event, message: ICommonSocketMessage): void {

@@ -8,11 +8,11 @@ import { CheatModeService } from "./cheatMode.service";
     providedIn: "root",
 })
 export class CheatModeTimeoutService implements OnInit {
-    private readonly INTERVAL_TIME: number = 250;
+    private readonly INTERVAL_TIME: number = 125;
     private timeout: NodeJS.Timeout;
 
     public ngOnInit(): void {
-        clearTimeout(this.timeout);
+        this.stopCheatMode();
     }
 
     public startCheatMode(cheatModeService: CheatModeService,

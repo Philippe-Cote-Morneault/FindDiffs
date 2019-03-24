@@ -4,6 +4,7 @@ import { Event, ICommonSocketMessage } from "../../../../common/communication/we
 import { AuthentificationService } from "./authentificationService";
 import { SocketCallback } from "./socketCallback";
 import { UserManager } from "./userManager";
+import { ICommonUser } from "../../../../common/communication/webSocket/user";
 
 export class SocketHandler {
     private static instance: SocketHandler;
@@ -86,7 +87,14 @@ export class SocketHandler {
     private authenticateUser(socket: SocketIO.Socket): void {
         this.authentificationService.authenticateUser(socket, (username: string) => {
             this.setEventListeners(socket);
-            this.io.emit(Event.UserConnected, username);
+            const user: ICommonUser = {
+                username: username,
+            };
+            const message: ICommonSocketMessage = {
+                data: user,
+                timestamp: new Date(),
+            };
+            this.io.emit(Event.UserConnected, message);
         });
     }
 }

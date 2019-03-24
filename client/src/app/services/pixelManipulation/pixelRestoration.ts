@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
+import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
-import { ICommonReveal } from "../../../../../common/model/reveal";
 import { RgbaPosition } from "../../models/pixelProperties/color";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
@@ -32,12 +32,12 @@ export class PixelRestoration  implements SocketSubscriber {
 
     public notify(event: Event, message: ICommonSocketMessage): void {
         if (event === Event.DifferenceFound) {
-            const response: ICommonReveal = message.data as ICommonReveal;
+            const response: ICommonDifferenceFound = message.data as ICommonDifferenceFound;
             this.restoreImage(response);
         }
     }
 
-    public restoreImage(response: ICommonReveal): void {
+    public restoreImage(response: ICommonDifferenceFound): void {
         this.originalContext = this.originalCanvas.getContext("2d");
         if (this.originalContext) {
             const originalImageData: ImageData = this.originalContext.getImageData(
@@ -56,14 +56,14 @@ export class PixelRestoration  implements SocketSubscriber {
 
         }
     }
-    public changePixelColor(pos: number, originalImageData: ImageData, modifiedImageData: ImageData): void {
+    private changePixelColor(pos: number, originalImageData: ImageData, modifiedImageData: ImageData): void {
         modifiedImageData.data[pos + RgbaPosition.R] = originalImageData.data[pos + RgbaPosition.R];
         modifiedImageData.data[pos + RgbaPosition.G] = originalImageData.data[pos + RgbaPosition.G];
         modifiedImageData.data[pos + RgbaPosition.B] = originalImageData.data[pos + RgbaPosition.B];
         modifiedImageData.data[pos + RgbaPosition.A] = originalImageData.data[pos + RgbaPosition.A];
     }
 
-    public pixelPositionInImageData(pos: ICommon2DPosition, width: number): number {
+    private pixelPositionInImageData(pos: ICommon2DPosition, width: number): number {
         return ((width * pos.y + pos.x) * PixelRestoration.imageDataPixelSpace);
     }
 }
