@@ -4,7 +4,7 @@ import { IPositionGridTheme } from "../../grid/theme/themeGrid";
 import { ThemeObjectGenerator } from "./themeObjectGenerator";
 describe("ThemeObjectGenerator", () => {
     describe("createObject()", () => {
-        it("Should return a car when the position is on car", () => {
+        it("Should create a car when the position is on a surface that allows car", () => {
             const position: IPositionGridTheme = {
                 surface: ThemeSurface.CAR,
                 x: 50,
@@ -14,7 +14,7 @@ describe("ThemeObjectGenerator", () => {
             const object: ICommonThematicObject = ThemeObjectGenerator.getInstance().createObject(position);
             expect([ObjTheme.LEXUS, ObjTheme.ECLIPSE, ObjTheme.LAMBO]).to.include.members([object.objectType]);
         });
-        it("Should return an object that goes on grass", () => {
+        it("Should create an object that goes on grass when the position is on a grass surface", () => {
             const position: IPositionGridTheme = {
                 surface: ThemeSurface.GRASS,
                 x: 50,
@@ -29,7 +29,7 @@ describe("ThemeObjectGenerator", () => {
                     ObjTheme.SIGN_SKIP,
                     ObjTheme.SIGN_STOP]).to.include.members([object.objectType]);
         });
-        it("Should return an object that goes in parking", () => {
+        it("Should create an object that goes in parking when the position is on a parking surface", () => {
             const position: IPositionGridTheme = {
                 surface: ThemeSurface.PARKING,
                 x: 50,
@@ -40,7 +40,7 @@ describe("ThemeObjectGenerator", () => {
             expect([ObjTheme.BIN,
                     ObjTheme.CONE]).to.include.members([object.objectType]);
         });
-        it("Should return an object that as the same position specified in the method", () => {
+        it("Should create an object that has the same position specified durring its creation", () => {
             const position: IPositionGridTheme = {
                 surface: ThemeSurface.CAR,
                 x: 50,
@@ -52,7 +52,7 @@ describe("ThemeObjectGenerator", () => {
             expect(object.position.y).to.equal(position.y);
             expect(object.position.z).to.equal(position.z);
         });
-        it("Should return 3 different car", () => {
+        it("Should create 3 different types of car, when creating a lot of cars", () => {
             const ITERATIONS: number = 1000;
             const NUMBER_OF_CARS: number = 3;
             const position: IPositionGridTheme = {
@@ -71,7 +71,7 @@ describe("ThemeObjectGenerator", () => {
             expect(cars.size).to.equal(NUMBER_OF_CARS);
         });
 
-        it("Should return 6 different grass objects", () => {
+        it("Should create 6 different types of grass objects, when creating a lot of objects that goes on grass", () => {
             const ITERATIONS: number = 1000;
             const NUMBER_OBJECTS: number = 6;
             const position: IPositionGridTheme = {
@@ -89,7 +89,7 @@ describe("ThemeObjectGenerator", () => {
             }
             expect(cars.size).to.equal(NUMBER_OBJECTS);
         });
-        it("Should return 2 different parking objects", () => {
+        it("Should create 2 different types of parking objects, when creating a lot of objects in the parking", () => {
             const ITERATIONS: number = 1000;
             const NUMBER_OBJECTS: number = 2;
             const position: IPositionGridTheme = {
@@ -107,7 +107,7 @@ describe("ThemeObjectGenerator", () => {
             }
             expect(cars.size).to.equal(NUMBER_OBJECTS);
         });
-        it("Should choose a random color or texture and have undefined", () => {
+        it("Should choose a random color or texture for the created object. This color or texture must be defined", () => {
             const position: IPositionGridTheme = {
                 surface: ThemeSurface.PARKING,
                 x: 50,
@@ -121,7 +121,7 @@ describe("ThemeObjectGenerator", () => {
                 expect(object.color).to.not.equal(undefined);
             }
         });
-        it("Should choose a random color or texture", () => {
+        it("Should choose a random color or texture for the created object. It should be diffrent after a few iterations", () => {
             const ITERATIONS: number = 10;
             const position: IPositionGridTheme = {
                 surface: ThemeSurface.PARKING,

@@ -84,7 +84,7 @@ describe("DifferenceService", () => {
             }
         });
 
-        it("Should return an array of pixels", async () => {
+        it("Should create an array of pixels that represents the differences", async () => {
             const request: Object = {
                 body: {
                     x: 400,
@@ -109,6 +109,7 @@ describe("DifferenceService", () => {
     });
 
     describe("postFree()", () => {
+        // TODO Implement this
         it("Should return a not implemented exception", async () => {
             try {
                 await service.postFree(mockReq({}));

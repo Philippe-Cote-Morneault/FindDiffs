@@ -2,13 +2,13 @@ import { TestBed } from "@angular/core/testing";
 import { expect } from "chai";
 import { FormVerificationFreePOVService } from "./formVerificationFreePOV.service";
 
-describe("formNameVerificationService", () => {
+describe("formVerificationFreePOVService", () => {
     let service: FormVerificationFreePOVService;
 
     beforeEach(() => {
         service = TestBed.get(FormVerificationFreePOVService);
     });
-    describe("isModificationTypeValid", () => {
+    describe("isModificationTypeValid()", () => {
         it("Should return false if all modifications are false", () => {
             const isAddType: boolean = false;
             const isRemoveType: boolean = false;
@@ -38,7 +38,7 @@ describe("formNameVerificationService", () => {
             expect(response).to.equal(true);
         });
     });
-    describe("isQuantityValid", () => {
+    describe("isQuantityValid()", () => {
         it("Should return false if the quantity is under 10", () => {
             const quantity: number = 8;
             const response: boolean = service.isQuantityValid(quantity);

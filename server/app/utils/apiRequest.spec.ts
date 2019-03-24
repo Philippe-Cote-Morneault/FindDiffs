@@ -17,7 +17,7 @@ describe("ApiRequest", () => {
     });
 
     describe("getImagePairId()", () => {
-        it("Should return an image pair if the id is valid.", async () => {
+        it("Should create an image pair if the id is valid made over HTTP", async () => {
             const imagePair: ICommonImagePair = {
                 id: "an id",
                 url_difference: "an url difference",
@@ -32,7 +32,7 @@ describe("ApiRequest", () => {
             expect(JSON.stringify(response)).to.equal(JSON.stringify(imagePair));
         });
 
-        it("Should return an error if the image pair is invalid", async () => {
+        it("Should throw an error if the image pair is invalid made over HTTP", async () => {
             (Axios.get as sinon.SinonStub).rejects();
             try {
                 await ApiRequest.getImagePairId("an invalid id");
@@ -44,7 +44,7 @@ describe("ApiRequest", () => {
     });
 
     describe("getImagePairDiffId()", () => {
-        it("Should return binary data if the id is valid", async () => {
+        it("Should create binary data if the id is valid made over HTTP", async () => {
             const bufferSize: number = 4;
 
             const buffer: ArrayBuffer = Buffer.alloc(bufferSize, "data").buffer;
@@ -52,7 +52,7 @@ describe("ApiRequest", () => {
             const response: ArrayBuffer = await ApiRequest.getImagePairDiffId("a valid id");
             expect(JSON.stringify(response)).to.equal(JSON.stringify(buffer));
         });
-        it("Should return an error if the image pair id is invalid", async () => {
+        it("Should throw an error if the image pair id is invalid made over HTTP", async () => {
             (Axios.get as sinon.SinonStub).rejects();
             try {
                 await ApiRequest.getImagePairDiffId("an invalid id");
@@ -64,14 +64,14 @@ describe("ApiRequest", () => {
     });
 
     describe("getImagePairDiffJSONId()", () => {
-        it("Should return number[] if the id is valid", async () => {
+        it("Should list all the image pair difference id if the id is in the database", async () => {
             const array: number[] = [0, 1];
             (Axios.get as sinon.SinonStub).resolves({data: array});
 
             const response: number[] = await ApiRequest.getImagePairDiffJSONId("a valid id");
             expect(response).to.eql(array);
         });
-        it("Should return an error if the image pair id is invalid", async () => {
+        it("Should throw an error if the image pair id is not in database", async () => {
             (Axios.get as sinon.SinonStub).rejects();
             try {
                 await ApiRequest.getImagePairDiffJSONId("an invalid id");
@@ -83,7 +83,7 @@ describe("ApiRequest", () => {
     });
 
     describe("getSceneId()", () => {
-        it("Should return a scene if the id is valid", async() => {
+        it("Should create a scene if the id is in the database", async() => {
             const scene: ICommonScene = {
                 id: "an id",
                 dimensions: {
@@ -98,7 +98,7 @@ describe("ApiRequest", () => {
             const response: ICommonScene = await ApiRequest.getSceneId("a valid id");
             expect(JSON.stringify(response)).to.equal(JSON.stringify(scene));
         });
-        it("Should return an error if the scene id is invalid", async () => {
+        it("Should throw an error if the scene id is not in database", async () => {
             (Axios.get as sinon.SinonStub).rejects();
             try {
                 await ApiRequest.getSceneId("an invalid id");

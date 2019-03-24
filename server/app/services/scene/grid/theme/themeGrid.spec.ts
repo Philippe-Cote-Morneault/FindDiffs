@@ -10,7 +10,7 @@ const sha1Pos: (pos: ICommon3DPosition) => string =
 
 describe("ThemeGrid", () => {
     describe("Positions.json", () => {
-        it("Should not have duplicates value", () => {
+        it("Should not have duplicates values", () => {
 
             for (const surface of Object.keys(GamePositions)) {
                 const positionsSet: Set<string> = new Set<string>();
@@ -52,7 +52,7 @@ describe("ThemeGrid", () => {
                 expect(position.y).to.be.gte(minY).and.to.be.lte(maxY);
             }
         });
-        it("Should return an error if the stack is popped to much", () => {
+        it("Should throw an error if too many positions are requested than they are available", () => {
             const SIZE: number = 1000;
             const MARGIN: number = 20;
             const DEPTH: number = 50;
@@ -69,7 +69,7 @@ describe("ThemeGrid", () => {
             }
         });
 
-        it("Should return an error if the stack is popped to much, not enough positons in json", () => {
+        it("Should throw an error if too many position are requested by the grid itself and not enough positons are in json", () => {
             const SIZE: number = 1000;
             const MARGIN: number = 20;
             const DEPTH: number = 50;
@@ -86,7 +86,7 @@ describe("ThemeGrid", () => {
             }
         });
 
-        it("Should not return a position that was already returned", () => {
+        it("Should not return a position that was already returned by the grid", () => {
             const SIZE: number = 1000;
             const MARGIN: number = 20;
             const DEPTH: number = 50;
@@ -112,7 +112,7 @@ describe("ThemeGrid", () => {
             }
         });
 
-        it("Should return a number which is approximately between the spawning rate", () => {
+        it("Should return a position which is approximately between the spawning rate specified", () => {
             const SIZE: number = 1000;
             const MARGIN: number = 20;
             const DEPTH: number = 50;

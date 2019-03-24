@@ -39,7 +39,7 @@ describe("BitmapDecoder", () => {
                 expect(bitmap.header.dataOffset[0]).to.equal(138);
             });
 
-            it("Should throw an exception if the image is not a bmp file", () => {
+            it("Should throw an error if the image is not a bmp file", () => {
                 expect(() => BitmapDecoder.FromArrayBuffer(bootsBuffer)).to.throw("Not a bmp file");
             });
         });

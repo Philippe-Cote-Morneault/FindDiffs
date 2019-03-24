@@ -19,7 +19,7 @@ describe("RevealDifference", () => {
             }
         });
 
-        it("Should return an ICommonReveal if the selected pixel is black", () => {
+        it("Should return an array of the pixels of the difference if the selected pixel is black", () => {
             const posClicked: Position = new Position(0, 0);
 
             const reveal: ICommonReveal = {
