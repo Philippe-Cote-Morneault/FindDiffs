@@ -10,11 +10,10 @@ export interface IImagePairService {
     getOriginal(id: string): Promise<ArrayBuffer>;
 }
 
-export interface IUserService {
+export interface IScoreService {
     post(req: Request): Promise<string>;
-    index(): Promise<string>;
+    update(req: Request): Promise<string>;
     single(id: string): Promise<string>;
-    delete(id: string): Promise<string>;
 }
 
 export interface ISceneService {

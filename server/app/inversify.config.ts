@@ -11,10 +11,12 @@ import { SceneController } from "./controllers/scene.controller";
 import {    IDifferenceController,
             IGameCardController,
             IImagePairController,
-            ISceneController } from "./controllers/interfaces";
+            ISceneController,
+            IScoreController} from "./controllers/interfaces";
 import { IApplication, IServer } from "./interfaces";
 import { IDifferenceService, IGameCardService, IImagePairService, ISceneService} from "./services/interfaces";
 
+import { ScoreController } from "./controllers/scoreController";
 import { DifferenceService } from "./services/difference/difference.service";
 import { GameCardService } from "./services/gameCard/gameCard.service";
 import { ImagePairService } from "./services/imagePair/imagePair.service";
@@ -29,6 +31,7 @@ container.bind<IGameCardController>(TYPES.IGameCardController).to(GameCardContro
 container.bind<IImagePairController>(TYPES.IImagePairController).to(ImagePairController);
 container.bind<IDifferenceController>(TYPES.IDifferenceController).to(DifferenceController);
 container.bind<ISceneController>(TYPES.ISceneController).to(SceneController);
+container.bind<IScoreController>(TYPES.IScoreController).to(ScoreController);
 
 container.bind<IGameCardService>(TYPES.IGameCardService).to(GameCardService);
 container.bind<IImagePairService>(TYPES.IImagePairService).to(ImagePairService);
