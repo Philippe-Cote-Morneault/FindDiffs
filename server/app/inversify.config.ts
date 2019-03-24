@@ -8,20 +8,16 @@ import { GameCardController } from "./controllers/gameCard.controller";
 import { ImagePairController } from "./controllers/imagePair.controller";
 import { SceneController } from "./controllers/scene.controller";
 import { ScoreController } from "./controllers/score.controller";
-import { UserController } from "./controllers/user.controller";
 
-import {    IDifferenceController,
-            IGameCardController,
-            IImagePairController,
+import { IDifferenceController,
+         IGameCardController,
+         IImagePairController,
             ISceneController,
             IScoreController,
-            IUserController, } from "./controllers/interfaces";
+        } from "./controllers/interfaces";
 import { IApplication, IServer } from "./interfaces";
-import {    IDifferenceService,
-            IGameCardService,
-            IImagePairService,
-            ISceneService,
-            IScoreService,
+
+import { IDifferenceService, IGameCardService, IImagePairService, ISceneService, IScoreService } from "./services/interfaces";
 
 import { DifferenceService } from "./services/difference/difference.service";
 import { GameCardService } from "./services/gameCard/gameCard.service";

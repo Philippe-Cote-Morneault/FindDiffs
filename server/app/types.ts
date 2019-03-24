@@ -3,7 +3,6 @@ export default  {
         IApplication: Symbol.for("IApplication"),
 
         IImagePairController: Symbol.for("IImagePairController"),
-        IUserController: Symbol.for("IUserController"),
         IGameCardController: Symbol.for("IGameCardController"),
         IDifferenceController: Symbol.for("IDifferenceController"),
         IScoreController: Symbol.for("IScoreController"),
