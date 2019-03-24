@@ -32,7 +32,6 @@ import { SocketHandlerService } from "../services/socket/socketHandler.service";
 })
 
 export class GameViewFreeComponent implements OnInit {
-    private static readonly DIFFERENCE_SOUND_SRC: string = "../../assets/mario.mp3";
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
@@ -43,7 +42,6 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("message_container") private messageContainer: ElementRef;
     @ViewChild("userDifferenceFound") private userDifferenceFound: ElementRef;
 
-    private differenceSound: HTMLAudioElement;
     private scenePairId: string;
     private currentOriginalScene: ICommonScene;
     private currentModifiedScene: ICommonSceneModifications;
@@ -53,7 +51,6 @@ export class GameViewFreeComponent implements OnInit {
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
     public playerTime: string;
-    public differenceCounterUser: number;
     public isGameOver: boolean;
 
     public constructor(
@@ -74,10 +71,7 @@ export class GameViewFreeComponent implements OnInit {
         public chat: Chat,
         public objectRestoration: ObjectRestorationService,
         public cheatModeHandlerService: CheatModeHandlerService) {
-            this.differenceCounterUser = 0;
-            this.differenceSound = new Audio;
-            this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
-            this.differenceSound.load();
+
             this.isGameOver = false;
             this.originalSceneLoader = new SceneLoaderService();
             this.modifiedSceneLoader = new SceneLoaderService();
@@ -91,6 +85,11 @@ export class GameViewFreeComponent implements OnInit {
                                                    this.identificationError,
                                                    this.game,
                                                    this.objectRestoration);
+
+            this.game.gameEnded.subscribe((value) => {
+                this.playerTime = value.time;
+                this.isGameOver = value.isGameOver;
+            });
     }
 
     public ngOnInit(): void {
