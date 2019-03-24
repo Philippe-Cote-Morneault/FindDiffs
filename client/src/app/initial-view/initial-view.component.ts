@@ -38,12 +38,12 @@ export class InitialViewComponent implements OnInit {
             data: user,
             timestamp: new Date(),
         };
-        this.socketHandlerService.socket.emit(Event.NewUser, message, (response: ICommonToken | ICommonError) => {
+        this.socketHandlerService.socket.emit(Event.NewUser, message, (response: ICommonToken /*| ICommonError*/) => {
             if ((response as ICommonToken).token) {
                 localStorage.setItem("user", username);
                 this.router.navigateByUrl("/gamesList");
             } else {
-                alert((response as ICommonError).error_message);
+                // alert((response as ICommonError).error_message);
             }
         });
     }
