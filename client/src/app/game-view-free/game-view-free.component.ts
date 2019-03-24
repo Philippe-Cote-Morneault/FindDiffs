@@ -2,6 +2,11 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular
 import { ActivatedRoute } from "@angular/router";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import * as THREE from "three";
+// import { TimerService } from "../services/timer/timer.service";
+// import { Chat } from "../services/socket/chat";
+// import { ChatFormaterService } from "../services/socket/chatFormater.service";
+// import { TimerService } from "../services/timer/timer.service";
+import { Event } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonGeometricModifications } from "../../../../common/model/scene/modifications/geometricModifications";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
@@ -19,11 +24,8 @@ import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
+import { Chat } from "../services/socket/chat";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
-// import { TimerService } from "../services/timer/timer.service";
-// import { Chat } from "../services/socket/chat";
-// import { ChatFormaterService } from "../services/socket/chatFormater.service";
-// import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -38,11 +40,12 @@ export class GameViewFreeComponent implements OnInit {
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
-    // @ViewChild("chronometer") private chronometer: ElementRef;
+    @ViewChild("chronometer") private chronometer: ElementRef;
+    @ViewChild("errorMessage") private errorMessage: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
-    // @ViewChild("message") private message: ElementRef;
-    // @ViewChild("message_container") private messageContainer: ElementRef;
-    // @ViewChild("errorMessage") private errorMessage: ElementRef;
+    @ViewChild("message") private message: ElementRef;
+    @ViewChild("message_container") private messageContainer: ElementRef;
+    @ViewChild("userDifferenceFound") private userDifferenceFound: ElementRef;
 
     private differenceSound: HTMLAudioElement;
     private scenePairId: string;
@@ -74,7 +77,8 @@ export class GameViewFreeComponent implements OnInit {
         public objectDetectionService: ObjectDetectionService,
         public restoreObjectsService: RestoreObjectsService,
         public socket: SocketHandlerService,
-        private game: GameService) {
+        private game: GameService,
+        public chat: Chat) {
             this.differenceCounterUser = 0;
             this.differenceSound = new Audio;
             this.differenceSound.src = GameViewFreeComponent.DIFFERENCE_SOUND_SRC;
@@ -101,7 +105,16 @@ export class GameViewFreeComponent implements OnInit {
         });
         this.spinnerService.show();
         this.getGameCardById();
+        this.setServicesContainers();
         this.cheatModeTimeoutService.ngOnInit();
+    }
+
+    private setServicesContainers(): void {
+        this.game.setContainers(this.chronometer.nativeElement, this.userDifferenceFound.nativeElement);
+        this.chat.setContainers(this.message.nativeElement, this.messageContainer.nativeElement);
+        this.identificationError.setContainers(this.errorMessage.nativeElement,
+                                               this.originalScene.nativeElement,
+                                               this.modifiedScene.nativeElement);
     }
 
     @HostListener("document:keydown", ["$event"])
@@ -168,7 +181,7 @@ export class GameViewFreeComponent implements OnInit {
 
                 this.setRestoreObjectService();
                 this.clickEvent();
-                this.socket.emitReadyToPlay();
+                this.socket.emitMessage(Event.ReadyToPlay, null);
             });
         });
     }

@@ -8,7 +8,7 @@
           <p id="timer_title">Timer</p><p id="timer" #chronometer>00:00</p>
       </div>
       <div class="differences_container">
-        <p id="differences_title">Differences found</p><p id="differences">{{differenceCounterUser}}</p>
+        <p id="differences_title">Differences found</p><p id="differences" #userDifferenceFound></p>
       </div>
       <div class="differences_container" *ngIf="false" >
           <p *ngIf="false" id="differences_title"> Opponent's differences found</p><p *ngIf="false" id="differences">{{differenceCounterUser}}</p>

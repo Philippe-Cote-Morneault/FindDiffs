@@ -1,5 +1,7 @@
 import { ElementRef, Injectable } from "@angular/core";
 import * as THREE from "three";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { ICommon3DObject } from "../../../../../common/model/positions";
 // import { DifferenceType, ICommonReveal3D } from "../../../../../common/model/reveal";
 import { ObjectType } from "../../../../../common/model/scene/scene";
 import { IdentificationError } from "../IdentificationError/identificationError.service";
@@ -61,7 +63,19 @@ export class RestoreObjectsService {
         // const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
         if (this.clickAreAllowed()) {
             this.identificationError.moveClickError(event.pageX, event.pageY);
-            this.socket.emitClick3D(scenePairId, modifiedObjectId, originalObjectId, gameType);
+
+            const clickInfo: ICommon3DObject = {
+                scenePairId: scenePairId,
+                originalObjectId: originalObjectId,
+                modifiedObjectId: modifiedObjectId,
+                gameType: gameType,
+            };
+            const message: ICommonSocketMessage = {
+                data: clickInfo,
+                timestamp: new Date(),
+            };
+            this.socket.emitMessage(Event.GameClick, message);
+            // this.socket.emitClick3D(scenePairId, modifiedObjectId, originalObjectId, gameType);
         }
             // .subscribe(async (response: ICommonReveal3D) => {
             //     switch (response.differenceType) {
@@ -90,7 +104,7 @@ export class RestoreObjectsService {
     }
 
     private clickAreAllowed(): boolean {
-        return !this.identificationError.timeout && this.game.gameStarted;
+        return !this.identificationError.getTimeout() && this.game.getGameStarted();
     }
 
     public addObject(objectOriginal: THREE.Object3D, scene: IThreeScene, isTexture: boolean): void {
