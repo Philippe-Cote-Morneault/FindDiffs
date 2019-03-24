@@ -192,9 +192,11 @@ export class GameViewFreeComponent implements OnInit {
         const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
         this.geometricObjectService.post3DObject(this.scenePairId, modifiedObjectId, originalObjectId, this.gameType)
             .subscribe(async (response: ICommonReveal3D) => {
+                console.log(modifiedObjectId);
+                console.log(originalObjectId);
                 switch (response.differenceType) {
                     case DifferenceType.removedObject:
-                        this.restoreObjectsService.addObject(this.detectedObjects.original, scenes);
+                        this.restoreObjectsService.addObject(this.detectedObjects.original, scenes, false);
                         // await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.colorChanged:
@@ -203,7 +205,7 @@ export class GameViewFreeComponent implements OnInit {
                         break;
                     case DifferenceType.textureObjectChanged:
                         // tslint:disable-next-line: max-line-length
-                        await this.restoreObjectsService.changeTextureObject(this.detectedObjects.original, this.detectedObjects.modified, this.thematicObjectParser);
+                        await this.restoreObjectsService.changeTextureObject(this.detectedObjects.original, this.detectedObjects.modified, scenes);
                         // await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.addedObject:
@@ -218,7 +220,7 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
-        sceneLoader.scene.children.forEach((element) => {
+        sceneLoader.scene.traverse((element) => {
             if (element.type === "Mesh" || element.type === "Scene") {
                 meshes.push(element);
             }
