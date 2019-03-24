@@ -31,7 +31,9 @@ export class SimplePOVGameManager extends GameManager {
 
     private differenceFound(differenceId: number): void {
         this.differencesFound.set(differenceId, true);
-        ++this.game.differences_found;
+        if (++this.game.differences_found === 7) {
+            this.endGameCallback(this.game, this.game.players[0]);
+        }
     }
 
 }
