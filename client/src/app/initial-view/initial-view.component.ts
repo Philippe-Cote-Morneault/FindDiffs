@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
+import { ICommonError } from "../../../../common/communication/webSocket/error";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonToken } from "../../../../common/communication/webSocket/token";
 import { ICommonUser } from "../../../../common/communication/webSocket/user";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
-import { ICommonError } from "../../../../common/communication/webSocket/error";
 
 @Component({
     selector: "app-initial-view",

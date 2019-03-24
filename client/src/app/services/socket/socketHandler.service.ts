@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import * as io from "socket.io-client";
+import { ICommonError } from "../../../../../common/communication/webSocket/error";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonToken } from "../../../../../common/communication/webSocket/token";
 import { SERVER_URL } from "../../../../../common/url";
@@ -15,8 +17,7 @@ export class SocketHandlerService {
     public socket: SocketIOClient.Socket;
     private subscribers: Map<string, SocketSubscriber[]>;
 
-    public constructor() {
-        console.log("constructor");
+    public constructor(private router: Router) {
         this.subscribers = new Map<string, SocketSubscriber[]>();
         this.init();
     }
@@ -34,13 +35,21 @@ export class SocketHandlerService {
                 const tokendata: ICommonToken = {
                     token: token,
                 };
-                const response: ICommonSocketMessage = {
+                const message: ICommonSocketMessage = {
                     data: tokendata,
                     timestamp: new Date(),
                 };
 
-                this.socket.emit(Event.Authenticate, response);
-                this.setEventListeners(this.socket);
+                this.socket.emit(Event.Authenticate, message, (response: Object) => {
+                    if ((response as ICommonError).error_message) {
+                        alert((response as ICommonError).error_message);
+                        sessionStorage.removeItem("token");
+                        this.router.navigateByUrl("/");
+                        this.onAuthenticate();
+                    } else {
+                        this.setEventListeners(this.socket);
+                    }
+                });
             } else {
                 this.onAuthenticate();
             }
@@ -77,12 +86,9 @@ export class SocketHandlerService {
         });
     }
 
-    // tslint:disable-next-line:max-func-body-length
     public onAuthenticate(): void {
         this.socket.on(Event.Authenticate, (message: ICommonSocketMessage) => {
-            console.log(JSON.stringify(message));
             const token: string = (message.data as ICommonToken).token;
-            console.log("Token doesn't exist, one received is " + token);
             sessionStorage.setItem("token", token);
             this.setEventListeners(this.socket);
         });
