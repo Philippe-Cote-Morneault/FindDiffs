@@ -7,8 +7,8 @@ import { CameraGenerator } from "../sceneRenderer/cameraGenerator";
 import { IThreeObject } from "./IThreeObject";
 import { ObjectDetectionService } from "./object-detection.service";
 import { ObjectHandler } from "./objects-handler.service";
-// import { ObjectRestorationService } from "./object-restoration.service";
-// import { SceneLoaderService } from "../sceneLoader/sceneLoader.service";
+import { ObjectRestorationService } from "./object-restoration.service";
+import { SceneLoaderService } from "../sceneLoader/sceneLoader.service";
 
 describe("ObjectHandler", () => {
   let event: MouseEvent;
@@ -56,7 +56,6 @@ describe("ObjectHandler", () => {
       };
       stub.returns(temp);
 
-      // tslint:disable-next-line: no-floating-promises
       objectHandler.clickOnScene(event, true);
       // tslint:disable-next-line: max-line-length
       objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
@@ -64,6 +63,119 @@ describe("ObjectHandler", () => {
       await expect(objectHandler.detectedObjects.original).toEqual(temp.original);
       await expect(objectHandler.detectedObjects.modified).toEqual(temp.modified);
       stub.restore();
+    });
+
+    it("Should detect a cube in both scenes", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      const objectDetectionService: ObjectDetectionService = TestBed.get(ObjectDetectionService);
+      const mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
+      const stub: sinon.SinonStub = sinon.stub(objectDetectionService, "rayCasting");
+      const temp: IThreeObject = {
+        original: cube,
+        modified: cube,
+      };
+      stub.returns(temp);
+
+      objectHandler.clickOnScene(event, false);
+      // tslint:disable-next-line: max-line-length
+      objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
+
+      await expect(objectHandler.detectedObjects.original).toEqual(temp.original);
+      await expect(objectHandler.detectedObjects.modified).toEqual(temp.modified);
+      stub.restore();
+    });
+
+    it("Should detect a cube in both scenes", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      const objectDetectionService: ObjectDetectionService = TestBed.get(ObjectDetectionService);
+      const mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
+      const stub: sinon.SinonStub = sinon.stub(objectDetectionService, "rayCasting");
+      const temp: IThreeObject = {
+        original: cube,
+        modified: cube,
+      };
+      stub.returns(temp);
+
+      objectHandler.clickOnScene(event, false);
+      // tslint:disable-next-line: max-line-length
+      objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
+
+      await expect(objectHandler.detectedObjects.original).toEqual(temp.original);
+      await expect(objectHandler.detectedObjects.modified).toEqual(temp.modified);
+      stub.restore();
+    });
+
+// tslint:disable-next-line: max-func-body-length
+    it("Should set sceneLoaderServices attributes and detectedObjets", async () => {
+
+      const sceneOriginalLoader: SceneLoaderService = new SceneLoaderService;
+      const sceneModifiedLoader: SceneLoaderService = new SceneLoaderService;
+
+      sceneOriginalLoader.camera = new THREE.PerspectiveCamera;
+      sceneOriginalLoader.scene = new THREE.Scene;
+
+      sceneModifiedLoader.camera = new THREE.PerspectiveCamera;
+      sceneModifiedLoader.scene = new THREE.Scene;
+
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      const objectDetectionService: ObjectDetectionService = TestBed.get(ObjectDetectionService);
+      const objectRestorationService: ObjectRestorationService = TestBed.get(ObjectRestorationService);
+      const mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
+      const spyRestoration: sinon.SinonSpy = sinon.stub(objectRestorationService, "setAttributes");
+      jasmine.clock().install();
+      const stubDetection: sinon.SinonStub = sinon.stub(objectDetectionService, "rayCasting");
+      const temp: IThreeObject = {
+        original: cube,
+        modified: cube,
+      };
+      stubDetection.returns(temp);
+
+      objectHandler.clickOnScene(event, true);
+      // tslint:disable-next-line: max-line-length
+      objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
+
+      objectRestorationService.setAttributes(sceneOriginalLoader, sceneModifiedLoader, temp);
+
+      jasmine.clock().tick(999);
+      sinon.assert.calledOnce(spyRestoration);
+      stubDetection.restore();
+      spyRestoration.restore();
+      jasmine.clock().uninstall();
+    });
+
+    // tslint:disable-next-line: max-func-body-length
+    it("Should set sceneLoaderServices attributes and detectedObjets", async () => {
+
+      const sceneOriginalLoader: SceneLoaderService = new SceneLoaderService;
+      const sceneModifiedLoader: SceneLoaderService = new SceneLoaderService;
+
+      sceneOriginalLoader.camera = new THREE.PerspectiveCamera;
+      sceneOriginalLoader.scene = new THREE.Scene;
+
+      sceneModifiedLoader.camera = new THREE.PerspectiveCamera;
+      sceneModifiedLoader.scene = new THREE.Scene;
+
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      const objectDetectionService: ObjectDetectionService = TestBed.get(ObjectDetectionService);
+      const objectRestorationService: ObjectRestorationService = TestBed.get(ObjectRestorationService);
+      const mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
+      const spyRestoration: sinon.SinonSpy = sinon.stub(objectRestorationService, "setAttributes");
+      const stubDetection: sinon.SinonStub = sinon.stub(objectDetectionService, "rayCasting");
+      const temp: IThreeObject = {
+        original: cube,
+        modified: cube,
+      };
+      stubDetection.returns(temp);
+
+      await objectHandler.clickOnScene(event, false);
+      // tslint:disable-next-line: max-line-length
+      objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
+
+      objectRestorationService.setAttributes(sceneOriginalLoader, sceneModifiedLoader, temp);
+
+      sinon.assert.called(spyRestoration);
+      stubDetection.restore();
+      spyRestoration.restore();
     });
   });
 });
