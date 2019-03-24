@@ -91,10 +91,10 @@ export class SocketHandlerService {
         this.socket.emit(Event.GameClick, message);
     }
 
-    public emitPlayerSoloGame(id: string): void {
+    public emitPlayerSoloGame(id: string, POV: POVType): void {
         const game: ICommonGame = {
             ressource_id: id,
-            pov: POVType.Simple,
+            pov: POV,
         };
         const message: ICommonSocketMessage = {
             data: game,
