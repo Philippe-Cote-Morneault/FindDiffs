@@ -62,7 +62,7 @@ export class GamesCardViewComponent implements OnInit {
             this.deleteGameCard();
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
-            this.socketHandlerService.emitPlayerSoloGame(this.gameCard.resource_id);
+            this.socketHandlerService.emitPlayerSoloGame(this.gameCard.resource_id, this.gameCard.pov);
             await this.router.navigateByUrl(gameUrl + this.gameCard.id);
         }
     }
