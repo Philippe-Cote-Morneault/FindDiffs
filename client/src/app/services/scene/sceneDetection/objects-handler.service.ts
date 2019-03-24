@@ -7,7 +7,6 @@ import { IdentificationError } from "../../IdentificationError/identificationErr
 import { GameService } from "../../game/game.service";
 import { SceneLoaderService } from "../../scene/sceneLoader/sceneLoader.service";
 import { SocketHandlerService } from "../../socket/socketHandler.service";
-// import { IThreeObject } from "./GeometricObjects/IThreeObject";
 import { MousePositionService } from "../sceneDetection/mouse-position.service";
 import { IThreeObject } from "./IThreeObject";
 import { ObjectDetectionService } from "./object-detection.service";
@@ -21,10 +20,10 @@ export class ObjectHandler {
     public detectedObjects: IThreeObject;
     public meshesOriginal: THREE.Object3D[];
     public meshesModified: THREE.Object3D[];
-    public gameType: ObjectType;
-    public scenePairId: string;
     public originalGame: ElementRef<HTMLElement>;
     public modifiedGame: ElementRef<HTMLElement>;
+    public scenePairId: string;
+    public gameType: ObjectType;
 
     public constructor( public mousePositionService: MousePositionService,
                         public objectDetectionService: ObjectDetectionService,
@@ -54,8 +53,7 @@ export class ObjectHandler {
                           this.detectedObjects.modified.userData.id, this.gameType);
     }
 
-    private emitDifference(event: MouseEvent,
-                           scenePairId: string, originalObjectId: string,
+    private emitDifference(event: MouseEvent, scenePairId: string, originalObjectId: string,
                            modifiedObjectId: string, gameType: ObjectType): void {
         if (this.clickAreAllowed()) {
             this.identificationError.moveClickError(event.pageX, event.pageY);

@@ -5,6 +5,7 @@ import { Event } from "../../../../common/communication/webSocket/socketMessage"
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { R } from "../ressources/strings";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeHandlerService } from "../services/cheatMode/cheatModeHandler.service";
 import { GameService } from "../services/game/game.service";
@@ -35,7 +36,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("message_container") private messageContainer: ElementRef;
     @ViewChild("userDifferenceFound") private userDifferenceFound: ElementRef;
 
-    private scenePairID: string;
+    private scenePairId: string;
     private currentOriginalScene: ICommonScene;
     private currentModifiedScene: ICommonSceneModifications;
     private gameCardId: string;
@@ -43,6 +44,8 @@ export class GameViewFreeComponent implements OnInit {
     private modifiedSceneLoader: SceneLoaderService;
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
+    public isGameOver: boolean;
+    public playerTime: string;
 
     public constructor( private route: ActivatedRoute,
                         private spinnerService: Ng4LoadingSpinnerService,
@@ -58,24 +61,24 @@ export class GameViewFreeComponent implements OnInit {
                         public socketHandler: SocketHandlerService) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
-        // this.objectHandler = new ObjectHandler(this.mousePositionService,
-        //                                        this.objectDetectionService,
-        //                                        this.originalSceneLoader,
-        //                                        this.modifiedSceneLoader,
-        //                                        this.geometricObjectService,
-        //                                        this.socket,
-        //                                        this.identificationError,
-        //                                        this.game,
-        //                                        this.objectRestoration);
+
+        this.isGameOver = false;
+        this.game.gameEnded.subscribe((value) => {
+            this.playerTime = value.time;
+            this.isGameOver = value.isGameOver;
+        });
+        this.game.resetTime();
     }
 
     public ngOnInit(): void {
         this.route.params.subscribe((params) => {
             this.gameCardId = params["id"];
         });
+
+        this.userDifferenceFound.nativeElement.innerText = R.ZERO;
         this.spinnerService.show();
-        this.getGameCardById();
         this.setServicesContainers();
+        this.getGameCardById();
     }
 
     private setServicesContainers(): void {
@@ -95,7 +98,7 @@ export class GameViewFreeComponent implements OnInit {
 
     private getGameCardById(): void {
         this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
-            this.scenePairID = gameCard.resource_id;
+            this.scenePairId = gameCard.resource_id;
             this.gameTitle.nativeElement.innerText = gameCard.title;
             this.loadScene();
         });
@@ -103,8 +106,8 @@ export class GameViewFreeComponent implements OnInit {
 
     // tslint:disable
     private loadScene(): void {
-        this.sceneService.getSceneById(this.scenePairID).subscribe(async (sceneResponse: ICommonScene) => {
-            this.sceneService.getModifiedSceneById(this.scenePairID).subscribe(async (sceneModified: ICommonSceneModifications) => {
+        this.sceneService.getSceneById(this.scenePairId).subscribe(async (sceneResponse: ICommonScene) => {
+            this.sceneService.getModifiedSceneById(this.scenePairId).subscribe(async (sceneModified: ICommonSceneModifications) => {
                 this.currentOriginalScene = sceneResponse;
                 this.currentModifiedScene = sceneModified;
                 this.cheatModeHandlerService.currentOriginalScene = this.currentOriginalScene;
@@ -128,9 +131,9 @@ export class GameViewFreeComponent implements OnInit {
                 this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
                 this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
                 this.setRestoreObjectService();
-                this.clickEvent();
-                // this.timerService.startTimer(this.chronometer.nativeElement);
-                
+                this.clickEvent(this.originalScene.nativeElement, true);
+                this.clickEvent(this.modifiedScene.nativeElement, false);
+
                 this.socketHandler.emitMessage(Event.ReadyToPlay, null);
             });
         });
@@ -139,23 +142,18 @@ export class GameViewFreeComponent implements OnInit {
     private setRestoreObjectService(): void {
         this.objectHandler.meshesOriginal = this.meshesOriginal;
         this.objectHandler.meshesModified = this.meshesModified;
-        this.objectHandler.scenePairId = this.scenePairID;
         this.objectHandler.originalGame = this.originalScene;
         this.objectHandler.modifiedGame = this.modifiedScene;
-        this.objectHandler.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
         this.objectHandler.originalSceneLoader = this.originalSceneLoader;
         this.objectHandler.modifiedSceneLoader = this.modifiedSceneLoader;
+        this.objectHandler.scenePairId = this.scenePairId;
+        this.objectHandler.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
+        console.log(this.isGameThematic());
     }
 
-    private clickEvent(): void {
-        this.originalScene.nativeElement.addEventListener("click", (event: MouseEvent) =>
-                    this.objectHandler.clickOnScene(event, true));
-        this.modifiedScene.nativeElement.addEventListener("click", (event: MouseEvent) =>
-                    this.objectHandler.clickOnScene(event, false));
-    }
-
-    private isGameThematic(): boolean {
-        return this.currentModifiedScene.type === ObjectType.Thematic;
+    private clickEvent(scene: HTMLElement, isOriginalScene: boolean): void {
+        scene.addEventListener("click", (event: MouseEvent) =>
+                    this.objectHandler.clickOnScene(event, isOriginalScene));
     }
 
     private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
@@ -164,6 +162,10 @@ export class GameViewFreeComponent implements OnInit {
                 meshes.push(element);
             }
         });
+    }
+
+    private isGameThematic(): boolean {
+        return this.currentModifiedScene.type === ObjectType.Thematic;
     }
 
 }

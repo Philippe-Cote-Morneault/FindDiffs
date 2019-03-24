@@ -1,4 +1,5 @@
 import { TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
@@ -7,7 +8,10 @@ import { Chat } from "./chat";
 describe("Chat", () => {
     let service: Chat;
     const time: number = 9;
-    beforeEach(() => {
+    beforeEach(async() => {
+        TestBed.configureTestingModule({
+            imports: [RouterTestingModule],
+        });
         service = TestBed.get(Chat);
     });
 
@@ -31,14 +35,14 @@ describe("Chat", () => {
         expect(p.innerText.slice(time)).to.equal("Difference found.");
     });
 
-    it("Should return the correct message in chat after NewUser Event", () => {
+    it("Should return the correct message in chat after UserConnected Event", () => {
         const p: HTMLElement = document.createElement("p");
         const container: HTMLElement = document.createElement("div");
         const user: ICommonUser = { username: "Daddy"};
         const msg: ICommonSocketMessage = {data: user, timestamp: new Date()};
 
         service.setContainers(p, container);
-        service.notify(Event.NewUser, msg);
+        service.notify(Event.UserConnected, msg);
         expect(p.innerText.slice(time)).to.equal("The user Daddy is now online!");
     });
 

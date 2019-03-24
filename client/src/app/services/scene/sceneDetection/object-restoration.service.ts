@@ -1,8 +1,7 @@
 import { ElementRef, Injectable } from "@angular/core";
+import { ICommonDifferenceFound } from "../../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../../common/communication/webSocket/socketMessage";
 import { DifferenceType, ICommonReveal3D } from "../../../../../../common/model/reveal";
-// import { ICommonReveal3D } from "../../../../../../common/model/reveal";
-// import { DifferenceType, ICommonReveal3D } from "../../../../../../common/model/reveal";
 import { SceneLoaderService } from "../../scene/sceneLoader/sceneLoader.service";
 import { SocketHandlerService } from "../../socket/socketHandler.service";
 import { SocketSubscriber } from "../../socket/socketSubscriber";
@@ -41,15 +40,13 @@ export class ObjectRestorationService implements SocketSubscriber {
   }
 
   public notify(event: Event, message: ICommonSocketMessage): void {
-    console.log("Received event!");
     if (event === Event.DifferenceFound) {
-        const response: ICommonReveal3D = message.data as ICommonReveal3D;
+        const response: ICommonReveal3D = (message.data as ICommonDifferenceFound).reveal as ICommonReveal3D;
         this.restoreObject(response);
     }
   }
 
   public restoreObject(response: ICommonReveal3D ): void {
-    console.log("Received event!");
     const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
     switch (response.differenceType) {
         case DifferenceType.removedObject:
@@ -74,8 +71,6 @@ export class ObjectRestorationService implements SocketSubscriber {
             break;
       }
   }
-
-  // Verify without promises !
 
   public addObject(objectOriginal: THREE.Object3D, scene: IThreeScene, isTexture: boolean): void {
         if (this.isANewDifference(objectOriginal.userData.id) || isTexture) {

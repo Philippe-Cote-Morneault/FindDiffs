@@ -44,7 +44,7 @@ export class GameService implements SocketSubscriber {
         this.socketService.subscribe(Event.DifferenceFound, this);
     }
 
-    public notify(event: Event, message: ICommonSocketMessage): void {
+    public async notify(event: Event, message: ICommonSocketMessage): Promise<void> {
         switch (event) {
             case Event.GameStarted: {
                 return this.startGame();
@@ -53,7 +53,7 @@ export class GameService implements SocketSubscriber {
                 return this.stopGame(message);
             }
             case Event.DifferenceFound: {
-                return this.differenceFound(message);
+                return  this.differenceFound(message);
             }
             default: {
                 break;
@@ -61,8 +61,12 @@ export class GameService implements SocketSubscriber {
         }
     }
 
-    private startGame(): void {
+    public resetTime(): void {
         this.timer.reset();
+        this.timer.pause();
+    }
+
+    private startGame(): void {
         this.timer.start();
         this.gameStarted = true;
         this.timer.addEventListener("secondsUpdated", () =>
@@ -71,17 +75,19 @@ export class GameService implements SocketSubscriber {
 
     private stopGame(message: ICommonSocketMessage): void {
         this.timer.stop();
+        const time: string = this.formatPlayerTimer(message);
         const game: GameEnding = {
             isGameOver: true,
-            time: this.formatPlayerTimer(message),
+            time: time,
         };
+        this.chronometer.innerText = time;
         this.gameEnded.next(game);
     }
 
-    private  differenceFound(message: ICommonSocketMessage): void {
+    private async differenceFound(message: ICommonSocketMessage): Promise<void> {
         const difference: number = (message.data as ICommonDifferenceFound).difference_count;
         this.differenceUser.innerText = JSON.stringify(difference);
-        this.differenceSound.play();
+        await this.differenceSound.play();
     }
 
     public getTimeValues(): string {

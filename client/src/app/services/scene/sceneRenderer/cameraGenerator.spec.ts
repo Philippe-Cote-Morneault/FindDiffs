@@ -9,11 +9,11 @@ describe("CameraGenerator", () => {
 
     it("Should create a camera with the right position.", () => {
         // tslint:disable-next-line:no-magic-numbers
-        expect(camera.position.x).to.equal(50);
+        expect(camera.position.x).to.equal(0);
         // tslint:disable-next-line:no-magic-numbers
-        expect(camera.position.y).to.equal(10);
+        expect(camera.position.y).to.equal(2);
         // tslint:disable-next-line:no-magic-numbers
-        expect(camera.position.z).to.equal(50);
+        expect(camera.position.z).to.equal(0);
     });
 
     it("Should create a camera with a far clip of 1000.", () => {
@@ -28,7 +28,7 @@ describe("CameraGenerator", () => {
 
     it("Should create a camera with an FOV of 90.", () => {
         // tslint:disable-next-line:no-magic-numbers
-        expect(camera.fov).to.equal(90);
+        expect(camera.fov).to.equal(45);
     });
 
     it("Should create a camera with a near clip of 0.1.", () => {

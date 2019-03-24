@@ -71,8 +71,6 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     private emitPlaySoloGame(): void {
-        console.log(this.gameCard.pov);
-        console.log(POVType[this.gameCard.pov]);
         const game: ICommonGame = {
             ressource_id: this.gameCard.resource_id,
             pov: +POVType[this.gameCard.pov],

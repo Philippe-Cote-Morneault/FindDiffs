@@ -30,7 +30,7 @@ export class InitialViewComponent implements OnInit {
           });
     }
 
-    public async verifyUsername(): Promise<void> {
+    public verifyUsername(): void {
         const username: string = this.usernameInput.nativeElement.value;
         const user: ICommonUser = {
             username: username,
@@ -39,10 +39,10 @@ export class InitialViewComponent implements OnInit {
             data: user,
             timestamp: new Date(),
         };
-        this.socketHandlerService.socket.emit(Event.NewUser, message, (response: ICommonToken | ICommonError) => {
+        this.socketHandlerService.socket.emit(Event.NewUser, message, async (response: ICommonToken | ICommonError) => {
             if ((response as ICommonToken).token) {
                 sessionStorage.setItem("user", username);
-                this.router.navigateByUrl("/gamesList");
+                await this.router.navigateByUrl("/gamesList");
             } else {
                 alert((response as ICommonError).error_message);
             }
