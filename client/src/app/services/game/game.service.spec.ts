@@ -19,6 +19,9 @@ describe("GameService", () => {
     it("Should return the correct time after game start and end after 2 sec", async () => {
 
         const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
+        const timer: HTMLElement = document.createElement("p");
+        const userDifference: HTMLElement = document.createElement("p");
+        service.setContainers(timer, userDifference);
         await service.notify(Event.GameStarted, msg);
         expect(service.getGameStarted()).to.equal(true);
         expect(service.getTimeValues()).to.equal("00:00");
@@ -43,11 +46,10 @@ describe("GameService", () => {
     it("Should return the correct count after a difference is found", async () => {
         const timer: HTMLElement = document.createElement("p");
         const userDifference: HTMLElement = document.createElement("p");
-        const diff: ICommonDifferenceFound = { player: "", difference_count: 2, pixels_affected: []};
+        const diff: ICommonDifferenceFound = { player: "", difference_count: 2, reveal: {}};
         const msg: ICommonSocketMessage = { data: diff, timestamp: new Date()};
         service.setContainers(timer, userDifference);
-        alert(userDifference);
         await service.notify(Event.DifferenceFound, msg);
-        // expect(userDifference.innerText).to.equal("2");
+        expect(userDifference.innerText).to.equal("2");
     });
 });

@@ -100,9 +100,9 @@ export class GameService implements SocketSubscriber {
 
     private formatPlayerTimer(message: ICommonSocketMessage): string {
         let seconds: number | string = (message.data as ICommonGameEnding).time / GameService.MS_IN_SEC;
-        // tslint:disable:radix
 
-        const minutes: number | string = this.format_two_digits(Math.floor(seconds / GameService.SEC_IN_MIN));
+        // tslint:disable:radix
+        const minutes: number | string = this.format_two_digits(Math.round(seconds / GameService.SEC_IN_MIN));
         seconds = this.format_two_digits(Math.round(seconds % GameService.SEC_IN_MIN));
 
         return minutes + R.COLON + seconds;
