@@ -7,7 +7,7 @@ import { IdentificationError } from "../IdentificationError/identificationError.
 import { GameService } from "../game/game.service";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
-import { IThreeObject, IThreeScene } from "./GeometricObjects/IThreeObject";
+import { IThreeObject } from "./GeometricObjects/IThreeObject";
 import { GeometricObjectsService } from "./GeometricObjects/geometric-objects.service";
 import { MousePositionService } from "./mousePosition.service";
 import { ObjectDetectionService } from "./object-detection.service";
@@ -18,7 +18,6 @@ import { ObjectRestorationService } from "./object-restoration.service";
 })
 export class ObjectHandler {
 
-    private differenceFound: string[];
     private detectedObjects: IThreeObject;
     public meshesOriginal: THREE.Object3D[];
     public meshesModified: THREE.Object3D[];
@@ -36,7 +35,6 @@ export class ObjectHandler {
                        private identificationError: IdentificationError,
                        private game: GameService,
                        public objectRestorationService: ObjectRestorationService) {
-        this.differenceFound = [];
         this.meshesOriginal = [];
         this.meshesModified = [];
     }
