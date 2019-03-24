@@ -56,6 +56,7 @@ export class GameService {
             players: [player],
             start_time: undefined,
             differences_found: 0,
+            game_card_id: data.game_card_id,
         };
         const endGameCallback: (game: Game, winner: string) => void = (game: Game, winner: string) => {
             this.endGame(game, winner);
