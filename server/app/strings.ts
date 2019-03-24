@@ -63,4 +63,6 @@ export const R: IString = {
     X_: "x",
     Y: "Y",
     Y_: "y",
+
+    SOCKET_DATE: "HH:MM:ss",
 };

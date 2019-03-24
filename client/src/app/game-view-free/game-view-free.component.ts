@@ -9,7 +9,6 @@ import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
 import { SceneSyncerService } from "../services/scene/sceneSyncer/sceneSyncer.service";
-import { TimerService } from "../services/timer/timer.service";
 
 @Component({
     selector: "app-game-view-free",
@@ -22,8 +21,10 @@ export class GameViewFreeComponent implements OnInit {
 
     @ViewChild("originalScene") private originalScene: ElementRef;
     @ViewChild("modifiedScene") private modifiedScene: ElementRef;
-    @ViewChild("chronometer") private chronometer: ElementRef;
+    // @ViewChild("chronometer") private chronometer: ElementRef;
     @ViewChild("gameTitle") private gameTitle: ElementRef;
+    // @ViewChild("message") private message: ElementRef;
+    // @ViewChild("message_container") private messageContainer: ElementRef;
 
     private scenePairID: string;
     private currentOriginalScene: ICommonScene;
@@ -31,11 +32,11 @@ export class GameViewFreeComponent implements OnInit {
     private gameCardId: string;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
+    private cheatActivated: boolean;
 
     public constructor( private route: ActivatedRoute,
                         private spinnerService: Ng4LoadingSpinnerService,
                         public sceneService: SceneService,
-                        public timerService: TimerService,
                         public gamesCardService: GamesCardService,
                         private sceneSyncer: SceneSyncerService,
                         public cheatModeHandlerService: CheatModeHandlerService) {
@@ -87,7 +88,7 @@ export class GameViewFreeComponent implements OnInit {
                     this.originalSceneLoader.camera, this.originalScene.nativeElement,
                     this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
                 this.spinnerService.hide();
-                this.timerService.startTimer(this.chronometer.nativeElement);
+                // this.timerService.startTimer(this.chronometer.nativeElement);
 
             });
         });
