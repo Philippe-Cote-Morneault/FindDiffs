@@ -11,6 +11,10 @@ import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
 import { ICommonReveal } from "../../../../common/model/reveal";
+import { ICommonDifferenceFound } from "../../../../common/communication/webSocket/differenceFound";
+import { ICommonIdentificationError } from "../../../../common/communication/webSocket/identificationError";
+
+
 
 export class GameService {
     private static instance: GameService;
@@ -96,6 +100,7 @@ export class GameService {
         });
     }
 
+    // tslint:disable-next-line:max-func-body-length
     private gameClick(message: ICommonSocketMessage, clickedPlayer: string): void {
         console.log("GAMECLICK");
         console.log(JSON.stringify(message));
@@ -105,15 +110,24 @@ export class GameService {
         }
         gameManager.playerClick(message.data, (data: Object | null) => {
             gameManager.game.players.forEach((player: string) => {
+                console.log(data);
                 if (data as ICommonReveal) {
+                    const differenceFound: ICommonDifferenceFound = {
+                        player: clickedPlayer,
+                        difference_count: gameManager.game.differences_found,
+                        pixels_affected: (data as ICommonReveal).pixels_affected,
+                    }
                     const response: ICommonSocketMessage = {
-                        data: data as ICommonReveal,
+                        data: differenceFound,
                         timestamp: new Date(),
                     };
                     this.socketHandler.sendMessage(Event.DifferenceFound, response, player);
                 } else {
+                    const identificationError: ICommonIdentificationError = {
+                        player: clickedPlayer,
+                    };
                     const response: ICommonSocketMessage = {
-                        data: "",
+                        data: identificationError,
                         timestamp: new Date(),
                     };
                     this.socketHandler.sendMessage(Event.InvalidClick, response, player);
