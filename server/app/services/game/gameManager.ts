@@ -19,6 +19,8 @@ export abstract class GameManager {
         this.game.start_time = new Date();
     }
 
-    public abstract playerClick(position: Object, callBack: (data: Object | null) => void): void;
+    public abstract playerClick(position: Object,
+                                successCallback: (data: Object | null) => void,
+                                failureCallback: () => void): void;
 
 }

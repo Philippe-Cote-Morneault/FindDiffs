@@ -12,14 +12,17 @@ export class SimplePOVGameManager extends GameManager {
         this.pixelPositionService = PixelPositionService.getInstance();
     }
 
-    public playerClick(position: ICommon2DPosition, callBack: (data: Object | null) => void): void {
+    public playerClick(position: ICommon2DPosition,
+                       successCallBack: (data: Object | null) => void,
+                       failureCallback: () => void): void {
+
         this.pixelPositionService.postPixelPosition(this.game.ressource_id, position.x, position.y)
             .then((value: ICommonReveal | null) => {
                 if (value && !this.differencesFound.get(value.difference_id)) {
                     this.differenceFound((value as ICommonReveal).difference_id);
-                    callBack(value);
+                    successCallBack(value);
                 } else {
-                    callBack(null);
+                    failureCallback();
                 }
             });
     }
