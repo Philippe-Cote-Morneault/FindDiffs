@@ -61,8 +61,12 @@ export class GameService implements SocketSubscriber {
         }
     }
 
-    private startGame(): void {
+    public resetTime(): void {
         this.timer.reset();
+        this.timer.pause();
+    }
+
+    private startGame(): void {
         this.timer.start();
         this.gameStarted = true;
         this.timer.addEventListener("secondsUpdated", () =>
@@ -71,10 +75,12 @@ export class GameService implements SocketSubscriber {
 
     private stopGame(message: ICommonSocketMessage): void {
         this.timer.stop();
+        const time: string = this.formatPlayerTimer(message);
         const game: GameEnding = {
             isGameOver: true,
-            time: this.formatPlayerTimer(message),
+            time: time,
         };
+        this.chronometer.innerText = time;
         this.gameEnded.next(game);
     }
 
