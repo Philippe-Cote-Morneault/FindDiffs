@@ -57,9 +57,9 @@ export class GameService {
             start_time: undefined,
             differences_found: 0,
         };
-        const endGameCallback = (game: Game, winner: string) => {
+        const endGameCallback: (game: Game, winner: string) => void = (game: Game, winner: string) => {
             this.endGame(game, winner);
-        }
+        };
         const gameManager: GameManager = data.pov === POVType.Simple ?
             new SimplePOVGameManager(newGame, endGameCallback) :
             new FreePOVGameManager(newGame, endGameCallback);
@@ -78,7 +78,7 @@ export class GameService {
         const socketMessage: ICommonSocketMessage = {
             data: "",
             timestamp: new Date(),
-        }
+        };
         this.socketHandler.sendMessage(Event.GameStarted, socketMessage, player);
     }
 

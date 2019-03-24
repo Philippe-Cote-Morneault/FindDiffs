@@ -12,11 +12,11 @@ export class SimplePOVGameManager extends GameManager {
         this.pixelPositionService = PixelPositionService.getInstance();
     }
 
-    public playerClick(position: ICommon2DPosition,
-                       successCallBack: (data: Object | null) => void,
-                       failureCallback: () => void): void {
+    public async playerClick(position: ICommon2DPosition,
+                             successCallBack: (data: Object | null) => void,
+                             failureCallback: () => void): Promise<void> {
 
-        this.pixelPositionService.postPixelPosition(this.game.ressource_id, position.x, position.y)
+         await this.pixelPositionService.postPixelPosition(this.game.ressource_id, position.x, position.y)
             .then((value: ICommonReveal | null) => {
                 if (value && !this.differencesFound.get(value.difference_id.toString())) {
                     this.differenceFound((value as ICommonReveal).difference_id.toString());
@@ -33,5 +33,4 @@ export class SimplePOVGameManager extends GameManager {
             this.endGameCallback(this.game, this.game.players[0]);
         }
     }
-
 }

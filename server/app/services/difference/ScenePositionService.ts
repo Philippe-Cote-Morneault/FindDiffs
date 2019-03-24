@@ -14,14 +14,14 @@ export class ScenePositionService {
         return ScenePositionService.instance;
     }
 
-    public async post3DClick(scenePairId: string, originalObjectId: string, modifiedObjectId: string, 
+    public async post3DClick(scenePairId: string, originalObjectId: string, modifiedObjectId: string,
                              gameType: ObjectType): Promise<ICommonReveal3D | null> {
         const requestBody: ICommon3DObject = {
             scenePairId: scenePairId,
             originalObjectId: originalObjectId,
             modifiedObjectId: modifiedObjectId,
             gameType: gameType,
-        }
+        };
         try {
             return (await axios.default.post("http://localhost:3000/difference/free", requestBody)).data as ICommonReveal3D;
         } catch (error) {
