@@ -12,3 +12,4 @@ export interface ICommonScoreEntry {
     score: number,
 }
 export enum POVType{Simple, Free};
+export enum GameType{Solo, Online};

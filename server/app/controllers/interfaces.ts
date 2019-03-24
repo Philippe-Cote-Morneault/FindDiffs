@@ -19,3 +19,7 @@ export interface IDifferenceController {
 export interface ISceneController {
     router: Router;
 }
+
+export interface IScoreController {
+    router: Router;
+}

@@ -73,6 +73,7 @@ export class GamesCardViewComponent implements OnInit {
     private emitPlaySoloGame(): void {
         const game: ICommonGame = {
             ressource_id: this.gameCard.resource_id,
+            game_card_id: this.gameCard.id,
             pov: +POVType[this.gameCard.pov],
         };
         const message: ICommonSocketMessage = {

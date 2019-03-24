@@ -9,8 +9,8 @@ import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { Validation } from "../../utils/validation";
 import { IGameCardService } from "../interfaces";
+import { ScoreGenerator } from "../score/scoreGenerator";
 import { Service } from "../service";
-import { ScoreGenerator } from "./scoreGenerator";
 import { ScoreUpdater } from "./scoreUpdater";
 
 export class GameCardService extends Service implements IGameCardService {

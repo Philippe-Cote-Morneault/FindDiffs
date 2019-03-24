@@ -26,11 +26,4 @@ export class SimplePOVGameManager extends GameManager {
                 }
             });
     }
-
-    private differenceFound(differenceId: string): void {
-        this.differencesFound.set(differenceId, true);
-        if (++this.game.differences_found === GameManager.SOLO_WINNING_DIFFERENCES_COUNT) {
-            this.endGameCallback(this.game, this.game.players[0]);
-        }
-    }
 }
