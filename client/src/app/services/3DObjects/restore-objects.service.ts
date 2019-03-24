@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { DifferenceType, ICommonReveal3D } from "../../../../../common/model/reveal";
 import { ObjectType } from "../../../../../common/model/scene/scene";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
+import { SocketHandlerService } from "../socket/socketHandler.service";
 import { IThreeObject, IThreeScene } from "./GeometricObjects/IThreeObject";
 import { GeometricObjectsService } from "./GeometricObjects/geometric-objects.service";
 import { MousePositionService } from "./mousePosition.service";
@@ -27,7 +28,8 @@ export class RestoreObjectsService {
                        public originalSceneLoader: SceneLoaderService,
                        public modifiedSceneLoader: SceneLoaderService,
                        public restoreObjectsService: RestoreObjectsService,
-                       public geometricObjectService: GeometricObjectsService) {
+                       public geometricObjectService: GeometricObjectsService,
+                       public socketHandlerService: SocketHandlerService) {
         this.differenceFound = [];
         this.meshesOriginal = [];
         this.meshesModified = [];
@@ -45,13 +47,13 @@ export class RestoreObjectsService {
                                                                       this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
                                                                       this.meshesOriginal, this.meshesModified);
 
-        this.postDifference(this.scenePairId, this.detectedObjects.original.userData.id,
+        this.emitDifference(this.scenePairId, this.detectedObjects.original.userData.id,
                             this.detectedObjects.modified.userData.id, this.gameType);
     }
 
-    private postDifference(scenePairId: string, originalObjectId: string, modifiedObjectId: string, gameType: ObjectType): void {
+    private emitDifference(scenePairId: string, originalObjectId: string, modifiedObjectId: string, gameType: ObjectType): void {
         const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
-        this.geometricObjectService.post3DObject(scenePairId, modifiedObjectId, originalObjectId, gameType)
+        this.socketHandlerService.emitClick3D(scenePairId, modifiedObjectId, originalObjectId, gameType)
             .subscribe(async (response: ICommonReveal3D) => {
                 switch (response.differenceType) {
                     case DifferenceType.removedObject:
