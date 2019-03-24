@@ -21,7 +21,7 @@ export class ScenePositionService {
             originalObjectId: originalObjectId,
             modifiedObjectId: modifiedObjectId,
             gameType: gameType,
-        }
+        };
         try {
             return (await axios.default.post("http://localhost:3000/difference/free", requestBody)).data as ICommonReveal3D;
         } catch (error) {

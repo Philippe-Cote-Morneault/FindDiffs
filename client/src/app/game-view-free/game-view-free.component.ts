@@ -5,6 +5,7 @@ import { Event } from "../../../../common/communication/webSocket/socketMessage"
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { R } from "../ressources/strings";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeHandlerService } from "../services/cheatMode/cheatModeHandler.service";
 import { GameService } from "../services/game/game.service";
@@ -66,6 +67,8 @@ export class GameViewFreeComponent implements OnInit {
             this.playerTime = value.time;
             this.isGameOver = value.isGameOver;
         });
+        this.game.resetTime();
+
         // this.objectHandler = new ObjectHandler(this.mousePositionService,
         //                                        this.objectDetectionService,
         //                                        this.originalSceneLoader,
@@ -81,10 +84,11 @@ export class GameViewFreeComponent implements OnInit {
         this.route.params.subscribe((params) => {
             this.gameCardId = params["id"];
         });
-        this.userDifferenceFound.nativeElement.innerText = 0;
+
+        this.userDifferenceFound.nativeElement.innerText = R.ZERO;
         this.spinnerService.show();
-        this.getGameCardById();
         this.setServicesContainers();
+        this.getGameCardById();
     }
 
     private setServicesContainers(): void {
@@ -137,7 +141,8 @@ export class GameViewFreeComponent implements OnInit {
                 this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
                 this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
                 this.setRestoreObjectService();
-                this.clickEvent();
+                this.clickEvent(this.originalScene.nativeElement);
+                this.clickEvent(this.modifiedScene.nativeElement);
 
                 this.socketHandler.emitMessage(Event.ReadyToPlay, null);
             });
@@ -155,11 +160,9 @@ export class GameViewFreeComponent implements OnInit {
         this.objectHandler.modifiedSceneLoader = this.modifiedSceneLoader;
     }
 
-    private clickEvent(): void {
-        this.originalScene.nativeElement.addEventListener("click", (event: MouseEvent) =>
+    private clickEvent(scene: HTMLElement): void {
+        scene.addEventListener("click", (event: MouseEvent) =>
                     this.objectHandler.clickOnScene(event, true));
-        this.modifiedScene.nativeElement.addEventListener("click", (event: MouseEvent) =>
-                    this.objectHandler.clickOnScene(event, false));
     }
 
     private isGameThematic(): boolean {

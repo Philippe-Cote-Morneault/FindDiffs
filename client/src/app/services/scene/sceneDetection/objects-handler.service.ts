@@ -42,13 +42,11 @@ export class ObjectHandler {
       isOriginalScene ?
             this.mousePositionService.setMousePosition(event, mouse, this.originalGame) :
             this.mousePositionService.setMousePosition(event, mouse, this.modifiedGame);
-      console.log(mouse);
 
       this.detectedObjects = this.objectDetectionService.rayCasting(mouse,
                                                                     this.originalSceneLoader.camera, this.modifiedSceneLoader.camera,
                                                                     this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
                                                                     this.meshesOriginal, this.meshesModified);
-      console.log(this.detectedObjects);
       this.objectRestorationService.set(this.originalSceneLoader, this.modifiedSceneLoader, this.detectedObjects);
       // await this.objectRestorationService = new ObjectRestorationService(this.socket,
       //                                                              this.originalSceneLoader,
@@ -61,7 +59,6 @@ export class ObjectHandler {
     private emitDifference(event: MouseEvent,
                            scenePairId: string, originalObjectId: string,
                            modifiedObjectId: string, gameType: ObjectType): void {
-        console.log("sent Event");
         if (this.clickAreAllowed()) {
             this.identificationError.moveClickError(event.pageX, event.pageY);
 

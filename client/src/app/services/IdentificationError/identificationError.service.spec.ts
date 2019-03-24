@@ -9,14 +9,14 @@ describe("IdentificationError", () => {
         service = TestBed.get(IdentificationError);
     });
 
-    it("Should return the correct values after the error is shown", () => {
+    it("Should return the correct values after the error is shown", async () => {
         const p: HTMLElement = document.createElement("p");
         const original: HTMLElement = document.createElement("div");
         const modified: HTMLElement = document.createElement("div");
         const time: number = 2000;
 
         service.setContainers(p, original, modified);
-        service.notify();
+        await service.notify();
 
         expect(original.style.cursor).to.equal("not-allowed");
         expect(modified.style.cursor).to.equal("not-allowed");

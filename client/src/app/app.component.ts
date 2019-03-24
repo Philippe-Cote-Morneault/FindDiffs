@@ -1,4 +1,4 @@
-import { Component, HostListener } from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
     selector: "app-root",
@@ -6,9 +6,4 @@ import { Component, HostListener } from "@angular/core";
     styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
-
-    @HostListener("window:beforeunload", ["$event"])
-    public async beforeUnload($event: Event): Promise<void> {
-        //const user: ICommonUser = JSON.parse(localStorage.getItem("user") || "{}");
-    }
 }

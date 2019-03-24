@@ -41,7 +41,6 @@ export class ObjectRestorationService implements SocketSubscriber {
   }
 
   public notify(event: Event, message: ICommonSocketMessage): void {
-    console.log("Received event!");
     if (event === Event.DifferenceFound) {
         const response: ICommonReveal3D = message.data as ICommonReveal3D;
         this.restoreObject(response);
@@ -49,7 +48,6 @@ export class ObjectRestorationService implements SocketSubscriber {
   }
 
   public restoreObject(response: ICommonReveal3D ): void {
-    console.log("Received event!");
     const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
     switch (response.differenceType) {
         case DifferenceType.removedObject:

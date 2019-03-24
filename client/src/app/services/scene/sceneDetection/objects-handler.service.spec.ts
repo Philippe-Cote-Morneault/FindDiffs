@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { ObjectsHandlerService } from './objects-handler.service';
+import { ObjectHandler } from "./objects-handler.service";
 
-describe('ObjectsHandlerService', () => {
+describe("ObjectHandler", () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
-    const service: ObjectsHandlerService = TestBed.get(ObjectsHandlerService);
+  it("should be created", () => {
+    const service: ObjectHandler = TestBed.get(ObjectHandler);
     expect(service).toBeTruthy();
   });
 });

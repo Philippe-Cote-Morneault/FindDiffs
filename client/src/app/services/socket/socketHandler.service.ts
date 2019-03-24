@@ -40,11 +40,11 @@ export class SocketHandlerService {
                     timestamp: new Date(),
                 };
 
-                this.socket.emit(Event.Authenticate, message, (response: Object) => {
+                this.socket.emit(Event.Authenticate, message, async (response: Object) => {
                     if ((response as ICommonError).error_message) {
                         alert((response as ICommonError).error_message);
                         sessionStorage.removeItem("token");
-                        this.router.navigateByUrl("/");
+                        await this.router.navigateByUrl("/");
                         this.onAuthenticate();
                     } else {
                         this.setEventListeners(this.socket);

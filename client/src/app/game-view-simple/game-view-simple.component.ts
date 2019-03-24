@@ -3,6 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Event } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
+import { R } from "../ressources/strings";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { GameService } from "../services/game/game.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
@@ -48,6 +49,7 @@ export class GameViewSimpleComponent implements OnInit {
             this.playerTime = value.time;
             this.isGameOver = value.isGameOver;
         });
+        this.game.resetTime();
     }
 
     public ngOnInit(): void {
@@ -55,7 +57,7 @@ export class GameViewSimpleComponent implements OnInit {
             this.gameCardId = params["id"];
         });
 
-        this.userDifferenceFound.nativeElement.innerText = 0;
+        this.userDifferenceFound.nativeElement.innerText = R.ZERO;
         this.getGameCardById();
         this.setServicesContainers();
     }
