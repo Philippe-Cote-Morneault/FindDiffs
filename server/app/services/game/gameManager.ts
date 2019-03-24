@@ -1,12 +1,17 @@
 import { Game } from "../../model/game/game";
+import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 
 export abstract class GameManager {
-    private game: Game;
     private endGameCallback: (game: Game, winner: string) => void;
+
+    public game: Game;
+    protected differencesFound: Map<number, boolean>;
+    protected identificationErrorCallback: (game: Game) => void;
 
     public constructor(game: Game, endGameCallback: (game: Game, winner: string) => void) {
         this.game = game;
         this.endGameCallback = endGameCallback;
+        this.differencesFound = new Map();
     }
 
     public startGame(): void {
@@ -15,5 +20,5 @@ export abstract class GameManager {
         console.log(this.endGameCallback);
     }
 
-    public abstract playerClick(): void;
+    public abstract playerClick(position: Object, callBack: (data: Object | null) => void): void;
 }

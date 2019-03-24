@@ -10,6 +10,7 @@ import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
+import { ICommonReveal } from "../../../../common/model/reveal";
 
 export class GameService {
     private static instance: GameService;
@@ -95,13 +96,30 @@ export class GameService {
         });
     }
 
-    private gameClick(message: ICommonSocketMessage, player: string): void {
+    private gameClick(message: ICommonSocketMessage, clickedPlayer: string): void {
         console.log("GAMECLICK");
         console.log(JSON.stringify(message));
-        const game: GameManager | undefined = this.activePlayers.get(player);
-        if (game === undefined) {
-            throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
+        const gameManager: GameManager | undefined = this.activePlayers.get(clickedPlayer);
+        if (gameManager === undefined) {
+            throw new NotFoundException(_e(R.ERROR_INVALIDID, [clickedPlayer]));
         }
+        gameManager.playerClick(message.data, (data: Object | null) => {
+            gameManager.game.players.forEach((player: string) => {
+                if (data as ICommonReveal) {
+                    const response: ICommonSocketMessage = {
+                        data: data as ICommonReveal,
+                        timestamp: new Date(),
+                    };
+                    this.socketHandler.sendMessage(Event.DifferenceFound, response, player);
+                } else {
+                    const response: ICommonSocketMessage = {
+                        data: "",
+                        timestamp: new Date(),
+                    };
+                    this.socketHandler.sendMessage(Event.InvalidClick, response, player);
+                }
+            });
+        });
 
        // game.
     }
