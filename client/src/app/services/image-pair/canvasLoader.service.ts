@@ -1,4 +1,6 @@
 import { Injectable } from "@angular/core";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { IdentificationError } from "../IdentificationError/identificationError.service";
 import { GameService } from "../game/game.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
@@ -30,7 +32,16 @@ export class CanvasLoaderService {
     private getClickPosition(e: any): void {
         if (this.clickAreAllowed()) {
             this.identificationError.moveClickError(e.pageX, e.pageY);
-            this.socket.emitClick(e.layerX, e.layerY);
+
+            const pixel: ICommon2DPosition = {
+                x: e.layerX,
+                y: e.layerY,
+            };
+            const message: ICommonSocketMessage = {
+                data: pixel,
+                timestamp: new Date(),
+            };
+            this.socket.emitMessage(Event.GameClick, message);
         }
     }
 
