@@ -63,12 +63,11 @@ export class ObjectHandler {
     private emitDifference(event: MouseEvent,
                            scenePairId: string, originalObjectId: string,
                            modifiedObjectId: string, gameType: ObjectType): void {
-        // const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
         if (this.clickAreAllowed()) {
             this.identificationError.moveClickError(event.pageX, event.pageY);
 
             const clickInfo: ICommon3DObject = {
-                scenePairId: scenePairId,
+                scenePairId: scenePairId, 
                 originalObjectId: originalObjectId,
                 modifiedObjectId: modifiedObjectId,
                 gameType: gameType,
