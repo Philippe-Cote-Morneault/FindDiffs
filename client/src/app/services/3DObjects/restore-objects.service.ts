@@ -3,7 +3,6 @@ import * as THREE from "three";
 import { DifferenceType, ICommonReveal3D } from "../../../../../common/model/reveal";
 import { ObjectType } from "../../../../../common/model/scene/scene";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
-import { ThematicObjectParser } from "../scene/sceneParser/objectParser/thematicObjectParser";
 import { IThreeObject, IThreeScene } from "./GeometricObjects/IThreeObject";
 import { GeometricObjectsService } from "./GeometricObjects/geometric-objects.service";
 import { MousePositionService } from "./mousePosition.service";
@@ -15,66 +14,62 @@ import { ObjectDetectionService } from "./object-detection.service";
 export class RestoreObjectsService {
 
     private differenceFound: string[];
-    private meshesOriginal: THREE.Object3D[];
-    private meshesModified: THREE.Object3D[];
-    private thematicObjectParser: ThematicObjectParser;
-
     private detectedObjects: IThreeObject;
+    public meshesOriginal: THREE.Object3D[];
+    public meshesModified: THREE.Object3D[];
+    public gameType: ObjectType;
+    public scenePairId: string;
+    public originalGame: ElementRef<HTMLElement>;
+    public modifiedGame: ElementRef<HTMLElement>;
 
     public constructor(public mousePositionService: MousePositionService,
-        public objectDetectionService: ObjectDetectionService,
-        public originalSceneLoader: SceneLoaderService,
-        public modifiedSceneLoader: SceneLoaderService,
-        public restoreObjectsService: RestoreObjectsService,
-        public geometricObjectService: GeometricObjectsService) {
+                       public objectDetectionService: ObjectDetectionService,
+                       public originalSceneLoader: SceneLoaderService,
+                       public modifiedSceneLoader: SceneLoaderService,
+                       public restoreObjectsService: RestoreObjectsService,
+                       public geometricObjectService: GeometricObjectsService) {
         this.differenceFound = [];
         this.meshesOriginal = [];
         this.meshesModified = [];
-        this.thematicObjectParser = new ThematicObjectParser();
     }
 
-    public clickOnScene(event: MouseEvent, scenePairId: string, isOriginalScene: boolean,
-        originalGame: ElementRef<HTMLElement>, modifiedGame: ElementRef<HTMLElement>,
-        originalSceneLoader: SceneLoaderService, modifiedSceneLoader: SceneLoaderService): void {
-        this.originalSceneLoader = originalSceneLoader;
-        this.modifiedSceneLoader = modifiedSceneLoader;
-
-        this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
-        this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
+    public clickOnScene(event: MouseEvent, isOriginalScene: boolean): void {
 
         const mouse: THREE.Vector2 = new THREE.Vector2();
         isOriginalScene ?
-            this.mousePositionService.setMousePosition(event, mouse, originalGame) :
-            this.mousePositionService.setMousePosition(event, mouse, modifiedGame);
+            this.mousePositionService.setMousePosition(event, mouse, this.originalGame) :
+            this.mousePositionService.setMousePosition(event, mouse, this.modifiedGame);
 
         this.detectedObjects = this.objectDetectionService.rayCasting(mouse,
-            this.originalSceneLoader.camera, modifiedSceneLoader.camera,
-            this.originalSceneLoader.scene, modifiedSceneLoader.scene,
-            this.meshesOriginal, this.meshesModified);
+                                                                      this.originalSceneLoader.camera, this.modifiedSceneLoader.camera,
+                                                                      this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
+                                                                      this.meshesOriginal, this.meshesModified);
 
-        this.postDifference(scenePairId, this.detectedObjects.original.userData.id, this.detectedObjects.modified.userData.id);
+        this.postDifference(this.scenePairId, this.detectedObjects.original.userData.id,
+                            this.detectedObjects.modified.userData.id, this.gameType);
     }
 
-    private postDifference(scenePairId: string, originalObjectId: string, modifiedObjectId: string): void {
+    private postDifference(scenePairId: string, originalObjectId: string, modifiedObjectId: string, gameType: ObjectType): void {
         const scenes: IThreeScene = { original: this.originalSceneLoader.scene, modified: this.modifiedSceneLoader.scene };
-        this.geometricObjectService.post3DObject(scenePairId, modifiedObjectId, originalObjectId, ObjectType.Geometric)
+        this.geometricObjectService.post3DObject(scenePairId, modifiedObjectId, originalObjectId, gameType)
             .subscribe(async (response: ICommonReveal3D) => {
                 switch (response.differenceType) {
                     case DifferenceType.removedObject:
-                        this.restoreObjectsService.addObject(this.detectedObjects.original, scenes);
+                        this.addObject(this.detectedObjects.original, scenes, false);
                         // await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.colorChanged:
-                        this.restoreObjectsService.changeColorObject(this.detectedObjects.original, this.detectedObjects.modified);
+                        this.changeColorObject(this.detectedObjects.original, this.detectedObjects.modified);
                         // await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.textureObjectChanged:
                         // tslint:disable-next-line: max-line-length
-                        await this.restoreObjectsService.changeTextureObject(this.detectedObjects.original, this.detectedObjects.modified, this.thematicObjectParser);
+                        await this.changeTextureObject(this.detectedObjects.original,
+                                                       this.detectedObjects.modified, scenes);
                         // await this.addDifference(this.detectedObjects.original.userData.id);
                         break;
                     case DifferenceType.addedObject:
-                        this.restoreObjectsService.removeObject(this.detectedObjects.modified, scenes);
+                        this.removeObject(this.detectedObjects.modified, scenes);
                         // await this.addDifference(this.detectedObjects.modified.userData.id);
                         break;
                     default:
@@ -108,7 +103,6 @@ export class RestoreObjectsService {
     public changeColorObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D): void {
         if (this.isANewDifference(objectModified.userData.id)) {
             // tslint:disable-next-line:no-any
-            console.log(objectModified);
             (objectModified as any).material.color.setHex((objectOriginal as any).material.color.getHex());
             this.addDifference(objectOriginal.userData.id);
 
@@ -117,7 +111,6 @@ export class RestoreObjectsService {
 
     public async changeTextureObject(objectOriginal: THREE.Object3D, objectModified: THREE.Object3D, scene: IThreeScene): Promise<void> {
         if (this.isANewDifference(objectModified.userData.id)) {
-            console.log(objectModified);
             if (objectModified.userData.isTextured) {
                 await this.removeObject(objectModified, scene);
                 await this.addObject(objectOriginal, scene, true);
@@ -137,13 +130,5 @@ export class RestoreObjectsService {
 
     private isANewDifference(differenceId: string): boolean {
         return !this.differenceFound.includes(differenceId);
-    }
-
-    private fillMeshes(meshes: THREE.Object3D[], sceneLoader: SceneLoaderService): void {
-        sceneLoader.scene.children.forEach((element) => {
-            if (element.type === "Mesh" || element.type === "Scene") {
-                meshes.push(element);
-            }
-        });
     }
 }
