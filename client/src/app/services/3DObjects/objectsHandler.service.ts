@@ -56,21 +56,18 @@ export class ObjectHandler {
                                                                      this.originalSceneLoader,
                                                                      this.modifiedSceneLoader);
 
-        this.emitDifference(event, this.scenePairId, this.detectedObjects.original.userData.id,
-                            this.detectedObjects.modified.userData.id, this.gameType);
+        this.emitDifference(event);
     }
 
-    private emitDifference(event: MouseEvent,
-                           scenePairId: string, originalObjectId: string,
-                           modifiedObjectId: string, gameType: ObjectType): void {
+    private emitDifference(event: MouseEvent): void {
         if (this.clickAreAllowed()) {
             this.identificationError.moveClickError(event.pageX, event.pageY);
 
             const clickInfo: ICommon3DObject = {
-                scenePairId: scenePairId, 
-                originalObjectId: originalObjectId,
-                modifiedObjectId: modifiedObjectId,
-                gameType: gameType,
+                scenePairId: this.scenePairId,
+                originalObjectId: this.detectedObjects.original.userData.id,
+                modifiedObjectId: this.detectedObjects.modified.userData.id,
+                gameType: this.gameType,
             };
             const message: ICommonSocketMessage = {
                 data: clickInfo,
