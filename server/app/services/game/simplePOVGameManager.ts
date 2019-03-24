@@ -18,8 +18,8 @@ export class SimplePOVGameManager extends GameManager {
 
         this.pixelPositionService.postPixelPosition(this.game.ressource_id, position.x, position.y)
             .then((value: ICommonReveal | null) => {
-                if (value && !this.differencesFound.get(value.difference_id)) {
-                    this.differenceFound((value as ICommonReveal).difference_id);
+                if (value && !this.differencesFound.get(value.difference_id.toString())) {
+                    this.differenceFound((value as ICommonReveal).difference_id.toString());
                     successCallBack(value);
                 } else {
                     failureCallback();
@@ -27,7 +27,7 @@ export class SimplePOVGameManager extends GameManager {
             });
     }
 
-    private differenceFound(differenceId: number): void {
+    private differenceFound(differenceId: string): void {
         this.differencesFound.set(differenceId, true);
         if (++this.game.differences_found === GameManager.SOLO_WINNING_DIFFERENCES_COUNT) {
             this.endGameCallback(this.game, this.game.players[0]);

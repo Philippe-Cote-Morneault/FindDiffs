@@ -6,7 +6,7 @@ export abstract class GameManager {
     public game: Game;
 
     protected endGameCallback: (game: Game, winner: string) => void;
-    protected differencesFound: Map<number, boolean>;
+    protected differencesFound: Map<string, boolean>;
     protected identificationErrorCallback: (game: Game) => void;
 
     public constructor(game: Game, endGameCallback: (game: Game, winner: string) => void) {
