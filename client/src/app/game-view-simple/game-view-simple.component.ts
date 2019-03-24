@@ -5,11 +5,11 @@ import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { GameService } from "../services/game/game.service";
-import { GamesCardService } from "../services/gameCard/games-card.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { CanvasLoaderService } from "../services/image-pair/canvasLoader.service";
-import { ImagePairService } from "../services/image-pair/image-pair.service";
+import { ImagePairService } from "../services/image-pair/imagePair.service";
+import { PixelRestoration } from "../services/pixelManipulation/pixelRestoration";
 import { Chat } from "../services/socket/chat";
-import { PixelRestoration } from "../services/pixelManipulation/pixel-restoration";
 import { SocketHandlerService } from "../services/socket/socketHandler.service";
 
 @Component({
