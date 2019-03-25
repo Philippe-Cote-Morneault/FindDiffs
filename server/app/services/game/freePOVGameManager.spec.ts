@@ -11,18 +11,18 @@ describe("FreePOVGameManager", () => {
         start_time: new Date(),
         differences_found: 0,
         game_card_id: "asdsafgresc3242refsd"
-    }
+    };
     const callback = (game: Game, winner: string) => {
 
-    }
+    };
 
     const successCallback = (data: Object) => {
 
-    }
+    };
 
     const failureCallback = () => {
 
-    }
+    };
 
     const position: ICommon3DObject = {
         scenePairId: "r23fjk23kdew",
@@ -33,8 +33,6 @@ describe("FreePOVGameManager", () => {
     const manager: FreePOVGameManager = new FreePOVGameManager(game, callback);
 
     describe("playerClick", () => {
-        manager.playerClick(position, successCallback, failureCallback) {
-            
-        }
-    })
+        manager.playerClick(position, successCallback, failureCallback);
+    });
 });
