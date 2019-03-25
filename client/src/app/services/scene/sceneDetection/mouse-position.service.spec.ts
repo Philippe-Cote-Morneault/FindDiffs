@@ -28,7 +28,6 @@ describe("MousePositionService", () => {
     const stub: sinon.SinonStub = sinon.stub(mousePositionService, "setMousePosition");
     mouse = mousePositionService.setMousePosition(event, mouse, originalScene);
     expect(mouse).toBeUndefined();
-    expect(mouse).toBeUndefined();
     stub.restore();
   });
 
@@ -40,6 +39,7 @@ describe("MousePositionService", () => {
     const mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
     mousePositionService.setMousePosition(event, mouse, originalScene);
 
-    expect(mousePositionService.divBoxInformation).toEqual(returnValue);
+    await expect(mousePositionService.divBoxInformation).toEqual(returnValue);
+    stub.restore();
   });
 });
