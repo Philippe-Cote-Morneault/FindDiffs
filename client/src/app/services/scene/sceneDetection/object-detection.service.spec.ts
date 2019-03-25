@@ -2,7 +2,6 @@ import { TestBed } from "@angular/core/testing";
 import {RouterTestingModule} from "@angular/router/testing";
 import * as sinon from "sinon";
 import * as THREE from "three";
-// import { SceneLoaderService } from "../sceneLoader/sceneLoader.service";
 import { CameraGenerator } from "../sceneRenderer/cameraGenerator";
 import { IThreeObject } from "./IThreeObject";
 import { ObjectDetectionService } from "./object-detection.service";
@@ -25,9 +24,9 @@ describe("ObjectDetectionService", () => {
 
   let meshesOriginal: THREE.Object3D[];
   let meshesModified: THREE.Object3D[];
+  // tslint:disable: no-floating-promises
+  // tslint:disable: no-magic-numbers
 
-  // let originalSceneLoader: SceneLoaderService;
-  // let modifiedSceneLoader: SceneLoaderService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({imports: [RouterTestingModule]});
@@ -89,8 +88,6 @@ describe("ObjectDetectionService", () => {
       stub2.returns(returnValue2);
 
       // tslint:disable-next-line: no-magic-numbers
-      // const result: IThreeObject = objectDetection.rayCasting(mouse, cameraOriginal, cameraModified,
-      //                                                         sceneOriginal, sceneModified, meshesOriginal, meshesOriginal);
       const intersectionOriginal: THREE.Intersection[] = objectDetection.raycasterOriginal.intersectObjects(meshesOriginal, true);
       const intersectionModified: THREE.Intersection[] = objectDetection.raycasterModified.intersectObjects(meshesModified, true);
 
@@ -99,7 +96,7 @@ describe("ObjectDetectionService", () => {
       expect(returnValue2[0]).toEqual(intersectionModified[0]);
     });
 
-    describe("setCamera()", () => { 
+    describe("setCamera()", () => {
       it("Should call the method setFromCamera at least once ", async () => {
         const objectDetection: ObjectDetectionService = TestBed.get(ObjectDetectionService);
         const spy: sinon.SinonSpy = sinon.spy(objectDetection.raycasterModified, "setFromCamera");
