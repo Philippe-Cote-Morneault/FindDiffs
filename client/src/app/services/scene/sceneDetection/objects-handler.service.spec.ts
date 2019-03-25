@@ -13,7 +13,6 @@ import { ObjectDetectionService } from "./object-detection.service";
 import { ObjectRestorationService } from "./object-restoration.service";
 import { ObjectHandler } from "./objects-handler.service";
 
-
 describe("ObjectHandler", () => {
   let event: MouseEvent;
   const sceneOriginal: THREE.Scene = new THREE.Scene();
@@ -62,9 +61,12 @@ describe("ObjectHandler", () => {
       };
       stub.returns(returnValue);
 
+      // tslint:disable-next-line: no-floating-promises
       objectHandler.clickOnScene(event, true);
       const mouse: THREE.Vector2 = new THREE.Vector2;
-      objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
+      objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified,
+                                                                        sceneOriginal, sceneModified,
+                                                                        meshesOriginal, meshesModified);
 
       await expect(objectHandler.detectedObjects.original).toEqual(returnValue.original);
       await expect(objectHandler.detectedObjects.modified).toEqual(returnValue.modified);
@@ -81,6 +83,7 @@ describe("ObjectHandler", () => {
       };
       stub.returns(returnValue);
 
+      // tslint:disable-next-line: no-floating-promises
       objectHandler.clickOnScene(event, false);
       const mouse: THREE.Vector2 = new THREE.Vector2;
       // tslint:disable-next-line: max-line-length
@@ -104,6 +107,7 @@ describe("ObjectHandler", () => {
       };
       stub.returns(returnValue);
 
+      // tslint:disable-next-line: no-floating-promises
       objectHandler.clickOnScene(event, true);
       const mouse: THREE.Vector2 = new THREE.Vector2;
       // tslint:disable-next-line: max-line-length
@@ -111,6 +115,7 @@ describe("ObjectHandler", () => {
 
       objectRestorationService.setAttributes( originalSceneLoader, modifiedSceneLoader, objectHandler.detectedObjects);
 
+      // tslint:disable-next-line: no-floating-promises
       expect(spy.callCount).toBeGreaterThanOrEqual(1);
       spy.restore();
     });
@@ -127,6 +132,7 @@ describe("ObjectHandler", () => {
       };
       stub.returns(returnValue);
 
+      // tslint:disable-next-line: no-floating-promises
       objectHandler.clickOnScene(event, false);
       const mouse: THREE.Vector2 = new THREE.Vector2;
       // tslint:disable-next-line: max-line-length
@@ -134,6 +140,7 @@ describe("ObjectHandler", () => {
 
       objectRestorationService.setAttributes( originalSceneLoader, modifiedSceneLoader, objectHandler.detectedObjects);
 
+      // tslint:disable-next-line: no-floating-promises
       expect(spy.callCount).toBeGreaterThanOrEqual(1);
       spy.restore();
     });
@@ -142,8 +149,10 @@ describe("ObjectHandler", () => {
       const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
       const spy: sinon.SinonSpy = sinon.spy(objectHandler, "clickOnScene");
 
+      // tslint:disable-next-line: no-floating-promises
       objectHandler.clickOnScene(event, true);
 
+      // tslint:disable-next-line: no-floating-promises
       expect(spy.callCount).toBeGreaterThanOrEqual(1);
       spy.restore();
     });
@@ -152,8 +161,10 @@ describe("ObjectHandler", () => {
       const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
       const spy: sinon.SinonSpy = sinon.spy(objectHandler, "clickOnScene");
 
+      // tslint:disable-next-line: no-floating-promises
       objectHandler.clickOnScene(event, false);
 
+      // tslint:disable-next-line: no-floating-promises
       expect(spy.callCount).toBeGreaterThanOrEqual(1);
       spy.restore();
     });
@@ -183,6 +194,7 @@ describe("ObjectHandler", () => {
       };
       stubDetection.returns(temp);
 
+      // tslint:disable-next-line: no-floating-promises
       objectHandler.clickOnScene(event, true);
       // tslint:disable-next-line: max-line-length
       objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
@@ -221,6 +233,7 @@ describe("ObjectHandler", () => {
       };
       stubDetection.returns(temp);
 
+      // tslint:disable-next-line: no-floating-promises
       objectHandler.clickOnScene(event, false);
       // tslint:disable-next-line: max-line-length
       objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
@@ -243,6 +256,7 @@ describe("ObjectHandler", () => {
 
       const canClick: boolean = objectHandler.clickAreAllowed();
 
+      // tslint:disable-next-line: no-floating-promises
       expect(canClick).toEqual(false);
     });
 
@@ -253,6 +267,7 @@ describe("ObjectHandler", () => {
 
       const canClick: boolean = objectHandler.clickAreAllowed();
 
+      // tslint:disable-next-line: no-floating-promises
       expect(canClick).toEqual(true);
     });
 
@@ -263,6 +278,7 @@ describe("ObjectHandler", () => {
 
       const canClick: boolean = objectHandler.clickAreAllowed();
 
+      // tslint:disable-next-line: no-floating-promises
       expect(canClick).toEqual(false);
     });
 
@@ -273,6 +289,7 @@ describe("ObjectHandler", () => {
 
       const canClick: boolean = objectHandler.clickAreAllowed();
 
+      // tslint:disable-next-line: no-floating-promises
       expect(canClick).toEqual(false);
     });
   });
@@ -302,6 +319,7 @@ describe("ObjectHandler", () => {
 
       objectHandler["socket"].emitMessage(Event.GameClick, message);
 
+    // tslint:disable-next-line: no-floating-promises
       expect(objectHandler["socket"].emitMessage).toHaveBeenCalled();
     });
 
@@ -329,6 +347,7 @@ describe("ObjectHandler", () => {
 
       objectHandler["socket"].emitMessage(Event.GameClick, message);
 
+      // tslint:disable-next-line: no-floating-promises
       expect(objectHandler["socket"].emitMessage).toHaveBeenCalled();
     });
   });
