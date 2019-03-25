@@ -97,12 +97,10 @@ export class ScoreService extends Service implements IScoreService {
         let response: INewScore = { is_top_score: false };
 
         if (lastScore.score > newScore) {
-            let position: number = numberOfScores - 1;
-            for (let i: number = numberOfScores - 1; i >= -1; i--) {
-                if (scoreEntry[i].score < newScore) {
-                    scoreEntry[i + 1].score = newScore;
-                    scoreEntry[i + 1].name = req.body.username;
-                    position = i + ScoreService.POSITION_MODIFIER;
+            let position: number = numberOfScores;
+            for (let i: number = 0; i < numberOfScores; i++) {
+                if (scoreEntry[i].score > newScore) {
+                    position = i + 1;
                     break;
                 }
             }
