@@ -52,11 +52,12 @@ export class ChatFormaterService {
 
     private onBestTime(message: ICommonSocketMessage): string {
         const newScore: INewScoreDetails = (message.data as INewScore).details as INewScoreDetails;
+        const type: string = (newScore.game_type) ? R.CHAT_ONLINE : R.CHAT_SOLO;
 
         return this.formatDate(message.timestamp) + _e(R.CHAT_BESTTIME, [newScore.username,
                                                                          newScore.place,
                                                                          newScore.game_name,
-                                                                         newScore.game_type ]);
+                                                                         type ]);
     }
 
     private onDefault(event: Event): string {

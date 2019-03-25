@@ -20,6 +20,8 @@ export const R: IString = {
     CONTEXT_MENU: "context-menu",
     DIFFERENCE_SOUND_SRC: "../../assets/mario.mp3",
 
+    CHAT_SOLO: "solo",
+    CHAT_ONLINE: "1v1",
     CHAT_DEFAULT: "This message type is not supported: ",
     CHAT_USERCONNECTED: " The user %s is now online!",
     CHAT_USERDISCONNECTED: " The user %s is now offline!",
