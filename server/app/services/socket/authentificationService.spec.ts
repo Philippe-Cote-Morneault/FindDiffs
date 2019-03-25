@@ -1,15 +1,18 @@
-/*
 import { expect } from "chai";
-import * as Mockito from "ts-mockito";
-import SocketIO = require("socket.io");
 import { AuthentificationService } from "./authentificationService";
 
 describe("AuthentificationService", () => {
-    const authentificationService: AuthentificationService = AuthentificationService.getInstance();
-    let server: SocketIO.Server = Mockito.mock(SocketIO);
-    describe("startCleanupTimer()", () => {
-        authentificationService.startCleanupTimer(server.on("connect"))
-    });
 
+    describe("getInstance()", () => {
+        it("Should return a GameService instance", () => {
+            const instance: AuthentificationService = AuthentificationService.getInstance();
+            expect(instance).to.be.an.instanceOf(AuthentificationService);
+        });
+
+        it("Should return the same GameService instance", () => {
+            const instance1: AuthentificationService = AuthentificationService.getInstance();
+            const instance2: AuthentificationService = AuthentificationService.getInstance();
+            expect(instance1).to.equal(instance2);
+        });
+    });
 });
-*/
