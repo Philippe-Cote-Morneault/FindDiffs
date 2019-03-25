@@ -148,7 +148,6 @@ export class GameViewFreeComponent implements OnInit {
         this.objectHandler.modifiedSceneLoader = this.modifiedSceneLoader;
         this.objectHandler.scenePairId = this.scenePairId;
         this.objectHandler.gameType = this.isGameThematic() ? ObjectType.Thematic : ObjectType.Geometric;
-        console.log(this.isGameThematic());
     }
 
     private clickEvent(scene: HTMLElement, isOriginalScene: boolean): void {

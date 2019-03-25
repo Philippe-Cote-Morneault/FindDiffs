@@ -15,14 +15,12 @@ export class ScoreUpdater {
     }
 
     public async updateScore(game: Game, time: number, type: GameType): Promise<INewScore | null> {
-        console.log("updateScore");
         const requestBody: Object = {
             id: game.game_card_id,
             username: game.players[0],
             time: time,
             type: type,
         };
-        console.log(requestBody);
         try {
             return (await axios.default.put(`http://localhost:3000/score/${game.game_card_id}`, requestBody)).data as INewScore;
         } catch (error) {

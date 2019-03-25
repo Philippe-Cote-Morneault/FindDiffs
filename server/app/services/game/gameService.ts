@@ -145,11 +145,10 @@ export class GameService {
     }
 
     private newBestScore(score: INewScore): void {
-        console.log("newBestScore");
         const message: ICommonSocketMessage = {
             data: score,
             timestamp: new Date(),
-        }
+        };
         this.socketHandler.broadcastMessage(Event.BestTime, message);
     }
 }
