@@ -3,12 +3,16 @@ import { TestBed } from "@angular/core/testing";
 import {RouterTestingModule} from "@angular/router/testing";
 import * as sinon from "sinon";
 import * as THREE from "three";
+import { Event, ICommonSocketMessage } from "../../../../../../common/communication/webSocket/socketMessage";
+import { ICommon3DObject } from "../../../../../../common/model/positions";
+import { ObjectType } from "../../../../../../common/model/scene/scene";
+import { SceneLoaderService } from "../sceneLoader/sceneLoader.service";
 import { CameraGenerator } from "../sceneRenderer/cameraGenerator";
 import { IThreeObject } from "./IThreeObject";
 import { ObjectDetectionService } from "./object-detection.service";
-import { ObjectHandler } from "./objects-handler.service";
 import { ObjectRestorationService } from "./object-restoration.service";
-import { SceneLoaderService } from "../sceneLoader/sceneLoader.service";
+import { ObjectHandler } from "./objects-handler.service";
+
 
 describe("ObjectHandler", () => {
   let event: MouseEvent;
@@ -40,69 +44,118 @@ describe("ObjectHandler", () => {
   // tslint:disable-next-line: no-magic-numbers
   event.initMouseEvent("click", true, true, window, 0, 0, 0, 640, 480, false, false, false, false, 0, null);
 
+  const originalSceneLoader: SceneLoaderService = new SceneLoaderService;
+  const modifiedSceneLoader: SceneLoaderService = new SceneLoaderService;
+
   beforeEach(() => {
     TestBed.configureTestingModule({imports: [RouterTestingModule]});
   });
 
   describe("clickOnScene()", () => {
-    it("Should detect a cube in both scenes", async () => {
+    it("Should give the same structure of detected objects when we click on the original scene", async () => {
       const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
       const objectDetectionService: ObjectDetectionService = TestBed.get(ObjectDetectionService);
-      const mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
       const stub: sinon.SinonStub = sinon.stub(objectDetectionService, "rayCasting");
-      const temp: IThreeObject = {
+      const returnValue: IThreeObject = {
         original: cube,
         modified: cube,
       };
-      stub.returns(temp);
+      stub.returns(returnValue);
 
       objectHandler.clickOnScene(event, true);
-      // tslint:disable-next-line: max-line-length
+      const mouse: THREE.Vector2 = new THREE.Vector2;
       objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
 
-      await expect(objectHandler.detectedObjects.original).toEqual(temp.original);
-      await expect(objectHandler.detectedObjects.modified).toEqual(temp.modified);
+      await expect(objectHandler.detectedObjects.original).toEqual(returnValue.original);
+      await expect(objectHandler.detectedObjects.modified).toEqual(returnValue.modified);
       stub.restore();
     });
 
-    it("Should detect a cube in both scenes", async () => {
+    it("Should give the same structure of detected objects when we click on the modified scene", async () => {
       const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
       const objectDetectionService: ObjectDetectionService = TestBed.get(ObjectDetectionService);
-      const mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
       const stub: sinon.SinonStub = sinon.stub(objectDetectionService, "rayCasting");
-      const temp: IThreeObject = {
+      const returnValue: IThreeObject = {
         original: cube,
         modified: cube,
       };
-      stub.returns(temp);
+      stub.returns(returnValue);
 
       objectHandler.clickOnScene(event, false);
+      const mouse: THREE.Vector2 = new THREE.Vector2;
       // tslint:disable-next-line: max-line-length
       objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
 
-      await expect(objectHandler.detectedObjects.original).toEqual(temp.original);
-      await expect(objectHandler.detectedObjects.modified).toEqual(temp.modified);
+      await expect(objectHandler.detectedObjects.original).toEqual(returnValue.original);
+      await expect(objectHandler.detectedObjects.modified).toEqual(returnValue.modified);
+
       stub.restore();
     });
 
-    it("Should detect a cube in both scenes", async () => {
+    it("Should call setAttributes function at least once", async () => {
       const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      const objectRestorationService: ObjectRestorationService = TestBed.get(ObjectRestorationService);
+      const spy: sinon.SinonSpy = sinon.spy(objectRestorationService, "setAttributes");
       const objectDetectionService: ObjectDetectionService = TestBed.get(ObjectDetectionService);
-      const mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
       const stub: sinon.SinonStub = sinon.stub(objectDetectionService, "rayCasting");
-      const temp: IThreeObject = {
+      const returnValue: IThreeObject = {
         original: cube,
         modified: cube,
       };
-      stub.returns(temp);
+      stub.returns(returnValue);
 
-      objectHandler.clickOnScene(event, false);
+      objectHandler.clickOnScene(event, true);
+      const mouse: THREE.Vector2 = new THREE.Vector2;
       // tslint:disable-next-line: max-line-length
       objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
 
-      await expect(objectHandler.detectedObjects.original).toEqual(temp.original);
-      await expect(objectHandler.detectedObjects.modified).toEqual(temp.modified);
-      stub.restore();
+      objectRestorationService.setAttributes( originalSceneLoader, modifiedSceneLoader, objectHandler.detectedObjects);
+
+      expect(spy.callCount).toBeGreaterThanOrEqual(1);
+      spy.restore();
+    });
+
+    it("Should call setAttributes function at least once", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      const objectRestorationService: ObjectRestorationService = TestBed.get(ObjectRestorationService);
+      const spy: sinon.SinonSpy = sinon.spy(objectRestorationService, "setAttributes");
+      const objectDetectionService: ObjectDetectionService = TestBed.get(ObjectDetectionService);
+      const stub: sinon.SinonStub = sinon.stub(objectDetectionService, "rayCasting");
+      const returnValue: IThreeObject = {
+        original: cube,
+        modified: cube,
+      };
+      stub.returns(returnValue);
+
+      objectHandler.clickOnScene(event, false);
+      const mouse: THREE.Vector2 = new THREE.Vector2;
+      // tslint:disable-next-line: max-line-length
+      objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
+
+      objectRestorationService.setAttributes( originalSceneLoader, modifiedSceneLoader, objectHandler.detectedObjects);
+
+      expect(spy.callCount).toBeGreaterThanOrEqual(1);
+      spy.restore();
+    });
+
+    it("Should call clickOnScene function at least once", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      const spy: sinon.SinonSpy = sinon.spy(objectHandler, "clickOnScene");
+
+      objectHandler.clickOnScene(event, true);
+
+      expect(spy.callCount).toBeGreaterThanOrEqual(1);
+      spy.restore();
+    });
+
+    it("Should call clickOnScene function at least once", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      const spy: sinon.SinonSpy = sinon.spy(objectHandler, "clickOnScene");
+
+      objectHandler.clickOnScene(event, false);
+
+      expect(spy.callCount).toBeGreaterThanOrEqual(1);
+      spy.restore();
     });
 
 // tslint:disable-next-line: max-func-body-length
@@ -143,7 +196,7 @@ describe("ObjectHandler", () => {
       jasmine.clock().uninstall();
     });
 
-    // tslint:disable-next-line: max-func-body-length
+// tslint:disable-next-line: max-func-body-length
     it("Should set sceneLoaderServices attributes and detectedObjets", async () => {
 
       const sceneOriginalLoader: SceneLoaderService = new SceneLoaderService;
@@ -160,6 +213,7 @@ describe("ObjectHandler", () => {
       const objectRestorationService: ObjectRestorationService = TestBed.get(ObjectRestorationService);
       const mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
       const spyRestoration: sinon.SinonSpy = sinon.stub(objectRestorationService, "setAttributes");
+      jasmine.clock().install();
       const stubDetection: sinon.SinonStub = sinon.stub(objectDetectionService, "rayCasting");
       const temp: IThreeObject = {
         original: cube,
@@ -167,15 +221,116 @@ describe("ObjectHandler", () => {
       };
       stubDetection.returns(temp);
 
-      await objectHandler.clickOnScene(event, false);
+      objectHandler.clickOnScene(event, false);
       // tslint:disable-next-line: max-line-length
       objectHandler.detectedObjects = objectDetectionService.rayCasting(mouse, cameraOriginal, cameraModified, sceneOriginal, sceneModified, meshesOriginal, meshesModified);
 
       objectRestorationService.setAttributes(sceneOriginalLoader, sceneModifiedLoader, temp);
 
-      sinon.assert.called(spyRestoration);
+      jasmine.clock().tick(999);
+      sinon.assert.calledOnce(spyRestoration);
       stubDetection.restore();
       spyRestoration.restore();
+      jasmine.clock().uninstall();
     });
   });
+
+  describe("clickAreAllowed()", () => {
+    it("Should not let the player to click on the scene 1", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      objectHandler.game["gameStarted"] = false;
+      objectHandler.identificationError["timeout"] = true;
+
+      const canClick: boolean = objectHandler.clickAreAllowed();
+
+      expect(canClick).toEqual(false);
+    });
+
+    it("Should let the player to click on the scene 2", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      objectHandler.game["gameStarted"] = true;
+      objectHandler.identificationError["timeout"] = false;
+
+      const canClick: boolean = objectHandler.clickAreAllowed();
+
+      expect(canClick).toEqual(true);
+    });
+
+    it("Should not let the player to click on the scene 3", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      objectHandler.game["gameStarted"] = false;
+      objectHandler.identificationError["timeout"] = false;
+
+      const canClick: boolean = objectHandler.clickAreAllowed();
+
+      expect(canClick).toEqual(false);
+    });
+
+    it("Should not let the player to click on the scene 4", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+      objectHandler.game["gameStarted"] = true;
+      objectHandler.identificationError["timeout"] = true;
+
+      const canClick: boolean = objectHandler.clickAreAllowed();
+
+      expect(canClick).toEqual(false);
+    });
+  });
+
+  describe("emitDifference()", () => {
+    it("Should emit an event to the server when a player is in a Geometric Game", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+
+      const scenePairId: string = "446465465adasd";
+      const originalObjectId: string = "s65df4s6ds6df5sd4f";
+      const modifiedObjectId: string = "sd45fsdfs6d54f50";
+      const gameType: ObjectType = ObjectType.Geometric;
+
+      spyOn(objectHandler["socket"], "emitMessage");
+      objectHandler.emitDifference(event, scenePairId, originalObjectId, modifiedObjectId, gameType);
+
+      const clickInfo: ICommon3DObject = {
+        scenePairId: scenePairId,
+        originalObjectId: originalObjectId,
+        modifiedObjectId: modifiedObjectId,
+        gameType: gameType,
+      };
+      const message: ICommonSocketMessage = {
+        data: clickInfo,
+        timestamp: new Date(),
+      };
+
+      objectHandler["socket"].emitMessage(Event.GameClick, message);
+
+      expect(objectHandler["socket"].emitMessage).toHaveBeenCalled();
+    });
+
+    it("Should emit an event to the server when a player is in a Thematic Game", async () => {
+      const objectHandler: ObjectHandler = TestBed.get(ObjectHandler);
+
+      const scenePairId: string = "446465465adasd";
+      const originalObjectId: string = "s65df4s6ds6df5sd4f";
+      const modifiedObjectId: string = "sd45fsdfs6d54f50";
+      const gameType: ObjectType = ObjectType.Thematic;
+
+      spyOn(objectHandler["socket"], "emitMessage");
+      objectHandler.emitDifference(event, scenePairId, originalObjectId, modifiedObjectId, gameType);
+
+      const clickInfo: ICommon3DObject = {
+        scenePairId: scenePairId,
+        originalObjectId: originalObjectId,
+        modifiedObjectId: modifiedObjectId,
+        gameType: gameType,
+      };
+      const message: ICommonSocketMessage = {
+        data: clickInfo,
+        timestamp: new Date(),
+      };
+
+      objectHandler["socket"].emitMessage(Event.GameClick, message);
+
+      expect(objectHandler["socket"].emitMessage).toHaveBeenCalled();
+    });
+  });
+// tslint:disable-next-line: max-file-line-count
 });

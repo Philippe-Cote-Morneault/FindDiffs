@@ -29,9 +29,9 @@ export class ObjectHandler {
                         public objectDetectionService: ObjectDetectionService,
                         public originalSceneLoader: SceneLoaderService,
                         public modifiedSceneLoader: SceneLoaderService,
-                        public socket: SocketHandlerService,
-                        private identificationError: IdentificationError,
-                        private game: GameService,
+                        private socket: SocketHandlerService,
+                        public identificationError: IdentificationError,
+                        public game: GameService,
                         public objectRestorationService: ObjectRestorationService) {
         this.meshesOriginal = [];
         this.meshesModified = [];
@@ -53,8 +53,8 @@ export class ObjectHandler {
                           this.detectedObjects.modified.userData.id, this.gameType);
     }
 
-    private emitDifference(event: MouseEvent, scenePairId: string, originalObjectId: string,
-                           modifiedObjectId: string, gameType: ObjectType): void {
+    public emitDifference(event: MouseEvent, scenePairId: string, originalObjectId: string,
+                          modifiedObjectId: string, gameType: ObjectType): void {
         if (this.clickAreAllowed()) {
             this.identificationError.moveClickError(event.pageX, event.pageY);
 
@@ -73,7 +73,7 @@ export class ObjectHandler {
         }
     }
 
-    private clickAreAllowed(): boolean {
+    public clickAreAllowed(): boolean {
         return !this.identificationError.getTimeout() && this.game.getGameStarted();
     }
 }
