@@ -8,8 +8,8 @@ import { IThreeObject } from "./IThreeObject";
 
 export class ObjectDetectionService {
 
-  public raycaster: THREE.Raycaster = new THREE.Raycaster();
-  public raycaster2: THREE.Raycaster = new THREE.Raycaster();
+  public raycasterOriginal: THREE.Raycaster = new THREE.Raycaster();
+  public raycasterModified: THREE.Raycaster = new THREE.Raycaster();
 
   public rayCasting(mouse: THREE.Vector2,
                     cameraOriginal: THREE.PerspectiveCamera,
@@ -19,8 +19,8 @@ export class ObjectDetectionService {
                     meshesOriginal: THREE.Object3D[],
                     meshesModified: THREE.Object3D[]): IThreeObject {
     this.setCamera(mouse, cameraOriginal, cameraModified);
-    const intersectsOriginal: THREE.Intersection[] = this.raycaster.intersectObjects(meshesOriginal, true);
-    const intersectsModified: THREE.Intersection[] = this.raycaster2.intersectObjects(meshesModified, true);
+    const intersectsOriginal: THREE.Intersection[] = this.raycasterOriginal.intersectObjects(meshesOriginal, true);
+    const intersectsModified: THREE.Intersection[] = this.raycasterModified.intersectObjects(meshesModified, true);
 
     const originalObject: THREE.Object3D = intersectsOriginal[0] ?
             this.getParent(intersectsOriginal[0].object, sceneOriginal) : new THREE.Object3D;
@@ -33,7 +33,7 @@ export class ObjectDetectionService {
     };
   }
 
-  private getParent(obj: THREE.Object3D, scene: THREE.Scene): THREE.Object3D {
+  public getParent(obj: THREE.Object3D, scene: THREE.Scene): THREE.Object3D {
     if (obj.parent !== scene as THREE.Object3D) {
         obj = obj.parent as THREE.Object3D;
         obj = this.getParent(obj, scene);
@@ -42,8 +42,8 @@ export class ObjectDetectionService {
     return obj;
 }
 
-  private setCamera(mouse: THREE.Vector2, cameraOriginal: THREE.PerspectiveCamera, cameraModified: THREE.PerspectiveCamera): void {
-    this.raycaster.setFromCamera(mouse, cameraOriginal);
-    this.raycaster2.setFromCamera(mouse, cameraModified);
+  public setCamera(mouse: THREE.Vector2, cameraOriginal: THREE.PerspectiveCamera, cameraModified: THREE.PerspectiveCamera): void {
+    this.raycasterOriginal.setFromCamera(mouse, cameraOriginal);
+    this.raycasterModified.setFromCamera(mouse, cameraModified);
   }
 }

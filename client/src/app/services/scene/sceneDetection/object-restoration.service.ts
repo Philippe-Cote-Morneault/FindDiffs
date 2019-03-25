@@ -29,7 +29,8 @@ export class ObjectRestorationService implements SocketSubscriber {
     this.modifiedScene = modifiedScene;
   }
 
-  public setAttributes(originalSceneLoader: SceneLoaderService, modifiedSceneLoader: SceneLoaderService, detectedObjects: IThreeObject): void {
+  public setAttributes(originalSceneLoader: SceneLoaderService, modifiedSceneLoader: SceneLoaderService,
+                       detectedObjects: IThreeObject): void {
     this.originalSceneLoader = originalSceneLoader;
     this.modifiedSceneLoader = modifiedSceneLoader;
     this.detectedObjects = detectedObjects;
