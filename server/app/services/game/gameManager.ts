@@ -1,7 +1,7 @@
-import { Game } from "../../model/game/game";
-import { ScoreUpdater } from "./scoreUpdater";
 import { GameType } from "../../../../common/model/gameCard";
 import { INewScore } from "../../../../common/model/score";
+import { Game } from "../../model/game/game";
+import { ScoreUpdater } from "./scoreUpdater";
 
 export abstract class GameManager {
     protected static SOLO_WINNING_DIFFERENCES_COUNT: number = 7;
@@ -37,10 +37,9 @@ export abstract class GameManager {
 
     private endGame(): void {
         this.scoreUpdater.updateScore(this.game, Date.now() - (this.game.start_time as Date).valueOf(), GameType.Solo)
-        .then((value: INewScore | null) => {
-            console.log(value);
-            this.endGameCallback(this.game, this.game.players[0]);
-        });
+            .then((value: INewScore | null) => {
+                this.endGameCallback(this.game, this.game.players[0]);
+            });
     }
 
 }
