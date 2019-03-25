@@ -1,13 +1,16 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { Message } from "../../../../common/communication/message";
-import { ICommonGameCard, ICommonScoreEntry } from "../../../../common/model/gameCard";
+import { ICommonGame } from "../../../../common/communication/webSocket/game";
+import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { GamesCardService } from "../services/gameCard/games-card.service";
-import { ImagePairService } from "../services/image-pair/image-pair.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
+import { ImagePairService } from "../services/image-pair/imagePair.service";
 import { SceneService } from "../services/scene/scene.service";
 import { SceneLoaderService } from "../services/scene/sceneLoader/sceneLoader.service";
+import { SocketHandlerService } from "../services/socket/socketHandler.service";
 import { StringFormater } from "../util/stringFormater";
 
 @Component({
@@ -20,7 +23,6 @@ export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
     @ViewChild("image") private image: ElementRef;
-    @ViewChild("scene") private scene: ElementRef;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
@@ -32,7 +34,7 @@ export class GamesCardViewComponent implements OnInit {
         private gamesCardService: GamesCardService,
         private sceneService: SceneService,
         private router: Router,
-        private sceneLoaderService: SceneLoaderService,
+        private socketHandlerService: SocketHandlerService,
         private imagePairService: ImagePairService) {
             this.rightButton = "Create";
             this.leftButton = "Play";
@@ -62,8 +64,23 @@ export class GamesCardViewComponent implements OnInit {
             this.deleteGameCard();
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
-            await this.router.navigateByUrl(gameUrl + this.gameCard.resource_id);
+
+            this.emitPlaySoloGame();
+            await this.router.navigateByUrl(gameUrl + this.gameCard.id);
         }
+    }
+
+    private emitPlaySoloGame(): void {
+        const game: ICommonGame = {
+            ressource_id: this.gameCard.resource_id,
+            game_card_id: this.gameCard.id,
+            pov: +POVType[this.gameCard.pov],
+        };
+        const message: ICommonSocketMessage = {
+            data: game,
+            timestamp: new Date(),
+        };
+        this.socketHandlerService.emitMessage(Event.PlaySoloGame, message);
     }
 
     public onRightButtonClick(): void {
@@ -104,7 +121,7 @@ export class GamesCardViewComponent implements OnInit {
     private getScenePairById(): void {
         this.sceneService.getSceneById(this.gameCard.resource_id).subscribe((scenePair: ICommonScene) => {
             this.scenePair = scenePair;
-            this.sceneLoaderService.loadOriginalScene(this.scene.nativeElement, this.scenePair, false);
+            this.image.nativeElement.src = `http://localhost:3000/scene/${scenePair.id}/thumbnail`;
         });
     }
 }

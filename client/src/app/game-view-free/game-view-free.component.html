@@ -1,24 +1,34 @@
 <head>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-    crossorigin="anonymous">
-</head>
-<div id="game_wrapper">
-  <div id="game_info">
-    <div>
-      <p> Differences found: 0</p>
-      <p *ngIf="false"> Opponent's differences found: {{differenceCounterOpponent}}</p>
-      <p> Timer: 00:00</p>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous">
+  </head>
+  <div id="game_wrapper">
+    <div id="game_info">
+      <div class="timer_container">
+          <p id="timer_title">Timer</p><p id="timer" #chronometer>00:00</p>
+      </div>
+      <div class="differences_container">
+        <p id="differences_title">Differences found</p><p id="differences" #userDifferenceFound></p>
+      </div>
+      <div class="differences_container" *ngIf="false" >
+          <p *ngIf="false" id="differences_title"> Opponent's differences found</p><p *ngIf="false" id="differences"></p>
+      </div>
+      <div id="title_wrapper">
+        <p id="title" #gameTitle></p>
+        <p id="POV">free point of view</p>
+      </div>
+      <div #message_container id="message_container">
+          <p #message class="message"></p>
+      </div>
     </div>
-    <div>
-      <p> Messages: </p>
+    <div id="game_image_wrapper">
+      <div id="image_original">
+        <div id="original_scene" width="640px" height="480px" style="border:1px solid #000000;" #originalScene ></div>
+      </div>
+      <div id="image_modified">
+        <div id="modified_scene" width="640px" height="480px" style="border:1px solid #000000;" #modifiedScene ></div>
+      </div>
+      <p id="ErrorMessage" #errorMessage>ERROR</p>
     </div>
+    <app-end-solo-game [playerTimeChild]="playerTime" [gameCard]="gameCard" *ngIf="isGameOver"></app-end-solo-game>
   </div>
-  <div id="game_image_wrapper">
-    <div id="image_original">
-      <div id="original_scene" width="640px" height="480px" style="border:1px solid #000000;" #originalScene ></div>
-    </div>
-    <div id="image_modified">
-      <div id="modified_scene" width="640px" height="480px" style="border:1px solid #000000;" #modifiedScene ></div>
-    </div>
-  </div>
-</div>

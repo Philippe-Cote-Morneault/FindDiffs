@@ -32,6 +32,7 @@ export const R: IString = {
     ERROR_INVALID_FILE: "%s is not a file.",
     ERROR_USERNAME_TAKEN: "The username is already taken.",
     ERROR_DIFFERENCE_INVALID: "The game card should have 7 differences. It has %d differences.",
+    ERROR_TOKEN: "Your authentification token has timed out or is invalid",
 
     IMAGE_PAIR: "Image Pair",
     IMAGE_PAIR_: "image pair",
@@ -49,6 +50,7 @@ export const R: IString = {
     NAME_: "name",
     POV: "POV",
     POV_: "pov",
+    SCENE_PAIR_ID_: "scene_pair_id",
     USERNAME: "Username",
     USERNAME_: "username",
     RESOURCE: "Resource",
@@ -63,4 +65,6 @@ export const R: IString = {
     X_: "x",
     Y: "Y",
     Y_: "y",
+
+    SOCKET_DATE: "HH:MM:ss",
 };

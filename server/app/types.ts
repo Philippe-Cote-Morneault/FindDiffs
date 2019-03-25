@@ -7,11 +7,13 @@ export default  {
         IGameCardController: Symbol.for("IGameCardController"),
         IDifferenceController: Symbol.for("IDifferenceController"),
         ISceneController: Symbol.for("ISceneController"),
+        IScoreController: Symbol.for("IScoreController"),
 
         IImagePairService: Symbol.for("IImagePairService"),
         IDifferenceService: Symbol.for("IDifferenceService"),
         IGameCardService: Symbol.for("IGameCardService"),
         IUserService: Symbol.for("IUserService"),
         ISceneService: Symbol.for("ISceneService"),
+        IScoreService: Symbol.for("IScoreService"),
 
 };

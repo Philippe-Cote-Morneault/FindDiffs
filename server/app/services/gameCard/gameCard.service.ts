@@ -3,19 +3,38 @@ import "reflect-metadata";
 import { Message } from "../../../../common/communication/message";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
-import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { GameCard, IGameCard } from "../../model/schemas/gameCard";
 import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { Validation } from "../../utils/validation";
 import { IGameCardService } from "../interfaces";
+import { ScoreGenerator } from "../score/scoreGenerator";
 import { Service } from "../service";
-import { ScoreGenerator } from "./scoreGenerator";
+import { ScoreUpdater } from "./scoreUpdater";
 
 export class GameCardService extends Service implements IGameCardService {
 
     public static readonly DEFAULT_SCORE_NUMBER: number = 3;
     public static readonly NUMBER_OF_DIFFERENCES: number = 7;
+
+    public static async updateScore(req: Request | undefined, doc: IGameCard | undefined, userScore: ICommonScoreEntry): Promise<void> {
+        let changed: boolean = false;
+        if (req && doc) {
+            if (req.body.best_time_solo) {
+                changed = true;
+                doc.best_time_solo = ScoreUpdater.updateScore(doc.best_time_solo, userScore);
+            }
+            if (req.body.best_time_online) {
+                changed = true;
+                doc.best_time_online = ScoreUpdater.updateScore(doc.best_time_online, userScore);
+            }
+            if (!changed) {
+                throw new InvalidFormatException(R.ERROR_NO_CHANGES);
+            }
+            await doc.save();
+        }
+    }
 
     private async validatePost(req: Request): Promise<void> {
         if (!req.body.name) {

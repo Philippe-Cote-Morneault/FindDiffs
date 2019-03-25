@@ -10,18 +10,19 @@ export interface IImagePairService {
     getOriginal(id: string): Promise<ArrayBuffer>;
 }
 
-export interface IUserService {
+export interface IScoreService {
     post(req: Request): Promise<string>;
-    index(): Promise<string>;
+    update(req: Request): Promise<string>;
     single(id: string): Promise<string>;
-    delete(id: string): Promise<string>;
 }
 
 export interface ISceneService {
     post(req: Request): Promise<string>;
     postModified(req: Request): Promise<string>;
+    postThumbnail(req: Request): Promise<string>;
     single(id: string): Promise<string>;
     singleModified(id: string): Promise<string>;
+    getThumbnail(id: string): Promise<ArrayBuffer>;
 }
 
 export interface IGameCardService {
