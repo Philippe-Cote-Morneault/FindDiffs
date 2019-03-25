@@ -14,6 +14,7 @@ import { ScoreGenerator } from "./scoreGenerator";
 export class ScoreService extends Service implements IScoreService {
     public static readonly DEFAULT_SCORE_NUMBER: number = 3;
     public static readonly POSITION_MODIFIER: number = 2;
+    private static readonly MS_IN_1_SECOND: number = 1000;
 
     private async generateScore(req: Request, doc: IGameCard): Promise<void> {
         let changed: boolean = false;
@@ -67,12 +68,6 @@ export class ScoreService extends Service implements IScoreService {
         if (Number(req.body.time) < 0) {
             throw new InvalidFormatException(_e(R.ERROR_LESS_ZERO, [R.TIME_]));
         }
-        /*
-        if (!req.body.type) {
-            console.log("notyp");
-            throw new InvalidFormatException(_e(R.ERROR_MISSING_FIELD, [R.GAME_TYPE_]));
-        }
-        */
         if (!EnumUtils.isStringInEnum(req.body.type, GameType)) {
             throw new InvalidFormatException(_e(R.ERROR_WRONG_TYPE, [R.GAME_TYPE_]));
         }
@@ -90,19 +85,17 @@ export class ScoreService extends Service implements IScoreService {
     }
 
     public verifyScore(req: Request, doc: IGameCard): INewScore {
-        const newScore: number = Number(req.body.time) / 1000;
+        const newScore: number = Number(req.body.time) / ScoreService.MS_IN_1_SECOND;
         const numberOfScores: number = doc.best_time_online.length;
         const scoreEntry: ICommonScoreEntry[] = req.body.type === GameType.Online ? doc.best_time_online : doc.best_time_solo;
         const lastScore: ICommonScoreEntry = scoreEntry[numberOfScores - 1];
         let response: INewScore = { is_top_score: false };
 
         if (lastScore.score > newScore) {
-            let position: number = numberOfScores - 1;
-            for (let i: number = numberOfScores - 1; i >= -1; i--) {
-                if (scoreEntry[i].score < newScore) {
-                    scoreEntry[i + 1].score = newScore;
-                    scoreEntry[i + 1].name = req.body.username;
-                    position = i + ScoreService.POSITION_MODIFIER;
+            let position: number = numberOfScores;
+            for (let i: number = 0; i < numberOfScores; i++) {
+                if (scoreEntry[i].score > newScore) {
+                    position = i + 1;
                     break;
                 }
             }

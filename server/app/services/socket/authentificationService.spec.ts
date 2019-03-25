@@ -15,6 +15,4 @@ describe("AuthentificationService", () => {
             expect(instance1).to.equal(instance2);
         });
     });
-
-
 });

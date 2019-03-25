@@ -1,7 +1,7 @@
-import { Game } from "../../model/game/game";
-import { ScoreUpdater } from "./scoreUpdater";
 import { GameType } from "../../../../common/model/gameCard";
 import { INewScore } from "../../../../common/model/score";
+import { Game } from "../../model/game/game";
+import { ScoreUpdater } from "./scoreUpdater";
 
 export abstract class GameManager {
     protected static SOLO_WINNING_DIFFERENCES_COUNT: number = 7;
@@ -9,11 +9,11 @@ export abstract class GameManager {
 
     public game: Game;
 
-    protected endGameCallback: (game: Game, winner: string) => void;
+    protected endGameCallback: (game: Game, winner: string, score: INewScore) => void;
     protected differencesFound: Map<string, boolean>;
     protected identificationErrorCallback: (game: Game) => void;
 
-    public constructor(game: Game, endGameCallback: (game: Game, winner: string) => void) {
+    public constructor(game: Game, endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
         this.game = game;
         this.endGameCallback = endGameCallback;
         this.differencesFound = new Map();
@@ -38,8 +38,9 @@ export abstract class GameManager {
     private endGame(): void {
         this.scoreUpdater.updateScore(this.game, Date.now() - (this.game.start_time as Date).valueOf(), GameType.Solo)
         .then((value: INewScore | null) => {
-            console.log(value);
-            this.endGameCallback(this.game, this.game.players[0]);
+            if (value as INewScore) {
+                this.endGameCallback(this.game, this.game.players[0], value as INewScore);
+            }
         });
     }
 

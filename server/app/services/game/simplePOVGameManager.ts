@@ -1,5 +1,6 @@
 import { ICommon2DPosition } from "../../../../common/model/positions";
 import { ICommonReveal } from "../../../../common/model/reveal";
+import { INewScore } from "../../../../common/model/score";
 import { Game } from "../../model/game/game";
 import { PixelPositionService } from "../difference/pixelPosition.service";
 import { GameManager } from "./gameManager";
@@ -7,7 +8,7 @@ import { GameManager } from "./gameManager";
 export class SimplePOVGameManager extends GameManager {
     private pixelPositionService: PixelPositionService;
 
-    public constructor(game: Game, endGameCallback: (game: Game, winner: string) => void) {
+    public constructor(game: Game, endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
         super(game, endGameCallback);
         this.pixelPositionService = PixelPositionService.getInstance();
     }
