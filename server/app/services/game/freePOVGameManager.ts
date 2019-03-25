@@ -1,5 +1,6 @@
 import { ICommon3DObject } from "../../../../common/model/positions";
 import { ICommonReveal3D } from "../../../../common/model/reveal";
+import { INewScore } from "../../../../common/model/score";
 import { Game } from "../../model/game/game";
 import { ScenePositionService } from "../difference/scenePositionService";
 import { GameManager } from "./gameManager";
@@ -7,7 +8,7 @@ import { GameManager } from "./gameManager";
 export class FreePOVGameManager extends GameManager {
     private scenePositionService: ScenePositionService;
 
-    public constructor(game: Game, endGameCallback: (game: Game, winner: string) => void) {
+    public constructor(game: Game, endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
         super(game, endGameCallback);
         this.scenePositionService = ScenePositionService.getInstance();
     }

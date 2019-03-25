@@ -14,6 +14,7 @@ import { ScoreGenerator } from "./scoreGenerator";
 export class ScoreService extends Service implements IScoreService {
     public static readonly DEFAULT_SCORE_NUMBER: number = 3;
     public static readonly POSITION_MODIFIER: number = 2;
+    private static readonly MS_IN_1_SECOND: number = 1000;
 
     private async generateScore(req: Request, doc: IGameCard): Promise<void> {
         let changed: boolean = false;
@@ -90,7 +91,7 @@ export class ScoreService extends Service implements IScoreService {
     }
 
     public verifyScore(req: Request, doc: IGameCard): INewScore {
-        const newScore: number = Number(req.body.time);
+        const newScore: number = Number(req.body.time) / ScoreService.MS_IN_1_SECOND;
         const numberOfScores: number = doc.best_time_online.length;
         const scoreEntry: ICommonScoreEntry[] = req.body.type === GameType.Online ? doc.best_time_online : doc.best_time_solo;
         const lastScore: ICommonScoreEntry = scoreEntry[numberOfScores - 1];
