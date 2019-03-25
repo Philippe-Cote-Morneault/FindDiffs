@@ -90,7 +90,7 @@ export class ScoreService extends Service implements IScoreService {
     }
 
     public verifyScore(req: Request, doc: IGameCard): INewScore {
-        const newScore: number = Number(req.body.time);
+        const newScore: number = Number(req.body.time) / 1000;
         const numberOfScores: number = doc.best_time_online.length;
         const scoreEntry: ICommonScoreEntry[] = req.body.type === GameType.Online ? doc.best_time_online : doc.best_time_solo;
         const lastScore: ICommonScoreEntry = scoreEntry[numberOfScores - 1];
