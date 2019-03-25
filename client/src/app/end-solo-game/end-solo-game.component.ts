@@ -10,10 +10,9 @@ import { StringFormater } from "../util/stringFormater";
   styleUrls: ["./end-solo-game.component.css"],
 })
 export class EndSoloGameComponent implements OnInit {
-
+  @Input() public gameCard: ICommonGameCard;
   @Input() public playerTimeChild: string;
 
-  public gameCard: ICommonGameCard;
   public gameCardId: string;
 
   public constructor(

@@ -40,6 +40,7 @@ export class GameViewFreeComponent implements OnInit {
     private currentOriginalScene: ICommonScene;
     private currentModifiedScene: ICommonSceneModifications;
     private gameCardId: string;
+    public gameCard: ICommonGameCard;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
     private meshesOriginal: THREE.Object3D[] = [];
@@ -98,6 +99,7 @@ export class GameViewFreeComponent implements OnInit {
 
     private getGameCardById(): void {
         this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
+            this.gameCard = gameCard;
             this.scenePairId = gameCard.resource_id;
             this.gameTitle.nativeElement.innerText = gameCard.title;
             this.loadScene();

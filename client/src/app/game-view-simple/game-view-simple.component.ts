@@ -29,6 +29,7 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("userDifferenceFound") private userDifferenceFound: ElementRef;
 
     private gameCardId: string;
+    public gameCard: ICommonGameCard;
     private imagePairId: string;
     public isGameOver: boolean;
     public playerTime: string;
@@ -73,6 +74,7 @@ export class GameViewSimpleComponent implements OnInit {
 
     private getGameCardById(): void {
         this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
+            this.gameCard = gameCard;
             this.imagePairId = gameCard.resource_id;
             this.gameTitle.nativeElement.innerText = gameCard.title;
             this.getImagePairById();
