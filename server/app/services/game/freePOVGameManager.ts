@@ -13,9 +13,12 @@ export class FreePOVGameManager extends GameManager {
         this.scenePositionService = ScenePositionService.getInstance();
     }
 
-    public playerClick(position: ICommon3DObject, successCallback: (data: Object | null) => void, failureCallback: () => void): void {
-        this.scenePositionService.post3DClick(this.game.ressource_id, position.originalObjectId,
-                                              position.modifiedObjectId, position.gameType)
+    public async playerClick(position: ICommon3DObject,
+                             successCallback: (data: Object | null) => void,
+                             failureCallback: () => void): Promise<void> {
+
+        await this.scenePositionService.post3DClick(this.game.ressource_id, position.originalObjectId,
+                                                    position.modifiedObjectId, position.gameType)
             .then((value: ICommonReveal3D | null) => {
                 if (value && !this.differencesFound.get(value.difference_id)) {
                     this.differenceFound((value as ICommonReveal3D).difference_id);

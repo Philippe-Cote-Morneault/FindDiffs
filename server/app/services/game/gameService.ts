@@ -6,13 +6,13 @@ import { ICommonIdentificationError } from "../../../../common/communication/web
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { POVType } from "../../../../common/model/gameCard";
+import { INewScore } from "../../../../common/model/score";
 import { Game } from "../../model/game/game";
 import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
-import { INewScore } from "../../../../common/model/score";
 
 export class GameService {
     private static instance: GameService;
@@ -97,7 +97,7 @@ export class GameService {
             this.activePlayers.delete(player);
         });
 
-        if(score.is_top_score) {
+        if (score.is_top_score) {
             this.newBestScore(score);
         }
 

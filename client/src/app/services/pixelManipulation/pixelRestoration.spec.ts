@@ -1,11 +1,11 @@
 import { TestBed } from "@angular/core/testing";
+import { _MatChipListMixinBase } from "@angular/material";
 import { RouterTestingModule } from "@angular/router/testing";
 import * as sinon from "sinon";
 import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
 import { PixelRestoration } from "./pixelRestoration";
-import { _MatChipListMixinBase } from "@angular/material";
 
 // tslint:disable no-magic-numbers
 
