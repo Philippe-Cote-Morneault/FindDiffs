@@ -9,11 +9,11 @@ export abstract class GameManager {
 
     public game: Game;
 
-    protected endGameCallback: (game: Game, winner: string) => void;
+    protected endGameCallback: (game: Game, winner: string, score: INewScore) => void;
     protected differencesFound: Map<string, boolean>;
     protected identificationErrorCallback: (game: Game) => void;
 
-    public constructor(game: Game, endGameCallback: (game: Game, winner: string) => void) {
+    public constructor(game: Game, endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
         this.game = game;
         this.endGameCallback = endGameCallback;
         this.differencesFound = new Map();
@@ -37,9 +37,11 @@ export abstract class GameManager {
 
     private endGame(): void {
         this.scoreUpdater.updateScore(this.game, Date.now() - (this.game.start_time as Date).valueOf(), GameType.Solo)
-            .then((value: INewScore | null) => {
-                this.endGameCallback(this.game, this.game.players[0]);
-            });
+        .then((value: INewScore | null) => {
+            if (value as INewScore) {
+                this.endGameCallback(this.game, this.game.players[0], value as INewScore);
+            }
+        });
     }
 
 }

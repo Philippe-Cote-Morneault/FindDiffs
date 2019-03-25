@@ -12,6 +12,7 @@ import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
+import { INewScore } from "../../../../common/model/score";
 
 export class GameService {
     private static instance: GameService;
@@ -57,8 +58,8 @@ export class GameService {
             differences_found: 0,
             game_card_id: data.game_card_id,
         };
-        const endGameCallback: (game: Game, winner: string) => void = (game: Game, winner: string) => {
-            this.endGame(game, winner);
+        const endGameCallback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => {
+            this.endGame(game, winner, score);
         };
         const gameManager: GameManager = data.pov === POVType.Simple ?
             new SimplePOVGameManager(newGame, endGameCallback) :
@@ -82,7 +83,7 @@ export class GameService {
         this.socketHandler.sendMessage(Event.GameStarted, socketMessage, player);
     }
 
-    private endGame(game: Game, winner: string): void {
+    private endGame(game: Game, winner: string, score: INewScore): void {
         const gameEndedMessage: ICommonGameEnding = {
             winner: winner,
             time: Date.now() - (game.start_time as Date).valueOf(),
@@ -95,6 +96,10 @@ export class GameService {
             this.socketHandler.sendMessage(Event.GameEnded, message, player);
             this.activePlayers.delete(player);
         });
+
+        if(score.is_top_score) {
+            this.newBestScore(score);
+        }
 
     }
 
@@ -137,5 +142,13 @@ export class GameService {
             };
             this.socketHandler.sendMessage(Event.InvalidClick, response, player);
         });
+    }
+
+    private newBestScore(score: INewScore): void {
+        const message: ICommonSocketMessage = {
+            data: score,
+            timestamp: new Date(),
+        };
+        this.socketHandler.broadcastMessage(Event.BestTime, message);
     }
 }
