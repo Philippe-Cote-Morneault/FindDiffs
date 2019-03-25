@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
+import { INewScoreDetails } from "../../../../../common/model/score";
 import { _e, R } from "../../ressources/strings";
 
 @Injectable({
@@ -50,7 +51,12 @@ export class ChatFormaterService {
     }
 
     private onBestTime(message: ICommonSocketMessage): string {
-        return this.formatDate(message.timestamp) + _e(R.CHAT_BESTTIME, [ ]);
+        const newScore: INewScoreDetails = message.data as INewScoreDetails;
+
+        return this.formatDate(message.timestamp) + _e(R.CHAT_BESTTIME, [newScore.username,
+                                                                         newScore.place,
+                                                                         newScore.game_name,
+                                                                         newScore.game_type ]);
     }
 
     private onDefault(event: Event): string {
