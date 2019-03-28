@@ -1,55 +1,22 @@
-// import { expect } from "chai";
-// tslint:disable-next-line:ordered-imports
-// import * as THREE from "three";
-// import { CameraGenerator } from "./cameraGenerator";
-// import { ControlsGenerator } from "./controlsGenerator";
+import * as sinon from "sinon";
+import * as THREE from "three";
+import { ControlsGenerator } from "./controlsGenerator";
 
+// tslint:disable: no-magic-numbers
+// tslint:disable: no-empty
 describe("ControlsGenerator", () => {
-    /*
-    describe("generateGameCardControls()", () => {
-        const controls: THREE.OrbitControls = ControlsGenerator.generateGameControls(
-            // tslint:disable-next-line:no-magic-numbers
-            CameraGenerator.createCamera(123, 45),
-            document.createElement("canvas"),
-        );
-
-        it("Should create controls with disabled keys.", () => {
-            expect(controls.enableKeys).to.equal(false);
-        });
-
-        it("Should create controls with autoRotate enabled.", () => {
-            expect(controls.autoRotate).to.equal(true);
-        });
-
-        it("Should create controls with disabled keys.", () => {
-            expect(controls.target.x).to.equal(0);
-            // tslint:disable-next-line:no-magic-numbers
-            expect(controls.target.y).to.equal(10);
-            expect(controls.target.z).to.equal(0);
+    let mockCamera: THREE.PerspectiveCamera;
+    let mockCanvas: HTMLCanvasElement;
+    beforeEach(() => {
+        mockCamera = new THREE.PerspectiveCamera(45, (4 / 3), 0.1, 1000);
+        mockCanvas = (document.createElement("canvas") as HTMLCanvasElement);
+    });
+    describe("generateGameControls", () => {
+        it("Should add an event listener to the document", () => {
+            const stub: sinon.SinonStub = sinon.stub(document, "addEventListener").callsFake(() => {});
+            ControlsGenerator.generateGameControls(mockCamera, mockCanvas);
+            sinon.assert.calledOnce(stub);
+            stub.restore();
         });
     });
-
-    describe("generateGameControls()", () => {
-        const controls: THREE.OrbitControls = ControlsGenerator.generateGameControls(
-            // tslint:disable-next-line:no-magic-numbers
-            CameraGenerator.createCamera(123, 45),
-            document.createElement("canvas"),
-        );
-
-        it("Should create controls with enabled keys.", () => {
-            expect(controls.enableKeys).to.equal(true);
-        });
-
-        it("Should create controls with autoRotate disabled.", () => {
-            expect(controls.autoRotate).to.equal(false);
-        });
-
-        it("Should create controls with disabled keys.", () => {
-            expect(controls.target.x).to.equal(0);
-            // tslint:disable-next-line:no-magic-numbers
-            expect(controls.target.y).to.equal(10);
-            expect(controls.target.z).to.equal(0);
-        });
-    });
-    */
 });
