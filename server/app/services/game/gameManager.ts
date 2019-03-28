@@ -4,8 +4,8 @@ import { Game } from "../../model/game/game";
 import { ScoreUpdater } from "./scoreUpdater";
 
 export abstract class GameManager {
-    public static SOLO_WINNING_DIFFERENCES_COUNT: number = 7;
-    public static MULTIPLAYER_WINNING_DIFFERENCES_COUNT: number = 4;
+    public static readonly SOLO_WINNING_DIFFERENCES_COUNT: number = 7;
+    public static readonly MULTIPLAYER_WINNING_DIFFERENCES_COUNT: number = 4;
     private scoreUpdater: ScoreUpdater;
 
     public game: Game;
