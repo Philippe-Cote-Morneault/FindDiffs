@@ -14,7 +14,7 @@ export class SceneSyncerService {
     public constructor() {
         this.isMousePressed = false;
     }
-    // tslint:disable-next-line:max-func-body-length
+
     public syncScenesMovement(camera1: THREE.Camera, canvas1: HTMLCanvasElement, camera2: THREE.Camera, canvas2: HTMLCanvasElement): void {
         this.addListeners(camera1, canvas1, camera2, canvas2);
         this.addListeners(camera2, canvas2, camera1, canvas1);
