@@ -1,7 +1,7 @@
-import { FreePOVGameManager } from "./freePOVGameManager";
-import { Game } from "../../model/game/game";
-import { ICommon3DObject } from "../../../../common/model/positions";
+/* import { ICommon3DObject } from "../../../../common/model/positions";
 import { ObjectType } from "../../../../common/model/scene/scene";
+import { Game } from "../../model/game/game";
+import { FreePOVGameManager } from "./freePOVGameManager";
 
 describe("FreePOVGameManager", () => {
     const game: Game = {
@@ -10,8 +10,9 @@ describe("FreePOVGameManager", () => {
         players: ["phil"],
         start_time: new Date(),
         differences_found: 0,
-        game_card_id: "asdsafgresc3242refsd"
+        game_card_id: "asdsafgresc3242refsd",
     };
+
     const callback = (game: Game, winner: string) => {
 
     };
@@ -28,11 +29,12 @@ describe("FreePOVGameManager", () => {
         scenePairId: "r23fjk23kdew",
         originalObjectId: "0kd2dmddsfs",
         modifiedObjectId: "d22r3jmdfs32",
-        gameType: ObjectType.Thematic, 
-    }
+        gameType: ObjectType.Thematic,
+    };
+
     const manager: FreePOVGameManager = new FreePOVGameManager(game, callback);
 
     describe("playerClick", () => {
         manager.playerClick(position, successCallback, failureCallback);
     });
-});
+});*/
