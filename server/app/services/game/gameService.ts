@@ -6,13 +6,13 @@ import { ICommonIdentificationError } from "../../../../common/communication/web
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { POVType } from "../../../../common/model/gameCard";
+import { INewScore } from "../../../../common/model/score";
 import { Game } from "../../model/game/game";
 import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
-import { INewScore } from "../../../../common/model/score";
 
 export class GameService {
     private static instance: GameService;
@@ -62,11 +62,36 @@ export class GameService {
             this.endGame(game, winner, score);
         };
         const gameManager: GameManager = data.pov === POVType.Simple ?
-            new SimplePOVGameManager(newGame, endGameCallback) :
-            new FreePOVGameManager(newGame, endGameCallback);
+            new SimplePOVGameManager(newGame, GameManager.SOLO_WINNING_DIFFERENCES_COUNT, endGameCallback) :
+            new FreePOVGameManager(newGame, GameManager.SOLO_WINNING_DIFFERENCES_COUNT, endGameCallback);
 
         this.activeGames.push(gameManager);
         this.activePlayers.set(player, gameManager);
+    }
+
+    private createMultiplayerGame(message: ICommonSocketMessage, player: string): void {
+        const data: ICommonGame = message.data as ICommonGame;
+        const newGame: Game = {
+            id: uuid.v4(),
+            ressource_id: data.ressource_id,
+            players: [player],
+            start_time: undefined,
+            differences_found: 0,
+            game_card_id: data.game_card_id,
+        };
+        const endGameCallback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => {
+            this.endGame(game, winner, score);
+        };
+        const gameManager: GameManager = data.pov === POVType.Simple ?
+            new SimplePOVGameManager(newGame, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT, endGameCallback) :
+            new FreePOVGameManager(newGame, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT, endGameCallback);
+
+        this.activeGames.push(gameManager);
+        this.activePlayers.set(player, gameManager);
+    }
+
+    private joinGame(): void {
+
     }
 
     private startSoloGame(message: ICommonSocketMessage, player: string): void {
@@ -97,7 +122,7 @@ export class GameService {
             this.activePlayers.delete(player);
         });
 
-        if(score.is_top_score) {
+        if (score.is_top_score) {
             this.newBestScore(score);
         }
 
