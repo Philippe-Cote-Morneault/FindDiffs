@@ -32,7 +32,7 @@ export class ScoreService extends Service implements IScoreService {
         await doc.save();
     }
 
-    public post(req: Request): Promise<string> {
+    public async post(req: Request): Promise<string> {
         const id: string = req.params.id;
 
         return GameCard.findById(id).then(async (doc: IGameCard) => {
@@ -113,7 +113,7 @@ export class ScoreService extends Service implements IScoreService {
         return response;
     }
 
-    public single(id: string): Promise<string> {
+    public async single(id: string): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
