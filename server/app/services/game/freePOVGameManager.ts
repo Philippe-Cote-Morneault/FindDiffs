@@ -8,8 +8,10 @@ import { GameManager } from "./gameManager";
 export class FreePOVGameManager extends GameManager {
     private scenePositionService: ScenePositionService;
 
-    public constructor(game: Game, endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
-        super(game, endGameCallback);
+    public constructor(game: Game, winningDifferenceCount: number,
+                       endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
+
+        super(game, winningDifferenceCount, endGameCallback);
         this.scenePositionService = ScenePositionService.getInstance();
     }
 
