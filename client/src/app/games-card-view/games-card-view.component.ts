@@ -65,8 +65,8 @@ export class GamesCardViewComponent implements OnInit {
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
 
+            this.playGame(gameUrl);
             this.emitPlaySoloGame();
-            await this.router.navigateByUrl(gameUrl + this.gameCard.id);
         }
     }
 
@@ -83,9 +83,35 @@ export class GamesCardViewComponent implements OnInit {
         this.socketHandlerService.emitMessage(Event.PlaySoloGame, message);
     }
 
-    public onRightButtonClick(): void {
+    private emitPlayMultiplayerGame(): void {
+        const game: ICommonGame = {
+            ressource_id: this.gameCard.resource_id,
+            game_card_id: this.gameCard.id,
+            pov: +POVType[this.gameCard.pov],
+        };
+        const message: ICommonSocketMessage = {
+            data: game,
+            timestamp: new Date(),
+        };
+        this.socketHandlerService.emitMessage(Event.PlayMultiplayerGame, message);
+    }
+
+    private async playGame(gameUrl: string): Promise<void> {
+        await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+            ((response as ICommonGameCard).id) ?
+                await this.router.navigateByUrl(gameUrl + this.gameCard.id) :
+                alert("This game has been deleted, please try another one.");
+        });
+    }
+
+    public async onRightButtonClick(): Promise<void> {
         if (this.isInAdminView) {
             this.resetBestTimes();
+        } else {
+            const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
+
+            this.playGame(gameUrl);
+            this.emitPlayMultiplayerGame();
         }
     }
 
