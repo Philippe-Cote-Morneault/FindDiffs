@@ -27,5 +27,13 @@ describe("ControlsGenerator", () => {
             document.dispatchEvent(mockEvent);
             expect(mockCamera.position.z).to.equal(newPosition.z);
         });
+
+        it("should should move the camera by 1 unit in the z direction", () => {
+            const newPosition: THREE.Vector3 = new THREE.Vector3(0, 0, mockCamera.position.z + 1);
+            const mockEvent: KeyboardEvent = new KeyboardEvent("keydown", {key: "s"});
+            ControlsGenerator.generateGameControls(mockCamera, mockCanvas);
+            document.dispatchEvent(mockEvent);
+            expect(mockCamera.position.z).to.equal(newPosition.z);
+        });
     });
 });
