@@ -6,19 +6,23 @@ import { ScoreUpdater } from "./scoreUpdater";
 export abstract class GameManager {
     public static readonly SOLO_WINNING_DIFFERENCES_COUNT: number = 7;
     public static readonly MULTIPLAYER_WINNING_DIFFERENCES_COUNT: number = 4;
-    private scoreUpdater: ScoreUpdater;
 
     public game: Game;
 
-    protected endGameCallback: (game: Game, winner: string, score: INewScore) => void;
     protected differencesFound: Map<string, boolean>;
-    protected identificationErrorCallback: (game: Game) => void;
 
-    public constructor(game: Game, endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
+    private scoreUpdater: ScoreUpdater;
+    private endGameCallback: (game: Game, winner: string, score: INewScore) => void;
+    private winningDifferenceCount: number;
+
+    public constructor(game: Game, winningDifferenceCount: number,
+                       endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
+
         this.game = game;
         this.endGameCallback = endGameCallback;
         this.differencesFound = new Map();
         this.scoreUpdater = ScoreUpdater.getInstance();
+        this.winningDifferenceCount = winningDifferenceCount;
     }
 
     public startGame(): void {
@@ -31,7 +35,7 @@ export abstract class GameManager {
 
     protected differenceFound(differenceId: string): void {
         this.differencesFound.set(differenceId, true);
-        if (++this.game.differences_found === GameManager.SOLO_WINNING_DIFFERENCES_COUNT) {
+        if (++this.game.differences_found === this.winningDifferenceCount) {
             this.endGame();
         }
     }
