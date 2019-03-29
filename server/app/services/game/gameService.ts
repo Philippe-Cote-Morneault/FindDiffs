@@ -12,6 +12,7 @@ import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
+import { MatchmakingService } from "./matchmakingService";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
 
 export class GameService {
@@ -20,6 +21,7 @@ export class GameService {
     private activePlayers: Map<string, GameManager>;
     private activeGames: GameManager[];
     private socketHandler: SocketHandler;
+    private matchmakingService: MatchmakingService;
 
     public static getInstance(): GameService {
         if (!GameService.instance) {
@@ -32,6 +34,7 @@ export class GameService {
     private constructor() {
         this.activeGames = [];
         this.socketHandler = SocketHandler.getInstance();
+        this.matchmakingService = MatchmakingService.getInstance();
         this.activePlayers = new Map();
         this.subscribeToSocket();
     }
@@ -39,6 +42,9 @@ export class GameService {
     private subscribeToSocket(): void {
         this.socketHandler.subscribe(Event.PlaySoloGame, (message: ICommonSocketMessage, player: string) => {
             this.createSoloGame(message, player);
+        });
+        this.socketHandler.subscribe(Event.PlayMultiplayerGame, (message: ICommonSocketMessage, player: string) => {
+            this.matchmakingService.matchPlayers(message, player);
         });
         this.socketHandler.subscribe(Event.ReadyToPlay, (message: ICommonSocketMessage, player: string) => {
             this.startSoloGame(message, player);
@@ -69,12 +75,11 @@ export class GameService {
         this.activePlayers.set(player, gameManager);
     }
 
-    private createMultiplayerGame(message: ICommonSocketMessage, player: string): void {
-        const data: ICommonGame = message.data as ICommonGame;
+    public createMultiplayerGame(data: ICommonGame, firstPlayer: string, secondPlayer: string): void {
         const newGame: Game = {
             id: uuid.v4(),
             ressource_id: data.ressource_id,
-            players: [player],
+            players: [firstPlayer, secondPlayer],
             start_time: undefined,
             differences_found: 0,
             game_card_id: data.game_card_id,
@@ -87,11 +92,8 @@ export class GameService {
             new FreePOVGameManager(newGame, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT, endGameCallback);
 
         this.activeGames.push(gameManager);
-        this.activePlayers.set(player, gameManager);
-    }
-
-    private joinGame(): void {
-
+        this.activePlayers.set(firstPlayer, gameManager);
+        this.activePlayers.set(secondPlayer, gameManager);
     }
 
     private startSoloGame(message: ICommonSocketMessage, player: string): void {
