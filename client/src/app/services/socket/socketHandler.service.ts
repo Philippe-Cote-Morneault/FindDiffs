@@ -66,8 +66,7 @@ export class SocketHandlerService {
 
     private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
         if (this.subscribers.has(event)) {
-            const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
-            subscribers.forEach((subscriber: SocketSubscriber) => {
+            (this.subscribers.get(event) as SocketSubscriber[]).forEach((subscriber: SocketSubscriber) => {
                 subscriber.notify(event, message);
             });
         }
@@ -77,7 +76,7 @@ export class SocketHandlerService {
         this.socket.emit(event, message);
     }
 
-    private setEventListeners(socket: SocketIOClient.Socket): void {
+    public setEventListeners(socket: SocketIOClient.Socket): void {
         this.onAuthenticate();
         Object.keys(Event).forEach((event: Event) => {
             socket.on(event, (message: ICommonSocketMessage) => {
@@ -88,9 +87,12 @@ export class SocketHandlerService {
 
     public onAuthenticate(): void {
         this.socket.on(Event.Authenticate, (message: ICommonSocketMessage) => {
-            const token: string = (message.data as ICommonToken).token;
-            sessionStorage.setItem("token", token);
-            this.setEventListeners(this.socket);
+            this.manageAuthenticateEvent(message);
         });
+    }
+
+    public manageAuthenticateEvent(message: ICommonSocketMessage): void {
+        sessionStorage.setItem("token", (message.data as ICommonToken).token);
+        this.setEventListeners(this.socket);
     }
 }
