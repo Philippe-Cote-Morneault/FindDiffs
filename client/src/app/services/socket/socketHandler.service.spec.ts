@@ -4,7 +4,6 @@ import { Event, ICommonSocketMessage } from "../../../../../common/communication
 import { SocketHandlerService } from "./socketHandler.service";
 import { SERVER_URL } from "../../../../../common/url";
 import * as io from "socket.io-client";
-// import * as sinon from "sinon";
 
 describe("SocketHandlerService", () => {
     let service: SocketHandlerService;
