@@ -5,8 +5,7 @@ import { GameService } from "./gameService";
 
 export class MatchmakingService {
     private static instance: MatchmakingService;
-    // private socketHandler: SocketHandler;
-    private pendingGame: Map<string, string>;
+    private waitingRoom: Map<string, string>;
     private gameService: GameService;
     private socketHandler: SocketHandler;
 
@@ -19,7 +18,7 @@ export class MatchmakingService {
     }
 
     private constructor() {
-        this.pendingGame = new Map();
+        this.waitingRoom = new Map();
         this.gameService = GameService.getInstance();
         this.socketHandler = SocketHandler.getInstance();
         this.subscribeToSocket();
@@ -30,20 +29,21 @@ export class MatchmakingService {
             this.matchPlayers(message, player);
         });
     }
+
     public matchPlayers(message: ICommonSocketMessage, player: string): void {
         const data: ICommonGame = message.data as ICommonGame;
-        (this.pendingGame.has(data.ressource_id)) ?
+        (this.waitingRoom.has(data.ressource_id)) ?
         this.createMultiplayersGame(data, player) :
-        this.pendingGame.set(data.ressource_id, player);
+        this.waitingRoom.set(data.ressource_id, player);
     }
 
     private createMultiplayersGame(data: ICommonGame, secondPlayer: string): void {
-        const firstPlayer: string | undefined = this.pendingGame.get(data.ressource_id);
+        const firstPlayer: string | undefined = this.waitingRoom.get(data.ressource_id);
         if (firstPlayer) {
             this.gameService.createMultiplayerGame(data, firstPlayer, secondPlayer);
             this.EndMatchmaking(secondPlayer);
             this.EndMatchmaking(firstPlayer);
-            this.pendingGame.delete(data.ressource_id);
+            this.waitingRoom.delete(data.ressource_id);
         }
     }
 
