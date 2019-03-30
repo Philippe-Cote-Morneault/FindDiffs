@@ -117,5 +117,25 @@ describe("SocketHandlerService", () => {
             service.notifySubsribers(event, message);
             expect(service["subscribers"].has(event)).toBeTruthy();
         });
+
+        it("Should notify all the subscribers", () => {
+            const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
+            service["subscribers"] = new Map<string, SocketSubscriber[]>();
+
+            const event: Event = Event.InvalidClick;
+
+            const subscriber: IdentificationError = new IdentificationError(service);
+            if (!service["subscribers"].has(event)) {
+                service["subscribers"].set(event, []);
+            }
+            const sub: SocketSubscriber[] = service["subscribers"].get(event) as SocketSubscriber[];
+            sub.push(subscriber);
+
+            service.notifySubsribers(event, message);
+            spyOn(subscriber, "notify");
+
+            (subscriber as SocketSubscriber).notify(event, message);
+            expect(subscriber.notify).toHaveBeenCalledWith(event, message);
+        });
     });
 });
