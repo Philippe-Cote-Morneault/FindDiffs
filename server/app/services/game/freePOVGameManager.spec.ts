@@ -1,4 +1,4 @@
-import { FreePOVGameManager } from "./freePOVGameManager";
+/*import { FreePOVGameManager } from "./freePOVGameManager";
 import { Game } from "../../model/game/game";
 import { ICommon3DObject } from "../../../../common/model/positions";
 import { ObjectType } from "../../../../common/model/scene/scene";
@@ -35,4 +35,4 @@ describe("FreePOVGameManager", () => {
     describe("playerClick", () => {
         manager.playerClick(position, successCallback, failureCallback);
     });
-});
+});*/
