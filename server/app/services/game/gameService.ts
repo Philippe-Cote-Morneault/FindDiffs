@@ -12,7 +12,6 @@ import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
-import { MatchmakingService } from "./matchmakingService";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
 
 export class GameService {
@@ -21,7 +20,6 @@ export class GameService {
     private activePlayers: Map<string, GameManager>;
     private activeGames: GameManager[];
     private socketHandler: SocketHandler;
-    private matchmakingService: MatchmakingService;
 
     public static getInstance(): GameService {
         if (!GameService.instance) {
@@ -34,7 +32,6 @@ export class GameService {
     private constructor() {
         this.activeGames = [];
         this.socketHandler = SocketHandler.getInstance();
-        this.matchmakingService = MatchmakingService.getInstance();
         this.activePlayers = new Map();
         this.subscribeToSocket();
     }
@@ -42,9 +39,6 @@ export class GameService {
     private subscribeToSocket(): void {
         this.socketHandler.subscribe(Event.PlaySoloGame, (message: ICommonSocketMessage, player: string) => {
             this.createSoloGame(message, player);
-        });
-        this.socketHandler.subscribe(Event.PlayMultiplayerGame, (message: ICommonSocketMessage, player: string) => {
-            this.matchmakingService.matchPlayers(message, player);
         });
         this.socketHandler.subscribe(Event.ReadyToPlay, (message: ICommonSocketMessage, player: string) => {
             this.startSoloGame(message, player);
