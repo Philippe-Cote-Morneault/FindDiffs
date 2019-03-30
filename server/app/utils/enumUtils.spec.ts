@@ -9,16 +9,16 @@ enum TestEnumLonger {One, Two, Three, Four, Five, Six}
 
 describe("EnumUtils", () => {
     describe("isStringInEnum()", () => {
-        it("Should return false if string is not in enum", () => {
+        it("Should detect if string is not in enum", () => {
             expect(EnumUtils.isStringInEnum("test", TestEnum)).to.equal(false);
         });
-        it("Should return false if string is not in enum with values", () => {
+        it("Should detect if string is not in enum with values", () => {
             expect(EnumUtils.isStringInEnum("test", TestEnumValues)).to.equal(false);
         });
-        it("Should return true if string is in enum", () => {
+        it("Should detect if string is in enum", () => {
             expect(EnumUtils.isStringInEnum("One", TestEnum)).to.equal(true);
         });
-        it("Should return true if string is in enum with values", () => {
+        it("Should detect if string is in enum with values", () => {
             expect(EnumUtils.isStringInEnum("One", TestEnumValues)).to.equal(true);
         });
     });
@@ -37,13 +37,13 @@ describe("EnumUtils", () => {
         });
     });
     describe("enumLength()", () => {
-        it("Should return 3 for the size of the test enum", () => {
+        it("Should give the size of the enum without values", () => {
             expect(EnumUtils.enumLength(TestEnum)).to.equal(3);
         });
-        it("Should return 3 for the size of the test enum with values", () => {
+        it("Should give the size of the enum with values", () => {
             expect(EnumUtils.enumLength(TestEnumValues)).to.equal(3);
         });
-        it("Should return 6 for the size of the longer test enum", () => {
+        it("Should give the size of a longer enum with values", () => {
             expect(EnumUtils.enumLength(TestEnumLonger)).to.equal(6);
         });
     });

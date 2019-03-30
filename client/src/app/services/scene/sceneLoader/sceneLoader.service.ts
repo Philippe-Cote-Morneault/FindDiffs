@@ -2,9 +2,9 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { ICommonSceneModifications } from "../../../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../../../common/model/scene/scene";
-import { ModifiedSceneParserService } from "../../../services/scene/sceneParser/modified-scene-parser.service";
-import { SceneParserService } from "../../../services/scene/sceneParser/scene-parser.service";
 import { CameraGenerator } from "../../../services/scene/sceneRenderer/cameraGenerator";
+import { ModifiedSceneParserService } from "../sceneParser/modifiedSceneParser.service";
+import { SceneParserService } from "../sceneParser/sceneParser.service";
 import { ControlsGenerator } from "../sceneRenderer/controlsGenerator";
 import { RendererGenerator } from "../sceneRenderer/rendererGenerator";
 
@@ -14,29 +14,31 @@ import { RendererGenerator } from "../sceneRenderer/rendererGenerator";
 
 export class SceneLoaderService {
     public camera: THREE.PerspectiveCamera;
-
     private renderer: THREE.WebGLRenderer;
-    private scene: THREE.Scene;
+    public scene: THREE.Scene;
 
-    public loadOriginalScene(container: HTMLElement | null, scene: ICommonScene, inGameMode: boolean): void {
-        this.scene = new SceneParserService().parseScene(scene);
-
-        this.renderScene(container, inGameMode);
+    public async loadOriginalScene(container: HTMLElement | null, scene: ICommonScene): Promise<void> {
+        this.scene = await new SceneParserService(scene).parseScene();
+        this.renderScene(container);
     }
 
-    public loadModifiedScene(container: HTMLElement | null, scene: ICommonScene, sceneModifications: ICommonSceneModifications): void {
-        this.scene = new ModifiedSceneParserService().parseModifiedScene(scene, sceneModifications);
+    public async loadModifiedScene(
+            container: HTMLElement | null,
+            scene: THREE.Scene,
+            sceneModifications: ICommonSceneModifications,
+        ): Promise<void> {
+        this.scene = await new ModifiedSceneParserService(sceneModifications.type).parseModifiedScene(scene, sceneModifications);
 
-        this.renderScene(container, true);
+        this.renderScene(container);
     }
 
-    public loadOnCanvas(canvas: HTMLCanvasElement, scene: ICommonScene): void {
-        this.scene = new SceneParserService().parseScene(scene);
+    public async loadOnCanvas(canvas: HTMLCanvasElement, scene: ICommonScene): Promise<void> {
+        this.scene = await new SceneParserService(scene).parseScene();
 
         this.renderOnCanvas(canvas);
     }
 
-    private renderScene(container: HTMLElement | null, inGameMode: boolean): void {
+    private renderScene(container: HTMLElement | null): void {
         if (container) {
             this.renderer = RendererGenerator.generateRenderer(container.clientWidth,
                                                                container.clientHeight);

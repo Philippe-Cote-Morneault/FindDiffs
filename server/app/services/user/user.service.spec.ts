@@ -1,13 +1,14 @@
+/*
 import {expect} from "chai";
 import * as sinon from "sinon";
 import { mockReq } from "sinon-express-mock";
 import { User } from "../../model/schemas/user";
 import { NoErrorThrownException } from "../../tests/noErrorThrownException";
-import { UserService } from "./user.service";
+import { UsernameValidator } from "./usernameValidator";
 
 // tslint:disable:no-magic-numbers
 describe("UserService", () => {
-    const userService: UserService = new UserService();
+    const userService: UsernameValidator = new UsernameValidator();
     const notSetError: string = "The field username is not present.";
     const notValidError: string = "The username is invalid, it must be between 3 and 12 alpha numeric characters.";
     const alreadyTakenError: string = "The username is already taken.";
@@ -31,7 +32,7 @@ describe("UserService", () => {
     });
 
     describe("post()", () => {
-        it("Should return the correct error message if input empty", async () => {
+        it("Should throw an error if the input is empty", async () => {
             const request: Object = {
                 body: { username : "", },
             };
@@ -42,8 +43,7 @@ describe("UserService", () => {
                 expect(err.message).to.equal(notSetError);
             }
         });
-
-        it("Should return the correct error message if input length is under 3", async () => {
+        it("Should throw an error if the username is invalid", async () => {
             const request: Object = {
                 body: { username : "ab", },
             };
@@ -55,79 +55,7 @@ describe("UserService", () => {
             }
         });
 
-        it("Should return the correct error message if input length is over 12", async () => {
-            const request: Object = {
-                body: { username : "aaaaaaaaaaaaa", },
-            };
-            try {
-                await userService.post(mockReq(request));
-                throw new NoErrorThrownException();
-            } catch (err) {
-                expect(err.message).to.equal(notValidError);
-            }
-        });
-
-        it("Should return the correct error message if the input is not alphanumeric", async () => {
-            const request: Object = {
-                body: { username : "-+-=", },
-            };
-            try {
-                await userService.post(mockReq(request));
-                throw new NoErrorThrownException();
-            } catch (err) {
-                expect(err.message).to.equal(notValidError);
-            }
-        });
-
-        it("Should return the correct message if input length is between 3 and 12", async () => {
-            const testUsername: string = "michel6";
-            const request: Object = {
-                body: { username : testUsername, },
-            };
-            (User.prototype.save as sinon.SinonStub).resolves({
-                username: testUsername,
-                creation_date: "2019-02-03T00:33:58.958Z",
-                id: "5c5636f68f786067b76d6b3e",
-            });
-            (User.countDocuments as sinon.SinonStub).resolves(0);
-
-            const data: string = await userService.post(mockReq(request));
-            expect(JSON.parse(data).username).to.equal(testUsername);
-        });
-
-        it("Should return the correct message if the input is alpha", async () => {
-            const testUsername: string = "MonNomCGab";
-            const request: Object = {
-                body: { username : testUsername, },
-            };
-            (User.prototype.save as sinon.SinonStub).resolves({
-                username: testUsername,
-                creation_date: "2019-02-03T00:33:58.958Z",
-                id: "5c5636f68f786067b76d6b3e",
-            });
-            (User.countDocuments as sinon.SinonStub).resolves(0);
-
-            const data: string = await userService.post(mockReq(request));
-            expect(JSON.parse(data).username).to.equal(testUsername);
-        });
-
-        it("Should return the correct message if the input is numeric", async () => {
-            const testUsername: string = "123456789";
-            const request: Object = {
-                body: { username : testUsername, },
-            };
-            (User.prototype.save as sinon.SinonStub).resolves({
-                username: testUsername,
-                creation_date: "2019-02-03T00:33:58.958Z",
-                id: "5c5636f68f786067b76d6b3e",
-            });
-            (User.countDocuments as sinon.SinonStub).resolves(0);
-
-            const data: string = await userService.post(mockReq(request));
-            expect(JSON.parse(data).username).to.equal(testUsername);
-        });
-
-        it("Should return the correct error message if the input is already taken", async () => {
+        it("Should throw an error if the input is already taken by an other user", async () => {
             const testUsername: string = "123456789";
             const request: Object = {
                 body: { username : testUsername, },
@@ -145,12 +73,28 @@ describe("UserService", () => {
             } catch (err) {
                 expect(err.message).to.equal(alreadyTakenError);
             }
-
         });
+
+        it("Should regsister the user if its name is valid", async () => {
+            const testUsername: string = "MonNomCGab";
+            const request: Object = {
+                body: { username : testUsername, },
+            };
+            (User.prototype.save as sinon.SinonStub).resolves({
+                username: testUsername,
+                creation_date: "2019-02-03T00:33:58.958Z",
+                id: "5c5636f68f786067b76d6b3e",
+            });
+            (User.countDocuments as sinon.SinonStub).resolves(0);
+
+            const data: string = await userService.post(mockReq(request));
+            expect(JSON.parse(data).username).to.equal(testUsername);
+        });
+
     });
 
     describe("delete()", () => {
-        it("Should return true if the username is removed", async () => {
+        it("Should be able to remove a user properly when the id is present in the server", async () => {
             const usernameId: string = "5c5636f68f786067b76d6b3e";
 
             (User.findById as sinon.SinonStub).resolves({
@@ -167,7 +111,7 @@ describe("UserService", () => {
             expect(JSON.parse(data).body).to.equal(sucessDelete);
         });
 
-        it("Should return true if the correct error message is shown during delete", async () => {
+        it("Should throw an error if the id is not present in the server", async () => {
 
             (User.findById as sinon.SinonStub).rejects("Not there!");
 
@@ -179,7 +123,7 @@ describe("UserService", () => {
             }
         });
 
-        it("Should return the correct error message is shown when mongoose returns null for delete", async () => {
+        it("Should throw an error if the id is not present in the server and is marked as undefined", async () => {
 
             (User.findById as sinon.SinonStub).resolves(undefined);
 
@@ -194,7 +138,7 @@ describe("UserService", () => {
     });
 
     describe("index()", () => {
-        it("Should be true if index is correct ", async () => {
+        it("Should list all the users that are currently connected to the server", async () => {
             (User.find as sinon.SinonStub).resolves({
                 username: "myname",
                 creation_date: "2019-02-03T00:33:58.958Z",
@@ -203,7 +147,7 @@ describe("UserService", () => {
             const data: string = await userService.index();
             expect(JSON.parse(data).username).to.equal("myname");
         });
-        it("Should be true if index catch error ", async () => {
+        it("Should throw an error if the server was not able to list all the users in the database", async () => {
             (User.find as sinon.SinonStub).rejects("Not there!");
 
             try {
@@ -217,7 +161,7 @@ describe("UserService", () => {
     });
 
     describe("single()", () => {
-        it("Should be true if single is correct", async () => {
+        it("Should list the user associated with it's id", async () => {
             const usernameId: string = "5c5636f68f786067b76d6b3e";
 
             (User.findById as sinon.SinonStub).resolves({
@@ -230,7 +174,7 @@ describe("UserService", () => {
             expect(JSON.parse(data).username).to.equal("myname");
         });
 
-        it("Should be true if single catch error", async () => {
+        it("Should throw an error if the user id is not present in the server", async () => {
             const usernameId: string = "5c5636f68f786067b76d6b3e";
 
             (User.findById as sinon.SinonStub).rejects("Not there!");
@@ -243,7 +187,7 @@ describe("UserService", () => {
             }
         });
 
-        it("Should be true if single catch error when mongoose returns null", async () => {
+        it("Should throw an error if the user id is not present in the server but is undefined", async () => {
             const usernameId: string = "5c5636f68f786067b76d6b3e";
 
             (User.findById as sinon.SinonStub).resolves(undefined);
@@ -257,4 +201,4 @@ describe("UserService", () => {
         });
     });
 
-});
+});*/

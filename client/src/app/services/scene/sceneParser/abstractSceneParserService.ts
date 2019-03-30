@@ -8,18 +8,20 @@ import { ThematicSceneParser } from "./thematicSceneParser";
 
 export abstract class AbstractSceneParser {
     protected sceneObjectParser: SceneObjectParser;
+    protected sceneType: ObjectType;
+    protected sceneModel: ICommonScene;
 
-    protected createScene(sceneModel: ICommonScene): THREE.Scene {
-        let scene: THREE.Scene;
+    protected constructor(sceneModel: ICommonScene) {
+        this.sceneType = sceneModel.type;
+        this.sceneModel = sceneModel;
+        this.sceneObjectParser = (sceneModel.type === ObjectType.Geometric) ?
+            new GeometricObjectParser() : new ThematicObjectParser();
+    }
 
-        if (sceneModel.type === ObjectType.Geometric) {
-            this.sceneObjectParser = new GeometricObjectParser();
-            scene = GeometricSceneParser.parseScene(sceneModel as ICommonGeometricScene);
-        } else {
-            this.sceneObjectParser = new ThematicObjectParser();
-            scene = ThematicSceneParser.parseScene(sceneModel as ICommonThematicScene);
-        }
+    protected async createScene(): Promise<THREE.Scene> {
+        return (this.sceneModel.type === ObjectType.Geometric) ?
+            GeometricSceneParser.parseScene(this.sceneModel as ICommonGeometricScene)
+            : ThematicSceneParser.parseScene(this.sceneModel as ICommonThematicScene);
 
-        return scene;
     }
 }

@@ -5,10 +5,10 @@ import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import { FormVerificationFreePOVService } from "../services/createGame/formVerificationFreePOV.service";
-import { GameCardLoaderService } from "../services/gameCard/game-card-loader.service";
-import { GamesCardService } from "../services/gameCard/games-card.service";
+import { GameCardLoaderService } from "../services/gameCard/gameCardLoader.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
-import { SceneCreationService } from "../services/scene/sceneCreation/scene-creation.service";
+import { SceneCreationService } from "../services/scene/sceneCreation/sceneCreation.service";
 
 @Component({
     selector: "app-create-game-free-view",
@@ -81,17 +81,17 @@ export class CreateGameFreeViewComponent {
         const objectType: string = this.objectType.nativeElement.value;
 
         this.sceneService.createScene(objectType, Number(quantity))
-            .subscribe((response: ICommonScene | Message) => {
+            .subscribe(async (response: ICommonScene | Message) => {
                 if ((response as Message).body) {
                     this.failedCreationHandler((response as Message).body);
                 } else {
-                    this.createThumbnail((response as ICommonScene), this.canvas.nativeElement);
+                    await this.createThumbnail((response as ICommonScene), this.canvas.nativeElement);
                 }
             });
     }
 
-    private createThumbnail(scene: ICommonScene, canvas: HTMLCanvasElement): void {
-        const thumbnail: Blob = this.sceneCreationService.createTumbnail(scene, canvas);
+    private async createThumbnail(scene: ICommonScene, canvas: HTMLCanvasElement): Promise<void> {
+        const thumbnail: Blob = await this.sceneCreationService.createTumbnail(scene, canvas);
         this.sceneService.addThumbnail(scene.id, thumbnail).subscribe((response: string | Message) => {
             if ((response as Message).body) {
                 this.failedCreationHandler((response as Message).body);

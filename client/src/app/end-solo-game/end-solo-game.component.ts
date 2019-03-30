@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ICommonGameCard, ICommonScoreEntry } from "../../../../common/model/gameCard";
-import { GamesCardService } from "../services/gameCard/games-card.service";
+import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { StringFormater } from "../util/stringFormater";
 
 @Component({
@@ -10,10 +10,9 @@ import { StringFormater } from "../util/stringFormater";
   styleUrls: ["./end-solo-game.component.css"],
 })
 export class EndSoloGameComponent implements OnInit {
-
+  @Input() public gameCard: ICommonGameCard;
   @Input() public playerTimeChild: string;
 
-  public gameCard: ICommonGameCard;
   public gameCardId: string;
 
   public constructor(

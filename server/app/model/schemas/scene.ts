@@ -2,7 +2,7 @@ import {model, Document, Model, Schema} from "mongoose";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene } from "../../../../common/model/scene/scene";
 import Config from "../../config";
-import { Grid } from "../../services/scene/grid";
+import { Grid } from "../../services/scene/grid/grid";
 
 export interface IScene extends Document {
     scene: ICommonScene;

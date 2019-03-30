@@ -25,6 +25,7 @@
       ".ts"
     ],
     "exclude": [
+      "**/I*.ts",
       "**/*.spec.ts",
       "app/services/interfaces.ts"
     ],
@@ -45,6 +46,7 @@
     "@types/aws-sdk": "^2.7.0",
     "@types/mongodb": "^3.1.19",
     "@types/mongoose": "^5.3.10",
+    "@types/request": "^2.48.1",
     "@types/sprintf-js": "^1.1.1",
     "@types/uuid": "^3.4.4",
     "aws-sdk": "^2.403.0",
@@ -54,6 +56,7 @@
     "chai-bytes": "^0.1.2",
     "cookie-parser": "1.4.1",
     "cors": "2.8.4",
+    "dateformat": "^3.0.3",
     "debug": "^4.1.1",
     "express": "~4.16.0",
     "file-saver": "^2.0.0",
@@ -66,8 +69,10 @@
     "nodemon": "^1.18.9",
     "path": "^0.12.7",
     "reflect-metadata": "^0.1.10",
+    "request": "^2.88.0",
     "serve-favicon": "~2.5.0",
     "socket.io": "^1.4.5",
+    "socket.io-mock": "^1.2.3",
     "sprintf-js": "^1.1.2",
     "ts-node": "^7.0.1",
     "uuid": "^3.3.2"
@@ -98,6 +103,7 @@
     "rimraf": "2.6.2",
     "sinon": "~7.2.2",
     "sinon-express-mock": "~2.1.0",
+    "ts-mockito": "^2.3.1",
     "tslint": "~5.11.0",
     "tslint-eslint-rules": "5.4.0",
     "tslint-microsoft-contrib": "5.2.0",
