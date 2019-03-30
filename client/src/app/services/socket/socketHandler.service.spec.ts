@@ -4,6 +4,7 @@ import { Event, ICommonSocketMessage } from "../../../../../common/communication
 import { SocketHandlerService } from "./socketHandler.service";
 import { SERVER_URL } from "../../../../../common/url";
 import * as io from "socket.io-client";
+import { SocketSubscriber } from "./socketSubscriber";
 
 describe("SocketHandlerService", () => {
     let service: SocketHandlerService;
@@ -73,6 +74,36 @@ describe("SocketHandlerService", () => {
             spyOn(service, "onAuthenticate");
             service.setEventListeners(socketClient);
             expect(service.onAuthenticate).toHaveBeenCalled();
+        });
+    });
+
+    describe("notifySubsribers()", () => {
+        it("Should notify all the subscribers", () => {
+            const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
+
+            spyOn(service, "notifySubsribers");
+            service.notifySubsribers(Event.GameClick, message);
+            expect(service.notifySubsribers).toHaveBeenCalled();
+        });
+
+        it("Should notify all the subscribers", () => {
+            const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
+            service["subscribers"] = new Map<string, SocketSubscriber[]>();
+
+            const event: Event = Event.NewUser;
+
+            service.notifySubsribers(Event.GameClick, message);
+            expect(service["subscribers"].has(event)).toBeFalsy();
+        });
+
+        it("Should notify all the subscribers", () => {
+            const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
+            service["subscribers"] = new Map<string, SocketSubscriber[]>();
+
+            const event: Event = Event.NewUser;
+
+            service.notifySubsribers(Event.GameClick, message);
+            expect(service["subscribers"].has(event)).toBeFalsy();
         });
     });
 });
