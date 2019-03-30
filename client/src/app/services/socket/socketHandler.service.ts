@@ -64,7 +64,7 @@ export class SocketHandlerService {
         sub.push(subscriber);
     }
 
-    private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
+    public notifySubsribers(event: Event, message: ICommonSocketMessage): void {
         if (this.subscribers.has(event)) {
             (this.subscribers.get(event) as SocketSubscriber[]).forEach((subscriber: SocketSubscriber) => {
                 subscriber.notify(event, message);
