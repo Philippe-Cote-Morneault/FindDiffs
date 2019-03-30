@@ -24,7 +24,6 @@ export class GameService implements SocketSubscriber {
     private gameStarted: boolean;
     private differenceSound: HTMLAudioElement;
     private differenceUser: HTMLElement;
-    private sceneSyncer: SceneSyncerService;
     public gameEnded: Subject<GameEnding>;
 
     public constructor(private socketService: SocketHandlerService) {
@@ -39,10 +38,6 @@ export class GameService implements SocketSubscriber {
     public setContainers(chronometer: HTMLElement, differenceCounterUser: HTMLElement): void {
         this.chronometer = chronometer;
         this.differenceUser = differenceCounterUser;
-    }
-
-    public setSceneSyncer(sceneSyncer: SceneSyncerService): void {
-        this.sceneSyncer = sceneSyncer;
     }
 
     private subscribeToSocket(): void {
@@ -124,6 +119,5 @@ export class GameService implements SocketSubscriber {
 
     private setControlsLock(isLocked: boolean): void {
         ControlsGenerator.isLocked = isLocked;
-        this.sceneSyncer.isLocked = isLocked;
     }
 }

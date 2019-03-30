@@ -80,7 +80,6 @@ export class GameViewFreeComponent implements OnInit {
         this.spinnerService.show();
         this.setServicesContainers();
         this.getGameCardById();
-        this.game.setSceneSyncer(this.sceneSyncer);
     }
 
     private setServicesContainers(): void {
