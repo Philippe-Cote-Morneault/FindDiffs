@@ -1,7 +1,9 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import * as io from "socket.io-client";
+import { ICommonError } from "../../../../../common/communication/webSocket/error";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { ICommonToken } from "../../../../../common/communication/webSocket/token";
 import { SERVER_URL } from "../../../../../common/url";
 import { IdentificationError } from "../IdentificationError/identificationError.service";
 import { SocketHandlerService } from "./socketHandler.service";
@@ -136,6 +138,80 @@ describe("SocketHandlerService", () => {
 
             (subscriber as SocketSubscriber).notify(event, message);
             expect(subscriber.notify).toHaveBeenCalledWith(event, message);
+        });
+    });
+
+    describe("init()", () => {
+        it("Should call the init method at least once", () => {
+            spyOn(service, "init");
+            service.init();
+            expect(service.init).toHaveBeenCalled();
+        });
+    });
+
+    describe("setEventListener()", () => {
+        it("Should emit an event to the server", () => {
+            const token: string | null = sessionStorage.getItem("token");
+            const testMsg: ICommonSocketMessage = {
+                // tslint:disable-next-line:no-non-null-assertion
+                data: token!,
+                timestamp: new Date(),
+            };
+            if (token) {
+                spyOn(socketClient, "emit").and.callFake((event: Event, message: ICommonSocketMessage, fct: Function) => {
+                    fct();
+                    event = Event.Authenticate;
+                    const tokendata: ICommonToken = {
+                        token: token,
+                    };
+                    message = {
+                        data: tokendata,
+                        timestamp: new Date(),
+                    };
+
+                    expect(event).toEqual(Event.Authenticate);
+                    expect(message.data).toEqual(testMsg.data);
+                    expect(socketClient.emit).toHaveBeenCalledWith(event, message);
+                });
+            }
+        });
+
+        it("Should emit an event to the server", () => {
+            const token: string | null = sessionStorage.getItem("token");
+            if (token) {
+                spyOn(socketClient, "emit").and.callFake((event: Event, message: ICommonSocketMessage, fct: Function) => {
+                    fct();
+                    event = Event.Authenticate;
+                    const tokendata: ICommonToken = {
+                        token: token,
+                    };
+                    message = {
+                        data: tokendata,
+                        timestamp: new Date(),
+                    };
+
+                    // tslint:disable-next-line:no-any
+                    spyOn<any>(service, "manageServerResponse");
+                    service["manageServerResponse"](message);
+                    expect(service["manageServerResponse"]).toHaveBeenCalled();
+                });
+            }
+        });
+    });
+
+    describe("manageServerResponse()", () => {
+        it("Should call onAuthenticate method", () => {
+            const errorResponse: ICommonError = {
+                error_message: "error",
+            };
+            // tslint:disable-next-line:no-any
+            spyOn<any>(service, "manageServerResponse").and.callFake(() => {
+                spyOn(service, "onAuthenticate");
+                service.onAuthenticate();
+            });
+
+            service["manageServerResponse"](errorResponse);
+            expect(service.onAuthenticate).toHaveBeenCalled();
         });
     });
 });
