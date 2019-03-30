@@ -1,9 +1,10 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
-import { SocketHandlerService } from "./socketHandler.service";
-import { SERVER_URL } from "../../../../../common/url";
 import * as io from "socket.io-client";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { SERVER_URL } from "../../../../../common/url";
+import { IdentificationError } from "../IdentificationError/identificationError.service";
+import { SocketHandlerService } from "./socketHandler.service";
 import { SocketSubscriber } from "./socketSubscriber";
 
 describe("SocketHandlerService", () => {
@@ -19,6 +20,8 @@ describe("SocketHandlerService", () => {
 
         spyOn(sessionStorage, "getItem").and.callFake(() => {
             returnValue = "hello";
+
+            // tslint:disable-next-line:no-non-null-assertion
             return returnValue!;
         });
     });
@@ -55,7 +58,8 @@ describe("SocketHandlerService", () => {
 
             service.manageAuthenticateEvent(message);
 
-            let returnValue2: string = sessionStorage.getItem("token")!;
+            // tslint:disable-next-line:no-non-null-assertion
+            const returnValue2: string = sessionStorage.getItem("token")!;
             expect(returnValue2).not.toEqual("");
         });
 
@@ -63,8 +67,9 @@ describe("SocketHandlerService", () => {
             const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
 
             service.manageAuthenticateEvent(message);
-            
-            let returnValue2: string = sessionStorage.getItem("token")!;
+
+            // tslint:disable-next-line:no-non-null-assertion
+            const returnValue2: string = sessionStorage.getItem("token")!;
             expect(returnValue2).toEqual(returnValue);
         });
     });
@@ -100,10 +105,17 @@ describe("SocketHandlerService", () => {
             const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
             service["subscribers"] = new Map<string, SocketSubscriber[]>();
 
-            const event: Event = Event.NewUser;
+            const event: Event = Event.InvalidClick;
 
-            service.notifySubsribers(Event.GameClick, message);
-            expect(service["subscribers"].has(event)).toBeFalsy();
+            const subscriber: IdentificationError = new IdentificationError(service);
+            if (!service["subscribers"].has(event)) {
+                service["subscribers"].set(event, []);
+            }
+            const sub: SocketSubscriber[] = service["subscribers"].get(event) as SocketSubscriber[];
+            sub.push(subscriber);
+
+            service.notifySubsribers(event, message);
+            expect(service["subscribers"].has(event)).toBeTruthy();
         });
     });
 });
