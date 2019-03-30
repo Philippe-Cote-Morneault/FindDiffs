@@ -33,15 +33,15 @@ export abstract class GameManager {
                                 successCallback: (data: Object | null) => void,
                                 failureCallback: () => void): void;
 
-    protected differenceFound(differenceId: string): void {
+    protected async differenceFound(differenceId: string): Promise<void> {
         this.differencesFound.set(differenceId, true);
         if (++this.game.differences_found === this.winningDifferenceCount) {
-            this.endGame();
+            await this.endGame();
         }
     }
 
-    private endGame(): void {
-        this.scoreUpdater.updateScore(this.game, Date.now() - (this.game.start_time as Date).valueOf(), GameType.Solo)
+    private async endGame(): Promise<void> {
+        await this.scoreUpdater.updateScore(this.game, Date.now() - (this.game.start_time as Date).valueOf(), GameType.Solo)
         .then((value: INewScore | null) => {
             if (value as INewScore) {
                 this.endGameCallback(this.game, this.game.players[0], value as INewScore);

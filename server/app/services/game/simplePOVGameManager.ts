@@ -20,9 +20,9 @@ export class SimplePOVGameManager extends GameManager {
                              failureCallback: () => void): Promise<void> {
 
          await this.pixelPositionService.postPixelPosition(this.game.ressource_id, position.x, position.y)
-            .then((value: ICommonReveal | null) => {
+            .then(async (value: ICommonReveal | null) => {
                 if (value && !this.differencesFound.get(value.difference_id.toString())) {
-                    this.differenceFound((value as ICommonReveal).difference_id.toString());
+                    await this.differenceFound((value as ICommonReveal).difference_id.toString());
                     successCallBack(value);
                 } else {
                     failureCallback();

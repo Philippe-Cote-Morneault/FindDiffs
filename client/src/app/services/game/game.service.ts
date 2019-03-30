@@ -6,6 +6,8 @@ import { ICommonDifferenceFound } from "../../../../../common/communication/webS
 import { ICommonGameEnding } from "../../../../../common/communication/webSocket/gameEnding";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameEnding } from "../../models/game/gameEnding";
+import { ControlsGenerator } from "../scene/sceneRenderer/controlsGenerator";
+import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
 
@@ -71,10 +73,12 @@ export class GameService implements SocketSubscriber {
         this.gameStarted = true;
         this.timer.addEventListener("secondsUpdated", () =>
             this.chronometer.innerText = this.getTimeValues());
+        this.setControlsLock(false);
     }
 
     private stopGame(message: ICommonSocketMessage): void {
         this.timer.stop();
+        this.setControlsLock(true);
         const time: string = this.formatPlayerTimer(message);
         const game: GameEnding = {
             isGameOver: true,
@@ -111,5 +115,9 @@ export class GameService implements SocketSubscriber {
     private format_two_digits(n: number): number | string {
 
         return n < GameService.MAX_TWO_DIGITS ? R.ZERO + n : n;
+    }
+
+    private setControlsLock(isLocked: boolean): void {
+        ControlsGenerator.isLocked = isLocked;
     }
 }

@@ -21,9 +21,9 @@ export class FreePOVGameManager extends GameManager {
 
         await this.scenePositionService.post3DClick(this.game.ressource_id, position.originalObjectId,
                                                     position.modifiedObjectId, position.gameType)
-            .then((value: ICommonReveal3D | null) => {
+            .then(async (value: ICommonReveal3D | null) => {
                 if (value && !this.differencesFound.get(value.difference_id)) {
-                    this.differenceFound((value as ICommonReveal3D).difference_id);
+                    await this.differenceFound((value as ICommonReveal3D).difference_id);
                     successCallback(value);
                 } else {
                     failureCallback();
