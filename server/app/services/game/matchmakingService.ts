@@ -1,11 +1,13 @@
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { SocketHandler } from "../socket/socketHandler";
+import { GameManager } from "./gameManager";
 import { GameService } from "./gameService";
 
 export class MatchmakingService {
     private static instance: MatchmakingService;
     private waitingRoom: Map<string, string>;
+    private loadingRoom: Map<string, string>;
     private gameService: GameService;
     private socketHandler: SocketHandler;
 
@@ -19,6 +21,7 @@ export class MatchmakingService {
 
     private constructor() {
         this.waitingRoom = new Map();
+        this.loadingRoom = new Map();
         this.gameService = GameService.getInstance();
         this.socketHandler = SocketHandler.getInstance();
         this.subscribeToSocket();
@@ -45,6 +48,17 @@ export class MatchmakingService {
             this.EndMatchmaking(firstPlayer);
             this.waitingRoom.delete(data.ressource_id);
         }
+    }
+
+    public matchLoadingGame(game: GameManager, player: string): void {
+        (this.loadingRoom.has(game.game.id)) ?
+        this.startMultiplayerGame(game) :
+        this.loadingRoom.set(game.game.id, player);
+    }
+
+    private startMultiplayerGame(game: GameManager): void {
+        this.gameService.startGame(game);
+        this.loadingRoom.delete(game.game.id);
     }
 
     private EndMatchmaking(player: string): void {
