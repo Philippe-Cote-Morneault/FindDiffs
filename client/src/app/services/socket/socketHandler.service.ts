@@ -41,19 +41,23 @@ export class SocketHandlerService {
                 };
 
                 this.socket.emit(Event.Authenticate, message, async (response: Object) => {
-                    if ((response as ICommonError).error_message) {
-                        alert((response as ICommonError).error_message);
-                        sessionStorage.removeItem("token");
-                        await this.router.navigateByUrl("/");
-                        this.onAuthenticate();
-                    } else {
-                        this.setEventListeners(this.socket);
-                    }
+                    this.manageServerResponse(response);
                 });
             } else {
                 this.onAuthenticate();
             }
         });
+    }
+
+    private async manageServerResponse(response: Object): Promise<void> {
+        if ((response as ICommonError).error_message) {
+            alert((response as ICommonError).error_message);
+            sessionStorage.removeItem("token");
+            await this.router.navigateByUrl("/");
+            this.onAuthenticate();
+        } else {
+            this.setEventListeners(this.socket);
+        }
     }
 
     public subscribe(event: Event, subscriber: SocketSubscriber): void {
