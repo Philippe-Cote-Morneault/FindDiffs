@@ -12,6 +12,7 @@ import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
+import { MatchmakingService } from "./matchmakingService";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
 
 export class GameService {
@@ -41,7 +42,7 @@ export class GameService {
             this.createSoloGame(message, player);
         });
         this.socketHandler.subscribe(Event.ReadyToPlay, (message: ICommonSocketMessage, player: string) => {
-            this.startSoloGame(message, player);
+            this.handlePlayer(message, player);
         });
         this.socketHandler.subscribe(Event.GameClick, (message: ICommonSocketMessage, player: string) => {
             this.gameClick(message, player);
@@ -90,18 +91,27 @@ export class GameService {
         this.activePlayers.set(secondPlayer, gameManager);
     }
 
-    private startSoloGame(message: ICommonSocketMessage, player: string): void {
+    private handlePlayer(message: ICommonSocketMessage, player: string): void {
         const game: GameManager | undefined = this.activePlayers.get(player);
         if (game === undefined) {
             throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
         }
 
+        (game.game.players.length) ?
+        this.startGame(game) :
+        MatchmakingService.getInstance().matchLoadingGame(game, player);
+
+    }
+
+    public startGame(game: GameManager): void {
         game.startGame();
         const socketMessage: ICommonSocketMessage = {
             data: "",
             timestamp: new Date(),
         };
-        this.socketHandler.sendMessage(Event.GameStarted, socketMessage, player);
+        game.game.players.forEach((player: string) => {
+            this.socketHandler.sendMessage(Event.GameStarted, socketMessage, player);
+        });
     }
 
     private endGame(game: Game, winner: string, score: INewScore): void {
