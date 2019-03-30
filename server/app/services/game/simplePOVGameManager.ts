@@ -8,7 +8,7 @@ import { GameManager } from "./gameManager";
 export class SimplePOVGameManager extends GameManager {
     private pixelPositionService: PixelPositionService;
 
-    public constructor(game: Game, winningDifferenceCount: number, 
+    public constructor(game: Game, winningDifferenceCount: number,
                        endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
 
         super(game, winningDifferenceCount, endGameCallback);
