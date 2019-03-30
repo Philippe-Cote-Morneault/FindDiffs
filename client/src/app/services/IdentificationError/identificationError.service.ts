@@ -31,7 +31,7 @@ export class IdentificationError implements SocketSubscriber {
         this.modified = modified;
     }
 
-    private subscribeToSocket(): void {
+    public subscribeToSocket(): void {
         this.socketService.subscribe(Event.InvalidClick, this);
     }
 
