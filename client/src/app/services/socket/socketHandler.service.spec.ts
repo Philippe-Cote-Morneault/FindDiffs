@@ -86,7 +86,7 @@ describe("SocketHandlerService", () => {
             expect(service.notifySubsribers).toHaveBeenCalled();
         });
 
-        it("Should notify all the subscribers", () => {
+        it("Should not notify all the subscribers", () => {
             const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
             service["subscribers"] = new Map<string, SocketSubscriber[]>();
 
