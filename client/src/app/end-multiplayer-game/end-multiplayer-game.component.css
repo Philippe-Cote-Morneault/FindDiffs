@@ -69,3 +69,12 @@ body {
     font-size: 30px;
     text-align: left;
   }
+
+  #buttons {
+    display: grid;
+    grid-auto-flow: column;
+  }
+
+  #buttons > * {
+    padding-bottom: 10px;
+  }
