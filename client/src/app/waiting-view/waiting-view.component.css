@@ -1,0 +1,20 @@
+.globalWrapper {
+    width: 80vw;
+    height: 80vh;
+    margin: auto auto;
+    background-color: #33343D;
+    border-radius: 20px;
+}
+
+.buttonDiv {
+    width: 4%;
+    height: 3%;
+    margin: auto auto;
+}
+
+.waitText {
+    width: 23%;
+    height: 3%; 
+    color: white;
+    margin: auto auto;
+}
