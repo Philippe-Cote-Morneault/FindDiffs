@@ -36,5 +36,30 @@ export class EndMultiplayerGameComponent implements OnInit {
     this.verifyWinCondition();
   }
 
+  private getGameCardById(): void {
+    this.gamesCardService.getGameById(this.gameCardId).subscribe((gameCard: ICommonGameCard) => {
+      this.gameCard = gameCard;
+    });
+  }
 
+  public toMinutes(index: number, times: ICommonScoreEntry[]): string {
+    return StringFormater.secondsToMinutes(times[index].score);
+  }
+
+  private verifyWinCondition(): void {
+    if (sessionStorage.getItem("user") === this.winner) {
+      this.endingMessage = "You won!";
+      this.tryAgain.nativeElement.style.display = "none";
+    } else {
+      this.endingMessage = "You lost!";
+    }
+  }
+
+  public async leaveGame(): Promise<void> {
+    await this.router.navigateByUrl("/gamesList");
+  }
+
+  public async resetGame(): Promise<void> {
+    await this.router.navigateByUrl(this.waitingScreenPath);
+  }
 }
