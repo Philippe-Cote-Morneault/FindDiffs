@@ -80,8 +80,10 @@ export class GameService implements SocketSubscriber {
         this.timer.stop();
         this.setControlsLock(true);
         const time: string = this.formatPlayerTimer(message);
+        const winner: string = (message.data as ICommonGameEnding).winner;
         const game: GameEnding = {
             isGameOver: true,
+            winner: winner,
             time: time,
         };
         this.chronometer.innerText = time;
