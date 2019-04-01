@@ -82,7 +82,7 @@ export class ScoreService extends Service implements IScoreService {
             const newScore: INewScore = this.verifyScore(req, doc);
 
             if (newScore.is_top_score) {
-                const i = (newScore.details as INewScoreDetails).place - 1;
+                const i: number = (newScore.details as INewScoreDetails).place - 1;
                 const scoreEntryName: string = req.body.type === GameType.Online ? "best_time_online" : "best_time_solo";
                 const scoreEntries: ICommonScoreEntry[] = JSON.parse(JSON.stringify(doc[scoreEntryName]));
                 scoreEntries[i].name = req.body.username;
