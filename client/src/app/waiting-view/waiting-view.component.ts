@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { MatchmakingService } from "../services/game/matchmaking.service";
 
 @Component({
   selector: "app-waiting-view",
@@ -8,7 +9,7 @@ import { Component, EventEmitter, Output } from "@angular/core";
 export class WaitingViewComponent {
   @Output() public closed: EventEmitter<boolean>;
 
-  public constructor() {
+  public constructor(public matchmakingService: MatchmakingService) {
     this.closed = new EventEmitter();
   }
 
