@@ -43,7 +43,7 @@ export class MatchmakingService {
     private createMultiplayersGame(data: ICommonGame, secondPlayer: string): void {
         const firstPlayer: string | undefined = this.waitingRoom.get(data.ressource_id);
         if (firstPlayer) {
-            this.gameService.createMultiplayerGame(data, firstPlayer, secondPlayer);
+            this.gameService.createGame([firstPlayer, secondPlayer], data, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT);
             this.EndMatchmaking(secondPlayer);
             this.EndMatchmaking(firstPlayer);
             this.waitingRoom.delete(data.ressource_id);
