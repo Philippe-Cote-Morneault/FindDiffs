@@ -51,21 +51,16 @@ export class ObjectRestorationService implements SocketSubscriber {
     switch (response.differenceType) {
         case DifferenceType.removedObject:
             this.addObject(this.detectedObjects.original, scenes, false);
-            // await this.addDifference(this.detectedObjects.original.userData.id);
             break;
         case DifferenceType.colorChanged:
             this.changeColorObject(this.detectedObjects.original, this.detectedObjects.modified);
-            // await this.addDifference(this.detectedObjects.original.userData.id);
             break;
         case DifferenceType.textureObjectChanged:
-            // tslint:disable-next-line: max-line-length
             this.changeTextureObject(this.detectedObjects.original,
                                      this.detectedObjects.modified, scenes);
-            // await this.addDifference(this.detectedObjects.original.userData.id);
             break;
         case DifferenceType.addedObject:
             this.removeObject(this.detectedObjects.modified, scenes);
-            // await this.addDifference(this.detectedObjects.modified.userData.id);
             break;
         default:
             break;
@@ -115,11 +110,6 @@ export class ObjectRestorationService implements SocketSubscriber {
 
   public addDifference(differenceId: string): void {
         this.differenceFound[this.differenceFound.length++] = differenceId;
-        // this.differenceCounterUser = this.differenceCounterUser + 1;
-        // await this.differenceSound.play();
-        // if (this.differenceCounterUser === GameViewFreeComponent.MAX_DIFFERENCES) {
-        //     this.gameOver();
-        // }
     }
 
   private isANewDifference(differenceId: string): boolean {

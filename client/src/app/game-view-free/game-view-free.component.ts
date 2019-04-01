@@ -47,6 +47,7 @@ export class GameViewFreeComponent implements OnInit {
     private meshesModified: THREE.Object3D[] = [];
     public isGameOver: boolean;
     public playerTime: string;
+    public winner: string;
 
     public constructor( private route: ActivatedRoute,
                         private spinnerService: Ng4LoadingSpinnerService,
@@ -67,6 +68,7 @@ export class GameViewFreeComponent implements OnInit {
         this.game.gameEnded.subscribe((value) => {
             this.playerTime = value.time;
             this.isGameOver = value.isGameOver;
+            this.winner = value.winner;
         });
         this.game.resetTime();
     }
@@ -106,7 +108,6 @@ export class GameViewFreeComponent implements OnInit {
         });
     }
 
-    // tslint:disable
     private loadScene(): void {
         this.sceneService.getSceneById(this.scenePairId).subscribe(async (sceneResponse: ICommonScene) => {
             this.sceneService.getModifiedSceneById(this.scenePairId).subscribe(async (sceneModified: ICommonSceneModifications) => {
@@ -125,20 +126,24 @@ export class GameViewFreeComponent implements OnInit {
                         this.currentModifiedScene,
                 );
 
-                this.sceneSyncer.syncScenesMovement(
-                    this.originalSceneLoader.camera, this.originalScene.nativeElement,
-                    this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
-                this.spinnerService.hide();
-
-                this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
-                this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
+                this.prepareScene();
                 this.setRestoreObjectService();
-                this.clickEvent(this.originalScene.nativeElement, true);
-                this.clickEvent(this.modifiedScene.nativeElement, false);
-
-                this.socketHandler.emitMessage(Event.ReadyToPlay, null);
             });
         });
+    }
+
+    private prepareScene(): void {
+        this.sceneSyncer.syncScenesMovement(
+            this.originalSceneLoader.camera, this.originalScene.nativeElement,
+            this.modifiedSceneLoader.camera, this.modifiedScene.nativeElement);
+        this.spinnerService.hide();
+
+        this.fillMeshes(this.meshesOriginal, this.originalSceneLoader);
+        this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
+        this.clickEvent(this.originalScene.nativeElement, true);
+        this.clickEvent(this.modifiedScene.nativeElement, false);
+
+        this.socketHandler.emitMessage(Event.ReadyToPlay, null);
     }
 
     private setRestoreObjectService(): void {
@@ -153,7 +158,7 @@ export class GameViewFreeComponent implements OnInit {
     }
 
     private clickEvent(scene: HTMLElement, isOriginalScene: boolean): void {
-        scene.addEventListener("click", (event: MouseEvent) =>
+        scene.addEventListener("click", async (event: MouseEvent) =>
                     this.objectHandler.clickOnScene(event, isOriginalScene));
     }
 

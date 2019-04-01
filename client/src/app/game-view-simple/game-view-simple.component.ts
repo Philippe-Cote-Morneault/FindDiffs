@@ -33,6 +33,7 @@ export class GameViewSimpleComponent implements OnInit {
     private imagePairId: string;
     public isGameOver: boolean;
     public playerTime: string;
+    public winner: string;
 
     public constructor(
         private route: ActivatedRoute,
@@ -49,6 +50,7 @@ export class GameViewSimpleComponent implements OnInit {
         this.game.gameEnded.subscribe((value) => {
             this.playerTime = value.time;
             this.isGameOver = value.isGameOver;
+            this.winner = value.winner;
         });
         this.game.resetTime();
     }
