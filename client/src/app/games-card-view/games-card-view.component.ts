@@ -66,11 +66,11 @@ export class GamesCardViewComponent implements OnInit {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
 
             this.playGame(gameUrl);
-            this.emitPlaySoloGame();
+            this.emitPlayGame(Event.PlaySoloGame);
         }
     }
 
-    private emitPlaySoloGame(): void {
+    private emitPlayGame(event: Event): void {
         const game: ICommonGame = {
             ressource_id: this.gameCard.resource_id,
             game_card_id: this.gameCard.id,
@@ -80,20 +80,7 @@ export class GamesCardViewComponent implements OnInit {
             data: game,
             timestamp: new Date(),
         };
-        this.socketHandlerService.emitMessage(Event.PlaySoloGame, message);
-    }
-
-    private emitPlayMultiplayerGame(): void {
-        const game: ICommonGame = {
-            ressource_id: this.gameCard.resource_id,
-            game_card_id: this.gameCard.id,
-            pov: +POVType[this.gameCard.pov],
-        };
-        const message: ICommonSocketMessage = {
-            data: game,
-            timestamp: new Date(),
-        };
-        this.socketHandlerService.emitMessage(Event.PlayMultiplayerGame, message);
+        this.socketHandlerService.emitMessage(event, message);
     }
 
     private async playGame(gameUrl: string): Promise<void> {
@@ -111,7 +98,7 @@ export class GamesCardViewComponent implements OnInit {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
 
             this.playGame(gameUrl);
-            this.emitPlayMultiplayerGame();
+            this.emitPlayGame(Event.PlayMultiplayerGame);
         }
     }
 
