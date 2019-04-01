@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ICommonGameCard, POVType } from "../../../../common/model/gameCard";
+import { MatchmakingService } from "../services/game/matchmaking.service";
 import { GameCardLoaderService } from "../services/gameCard/gameCardLoader.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 
@@ -16,7 +17,8 @@ export class GamesListViewComponent implements OnInit {
 
     public constructor(
         public gameCardsService: GamesCardService,
-        public gameCardLoaderService: GameCardLoaderService) {
+        public gameCardLoaderService: GameCardLoaderService,
+        public matchmakingService: MatchmakingService) {
             this.isInAdminView = false;
     }
 
