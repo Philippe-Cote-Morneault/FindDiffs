@@ -19,10 +19,8 @@ export class MatchmakingService implements SocketSubscriber {
     }
 
     public async notify(event: Event, message: ICommonSocketMessage): Promise<void> {
-        if (event === Event.EndMatchmaking) {
-            const game: ICommonGame = message.data as ICommonGame;
-            const gameUrl: string = (game.pov) ? "/gameFree/" : "/gameSimple/";
-            this.router.navigateByUrl(gameUrl + game.game_card_id);
-        }
+        const game: ICommonGame = message.data as ICommonGame;
+        const gameUrl: string = (game.pov) ? "/gameFree/" : "/gameSimple/";
+        this.router.navigateByUrl(gameUrl + game.game_card_id);
     }
 }
