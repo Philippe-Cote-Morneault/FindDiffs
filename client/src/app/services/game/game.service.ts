@@ -24,6 +24,7 @@ export class GameService implements SocketSubscriber {
     private differenceSound: HTMLAudioElement;
     private differenceUser: HTMLElement;
     public gameEnded: Subject<GameEnding>;
+    private username: string | null;
 
     public constructor(private socketService: SocketHandlerService) {
         this.timer = new Timer();
@@ -31,6 +32,7 @@ export class GameService implements SocketSubscriber {
         this.gameEnded = new Subject<GameEnding>();
         this.differenceSound = new Audio;
         this.differenceSound.src = R.DIFFERENCE_SOUND_SRC;
+        this.username = sessionStorage.getItem("user");
         this.subscribeToSocket();
     }
 
@@ -90,8 +92,10 @@ export class GameService implements SocketSubscriber {
     }
 
     private async differenceFound(message: ICommonSocketMessage): Promise<void> {
-        const difference: number = (message.data as ICommonDifferenceFound).difference_count;
-        this.differenceUser.innerText = JSON.stringify(difference);
+        const difference: ICommonDifferenceFound = message.data as ICommonDifferenceFound;
+        if (difference.player === this.username) {
+            this.differenceUser.innerText = JSON.stringify(difference.difference_count);
+        }
         await this.differenceSound.play();
     }
 
