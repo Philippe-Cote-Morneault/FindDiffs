@@ -78,3 +78,7 @@ body {
   #buttons > * {
     padding-bottom: 10px;
   }
+
+  #tryAgain {
+    display: none;
+  }

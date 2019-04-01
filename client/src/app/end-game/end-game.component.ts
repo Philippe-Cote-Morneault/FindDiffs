@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ICommonGameCard, ICommonScoreEntry } from "../../../../common/model/gameCard";
+import { R } from "../ressources/strings";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { StringFormater } from "../util/stringFormater";
 
@@ -26,6 +27,8 @@ export class EndGameComponent implements OnInit {
     public gamesCardService: GamesCardService,
     private router: Router) {
     this.waitingScreenPath = "/gamesList";
+    this.endingMessage = R.MESSAGE_WIN;
+    this.gameCardId = "";
   }
 
   public ngOnInit(): void {
@@ -47,11 +50,9 @@ export class EndGameComponent implements OnInit {
   }
 
   private verifyWinCondition(): void {
-    if (sessionStorage.getItem("user") === this.winner) {
-      this.endingMessage = "You win!";
-      this.tryAgain.nativeElement.style.display = "none";
-    } else {
-      this.endingMessage = "You lose!";
+    if (sessionStorage.getItem("user") !== this.winner) {
+      this.tryAgain.nativeElement.style.display = "block";
+      this.endingMessage = R.MESSAGE_LOSE;
     }
   }
 
