@@ -30,7 +30,7 @@ export class GamesCardViewComponent implements OnInit {
     public rightButton: string;
     public simplePOV: string;
 
-    private waitOpponent: boolean;
+    public waitOpponent: boolean;
 
     public constructor(
         private gamesCardService: GamesCardService,
@@ -97,7 +97,6 @@ export class GamesCardViewComponent implements OnInit {
     private async playMultiplayerGame(): Promise<void> {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             ((response as ICommonGameCard).id) ?
-                // à changer, affiche le pop up au lieu de router.
                 this.waitOpponent = true :
                 alert("This game has been deleted, please try another one.");
         });
@@ -151,7 +150,11 @@ export class GamesCardViewComponent implements OnInit {
     public onClosed(closed: boolean): void {
         if (closed) {
             this.waitOpponent = false;
+            const message: ICommonSocketMessage = {
+                data: this.gameCard.resource_id,
+                timestamp: new Date(),
+            };
+            this.socketHandlerService.emitMessage(Event.CancelMatchmaking, message);
         }
     }
-
 }
