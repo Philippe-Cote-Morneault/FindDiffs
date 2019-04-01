@@ -1,55 +1,63 @@
-// import { expect } from "chai";
-// tslint:disable-next-line:ordered-imports
-// import * as THREE from "three";
-// import { CameraGenerator } from "./cameraGenerator";
-// import { ControlsGenerator } from "./controlsGenerator";
+import { expect } from "chai";
+import * as sinon from "sinon";
+import * as THREE from "three";
+import { ControlsGenerator } from "./controlsGenerator";
 
+// tslint:disable: no-magic-numbers
+// tslint:disable: no-empty
 describe("ControlsGenerator", () => {
-    /*
-    describe("generateGameCardControls()", () => {
-        const controls: THREE.OrbitControls = ControlsGenerator.generateGameControls(
-            // tslint:disable-next-line:no-magic-numbers
-            CameraGenerator.createCamera(123, 45),
-            document.createElement("canvas"),
-        );
-
-        it("Should create controls with disabled keys.", () => {
-            expect(controls.enableKeys).to.equal(false);
+    let mockCamera: THREE.PerspectiveCamera;
+    let mockCanvas: HTMLCanvasElement;
+    beforeEach(() => {
+        mockCamera = new THREE.PerspectiveCamera(45, (4 / 3), 0.1, 1000);
+        mockCanvas = (document.createElement("canvas") as HTMLCanvasElement);
+    });
+    describe("generateGameControls", () => {
+        it("should add an event listener to the document", () => {
+            const stub: sinon.SinonStub = sinon.stub(document, "addEventListener").callsFake(() => {});
+            ControlsGenerator.generateGameControls(mockCamera, mockCanvas);
+            sinon.assert.calledOnce(stub);
+            stub.restore();
         });
 
-        it("Should create controls with autoRotate enabled.", () => {
-            expect(controls.autoRotate).to.equal(true);
+        it("should do nothing if nothing is pressed", () => {
+            const newPosition: THREE.Vector3 = mockCamera.position;
+            const mockEvent: KeyboardEvent = new KeyboardEvent("keydown", {key: ""});
+            ControlsGenerator.generateGameControls(mockCamera, mockCanvas);
+            document.dispatchEvent(mockEvent);
+            expect(mockCamera.position).to.equal(newPosition);
         });
 
-        it("Should create controls with disabled keys.", () => {
-            expect(controls.target.x).to.equal(0);
-            // tslint:disable-next-line:no-magic-numbers
-            expect(controls.target.y).to.equal(10);
-            expect(controls.target.z).to.equal(0);
+        it("should move the camera by 1 unit in the -z direction when w is pressed", () => {
+            const newPosition: THREE.Vector3 = new THREE.Vector3(0, 0, mockCamera.position.z - 1);
+            const mockEvent: KeyboardEvent = new KeyboardEvent("keydown", {key: "w"});
+            ControlsGenerator.generateGameControls(mockCamera, mockCanvas);
+            document.dispatchEvent(mockEvent);
+            expect(mockCamera.position.z).to.equal(newPosition.z);
+        });
+
+        it("should move the camera by 1 unit in the z direction when s is pressed", () => {
+            const newPosition: THREE.Vector3 = new THREE.Vector3(0, 0, mockCamera.position.z + 1);
+            const mockEvent: KeyboardEvent = new KeyboardEvent("keydown", {key: "s"});
+            ControlsGenerator.generateGameControls(mockCamera, mockCanvas);
+            document.dispatchEvent(mockEvent);
+            expect(mockCamera.position.z).to.equal(newPosition.z);
+        });
+
+        it("should move the camera by 1 unit in the -x direction when a is pressed", () => {
+            const newPosition: THREE.Vector3 = new THREE.Vector3(mockCamera.position.x - 1, 0, 0);
+            const mockEvent: KeyboardEvent = new KeyboardEvent("keydown", {key: "a"});
+            ControlsGenerator.generateGameControls(mockCamera, mockCanvas);
+            document.dispatchEvent(mockEvent);
+            expect(mockCamera.position.x).to.equal(newPosition.x);
+        });
+
+        it("should move the camera by 1 unit in the x direction when d is pressed", () => {
+            const newPosition: THREE.Vector3 = new THREE.Vector3(mockCamera.position.x + 1, 0, 0);
+            const mockEvent: KeyboardEvent = new KeyboardEvent("keydown", {key: "d"});
+            ControlsGenerator.generateGameControls(mockCamera, mockCanvas);
+            document.dispatchEvent(mockEvent);
+            expect(mockCamera.position.x).to.equal(newPosition.x);
         });
     });
-
-    describe("generateGameControls()", () => {
-        const controls: THREE.OrbitControls = ControlsGenerator.generateGameControls(
-            // tslint:disable-next-line:no-magic-numbers
-            CameraGenerator.createCamera(123, 45),
-            document.createElement("canvas"),
-        );
-
-        it("Should create controls with enabled keys.", () => {
-            expect(controls.enableKeys).to.equal(true);
-        });
-
-        it("Should create controls with autoRotate disabled.", () => {
-            expect(controls.autoRotate).to.equal(false);
-        });
-
-        it("Should create controls with disabled keys.", () => {
-            expect(controls.target.x).to.equal(0);
-            // tslint:disable-next-line:no-magic-numbers
-            expect(controls.target.y).to.equal(10);
-            expect(controls.target.z).to.equal(0);
-        });
-    });
-    */
 });

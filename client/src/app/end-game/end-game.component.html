@@ -7,7 +7,7 @@
   <div class="popuptext" id="myPopup">
     <div class="global-wrapper">
       <h1>
-        You win!
+        {{endingMessage}}
       </h1>
       <div class="grid-container">
         <div>
@@ -20,7 +20,14 @@
           <div class="grid-item">{{playerTimeChild}}</div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" (click)="leaveGame()">Continue</button>
+      <div #buttons id="buttons">
+        <div>
+          <button type="submit" class="btn btn-success" (click)="leaveGame()">Continue</button>
+        </div>
+        <div #tryAgain id="tryAgain">
+          <button type="submit" class="btn btn-success" (click)="resetGame()">Play again?</button>
+        </div>
+      </div>
     </div>
   </div>
 </body>
