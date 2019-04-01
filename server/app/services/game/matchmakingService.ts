@@ -44,8 +44,8 @@ export class MatchmakingService {
         const firstPlayer: string | undefined = this.waitingRoom.get(data.ressource_id);
         if (firstPlayer) {
             this.gameService.createMultiplayerGame(data, firstPlayer, secondPlayer);
-            this.EndMatchmaking(secondPlayer);
-            this.EndMatchmaking(firstPlayer);
+            this.EndMatchmaking(secondPlayer, data);
+            this.EndMatchmaking(firstPlayer, data);
             this.waitingRoom.delete(data.ressource_id);
         }
     }
@@ -61,9 +61,9 @@ export class MatchmakingService {
         this.loadingRoom.delete(game.game.id);
     }
 
-    private EndMatchmaking(player: string): void {
+    private EndMatchmaking(player: string, game: ICommonGame): void {
         const socketMessage: ICommonSocketMessage = {
-            data: "",
+            data: game,
             timestamp: new Date(),
         };
         this.socketHandler.sendMessage(Event.EndMatchmaking, socketMessage, player);
