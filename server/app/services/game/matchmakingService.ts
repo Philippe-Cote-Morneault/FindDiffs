@@ -48,8 +48,8 @@ export class MatchmakingService {
         const firstPlayer: string | undefined = this.waitingRoom.get(data.ressource_id);
         if (firstPlayer) {
             this.gameService.createGame([firstPlayer, secondPlayer], data, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT);
-            this.EndMatchmaking(secondPlayer);
-            this.EndMatchmaking(firstPlayer);
+            this.EndMatchmaking(secondPlayer, data);
+            this.EndMatchmaking(firstPlayer, data);
             this.waitingRoom.delete(data.ressource_id);
         }
     }
