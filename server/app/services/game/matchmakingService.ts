@@ -54,7 +54,7 @@ export class MatchmakingService {
         const firstPlayer: string | undefined = this.waitingRoom.get(data.ressource_id);
 
         if (firstPlayer) {
-            this.gameService.createMultiplayerGame(data, firstPlayer, secondPlayer);
+            this.gameService.createGame([firstPlayer, secondPlayer], data, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT);
             this.EndMatchmaking(secondPlayer, data);
             this.EndMatchmaking(firstPlayer, data);
             this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);

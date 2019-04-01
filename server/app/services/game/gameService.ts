@@ -39,7 +39,7 @@ export class GameService {
 
     private subscribeToSocket(): void {
         this.socketHandler.subscribe(Event.PlaySoloGame, (message: ICommonSocketMessage, player: string) => {
-            this.createSoloGame(message, player);
+            this.createGame([player], message.data as ICommonGame, GameManager.SOLO_WINNING_DIFFERENCES_COUNT);
         });
         this.socketHandler.subscribe(Event.ReadyToPlay, (message: ICommonSocketMessage, player: string) => {
             this.handlePlayer(message, player);
@@ -49,46 +49,27 @@ export class GameService {
         });
     }
 
-    private createSoloGame(message: ICommonSocketMessage, player: string): void {
-        const data: ICommonGame = message.data as ICommonGame;
+    public createGame(players: string[], commonGame: ICommonGame, differenceCount: number): void {
         const newGame: Game = {
             id: uuid.v4(),
-            ressource_id: data.ressource_id,
-            players: [player],
+            ressource_id: commonGame.ressource_id,
+            players: players,
             start_time: undefined,
             differences_found: 0,
-            game_card_id: data.game_card_id,
+            game_card_id: commonGame.game_card_id,
         };
+
         const endGameCallback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => {
             this.endGame(game, winner, score);
         };
-        const gameManager: GameManager = data.pov === POVType.Simple ?
-            new SimplePOVGameManager(newGame, GameManager.SOLO_WINNING_DIFFERENCES_COUNT, endGameCallback) :
-            new FreePOVGameManager(newGame, GameManager.SOLO_WINNING_DIFFERENCES_COUNT, endGameCallback);
+        const gameManager: GameManager = commonGame.pov === POVType.Simple ?
+            new SimplePOVGameManager(newGame, differenceCount, endGameCallback) :
+            new FreePOVGameManager(newGame, differenceCount, endGameCallback);
 
         this.activeGames.push(gameManager);
-        this.activePlayers.set(player, gameManager);
-    }
-
-    public createMultiplayerGame(data: ICommonGame, firstPlayer: string, secondPlayer: string): void {
-        const newGame: Game = {
-            id: uuid.v4(),
-            ressource_id: data.ressource_id,
-            players: [firstPlayer, secondPlayer],
-            start_time: undefined,
-            differences_found: 0,
-            game_card_id: data.game_card_id,
-        };
-        const endGameCallback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => {
-            this.endGame(game, winner, score);
-        };
-        const gameManager: GameManager = data.pov === POVType.Simple ?
-            new SimplePOVGameManager(newGame, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT, endGameCallback) :
-            new FreePOVGameManager(newGame, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT, endGameCallback);
-
-        this.activeGames.push(gameManager);
-        this.activePlayers.set(firstPlayer, gameManager);
-        this.activePlayers.set(secondPlayer, gameManager);
+        players.forEach((player: string) => {
+            this.activePlayers.set(player, gameManager);
+        });
     }
 
     private handlePlayer(message: ICommonSocketMessage, player: string): void {
