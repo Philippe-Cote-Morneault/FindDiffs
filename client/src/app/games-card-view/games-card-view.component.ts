@@ -65,7 +65,7 @@ export class GamesCardViewComponent implements OnInit {
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
 
-            this.playGame(gameUrl);
+            this.playSoloGame(gameUrl);
             this.emitPlayGame(Event.PlaySoloGame);
         }
     }
@@ -83,9 +83,18 @@ export class GamesCardViewComponent implements OnInit {
         this.socketHandlerService.emitMessage(event, message);
     }
 
-    private async playGame(gameUrl: string): Promise<void> {
+    private async playSoloGame(gameUrl: string): Promise<void> {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             ((response as ICommonGameCard).id) ?
+                await this.router.navigateByUrl(gameUrl + this.gameCard.id) :
+                alert("This game has been deleted, please try another one.");
+        });
+    }
+
+    private async playMultiplayerGame(gameUrl: string): Promise<void> {
+        await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+            ((response as ICommonGameCard).id) ?
+                // à changer, affiche le pop up au lieu de router.
                 await this.router.navigateByUrl(gameUrl + this.gameCard.id) :
                 alert("This game has been deleted, please try another one.");
         });
@@ -97,7 +106,7 @@ export class GamesCardViewComponent implements OnInit {
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
 
-            this.playGame(gameUrl);
+            this.playMultiplayerGame(gameUrl);
             this.emitPlayGame(Event.PlayMultiplayerGame);
         }
     }
