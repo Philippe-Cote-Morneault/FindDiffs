@@ -5,11 +5,11 @@ import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { StringFormater } from "../util/stringFormater";
 
 @Component({
-  selector: "app-end-multiplayer-game",
-  templateUrl: "./end-multiplayer-game.component.html",
-  styleUrls: ["./end-multiplayer-game.component.css"],
+  selector: "app-end-game",
+  templateUrl: "./end-game.component.html",
+  styleUrls: ["./end-game.component.css"],
 })
-export class EndMultiplayerGameComponent implements OnInit {
+export class EndGameComponent implements OnInit {
 
   @ViewChild("tryAgain") private tryAgain: ElementRef;
 
@@ -48,10 +48,10 @@ export class EndMultiplayerGameComponent implements OnInit {
 
   private verifyWinCondition(): void {
     if (sessionStorage.getItem("user") === this.winner) {
-      this.endingMessage = "You won!";
+      this.endingMessage = "You win!";
       this.tryAgain.nativeElement.style.display = "none";
     } else {
-      this.endingMessage = "You lost!";
+      this.endingMessage = "You lose!";
     }
   }
 
