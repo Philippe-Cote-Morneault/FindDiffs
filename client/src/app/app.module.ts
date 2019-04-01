@@ -18,6 +18,7 @@ import { GamesCardViewComponent } from "./games-card-view/games-card-view.compon
 import { GamesListViewComponent } from "./games-list-view/games-list-view.component";
 import { InitialViewComponent } from "./initial-view/initial-view.component";
 import { GameCardLoaderService } from "./services/gameCard/gameCardLoader.service";
+import { WaitingViewComponent } from "./waiting-view/waiting-view.component";
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { GameCardLoaderService } from "./services/gameCard/gameCardLoader.servic
         GameViewSimpleComponent,
         CreateGameFreeViewComponent,
         GameViewFreeComponent,
+        WaitingViewComponent,
         EndGameComponent,
     ],
     imports: [
