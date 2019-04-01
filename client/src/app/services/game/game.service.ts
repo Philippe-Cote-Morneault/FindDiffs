@@ -7,7 +7,6 @@ import { ICommonGameEnding } from "../../../../../common/communication/webSocket
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameEnding } from "../../models/game/gameEnding";
 import { ControlsGenerator } from "../scene/sceneRenderer/controlsGenerator";
-import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
 
