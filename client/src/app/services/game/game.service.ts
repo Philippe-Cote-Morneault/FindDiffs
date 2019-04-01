@@ -24,6 +24,7 @@ export class GameService implements SocketSubscriber {
     private differenceSound: HTMLAudioElement;
     private differenceUser: HTMLElement;
     public gameEnded: Subject<GameEnding>;
+    private username: string | null;
 
     public constructor(private socketService: SocketHandlerService) {
         this.timer = new Timer();
@@ -31,6 +32,7 @@ export class GameService implements SocketSubscriber {
         this.gameEnded = new Subject<GameEnding>();
         this.differenceSound = new Audio;
         this.differenceSound.src = R.DIFFERENCE_SOUND_SRC;
+        this.username = sessionStorage.getItem("user");
         this.subscribeToSocket();
     }
 
@@ -79,8 +81,10 @@ export class GameService implements SocketSubscriber {
         this.timer.stop();
         this.setControlsLock(true);
         const time: string = this.formatPlayerTimer(message);
+        const winner: string = (message.data as ICommonGameEnding).winner;
         const game: GameEnding = {
             isGameOver: true,
+            winner: winner,
             time: time,
         };
         this.chronometer.innerText = time;
@@ -88,8 +92,10 @@ export class GameService implements SocketSubscriber {
     }
 
     private async differenceFound(message: ICommonSocketMessage): Promise<void> {
-        const difference: number = (message.data as ICommonDifferenceFound).difference_count;
-        this.differenceUser.innerText = JSON.stringify(difference);
+        const difference: ICommonDifferenceFound = message.data as ICommonDifferenceFound;
+        if (difference.player === this.username) {
+            this.differenceUser.innerText = JSON.stringify(difference.difference_count);
+        }
         await this.differenceSound.play();
     }
 
@@ -102,10 +108,10 @@ export class GameService implements SocketSubscriber {
     }
 
     private formatPlayerTimer(message: ICommonSocketMessage): string {
-        let seconds: number | string = (message.data as ICommonGameEnding).time / GameService.MS_IN_SEC;
+        let seconds: number | string =  (message.data as ICommonGameEnding).time / GameService.MS_IN_SEC;
 
         // tslint:disable:radix
-        const minutes: number | string = this.format_two_digits(Math.round(seconds / GameService.SEC_IN_MIN));
+        const minutes: number | string = this.format_two_digits(Math.floor(seconds / GameService.SEC_IN_MIN));
         seconds = this.format_two_digits(Math.round(seconds % GameService.SEC_IN_MIN));
 
         return minutes + R.COLON + seconds;

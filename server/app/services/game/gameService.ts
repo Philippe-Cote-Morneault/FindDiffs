@@ -78,7 +78,7 @@ export class GameService {
             throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
         }
 
-        (game.game.players.length) ?
+        (game.game.players.length === 1) ?
         this.startGame(game) :
         MatchmakingService.getInstance().matchLoadingGame(game, player);
 

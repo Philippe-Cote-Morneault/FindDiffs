@@ -31,6 +31,9 @@ export class MatchmakingService {
         this.socketHandler.subscribe(Event.PlayMultiplayerGame, (message: ICommonSocketMessage, player: string) => {
             this.matchPlayers(message, player);
         });
+        this.socketHandler.subscribe(Event.CancelMatchmaking, (message: ICommonSocketMessage, player: string) => {
+            this.waitingRoom.delete(message.data as string);
+        });
     }
 
     public matchPlayers(message: ICommonSocketMessage, player: string): void {
@@ -38,6 +41,7 @@ export class MatchmakingService {
         (this.waitingRoom.has(data.ressource_id)) ?
         this.createMultiplayersGame(data, player) :
         this.waitingRoom.set(data.ressource_id, player);
+
     }
 
     private createMultiplayersGame(data: ICommonGame, secondPlayer: string): void {
@@ -61,9 +65,9 @@ export class MatchmakingService {
         this.loadingRoom.delete(game.game.id);
     }
 
-    private EndMatchmaking(player: string): void {
+    private EndMatchmaking(player: string, game: ICommonGame): void {
         const socketMessage: ICommonSocketMessage = {
-            data: "",
+            data: game,
             timestamp: new Date(),
         };
         this.socketHandler.sendMessage(Event.EndMatchmaking, socketMessage, player);

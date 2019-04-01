@@ -30,6 +30,8 @@ export class GamesCardViewComponent implements OnInit {
     public rightButton: string;
     public simplePOV: string;
 
+    public waitOpponent: boolean;
+
     public constructor(
         private gamesCardService: GamesCardService,
         private sceneService: SceneService,
@@ -40,6 +42,7 @@ export class GamesCardViewComponent implements OnInit {
             this.leftButton = "Play";
             this.simplePOV = "Simple";
             this.isInAdminView = false;
+            this.waitOpponent = false;
         }
 
     public ngOnInit(): void {
@@ -65,12 +68,12 @@ export class GamesCardViewComponent implements OnInit {
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
 
-            this.emitPlaySoloGame();
-            await this.router.navigateByUrl(gameUrl + this.gameCard.id);
+            this.playSoloGame(gameUrl);
+            this.emitPlayGame(Event.PlaySoloGame);
         }
     }
 
-    private emitPlaySoloGame(): void {
+    private emitPlayGame(event: Event): void {
         const game: ICommonGame = {
             ressource_id: this.gameCard.resource_id,
             game_card_id: this.gameCard.id,
@@ -80,12 +83,31 @@ export class GamesCardViewComponent implements OnInit {
             data: game,
             timestamp: new Date(),
         };
-        this.socketHandlerService.emitMessage(Event.PlaySoloGame, message);
+        this.socketHandlerService.emitMessage(event, message);
     }
 
-    public onRightButtonClick(): void {
+    private async playSoloGame(gameUrl: string): Promise<void> {
+        await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+            ((response as ICommonGameCard).id) ?
+                await this.router.navigateByUrl(gameUrl + this.gameCard.id) :
+                alert("This game has been deleted, please try another one.");
+        });
+    }
+
+    private async playMultiplayerGame(): Promise<void> {
+        await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+            ((response as ICommonGameCard).id) ?
+                this.waitOpponent = true :
+                alert("This game has been deleted, please try another one.");
+        });
+    }
+
+    public async onRightButtonClick(): Promise<void> {
         if (this.isInAdminView) {
             this.resetBestTimes();
+        } else {
+            this.playMultiplayerGame();
+            this.emitPlayGame(Event.PlayMultiplayerGame);
         }
     }
 
@@ -123,5 +145,16 @@ export class GamesCardViewComponent implements OnInit {
             this.scenePair = scenePair;
             this.image.nativeElement.src = `http://localhost:3000/scene/${scenePair.id}/thumbnail`;
         });
+    }
+
+    public onClosed(closed: boolean): void {
+        if (closed) {
+            this.waitOpponent = false;
+            const message: ICommonSocketMessage = {
+                data: this.gameCard.resource_id,
+                timestamp: new Date(),
+            };
+            this.socketHandlerService.emitMessage(Event.CancelMatchmaking, message);
+        }
     }
 }
