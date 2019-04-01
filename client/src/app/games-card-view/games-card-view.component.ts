@@ -91,11 +91,11 @@ export class GamesCardViewComponent implements OnInit {
         });
     }
 
-    private async playMultiplayerGame(gameUrl: string): Promise<void> {
+    private async playMultiplayerGame(): Promise<void> {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             ((response as ICommonGameCard).id) ?
                 // à changer, affiche le pop up au lieu de router.
-                await this.router.navigateByUrl(gameUrl + this.gameCard.id) :
+                await this.router.navigateByUrl("/gameSimple/" + this.gameCard.id) :
                 alert("This game has been deleted, please try another one.");
         });
     }
@@ -104,9 +104,7 @@ export class GamesCardViewComponent implements OnInit {
         if (this.isInAdminView) {
             this.resetBestTimes();
         } else {
-            const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
-
-            this.playMultiplayerGame(gameUrl);
+            this.playMultiplayerGame();
             this.emitPlayGame(Event.PlayMultiplayerGame);
         }
     }
