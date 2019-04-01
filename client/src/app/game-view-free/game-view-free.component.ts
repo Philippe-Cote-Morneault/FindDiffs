@@ -47,6 +47,7 @@ export class GameViewFreeComponent implements OnInit {
     private meshesModified: THREE.Object3D[] = [];
     public isGameOver: boolean;
     public playerTime: string;
+    public winner: string;
 
     public constructor( private route: ActivatedRoute,
                         private spinnerService: Ng4LoadingSpinnerService,
@@ -67,6 +68,7 @@ export class GameViewFreeComponent implements OnInit {
         this.game.gameEnded.subscribe((value) => {
             this.playerTime = value.time;
             this.isGameOver = value.isGameOver;
+            this.winner = value.winner;
         });
         this.game.resetTime();
     }

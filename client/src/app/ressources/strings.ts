@@ -30,4 +30,7 @@ export const R: IString = {
     CHAT_ERROR_1v1: " Error by %s.",
     CHAT_DIFFERENCE_SOLO: " Difference found.",
     CHAT_DIFFERENCE_1v1: "Difference found by %s.",
+
+    MESSAGE_WIN: "You win!",
+    MESSAGE_LOSE: "You lose!",
 };

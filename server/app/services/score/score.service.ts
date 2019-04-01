@@ -3,7 +3,7 @@ import { Message } from "../../../../common/communication/message";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { GameType, ICommonScoreEntry } from "../../../../common/model/gameCard";
-import { INewScore } from "../../../../common/model/score";
+import { INewScore, INewScoreDetails } from "../../../../common/model/score";
 import { GameCard, IGameCard } from "../../model/schemas/gameCard";
 import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
@@ -79,8 +79,20 @@ export class ScoreService extends Service implements IScoreService {
                 throw new NotFoundException(R.ERROR_UNKNOWN_ID);
             }
             this.validateUpdate(req, doc);
+            const newScore: INewScore = this.verifyScore(req, doc);
 
-            return JSON.stringify(this.verifyScore(req, doc));
+            if (newScore.is_top_score) {
+                const i: number = (newScore.details as INewScoreDetails).place - 1;
+                const scoreEntryName: string = req.body.type === GameType.Online ? "best_time_online" : "best_time_solo";
+                const scoreEntries: ICommonScoreEntry[] = JSON.parse(JSON.stringify(doc[scoreEntryName]));
+                scoreEntries[i].name = req.body.username;
+                scoreEntries[i].score = Math.round(Number(req.body.time) / ScoreService.MS_IN_1_SECOND);
+                doc[scoreEntryName] = scoreEntries;
+            }
+
+            await doc.save();
+
+            return JSON.stringify(newScore);
         });
     }
 

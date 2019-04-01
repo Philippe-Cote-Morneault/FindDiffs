@@ -65,12 +65,12 @@ export class GamesCardViewComponent implements OnInit {
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
 
-            this.emitPlaySoloGame();
-            await this.router.navigateByUrl(gameUrl + this.gameCard.id);
+            this.playSoloGame(gameUrl);
+            this.emitPlayGame(Event.PlaySoloGame);
         }
     }
 
-    private emitPlaySoloGame(): void {
+    private emitPlayGame(event: Event): void {
         const game: ICommonGame = {
             ressource_id: this.gameCard.resource_id,
             game_card_id: this.gameCard.id,
@@ -80,12 +80,34 @@ export class GamesCardViewComponent implements OnInit {
             data: game,
             timestamp: new Date(),
         };
-        this.socketHandlerService.emitMessage(Event.PlaySoloGame, message);
+        this.socketHandlerService.emitMessage(event, message);
     }
 
-    public onRightButtonClick(): void {
+    private async playSoloGame(gameUrl: string): Promise<void> {
+        await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+            ((response as ICommonGameCard).id) ?
+                await this.router.navigateByUrl(gameUrl + this.gameCard.id) :
+                alert("This game has been deleted, please try another one.");
+        });
+    }
+
+    private async playMultiplayerGame(gameUrl: string): Promise<void> {
+        await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+            ((response as ICommonGameCard).id) ?
+                // à changer, affiche le pop up au lieu de router.
+                await this.router.navigateByUrl(gameUrl + this.gameCard.id) :
+                alert("This game has been deleted, please try another one.");
+        });
+    }
+
+    public async onRightButtonClick(): Promise<void> {
         if (this.isInAdminView) {
             this.resetBestTimes();
+        } else {
+            const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
+
+            this.playMultiplayerGame(gameUrl);
+            this.emitPlayGame(Event.PlayMultiplayerGame);
         }
     }
 
