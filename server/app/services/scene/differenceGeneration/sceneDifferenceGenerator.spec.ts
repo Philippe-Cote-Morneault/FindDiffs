@@ -109,7 +109,6 @@ describe("SceneDifferenceGenerator", () => {
 
                 expect(sceneObj.sceneObjects.length - differenceObj.deletedObjects.length).to.be.lte(sceneObj.sceneObjects.length);
             });
-            // TODO Complete tests to make sure color and texture is used
             it("Should create an array of objects with different textures/color than the original when the modification is color/texture",
             // tslint:disable-next-line:max-func-body-length
                () => {

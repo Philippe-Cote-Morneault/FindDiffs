@@ -43,19 +43,20 @@ describe("SocketHandler", () => {
 
     describe("sendMessage()", () => {
         it("Should send a message with the event and message passed in parameters", () => {
-            const spy = sinon.spy(socketHander["io"], "to");
+            const spy: sinon.SinonSpy<[string], SocketIO.Namespace> = sinon.spy(socketHander["io"], "to");
             const message: ICommonSocketMessage = {
                 data: "test",
                 timestamp: new Date(),
             };
             usernameManager.addUsername("1234asdf", "phil");
             socketHander.sendMessage(Event.Authenticate, message, "phil");
+            // tslint:disable-next-line:no-unused-expression
             expect(spy.calledOnce).to.be.true;
             spy.restore();
         });
 
         it("Should send a message to the socket associated with the username passed as an argument", () => {
-            const spy = sinon.spy(socketHander["io"], "to");
+            const spy: sinon.SinonSpy<[string], SocketIO.Namespace> = sinon.spy(socketHander["io"], "to");
             const message: ICommonSocketMessage = {
                 data: "test",
                 timestamp: new Date(),
@@ -69,18 +70,20 @@ describe("SocketHandler", () => {
 
     describe("broadcastMessage()", () => {
         it("Should broadcast a message to all sockets with the event passed as an argument", () => {
-            const spy = sinon.spy(socketHander["io"].sockets, "emit");
+            // tslint:disable-next-line:no-any
+            const spy: sinon.SinonSpy<[string | symbol, ...any[]], boolean> = sinon.spy(socketHander["io"].sockets, "emit");
             const message: ICommonSocketMessage = {
                 data: "test123",
                 timestamp: new Date(),
-            }
+            };
 
             socketHander.broadcastMessage(Event.Authenticate, message);
             expect(spy.getCalls()[0].args[0]).to.equal(Event.Authenticate);
             spy.restore();
         });
         it("Should broadcast a message to all sockets with the message passed as an argument", () => {
-            const spy = sinon.spy(socketHander["io"].sockets, "emit");
+            // tslint:disable-next-line:no-any
+            const spy: sinon.SinonSpy<[string | symbol, ...any[]], boolean> = sinon.spy(socketHander["io"].sockets, "emit");
             const message: ICommonSocketMessage = {
                 data: "test123",
                 timestamp: new Date(),
