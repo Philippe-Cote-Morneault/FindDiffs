@@ -30,6 +30,8 @@ export class GamesCardViewComponent implements OnInit {
     public rightButton: string;
     public simplePOV: string;
 
+    public waitOpponent: boolean;
+
     public constructor(
         private gamesCardService: GamesCardService,
         private sceneService: SceneService,
@@ -40,6 +42,7 @@ export class GamesCardViewComponent implements OnInit {
             this.leftButton = "Play";
             this.simplePOV = "Simple";
             this.isInAdminView = false;
+            this.waitOpponent = false;
         }
 
     public ngOnInit(): void {
@@ -91,11 +94,10 @@ export class GamesCardViewComponent implements OnInit {
         });
     }
 
-    private async playMultiplayerGame(gameUrl: string): Promise<void> {
+    private async playMultiplayerGame(): Promise<void> {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             ((response as ICommonGameCard).id) ?
-                // à changer, affiche le pop up au lieu de router.
-                await this.router.navigateByUrl(gameUrl + this.gameCard.id) :
+                this.waitOpponent = true :
                 alert("This game has been deleted, please try another one.");
         });
     }
@@ -104,9 +106,7 @@ export class GamesCardViewComponent implements OnInit {
         if (this.isInAdminView) {
             this.resetBestTimes();
         } else {
-            const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
-
-            this.playMultiplayerGame(gameUrl);
+            this.playMultiplayerGame();
             this.emitPlayGame(Event.PlayMultiplayerGame);
         }
     }
@@ -145,5 +145,16 @@ export class GamesCardViewComponent implements OnInit {
             this.scenePair = scenePair;
             this.image.nativeElement.src = `http://localhost:3000/scene/${scenePair.id}/thumbnail`;
         });
+    }
+
+    public onClosed(closed: boolean): void {
+        if (closed) {
+            this.waitOpponent = false;
+            const message: ICommonSocketMessage = {
+                data: this.gameCard.resource_id,
+                timestamp: new Date(),
+            };
+            this.socketHandlerService.emitMessage(Event.CancelMatchmaking, message);
+        }
     }
 }

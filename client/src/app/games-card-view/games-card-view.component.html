@@ -29,3 +29,5 @@
     <button class="button" (click)="onRightButtonClick()">{{rightButton}}</button>
   </div>
 </div>
+
+<app-waiting-view (closed)="onClosed($event)" *ngIf="waitOpponent"></app-waiting-view>

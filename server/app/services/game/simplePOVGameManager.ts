@@ -8,19 +8,20 @@ import { GameManager } from "./gameManager";
 export class SimplePOVGameManager extends GameManager {
     private pixelPositionService: PixelPositionService;
 
-    public constructor(game: Game, endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
-        super(game, endGameCallback);
+    public constructor(game: Game, winningDifferenceCount: number,
+                       endGameCallback: (game: Game, winner: string, score: INewScore) => void) {
+
+        super(game, winningDifferenceCount, endGameCallback);
         this.pixelPositionService = PixelPositionService.getInstance();
     }
 
-    public async playerClick(position: ICommon2DPosition,
+    public async playerClick(position: ICommon2DPosition, player: string,
                              successCallBack: (data: Object | null) => void,
                              failureCallback: () => void): Promise<void> {
-
          await this.pixelPositionService.postPixelPosition(this.game.ressource_id, position.x, position.y)
             .then(async (value: ICommonReveal | null) => {
-                if (value && !this.differencesFound.get(value.difference_id.toString())) {
-                    await this.differenceFound((value as ICommonReveal).difference_id.toString());
+                if (value && !this.isDifferenceFound(player, value.difference_id.toString())) {
+                    await this.differenceFound((value as ICommonReveal).difference_id.toString(), player);
                     successCallBack(value);
                 } else {
                     failureCallback();

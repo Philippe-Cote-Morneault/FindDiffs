@@ -3,6 +3,5 @@ export interface Game {
     ressource_id: string;
     players: string[];
     start_time: Date | undefined;
-    differences_found: number;
     game_card_id: string;
 }

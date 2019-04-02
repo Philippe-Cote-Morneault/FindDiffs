@@ -9,6 +9,7 @@ import { GameEnding } from "../../models/game/gameEnding";
 import { ControlsGenerator } from "../scene/sceneRenderer/controlsGenerator";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
+import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
 
 @Injectable({
     providedIn: "root",
@@ -23,7 +24,9 @@ export class GameService implements SocketSubscriber {
     private gameStarted: boolean;
     private differenceSound: HTMLAudioElement;
     private differenceUser: HTMLElement;
+    private sceneSyncer: SceneSyncerService;
     public gameEnded: Subject<GameEnding>;
+    private username: string | null;
 
     public constructor(private socketService: SocketHandlerService) {
         this.timer = new Timer();
@@ -31,12 +34,17 @@ export class GameService implements SocketSubscriber {
         this.gameEnded = new Subject<GameEnding>();
         this.differenceSound = new Audio;
         this.differenceSound.src = R.DIFFERENCE_SOUND_SRC;
+        this.username = sessionStorage.getItem("user");
         this.subscribeToSocket();
     }
 
     public setContainers(chronometer: HTMLElement, differenceCounterUser: HTMLElement): void {
         this.chronometer = chronometer;
         this.differenceUser = differenceCounterUser;
+    }
+
+    public setControls(sceneSyncer: SceneSyncerService): void {
+        this.sceneSyncer = sceneSyncer;
     }
 
     private subscribeToSocket(): void {
@@ -90,8 +98,10 @@ export class GameService implements SocketSubscriber {
     }
 
     private async differenceFound(message: ICommonSocketMessage): Promise<void> {
-        const difference: number = (message.data as ICommonDifferenceFound).difference_count;
-        this.differenceUser.innerText = JSON.stringify(difference);
+        const difference: ICommonDifferenceFound = message.data as ICommonDifferenceFound;
+        if (difference.player === this.username) {
+            this.differenceUser.innerText = JSON.stringify(difference.difference_count);
+        }
         await this.differenceSound.play();
     }
 
@@ -104,10 +114,10 @@ export class GameService implements SocketSubscriber {
     }
 
     private formatPlayerTimer(message: ICommonSocketMessage): string {
-        let seconds: number | string = (message.data as ICommonGameEnding).time / GameService.MS_IN_SEC;
+        let seconds: number | string =  (message.data as ICommonGameEnding).time / GameService.MS_IN_SEC;
 
         // tslint:disable:radix
-        const minutes: number | string = this.format_two_digits(Math.round(seconds / GameService.SEC_IN_MIN));
+        const minutes: number | string = this.format_two_digits(Math.floor(seconds / GameService.SEC_IN_MIN));
         seconds = this.format_two_digits(Math.round(seconds % GameService.SEC_IN_MIN));
 
         return minutes + R.COLON + seconds;
@@ -120,5 +130,6 @@ export class GameService implements SocketSubscriber {
 
     private setControlsLock(isLocked: boolean): void {
         ControlsGenerator.isLocked = isLocked;
+        this.sceneSyncer.isLocked = isLocked;
     }
 }

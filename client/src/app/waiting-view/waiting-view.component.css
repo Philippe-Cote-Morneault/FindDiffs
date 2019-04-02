@@ -1,10 +1,15 @@
 .globalWrapper {
     width: 40vw;
     height: 70vh;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     margin: auto auto;
     background-color: #33343D;
     border-radius: 20px;
-}
+    border: 2px black solid;  
+  }
 
 .content {
     height: 100%;
@@ -16,7 +21,7 @@
     width: 19%;
     height: 7%;
     margin: auto auto;
-    padding: 10% 0;
+    padding: 15% 0;
 }
 
 .leaveButton {
@@ -42,7 +47,7 @@
 
 .lds-roller {
     margin-left: -8%;
-    padding: 10% 0;
+    padding: 15% 0;
     display: inline-block;
     position: relative;
     width: 20%;
