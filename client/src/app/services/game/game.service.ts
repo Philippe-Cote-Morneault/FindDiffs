@@ -7,17 +7,15 @@ import { ICommonGameEnding } from "../../../../../common/communication/webSocket
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameEnding } from "../../models/game/gameEnding";
 import { ControlsGenerator } from "../scene/sceneRenderer/controlsGenerator";
+import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
-import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
+import { PlayerTimeService } from "./playerTime.service";
 
 @Injectable({
     providedIn: "root",
 })
 export class GameService implements SocketSubscriber {
-    private static readonly MAX_TWO_DIGITS: number = 10;
-    private static readonly MS_IN_SEC: number = 1000;
-    private static readonly SEC_IN_MIN: number = 60;
     private static readonly MINUTES_POSITION: number = 3;
     private timer: Timer;
     private chronometer: HTMLElement;
@@ -28,7 +26,7 @@ export class GameService implements SocketSubscriber {
     public gameEnded: Subject<GameEnding>;
     private username: string | null;
 
-    public constructor(private socketService: SocketHandlerService) {
+    public constructor(private socketService: SocketHandlerService, private playerTimeService: PlayerTimeService) {
         this.timer = new Timer();
         this.gameStarted = false;
         this.gameEnded = new Subject<GameEnding>();
@@ -85,8 +83,8 @@ export class GameService implements SocketSubscriber {
 
     private stopGame(message: ICommonSocketMessage): void {
         this.timer.stop();
-        this.setControlsLock(true);
-        const time: string = this.formatPlayerTimer(message);
+        // this.setControlsLock(true);
+        const time: string = this.playerTimeService.formatPlayerTimer(message);
         const winner: string = (message.data as ICommonGameEnding).winner;
         const game: GameEnding = {
             isGameOver: true,
@@ -111,21 +109,6 @@ export class GameService implements SocketSubscriber {
 
     public getGameStarted(): boolean {
         return this.gameStarted;
-    }
-
-    private formatPlayerTimer(message: ICommonSocketMessage): string {
-        let seconds: number | string =  (message.data as ICommonGameEnding).time / GameService.MS_IN_SEC;
-
-        // tslint:disable:radix
-        const minutes: number | string = this.format_two_digits(Math.floor(seconds / GameService.SEC_IN_MIN));
-        seconds = this.format_two_digits(Math.round(seconds % GameService.SEC_IN_MIN));
-
-        return minutes + R.COLON + seconds;
-    }
-
-    private format_two_digits(n: number): number | string {
-
-        return n < GameService.MAX_TWO_DIGITS ? R.ZERO + n : n;
     }
 
     private setControlsLock(isLocked: boolean): void {
