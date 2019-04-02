@@ -18,6 +18,7 @@ import { PlayerTimeService } from "./playerTime.service";
 export class GameService implements SocketSubscriber {
     private static readonly MINUTES_POSITION: number = 3;
     private timer: Timer;
+    private isSoloGame: boolean;
     private chronometer: HTMLElement;
     private gameStarted: boolean;
     private differenceSound: HTMLAudioElement;
@@ -31,6 +32,7 @@ export class GameService implements SocketSubscriber {
         this.gameStarted = false;
         this.gameEnded = new Subject<GameEnding>();
         this.differenceSound = new Audio;
+        this.isSoloGame = true;
         this.differenceSound.src = R.DIFFERENCE_SOUND_SRC;
         this.username = sessionStorage.getItem("user");
         this.subscribeToSocket();
@@ -83,7 +85,7 @@ export class GameService implements SocketSubscriber {
 
     private stopGame(message: ICommonSocketMessage): void {
         this.timer.stop();
-        // this.setControlsLock(true);
+        this.setControlsLock(true);
         const time: string = this.playerTimeService.formatPlayerTimer(message);
         const winner: string = (message.data as ICommonGameEnding).winner;
         const game: GameEnding = {
@@ -111,8 +113,18 @@ export class GameService implements SocketSubscriber {
         return this.gameStarted;
     }
 
+    public getIsSoloGame(): boolean {
+        return this.isSoloGame;
+    }
+
+    public setIsSoloGame(isSoloGame: boolean): void {
+        this.isSoloGame = isSoloGame;
+    }
+
     private setControlsLock(isLocked: boolean): void {
-        ControlsGenerator.isLocked = isLocked;
-        this.sceneSyncer.isLocked = isLocked;
+        if (!this.isSoloGame) {
+            ControlsGenerator.isLocked = isLocked;
+            this.sceneSyncer.isLocked = isLocked;
+        }
     }
 }
