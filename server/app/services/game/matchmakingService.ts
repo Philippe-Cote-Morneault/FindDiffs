@@ -32,24 +32,32 @@ export class MatchmakingService {
             this.matchPlayers(message, player);
         });
         this.socketHandler.subscribe(Event.CancelMatchmaking, (message: ICommonSocketMessage, player: string) => {
-            this.waitingRoom.delete(message.data as string);
+            this.cancelMatchmaking(message);
         });
     }
 
     public matchPlayers(message: ICommonSocketMessage, player: string): void {
         const data: ICommonGame = message.data as ICommonGame;
-        (this.waitingRoom.has(data.ressource_id)) ?
-        this.createMultiplayersGame(data, player) :
-        this.waitingRoom.set(data.ressource_id, player);
-
+        if (this.waitingRoom.has(data.ressource_id)) {
+            this.createMultiplayersGame(data, player);
+            this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
+        } else {
+            this.waitingRoom.set(data.ressource_id, player);
+        }
     }
 
     private createMultiplayersGame(data: ICommonGame, secondPlayer: string): void {
+        const message: ICommonSocketMessage = {
+            data: data,
+            timestamp: new Date(),
+        };
         const firstPlayer: string | undefined = this.waitingRoom.get(data.ressource_id);
+
         if (firstPlayer) {
             this.gameService.createGame([firstPlayer, secondPlayer], data, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT);
             this.EndMatchmaking(secondPlayer, data);
             this.EndMatchmaking(firstPlayer, data);
+            this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
             this.waitingRoom.delete(data.ressource_id);
         }
     }
@@ -71,5 +79,10 @@ export class MatchmakingService {
             timestamp: new Date(),
         };
         this.socketHandler.sendMessage(Event.EndMatchmaking, socketMessage, player);
+    }
+
+    private cancelMatchmaking(message: ICommonSocketMessage): void {
+        this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
+        this.waitingRoom.delete(message.data as string);
     }
 }
