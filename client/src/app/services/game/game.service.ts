@@ -9,6 +9,7 @@ import { GameEnding } from "../../models/game/gameEnding";
 import { ControlsGenerator } from "../scene/sceneRenderer/controlsGenerator";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
+import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
 
 @Injectable({
     providedIn: "root",
@@ -23,6 +24,7 @@ export class GameService implements SocketSubscriber {
     private gameStarted: boolean;
     private differenceSound: HTMLAudioElement;
     private differenceUser: HTMLElement;
+    private sceneSyncer: SceneSyncerService;
     public gameEnded: Subject<GameEnding>;
     private username: string | null;
 
@@ -39,6 +41,10 @@ export class GameService implements SocketSubscriber {
     public setContainers(chronometer: HTMLElement, differenceCounterUser: HTMLElement): void {
         this.chronometer = chronometer;
         this.differenceUser = differenceCounterUser;
+    }
+
+    public setControls(sceneSyncer: SceneSyncerService): void {
+        this.sceneSyncer = sceneSyncer;
     }
 
     private subscribeToSocket(): void {
@@ -124,5 +130,6 @@ export class GameService implements SocketSubscriber {
 
     private setControlsLock(isLocked: boolean): void {
         ControlsGenerator.isLocked = isLocked;
+        this.sceneSyncer.isLocked = isLocked;
     }
 }
