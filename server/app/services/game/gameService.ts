@@ -55,7 +55,6 @@ export class GameService {
             ressource_id: commonGame.ressource_id,
             players: players,
             start_time: undefined,
-            differences_found: 0,
             game_card_id: commonGame.game_card_id,
         };
 
@@ -120,7 +119,7 @@ export class GameService {
         if (gameManager === undefined) {
             throw new NotFoundException(_e(R.ERROR_INVALIDID, [clickedPlayer]));
         }
-        gameManager.playerClick(message.data,
+        gameManager.playerClick(message.data, clickedPlayer,
                                 (data: Object | null) => {
                                     this.differenceFound(gameManager, clickedPlayer, data as Object);
         },                      () => {
@@ -132,7 +131,7 @@ export class GameService {
         gameManager.game.players.forEach((player: string) => {
                 const differenceFound: ICommonDifferenceFound = {
                     player: clickedPlayer,
-                    difference_count: gameManager.game.differences_found,
+                    difference_count: gameManager.getAmountDifferencesFound(player),
                     reveal: reveal,
                 };
                 const response: ICommonSocketMessage = {
