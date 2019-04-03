@@ -12,6 +12,7 @@ describe("SocketHandler", () => {
     let socketHandler: SocketHandler;
     const usernameManager: UsernameManager = UsernameManager.getInstance();
     let clientSocket: SocketIOClient.Socket;
+    let socket1: socketIo.Socket;
     let server: http.Server;
 
     
@@ -21,8 +22,11 @@ describe("SocketHandler", () => {
         server.listen(3030);
         socketHandler = SocketHandler.getInstance();
         socketHandler["io"] = socketIo(server);
+        socketHandler["io"].on("connect", (socket : socketIo.Socket) => {
+            socket1 = socket;
+            done();
+        });
         clientSocket = socketIoClient.connect("http://localhost:3030");
-        done();
     });
 
     after(() => {
@@ -110,6 +114,16 @@ describe("SocketHandler", () => {
 
             socketHandler.broadcastMessage(Event.Authenticate, message);
             expect(spy.getCalls()[0].args[1]).to.equal(message);
+            spy.restore();
+        });
+    });
+
+    describe("authenticateUser()", () => {
+        it("Should call AuthentificationService::authenticateUser() once", () => {
+            const spy = sinon.spy(socketHandler["authentificationService"], "authenticateUser");
+            socketHandler["authenticateUser"](socket1);
+            // tslint:disable-next-line:no-unused-expression
+            expect(spy.calledOnce).to.be.true;
             spy.restore();
         });
     });
