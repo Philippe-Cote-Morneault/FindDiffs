@@ -27,10 +27,12 @@ export class GameViewSimpleComponent implements OnInit {
     @ViewChild("message") private message: ElementRef;
     @ViewChild("message_container") private messageContainer: ElementRef;
     @ViewChild("userDifferenceFound") private userDifferenceFound: ElementRef;
+    @ViewChild("opponentDifferenceFound") private opponentDifferenceFound: ElementRef;
 
     private gameCardId: string;
     public gameCard: ICommonGameCard;
     private imagePairId: string;
+    public isSoloGame: boolean;
     public isGameOver: boolean;
     public playerTime: string;
     public winner: string;
@@ -47,11 +49,7 @@ export class GameViewSimpleComponent implements OnInit {
         public canvasLoader: CanvasLoaderService) {
 
         this.isGameOver = false;
-        this.game.gameEnded.subscribe((value) => {
-            this.playerTime = value.time;
-            this.isGameOver = value.isGameOver;
-            this.winner = value.winner;
-        });
+        this.subscribeToGame();
         this.game.resetTime();
     }
 
@@ -61,12 +59,29 @@ export class GameViewSimpleComponent implements OnInit {
         });
 
         this.userDifferenceFound.nativeElement.innerText = R.ZERO;
+        this.isSoloGame = this.game.getIsSoloGame();
         this.getGameCardById();
         this.setServicesContainers();
     }
 
+    private subscribeToGame(): void {
+        this.game.gameEnded.subscribe((value) => {
+            this.playerTime = value.time;
+            this.isGameOver = value.isGameOver;
+            this.winner = value.winner;
+        });
+
+        this.game.differenceUser.subscribe((value) => {
+            this.userDifferenceFound.nativeElement.innerText = value;
+        });
+
+        this.game.differenceOpponent.subscribe((value) => {
+            this.opponentDifferenceFound.nativeElement.innerText = value;
+        });
+    }
+
     private setServicesContainers(): void {
-        this.game.setContainers(this.chronometer.nativeElement, this.userDifferenceFound.nativeElement);
+        this.game.setContainers(this.chronometer.nativeElement);
         this.chat.setContainers(this.message.nativeElement, this.messageContainer.nativeElement);
         this.identificationError.setContainers(this.errorMessage.nativeElement,
                                                this.originalCanvas.nativeElement,
