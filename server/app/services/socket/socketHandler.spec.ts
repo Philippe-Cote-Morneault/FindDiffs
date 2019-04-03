@@ -1,14 +1,35 @@
 import { expect } from "chai";
 import * as http from "http";
 import * as sinon from "sinon";
+import * as socketIo from "socket.io";
+import * as socketIoClient from "socket.io-client";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { SocketCallback } from "./socketCallback";
 import { SocketHandler } from "./socketHandler";
 import { UsernameManager } from "./usernameManager";
 
 describe("SocketHandler", () => {
-    const socketHander: SocketHandler = SocketHandler.getInstance();
+    let socketHandler: SocketHandler;
     const usernameManager: UsernameManager = UsernameManager.getInstance();
+    let clientSocket: SocketIOClient.Socket;
+    let server: http.Server;
+
+    
+    before((done: MochaDone) => {
+        const express = require("express");
+        server = http.createServer(express);
+        server.listen(3030);
+        socketHandler = SocketHandler.getInstance();
+        socketHandler["io"] = socketIo(server);
+        clientSocket = socketIoClient.connect("http://localhost:3030");
+        done();
+    });
+
+    after(() => {
+        clientSocket.close();
+        socketHandler["io"].close();
+        server.close();
+    });
 
     describe("getInstance()", () => {
         it("Should return an instance of SocketHandler when getting an instance", () => {
@@ -26,14 +47,12 @@ describe("SocketHandler", () => {
     describe("setServer()", () => {
         it("Should return the same instance of SocketHandler after setting a server", () => {
             const server: http.Server = http.createServer();
-            const socketHandler: SocketHandler = SocketHandler.getInstance();
             expect(SocketHandler.getInstance().setServer(server)).to.equal(socketHandler);
         });
     });
 
     describe("subscribe()", () => {
         it("Subscribing to an event should add the callback to the list of subsribers", () => {
-            const socketHandler: SocketHandler = SocketHandler.getInstance();
             // tslint:disable-next-line:no-empty
             const callback: SocketCallback = (message: ICommonSocketMessage, sender: string) => {};
             socketHandler.subscribe(Event.UserConnected, callback);
@@ -43,26 +62,26 @@ describe("SocketHandler", () => {
 
     describe("sendMessage()", () => {
         it("Should send a message with the event and message passed in parameters", () => {
-            const spy: sinon.SinonSpy<[string], SocketIO.Namespace> = sinon.spy(socketHander["io"], "to");
+            const spy: sinon.SinonSpy<[string], SocketIO.Namespace> = sinon.spy(socketHandler["io"], "to");
             const message: ICommonSocketMessage = {
                 data: "test",
                 timestamp: new Date(),
             };
             usernameManager.addUsername("1234asdf", "phil");
-            socketHander.sendMessage(Event.Authenticate, message, "phil");
+            socketHandler.sendMessage(Event.Authenticate, message, "phil");
             // tslint:disable-next-line:no-unused-expression
             expect(spy.calledOnce).to.be.true;
             spy.restore();
         });
 
         it("Should send a message to the socket associated with the username passed as an argument", () => {
-            const spy: sinon.SinonSpy<[string], SocketIO.Namespace> = sinon.spy(socketHander["io"], "to");
+            const spy: sinon.SinonSpy<[string], SocketIO.Namespace> = sinon.spy(socketHandler["io"], "to");
             const message: ICommonSocketMessage = {
                 data: "test",
                 timestamp: new Date(),
             };
             usernameManager.addUsername("1234asdf", "phil");
-            socketHander.sendMessage(Event.Authenticate, message, "phil");
+            socketHandler.sendMessage(Event.Authenticate, message, "phil");
             expect(spy.getCalls()[0].args[0]).to.equal("1234asdf");
             spy.restore();
         });
@@ -71,25 +90,25 @@ describe("SocketHandler", () => {
     describe("broadcastMessage()", () => {
         it("Should broadcast a message to all sockets with the event passed as an argument", () => {
             // tslint:disable-next-line:no-any
-            const spy: sinon.SinonSpy<[string | symbol, ...any[]], boolean> = sinon.spy(socketHander["io"].sockets, "emit");
+            const spy: sinon.SinonSpy<[string | symbol, ...any[]], boolean> = sinon.spy(socketHandler["io"].sockets, "emit");
             const message: ICommonSocketMessage = {
                 data: "test123",
                 timestamp: new Date(),
             };
 
-            socketHander.broadcastMessage(Event.Authenticate, message);
+            socketHandler.broadcastMessage(Event.Authenticate, message);
             expect(spy.getCalls()[0].args[0]).to.equal(Event.Authenticate);
             spy.restore();
         });
         it("Should broadcast a message to all sockets with the message passed as an argument", () => {
             // tslint:disable-next-line:no-any
-            const spy: sinon.SinonSpy<[string | symbol, ...any[]], boolean> = sinon.spy(socketHander["io"].sockets, "emit");
+            const spy: sinon.SinonSpy<[string | symbol, ...any[]], boolean> = sinon.spy(socketHandler["io"].sockets, "emit");
             const message: ICommonSocketMessage = {
                 data: "test123",
                 timestamp: new Date(),
             };
 
-            socketHander.broadcastMessage(Event.Authenticate, message);
+            socketHandler.broadcastMessage(Event.Authenticate, message);
             expect(spy.getCalls()[0].args[1]).to.equal(message);
             spy.restore();
         });
