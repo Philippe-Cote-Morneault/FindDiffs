@@ -35,6 +35,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("message") private message: ElementRef;
     @ViewChild("message_container") private messageContainer: ElementRef;
     @ViewChild("userDifferenceFound") private userDifferenceFound: ElementRef;
+    @ViewChild("opponentDifferenceFound") private opponentDifferenceFound: ElementRef;
 
     private scenePairId: string;
     private currentOriginalScene: ICommonScene;
@@ -46,6 +47,7 @@ export class GameViewFreeComponent implements OnInit {
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
     public isGameOver: boolean;
+    public isSoloGame: boolean;
     public playerTime: string;
     public winner: string;
 
@@ -64,13 +66,9 @@ export class GameViewFreeComponent implements OnInit {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
 
-        this.isGameOver = false;
-        this.game.gameEnded.subscribe((value) => {
-            this.playerTime = value.time;
-            this.isGameOver = value.isGameOver;
-            this.winner = value.winner;
-        });
+        this.subscribeToGame();
         this.game.resetTime();
+        this.isSoloGame = this.game.getIsSoloGame();
     }
 
     public ngOnInit(): void {
@@ -85,8 +83,24 @@ export class GameViewFreeComponent implements OnInit {
         this.game.setControls(this.sceneSyncer);
     }
 
+    private subscribeToGame(): void {
+        this.game.gameEnded.subscribe((value) => {
+            this.playerTime = value.time;
+            this.isGameOver = value.isGameOver;
+            this.winner = value.winner;
+        });
+
+        this.game.differenceUser.subscribe((value) => {
+            this.userDifferenceFound.nativeElement.innerText = value;
+        });
+
+        this.game.differenceOpponent.subscribe((value) => {
+            this.opponentDifferenceFound.nativeElement.innerText = value;
+        });
+    }
+
     private setServicesContainers(): void {
-        this.game.setContainers(this.chronometer.nativeElement, this.userDifferenceFound.nativeElement);
+        this.game.setContainers(this.chronometer.nativeElement);
         this.chat.setContainers(this.message.nativeElement, this.messageContainer.nativeElement);
         this.identificationError.setContainers(this.errorMessage.nativeElement,
                                                this.originalScene.nativeElement,

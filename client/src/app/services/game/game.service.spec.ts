@@ -10,6 +10,7 @@ describe("GameService", () => {
     const time: number = 2000;
 
     beforeEach(async() => {
+        sessionStorage.setItem("user", "player");
         TestBed.configureTestingModule({
             imports: [RouterTestingModule],
         });
@@ -46,7 +47,7 @@ describe("GameService", () => {
     it("Should return the correct count after a difference is found", async () => {
         const timer: HTMLElement = document.createElement("p");
         const userDifference: HTMLElement = document.createElement("p");
-        const diff: ICommonDifferenceFound = { player: "", difference_count: 2, reveal: {}};
+        const diff: ICommonDifferenceFound = { player: "player", difference_count: 2, reveal: {}};
         const msg: ICommonSocketMessage = { data: diff, timestamp: new Date()};
         service.setContainers(timer, userDifference);
         await service.notify(Event.DifferenceFound, msg);

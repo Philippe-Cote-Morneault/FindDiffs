@@ -7,40 +7,42 @@ import { ICommonGameEnding } from "../../../../../common/communication/webSocket
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameEnding } from "../../models/game/gameEnding";
 import { ControlsGenerator } from "../scene/sceneRenderer/controlsGenerator";
+import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
-import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
+import { PlayerTimeService } from "./playerTime.service";
 
 @Injectable({
     providedIn: "root",
 })
 export class GameService implements SocketSubscriber {
-    private static readonly MAX_TWO_DIGITS: number = 10;
-    private static readonly MS_IN_SEC: number = 1000;
-    private static readonly SEC_IN_MIN: number = 60;
     private static readonly MINUTES_POSITION: number = 3;
     private timer: Timer;
+    private isSoloGame: boolean;
     private chronometer: HTMLElement;
     private gameStarted: boolean;
     private differenceSound: HTMLAudioElement;
-    private differenceUser: HTMLElement;
+    public differenceUser: Subject<string>;
+    public differenceOpponent: Subject<string>;
     private sceneSyncer: SceneSyncerService;
     public gameEnded: Subject<GameEnding>;
     private username: string | null;
 
-    public constructor(private socketService: SocketHandlerService) {
+    public constructor(private socketService: SocketHandlerService, private playerTimeService: PlayerTimeService) {
         this.timer = new Timer();
         this.gameStarted = false;
         this.gameEnded = new Subject<GameEnding>();
+        this.differenceOpponent = new Subject<string>();
+        this.differenceUser = new Subject<string>();
         this.differenceSound = new Audio;
+        this.isSoloGame = true;
         this.differenceSound.src = R.DIFFERENCE_SOUND_SRC;
         this.username = sessionStorage.getItem("user");
         this.subscribeToSocket();
     }
 
-    public setContainers(chronometer: HTMLElement, differenceCounterUser: HTMLElement): void {
+    public setContainers(chronometer: HTMLElement): void {
         this.chronometer = chronometer;
-        this.differenceUser = differenceCounterUser;
     }
 
     public setControls(sceneSyncer: SceneSyncerService): void {
@@ -86,7 +88,7 @@ export class GameService implements SocketSubscriber {
     private stopGame(message: ICommonSocketMessage): void {
         this.timer.stop();
         this.setControlsLock(true);
-        const time: string = this.formatPlayerTimer(message);
+        const time: string = this.playerTimeService.formatPlayerTimer(message);
         const winner: string = (message.data as ICommonGameEnding).winner;
         const game: GameEnding = {
             isGameOver: true,
@@ -99,9 +101,10 @@ export class GameService implements SocketSubscriber {
 
     private async differenceFound(message: ICommonSocketMessage): Promise<void> {
         const difference: ICommonDifferenceFound = message.data as ICommonDifferenceFound;
-        if (difference.player === this.username) {
-            this.differenceUser.innerText = JSON.stringify(difference.difference_count);
-        }
+        (difference.player === this.username) ?
+        this.differenceUser.next(JSON.stringify(difference.difference_count)) :
+        this.differenceOpponent.next(JSON.stringify(difference.difference_count));
+
         await this.differenceSound.play();
     }
 
@@ -113,19 +116,12 @@ export class GameService implements SocketSubscriber {
         return this.gameStarted;
     }
 
-    private formatPlayerTimer(message: ICommonSocketMessage): string {
-        let seconds: number | string =  (message.data as ICommonGameEnding).time / GameService.MS_IN_SEC;
-
-        // tslint:disable:radix
-        const minutes: number | string = this.format_two_digits(Math.floor(seconds / GameService.SEC_IN_MIN));
-        seconds = this.format_two_digits(Math.round(seconds % GameService.SEC_IN_MIN));
-
-        return minutes + R.COLON + seconds;
+    public getIsSoloGame(): boolean {
+        return this.isSoloGame;
     }
 
-    private format_two_digits(n: number): number | string {
-
-        return n < GameService.MAX_TWO_DIGITS ? R.ZERO + n : n;
+    public setIsSoloGame(isSoloGame: boolean): void {
+        this.isSoloGame = isSoloGame;
     }
 
     private setControlsLock(isLocked: boolean): void {
