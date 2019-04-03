@@ -22,7 +22,8 @@ export class GameService implements SocketSubscriber {
     private chronometer: HTMLElement;
     private gameStarted: boolean;
     private differenceSound: HTMLAudioElement;
-    private differenceUser: HTMLElement;
+    public differenceUser: Subject<string>;
+    public differenceOpponent: Subject<string>;
     private sceneSyncer: SceneSyncerService;
     public gameEnded: Subject<GameEnding>;
     private username: string | null;
@@ -31,6 +32,8 @@ export class GameService implements SocketSubscriber {
         this.timer = new Timer();
         this.gameStarted = false;
         this.gameEnded = new Subject<GameEnding>();
+        this.differenceOpponent = new Subject<string>();
+        this.differenceUser = new Subject<string>();
         this.differenceSound = new Audio;
         this.isSoloGame = true;
         this.differenceSound.src = R.DIFFERENCE_SOUND_SRC;
@@ -38,9 +41,8 @@ export class GameService implements SocketSubscriber {
         this.subscribeToSocket();
     }
 
-    public setContainers(chronometer: HTMLElement, differenceCounterUser: HTMLElement): void {
+    public setContainers(chronometer: HTMLElement): void {
         this.chronometer = chronometer;
-        this.differenceUser = differenceCounterUser;
     }
 
     public setControls(sceneSyncer: SceneSyncerService): void {
@@ -99,9 +101,10 @@ export class GameService implements SocketSubscriber {
 
     private async differenceFound(message: ICommonSocketMessage): Promise<void> {
         const difference: ICommonDifferenceFound = message.data as ICommonDifferenceFound;
-        if (difference.player === this.username) {
-            this.differenceUser.innerText = JSON.stringify(difference.difference_count);
-        }
+        (difference.player === this.username) ?
+        this.differenceUser.next(JSON.stringify(difference.difference_count)) :
+        this.differenceOpponent.next(JSON.stringify(difference.difference_count));
+
         await this.differenceSound.play();
     }
 
@@ -122,9 +125,7 @@ export class GameService implements SocketSubscriber {
     }
 
     private setControlsLock(isLocked: boolean): void {
-        if (!this.isSoloGame) {
-            ControlsGenerator.isLocked = isLocked;
-            this.sceneSyncer.isLocked = isLocked;
-        }
+        ControlsGenerator.isLocked = isLocked;
+        this.sceneSyncer.isLocked = isLocked;
     }
 }
