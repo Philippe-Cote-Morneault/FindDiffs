@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
+import { ICommonIdentificationError } from "../../../../../common/communication/webSocket/identificationError";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
 import { INewScore, INewScoreDetails } from "../../../../../common/model/score";
@@ -61,7 +62,7 @@ export class ChatFormaterService {
 
         (this.game.getIsSoloGame()) ?
         chatMessage = this.formatDate(message.timestamp) + R.CHAT_ERROR_SOLO :
-        chatMessage = this.formatDate(message.timestamp) + _e(R.CHAT_ERROR_1v1, [(message.data as ICommonDifferenceFound).player]);
+        chatMessage = this.formatDate(message.timestamp) + _e(R.CHAT_ERROR_1v1, [(message.data as ICommonIdentificationError).player]);
 
         return chatMessage;
     }
