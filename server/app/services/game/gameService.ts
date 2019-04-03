@@ -128,16 +128,16 @@ export class GameService {
     }
 
     private differenceFound(gameManager: GameManager, clickedPlayer: string, reveal: Object): void {
+        const differenceFound: ICommonDifferenceFound = {
+            player: clickedPlayer,
+            difference_count: gameManager.getAmountDifferencesFound(clickedPlayer),
+            reveal: reveal,
+        };
+        const response: ICommonSocketMessage = {
+            data: differenceFound,
+            timestamp: new Date(),
+        };
         gameManager.game.players.forEach((player: string) => {
-                const differenceFound: ICommonDifferenceFound = {
-                    player: clickedPlayer,
-                    difference_count: gameManager.getAmountDifferencesFound(player),
-                    reveal: reveal,
-                };
-                const response: ICommonSocketMessage = {
-                    data: differenceFound,
-                    timestamp: new Date(),
-                };
                 this.socketHandler.sendMessage(Event.DifferenceFound, response, player);
         });
     }
