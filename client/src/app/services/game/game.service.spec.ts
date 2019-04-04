@@ -22,8 +22,6 @@ describe("GameService", () => {
         it("Should return the correct time after game start and end after 2 sec", async () => {
 
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
-            const timer: HTMLElement = document.createElement("p");
-            service.setContainers(timer);
             await service.notify(Event.GameStarted, msg);
             expect(service.getGameStarted()).to.equal(true);
             expect(service.getTimeValues()).to.equal("00:00");
@@ -48,11 +46,9 @@ describe("GameService", () => {
     describe("differencefound", () => {
 
         it("Should return the correct count after a difference is found by player", async () => {
-            const timer: HTMLElement = document.createElement("p");
             let difference: string = "0";
             const diff: ICommonDifferenceFound = { player: "player", difference_count: 2, reveal: {}};
             const msg: ICommonSocketMessage = { data: diff, timestamp: new Date()};
-            service.setContainers(timer);
 
             service.differenceUser.subscribe((value) => {
                 difference = value;
@@ -63,11 +59,9 @@ describe("GameService", () => {
         });
 
         it("Should return the correct count after a difference is found by opponent", async () => {
-            const timer: HTMLElement = document.createElement("p");
             let difference: string = "0";
             const diff: ICommonDifferenceFound = { player: "opponent", difference_count: 2, reveal: {}};
             const msg: ICommonSocketMessage = { data: diff, timestamp: new Date()};
-            service.setContainers(timer);
 
             service.differenceOpponent.subscribe((value) => {
                 difference = value;
@@ -80,9 +74,7 @@ describe("GameService", () => {
 
     describe("resetTime", () => {
         it("Should return 00:00 after resettime", async () => {
-            const timer: HTMLElement = document.createElement("p");
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
-            service.setContainers(timer);
             await service.notify(Event.GameStarted, msg);
             setTimeout(async() => {
                 service.resetTime();
@@ -93,9 +85,7 @@ describe("GameService", () => {
 
     describe("getGameStarted", () => {
         it("Should return true after game started", async () => {
-            const timer: HTMLElement = document.createElement("p");
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
-            service.setContainers(timer);
             await service.notify(Event.GameStarted, msg);
             setTimeout(async() => {
                 expect(service.getGameStarted()).to.equal(true);
