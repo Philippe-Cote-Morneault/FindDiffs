@@ -22,6 +22,8 @@ export class ObjectDetectionService {
     const intersectsOriginal: THREE.Intersection[] = this.raycaster.intersectObjects(meshesOriginal, true);
     const intersectsModified: THREE.Intersection[] = this.raycaster2.intersectObjects(meshesModified, true);
 
+    console.log(intersectsOriginal);
+    console.log(intersectsModified);
     const originalObject: THREE.Object3D = intersectsOriginal[0] ?
             this.getParent(intersectsOriginal[0].object, sceneOriginal) : new THREE.Object3D;
     const modifiedObject: THREE.Object3D = intersectsModified[0] ?

@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import * as THREE from "three";
 import { InvalidFormatException } from "../../../../../../common/errors/invalidFormatException";
 import { Pair } from "../../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../../common/model/scene/modifications/geometricModifications";
@@ -96,6 +97,12 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         this.sceneObjectParser.parse(object)))
         .then((v: THREE.Object3D[]) => {
             for (const object of v) {
+                // temp
+                const box3d: THREE.Box3 = new THREE.Box3();
+                box3d.setFromObject(object);
+                const color: THREE.Color = new THREE.Color(0xffff00);
+                const helper: THREE.BoxHelper = new THREE.BoxHelper(object, color);
+                scene.add(helper);
                 scene.add(object);
             }
         });
