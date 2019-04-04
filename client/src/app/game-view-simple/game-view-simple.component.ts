@@ -78,10 +78,12 @@ export class GameViewSimpleComponent implements OnInit {
         this.game.differenceOpponent.subscribe((value) => {
             this.opponentDifferenceFound.nativeElement.innerText = value;
         });
+        this.game.chronometer.subscribe((value: string) => {
+            this.chronometer.nativeElement.innerText = value;
+        });
     }
 
     private setServicesContainers(): void {
-        this.game.setContainers(this.chronometer.nativeElement);
         this.chat.setContainers(this.message.nativeElement, this.messageContainer.nativeElement);
         this.identificationError.setContainers(this.errorMessage.nativeElement,
                                                this.originalCanvas.nativeElement,
