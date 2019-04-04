@@ -1,12 +1,13 @@
 import { expect } from "chai";
-import { GameManager } from "./gameManager";
-import { FreePOVGameManager } from "./freePOVGameManager";
-import { Game } from "../../model/game/game";
-import { INewScore } from "../../../../common/model/score";
 import * as sinon from "sinon";
-import { ICommonReveal3D, DifferenceType } from "../../../../common/model/reveal";
 import { ICommon3DObject } from "../../../../common/model/positions";
+import { DifferenceType, ICommonReveal3D } from "../../../../common/model/reveal";
 import { ObjectType } from "../../../../common/model/scene/scene";
+import { INewScore } from "../../../../common/model/score";
+import { Game } from "../../model/game/game";
+import { FreePOVGameManager } from "./freePOVGameManager";
+import { GameManager } from "./gameManager";
+import { fail } from "assert";
 
 describe("FreePOVGameManager", () => {
     const player1: string = "player1";
@@ -64,13 +65,15 @@ describe("FreePOVGameManager", () => {
             // tslint:disable-next-line:no-empty
             const failureCallback = () => {};
 
-            post3DClickStub.returns(Promise.resolve<ICommonReveal3D>(reveal));
+            post3DClickStub.resolves(reveal);
             // tslint:disable-next-line:no-any
             const successCallbackSpy: sinon.SinonSpy<any[], any> = sinon.spy(successCallback);
             gameManager.playerClick(_3dObj, player2, successCallback, failureCallback)
                 .then(() => {
                     post3DClickStub.restore();
                     expect(successCallbackSpy.called).to.equal(true);
+                },    () => {
+                    fail("playerClick() failed to resolve");
                 });
         });
 
@@ -99,9 +102,39 @@ describe("FreePOVGameManager", () => {
                 post3DClickStub.restore();
                 expect(failureCallbackSpy.calledOnce).to.equal(false);
             });
+        });
+    });
 
-            // tslint:disable-next-line:no-unused-expression
+    describe("endGame()", () => {
+        it("Should call updateScore() once when calling the method", async () => {
+            const updateScoreStub = sinon.stub(gameManager["scoreUpdater"], "updateScore");
+            updateScoreStub.resolves(null);
+        
+            //const lowerBoundDate: number = Date.now() - (gameManager.game.start_time as Date).valueOf();
+
+            gameManager["endGame"](player1).then(() => {
+                updateScoreStub.restore();
+                expect(updateScoreStub.called).to.equal(true);
+            },                                   () => {
+                fail("endGame() failed to resolve");
+            });
+            //const upperBoundDate: number =  Date.now() - (gameManager.game.start_time as Date).valueOf();
+            //updateScoreSpy.restore();
             
+            //expect(updateScoreSpy.args[0][1] >= lowerBoundDate && updateScoreSpy.args[0][1] <= upperBoundDate).to.equal(true);
+        });
+
+
+        it("Should call updateScore() with the current game as the first parameter", () => {
+            const updateScoreStub = sinon.stub(gameManager["scoreUpdater"], "updateScore");
+            updateScoreStub.resolves(null);
+
+            gameManager["endGame"](player1).then(() => {
+                updateScoreStub.restore();
+                expect(updateScoreStub.args[0][0]).to.equal(gameManager.game);
+            },                                   () => {
+                fail("endGame() failed to resolve");
+            });
         });
     });
 });
