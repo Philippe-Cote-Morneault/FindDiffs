@@ -1,6 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
+import * as Sinon from "sinon";
 import { IdentificationError } from "./identificationError.service";
 
 describe("IdentificationError", () => {
@@ -11,6 +12,15 @@ describe("IdentificationError", () => {
             imports: [RouterTestingModule],
         });
         service = TestBed.get(IdentificationError);
+
+    });
+
+    beforeEach(() => {
+        Sinon.stub(Audio.prototype, "play");
+    });
+
+    afterEach(() => {
+        (Audio.prototype.play as Sinon.SinonStub).restore();
     });
 
     it("Should return the correct values after the error is shown", async () => {
