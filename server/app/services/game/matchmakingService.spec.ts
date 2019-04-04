@@ -30,7 +30,6 @@ describe("SocketHandler", () => {
     let socketHandler: SocketHandler;
     let service: MatchmakingService;
     let clientSocket: SocketIOClient.Socket;
-    // let socket1: socketIo.Socket;
     let server: http.Server;
 
     before((done: MochaDone) => {
@@ -43,7 +42,6 @@ describe("SocketHandler", () => {
         socketHandler = SocketHandler.getInstance();
         socketHandler["io"] = socketIo(server);
         socketHandler["io"].on("connect", (socket: socketIo.Socket) => {
-            // socket1 = socket;
             done();
         });
         clientSocket = socketIoClient.connect("http://localhost:3030");
@@ -108,7 +106,7 @@ describe("SocketHandler", () => {
             // tslint:disable-next-line:no-any
             const spy: sinon.SinonSpy<[string | symbol, ...any[]], boolean> = sinon.spy(socketHandler["io"].sockets, "emit");
             // tslint:disable-next-line
-            const endGameCallback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => {};
+            const endGameCallback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => { };
             // tslint:disable-next-line:no-magic-numbers
             const gameManager: GameManager = new SimplePOVGameManager(newGame1v1, 4, endGameCallback);
             service.matchLoadingGame(gameManager, "players1");
@@ -123,13 +121,30 @@ describe("SocketHandler", () => {
             // tslint:disable-next-line:no-any
             const spy: sinon.SinonSpy<[string | symbol, ...any[]], boolean> = sinon.spy(socketHandler["io"].sockets, "emit");
             // tslint:disable-next-line
-            const endGameCallback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => {};
+            const endGameCallback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => { };
             // tslint:disable-next-line:no-magic-numbers
             const gameManager: GameManager = new SimplePOVGameManager(newGame1v1, 4, endGameCallback);
             service.matchLoadingGame(gameManager, "players1");
             // tslint:disable-next-line:no-unused-expression
             expect(spy.calledOnce).to.be.false;
             spy.restore();
+        });
+    });
+
+    describe("cancelMatchmaking()", () => {
+        it("Should emit 1 messages (onMatchmakingchange) to all players when a matchmaking is cancelled", () => {
+            // tslint:disable-next-line:no-any
+            const spy: sinon.SinonSpy<[string | symbol, ...any[]], boolean> = sinon.spy(socketHandler["io"].sockets, "emit");
+            const message: ICommonSocketMessage = {
+                data: game,
+                timestamp: new Date(),
+            };
+            service["cancelMatchmaking"](message);
+            expect(spy.getCalls()[0].args[0]).to.equal(Event.MatchmakingChange);
+            // tslint:disable-next-line:no-unused-expression
+            expect(spy.calledOnce).to.be.true;
+            spy.restore();
+
         });
     });
 });
