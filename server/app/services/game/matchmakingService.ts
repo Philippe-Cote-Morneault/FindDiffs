@@ -40,9 +40,9 @@ export class MatchmakingService {
         const data: ICommonGame = message.data as ICommonGame;
         if (this.waitingRoom.has(data.ressource_id)) {
             this.createMultiplayersGame(data, player);
-            this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
         } else {
             this.waitingRoom.set(data.ressource_id, player);
+            this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
         }
     }
 
