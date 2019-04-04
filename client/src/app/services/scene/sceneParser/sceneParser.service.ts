@@ -58,9 +58,11 @@ export class SceneParserService extends AbstractSceneParser {
 
                     const box3dTop: THREE.Box3 = new THREE.Box3();
 
+                    // tslint:disable-next-line:max-line-length
                     const geometry2: THREE.BoxGeometry = new THREE.BoxGeometry( 6 * element.scale.x, 1.3 * element.scale.y , 0.72 * element.scale.z);
                     const material2: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
                     const cube2: THREE.Mesh = new THREE.Mesh( geometry2, material2 );
+                    cube2.rotation.set(element.rotation.x, element.rotation.y, element.rotation.z);
                     cube2.position.set(element.position.x, (element.position.y + 5.2) * element.scale.y, element.position.z);
 
                     box3dTop.setFromObject(cube2);
