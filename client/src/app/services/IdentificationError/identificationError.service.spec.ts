@@ -24,6 +24,7 @@ describe("IdentificationError", () => {
     });
 
     it("Should return the correct values after the error is shown", async () => {
+        (Audio.prototype.play as Sinon.SinonStub).returns({});
         const p: HTMLElement = document.createElement("p");
         const original: HTMLElement = document.createElement("div");
         const modified: HTMLElement = document.createElement("div");
