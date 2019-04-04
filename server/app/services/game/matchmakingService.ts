@@ -34,6 +34,9 @@ export class MatchmakingService {
         this.socketHandler.subscribe(Event.CancelMatchmaking, (message: ICommonSocketMessage, player: string) => {
             this.cancelMatchmaking(message);
         });
+        this.socketHandler.subscribe(Event.UserConnected, (message: ICommonSocketMessage, player: string) => {
+            this.onMatchmakingChange();
+        });
     }
 
     public matchPlayers(message: ICommonSocketMessage, player: string): void {
