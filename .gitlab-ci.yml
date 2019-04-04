@@ -33,9 +33,9 @@ lint:
 build:
     stage: build
     script:
-        - cd client && npm install && ng build
+        - cd client && ng build
         - cd ..
-        - cd server && npm install && npm run tsc
+        - cd server && npm run tsc
     only:
         - master
         - develop
