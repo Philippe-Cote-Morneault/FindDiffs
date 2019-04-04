@@ -277,7 +277,7 @@ describe("CheatModeService", () => {
                             expect(object3D).to.not.equal(undefined);
                             if (object3D) {
                                 expect(object3D.visible).to.equal(false);
-                            } 
+                            }
                         });
                     });
                 });
@@ -296,7 +296,7 @@ describe("CheatModeService", () => {
                         if (object3D) {
                             expect(object3D.visible).to.equal(true);
                         }
-                    })
+                    });
                 });
 
                 it("should change the deleted objects visibility to true in the original scene", () => {
