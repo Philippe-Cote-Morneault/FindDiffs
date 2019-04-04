@@ -30,10 +30,11 @@ export class SocketHandlerService {
 
     private setEventListener(): void {
         this.socket.on("connect", () => {
-            const token: string | null = sessionStorage.getItem("token");
-            if (token) {
+            // const token: string | null = sessionStorage.getItem("token");
+            if (this.isValidSessionStorage()) {
                 const tokendata: ICommonToken = {
-                    token: token,
+                    // tslint:disable-next-line: no-non-null-assertion
+                    token: sessionStorage.getItem("token")!,
                 };
                 const message: ICommonSocketMessage = {
                     data: tokendata,
@@ -41,7 +42,7 @@ export class SocketHandlerService {
                 };
 
                 this.socket.emit(Event.Authenticate, message, async (response: Object) => {
-                    this.manageServerResponse(response);
+                    await this.manageServerResponse(response);
                 });
             } else {
                 this.onAuthenticate();
@@ -49,8 +50,12 @@ export class SocketHandlerService {
         });
     }
 
+    private isValidSessionStorage(): boolean {
+        return sessionStorage.getItem("token") ? true : false;
+    }
+
     private async manageServerResponse(response: Object): Promise<void> {
-        if ((response as ICommonError).error_message) {
+        if (this.hasErrorMessage(response)) {
             alert((response as ICommonError).error_message);
             sessionStorage.removeItem("token");
             await this.router.navigateByUrl("/");
@@ -58,6 +63,10 @@ export class SocketHandlerService {
         } else {
             this.setEventListeners(this.socket);
         }
+    }
+
+    private hasErrorMessage(response: Object): boolean {
+        return (response as ICommonError).error_message ? true : false;
     }
 
     public subscribe(event: Event, subscriber: SocketSubscriber): void {
