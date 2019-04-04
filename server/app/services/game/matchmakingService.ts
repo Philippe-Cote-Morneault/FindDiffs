@@ -86,12 +86,12 @@ export class MatchmakingService {
     }
 
     private onMatchmakingChange(): void {
-        const roomArray: string[] = [];
+        const room: string[] = [];
         this.waitingRoom.forEach((value: string, key: string) => {
-            roomArray[roomArray.length++] = key;
+            room[room.length++] = key;
         });
         const message: ICommonSocketMessage = {
-            data: roomArray,
+            data: room,
             timestamp: new Date(),
         };
         this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
