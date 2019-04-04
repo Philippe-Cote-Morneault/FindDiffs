@@ -42,23 +42,19 @@ export class MatchmakingService {
             this.createMultiplayersGame(data, player);
         } else {
             this.waitingRoom.set(data.ressource_id, player);
-            this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
+            this.onMatchmakingChange();
         }
     }
 
     private createMultiplayersGame(data: ICommonGame, secondPlayer: string): void {
-        const message: ICommonSocketMessage = {
-            data: data,
-            timestamp: new Date(),
-        };
         const firstPlayer: string | undefined = this.waitingRoom.get(data.ressource_id);
 
         if (firstPlayer) {
             this.gameService.createGame([firstPlayer, secondPlayer], data, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT);
             this.EndMatchmaking(secondPlayer, data);
             this.EndMatchmaking(firstPlayer, data);
-            this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
             this.waitingRoom.delete(data.ressource_id);
+            this.onMatchmakingChange();
         }
     }
 
@@ -82,7 +78,19 @@ export class MatchmakingService {
     }
 
     private cancelMatchmaking(message: ICommonSocketMessage): void {
-        this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
         this.waitingRoom.delete(message.data as string);
+        this.onMatchmakingChange();
+    }
+
+    private onMatchmakingChange(): void {
+        const roomArray: string[] = [];
+        this.waitingRoom.forEach((value: string, key: string) => {
+            roomArray[roomArray.length++] = key;
+        });
+        const message: ICommonSocketMessage = {
+            data: roomArray,
+            timestamp: new Date(),
+        };
+        this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
     }
 }
