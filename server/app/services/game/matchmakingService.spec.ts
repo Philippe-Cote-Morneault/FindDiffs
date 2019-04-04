@@ -26,8 +26,7 @@ const newGame1v1: Game = {
     game_card_id: "commonGame.game_card_id",
 };
 
-// tslint:disable-next-line:max-func-body-length
-describe.only("SocketHandler", () => {
+describe("SocketHandler", () => {
     let socketHandler: SocketHandler;
     let service: MatchmakingService;
     let clientSocket: SocketIOClient.Socket;
