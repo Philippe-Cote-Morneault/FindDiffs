@@ -28,7 +28,7 @@ export class SceneParserService extends AbstractSceneParser {
         // tslint:disable-next-line:max-func-body-length
         await Promise.all(promises).then((v: THREE.Object3D[]) => {
             // tslint:disable-next-line:max-func-body-length
-            v.forEach((element) => {
+            v.forEach((element, index: number) => {
                 // console.log("g");
                 if (element.name === "lamp.gltf") {
                     // console.log(element.position);
@@ -62,8 +62,10 @@ export class SceneParserService extends AbstractSceneParser {
                     const geometry2: THREE.BoxGeometry = new THREE.BoxGeometry( 6 * element.scale.x, 1.3 * element.scale.y , 0.72 * element.scale.z);
                     const material2: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
                     const cube2: THREE.Mesh = new THREE.Mesh( geometry2, material2 );
-                    cube2.rotation.set(element.rotation.x, element.rotation.y, element.rotation.z);
                     cube2.position.set(element.position.x, (element.position.y + 5.2) * element.scale.y, element.position.z);
+
+                    scene.add(cube2);
+                    cube2.rotation.y = sceneObjects[index].orientation.yAngle;
 
                     box3dTop.setFromObject(cube2);
 
