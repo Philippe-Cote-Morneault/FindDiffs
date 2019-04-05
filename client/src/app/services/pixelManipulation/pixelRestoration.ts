@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommon2DPosition } from "../../../../../common/model/positions";
@@ -10,7 +10,7 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
 @Injectable({
     providedIn: "root",
 })
-export class PixelRestoration  implements SocketSubscriber {
+export class PixelRestoration  implements SocketSubscriber, OnDestroy {
     public static pixelDimension: number = 1;
     public static imageDataPixelSpace: number = 4;
     public originalContext: CanvasRenderingContext2D | null;
@@ -20,6 +20,10 @@ export class PixelRestoration  implements SocketSubscriber {
 
     public constructor(private socketService: SocketHandlerService) {
         this.subscribeToSocket();
+    }
+
+    public ngOnDestroy(): void {
+        this.socketService.unsubscribe(Event.DifferenceFound, this);
     }
 
     public setContainers(originalCanvas: HTMLCanvasElement, modifiedCanvas: HTMLCanvasElement): void {
