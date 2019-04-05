@@ -23,7 +23,7 @@ import { SocketHandlerService } from "../services/socket/socketHandler.service";
     selector: "app-game-view-free",
     templateUrl: "./game-view-free.component.html",
     styleUrls: ["./game-view-free.component.css"],
-    providers: [SceneSyncerService],
+    providers: [SceneSyncerService, ObjectHandler, ObjectRestorationService],
 })
 
 export class GameViewFreeComponent implements OnInit {

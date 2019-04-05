@@ -1,4 +1,4 @@
-import { ElementRef, Injectable } from "@angular/core";
+import { ElementRef, Injectable, OnDestroy } from "@angular/core";
 import { ICommonDifferenceFound } from "../../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../../common/communication/webSocket/socketMessage";
 import { DifferenceType, ICommonReveal3D } from "../../../../../../common/model/reveal";
@@ -10,7 +10,7 @@ import { IThreeObject, IThreeScene } from "./IThreeObject";
 @Injectable({
   providedIn: "root",
 })
-export class ObjectRestorationService implements SocketSubscriber {
+export class ObjectRestorationService implements SocketSubscriber, OnDestroy {
   public originalScene: ElementRef<HTMLElement>;
   public modifiedScene: ElementRef<HTMLElement>;
   public detectedObjects: IThreeObject;
@@ -35,15 +35,17 @@ export class ObjectRestorationService implements SocketSubscriber {
     this.detectedObjects = detectedObjects;
   }
 
+  public ngOnDestroy(): void {
+      this.socketService.unsubscribe(Event.DifferenceFound, this);
+  }
+
   private subscribeToSocket(): void {
     this.socketService.subscribe(Event.DifferenceFound, this);
   }
 
   public notify(event: Event, message: ICommonSocketMessage): void {
-    if (event === Event.DifferenceFound) {
-        const response: ICommonReveal3D = (message.data as ICommonDifferenceFound).reveal as ICommonReveal3D;
-        this.restoreObject(response);
-    }
+    const response: ICommonReveal3D = (message.data as ICommonDifferenceFound).reveal as ICommonReveal3D;
+    this.restoreObject(response);
   }
 
   public restoreObject(response: ICommonReveal3D ): void {
