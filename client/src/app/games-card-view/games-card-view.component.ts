@@ -6,7 +6,7 @@ import { Event, ICommonSocketMessage } from "../../../../common/communication/we
 import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { GameService } from "../services/game/game.service";
+import { MatchmakingService } from "../services/game/matchmaking.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { ImagePairService } from "../services/image-pair/imagePair.service";
 import { SceneService } from "../services/scene/scene.service";
@@ -39,7 +39,7 @@ export class GamesCardViewComponent implements OnInit {
         private router: Router,
         private socketHandlerService: SocketHandlerService,
         private imagePairService: ImagePairService,
-        public game: GameService) {
+        public matchmaking: MatchmakingService) {
             this.rightButton = "Create";
             this.leftButton = "Play";
             this.simplePOV = "Simple";
@@ -89,7 +89,7 @@ export class GamesCardViewComponent implements OnInit {
     private async playSoloGame(gameUrl: string): Promise<void> {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             if ((response as ICommonGameCard).id) {
-                this.game.setIsSoloGame(true);
+                this.matchmaking.setIsActive(false);
                 await this.router.navigateByUrl(gameUrl + this.gameCard.id);
                 this.emitPlayGame(Event.PlaySoloGame);
             } else {
@@ -102,7 +102,7 @@ export class GamesCardViewComponent implements OnInit {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             if ((response as ICommonGameCard).id) {
                 this.waitOpponent = true;
-                this.game.setIsSoloGame(false);
+                this.matchmaking.setIsActive(true);
                 this.emitPlayGame(Event.PlayMultiplayerGame);
             } else {
                 alert("This game has been deleted, please try another one.");
