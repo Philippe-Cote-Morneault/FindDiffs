@@ -9,8 +9,10 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
     providedIn: "root",
 })
 export class MatchmakingService implements SocketSubscriber {
+    private isActive: boolean;
 
     public constructor(private socketService: SocketHandlerService, private router: Router) {
+        this.isActive = false;
         this.subscribeToSocket();
     }
 
@@ -22,5 +24,13 @@ export class MatchmakingService implements SocketSubscriber {
         const game: ICommonGame = message.data as ICommonGame;
         const gameUrl: string = (game.pov) ? "/gameFree/" : "/gameSimple/";
         this.router.navigateByUrl(gameUrl + game.game_card_id);
+    }
+
+    public getIsActive(): boolean {
+        return this.isActive;
+    }
+
+    public setIsActive(isActive: boolean): void {
+        this.isActive = isActive;
     }
 }
