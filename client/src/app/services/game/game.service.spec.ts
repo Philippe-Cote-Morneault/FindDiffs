@@ -95,17 +95,4 @@ describe("GameService", () => {
             expect(service.getGameStarted()).to.equal(false);
         });
     });
-    describe("getIsSoloGame, setItSoloGame", () => {
-        it("Should return true if the game is solo", async () => {
-            service.setIsSoloGame(true);
-            expect(service.getIsSoloGame()).to.equal(true);
-        });
-        it("Should return true by default", async () => {
-            expect(service.getIsSoloGame()).to.equal(true);
-        });
-        it("Should return false if the game is multiplayer", async () => {
-            service.setIsSoloGame(false);
-            expect(service.getIsSoloGame()).to.equal(false);
-        });
-    });
 });
