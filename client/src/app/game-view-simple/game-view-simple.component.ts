@@ -17,6 +17,9 @@ import { SocketHandlerService } from "../services/socket/socketHandler.service";
     selector: "app-game-view-simple",
     templateUrl: "./game-view-simple.component.html",
     styleUrls: ["./game-view-simple.component.css"],
+    providers: [
+        PixelRestoration,
+      ],
 })
 export class GameViewSimpleComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
