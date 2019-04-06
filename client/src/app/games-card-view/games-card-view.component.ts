@@ -6,7 +6,6 @@ import { Event, ICommonSocketMessage } from "../../../../common/communication/we
 import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { MatchmakingService } from "../services/game/matchmaking.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { ImagePairService } from "../services/image-pair/imagePair.service";
 import { SceneService } from "../services/scene/scene.service";
@@ -38,8 +37,7 @@ export class GamesCardViewComponent implements OnInit {
         private sceneService: SceneService,
         private router: Router,
         private socketHandlerService: SocketHandlerService,
-        private imagePairService: ImagePairService,
-        private matchMakingService: MatchmakingService) {
+        private imagePairService: ImagePairService) {
             this.rightButton = "Create";
             this.leftButton = "Play";
             this.simplePOV = "Simple";
@@ -99,8 +97,7 @@ export class GamesCardViewComponent implements OnInit {
     private async playMultiplayerGame(): Promise<void> {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             ((response as ICommonGameCard).id) ?
-                // a changer
-                this.matchMakingService.changeMatchMakingType() :
+                this.changeMatchmakingType() :
                 alert("This game has been deleted, please try another one.");
         });
     }
@@ -152,12 +149,21 @@ export class GamesCardViewComponent implements OnInit {
 
     public onClosed(closed: boolean): void {
         if (closed) {
-            this.matchMakingService.changeMatchMakingType();
             const message: ICommonSocketMessage = {
                 data: this.gameCard.resource_id,
                 timestamp: new Date(),
             };
+            this.changeMatchmakingType();
             this.socketHandlerService.emitMessage(Event.CancelMatchmaking, message);
         }
+    }
+
+    private changeMatchmakingType(): void {
+        this.waitOpponent = !this.waitOpponent;
+        const message: ICommonSocketMessage = {
+            data: this.gameCard.resource_id,
+            timestamp: new Date(),
+        };
+        this.socketHandlerService.emitMessage(Event.MatchmakingChange, message);
     }
 }
