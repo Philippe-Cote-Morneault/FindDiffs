@@ -165,10 +165,5 @@ export class GamesCardViewComponent implements OnInit {
 
     private changeMatchmakingType(): void {
         this.waitOpponent = !this.waitOpponent;
-        const message: ICommonSocketMessage = {
-            data: this.gameCard.resource_id,
-            timestamp: new Date(),
-        };
-        this.socketHandlerService.emitMessage(Event.MatchmakingChange, message);
     }
 }
