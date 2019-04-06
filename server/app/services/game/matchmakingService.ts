@@ -34,8 +34,8 @@ export class MatchmakingService {
         this.socketHandler.subscribe(Event.CancelMatchmaking, (message: ICommonSocketMessage, player: string) => {
             this.cancelMatchmaking(message);
         });
-        this.socketHandler.subscribe(Event.UserConnected, (message: ICommonSocketMessage, player: string) => {
-            this.onMatchmakingChange();
+        this.socketHandler.subscribe(Event.MatchmakingChange, (message: ICommonSocketMessage, player: string) => {
+            this.onMatchmakingChange(player);
         });
     }
 
@@ -45,7 +45,7 @@ export class MatchmakingService {
             this.createMultiplayersGame(data, player);
         } else {
             this.waitingRoom.set(data.ressource_id, player);
-            this.onMatchmakingChange();
+            this.onMatchmakingChange(null);
         }
     }
 
@@ -57,7 +57,7 @@ export class MatchmakingService {
             this.EndMatchmaking(secondPlayer, data);
             this.EndMatchmaking(firstPlayer, data);
             this.waitingRoom.delete(data.ressource_id);
-            this.onMatchmakingChange();
+            this.onMatchmakingChange(null);
         }
     }
 
@@ -82,10 +82,10 @@ export class MatchmakingService {
 
     private cancelMatchmaking(message: ICommonSocketMessage): void {
         this.waitingRoom.delete(message.data as string);
-        this.onMatchmakingChange();
+        this.onMatchmakingChange(null);
     }
 
-    private onMatchmakingChange(): void {
+    private onMatchmakingChange(player: string | null): void {
         const room: string[] = [];
         this.waitingRoom.forEach((value: string, key: string) => {
             room[room.length++] = key;
@@ -94,6 +94,8 @@ export class MatchmakingService {
             data: room,
             timestamp: new Date(),
         };
-        this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
+
+        player ? this.socketHandler.sendMessage(Event.MatchmakingChange, message, player) :
+                 this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
     }
 }
