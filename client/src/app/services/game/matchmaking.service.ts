@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { GamesCardViewComponent } from "src/app/games-card-view/games-card-view.component";
 import { ICommonGame } from "../../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { SocketHandlerService } from "../socket/socketHandler.service";
@@ -10,12 +11,9 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
 })
 export class MatchmakingService implements SocketSubscriber {
 
-    private rightButtonText: string;
-    private waitOpponent: boolean;
+    private gameList: GamesCardViewComponent[];
 
     public constructor(private socketService: SocketHandlerService, private router: Router) {
-        this.rightButtonText = "Create";
-        this.waitOpponent = false;
         this.subscribeToSocket();
     }
 
@@ -29,7 +27,7 @@ export class MatchmakingService implements SocketSubscriber {
                 return this.endMatchmaking(message);
             }
             case Event.MatchmakingChange: {
-                return this.changeMatchMakingType();
+                return this.changeMatchmakingType(message);
             }
             default: {
                 break;
@@ -43,8 +41,14 @@ export class MatchmakingService implements SocketSubscriber {
         this.router.navigateByUrl(gameUrl + game.game_card_id);
     }
 
-    public changeMatchMakingType(): void {
-        this.waitOpponent = !this.waitOpponent;
-        this.rightButtonText === "Create" ? this.rightButtonText = "Join" : this.rightButtonText = "Create";
+    private changeMatchmakingType(message: ICommonSocketMessage): void {
+        const gameIDs: string[] = message.data as string[];
+        this.gameList.forEach((game: GamesCardViewComponent) => {
+            gameIDs.includes(game.scenePair.id) ? game.rightButton = "Join" : game.rightButton = "Create";
+        });
+    }
+
+    public setGameList(list: GamesCardViewComponent[]): void {
+        this.gameList = list;
     }
 }
