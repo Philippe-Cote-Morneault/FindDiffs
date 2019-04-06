@@ -6,6 +6,7 @@ import { Event, ICommonSocketMessage } from "../../../../common/communication/we
 import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
+import { MatchmakingService } from "../services/game/matchmaking.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { ImagePairService } from "../services/image-pair/imagePair.service";
 import { SceneService } from "../services/scene/scene.service";
@@ -37,7 +38,8 @@ export class GamesCardViewComponent implements OnInit {
         private sceneService: SceneService,
         private router: Router,
         private socketHandlerService: SocketHandlerService,
-        private imagePairService: ImagePairService) {
+        private imagePairService: ImagePairService,
+        public matchmaking: MatchmakingService) {
             this.rightButton = "Create";
             this.leftButton = "Play";
             this.simplePOV = "Simple";
@@ -67,9 +69,7 @@ export class GamesCardViewComponent implements OnInit {
             this.deleteGameCard();
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
-
             this.playSoloGame(gameUrl);
-            this.emitPlayGame(Event.PlaySoloGame);
         }
     }
 
@@ -88,27 +88,32 @@ export class GamesCardViewComponent implements OnInit {
 
     private async playSoloGame(gameUrl: string): Promise<void> {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
-            ((response as ICommonGameCard).id) ?
-                await this.router.navigateByUrl(gameUrl + this.gameCard.id) :
+            if ((response as ICommonGameCard).id) {
+                this.matchmaking.setIsActive(false);
+                await this.router.navigateByUrl(gameUrl + this.gameCard.id);
+                this.emitPlayGame(Event.PlaySoloGame);
+            } else {
                 alert("This game has been deleted, please try another one.");
+            }
         });
     }
 
     private async playMultiplayerGame(): Promise<void> {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
-            ((response as ICommonGameCard).id) ?
-                this.changeMatchmakingType() :
+            if ((response as ICommonGameCard).id) {
+                this.changeMatchmakingType();
+                this.matchmaking.setIsActive(true);
+                this.emitPlayGame(Event.PlayMultiplayerGame);
+            } else {
                 alert("This game has been deleted, please try another one.");
+            }
         });
     }
 
     public async onRightButtonClick(): Promise<void> {
-        if (this.isInAdminView) {
-            this.resetBestTimes();
-        } else {
-            this.playMultiplayerGame();
-            this.emitPlayGame(Event.PlayMultiplayerGame);
-        }
+        (this.isInAdminView) ?
+        this.resetBestTimes() :
+        this.playMultiplayerGame();
     }
 
     public deleteGameCard(): void {

@@ -10,10 +10,12 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
     providedIn: "root",
 })
 export class MatchmakingService implements SocketSubscriber {
+    private isActive: boolean;
 
     private gameList: GamesCardViewComponent[];
 
     public constructor(private socketService: SocketHandlerService, private router: Router) {
+        this.isActive = false;
         this.subscribeToSocket();
     }
 
@@ -50,5 +52,13 @@ export class MatchmakingService implements SocketSubscriber {
 
     public setGameList(list: GamesCardViewComponent[]): void {
         this.gameList = list;
+    }
+
+    public getIsActive(): boolean {
+        return this.isActive;
+    }
+
+    public setIsActive(isActive: boolean): void {
+        this.isActive = isActive;
     }
 }

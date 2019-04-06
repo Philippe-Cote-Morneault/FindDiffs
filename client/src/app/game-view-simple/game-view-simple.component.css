@@ -33,7 +33,7 @@
 
   #title_wrapper {
     text-align: center;
-    width: 64%;
+    width: 50%;
   }
   #message_container {
     overflow-y: visible;
@@ -47,7 +47,7 @@
     border: 1px black solid;
   }
   .message {
-    margin-bottom: 1%;
+    margin-bottom: 2px;
     margin-right: 100%;
     padding:2px;
     width: 98%;

@@ -45,4 +45,18 @@ describe("MatchmakingService", () => {
 
         expect(url).to.equal("/gameFree/1231231");
     });
+
+    describe("getIsActive, setIsAvtive", () => {
+        it("Should return true if the game is solo", async () => {
+            service.setIsActive(true);
+            expect(service.getIsActive()).to.equal(true);
+        });
+        it("Should return false by default", async () => {
+            expect(service.getIsActive()).to.equal(false);
+        });
+        it("Should return false if the game is multiplayer", async () => {
+            service.setIsActive(false);
+            expect(service.getIsActive()).to.equal(false);
+        });
+    });
 });
