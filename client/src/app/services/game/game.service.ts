@@ -22,7 +22,7 @@ export class GameService implements SocketSubscriber, OnDestroy {
     public differenceUser: Subject<string>;
     public differenceOpponent: Subject<string>;
     public gameEnded: Subject<GameEnding>;
-    protected username: string | null;
+    public username: string | null;
 
     public constructor(protected socketService: SocketHandlerService, protected playerTimeService: PlayerTimeService) {
         this.timer = new Timer();
