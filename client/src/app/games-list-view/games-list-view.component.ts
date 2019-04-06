@@ -33,6 +33,7 @@ export class GamesListViewComponent implements OnInit {
             gameCards.forEach((gameCard: ICommonGameCard) => {
                 this.gameCardLoaderService.addDynamicComponent(gameCard, this.isInAdminView);
             });
+            this.matchmakingService.getWaitingRooms();
         });
     }
 }
