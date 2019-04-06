@@ -10,11 +10,13 @@ import { ICommonThematicObject } from "../../../../../../common/model/scene/obje
 import { ObjectType } from "../../../../../../common/model/scene/scene";
 import { AbstractSceneParser } from "./abstractSceneParserService";
 import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
+import { ISceneBoundingBox } from "./ISceneBoundingBox";
 
 @Injectable({
     providedIn: "root",
 })
 export class ModifiedSceneParserService extends AbstractSceneParser {
+    public boundingBoxes: THREE.Box3[] = new Array<THREE.Box3>();
     public constructor(type: ObjectType) {
         super(
             {
@@ -30,7 +32,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         );
     }
 
-    public async parseModifiedScene(originalScene: THREE.Scene, sceneModifications: ICommonSceneModifications): Promise<THREE.Scene> {
+    public async parseModifiedScene(originalScene: THREE.Scene, sceneModifications: ICommonSceneModifications): Promise<ISceneBoundingBox> {
         const scene: THREE.Scene = originalScene.clone();
         if (sceneModifications.type === ObjectType.Geometric) {
             await this.parseGeometricObjects(
@@ -45,7 +47,13 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         }
         await this.addAddedObjects(scene, sceneModifications.addedObjects);
 
-        return scene;
+        // tslint:disable-next-line:no-unnecessary-local-variable
+        const sceneBoundingBox: ISceneBoundingBox = {
+            scene: scene,
+            bbox: this.boundingBoxes,
+        };
+
+        return sceneBoundingBox;
     }
 
     private async parseThematicObjects(scene: THREE.Scene, sceneModifications: ICommonThematicModifications): Promise<void> {
@@ -100,10 +108,8 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
                 // temp
                 const box3d: THREE.Box3 = new THREE.Box3();
                 box3d.setFromObject(object);
-                const color: THREE.Color = new THREE.Color(0xffff00);
-                const helper: THREE.BoxHelper = new THREE.BoxHelper(object, color);
-                scene.add(helper);
                 scene.add(object);
+                this.boundingBoxes.push(box3d);
             }
         });
     }
