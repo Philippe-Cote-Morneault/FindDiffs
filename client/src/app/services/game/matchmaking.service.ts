@@ -21,6 +21,7 @@ export class MatchmakingService implements SocketSubscriber {
 
     private subscribeToSocket(): void {
         this.socketService.subscribe(Event.EndMatchmaking, this);
+        this.socketService.subscribe(Event.MatchmakingChange, this);
     }
 
     public async notify(event: Event, message: ICommonSocketMessage): Promise<void> {
@@ -46,7 +47,7 @@ export class MatchmakingService implements SocketSubscriber {
     private changeMatchmakingType(message: ICommonSocketMessage): void {
         const gameIDs: string[] = message.data as string[];
         this.gameList.forEach((game: GamesCardViewComponent) => {
-            gameIDs.includes(game.scenePair.id) ? game.rightButton = "Join" : game.rightButton = "Create";
+            gameIDs.includes(game.gameCard.resource_id) ? game.rightButton = "Join" : game.rightButton = "Create";
         });
     }
 
@@ -60,5 +61,9 @@ export class MatchmakingService implements SocketSubscriber {
 
     public setIsActive(isActive: boolean): void {
         this.isActive = isActive;
+    }
+
+    public getWaitingRooms(): void {
+        this.socketService.emitMessage(Event.MatchmakingChange, null);
     }
 }
