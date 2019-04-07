@@ -19,13 +19,8 @@ export class SceneParserService extends AbstractSceneParser {
         const scene: THREE.Scene = await this.createScene();
 
         const bbox: THREE.Box3[] = await this.parseObjects(scene, this.sceneModel.sceneObjects);
-        // tslint:disable-next-line:no-unnecessary-local-variable
-        const sceneBoundingBox: ISceneBoundingBox = {
-            scene: scene,
-            bbox: bbox,
-        };
 
-        return sceneBoundingBox;
+        return {scene: scene, bbox: bbox};
     }
 
     private async parseObjects(scene: THREE.Scene, sceneObjects: ICommonSceneObject[]): Promise<THREE.Box3[]> {
