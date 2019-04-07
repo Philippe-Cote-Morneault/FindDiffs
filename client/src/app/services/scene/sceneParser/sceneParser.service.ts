@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene } from "../../../../../../common/model/scene/scene";
+import { WallLoader } from "../sceneLoader/wallLoader";
 import { ISceneBoundingBox } from "./ISceneBoundingBox";
 import { AbstractSceneParser } from "./abstractSceneParserService";
 
@@ -26,15 +27,15 @@ export class SceneParserService extends AbstractSceneParser {
         return sceneBoundingBox;
     }
 
-    // tslint:disable-next-line:max-func-body-length
+    // tslint:disable:max-func-body-length
     private async parseObjects(scene: THREE.Scene, sceneObjects: ICommonSceneObject[]): Promise<THREE.Box3[]> {
 
         const boundingBoxes: THREE.Box3[] = new Array<THREE.Box3>();
         const promises: Promise<THREE.Object3D>[] = sceneObjects.map(
             async (object: ICommonSceneObject) => this.sceneObjectParser.parse(object));
+        WallLoader.load(boundingBoxes, scene);
         // tslint:disable-next-line:max-func-body-length
         await Promise.all(promises).then((v: THREE.Object3D[]) => {
-            // tslint:disable-next-line:max-func-body-length
             v.forEach((element, index: number) => {
                 // console.log("g");
                 if (element.name === "lamp.gltf") {
@@ -108,5 +109,4 @@ export class SceneParserService extends AbstractSceneParser {
 
         return boundingBoxes;
     }
-
 }
