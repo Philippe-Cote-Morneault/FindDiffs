@@ -8,9 +8,10 @@ import { ICommonThematicModifications } from "../../../../../../common/model/sce
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonThematicObject } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ObjectType } from "../../../../../../common/model/scene/scene";
+import { BoundingBoxLoader } from "../sceneLoader/boundingBoxLoader";
+import { ISceneBoundingBox } from "./ISceneBoundingBox";
 import { AbstractSceneParser } from "./abstractSceneParserService";
 import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
-import { ISceneBoundingBox } from "./ISceneBoundingBox";
 
 @Injectable({
     providedIn: "root",
@@ -47,13 +48,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         }
         await this.addAddedObjects(scene, sceneModifications.addedObjects);
 
-        // tslint:disable-next-line:no-unnecessary-local-variable
-        const sceneBoundingBox: ISceneBoundingBox = {
-            scene: scene,
-            bbox: this.boundingBoxes,
-        };
-
-        return sceneBoundingBox;
+        return {scene: scene, bbox: this.boundingBoxes};
     }
 
     private async parseThematicObjects(scene: THREE.Scene, sceneModifications: ICommonThematicModifications): Promise<void> {
@@ -104,13 +99,12 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         await Promise.all(objectsToAdd.map(async (object: ICommonSceneObject) =>
         this.sceneObjectParser.parse(object)))
         .then((v: THREE.Object3D[]) => {
-            for (const object of v) {
-                // temp
-                const box3d: THREE.Box3 = new THREE.Box3();
-                box3d.setFromObject(object);
-                scene.add(object);
-                this.boundingBoxes.push(box3d);
-            }
+            v.forEach((element, index: number) => {
+                (element.name === "lamp.gltf") ?
+                    BoundingBoxLoader.loadLamp(this.boundingBoxes, objectsToAdd, element, index) :
+                    BoundingBoxLoader.loadObject(this.boundingBoxes, element);
+                scene.add(element);
+            });
         });
     }
 
