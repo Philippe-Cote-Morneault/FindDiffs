@@ -58,7 +58,7 @@ export class SceneLoaderService {
             this.camera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
 
             const geometry2: THREE.BoxGeometry = new THREE.BoxGeometry( );
-            const material2: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+            const material2: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( {color: 0x00FF00} );
             const cube2: THREE.Mesh = new THREE.Mesh( geometry2, material2 );
             cube2.position.set(this.camera.position.x, (this.camera.position.y ), this.camera.position.z);
 
@@ -66,6 +66,9 @@ export class SceneLoaderService {
             const helper: THREE.BoxHelper = new THREE.BoxHelper(cube2);
             this.scene.add(cube2);
             this.scene.add(helper);
+
+            // TODO: eventually use this.
+            // const bboxCam: any = BoundingBoxLoader.loadCamera(this.scene, this.camera);
             ControlsGenerator.generateGameControls(this.camera, helper, cube2, SceneLoaderService.bbox, bboxCam, container);
             this.animate();
         }
