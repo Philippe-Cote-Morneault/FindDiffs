@@ -147,4 +147,17 @@ describe("SocketHandler", () => {
 
         });
     });
+    describe("onMatchmakingChange()", () => {
+        it("Should emit 1 messages (onMatchmakingchange) to all players when a matchmaking is cancelled", () => {
+            // tslint:disable-next-line:no-any
+            const spy: sinon.SinonSpy<[string | symbol, ...any[]], boolean> = sinon.spy(socketHandler["io"].sockets, "emit");
+
+            service["onMatchmakingChange"]("");
+            expect(spy.getCalls()[0].args[0]).to.equal(Event.MatchmakingChange);
+            // tslint:disable-next-line:no-unused-expression
+            expect(spy.calledOnce).to.be.true;
+            spy.restore();
+
+        });
+    });
 });
