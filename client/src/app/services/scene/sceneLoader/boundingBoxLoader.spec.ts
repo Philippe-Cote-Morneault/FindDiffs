@@ -16,4 +16,14 @@ describe("BoundingBoxLoader", () => {
         });
     });
 
+    describe("loadObject()", () => {
+        it("Should add an object to boundingBoxes array", async () => {
+            const boundingBoxes: THREE.Box3[] = new Array<THREE.Box3>();
+            const randomObj: THREE.Object3D = new THREE.Object3D();
+            await BoundingBoxLoader.loadObject(boundingBoxes, randomObj);
+
+            expect(boundingBoxes.length).to.equal(1);
+        });
+    });
+
 });
