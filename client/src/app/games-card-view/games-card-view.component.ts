@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
+import { CREATE_BUTTON, DELETE_BUTTON, PLAY_BUTTON, RESET_BUTTON, SIMPLE_BUTTON } from "../../../../common/buttonName";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
@@ -24,6 +25,7 @@ export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
     @ViewChild("image") private image: ElementRef;
+    @ViewChild("matchMakingButton") public matchMakingButton: ElementRef;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
@@ -40,17 +42,17 @@ export class GamesCardViewComponent implements OnInit {
         private socketHandlerService: SocketHandlerService,
         private imagePairService: ImagePairService,
         public matchmaking: MatchmakingService) {
-            this.rightButton = "Create";
-            this.leftButton = "Play";
-            this.simplePOV = "Simple";
+            this.rightButton = CREATE_BUTTON;
+            this.leftButton = PLAY_BUTTON;
+            this.simplePOV = SIMPLE_BUTTON;
             this.isInAdminView = false;
             this.waitOpponent = false;
         }
 
     public ngOnInit(): void {
         if (this.isInAdminView) {
-            this.leftButton = "Delete";
-            this.rightButton = "Reset";
+            this.leftButton = DELETE_BUTTON;
+            this.rightButton = RESET_BUTTON;
         }
 
         if (this.isSimplePov()) {
