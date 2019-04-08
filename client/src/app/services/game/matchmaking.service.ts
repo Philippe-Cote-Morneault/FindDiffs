@@ -13,7 +13,7 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
 export class MatchmakingService implements SocketSubscriber {
     private isActive: boolean;
 
-    private gameList: GamesCardViewComponent[];
+    public gameList: GamesCardViewComponent[];
 
     public constructor(private socketService: SocketHandlerService, private router: Router) {
         this.isActive = false;

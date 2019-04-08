@@ -1,7 +1,10 @@
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
 import { Router } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
+import { GamesCardViewComponent } from "src/app/games-card-view/games-card-view.component";
+import { WaitingViewComponent } from "src/app/waiting-view/waiting-view.component";
 import { ICommonGame } from "../../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { MatchmakingService } from "./matchmaking.service";
@@ -12,7 +15,8 @@ describe("MatchmakingService", () => {
 
     beforeEach(async() => {
         TestBed.configureTestingModule({
-            imports: [RouterTestingModule],
+            imports: [RouterTestingModule, HttpClientTestingModule],
+            declarations: [GamesCardViewComponent, WaitingViewComponent],
         });
         service = TestBed.get(MatchmakingService);
         router = TestBed.get(Router);
@@ -57,6 +61,29 @@ describe("MatchmakingService", () => {
         it("Should return false if the game is multiplayer", async () => {
             service.setIsActive(false);
             expect(service.getIsActive()).to.equal(false);
+        });
+    });
+
+    describe("MatchmakingChange event", () => {
+        let fakeComponent: GamesCardViewComponent;
+
+        beforeEach(async () => {
+            fakeComponent = TestBed.createComponent(GamesCardViewComponent).componentInstance;
+        });
+        describe("setGameList()", () => {
+            it("should add a GamesCardViewComponent to the list", () => {
+                service.setGameList([fakeComponent]);
+                expect(service.gameList.length).to.equal(1);
+                expect(service.gameList[0]).to.equal(fakeComponent);
+            });
+
+            it("should add multiple GamesCadViewComponents to the list", () => {
+                service.setGameList([fakeComponent, fakeComponent, fakeComponent]);
+                expect(service.gameList.length).to.equal(3);
+                service.gameList.forEach((game: GamesCardViewComponent) => {
+                    expect(game).to.equal(fakeComponent);
+                });
+            });
         });
     });
 });
