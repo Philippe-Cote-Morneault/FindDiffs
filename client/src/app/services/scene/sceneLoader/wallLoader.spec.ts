@@ -13,4 +13,12 @@ describe("WallLoader", () => {
         });
     });
 
+    describe("loadThematic()", () => {
+        it("Should add 6 walls to the boundingBoxes array, for a thematic scene", async () => {
+            const boundingBoxes: THREE.Box3[] = new Array<THREE.Box3>();
+            await WallLoader.loadThematic(boundingBoxes);
+
+            expect(boundingBoxes.length).to.equal(6);
+        });
+    });
 });
