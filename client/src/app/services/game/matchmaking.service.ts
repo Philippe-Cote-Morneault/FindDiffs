@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { GamesCardViewComponent } from "src/app/games-card-view/games-card-view.component";
+import { CREATE_BUTTON, JOIN_BUTTON } from "../../../../../common/buttonName";
 import { ICommonGame } from "../../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { SocketHandlerService } from "../socket/socketHandler.service";
@@ -47,8 +48,18 @@ export class MatchmakingService implements SocketSubscriber {
     private changeMatchmakingType(message: ICommonSocketMessage): void {
         const gameIDs: string[] = message.data as string[];
         this.gameList.forEach((game: GamesCardViewComponent) => {
-            gameIDs.includes(game.gameCard.resource_id) ? game.rightButton = "Join" : game.rightButton = "Create";
+            gameIDs.includes(game.gameCard.resource_id) ? this.changeToJoin(game) : this.changeToCreate(game);
         });
+    }
+
+    private changeToJoin(game: GamesCardViewComponent): void {
+        game.rightButton = JOIN_BUTTON;
+        game.matchMakingButton.nativeElement.style.backgroundColor = "blue";
+    }
+
+    private changeToCreate(game: GamesCardViewComponent): void {
+        game.rightButton = CREATE_BUTTON;
+        game.matchMakingButton.nativeElement.style.backgroundColor = "green";
     }
 
     public setGameList(list: GamesCardViewComponent[]): void {
