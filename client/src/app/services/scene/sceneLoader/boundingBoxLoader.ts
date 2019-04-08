@@ -45,4 +45,18 @@ export class BoundingBoxLoader {
             // scene.add(helper);
             boundingBoxes.push(box3d);
     }
+
+    public static async loadCamera(scene: THREE.Scene, camera: THREE.PerspectiveCamera): Promise<Object> {
+        const geometry: THREE.BoxGeometry = new THREE.BoxGeometry( );
+        const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( {color: 0x00F00} );
+        const cubeCam: THREE.Mesh = new THREE.Mesh( geometry, material );
+        cubeCam.position.set(camera.position.x, camera.position.y, camera.position.z);
+
+        const bboxCam: THREE.Box3 = new THREE.Box3().setFromObject(cubeCam);
+        const helper: THREE.BoxHelper = new THREE.BoxHelper(cubeCam);
+        scene.add(cubeCam);
+        scene.add(helper);
+
+        return {helper: helper, cube: cubeCam, bbox: bboxCam};
+    }
 }
