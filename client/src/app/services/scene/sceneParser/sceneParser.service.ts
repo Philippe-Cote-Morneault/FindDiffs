@@ -36,7 +36,7 @@ export class SceneParserService extends AbstractSceneParser {
         await Promise.all(promises).then((v: THREE.Object3D[]) => {
             v.forEach((element, index: number) => {
                 (element.name === "lamp.gltf") ?
-                    BoundingBoxLoader.loadLamp(boundingBoxes, sceneObjects, element, index) :
+                    BoundingBoxLoader.loadLamp(boundingBoxes, sceneObjects[index], element) :
                     BoundingBoxLoader.loadObject(boundingBoxes, element);
             });
             scene.add(...v);

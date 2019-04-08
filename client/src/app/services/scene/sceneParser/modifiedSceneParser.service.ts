@@ -101,7 +101,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         .then((v: THREE.Object3D[]) => {
             v.forEach((element, index: number) => {
                 (element.name === "lamp.gltf") ?
-                    BoundingBoxLoader.loadLamp(this.boundingBoxes, objectsToAdd, element, index) :
+                    BoundingBoxLoader.loadLamp(this.boundingBoxes, objectsToAdd[index], element) :
                     BoundingBoxLoader.loadObject(this.boundingBoxes, element);
                 scene.add(element);
             });
