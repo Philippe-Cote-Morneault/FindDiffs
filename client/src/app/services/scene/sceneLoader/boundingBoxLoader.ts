@@ -9,8 +9,8 @@ export class BoundingBoxLoader {
     private static readonly TOP_BOX_DEPTH_MULTIPLIER: number = 0.1;
     private static readonly TOP_BOX_POS_Y: number = 5.2;
 
-    public static async loadLamp(boundingBoxes: THREE.Box3[], sceneObjects: ICommonSceneObject[],
-                                 element: THREE.Object3D, index: number): Promise<void> {
+    public static async loadLamp(boundingBoxes: THREE.Box3[], sceneObject: ICommonSceneObject,
+                                 element: THREE.Object3D): Promise<void> {
         const box3dBottom: THREE.Box3 = new THREE.Box3();
         const box3dTop: THREE.Box3 = new THREE.Box3();
 
@@ -26,7 +26,7 @@ export class BoundingBoxLoader {
 
         cubeBottom.position.set(element.position.x, element.position.y, element.position.z);
         cubeTop.position.set(element.position.x, (element.position.y + this.TOP_BOX_POS_Y) * element.scale.y, element.position.z);
-        cubeTop.rotation.y = sceneObjects[index].orientation.yAngle;
+        cubeTop.rotation.y = sceneObject.orientation.yAngle;
 
         box3dBottom.setFromObject(cubeBottom);
         box3dTop.setFromObject(cubeTop);
@@ -53,10 +53,8 @@ export class BoundingBoxLoader {
         cubeCam.position.set(camera.position.x, camera.position.y, camera.position.z);
 
         const bboxCam: THREE.Box3 = new THREE.Box3().setFromObject(cubeCam);
-        const helper: THREE.BoxHelper = new THREE.BoxHelper(cubeCam);
         scene.add(cubeCam);
-        scene.add(helper);
 
-        return {helper: helper, cube: cubeCam, bbox: bboxCam};
+        return {cube: cubeCam, bbox: bboxCam};
     }
 }
