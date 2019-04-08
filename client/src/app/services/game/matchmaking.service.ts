@@ -42,7 +42,10 @@ export class MatchmakingService implements SocketSubscriber {
     private endMatchmaking(message: ICommonSocketMessage): void {
         const game: ICommonGame = message.data as ICommonGame;
         const gameUrl: string = (game.pov) ? "/gameFree/" : "/gameSimple/";
-        this.router.navigateByUrl(gameUrl + game.game_card_id);
+        const url: string = gameUrl + game.game_card_id;
+        (this.router.url === url) ?
+        window.location.reload() :
+        this.router.navigateByUrl(url);
     }
 
     private changeMatchmakingType(message: ICommonSocketMessage): void {
