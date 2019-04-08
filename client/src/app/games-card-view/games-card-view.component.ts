@@ -68,7 +68,7 @@ export class GamesCardViewComponent implements OnInit {
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
 
-            this.playSoloGame(gameUrl);
+            await this.playSoloGame(gameUrl);
             this.emitPlayGame(Event.PlaySoloGame);
         }
     }
@@ -87,7 +87,7 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     private async playSoloGame(gameUrl: string): Promise<void> {
-        await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+        this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             ((response as ICommonGameCard).id) ?
                 await this.router.navigateByUrl(gameUrl + this.gameCard.id) :
                 alert("This game has been deleted, please try another one.");
@@ -95,7 +95,7 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     private async playMultiplayerGame(): Promise<void> {
-        await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+        this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             ((response as ICommonGameCard).id) ?
                 this.waitOpponent = true :
                 alert("This game has been deleted, please try another one.");
@@ -106,7 +106,7 @@ export class GamesCardViewComponent implements OnInit {
         if (this.isInAdminView) {
             this.resetBestTimes();
         } else {
-            this.playMultiplayerGame();
+            await this.playMultiplayerGame();
             this.emitPlayGame(Event.PlayMultiplayerGame);
         }
     }

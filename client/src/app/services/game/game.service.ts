@@ -7,9 +7,9 @@ import { ICommonGameEnding } from "../../../../../common/communication/webSocket
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameEnding } from "../../models/game/gameEnding";
 import { ControlsGenerator } from "../scene/sceneRenderer/controlsGenerator";
+import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
-import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
 
 @Injectable({
     providedIn: "root",
@@ -116,7 +116,6 @@ export class GameService implements SocketSubscriber {
     private formatPlayerTimer(message: ICommonSocketMessage): string {
         let seconds: number | string =  (message.data as ICommonGameEnding).time / GameService.MS_IN_SEC;
 
-        // tslint:disable:radix
         const minutes: number | string = this.format_two_digits(Math.floor(seconds / GameService.SEC_IN_MIN));
         seconds = this.format_two_digits(Math.round(seconds % GameService.SEC_IN_MIN));
 
