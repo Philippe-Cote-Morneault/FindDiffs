@@ -30,8 +30,8 @@ export class SceneParserService extends AbstractSceneParser {
             async (object: ICommonSceneObject) => this.sceneObjectParser.parse(object));
 
         (this.sceneType === ObjectType.Geometric) ?
-            await WallLoader.loadGeometric(boundingBoxes, scene) :
-            await WallLoader.loadThematic(boundingBoxes, scene);
+            await WallLoader.loadGeometric(boundingBoxes) :
+            await WallLoader.loadThematic(boundingBoxes);
 
         await Promise.all(promises).then((v: THREE.Object3D[]) => {
             v.forEach((element, index: number) => {
