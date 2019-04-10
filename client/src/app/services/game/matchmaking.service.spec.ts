@@ -89,13 +89,25 @@ describe("MatchmakingService", () => {
 
         describe("changeToJoin", () => {
 
-            it("should change the button text to 'Join' and the backgorund color to blue", async () => {
+            it("should change the button text to 'Join' and the button background color to blue", async () => {
                 fakeComponent.gameCard = {id: "", pov: POVType.Simple, title: "", resource_id: "123321",
                                           best_time_solo: [], best_time_online: []};
                 service.setGameList([fakeComponent]);
                 await service.notify(Event.MatchmakingChange, {data: [fakeComponent.gameCard.resource_id], timestamp: new Date()});
                 expect(fakeComponent.rightButton).to.equal("Join");
                 expect(fakeComponent.matchMakingButton.nativeElement.style.backgroundColor).to.equal("blue");
+            });
+        });
+
+        describe("changeToCreate", () => {
+            it("should change the button text to 'Create' and the button background color to green", async () => {
+                fakeComponent.gameCard = {id: "", pov: POVType.Simple, title: "", resource_id: "123321",
+                                          best_time_solo: [], best_time_online: []};
+                service.setGameList([fakeComponent]);
+                await service.notify(Event.MatchmakingChange, {data: [fakeComponent.gameCard.resource_id], timestamp: new Date()});
+                await service.notify(Event.MatchmakingChange, {data: [], timestamp: new Date()});
+                expect(fakeComponent.rightButton).to.equal("Create");
+                expect(fakeComponent.matchMakingButton.nativeElement.style.backgroundColor).to.equal("green");
             });
         });
     });
