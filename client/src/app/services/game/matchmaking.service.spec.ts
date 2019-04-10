@@ -7,6 +7,7 @@ import { GamesCardViewComponent } from "src/app/games-card-view/games-card-view.
 import { WaitingViewComponent } from "src/app/waiting-view/waiting-view.component";
 import { ICommonGame } from "../../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
+import { POVType } from "../../../../../common/model/gameCard";
 import { MatchmakingService } from "./matchmaking.service";
 
 describe("MatchmakingService", () => {
@@ -83,6 +84,18 @@ describe("MatchmakingService", () => {
                 service.gameList.forEach((game: GamesCardViewComponent) => {
                     expect(game).to.equal(fakeComponent);
                 });
+            });
+        });
+
+        describe("changeToJoin", () => {
+
+            it("should change the button text to 'Join' and the backgorund color to blue", async () => {
+                fakeComponent.gameCard = {id: "", pov: POVType.Simple, title: "", resource_id: "123321",
+                                          best_time_solo: [], best_time_online: []};
+                service.setGameList([fakeComponent]);
+                await service.notify(Event.MatchmakingChange, {data: [fakeComponent.gameCard.resource_id], timestamp: new Date()});
+                expect(fakeComponent.rightButton).to.equal("Join");
+                expect(fakeComponent.matchMakingButton.nativeElement.style.backgroundColor).to.equal("blue");
             });
         });
     });
