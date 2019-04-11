@@ -14,8 +14,8 @@ export class CanvasLoaderService {
     public constructor(private identificationError: IdentificationError,
                        private socket: SocketHandlerService,
                        private game: GameService) {}
-    // tslint:disable:no-any
-    public loadCanvas(canvas: any, imageSrc: string): void {
+    public loadCanvas(canvas: HTMLCanvasElement, imageSrc: string): void {
+        // tslint:disable-next-line: no-any
         canvas.addEventListener("click", (e: any) => this.getClickPosition(e));
         const canvasContext: CanvasRenderingContext2D | null = canvas.getContext("2d");
         const image: HTMLImageElement = new Image();

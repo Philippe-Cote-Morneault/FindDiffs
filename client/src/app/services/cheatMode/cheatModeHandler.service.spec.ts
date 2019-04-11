@@ -12,9 +12,7 @@ import { CheatModeService } from "./cheatMode.service";
 import { CheatModeHandlerService } from "./cheatModeHandler.service";
 import { CheatModeTimeoutService } from "./cheatModeTimeout.service";
 
-// tslint:disable
 describe("CheatModeHandlerService", () => {
-
     let cheatModeHandlerService: CheatModeHandlerService;
     let cheatModeService: CheatModeService;
     let cheatModeTimeoutService: CheatModeTimeoutService;
@@ -25,7 +23,7 @@ describe("CheatModeHandlerService", () => {
     beforeEach(() => {
         cheatModeService = new CheatModeService();
         cheatModeTimeoutService = new CheatModeTimeoutService();
-        cheatModeHandlerService = new CheatModeHandlerService(cheatModeService, cheatModeTimeoutService);    
+        cheatModeHandlerService = new CheatModeHandlerService(cheatModeService, cheatModeTimeoutService);
     });
 
     describe("keyPressed()", () => {
@@ -34,38 +32,47 @@ describe("CheatModeHandlerService", () => {
             originalLoaderService = new SceneLoaderService();
             modifiedLoaderService = new SceneLoaderService();
             originalLoaderService.scene = await new SceneParserService(scene).parseScene();
-            modifiedLoaderService.scene = 
+            modifiedLoaderService.scene =
               await new ModifiedSceneParserService(ObjectType.Geometric).parseModifiedScene(originalLoaderService.scene, modifiedScene);
         });
 
         it("should call startCheatMode once", () => {
-            const stub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "startCheatMode").callsFake(() => {});
+            const stub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "startCheatMode");
+            stub.returns({});
+
             const event: KeyboardEvent = new KeyboardEvent("KeyboardEvent", {key: "t"});
             cheatModeHandlerService.keyPressed(event, originalLoaderService, modifiedLoaderService);
-            expect(stub.calledOnce).to.be.true;
+            expect(stub.calledOnce).to.equal(true);
             stub.restore();
         });
 
         it("should call stopCheatMode once", () => {
-            const startStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "startCheatMode").callsFake(() => {});
-            const stopStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "stopCheatMode").callsFake(() => {});
+            const startStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "startCheatMode");
+            startStub.returns({});
+            const stopStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "stopCheatMode");
+            stopStub.returns({});
+
             const event: KeyboardEvent = new KeyboardEvent("KeyboardEvent", {key: "t"});
             cheatModeHandlerService.keyPressed(event, originalLoaderService, modifiedLoaderService);
             cheatModeHandlerService.keyPressed(event, originalLoaderService, modifiedLoaderService);
-            expect(stopStub.calledOnce).to.be.true;
+            expect(stopStub.calledOnce).to.equal(true);
             startStub.restore();
             stopStub.restore();
         });
 
         it("should call toggleCheatMode if cheatActivated is true when the cheat mode is disabled", () => {
-            const startStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "startCheatMode").callsFake(() => {});
-            const stopStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "stopCheatMode").callsFake(() => {});
-            const cheatModeStub: sinon.SinonStub = sinon.stub(cheatModeHandlerService.cheatModeService, "toggleCheatMode").callsFake(() => {});
+            const startStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "startCheatMode");
+            startStub.returns({});
+            const stopStub: sinon.SinonStub = sinon.stub(cheatModeTimeoutService, "stopCheatMode");
+            stopStub.returns({});
+            const cheatModeStub: sinon.SinonStub = sinon
+            .stub(cheatModeHandlerService.cheatModeService, "toggleCheatMode");
+            cheatModeStub.returns({});
             const event: KeyboardEvent = new KeyboardEvent("KeyboardEvent", {key: "t"});
             cheatModeHandlerService.keyPressed(event, originalLoaderService, modifiedLoaderService);
             cheatModeHandlerService.cheatModeService.cheatActivated = true;
             cheatModeHandlerService.keyPressed(event, originalLoaderService, modifiedLoaderService);
-            expect(cheatModeStub.calledOnce).to.be.true;
+            expect(cheatModeStub.calledOnce).to.equal(true);
             startStub.restore();
             stopStub.restore();
             cheatModeStub.restore();

@@ -5,11 +5,11 @@ import { scene } from "../../tests/scene/sceneMock";
 import { CheatModeService } from "./cheatMode.service";
 import { CheatModeTimeoutService } from "./cheatModeTimeout.service";
 
-// tslint:disable
 describe("CheatModeTimeoutService", () => {
 
   let cheatModeTimeoutService: CheatModeTimeoutService;
   let cheatModeService: CheatModeService;
+
   beforeEach(() => {
     cheatModeTimeoutService = new CheatModeTimeoutService;
     cheatModeService = new CheatModeService;
@@ -21,24 +21,29 @@ describe("CheatModeTimeoutService", () => {
         () => {cheatModeService.cheatActivated = !cheatModeService.cheatActivated;
       });
       cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
-      expect(cheatModeService.cheatActivated).to.be.true;
+      expect(cheatModeService.cheatActivated).to.equal(true);
       cheatModeTimeoutService.stopCheatMode();
       stub.restore();
     });
 
     it("should make the objects flash by changing cheatActivated to false", () => {
       const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
-      stub.callsFake(() => {});
+      stub.returns({});
+
       jasmine.clock().install();
       cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
-      jasmine.clock().tick(125);
+      const delay8ThSecond: number = 125;
+      jasmine.clock().tick(delay8ThSecond);
       cheatModeTimeoutService.stopCheatMode();
-      expect(cheatModeService.cheatActivated).to.be.false;
+      expect(cheatModeService.cheatActivated).to.equal(false);
       stub.restore();
       jasmine.clock().uninstall();
-    })
+    });
+
     it("should call toggleCheatMode once when startCheatMode is called", () => {
-      const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode").callsFake(() => {});
+      const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
+      stub.returns({});
+
       cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
       cheatModeTimeoutService.stopCheatMode();
       sinon.assert.calledOnce(stub);
@@ -47,12 +52,15 @@ describe("CheatModeTimeoutService", () => {
 
     it("should call toggleCheatMode four times in one second", () => {
       const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
-      stub.callsFake(() => {});
+      stub.returns({});
+
       jasmine.clock().install();
       cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
-      jasmine.clock().tick(999);
+      const sleepTime: number = 999;
+      jasmine.clock().tick(sleepTime);
       cheatModeTimeoutService.stopCheatMode();
-      sinon.assert.callCount(stub, 8);
+      const callCountOfToggleCheatMode: number = 8;
+      sinon.assert.callCount(stub, callCountOfToggleCheatMode);
       stub.restore();
       jasmine.clock().uninstall();
     });
@@ -61,12 +69,14 @@ describe("CheatModeTimeoutService", () => {
   describe("stopCheatMode()", () => {
     it("should stop calling toggleCheatMode", () => {
       const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
-      stub.callsFake(() => {});
+      stub.returns({});
+
       jasmine.clock().install();
       cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
       cheatModeTimeoutService.stopCheatMode();
       stub.resetHistory();
-      jasmine.clock().tick(999);
+      const sleepTime: number = 999;
+      jasmine.clock().tick(sleepTime);
       sinon.assert.callCount(stub, 0);
       stub.restore();
       jasmine.clock().uninstall();
@@ -74,28 +84,32 @@ describe("CheatModeTimeoutService", () => {
   });
 
   describe("ngOnInit()", () => {
-    it("should call stopCheatMode() on initialisation", () => {
+    it("should call stopCheatMode() on initialization", () => {
       const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
-      stub.callsFake(() => {});
+      stub.returns({});
+
       const spy: sinon.SinonSpy = sinon.spy(cheatModeTimeoutService, "stopCheatMode");
       jasmine.clock().install();
       cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
       cheatModeTimeoutService.ngOnInit();
-      jasmine.clock().tick(999);
+      const sleepTime: number = 999;
+      jasmine.clock().tick(sleepTime);
       sinon.assert.calledOnce(spy);
       stub.restore();
       spy.restore();
       jasmine.clock().uninstall();
     });
 
-    it("should stop an active timer on initialisation", () => {
+    it("should stop an active timer on initialization", () => {
       const stub: sinon.SinonStub = sinon.stub(cheatModeService, "toggleCheatMode");
-      stub.callsFake(() => {});
+      stub.returns({});
+
       jasmine.clock().install();
       cheatModeTimeoutService.startCheatMode(cheatModeService, scene, sceneModifications);
       cheatModeTimeoutService.ngOnInit();
       stub.resetHistory();
-      jasmine.clock().tick(999);
+      const sleepTime: number = 999;
+      jasmine.clock().tick(sleepTime);
       sinon.assert.callCount(stub, 0);
       stub.restore();
       jasmine.clock().uninstall();
