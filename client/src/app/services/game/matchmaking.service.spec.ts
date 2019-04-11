@@ -33,7 +33,7 @@ describe("MatchmakingService", () => {
             timestamp: new Date(),
         };
         const spy: jasmine.Spy = spyOn(router, "navigateByUrl");
-        service.notify(Event.EndMatchmaking, message);
+        await service.notify(Event.EndMatchmaking, message);
         // tslint:disable-next-line:no-any
         const url: any = spy.calls.first().args[0];
 
@@ -47,7 +47,7 @@ describe("MatchmakingService", () => {
             timestamp: new Date(),
         };
         const spy: jasmine.Spy = spyOn(router, "navigateByUrl");
-        service.notify(Event.EndMatchmaking, message);
+        await service.notify(Event.EndMatchmaking, message);
         // tslint:disable-next-line:no-any
         const url: any = spy.calls.first().args[0];
 
