@@ -19,6 +19,7 @@ export class FreePOVGameManager extends GameManager {
                              successCallback: (data: Object | null) => void,
                              failureCallback: () => void): Promise<void> {
 
+        try {
         await this.scenePositionService.post3DClick(this.game.ressource_id, position.originalObjectId,
                                                     position.modifiedObjectId, position.gameType)
             .then(async (value: ICommonReveal3D | null) => {
@@ -29,5 +30,8 @@ export class FreePOVGameManager extends GameManager {
                     failureCallback();
                 }
             });
+        } catch (error) {
+            failureCallback();
+        }
     }
 }

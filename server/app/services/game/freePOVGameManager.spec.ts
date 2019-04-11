@@ -1,3 +1,4 @@
+import { fail } from "assert";
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { ICommon3DObject } from "../../../../common/model/positions";
@@ -7,7 +8,6 @@ import { INewScore } from "../../../../common/model/score";
 import { Game } from "../../model/game/game";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
-import { fail } from "assert";
 
 describe("FreePOVGameManager", () => {
     const player1: string = "player1";
@@ -46,6 +46,7 @@ describe("FreePOVGameManager", () => {
     });
 
     describe("playerClick()", () => {
+        // tslint:disable-next-line:max-func-body-length
         it("Should call the success callback passed in parameter if this is a sucessful hit", async () => {
             const _3dObj: ICommon3DObject = {
                 scenePairId: "234rs",
@@ -54,6 +55,7 @@ describe("FreePOVGameManager", () => {
                 gameType: ObjectType.Geometric,
             };
             const post3DClickStub = sinon.stub(gameManager["scenePositionService"], "post3DClick");
+            const differenceFoundStub = sinon.stub(gameManager, "differenceFound" as any);
             const reveal: ICommonReveal3D = {
                 hit: true,
                 differenceType: DifferenceType.addedObject,
@@ -61,17 +63,19 @@ describe("FreePOVGameManager", () => {
             };
 
             // tslint:disable-next-line:no-empty
-            const successCallback = (data: Object | null) => {};
-            // tslint:disable-next-line:no-empty
             const failureCallback = () => {};
 
+            // tslint:disable-next-line:no-any
+            const successCallbackfake: sinon.SinonSpy<any[], any> = sinon.fake();
             post3DClickStub.resolves(reveal);
             // tslint:disable-next-line:no-any
-            const successCallbackSpy: sinon.SinonSpy<any[], any> = sinon.spy(successCallback);
-            gameManager.playerClick(_3dObj, player2, successCallback, failureCallback)
+            (differenceFoundStub as sinon.SinonStub<any[], any>).returns(Promise.resolve());
+            gameManager.playerClick(_3dObj, player2, successCallbackfake, failureCallback)
                 .then(() => {
+                   // console.log(fake);
                     post3DClickStub.restore();
-                    expect(successCallbackSpy.called).to.equal(true);
+                    differenceFoundStub.restore();
+                    expect(successCallbackfake.called).to.equal(true);
                 },    () => {
                     fail("playerClick() failed to resolve");
                 });

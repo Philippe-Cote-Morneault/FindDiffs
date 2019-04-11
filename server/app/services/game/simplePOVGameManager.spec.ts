@@ -34,17 +34,18 @@ describe("simplePOVGameManager", () => {
                 difference_id: 12312,
             };
             // tslint:disable-next-line:no-empty
-            const successCallback = (data: Object | null) => {};
+           // const successCallback = (data: Object | null) => {};
             // tslint:disable-next-line:no-empty
-            const failureCallback = () => {};
+            const failureCallback: () => void = () => {};
 
+            // tslint:disable-next-line:no-any
+            const successCallbackfake: sinon.SinonSpy<any[], any> = sinon.fake();
             postPixelPositionStub.resolves(reveal);
             // tslint:disable-next-line:no-any
-            const successCallbackSpy: sinon.SinonSpy<any[], any> = sinon.spy(successCallback);
-            gameManager.playerClick(_2dPosition, player2, successCallback, failureCallback)
+            gameManager.playerClick(_2dPosition, player2, successCallbackfake, failureCallback)
                 .then(() => {
                     postPixelPositionStub.restore();
-                    expect(successCallbackSpy.called).to.equal(true);
+                    expect(successCallbackfake.called).to.equal(true);
                 },    () => {
                     fail("playerClick() failed to resolve");
                 });
