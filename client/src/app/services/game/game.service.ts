@@ -129,6 +129,7 @@ export class GameService implements SocketSubscriber {
 
     private setControlsLock(isLocked: boolean): void {
         ControlsGenerator.isLocked = isLocked;
+        ControlsGenerator.isCollision = false;
         this.sceneSyncer.isLocked = isLocked;
     }
 }

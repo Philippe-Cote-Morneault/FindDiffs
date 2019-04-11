@@ -1,24 +1,64 @@
 import * as THREE from "three";
+import { CollisionDetectionService } from "../sceneDetection/collisionDetection.service";
 
 export class ControlsGenerator {
     public static isLocked: boolean = true;
+    public static distance: number = 0;
+    public static isCollision: boolean;
     private static readonly DISTANCE_TO_MOVE: number = 1;
 
-    public static generateGameControls(camera: THREE.PerspectiveCamera, canvas: HTMLElement): void {
+    // tslint:disable:max-func-body-length
+    public static generateGameControls(camera: THREE.PerspectiveCamera, scene: THREE.Scene): void {
         document.addEventListener("keydown", (event: KeyboardEvent) => {
+            const vector: THREE.Vector3 = new THREE.Vector3();
+            camera.getWorldDirection(vector);
+
             if (!ControlsGenerator.isLocked) {
                 switch (event.key) {
                     case "w":
-                        camera.translateZ(-ControlsGenerator.DISTANCE_TO_MOVE);
+                        this.isCollision = CollisionDetectionService.verifyCollisions(camera, scene, vector);
+
+                        if (!this.isCollision) {
+                            camera.translateZ(-ControlsGenerator.DISTANCE_TO_MOVE);
+                        }
+
                         break;
                     case "a":
-                        camera.translateX(-ControlsGenerator.DISTANCE_TO_MOVE);
+                        // tslint:disable-next-line:no-magic-numbers
+                        camera.rotation.y += Math.PI / 2;
+                        camera.getWorldDirection(vector);
+
+                        this.isCollision = CollisionDetectionService.verifyCollisions(camera, scene, vector);
+
+                        // tslint:disable-next-line:no-magic-numbers
+                        camera.rotation.y -= Math.PI / 2;
+                        if (!this.isCollision) {
+                            camera.translateX(-ControlsGenerator.DISTANCE_TO_MOVE);
+                        }
+
                         break;
                     case "s":
-                        camera.translateZ(ControlsGenerator.DISTANCE_TO_MOVE);
+                        this.isCollision = CollisionDetectionService.verifyCollisions(
+                            camera, scene, new THREE.Vector3(-vector.x, -vector.y, -vector.z));
+
+                        if (!this.isCollision) {
+                            camera.translateZ(ControlsGenerator.DISTANCE_TO_MOVE);
+                        }
+
                         break;
                     case "d":
-                        camera.translateX(ControlsGenerator.DISTANCE_TO_MOVE);
+                        // tslint:disable-next-line:no-magic-numbers
+                        camera.rotation.y -= Math.PI / 2;
+                        camera.getWorldDirection(vector);
+
+                        this.isCollision = CollisionDetectionService.verifyCollisions(camera, scene, vector);
+
+                        // tslint:disable-next-line:no-magic-numbers
+                        camera.rotation.y += Math.PI / 2;
+                        if (!this.isCollision) {
+                            camera.translateX(ControlsGenerator.DISTANCE_TO_MOVE);
+                        }
+
                         break;
                     default:
                         break;

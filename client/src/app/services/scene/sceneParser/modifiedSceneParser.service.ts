@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import * as THREE from "three";
 import { InvalidFormatException } from "../../../../../../common/errors/invalidFormatException";
 import { Pair } from "../../../../../../common/model/pair";
 import { ICommonGeometricModifications } from "../../../../../../common/model/scene/modifications/geometricModifications";
@@ -95,9 +96,9 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         await Promise.all(objectsToAdd.map(async (object: ICommonSceneObject) =>
         this.sceneObjectParser.parse(object)))
         .then((v: THREE.Object3D[]) => {
-            for (const object of v) {
-                scene.add(object);
-            }
+            v.forEach((element) => {
+                scene.add(element);
+            });
         });
     }
 
