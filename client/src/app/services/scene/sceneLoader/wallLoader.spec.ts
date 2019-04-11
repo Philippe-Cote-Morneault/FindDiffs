@@ -6,19 +6,23 @@ describe("WallLoader", () => {
     // tslint:disable:no-magic-numbers
     describe("loadGeometric()", () => {
         it("Should add 6 walls to the boundingBoxes array, for a geometric scene", async () => {
-            const boundingBoxes: THREE.Box3[] = new Array<THREE.Box3>();
-            await WallLoader.loadGeometric(boundingBoxes);
+            const scene: THREE.Scene = new THREE.Scene;
+            const initialSize: number = scene.children.length;
+            await WallLoader.loadGeometric(scene);
+            const finalSize: number = scene.children.length;
 
-            expect(boundingBoxes.length).to.equal(6);
+            expect(initialSize + 6).to.equal(finalSize);
         });
     });
 
     describe("loadThematic()", () => {
         it("Should add 6 walls to the boundingBoxes array, for a thematic scene", async () => {
-            const boundingBoxes: THREE.Box3[] = new Array<THREE.Box3>();
-            await WallLoader.loadThematic(boundingBoxes);
+            const scene: THREE.Scene = new THREE.Scene;
+            const initialSize: number = scene.children.length;
+            await WallLoader.loadThematic(scene);
+            const finalSize: number = scene.children.length;
 
-            expect(boundingBoxes.length).to.equal(6);
+            expect(initialSize + 6).to.equal(finalSize);
         });
     });
 });
