@@ -27,8 +27,6 @@ export class ObjectDetectionService {
     const modifiedObject: THREE.Object3D = intersectsModified[0] ?
             this.getParent(intersectsModified[0].object, sceneModified) : new THREE.Object3D;
 
-    console.log(originalObject);
-
     return {
       original: originalObject,
       modified: modifiedObject,

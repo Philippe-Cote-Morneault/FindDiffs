@@ -22,8 +22,5 @@ describe("CollisionDetectionService", () => {
             const isCollision: boolean = CollisionDetectionService.verifyCollisions(camera, scene, vector);
             expect(isCollision).to.equal(true);
         });
-        // it("Should not detect a collision if there is not an object within the minimum distance and in the correct direction", async () => {
-        //     const scene: THREE.Scene = new THREE.Scene;
-        // });
     });
 });
