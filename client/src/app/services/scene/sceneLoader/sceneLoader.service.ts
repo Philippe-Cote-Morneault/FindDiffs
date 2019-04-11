@@ -27,14 +27,13 @@ export class SceneLoaderService {
             scene: THREE.Scene,
             sceneModifications: ICommonSceneModifications,
         ): Promise<void> {
-        this.scene = await new ModifiedSceneParserService(sceneModifications.type).parseModifiedScene(scene, sceneModifications);
-
+        this.scene = await new ModifiedSceneParserService(sceneModifications.type)
+            .parseModifiedScene(scene, sceneModifications);
         this.renderScene(container);
     }
 
     public async loadOnCanvas(canvas: HTMLCanvasElement, scene: ICommonScene): Promise<void> {
         this.scene = await new SceneParserService(scene).parseScene();
-
         this.renderOnCanvas(canvas);
     }
 
@@ -44,7 +43,8 @@ export class SceneLoaderService {
                                                                container.clientHeight);
             container.appendChild(this.renderer.domElement);
             this.camera = CameraGenerator.createCamera(container.clientWidth, container.clientHeight);
-            ControlsGenerator.generateGameControls(this.camera, container);
+
+            ControlsGenerator.generateGameControls(this.camera, this.scene);
             this.animate();
         }
     }
