@@ -22,7 +22,7 @@ describe("GameService", () => {
     });
 
     afterEach(() => {
-        (Audio.prototype)
+        (Audio.prototype as sinon.SinonStub).restore();
     });
     it("Should return the correct time after game start and end after 2 sec", async () => {
 
@@ -52,7 +52,6 @@ describe("GameService", () => {
     });
 
     it("Should return the correct count after a difference is found", async () => {
-        
         const timer: HTMLElement = document.createElement("p");
         const userDifference: HTMLElement = document.createElement("p");
         const diff: ICommonDifferenceFound = { player: "", difference_count: 2, reveal: {}};
