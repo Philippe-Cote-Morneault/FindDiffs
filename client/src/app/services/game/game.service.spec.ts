@@ -18,7 +18,6 @@ describe("GameService", () => {
         service = TestBed.get(GameService);
     });
 
-    describe("startGame and stopGame", () => {
     beforeEach(() => {
         sinon.stub(Audio.prototype, "play");
     });
