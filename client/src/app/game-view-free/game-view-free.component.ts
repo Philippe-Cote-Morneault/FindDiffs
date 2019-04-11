@@ -166,6 +166,7 @@ export class GameViewFreeComponent implements OnInit {
         this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
         this.clickEvent(this.originalScene.nativeElement, true);
         this.clickEvent(this.modifiedScene.nativeElement, false);
+        this.objectRestoration.set(this.originalSceneLoader, this.modifiedSceneLoader);
 
         this.socketHandler.emitMessage(Event.ReadyToPlay, null);
     }
