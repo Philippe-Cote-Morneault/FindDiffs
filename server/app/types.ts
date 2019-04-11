@@ -15,5 +15,5 @@ export default  {
         IUserService: Symbol.for("IUserService"),
         ISceneService: Symbol.for("ISceneService"),
         IScoreService: Symbol.for("IScoreService"),
-
+        IScenePositionService: Symbol.for("IScenePositionService"),
 };
