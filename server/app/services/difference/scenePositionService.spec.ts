@@ -2,9 +2,8 @@ import * as axios from "axios";
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { DifferenceType, ICommonReveal3D } from "../../../../common/model/reveal";
-import { ScenePositionService } from "./scenePositionService";
 import { ObjectType } from "../../../../common/model/scene/scene";
-
+import { ScenePositionService } from "./scenePositionService";
 
 describe("ScenePositionService", () => {
     describe("getInstance()", () => {
@@ -27,7 +26,8 @@ describe("ScenePositionService", () => {
                 differenceType: DifferenceType.addedObject,
                 difference_id: "123",
             };
-            const stubResponse = {status: 200, statusText: "OK", data: _3DReveal };
+            const stubResponse: Object = {status: 200, statusText: "OK", data: _3DReveal };
+            // tslint:disable-next-line:typedef
             const axiosStub = sinon.stub(axios.default, "post");
             axiosStub.returns(Promise.resolve(stubResponse) as axios.AxiosPromise);
 
@@ -38,6 +38,7 @@ describe("ScenePositionService", () => {
                 });
         });
         it("Should return null if the axios post call fails", () => {
+            // tslint:disable-next-line:typedef
             const axiosStub = sinon.stub(axios.default, "post");
             axiosStub.rejects();
             ScenePositionService.getInstance().post3DClick("123", "123", "123", ObjectType.Geometric)
