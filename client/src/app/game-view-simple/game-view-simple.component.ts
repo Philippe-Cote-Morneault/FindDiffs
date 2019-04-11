@@ -6,6 +6,7 @@ import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { R } from "../ressources/strings";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { GameService } from "../services/game/game.service";
+import { MatchmakingService } from "../services/game/matchmaking.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { CanvasLoaderService } from "../services/image-pair/canvasLoader.service";
 import { ImagePairService } from "../services/image-pair/imagePair.service";
@@ -17,6 +18,9 @@ import { SocketHandlerService } from "../services/socket/socketHandler.service";
     selector: "app-game-view-simple",
     templateUrl: "./game-view-simple.component.html",
     styleUrls: ["./game-view-simple.component.css"],
+    providers: [
+        PixelRestoration, GameService,
+      ],
 })
 export class GameViewSimpleComponent implements OnInit {
     @ViewChild("originalCanvas") private originalCanvas: ElementRef;
@@ -46,6 +50,7 @@ export class GameViewSimpleComponent implements OnInit {
         public pixelRestoration: PixelRestoration,
         public identificationError: IdentificationError,
         public game: GameService,
+        private matchmaking: MatchmakingService,
         public canvasLoader: CanvasLoaderService) {
 
         this.isGameOver = false;
@@ -59,7 +64,7 @@ export class GameViewSimpleComponent implements OnInit {
         });
 
         this.userDifferenceFound.nativeElement.innerText = R.ZERO;
-        this.isSoloGame = this.game.getIsSoloGame();
+        this.isSoloGame = !this.matchmaking.getIsActive();
         this.getGameCardById();
         this.setServicesContainers();
     }
@@ -78,10 +83,13 @@ export class GameViewSimpleComponent implements OnInit {
         this.game.differenceOpponent.subscribe((value) => {
             this.opponentDifferenceFound.nativeElement.innerText = value;
         });
+
+        this.game.chronometer.subscribe((value: string) => {
+            this.chronometer.nativeElement.innerText = value;
+        });
     }
 
     private setServicesContainers(): void {
-        this.game.setContainers(this.chronometer.nativeElement);
         this.chat.setContainers(this.message.nativeElement, this.messageContainer.nativeElement);
         this.identificationError.setContainers(this.errorMessage.nativeElement,
                                                this.originalCanvas.nativeElement,

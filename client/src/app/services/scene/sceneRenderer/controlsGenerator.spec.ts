@@ -11,6 +11,7 @@ describe("ControlsGenerator", () => {
     beforeEach(() => {
         mockCamera = new THREE.PerspectiveCamera(45, (4 / 3), 0.1, 1000);
         mockCanvas = (document.createElement("canvas") as HTMLCanvasElement);
+        ControlsGenerator.isLocked = false;
     });
     describe("generateGameControls", () => {
         it("should add an event listener to the document", () => {

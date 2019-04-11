@@ -3,10 +3,11 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
 import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
-import { GameService } from "./game.service";
+import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
+import { GameFreePOVService } from "./gameFreePOV.service";
 
-describe("GameService", () => {
-    let service: GameService;
+describe("GameFreePOVService", () => {
+    let service: GameFreePOVService;
     const time: number = 2000;
 
     beforeEach(async() => {
@@ -14,13 +15,14 @@ describe("GameService", () => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule],
         });
-        service = TestBed.get(GameService);
+        service = TestBed.get(GameFreePOVService);
     });
 
     describe("startGame and stopGame", () => {
 
         it("Should return the correct time after game start and end after 2 sec", async () => {
-
+            const scene: SceneSyncerService = new SceneSyncerService();
+            service.setControls(scene);
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.GameStarted, msg);
             expect(service.getGameStarted()).to.equal(true);
@@ -32,13 +34,26 @@ describe("GameService", () => {
         });
 
         it("Should return 00:00 if the event is not supported", async () => {
-
+            const scene: SceneSyncerService = new SceneSyncerService();
+            service.setControls(scene);
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.InvalidClick, msg);
             expect(service.getTimeValues()).to.equal("00:00");
             setTimeout(async() => {
                 await service.notify(Event.GameEnded, msg);
                 expect(service.getTimeValues()).to.equal("00:00");
+                    }, time);
+        });
+
+        it("Should unlock controls when the game start and lock controls when game end", async () => {
+            const scene: SceneSyncerService = new SceneSyncerService();
+            service.setControls(scene);
+            const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
+            await service.notify(Event.GameStarted, msg);
+            expect(scene.isLocked).to.equal(false);
+            setTimeout(async() => {
+                await service.notify(Event.GameEnded, msg);
+                expect(scene.isLocked).that.equal(true);
                     }, time);
         });
     });
@@ -74,6 +89,8 @@ describe("GameService", () => {
 
     describe("resetTime", () => {
         it("Should return 00:00 after resettime", async () => {
+            const scene: SceneSyncerService = new SceneSyncerService();
+            service.setControls(scene);
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.GameStarted, msg);
             setTimeout(async() => {
@@ -85,6 +102,8 @@ describe("GameService", () => {
 
     describe("getGameStarted", () => {
         it("Should return true after game started", async () => {
+            const scene: SceneSyncerService = new SceneSyncerService();
+            service.setControls(scene);
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.GameStarted, msg);
             setTimeout(async() => {

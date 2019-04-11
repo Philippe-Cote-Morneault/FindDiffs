@@ -1,12 +1,13 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
+import { CREATE_BUTTON, DELETE_BUTTON, PLAY_BUTTON, RESET_BUTTON, SIMPLE_BUTTON } from "../../../../common/buttonName";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
-import { GameService } from "../services/game/game.service";
+import { MatchmakingService } from "../services/game/matchmaking.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { ImagePairService } from "../services/image-pair/imagePair.service";
 import { SceneService } from "../services/scene/scene.service";
@@ -24,6 +25,7 @@ export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
     @ViewChild("image") private image: ElementRef;
+    @ViewChild("matchMakingButton") public matchMakingButton: ElementRef;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
@@ -39,18 +41,18 @@ export class GamesCardViewComponent implements OnInit {
         private router: Router,
         private socketHandlerService: SocketHandlerService,
         private imagePairService: ImagePairService,
-        public game: GameService) {
-            this.rightButton = "Create";
-            this.leftButton = "Play";
-            this.simplePOV = "Simple";
+        public matchmaking: MatchmakingService) {
+            this.rightButton = CREATE_BUTTON;
+            this.leftButton = PLAY_BUTTON;
+            this.simplePOV = SIMPLE_BUTTON;
             this.isInAdminView = false;
             this.waitOpponent = false;
         }
 
     public ngOnInit(): void {
         if (this.isInAdminView) {
-            this.leftButton = "Delete";
-            this.rightButton = "Reset";
+            this.leftButton = DELETE_BUTTON;
+            this.rightButton = RESET_BUTTON;
         }
 
         if (this.isSimplePov()) {
@@ -89,7 +91,7 @@ export class GamesCardViewComponent implements OnInit {
     private async playSoloGame(gameUrl: string): Promise<void> {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             if ((response as ICommonGameCard).id) {
-                this.game.setIsSoloGame(true);
+                this.matchmaking.setIsActive(false);
                 await this.router.navigateByUrl(gameUrl + this.gameCard.id);
                 this.emitPlayGame(Event.PlaySoloGame);
             } else {
@@ -101,8 +103,8 @@ export class GamesCardViewComponent implements OnInit {
     private async playMultiplayerGame(): Promise<void> {
         await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             if ((response as ICommonGameCard).id) {
-                this.waitOpponent = true;
-                this.game.setIsSoloGame(false);
+                this.changeMatchmakingType();
+                this.matchmaking.setIsActive(true);
                 this.emitPlayGame(Event.PlayMultiplayerGame);
             } else {
                 alert("This game has been deleted, please try another one.");
@@ -154,12 +156,16 @@ export class GamesCardViewComponent implements OnInit {
 
     public onClosed(closed: boolean): void {
         if (closed) {
-            this.waitOpponent = false;
             const message: ICommonSocketMessage = {
                 data: this.gameCard.resource_id,
                 timestamp: new Date(),
             };
+            this.changeMatchmakingType();
             this.socketHandlerService.emitMessage(Event.CancelMatchmaking, message);
         }
+    }
+
+    private changeMatchmakingType(): void {
+        this.waitOpponent = !this.waitOpponent;
     }
 }

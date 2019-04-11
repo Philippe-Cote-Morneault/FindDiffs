@@ -64,6 +64,14 @@ export class SocketHandlerService {
         sub.push(subscriber);
     }
 
+    public unsubscribe(event: Event, subscriber: SocketSubscriber): void {
+        const sub: SocketSubscriber[] | undefined = this.subscribers.get(event);
+        if (sub) {
+            sub.splice( sub.indexOf(subscriber), 1 );
+            this.subscribers.set(event, sub);
+        }
+    }
+
     private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
         if (this.subscribers.has(event)) {
             const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];

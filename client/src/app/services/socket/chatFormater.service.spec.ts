@@ -6,26 +6,26 @@ import { ICommonIdentificationError } from "../../../../../common/communication/
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
 import { INewScore, INewScoreDetails } from "../../../../../common/model/score";
-import { GameService } from "../game/game.service";
+import { MatchmakingService } from "../game/matchmaking.service";
 import { ChatFormaterService } from "./chatFormater.service";
 
 describe("ChatFormater", () => {
     let service: ChatFormaterService;
-    let game: GameService;
+    let game: MatchmakingService;
     const time: number = 9;
     beforeEach(async() => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule],
         });
         service = TestBed.get(ChatFormaterService);
-        game = TestBed.get(GameService);
+        game = TestBed.get(MatchmakingService);
     });
 
     describe("InvalidClick", () => {
 
         it("Should return the correct string after InvalidClick Event (solo)", () => {
             const msg: ICommonSocketMessage = {data: "", timestamp: new Date("2019-03-25T12:00:00Z")};
-            game.setIsSoloGame(true);
+            game.setIsActive(false);
             const result: string = service.formatMessage(Event.InvalidClick, msg);
 
             expect(result).to.equal("08:00:00 Error.");
@@ -35,7 +35,7 @@ describe("ChatFormater", () => {
             const data: ICommonIdentificationError = {
                 player: "Dad",
             };
-            game.setIsSoloGame(false);
+            game.setIsActive(true);
             const msg: ICommonSocketMessage = {data: data, timestamp: new Date("2019-03-25T12:00:00Z")};
             const result: string = service.formatMessage(Event.InvalidClick, msg);
 
@@ -46,14 +46,14 @@ describe("ChatFormater", () => {
 
         it("Should return the correct string after DifferenceFound Event (solo)", () => {
             const msg: ICommonSocketMessage = {data: "", timestamp: new Date("2019-03-25T12:00:00Z")};
-            game.setIsSoloGame(true);
+            game.setIsActive(false);
             const result: string = service.formatMessage(Event.DifferenceFound, msg);
 
             expect(result).to.equal("08:00:00 Difference found.");
         });
 
         it("Should return the correct string after DifferenceFound Event (1v1)", () => {
-            game.setIsSoloGame(false);
+            game.setIsActive(true);
             const data: ICommonDifferenceFound = {
                 player: "Dad",
                 difference_count: 2,

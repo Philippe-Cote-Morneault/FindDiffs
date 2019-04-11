@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import Timer from "easytimer.js";
 import { Subject } from "rxjs";
 import { R } from "src/app/ressources/strings";
@@ -6,8 +6,6 @@ import { ICommonDifferenceFound } from "../../../../../common/communication/webS
 import { ICommonGameEnding } from "../../../../../common/communication/webSocket/gameEnding";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameEnding } from "../../models/game/gameEnding";
-import { ControlsGenerator } from "../scene/sceneRenderer/controlsGenerator";
-import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
 import { PlayerTimeService } from "./playerTime.service";
@@ -15,44 +13,40 @@ import { PlayerTimeService } from "./playerTime.service";
 @Injectable({
     providedIn: "root",
 })
-export class GameService implements SocketSubscriber {
-    private static readonly MINUTES_POSITION: number = 3;
-    private timer: Timer;
-    private isSoloGame: boolean;
-    private chronometer: HTMLElement;
-    private gameStarted: boolean;
-    private differenceSound: HTMLAudioElement;
+export class GameService implements SocketSubscriber, OnDestroy {
+    protected static readonly MINUTES_POSITION: number = 3;
+    protected timer: Timer;
+    public chronometer: Subject<string>;
+    protected gameStarted: boolean;
+    protected differenceSound: HTMLAudioElement;
     public differenceUser: Subject<string>;
     public differenceOpponent: Subject<string>;
-    private sceneSyncer: SceneSyncerService;
     public gameEnded: Subject<GameEnding>;
-    private username: string | null;
+    public username: string | null;
 
-    public constructor(private socketService: SocketHandlerService, private playerTimeService: PlayerTimeService) {
+    public constructor(protected socketService: SocketHandlerService, protected playerTimeService: PlayerTimeService) {
         this.timer = new Timer();
         this.gameStarted = false;
         this.gameEnded = new Subject<GameEnding>();
         this.differenceOpponent = new Subject<string>();
         this.differenceUser = new Subject<string>();
+        this.chronometer = new Subject<string>();
         this.differenceSound = new Audio;
-        this.isSoloGame = true;
         this.differenceSound.src = R.DIFFERENCE_SOUND_SRC;
         this.username = sessionStorage.getItem("user");
         this.subscribeToSocket();
-    }
-
-    public setContainers(chronometer: HTMLElement): void {
-        this.chronometer = chronometer;
-    }
-
-    public setControls(sceneSyncer: SceneSyncerService): void {
-        this.sceneSyncer = sceneSyncer;
     }
 
     private subscribeToSocket(): void {
         this.socketService.subscribe(Event.GameEnded, this);
         this.socketService.subscribe(Event.GameStarted, this);
         this.socketService.subscribe(Event.DifferenceFound, this);
+    }
+
+    public ngOnDestroy(): void {
+        this.socketService.unsubscribe(Event.GameEnded, this);
+        this.socketService.unsubscribe(Event.GameStarted, this);
+        this.socketService.unsubscribe(Event.DifferenceFound, this);
     }
 
     public async notify(event: Event, message: ICommonSocketMessage): Promise<void> {
@@ -77,17 +71,15 @@ export class GameService implements SocketSubscriber {
         this.timer.pause();
     }
 
-    private startGame(): void {
+    protected startGame(): void {
         this.timer.start();
         this.gameStarted = true;
         this.timer.addEventListener("secondsUpdated", () =>
-            this.chronometer.innerText = this.getTimeValues());
-        this.setControlsLock(false);
+            this.chronometer.next(this.getTimeValues()));
     }
 
-    private stopGame(message: ICommonSocketMessage): void {
+    protected stopGame(message: ICommonSocketMessage): void {
         this.timer.stop();
-        this.setControlsLock(true);
         const time: string = this.playerTimeService.formatPlayerTimer(message);
         const winner: string = (message.data as ICommonGameEnding).winner;
         const game: GameEnding = {
@@ -95,11 +87,11 @@ export class GameService implements SocketSubscriber {
             winner: winner,
             time: time,
         };
-        this.chronometer.innerText = time;
+        this.chronometer.next(time);
         this.gameEnded.next(game);
     }
 
-    private async differenceFound(message: ICommonSocketMessage): Promise<void> {
+    protected async differenceFound(message: ICommonSocketMessage): Promise<void> {
         const difference: ICommonDifferenceFound = message.data as ICommonDifferenceFound;
         (difference.player === this.username) ?
         this.differenceUser.next(JSON.stringify(difference.difference_count)) :
@@ -114,18 +106,5 @@ export class GameService implements SocketSubscriber {
 
     public getGameStarted(): boolean {
         return this.gameStarted;
-    }
-
-    public getIsSoloGame(): boolean {
-        return this.isSoloGame;
-    }
-
-    public setIsSoloGame(isSoloGame: boolean): void {
-        this.isSoloGame = isSoloGame;
-    }
-
-    private setControlsLock(isLocked: boolean): void {
-        ControlsGenerator.isLocked = isLocked;
-        this.sceneSyncer.isLocked = isLocked;
     }
 }
