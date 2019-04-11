@@ -25,7 +25,7 @@ describe("GameService", () => {
     afterEach(() => {
         (Audio.prototype as sinon.SinonStub).restore();
     });
-    it("Should return the correct time after game start and end after 2 sec", async () => {
+    describe("getGameStarted() and getTimeValues()", async () => {
 
         it("Should return the correct time after game start and end after 2 sec", async () => {
 
