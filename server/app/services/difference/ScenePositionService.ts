@@ -24,7 +24,7 @@ export class ScenePositionService {
             gameType: gameType,
         };
         try {
-            return (await axios.default.post(`http://${Config.hostname}/${Config.port}/difference/free`,
+            return (await axios.default.post(`http://${Config.hostname}:${Config.port}/difference/free`,
                                              requestBody)).data as ICommonReveal3D;
         } catch (error) {
             return null;
