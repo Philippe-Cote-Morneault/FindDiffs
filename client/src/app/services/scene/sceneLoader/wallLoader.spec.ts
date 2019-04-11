@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import * as THREE from "three";
-import { WallLoader } from "./WallLoader";
+import { WallLoader } from "./wallLoader";
 
 describe("WallLoader", () => {
     // tslint:disable:no-magic-numbers
