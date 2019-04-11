@@ -27,8 +27,8 @@ export class SceneLoaderService {
             scene: THREE.Scene,
             sceneModifications: ICommonSceneModifications,
         ): Promise<void> {
-        // tslint:disable-next-line:max-line-length
-        this.scene = await new ModifiedSceneParserService(sceneModifications.type).parseModifiedScene(scene, sceneModifications);
+        this.scene = await new ModifiedSceneParserService(sceneModifications.type)
+            .parseModifiedScene(scene, sceneModifications);
         this.renderScene(container);
     }
 
