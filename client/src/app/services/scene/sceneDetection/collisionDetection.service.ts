@@ -13,7 +13,6 @@ export class CollisionDetectionService {
         raycaster.set(camera.position, vector);
         const intersectedObj: THREE.Intersection[] = raycaster.intersectObjects(scene.children, true);
         const distance: number = intersectedObj.length === 0 ? CollisionDetectionService.MAX_DISTANCE : intersectedObj[0].distance;
-        console.log(distance);
         if (distance > CollisionDetectionService.MIN_DISTANCE_TO_MOVE) {
             return false;
         }
