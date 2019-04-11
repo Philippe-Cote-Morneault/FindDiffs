@@ -1,6 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
+import * as sinon from "sinon";
 import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameService } from "./game.service";
@@ -16,6 +17,13 @@ describe("GameService", () => {
         service = TestBed.get(GameService);
     });
 
+    beforeEach(() => {
+        sinon.stub(Audio.prototype, "play");
+    });
+
+    afterEach(() => {
+        (Audio.prototype)
+    });
     it("Should return the correct time after game start and end after 2 sec", async () => {
 
         const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
@@ -44,6 +52,7 @@ describe("GameService", () => {
     });
 
     it("Should return the correct count after a difference is found", async () => {
+        
         const timer: HTMLElement = document.createElement("p");
         const userDifference: HTMLElement = document.createElement("p");
         const diff: ICommonDifferenceFound = { player: "", difference_count: 2, reveal: {}};
