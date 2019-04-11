@@ -8,10 +8,12 @@ import { WaitingViewComponent } from "src/app/waiting-view/waiting-view.componen
 import { ICommonGame } from "../../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { POVType } from "../../../../../common/model/gameCard";
+import { SocketHandlerService } from "../socket/socketHandler.service";
 import { MatchmakingService } from "./matchmaking.service";
 
 describe("MatchmakingService", () => {
     let service: MatchmakingService;
+    let socketHandlerService: SocketHandlerService;
     let router: Router;
 
     beforeEach(async() => {
@@ -20,6 +22,7 @@ describe("MatchmakingService", () => {
             declarations: [GamesCardViewComponent, WaitingViewComponent],
         });
         service = TestBed.get(MatchmakingService);
+        socketHandlerService = TestBed.get(SocketHandlerService);
         router = TestBed.get(Router);
     });
 
@@ -30,7 +33,7 @@ describe("MatchmakingService", () => {
             timestamp: new Date(),
         };
         const spy: jasmine.Spy = spyOn(router, "navigateByUrl");
-        service.notify(Event.EndMatchmaking, message);
+        await service.notify(Event.EndMatchmaking, message);
         // tslint:disable-next-line:no-any
         const url: any = spy.calls.first().args[0];
 
@@ -44,7 +47,7 @@ describe("MatchmakingService", () => {
             timestamp: new Date(),
         };
         const spy: jasmine.Spy = spyOn(router, "navigateByUrl");
-        service.notify(Event.EndMatchmaking, message);
+        await service.notify(Event.EndMatchmaking, message);
         // tslint:disable-next-line:no-any
         const url: any = spy.calls.first().args[0];
 
@@ -71,6 +74,19 @@ describe("MatchmakingService", () => {
         beforeEach(async () => {
             fakeComponent = TestBed.createComponent(GamesCardViewComponent).componentInstance;
         });
+
+        it("should do nothing when the event thrown is not an event the service is subscribed to", async () => {
+            fakeComponent.gameCard = {id: "", pov: POVType.Simple, title: "", resource_id: "123321",
+                                      best_time_solo: [], best_time_online: []};
+            service.setGameList([fakeComponent]);
+            const spy: jasmine.Spy = spyOn(router, "navigateByUrl");
+            await service.notify(Event.BestTime, {data: [fakeComponent.gameCard.resource_id], timestamp: new Date()});
+
+            expect(spy.calls.count()).to.equal(0);
+            expect(fakeComponent.rightButton).to.equal("Create");
+            expect(fakeComponent.matchMakingButton.nativeElement.style.backgroundColor).to.equal("");
+        });
+
         describe("setGameList()", () => {
             it("should add a GamesCardViewComponent to the list", () => {
                 service.setGameList([fakeComponent]);
@@ -79,8 +95,9 @@ describe("MatchmakingService", () => {
             });
 
             it("should add multiple GamesCadViewComponents to the list", () => {
+                const NB_GAMELIST: number = 3;
                 service.setGameList([fakeComponent, fakeComponent, fakeComponent]);
-                expect(service.gameList.length).to.equal(3);
+                expect(service.gameList.length).to.equal(NB_GAMELIST);
                 service.gameList.forEach((game: GamesCardViewComponent) => {
                     expect(game).to.equal(fakeComponent);
                 });
@@ -108,6 +125,17 @@ describe("MatchmakingService", () => {
                 await service.notify(Event.MatchmakingChange, {data: [], timestamp: new Date()});
                 expect(fakeComponent.rightButton).to.equal("Create");
                 expect(fakeComponent.matchMakingButton.nativeElement.style.backgroundColor).to.equal("green");
+            });
+        });
+
+        describe("getWaitingRooms", () => {
+            it("should call emitMessage method from SocketHandlerService", () => {
+                // tslint:disable-next-line:no-empty
+                const spy: jasmine.Spy = spyOn(socketHandlerService, "emitMessage").and.callFake(() => {});
+
+                service.getWaitingRooms();
+
+                expect(spy.calls.count()).to.equal(1);
             });
         });
     });

@@ -71,7 +71,7 @@ export class GamesCardViewComponent implements OnInit {
             this.deleteGameCard();
         } else {
             const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
-            this.playSoloGame(gameUrl);
+            await this.playSoloGame(gameUrl);
         }
     }
 
@@ -89,7 +89,7 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     private async playSoloGame(gameUrl: string): Promise<void> {
-        await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+        this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             if ((response as ICommonGameCard).id) {
                 this.matchmaking.setIsActive(false);
                 await this.router.navigateByUrl(gameUrl + this.gameCard.id);
@@ -101,7 +101,7 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     private async playMultiplayerGame(): Promise<void> {
-        await this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+        this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
             if ((response as ICommonGameCard).id) {
                 this.changeMatchmakingType();
                 this.matchmaking.setIsActive(true);
