@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonScene, ObjectType } from "../../../../../../common/model/scene/scene";
 import { WallLoader } from "../sceneLoader/wallLoader";
+import { ICommonSceneAndObjects } from "./ICommonSceneAndObjects";
 import { AbstractSceneParser } from "./abstractSceneParserService";
 
 @Injectable({
@@ -13,14 +14,15 @@ export class SceneParserService extends AbstractSceneParser {
         super(scene);
     }
 
-    public async parseScene(): Promise<THREE.Scene> {
+    public async parseScene(): Promise<ICommonSceneAndObjects> {
         const scene: THREE.Scene = await this.createScene();
-        await this.parseObjects(scene, this.sceneModel.sceneObjects);
+        const objects: THREE.Object3D[] = await this.parseObjects(scene, this.sceneModel.sceneObjects);
 
-        return scene;
+        return {scene: scene, objects: objects};
     }
 
-    private async parseObjects(scene: THREE.Scene, sceneObjects: ICommonSceneObject[]): Promise<void> {
+    private async parseObjects(scene: THREE.Scene, sceneObjects: ICommonSceneObject[]): Promise<THREE.Object3D[]> {
+        const objects: THREE.Object3D[] = new Array<THREE.Object3D>();
         const promises: Promise<THREE.Object3D>[] = sceneObjects.map(
             async (object: ICommonSceneObject) => this.sceneObjectParser.parse(object));
         (this.sceneType === ObjectType.Geometric) ?
@@ -28,7 +30,14 @@ export class SceneParserService extends AbstractSceneParser {
             await WallLoader.loadThematic(scene);
 
         await Promise.all(promises).then((v: THREE.Object3D[]) => {
+            v.forEach((element) => {
+                if (element.type === "Mesh" || element.type === "Scene") {
+                    objects.push(element);
+                }
+            });
             scene.add(...v);
         });
+
+        return objects;
     }
 }
