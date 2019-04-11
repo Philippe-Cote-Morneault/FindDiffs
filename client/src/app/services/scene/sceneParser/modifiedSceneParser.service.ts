@@ -8,8 +8,6 @@ import { ICommonThematicModifications } from "../../../../../../common/model/sce
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonThematicObject } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ObjectType } from "../../../../../../common/model/scene/scene";
-import { BoundingBoxLoader } from "../sceneLoader/boundingBoxLoader";
-import { ISceneBoundingBox } from "./ISceneBoundingBox";
 import { AbstractSceneParser } from "./abstractSceneParserService";
 import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
 
@@ -17,7 +15,6 @@ import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
     providedIn: "root",
 })
 export class ModifiedSceneParserService extends AbstractSceneParser {
-    public boundingBoxes: THREE.Box3[] = new Array<THREE.Box3>();
     public constructor(type: ObjectType) {
         super(
             {
@@ -33,7 +30,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         );
     }
 
-    public async parseModifiedScene(originalScene: THREE.Scene, sceneModifications: ICommonSceneModifications): Promise<ISceneBoundingBox> {
+    public async parseModifiedScene(originalScene: THREE.Scene, sceneModifications: ICommonSceneModifications): Promise<THREE.Scene> {
         const scene: THREE.Scene = originalScene.clone();
         if (sceneModifications.type === ObjectType.Geometric) {
             await this.parseGeometricObjects(
@@ -48,7 +45,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         }
         await this.addAddedObjects(scene, sceneModifications.addedObjects);
 
-        return {scene: scene, bbox: this.boundingBoxes};
+        return scene;
     }
 
     private async parseThematicObjects(scene: THREE.Scene, sceneModifications: ICommonThematicModifications): Promise<void> {
@@ -99,10 +96,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         await Promise.all(objectsToAdd.map(async (object: ICommonSceneObject) =>
         this.sceneObjectParser.parse(object)))
         .then((v: THREE.Object3D[]) => {
-            v.forEach((element, index: number) => {
-                (element.name === "lamp.gltf") ?
-                    BoundingBoxLoader.loadLamp(this.boundingBoxes, objectsToAdd[index], element) :
-                    BoundingBoxLoader.loadObject(this.boundingBoxes, element);
+            v.forEach((element) => {
                 scene.add(element);
             });
         });
