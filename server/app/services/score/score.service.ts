@@ -125,8 +125,4 @@ export class ScoreService extends Service implements IScoreService {
         return response;
     }
 
-    public async single(id: string): Promise<string> {
-        throw new Error("Method not implemented.");
-    }
-
 }

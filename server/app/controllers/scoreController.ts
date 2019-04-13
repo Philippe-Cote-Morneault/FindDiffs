@@ -30,15 +30,6 @@ export class ScoreController extends Controller implements IScoreController {
             }
         });
 
-        router.get("/:id/", async(req: Request, res: Response, next: NextFunction) => {
-            try {
-                const response: string = await this.scoreService.single(req.params.id);
-                res.send(response);
-            } catch (err) {
-                this.handleError(res, err);
-            }
-        });
-
         return router;
     }
 }
