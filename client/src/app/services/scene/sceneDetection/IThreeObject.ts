@@ -4,6 +4,6 @@ export interface IThreeObject {
   }
 
 export interface IThreeScene {
-  original: THREE.Scene;
-  modified: THREE.Scene;
+  original?: THREE.Scene;
+  modified?: THREE.Scene;
 }
