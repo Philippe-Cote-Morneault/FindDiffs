@@ -48,8 +48,12 @@ export class ObjectHandler {
                                                                       this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
                                                                       this.meshesOriginal, this.meshesModified);
 
-        this.emitDifference(event, this.scenePairId, this.detectedObjects.original.userData.id,
-                            this.detectedObjects.modified.userData.id, this.gameType);
+        if (this.detectedObjects.modified) {
+            this.emitDifference(event, this.scenePairId, this.detectedObjects.original.userData.id,
+                                this.detectedObjects.modified.userData.id, this.gameType);
+        } else {
+            await this.identificationError.showErrorMessage();
+        }
     }
 
     private emitDifference(event: MouseEvent, scenePairId: string, originalObjectId: string,
