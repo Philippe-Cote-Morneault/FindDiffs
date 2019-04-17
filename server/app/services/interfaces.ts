@@ -13,7 +13,6 @@ export interface IImagePairService {
 export interface IScoreService {
     post(req: Request): Promise<string>;
     update(req: Request): Promise<string>;
-    single(id: string): Promise<string>;
 }
 
 export interface ISceneService {
