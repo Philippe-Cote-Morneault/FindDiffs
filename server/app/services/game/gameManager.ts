@@ -58,8 +58,15 @@ export abstract class GameManager {
         });
     }
 
-    protected isDifferenceFound(player: string, differenceId: string): boolean {
-        return (this.differencesFound.get(player) as string[]).indexOf(differenceId) >= 0;
+    protected isDifferenceFound(differenceId: string): boolean {
+        let isDifferenceFound: boolean = false;
+        this.game.players.forEach((element: string) => {
+            if ((this.differencesFound.get(element) as string[]).indexOf(differenceId) >= 0) {
+                isDifferenceFound = true;
+            }
+        });
+
+        return isDifferenceFound;
     }
 
     private populateDifferencesMap(): void {
