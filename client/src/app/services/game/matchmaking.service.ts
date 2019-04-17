@@ -16,7 +16,7 @@ export class MatchmakingService implements SocketSubscriber {
     public gameList: GamesCardViewComponent[];
 
     public constructor(private socketService: SocketHandlerService, private router: Router) {
-        this.isActive = false;
+        this.isActive = true;
         this.subscribeToSocket();
     }
 
