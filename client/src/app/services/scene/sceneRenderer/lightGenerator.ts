@@ -18,11 +18,7 @@ export class LightGenerator {
     }
 
     private static generateTopNorthEastLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
-        const light: THREE.PointLight = new THREE.PointLight(
-            LightGenerator.WHITE_LIGHT_COLOR,
-            LightGenerator.LIGHT_INTENSITY,
-            LightGenerator.LIGHT_DISTANCE,
-        );
+        const light: THREE.PointLight = this.createLight();
 
         light.position.set(
             dimensions.x / LightGenerator.DISTANCE_RATIO,
@@ -34,11 +30,7 @@ export class LightGenerator {
     }
 
     private static generateBottomNorthWestLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
-        const light: THREE.PointLight = new THREE.PointLight(
-            LightGenerator.WHITE_LIGHT_COLOR,
-            LightGenerator.LIGHT_INTENSITY,
-            LightGenerator.LIGHT_DISTANCE,
-        );
+        const light: THREE.PointLight = this.createLight();
 
         light.position.set(
             -(dimensions.x / LightGenerator.DISTANCE_RATIO),
@@ -50,11 +42,7 @@ export class LightGenerator {
     }
 
     private static generateBottomSouthEastLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
-        const light: THREE.PointLight = new THREE.PointLight(
-            LightGenerator.WHITE_LIGHT_COLOR,
-            LightGenerator.LIGHT_INTENSITY,
-            LightGenerator.LIGHT_DISTANCE,
-        );
+        const light: THREE.PointLight = this.createLight();
 
         light.position.set(
             dimensions.x / LightGenerator.DISTANCE_RATIO,
@@ -66,11 +54,7 @@ export class LightGenerator {
     }
 
     private static generateTopSouthWestLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
-        const light: THREE.PointLight = new THREE.PointLight(
-            LightGenerator.WHITE_LIGHT_COLOR,
-            LightGenerator.LIGHT_INTENSITY,
-            LightGenerator.LIGHT_DISTANCE,
-        );
+        const light: THREE.PointLight = this.createLight();
 
         light.position.set(
             -(dimensions.x / LightGenerator.DISTANCE_RATIO),
@@ -80,4 +64,13 @@ export class LightGenerator {
 
         return light;
     }
+
+    private static createLight(): THREE.PointLight {
+        return new THREE.PointLight(
+            LightGenerator.WHITE_LIGHT_COLOR,
+            LightGenerator.LIGHT_INTENSITY,
+            LightGenerator.LIGHT_DISTANCE,
+        );
+    }
+     
 }
