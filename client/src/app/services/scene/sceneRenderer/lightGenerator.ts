@@ -18,66 +18,51 @@ export class LightGenerator {
     }
 
     private static generateTopNorthEastLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
-        const light: THREE.PointLight = new THREE.PointLight(
-            LightGenerator.WHITE_LIGHT_COLOR,
-            LightGenerator.LIGHT_INTENSITY,
-            LightGenerator.LIGHT_DISTANCE,
-        );
-
-        light.position.set(
-            dimensions.x / LightGenerator.DISTANCE_RATIO,
-            dimensions.y,
-            dimensions.z / LightGenerator.DISTANCE_RATIO,
-        );
+        const light: THREE.PointLight = this.createLight();
+       
+        this.setLightPosition(light, dimensions.x, dimensions.y, dimensions.z);
 
         return light;
     }
 
     private static generateBottomNorthWestLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
-        const light: THREE.PointLight = new THREE.PointLight(
-            LightGenerator.WHITE_LIGHT_COLOR,
-            LightGenerator.LIGHT_INTENSITY,
-            LightGenerator.LIGHT_DISTANCE,
-        );
+        const light: THREE.PointLight = this.createLight();
 
-        light.position.set(
-            -(dimensions.x / LightGenerator.DISTANCE_RATIO),
-            -(dimensions.y),
-            dimensions.z / LightGenerator.DISTANCE_RATIO,
-        );
+        this.setLightPosition(light, -dimensions.x, -dimensions.y, dimensions.z);
 
         return light;
     }
 
     private static generateBottomSouthEastLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
-        const light: THREE.PointLight = new THREE.PointLight(
-            LightGenerator.WHITE_LIGHT_COLOR,
-            LightGenerator.LIGHT_INTENSITY,
-            LightGenerator.LIGHT_DISTANCE,
-        );
+        const light: THREE.PointLight = this.createLight();
 
-        light.position.set(
-            dimensions.x / LightGenerator.DISTANCE_RATIO,
-            -(dimensions.y),
-            -(dimensions.z / LightGenerator.DISTANCE_RATIO),
-        );
+        this.setLightPosition(light, dimensions.x, -dimensions.y, -dimensions.z);
 
         return light;
     }
 
     private static generateTopSouthWestLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
-        const light: THREE.PointLight = new THREE.PointLight(
+        const light: THREE.PointLight = this.createLight();
+
+        this.setLightPosition(light, -dimensions.x, dimensions.y, -dimensions.z);
+
+        return light;
+    }
+
+    private static createLight(): THREE.PointLight {
+        return new THREE.PointLight(
             LightGenerator.WHITE_LIGHT_COLOR,
             LightGenerator.LIGHT_INTENSITY,
             LightGenerator.LIGHT_DISTANCE,
         );
-
-        light.position.set(
-            -(dimensions.x / LightGenerator.DISTANCE_RATIO),
-            dimensions.y,
-            -(dimensions.z / LightGenerator.DISTANCE_RATIO),
-        );
-
-        return light;
     }
+
+    private static setLightPosition(light:THREE.PointLight, xDimension: number, yDimension: number, zDimension: number): void {
+        light.position.set(
+            xDimension / LightGenerator.DISTANCE_RATIO,
+            yDimension,
+            zDimension / LightGenerator.DISTANCE_RATIO,
+        );
+    }
+     
 }

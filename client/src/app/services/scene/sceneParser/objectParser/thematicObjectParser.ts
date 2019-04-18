@@ -18,13 +18,9 @@ export class ThematicObjectParser extends SceneObjectParser {
         const objectName: string = ObjTheme[object.objectType].toLowerCase();
         const object3D: THREE.Object3D = await JSONLoader.load(objectName);
 
-        object3D.position.x = object.position.x;
-        object3D.position.y = object.position.y;
-        object3D.position.z = object.position.z;
+        this.setObjectPosition(object3D, object);
 
-        object3D.scale.x *= object.scale;
-        object3D.scale.y *= object.scale;
-        object3D.scale.z *= object.scale;
+        this.setObjectScale(object3D, object);
 
         object3D.userData = object;
 
@@ -37,6 +33,18 @@ export class ThematicObjectParser extends SceneObjectParser {
         await this.loadMaterial(object3D, object);
 
         return object3D;
+    }
+
+    private setObjectPosition(object3D: THREE.Object3D, object: ICommonThematicObject): void {
+        object3D.position.x = object.position.x;
+        object3D.position.y = object.position.y;
+        object3D.position.z = object.position.z;
+    }
+
+    private setObjectScale(object3D: THREE.Object3D, object: ICommonThematicObject): void {
+        object3D.scale.x *= object.scale;
+        object3D.scale.y *= object.scale;
+        object3D.scale.z *= object.scale;
     }
 
     public async loadMaterial(object3D: THREE.Object3D, object: ICommonThematicObject, forceUpdate: boolean = false): Promise<void> {
