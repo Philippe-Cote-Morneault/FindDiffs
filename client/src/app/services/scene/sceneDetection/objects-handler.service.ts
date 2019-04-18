@@ -26,8 +26,8 @@ export class ObjectHandler {
 
     public constructor( private mousePositionService: MousePositionService,
                         private objectDetectionService: ObjectDetectionService,
-                        private originalSceneLoader: SceneLoaderService,
-                        private modifiedSceneLoader: SceneLoaderService,
+                        public originalSceneLoader: SceneLoaderService,
+                        public modifiedSceneLoader: SceneLoaderService,
                         private socket: SocketHandlerService,
                         private identificationError: IdentificationError,
                         private game: GameService) {
