@@ -10,9 +10,14 @@
         {{endingMessage}}
       </h1>
       <div class="grid-container">
-        <div>
+        <div *ngIf="!isSoloGame">
+          <ol *ngFor='let onlineTime of gameCard.best_time_online; let i = index'>
+            <span> {{gameCard.best_time_online[i].name}}: </span> {{toMinutes(i, gameCard.best_time_online)}}
+          </ol>
+        </div>
+        <div *ngIf="isSoloGame">
           <ol *ngFor='let soloTime of gameCard.best_time_solo; let i = index'>
-              <span> {{gameCard.best_time_online[i].name}}: </span> {{toMinutes(i, gameCard.best_time_online)}}
+            <span> {{gameCard.best_time_solo[i].name}}: </span> {{toMinutes(i, gameCard.best_time_solo)}}
           </ol>
         </div>
         <div class="flex-container">
