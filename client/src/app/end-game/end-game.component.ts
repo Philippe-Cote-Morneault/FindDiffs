@@ -24,7 +24,7 @@ export class EndGameComponent implements OnInit {
 
     public endingMessage: string;
     public gameCardId: string;
-    private waitingScreenPath: string;
+    private gamesListPath: string;
     public waitOpponent: boolean;
 
     public constructor(
@@ -33,7 +33,7 @@ export class EndGameComponent implements OnInit {
         private socket: SocketHandlerService,
         private router: Router,
         private matchmaking: MatchmakingService) {
-        this.waitingScreenPath = "/gamesList";
+        this.gamesListPath = "/gamesList";
         this.endingMessage = R.MESSAGE_WIN;
         this.gameCardId = "";
     }
@@ -64,7 +64,7 @@ export class EndGameComponent implements OnInit {
     }
 
     public async leaveGame(): Promise<void> {
-        await this.router.navigateByUrl(this.waitingScreenPath);
+        await this.router.navigateByUrl(this.gamesListPath);
     }
 
     public async resetGame(): Promise<void> {
