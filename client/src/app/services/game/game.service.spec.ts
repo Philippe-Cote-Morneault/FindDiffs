@@ -1,7 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
-import * as sinon from "sinon";
 import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameService } from "./game.service";
@@ -18,13 +17,6 @@ describe("GameService", () => {
         service = TestBed.get(GameService);
     });
 
-    beforeEach(() => {
-        sinon.stub(Audio.prototype, "play");
-    });
-
-    afterEach(() => {
-        (Audio.prototype as sinon.SinonStub).restore();
-    });
     describe("getGameStarted() and getTimeValues()", async () => {
 
         it("Should return the correct time after game start and end after 2 sec", async () => {

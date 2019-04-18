@@ -60,7 +60,7 @@ describe("MatchmakingService", () => {
             expect(service.getIsActive()).to.equal(true);
         });
         it("Should return false by default", async () => {
-            expect(service.getIsActive()).to.equal(false);
+            expect(service.getIsActive()).to.equal(true);
         });
         it("Should return false if the game is multiplayer", async () => {
             service.setIsActive(false);

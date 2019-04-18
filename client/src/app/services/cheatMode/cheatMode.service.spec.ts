@@ -70,10 +70,10 @@ describe("CheatModeService", () => {
                 cheatModeService.modifiedLoaderService = new SceneLoaderService();
 
                 const sceneAndObjectsOriginal: ICommonSceneAndObjects = await new SceneParserService(scene).parseScene();
+                cheatModeService.originalLoaderService.scene = sceneAndObjectsOriginal.scene;
                 const sceneAndObjectsModified: ICommonSceneAndObjects = await new ModifiedSceneParserService(ObjectType.Geometric)
                     .parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
 
-                cheatModeService.originalLoaderService.scene = sceneAndObjectsOriginal.scene;
                 cheatModeService.modifiedLoaderService.scene = sceneAndObjectsModified.scene;
             });
 
@@ -217,10 +217,10 @@ describe("CheatModeService", () => {
                 cheatModeService.modifiedLoaderService = new SceneLoaderService();
 
                 const sceneAndObjectsOriginal: ICommonSceneAndObjects = await new SceneParserService(thematicScene).parseScene();
+                cheatModeService.originalLoaderService.scene = sceneAndObjectsOriginal.scene;
                 const sceneAndObjectsModified: ICommonSceneAndObjects = await new ModifiedSceneParserService(ObjectType.Thematic)
                 .parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
 
-                cheatModeService.originalLoaderService.scene = sceneAndObjectsOriginal.scene;
                 cheatModeService.modifiedLoaderService.scene = sceneAndObjectsModified.scene;
             });
 
@@ -365,5 +365,4 @@ describe("CheatModeService", () => {
             expect(cheatModeService.arrayNotEmpty(array.length)).to.equal(true);
         });
     });
-// tslint:disable-next-line: max-file-line-count
 });
