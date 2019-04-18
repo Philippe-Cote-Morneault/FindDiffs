@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { CameraGenerator } from "../sceneRenderer/cameraGenerator";
 import { MousePositionService } from "./mouse-position.service";
 import { ObjectDetectionService } from "./object-detection.service";
+import { IThreeObject } from "./IThreeObject";
 
 // tslint:disable
 describe("ObjectDetectionService", () => {
@@ -138,8 +139,44 @@ describe("ObjectDetectionService", () => {
 
 
   describe("getParent()", () => {
-    it("Should", async () => {
+    it("Should return the original and the modified object", async () => {
+      const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
+      const mouseService: MousePositionService = new MousePositionService();
+  
+      let mouse: THREE.Vector2 = new THREE.Vector2();
+      const event: MouseEvent = document.createEvent("MouseEvent");
+      event.initMouseEvent("click", true, true, window, 0, 0, 0, 371, 207, false, false, false, false, 0, null);
+      const divBoxInformation: ClientRect | DOMRect = {
+          bottom: 585.1999969482422,
+          height: 480,
+          left: 160,
+          right: 800,
+          top: 105.19999694824219,
+          width: 640,
+          x: 160,
+          y: 105.19999694824219,
+        };
+  
+      const clientWidth: number = 638;
+      const clientHeight: number = 478;
+  
+      mouseService.setMousePosition(event, mouse, divBoxInformation, clientWidth, clientHeight);
+  
+      const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(window.screenX, window.screenY);
 
+      const scene: THREE.Scene = new THREE.Scene();
+
+      const geometry: THREE.BoxGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+      var material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+      var cube: THREE.Mesh = new THREE.Mesh( geometry, material );
+      scene.add( cube );
+
+      const meshes: THREE.Object3D[] = [];
+      meshes.push(cube);
+
+      const objects: IThreeObject = service.rayCasting(mouse, camera, camera, scene, scene, meshes, meshes);
+      await expect(objects.original).not.toBeNull();
+      await expect(objects.modified).not.toBeNull();
     });
   });
 
