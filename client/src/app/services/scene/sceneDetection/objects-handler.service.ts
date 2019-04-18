@@ -10,7 +10,6 @@ import { SocketHandlerService } from "../../socket/socketHandler.service";
 import { MousePositionService } from "../sceneDetection/mouse-position.service";
 import { IThreeObject } from "./IThreeObject";
 import { ObjectDetectionService } from "./object-detection.service";
-import { ObjectRestorationService } from "./object-restoration.service";
 
 @Injectable({
     providedIn: "root",
@@ -25,54 +24,52 @@ export class ObjectHandler {
     public scenePairId: string;
     public gameType: ObjectType;
 
-    public constructor( public mousePositionService: MousePositionService,
-                        public objectDetectionService: ObjectDetectionService,
-                        public originalSceneLoader: SceneLoaderService,
-                        public modifiedSceneLoader: SceneLoaderService,
-                        public socket: SocketHandlerService,
+    public constructor( private mousePositionService: MousePositionService,
+                        private objectDetectionService: ObjectDetectionService,
+                        private originalSceneLoader: SceneLoaderService,
+                        private modifiedSceneLoader: SceneLoaderService,
+                        private socket: SocketHandlerService,
                         private identificationError: IdentificationError,
-                        private game: GameService,
-                        public objectRestorationService: ObjectRestorationService) {
+                        private game: GameService) {
         this.meshesOriginal = [];
         this.meshesModified = [];
     }
 
     public async clickOnScene(event: MouseEvent, isOriginalScene: boolean): Promise<void> {
-        const mouse: THREE.Vector2 = new THREE.Vector2();
-        isOriginalScene ?
-            this.mousePositionService.setMousePosition(event, mouse, this.originalGame) :
-            this.mousePositionService.setMousePosition(event, mouse, this.modifiedGame);
+        if (this.clickAreAllowed()) {
+            this.identificationError.moveClickError(event.pageX, event.pageY);
+            const mouse: THREE.Vector2 = new THREE.Vector2();
+            isOriginalScene ?
+                this.mousePositionService.setMousePosition(event, mouse, this.originalGame) :
+                this.mousePositionService.setMousePosition(event, mouse, this.modifiedGame);
 
-        this.detectedObjects = this.objectDetectionService.rayCasting(mouse,
-                                                                      this.originalSceneLoader.camera, this.modifiedSceneLoader.camera,
-                                                                      this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
-                                                                      this.meshesOriginal, this.meshesModified);
+            this.detectedObjects = this.objectDetectionService.rayCasting(mouse,
+                                                                          this.originalSceneLoader.camera, this.modifiedSceneLoader.camera,
+                                                                          this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
+                                                                          this.meshesOriginal, this.meshesModified);
 
-        if (this.detectedObjects.modified) {
-            this.emitDifference(event, this.scenePairId, this.detectedObjects.original.userData.id,
-                                this.detectedObjects.modified.userData.id, this.gameType);
-        } else {
-            await this.identificationError.showErrorMessage();
+            if (this.detectedObjects.modified) {
+                this.emitDifference(this.scenePairId, this.detectedObjects.original.userData.id,
+                                    this.detectedObjects.modified.userData.id, this.gameType);
+            } else {
+                this.socket.emitMessage(Event.InvalidClick, null);
+            }
         }
     }
 
-    private emitDifference(event: MouseEvent, scenePairId: string, originalObjectId: string,
+    private emitDifference(scenePairId: string, originalObjectId: string,
                            modifiedObjectId: string, gameType: ObjectType): void {
-        if (this.clickAreAllowed()) {
-            this.identificationError.moveClickError(event.pageX, event.pageY);
-
-            const clickInfo: ICommon3DObject = {
-                scenePairId: scenePairId,
-                originalObjectId: originalObjectId,
-                modifiedObjectId: modifiedObjectId,
-                gameType: gameType,
-            };
-            const message: ICommonSocketMessage = {
-                data: clickInfo,
-                timestamp: new Date(),
-            };
-            this.socket.emitMessage(Event.GameClick, message);
-        }
+        const clickInfo: ICommon3DObject = {
+            scenePairId: scenePairId,
+            originalObjectId: originalObjectId,
+            modifiedObjectId: modifiedObjectId,
+            gameType: gameType,
+        };
+        const message: ICommonSocketMessage = {
+            data: clickInfo,
+            timestamp: new Date(),
+        };
+        this.socket.emitMessage(Event.GameClick, message);
     }
 
     private clickAreAllowed(): boolean {
