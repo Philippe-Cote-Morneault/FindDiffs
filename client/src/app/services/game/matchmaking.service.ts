@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { GamesCardViewComponent } from "src/app/games-card-view/games-card-view.component";
 import { CREATE_BUTTON, JOIN_BUTTON } from "../../../../../common/buttonName";
+import { BLUE_BACKGROUND, GREEN_BACKGROUND } from "../../../../../common/communication/webSocket/colorName";
 import { ICommonGame } from "../../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { SocketHandlerService } from "../socket/socketHandler.service";
@@ -57,12 +58,12 @@ export class MatchmakingService implements SocketSubscriber {
 
     private changeToJoin(game: GamesCardViewComponent): void {
         game.rightButton = JOIN_BUTTON;
-        game.matchMakingButton.nativeElement.style.backgroundColor = "blue";
+        game.matchMakingButton.nativeElement.style.backgroundColor = BLUE_BACKGROUND;
     }
 
     private changeToCreate(game: GamesCardViewComponent): void {
         game.rightButton = CREATE_BUTTON;
-        game.matchMakingButton.nativeElement.style.backgroundColor = "green";
+        game.matchMakingButton.nativeElement.style.backgroundColor = GREEN_BACKGROUND;
     }
 
     public setGameList(list: GamesCardViewComponent[]): void {
