@@ -21,6 +21,7 @@ export class EndGameComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public playerTimeChild: string;
     @Input() public winner: string;
+    @Input() public isSoloGame: boolean;
 
     public endingMessage: string;
     public gameCardId: string;
@@ -36,6 +37,7 @@ export class EndGameComponent implements OnInit {
         this.gamesListPath = "/gamesList";
         this.endingMessage = R.MESSAGE_WIN;
         this.gameCardId = "";
+        this.isSoloGame = true;
     }
 
     public ngOnInit(): void {
