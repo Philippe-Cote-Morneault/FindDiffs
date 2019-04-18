@@ -2,9 +2,9 @@ import { TestBed } from "@angular/core/testing";
 
 import * as THREE from "three";
 import { CameraGenerator } from "../sceneRenderer/cameraGenerator";
+import { IThreeObject } from "./IThreeObject";
 import { MousePositionService } from "./mouse-position.service";
 import { ObjectDetectionService } from "./object-detection.service";
-import { IThreeObject } from "./IThreeObject";
 
 // tslint:disable
 describe("ObjectDetectionService", () => {
