@@ -12,7 +12,7 @@
       <div class="grid-container">
         <div>
           <ol *ngFor='let soloTime of gameCard.best_time_solo; let i = index'>
-              <span> {{gameCard.best_time_solo[i].name}}: </span> {{toMinutes(i, gameCard.best_time_solo)}}
+              <span> {{gameCard.best_time_online[i].name}}: </span> {{toMinutes(i, gameCard.best_time_online)}}
           </ol>
         </div>
         <div class="flex-container">
