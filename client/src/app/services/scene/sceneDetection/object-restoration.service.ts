@@ -3,7 +3,6 @@ import * as THREE from "three";
 import { ICommonDifferenceFound } from "../../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../../common/communication/webSocket/socketMessage";
 import { DifferenceType, ICommonReveal3D } from "../../../../../../common/model/reveal";
-import { IdentificationError } from "../../IdentificationError/identificationError.service";
 import { SceneLoaderService } from "../../scene/sceneLoader/sceneLoader.service";
 import { SocketHandlerService } from "../../socket/socketHandler.service";
 import { SocketSubscriber } from "../../socket/socketSubscriber";
@@ -19,10 +18,10 @@ export class ObjectRestorationService implements SocketSubscriber, OnDestroy {
 
     public differenceFound: string[];
 
-    public constructor(public socketService: SocketHandlerService,
-                       public originalSceneLoader: SceneLoaderService,
-                       public modifiedSceneLoader: SceneLoaderService,
-                       public identificationError: IdentificationError) {
+    public constructor(private socketService: SocketHandlerService,
+                       private originalSceneLoader: SceneLoaderService,
+                       private modifiedSceneLoader: SceneLoaderService,
+                       private socket: SocketHandlerService) {
         this.differenceFound = [];
         this.subscribeToSocket();
     }
@@ -137,7 +136,7 @@ export class ObjectRestorationService implements SocketSubscriber, OnDestroy {
             this.addObject(object, scene, true);
             this.addDifference(object);
         } else {
-            await this.identificationError.showErrorMessage();
+            this.socket.emitMessage(Event.InvalidClick, null);
         }
     }
 
