@@ -10,6 +10,7 @@ import { scene } from "../../tests/scene/sceneMock";
 import { thematicScene } from "../../tests/scene/thematicSceneMock";
 import { thematicSceneModifications } from "../../tests/scene/thematicSceneModificationsMock";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
+import { ICommonSceneAndObjects } from "../scene/sceneParser/ICommonSceneAndObjects";
 import { ModifiedSceneParserService } from "../scene/sceneParser/modifiedSceneParser.service";
 import { SceneParserService } from "../scene/sceneParser/sceneParser.service";
 import { CheatModeService } from "./cheatMode.service";
@@ -68,10 +69,12 @@ describe("CheatModeService", () => {
                 cheatModeService.originalLoaderService = new SceneLoaderService();
                 cheatModeService.modifiedLoaderService = new SceneLoaderService();
 
-                cheatModeService.originalLoaderService.scene = await new SceneParserService(scene).parseScene();
-                cheatModeService.modifiedLoaderService.scene = await new ModifiedSceneParserService(ObjectType.Geometric)
-                .parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
+                const sceneAndObjectsOriginal: ICommonSceneAndObjects = await new SceneParserService(scene).parseScene();
+                const sceneAndObjectsModified: ICommonSceneAndObjects = await new ModifiedSceneParserService(ObjectType.Geometric)
+                    .parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
 
+                cheatModeService.originalLoaderService.scene = sceneAndObjectsOriginal.scene;
+                cheatModeService.modifiedLoaderService.scene = sceneAndObjectsModified.scene;
             });
 
             describe("enableCheats()", () => {
@@ -213,9 +216,12 @@ describe("CheatModeService", () => {
                 cheatModeService.originalLoaderService = new SceneLoaderService();
                 cheatModeService.modifiedLoaderService = new SceneLoaderService();
 
-                cheatModeService.originalLoaderService.scene = await new SceneParserService(thematicScene).parseScene();
-                cheatModeService.modifiedLoaderService.scene = await new ModifiedSceneParserService(ObjectType.Thematic)
-                    .parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
+                const sceneAndObjectsOriginal: ICommonSceneAndObjects = await new SceneParserService(thematicScene).parseScene();
+                const sceneAndObjectsModified: ICommonSceneAndObjects = await new ModifiedSceneParserService(ObjectType.Thematic)
+                .parseModifiedScene(cheatModeService.originalLoaderService.scene, modifiedScene);
+
+                cheatModeService.originalLoaderService.scene = sceneAndObjectsOriginal.scene;
+                cheatModeService.modifiedLoaderService.scene = sceneAndObjectsModified.scene;
             });
 
             describe("enableCheats()", () => {
