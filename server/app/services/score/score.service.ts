@@ -3,13 +3,14 @@ import { Message } from "../../../../common/communication/message";
 import { InvalidFormatException } from "../../../../common/errors/invalidFormatException";
 import { NotFoundException } from "../../../../common/errors/notFoundException";
 import { GameType, ICommonScoreEntry } from "../../../../common/model/gameCard";
-import { INewScore, INewScoreDetails } from "../../../../common/model/score";
+import { INewScore } from "../../../../common/model/score";
 import { GameCard, IGameCard } from "../../model/schemas/gameCard";
 import { _e, R } from "../../strings";
 import { EnumUtils } from "../../utils/enumUtils";
 import { IScoreService } from "../interfaces";
 import { Service } from "../service";
 import { ScoreGenerator } from "./scoreGenerator";
+import { ScoreUpdater } from "./scoreUpdater";
 
 export class ScoreService extends Service implements IScoreService {
     public static readonly DEFAULT_SCORE_NUMBER: number = 3;
@@ -82,12 +83,13 @@ export class ScoreService extends Service implements IScoreService {
             const newScore: INewScore = this.verifyScore(req, doc);
 
             if (newScore.is_top_score) {
-                const i: number = (newScore.details as INewScoreDetails).place - 1;
+                const scoreEntry: ICommonScoreEntry = {
+                    name: req.body.username,
+                    score: Math.round(Number(req.body.time) / ScoreService.MS_IN_1_SECOND),
+                };
                 const scoreEntryName: string = req.body.type === GameType.Online ? "best_time_online" : "best_time_solo";
                 const scoreEntries: ICommonScoreEntry[] = JSON.parse(JSON.stringify(doc[scoreEntryName]));
-                scoreEntries[i].name = req.body.username;
-                scoreEntries[i].score = Math.round(Number(req.body.time) / ScoreService.MS_IN_1_SECOND);
-                doc[scoreEntryName] = scoreEntries;
+                doc[scoreEntryName] = ScoreUpdater.updateScore(scoreEntries, scoreEntry);
             }
 
             await doc.save();
