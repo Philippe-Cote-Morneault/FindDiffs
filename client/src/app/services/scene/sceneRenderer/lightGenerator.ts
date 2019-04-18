@@ -32,11 +32,7 @@ export class LightGenerator {
     private static generateBottomNorthWestLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
         const light: THREE.PointLight = this.createLight();
 
-        light.position.set(
-            -(dimensions.x / LightGenerator.DISTANCE_RATIO),
-            -(dimensions.y),
-            dimensions.z / LightGenerator.DISTANCE_RATIO,
-        );
+        this.setLightPosition(light, -dimensions.x, -dimensions.y, dimensions.z);
 
         return light;
     }
@@ -44,11 +40,7 @@ export class LightGenerator {
     private static generateBottomSouthEastLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
         const light: THREE.PointLight = this.createLight();
 
-        light.position.set(
-            dimensions.x / LightGenerator.DISTANCE_RATIO,
-            -(dimensions.y),
-            -(dimensions.z / LightGenerator.DISTANCE_RATIO),
-        );
+        this.setLightPosition(light, dimensions.x, -dimensions.y, -dimensions.z);
 
         return light;
     }
@@ -56,11 +48,7 @@ export class LightGenerator {
     private static generateTopSouthWestLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
         const light: THREE.PointLight = this.createLight();
 
-        light.position.set(
-            -(dimensions.x / LightGenerator.DISTANCE_RATIO),
-            dimensions.y,
-            -(dimensions.z / LightGenerator.DISTANCE_RATIO),
-        );
+        this.setLightPosition(light, -dimensions.x, dimensions.y, -dimensions.z);
 
         return light;
     }
@@ -70,6 +58,14 @@ export class LightGenerator {
             LightGenerator.WHITE_LIGHT_COLOR,
             LightGenerator.LIGHT_INTENSITY,
             LightGenerator.LIGHT_DISTANCE,
+        );
+    }
+
+    private static setLightPosition(light:THREE.PointLight, xDimension: number, yDimension: number, zDimension: number): void {
+        light.position.set(
+            xDimension / LightGenerator.DISTANCE_RATIO,
+            yDimension,
+            zDimension / LightGenerator.DISTANCE_RATIO,
         );
     }
      
