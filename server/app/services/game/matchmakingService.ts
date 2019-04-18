@@ -34,31 +34,30 @@ export class MatchmakingService {
         this.socketHandler.subscribe(Event.CancelMatchmaking, (message: ICommonSocketMessage, player: string) => {
             this.cancelMatchmaking(message);
         });
+        this.socketHandler.subscribe(Event.MatchmakingChange, (message: ICommonSocketMessage, player: string) => {
+            this.onMatchmakingChange(player);
+        });
     }
 
     public matchPlayers(message: ICommonSocketMessage, player: string): void {
         const data: ICommonGame = message.data as ICommonGame;
         if (this.waitingRoom.has(data.ressource_id)) {
             this.createMultiplayersGame(data, player);
-            this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
         } else {
             this.waitingRoom.set(data.ressource_id, player);
+            this.onMatchmakingChange(null);
         }
     }
 
     private createMultiplayersGame(data: ICommonGame, secondPlayer: string): void {
-        const message: ICommonSocketMessage = {
-            data: data,
-            timestamp: new Date(),
-        };
         const firstPlayer: string | undefined = this.waitingRoom.get(data.ressource_id);
 
         if (firstPlayer) {
             this.gameService.createGame([firstPlayer, secondPlayer], data, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT);
             this.EndMatchmaking(secondPlayer, data);
             this.EndMatchmaking(firstPlayer, data);
-            this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
             this.waitingRoom.delete(data.ressource_id);
+            this.onMatchmakingChange(null);
         }
     }
 
@@ -82,7 +81,21 @@ export class MatchmakingService {
     }
 
     private cancelMatchmaking(message: ICommonSocketMessage): void {
-        this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
         this.waitingRoom.delete(message.data as string);
+        this.onMatchmakingChange(null);
+    }
+
+    private onMatchmakingChange(player: string | null): void {
+        const room: string[] = [];
+        this.waitingRoom.forEach((value: string, key: string) => {
+            room[room.length++] = key;
+        });
+        const message: ICommonSocketMessage = {
+            data: room,
+            timestamp: new Date(),
+        };
+
+        player ? this.socketHandler.sendMessage(Event.MatchmakingChange, message, player) :
+                 this.socketHandler.broadcastMessage(Event.MatchmakingChange, message);
     }
 }

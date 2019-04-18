@@ -12,7 +12,6 @@ import { GamesCardService } from "../services/gameCard/gamesCard.service";
 export class GamesListViewComponent implements OnInit {
     @ViewChild("simplePOVGamesContainer", { read: ViewContainerRef }) private simplePOVContainer: ViewContainerRef;
     @ViewChild("freePOVGamesContainer", { read: ViewContainerRef }) private freePOVContainer: ViewContainerRef;
-
     @Input() public isInAdminView: boolean;
 
     public constructor(
@@ -25,8 +24,8 @@ export class GamesListViewComponent implements OnInit {
     public ngOnInit(): void {
         this.gameCardLoaderService.setContainer(this.simplePOVContainer, POVType.Simple);
         this.gameCardLoaderService.setContainer(this.freePOVContainer, POVType.Free);
-
         this.addAllGameCards();
+        this.matchmakingService.setGameList(this.gameCardLoaderService.gamesList);
     }
 
     private addAllGameCards(): void {
@@ -34,7 +33,7 @@ export class GamesListViewComponent implements OnInit {
             gameCards.forEach((gameCard: ICommonGameCard) => {
                 this.gameCardLoaderService.addDynamicComponent(gameCard, this.isInAdminView);
             });
+            this.matchmakingService.getWaitingRooms();
         });
     }
-
 }

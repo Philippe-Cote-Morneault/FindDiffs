@@ -5,10 +5,12 @@ import { Event } from "../../../../common/communication/webSocket/socketMessage"
 import { ICommonGameCard } from "../../../../common/model/gameCard";
 import { ICommonSceneModifications } from "../../../../common/model/scene/modifications/sceneModifications";
 import { ICommonScene, ObjectType } from "../../../../common/model/scene/scene";
+import { GameEnding } from "../models/game/gameEnding";
 import { R } from "../ressources/strings";
 import { IdentificationError } from "../services/IdentificationError/identificationError.service";
 import { CheatModeHandlerService } from "../services/cheatMode/cheatModeHandler.service";
-import { GameService } from "../services/game/game.service";
+import { GameFreePOVService } from "../services/game/gameFreePOV.service";
+import { MatchmakingService } from "../services/game/matchmaking.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { SceneService } from "../services/scene/scene.service";
 import { ObjectRestorationService } from "../services/scene/sceneDetection/object-restoration.service";
@@ -22,7 +24,10 @@ import { SocketHandlerService } from "../services/socket/socketHandler.service";
     selector: "app-game-view-free",
     templateUrl: "./game-view-free.component.html",
     styleUrls: ["./game-view-free.component.css"],
-    providers: [SceneSyncerService],
+    providers: [SceneSyncerService,
+                ObjectHandler,
+                ObjectRestorationService,
+                GameFreePOVService],
 })
 
 export class GameViewFreeComponent implements OnInit {
@@ -35,6 +40,7 @@ export class GameViewFreeComponent implements OnInit {
     @ViewChild("message") private message: ElementRef;
     @ViewChild("message_container") private messageContainer: ElementRef;
     @ViewChild("userDifferenceFound") private userDifferenceFound: ElementRef;
+    @ViewChild("opponentDifferenceFound") private opponentDifferenceFound: ElementRef;
 
     private scenePairId: string;
     private currentOriginalScene: ICommonScene;
@@ -46,6 +52,7 @@ export class GameViewFreeComponent implements OnInit {
     private meshesOriginal: THREE.Object3D[] = [];
     private meshesModified: THREE.Object3D[] = [];
     public isGameOver: boolean;
+    public isSoloGame: boolean;
     public playerTime: string;
     public winner: string;
 
@@ -56,7 +63,8 @@ export class GameViewFreeComponent implements OnInit {
                         private sceneSyncer: SceneSyncerService,
                         public cheatModeHandlerService: CheatModeHandlerService,
                         public chat: Chat,
-                        private game: GameService,
+                        private gameFree: GameFreePOVService,
+                        private matchmaking: MatchmakingService,
                         private identificationError: IdentificationError,
                         public objectHandler: ObjectHandler,
                         public objectRestoration: ObjectRestorationService,
@@ -64,13 +72,8 @@ export class GameViewFreeComponent implements OnInit {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
 
-        this.isGameOver = false;
-        this.game.gameEnded.subscribe((value) => {
-            this.playerTime = value.time;
-            this.isGameOver = value.isGameOver;
-            this.winner = value.winner;
-        });
-        this.game.resetTime();
+        this.subscribeToGame();
+        this.gameFree.resetTime();
     }
 
     public ngOnInit(): void {
@@ -79,14 +82,34 @@ export class GameViewFreeComponent implements OnInit {
         });
 
         this.userDifferenceFound.nativeElement.innerText = R.ZERO;
+        this.isSoloGame = !this.matchmaking.getIsActive();
         this.spinnerService.show();
         this.setServicesContainers();
         this.getGameCardById();
-        this.game.setControls(this.sceneSyncer);
+        this.gameFree.setControls(this.sceneSyncer);
+    }
+
+    private subscribeToGame(): void {
+        this.gameFree.gameEnded.subscribe((value: GameEnding) => {
+            this.playerTime = value.time;
+            this.isGameOver = value.isGameOver;
+            this.winner = value.winner;
+        });
+
+        this.gameFree.differenceUser.subscribe((value: string) => {
+            this.userDifferenceFound.nativeElement.innerText = value;
+        });
+
+        this.gameFree.differenceOpponent.subscribe((value: string) => {
+            this.opponentDifferenceFound.nativeElement.innerText = value;
+        });
+
+        this.gameFree.chronometer.subscribe((value: string) => {
+            this.chronometer.nativeElement.innerText = value;
+        });
     }
 
     private setServicesContainers(): void {
-        this.game.setContainers(this.chronometer.nativeElement, this.userDifferenceFound.nativeElement);
         this.chat.setContainers(this.message.nativeElement, this.messageContainer.nativeElement);
         this.identificationError.setContainers(this.errorMessage.nativeElement,
                                                this.originalScene.nativeElement,
@@ -143,6 +166,7 @@ export class GameViewFreeComponent implements OnInit {
         this.fillMeshes(this.meshesModified, this.modifiedSceneLoader);
         this.clickEvent(this.originalScene.nativeElement, true);
         this.clickEvent(this.modifiedScene.nativeElement, false);
+        this.objectRestoration.set(this.originalSceneLoader, this.modifiedSceneLoader);
 
         this.socketHandler.emitMessage(Event.ReadyToPlay, null);
     }

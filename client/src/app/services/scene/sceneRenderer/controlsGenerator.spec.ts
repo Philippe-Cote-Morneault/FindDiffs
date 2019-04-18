@@ -10,6 +10,7 @@ describe("ControlsGenerator", () => {
     const mockScene: THREE.Scene = new THREE.Scene;
     beforeEach(() => {
         mockCamera = new THREE.PerspectiveCamera(45, (4 / 3), 0.1, 1000);
+        ControlsGenerator.isLocked = false;
     });
     describe("generateGameControls", () => {
         it("should add an event listener to the document", () => {

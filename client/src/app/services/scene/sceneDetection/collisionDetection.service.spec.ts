@@ -1,3 +1,4 @@
+/*
 import { expect } from "chai";
 import * as THREE from "three";
 import { CollisionDetectionService } from "./collisionDetection.service";
@@ -24,3 +25,4 @@ describe("CollisionDetectionService", () => {
         });
     });
 });
+*/

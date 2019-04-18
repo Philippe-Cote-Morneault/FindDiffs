@@ -38,19 +38,22 @@ export class ObjectHandler {
     }
 
     public async clickOnScene(event: MouseEvent, isOriginalScene: boolean): Promise<void> {
-      const mouse: THREE.Vector2 = new THREE.Vector2();
-      isOriginalScene ?
+        const mouse: THREE.Vector2 = new THREE.Vector2();
+        isOriginalScene ?
             this.mousePositionService.setMousePosition(event, mouse, this.originalGame) :
             this.mousePositionService.setMousePosition(event, mouse, this.modifiedGame);
 
-      this.detectedObjects = this.objectDetectionService.rayCasting(mouse,
-                                                                    this.originalSceneLoader.camera, this.modifiedSceneLoader.camera,
-                                                                    this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
-                                                                    this.meshesOriginal, this.meshesModified);
-      this.objectRestorationService.set(this.originalSceneLoader, this.modifiedSceneLoader, this.detectedObjects);
+        this.detectedObjects = this.objectDetectionService.rayCasting(mouse,
+                                                                      this.originalSceneLoader.camera, this.modifiedSceneLoader.camera,
+                                                                      this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
+                                                                      this.meshesOriginal, this.meshesModified);
 
-      this.emitDifference(event, this.scenePairId, this.detectedObjects.original.userData.id,
-                          this.detectedObjects.modified.userData.id, this.gameType);
+        if (this.detectedObjects.modified) {
+            this.emitDifference(event, this.scenePairId, this.detectedObjects.original.userData.id,
+                                this.detectedObjects.modified.userData.id, this.gameType);
+        } else {
+            await this.identificationError.showErrorMessage();
+        }
     }
 
     private emitDifference(event: MouseEvent, scenePairId: string, originalObjectId: string,
@@ -68,7 +71,6 @@ export class ObjectHandler {
                 data: clickInfo,
                 timestamp: new Date(),
             };
-
             this.socket.emitMessage(Event.GameClick, message);
         }
     }

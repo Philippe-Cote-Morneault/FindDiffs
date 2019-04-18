@@ -2,6 +2,7 @@ import * as axios from "axios";
 import { ICommon3DObject } from "../../../../common/model/positions";
 import { ICommonReveal3D } from "../../../../common/model/reveal";
 import { ObjectType } from "../../../../common/model/scene/scene";
+import Config from "../../config";
 
 export class ScenePositionService {
     private static instance: ScenePositionService;
@@ -23,7 +24,8 @@ export class ScenePositionService {
             gameType: gameType,
         };
         try {
-            return (await axios.default.post("http://localhost:3000/difference/free", requestBody)).data as ICommonReveal3D;
+            return (await axios.default.post(`http://${Config.hostname}:${Config.port}/difference/free`,
+                                             requestBody)).data as ICommonReveal3D;
         } catch (error) {
             return null;
         }

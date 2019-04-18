@@ -19,15 +19,19 @@ export class FreePOVGameManager extends GameManager {
                              successCallback: (data: Object | null) => void,
                              failureCallback: () => void): Promise<void> {
 
+        try {
         await this.scenePositionService.post3DClick(this.game.ressource_id, position.originalObjectId,
                                                     position.modifiedObjectId, position.gameType)
             .then(async (value: ICommonReveal3D | null) => {
-                if (value && !this.isDifferenceFound(player, value.difference_id.toString())) {
+                if (value && !this.isDifferenceFound(value.difference_id.toString())) {
                     await this.differenceFound((value as ICommonReveal3D).difference_id, player);
                     successCallback(value);
                 } else {
                     failureCallback();
                 }
             });
+        } catch (error) {
+            failureCallback();
+        }
     }
 }

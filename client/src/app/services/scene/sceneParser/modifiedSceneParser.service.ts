@@ -54,13 +54,13 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
 
     private async parseThematicObjects(scene: THREE.Scene, sceneModifications: ICommonThematicModifications): Promise<void> {
         for (const originalObject of scene.children) {
-            if (originalObject.userData.id !== undefined) {
+            if (originalObject.userData.id) {
                 if (!sceneModifications.deletedObjects.includes(originalObject.userData.id)) {
                     const objectTexture: Pair<string, string> | undefined =
                     sceneModifications.texturesChangedObjects.find(
                         (object: Pair<string, string>) => originalObject.userData.id === object.key,
                     );
-                    if (objectTexture !== undefined) {
+                    if (objectTexture) {
                         if (isNaN(Number(objectTexture.value))) {
                             await this.changeObjectTexture(originalObject, objectTexture.value);
                         } else {
@@ -77,13 +77,13 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
     private async parseGeometricObjects(scene: THREE.Scene, sceneModifications: ICommonGeometricModifications): Promise<void> {
 
         for (const originalObject of scene.children) {
-            if (originalObject.userData.id !== undefined) {
+            if (originalObject.userData.id) {
                 if (!sceneModifications.deletedObjects.includes(originalObject.userData.id)) {
                     const objectColor: Pair<string, number> | undefined =
                     sceneModifications.colorChangedObjects.find(
                         (object: Pair<string, number>) => originalObject.userData.id === object.key,
                     );
-                    if (objectColor !== undefined) {
+                    if (objectColor) {
                         await this.changeObjectColor(
                             originalObject,
                             objectColor.value,
@@ -110,7 +110,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
     }
 
     private async changeObjectColor(objectToModify: THREE.Object3D, color: number | undefined): Promise<void> {
-        if (color === undefined) {
+        if (color) {
             throw new InvalidFormatException("Color not valid!");
         }
         const object: ICommonThematicObject = objectToModify.userData as ICommonThematicObject;
@@ -119,7 +119,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
     }
 
     private async changeObjectTexture(objectToModify: THREE.Object3D, texture: string): Promise<void> {
-        if (texture === undefined) {
+        if (texture) {
             throw new InvalidFormatException("Texture not valid!");
         }
         const object: ICommonThematicObject = objectToModify.userData as ICommonThematicObject;

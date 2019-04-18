@@ -3,6 +3,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
+import { INewScore, INewScoreDetails } from "../../../../../common/model/score";
 import { Chat } from "./chat";
 
 describe("Chat", () => {
@@ -23,6 +24,27 @@ describe("Chat", () => {
         service.setContainers(p, container);
         service.notify(Event.InvalidClick, msg);
         expect(p.innerText.slice(time)).to.equal("Error.");
+    });
+
+    it("Should return the correct message in chat after BestTime Event", () => {
+        const p: HTMLElement = document.createElement("p");
+        const container: HTMLElement = document.createElement("div");
+        const data: INewScoreDetails = {
+            place: 1,
+            game_name: "Bamboozled",
+            username: "Bamboozleur",
+            game_type: 1,
+        };
+
+        const score: INewScore = {
+            is_top_score: true,
+            details: data,
+        };
+        const msg: ICommonSocketMessage = {data: score, timestamp: new Date()};
+
+        service.setContainers(p, container);
+        service.notify(Event.BestTime, msg);
+        expect(p.innerText.slice(time)).to.equal("Bamboozleur is now 1 place in the bests time of the game Bamboozled in 1v1.");
     });
 
     it("Should return the correct message in chat after DifferenceFound Event", () => {
