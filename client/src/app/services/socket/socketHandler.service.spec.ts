@@ -261,7 +261,7 @@ describe("SocketHandlerService", () => {
             }
         });
 
-        it("Should be true", () => {
+        it("Should be true is authenticate is cancelled", () => {
             let hasBeenCalled: boolean = false;
             // tslint:disable: no-any
             spyOn<any>(service, "isValidSessionStorage").and.returnValue(false);
