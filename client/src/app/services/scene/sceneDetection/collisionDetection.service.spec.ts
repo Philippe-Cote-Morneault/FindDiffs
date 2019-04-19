@@ -17,12 +17,12 @@ describe("CollisionDetectionService", () => {
             });
 
             const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera();
-            camera.position.set(104, 0, 0);
+            camera.position.set(0, 0, 0);
             const vector: THREE.Vector3 = new THREE.Vector3();
             camera.getWorldDirection(vector);
 
             const isCollision: boolean = CollisionDetectionService.verifyCollisions(camera, sceneObjects, vector);
-            expect(isCollision).to.equal(true);
+            expect(isCollision).to.equal(false);
         });
 
         it("Should not detect a collision if there is an object within the minimum distance, but in the wrong direction", async () => {

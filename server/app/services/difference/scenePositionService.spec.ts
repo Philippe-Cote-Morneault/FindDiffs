@@ -5,6 +5,8 @@ import { DifferenceType, ICommonReveal3D } from "../../../../common/model/reveal
 import { ObjectType } from "../../../../common/model/scene/scene";
 import { ScenePositionService } from "./scenePositionService";
 
+    // tslint:disable: no-floating-promises
+
 describe("ScenePositionService", () => {
     describe("getInstance()", () => {
         it("Should return a ScenePositionService instance", () => {
