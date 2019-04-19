@@ -261,7 +261,7 @@ describe("SocketHandlerService", () => {
             }
         });
 
-        it("Should be false", () => {
+        it("Should be true", () => {
             let hasBeenCalled: boolean = false;
             // tslint:disable: no-any
             spyOn<any>(service, "isValidSessionStorage").and.returnValue(false);
@@ -289,7 +289,7 @@ describe("SocketHandlerService", () => {
                 }
             });
             service["setEventListener"]();
-            expect(hasBeenCalled).toEqual(false);
+            expect(hasBeenCalled).toEqual(true);
         });
 
         it("Should be true", async () => {
