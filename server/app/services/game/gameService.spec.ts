@@ -7,8 +7,12 @@ import * as sinon from "sinon";
 import { INewScore } from "../../../../common/model/score";
 import { Game } from "../../model/game/game";
 import { FreePOVGameManager } from "./freePOVGameManager";
+import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { _e, R } from "../../strings";
 
-describe("GameService", () => {
+
+// tslint:disable-next-line:max-func-body-length
+describe.only("GameService", () => {
     const gameService: GameService = GameService.getInstance();
     describe("getInstance()", () => {
         it("Should return a GameService instance", () => {
@@ -95,6 +99,60 @@ describe("GameService", () => {
 
             expect(sendMessageStub.calledTwice).to.equal(true);
             sendMessageStub.restore();
+        });
+    });
+
+    describe("gameClick()", () => {
+        const player1: string = "player1";
+        const player2: string = "player2";
+        const socketMessage: ICommonSocketMessage = {
+            data: {
+                test: "testData",
+            },
+            timestamp: new Date(),
+        };
+
+        const game: Game = {
+            id: "123fsd",
+            ressource_id: "fdsr324r",
+            players: [player1, player2],
+            start_time: undefined,
+            game_card_id: "13eref43",
+        };
+
+        const callback = (game: Game, winner: string, score: INewScore) => {};
+        const gameManager: FreePOVGameManager = new FreePOVGameManager(game, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT,
+                                                                       callback);
+        beforeEach((done: MochaDone) => {
+            gameService["activePlayers"].clear();
+            gameService["activePlayers"].set(player1, gameManager);
+            done();
+        });
+
+        it("Should call playerClick() on the gameManager matching the player that clicked exactly once", () => {
+            const playerClickStub = sinon.stub(gameManager, "playerClick");
+
+            gameService["gameClick"](socketMessage, player1);
+
+            expect(playerClickStub.calledOnce).to.equal(true);
+
+            playerClickStub.restore();
+        });
+
+        it("Should call playerClick with the message data passed in parameter", () => {
+            const playerClickStub = sinon.stub(gameManager, "playerClick");
+
+            gameService["gameClick"](socketMessage, player1);
+
+            expect(playerClickStub.firstCall.args[0]).to.equal(socketMessage.data);
+
+            playerClickStub.restore();
+        });
+
+        it("Should throw an invalidId error if the player that clicked is not in the activePlayers map", () => {
+            gameService["activePlayers"].clear();
+
+            expect(() => gameService["gameClick"](socketMessage, "randomPlayer")).to.throw((_e(R.ERROR_INVALIDID, ["randomPlayer"])));
         });
     });
 
