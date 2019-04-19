@@ -9,7 +9,6 @@
 .global-wrapper{
     height: 55%;
     width: 60%;
-    min-height: 400px;
     background-color: #33343D;
     margin: 10% auto;
     border-radius: 2%;
