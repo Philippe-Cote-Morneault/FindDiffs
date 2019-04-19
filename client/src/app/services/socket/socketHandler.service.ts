@@ -78,11 +78,15 @@ export class SocketHandlerService {
     }
 
     public unsubscribe(event: Event, subscriber: SocketSubscriber): void {
-        const sub: SocketSubscriber[] | undefined = this.subscribers.get(event);
+        const sub: SocketSubscriber[] | undefined = this.getSubscribers(event);
         if (sub) {
             sub.splice( sub.indexOf(subscriber), 1 );
             this.subscribers.set(event, sub);
         }
+    }
+
+    private getSubscribers(event: Event): SocketSubscriber[] | undefined {
+        return this.subscribers.get(event);
     }
 
     private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
