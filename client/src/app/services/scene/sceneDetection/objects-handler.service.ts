@@ -40,8 +40,14 @@ export class ObjectHandler {
             this.identificationError.moveClickError(event.pageX, event.pageY);
             const mouse: THREE.Vector2 = new THREE.Vector2();
             isOriginalScene ?
-                this.mousePositionService.setMousePosition(event, mouse, this.originalGame) :
-                this.mousePositionService.setMousePosition(event, mouse, this.modifiedGame);
+                this.mousePositionService.setMousePosition(event, mouse,
+                                                           this.originalGame.nativeElement.getBoundingClientRect(),
+                                                           this.originalGame.nativeElement.clientWidth,
+                                                           this.originalGame.nativeElement.clientHeight) :
+                this.mousePositionService.setMousePosition(event, mouse,
+                                                           this.modifiedGame.nativeElement.getBoundingClientRect(),
+                                                           this.modifiedGame.nativeElement.clientWidth,
+                                                           this.modifiedGame.nativeElement.clientHeight);
 
             this.detectedObjects = this.objectDetectionService.rayCasting(mouse,
                                                                           this.originalSceneLoader.camera, this.modifiedSceneLoader.camera,
