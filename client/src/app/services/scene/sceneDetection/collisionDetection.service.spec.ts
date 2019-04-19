@@ -17,7 +17,7 @@ describe("CollisionDetectionService", () => {
             });
 
             const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera();
-            camera.position.set(104, 0, 0);
+            camera.position.set(0, 0, 0);
             const vector: THREE.Vector3 = new THREE.Vector3();
             camera.getWorldDirection(vector);
 
