@@ -9,6 +9,7 @@ import { GameService } from "./game.service";
 describe("GameService", () => {
     let service: GameService;
     const time: number = 2000;
+    let sin: sinon.SinonStub;
 
     beforeEach(async() => {
         sessionStorage.setItem("user", "player");
@@ -19,12 +20,13 @@ describe("GameService", () => {
     });
 
     beforeEach(() => {
-        sinon.stub(Audio.prototype, "play");
+        sin = sinon.stub(Audio.prototype, "play");
     });
 
     afterEach(() => {
-        (Audio.prototype as sinon.SinonStub).restore();
+        sin.restore();
     });
+
     describe("getGameStarted() and getTimeValues()", async () => {
 
         it("Should return the correct time after game start and end after 2 sec", async () => {

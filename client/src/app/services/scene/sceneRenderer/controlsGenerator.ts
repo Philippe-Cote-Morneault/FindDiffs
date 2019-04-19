@@ -8,7 +8,7 @@ export class ControlsGenerator {
     private static readonly DISTANCE_TO_MOVE: number = 1;
 
     // tslint:disable:max-func-body-length
-    public static generateGameControls(camera: THREE.PerspectiveCamera, scene: THREE.Scene): void {
+    public static generateGameControls(camera: THREE.PerspectiveCamera, sceneObjects: THREE.Object3D[]): void {
         document.addEventListener("keydown", (event: KeyboardEvent) => {
             const vector: THREE.Vector3 = new THREE.Vector3();
             camera.getWorldDirection(vector);
@@ -16,7 +16,7 @@ export class ControlsGenerator {
             if (!ControlsGenerator.isLocked) {
                 switch (event.key) {
                     case "w":
-                        this.isCollision = CollisionDetectionService.verifyCollisions(camera, scene, vector);
+                        this.isCollision = CollisionDetectionService.verifyCollisions(camera, sceneObjects, vector);
 
                         if (!this.isCollision) {
                             camera.translateZ(-ControlsGenerator.DISTANCE_TO_MOVE);
@@ -28,7 +28,7 @@ export class ControlsGenerator {
                         camera.rotation.y += Math.PI / 2;
                         camera.getWorldDirection(vector);
 
-                        this.isCollision = CollisionDetectionService.verifyCollisions(camera, scene, vector);
+                        this.isCollision = CollisionDetectionService.verifyCollisions(camera, sceneObjects, vector);
 
                         // tslint:disable-next-line:no-magic-numbers
                         camera.rotation.y -= Math.PI / 2;
@@ -39,7 +39,7 @@ export class ControlsGenerator {
                         break;
                     case "s":
                         this.isCollision = CollisionDetectionService.verifyCollisions(
-                            camera, scene, new THREE.Vector3(-vector.x, -vector.y, -vector.z));
+                            camera, sceneObjects, new THREE.Vector3(-vector.x, -vector.y, -vector.z));
 
                         if (!this.isCollision) {
                             camera.translateZ(ControlsGenerator.DISTANCE_TO_MOVE);
@@ -51,7 +51,7 @@ export class ControlsGenerator {
                         camera.rotation.y -= Math.PI / 2;
                         camera.getWorldDirection(vector);
 
-                        this.isCollision = CollisionDetectionService.verifyCollisions(camera, scene, vector);
+                        this.isCollision = CollisionDetectionService.verifyCollisions(camera, sceneObjects, vector);
 
                         // tslint:disable-next-line:no-magic-numbers
                         camera.rotation.y += Math.PI / 2;

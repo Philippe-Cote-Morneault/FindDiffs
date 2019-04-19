@@ -47,6 +47,13 @@ export class GameService {
         this.socketHandler.subscribe(Event.GameClick, (message: ICommonSocketMessage, player: string) => {
             this.gameClick(message, player);
         });
+        this.socketHandler.subscribe(Event.InvalidClick, (message: ICommonSocketMessage, player: string) => {
+            const gameManager: GameManager | undefined = this.activePlayers.get(player);
+            if (gameManager === undefined) {
+                throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
+            }
+            this.invalidClick(gameManager, player);
+        });
     }
 
     public createGame(players: string[], commonGame: ICommonGame, differenceCount: number): void {

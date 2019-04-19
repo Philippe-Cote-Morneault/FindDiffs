@@ -6,6 +6,7 @@ import { ObjectType } from "../../../../../common/model/scene/scene";
 import { sceneModifications } from "../../tests/scene/geometricSceneModificationsMock";
 import { scene } from "../../tests/scene/sceneMock";
 import { SceneLoaderService } from "../scene/sceneLoader/sceneLoader.service";
+import { ICommonSceneAndObjects } from "../scene/sceneParser/ICommonSceneAndObjects";
 import { ModifiedSceneParserService } from "../scene/sceneParser/modifiedSceneParser.service";
 import { SceneParserService } from "../scene/sceneParser/sceneParser.service";
 import { CheatModeService } from "./cheatMode.service";
@@ -31,9 +32,11 @@ describe("CheatModeHandlerService", () => {
             modifiedScene = (sceneModifications as ICommonGeometricModifications & ICommonThematicModifications);
             originalLoaderService = new SceneLoaderService();
             modifiedLoaderService = new SceneLoaderService();
-            originalLoaderService.scene = await new SceneParserService(scene).parseScene();
-            modifiedLoaderService.scene =
-              await new ModifiedSceneParserService(ObjectType.Geometric).parseModifiedScene(originalLoaderService.scene, modifiedScene);
+            const sceneAndObjectsOriginal: ICommonSceneAndObjects = await new SceneParserService(scene).parseScene();
+            originalLoaderService.scene = sceneAndObjectsOriginal.scene;
+            const sceneAndObjectsModified: ICommonSceneAndObjects =
+                await new ModifiedSceneParserService(ObjectType.Geometric).parseModifiedScene(originalLoaderService.scene, modifiedScene);
+            modifiedLoaderService.scene = sceneAndObjectsModified.scene;
         });
 
         it("should call startCheatMode once", () => {

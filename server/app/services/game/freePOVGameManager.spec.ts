@@ -1,6 +1,7 @@
 import { fail } from "assert";
 import { expect } from "chai";
 import * as sinon from "sinon";
+import { GameType } from "../../../../common/model/gameCard";
 import { ICommon3DObject } from "../../../../common/model/positions";
 import { DifferenceType, ICommonReveal3D } from "../../../../common/model/reveal";
 import { ObjectType } from "../../../../common/model/scene/scene";
@@ -8,6 +9,7 @@ import { INewScore } from "../../../../common/model/score";
 import { Game } from "../../model/game/game";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
+// tslint:disable:no-any
 
 describe("FreePOVGameManager", () => {
     const player1: string = "player1";
@@ -19,7 +21,9 @@ describe("FreePOVGameManager", () => {
         start_time: undefined,
         game_card_id: "13eref43",
     };
-    const callback = (game: Game, winner: string, score: INewScore) => {};
+    // tslint:disable:no-shadowed-variable
+    // tslint:disable:no-empty
+    const callback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => {};
     const gameManager: FreePOVGameManager = new FreePOVGameManager(game, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT,
                                                                    callback);
     describe("startGame()", () => {
@@ -54,8 +58,10 @@ describe("FreePOVGameManager", () => {
                 modifiedObjectId: "23rfdsf",
                 gameType: ObjectType.Geometric,
             };
-            const post3DClickStub = sinon.stub(gameManager["scenePositionService"], "post3DClick");
-            const differenceFoundStub = sinon.stub(gameManager, "differenceFound" as any);
+            const post3DClickStub: sinon.SinonStub<[string, string, string, ObjectType], Promise<ICommonReveal3D | null>>
+            = sinon.stub(gameManager["scenePositionService"], "post3DClick");
+            const differenceFoundStub: sinon.SinonStub<any[], any> | sinon.SinonStub<unknown[], {}> =
+            sinon.stub(gameManager, "differenceFound" as any);
             const reveal: ICommonReveal3D = {
                 hit: true,
                 differenceType: DifferenceType.addedObject,
@@ -63,7 +69,7 @@ describe("FreePOVGameManager", () => {
             };
 
             // tslint:disable-next-line:no-empty
-            const failureCallback = () => {};
+            const failureCallback: () => void = () => {};
 
             // tslint:disable-next-line:no-any
             const successCallbackfake: sinon.SinonSpy<any[], any> = sinon.fake();
@@ -88,20 +94,21 @@ describe("FreePOVGameManager", () => {
                 modifiedObjectId: "23rfdsf",
                 gameType: ObjectType.Geometric,
             };
-            const post3DClickStub = sinon.stub(gameManager["scenePositionService"], "post3DClick");
+            const post3DClickStub: sinon.SinonStub<[string, string, string, ObjectType], Promise<ICommonReveal3D | null>> =
+            sinon.stub(gameManager["scenePositionService"], "post3DClick");
             const reveal: ICommonReveal3D = {
                 hit: true,
                 differenceType: DifferenceType.addedObject,
                 difference_id: "abc123",
             };
 
-            const successCallback = (data: Object | null) => {};
-            const failureCallback = () => {};
+            const successCallback: (data: Object | null) => void = (data: Object | null) => {};
+            const failureCallback: () => void = () => {};
 
             post3DClickStub.returns(Promise.resolve<ICommonReveal3D>(reveal));
             // tslint:disable-next-line:no-any
             const failureCallbackSpy: sinon.SinonSpy<any[], any> = sinon.spy(failureCallback);
-            gameManager.playerClick(_3dObj, player2, successCallback, failureCallback)
+            await gameManager.playerClick(_3dObj, player2, successCallback, failureCallback)
             .then(() => {
                 post3DClickStub.restore();
                 expect(failureCallbackSpy.calledOnce).to.equal(false);
@@ -111,10 +118,11 @@ describe("FreePOVGameManager", () => {
 
     describe("endGame()", () => {
         it("Should call updateScore() once when calling the method", async () => {
-            const updateScoreStub = sinon.stub(gameManager["scoreUpdater"], "updateScore");
+            const updateScoreStub: sinon.SinonStub<[Game, number, GameType], Promise<INewScore | null>> =
+            sinon.stub(gameManager["scoreUpdater"], "updateScore");
             updateScoreStub.resolves(null);
-        
-            //const lowerBoundDate: number = Date.now() - (gameManager.game.start_time as Date).valueOf();
+
+            // const lowerBoundDate: number = Date.now() - (gameManager.game.start_time as Date).valueOf();
 
             gameManager["endGame"](player1).then(() => {
                 updateScoreStub.restore();
@@ -122,15 +130,15 @@ describe("FreePOVGameManager", () => {
             },                                   () => {
                 fail("endGame() failed to resolve");
             });
-            //const upperBoundDate: number =  Date.now() - (gameManager.game.start_time as Date).valueOf();
-            //updateScoreSpy.restore();
-            
-            //expect(updateScoreSpy.args[0][1] >= lowerBoundDate && updateScoreSpy.args[0][1] <= upperBoundDate).to.equal(true);
+            // const upperBoundDate: number =  Date.now() - (gameManager.game.start_time as Date).valueOf();
+            // updateScoreSpy.restore();
+
+            // expect(updateScoreSpy.args[0][1] >= lowerBoundDate && updateScoreSpy.args[0][1] <= upperBoundDate).to.equal(true);
         });
 
-
         it("Should call updateScore() with the current game as the first parameter", () => {
-            const updateScoreStub = sinon.stub(gameManager["scoreUpdater"], "updateScore");
+            const updateScoreStub: sinon.SinonStub<[Game, number, GameType], Promise<INewScore | null>> =
+            sinon.stub(gameManager["scoreUpdater"], "updateScore");
             updateScoreStub.resolves(null);
 
             gameManager["endGame"](player1).then(() => {

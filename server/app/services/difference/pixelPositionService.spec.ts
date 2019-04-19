@@ -4,6 +4,8 @@ import * as sinon from "sinon";
 import { ICommonReveal } from "../../../../common/model/reveal";
 import { PixelPositionService } from "./pixelPosition.service";
 
+    // tslint:disable: no-floating-promises
+
 describe("PixelPositionService", () => {
     describe("getInstance()", () => {
         it("Should return a PixelPositionService instance", () => {
@@ -19,7 +21,7 @@ describe("PixelPositionService", () => {
     });
 
     describe("postPixelPosition", () => {
-        it("Should return the ICommonReveal returned by the axios post call", () => {
+        it("Should return the ICommonReveal returned by the axios post call", async () => {
             const reveal: ICommonReveal = {
                 hit: true,
                 pixels_affected: [{x: 1, y: 2}],
@@ -28,7 +30,7 @@ describe("PixelPositionService", () => {
             const stubResponse: Object = {status: 200, statusText: "OK", data: reveal };
             // tslint:disable-next-line:typedef
             const axiosStub = sinon.stub(axios.default, "post");
-            axiosStub.returns(Promise.resolve(stubResponse) as axios.AxiosPromise);
+            await axiosStub.returns(Promise.resolve(stubResponse) as axios.AxiosPromise);
 
             PixelPositionService.getInstance().postPixelPosition("123", 1, 1)
                 .then((value: ICommonReveal | null) => {
@@ -36,9 +38,9 @@ describe("PixelPositionService", () => {
                     expect(value).to.equal(reveal);
                 });
         });
-        it("Should return null if the axios post call fails", () => {
+        it("Should return null if the axios post call fails", async () => {
             // tslint:disable-next-line:typedef
-            const axiosStub = sinon.stub(axios.default, "post");
+            const axiosStub = await sinon.stub(axios.default, "post");
             axiosStub.rejects();
             PixelPositionService.getInstance().postPixelPosition("123", 1, 1)
                 .then((value: ICommonReveal | null) => {

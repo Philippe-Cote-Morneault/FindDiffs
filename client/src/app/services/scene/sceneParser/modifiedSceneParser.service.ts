@@ -8,6 +8,7 @@ import { ICommonThematicModifications } from "../../../../../../common/model/sce
 import { ICommonSceneObject } from "../../../../../../common/model/scene/objects/sceneObject";
 import { ICommonThematicObject } from "../../../../../../common/model/scene/objects/thematicObjects/thematicObject";
 import { ObjectType } from "../../../../../../common/model/scene/scene";
+import { ICommonSceneAndObjects } from "./ICommonSceneAndObjects";
 import { AbstractSceneParser } from "./abstractSceneParserService";
 import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
 
@@ -15,6 +16,8 @@ import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
     providedIn: "root",
 })
 export class ModifiedSceneParserService extends AbstractSceneParser {
+    public sceneObjects: THREE.Object3D[] = new Array<THREE.Object3D>();
+
     public constructor(type: ObjectType) {
         super(
             {
@@ -30,7 +33,8 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         );
     }
 
-    public async parseModifiedScene(originalScene: THREE.Scene, sceneModifications: ICommonSceneModifications): Promise<THREE.Scene> {
+    public async parseModifiedScene(originalScene: THREE.Scene, sceneModifications: ICommonSceneModifications):
+        Promise<ICommonSceneAndObjects> {
         const scene: THREE.Scene = originalScene.clone();
         if (sceneModifications.type === ObjectType.Geometric) {
             await this.parseGeometricObjects(
@@ -45,7 +49,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         }
         await this.addAddedObjects(scene, sceneModifications.addedObjects);
 
-        return scene;
+        return {scene: scene, objects: this.sceneObjects};
     }
 
     private async parseThematicObjects(scene: THREE.Scene, sceneModifications: ICommonThematicModifications): Promise<void> {
@@ -97,13 +101,19 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
         this.sceneObjectParser.parse(object)))
         .then((v: THREE.Object3D[]) => {
             v.forEach((element) => {
+                if (element.type === "Mesh" || element.type === "Scene") {
+                    this.sceneObjects.push(element);
+                }
+            });
+
+            v.forEach((element) => {
                 scene.add(element);
             });
         });
     }
 
     private async changeObjectColor(objectToModify: THREE.Object3D, color: number | undefined): Promise<void> {
-        if (color) {
+        if (!color) {
             throw new InvalidFormatException("Color not valid!");
         }
         const object: ICommonThematicObject = objectToModify.userData as ICommonThematicObject;
@@ -112,7 +122,7 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
     }
 
     private async changeObjectTexture(objectToModify: THREE.Object3D, texture: string): Promise<void> {
-        if (texture) {
+        if (!texture) {
             throw new InvalidFormatException("Texture not valid!");
         }
         const object: ICommonThematicObject = objectToModify.userData as ICommonThematicObject;
