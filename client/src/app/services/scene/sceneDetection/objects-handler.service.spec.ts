@@ -87,4 +87,44 @@ describe("ObjectHandler", () => {
       await expect(service["identificationError"].moveClickError).toHaveBeenCalled();
     });
   });
+
+  describe("adjustMouse()", () => {
+    it("Should call setMousePosition function", async () => {
+      const service: ObjectHandler = TestBed.get(ObjectHandler);
+
+      const event: MouseEvent = document.createEvent("MouseEvent");
+      event.initMouseEvent("click", true, true, window, 0, 80, 50, 371, 207, false, false, false, false, 0, null);
+      const mouse: THREE.Vector2 = new THREE.Vector2();
+
+      const originalScene: ElementRef<HTMLElement> = new ElementRef<HTMLElement>(document.createElement("HTMLElement"));
+      const modifiedScene: ElementRef<HTMLElement> = new ElementRef<HTMLElement>(document.createElement("HTMLElement"));
+
+      service.originalGame = originalScene;
+      service.modifiedGame = modifiedScene;
+
+      spyOn<any>(service["mousePositionService"], "setMousePosition");
+      service["adjustMouse"](false, event, mouse);
+
+      await expect(service["mousePositionService"].setMousePosition).toHaveBeenCalled();
+    });
+
+    it("Should call setMousePosition function", async () => {
+      const service: ObjectHandler = TestBed.get(ObjectHandler);
+
+      const event: MouseEvent = document.createEvent("MouseEvent");
+      event.initMouseEvent("click", true, true, window, 0, 80, 50, 371, 207, false, false, false, false, 0, null);
+      const mouse: THREE.Vector2 = new THREE.Vector2();
+
+      const originalScene: ElementRef<HTMLElement> = new ElementRef<HTMLElement>(document.createElement("HTMLElement"));
+      const modifiedScene: ElementRef<HTMLElement> = new ElementRef<HTMLElement>(document.createElement("HTMLElement"));
+
+      service.originalGame = originalScene;
+      service.modifiedGame = modifiedScene;
+
+      spyOn<any>(service["mousePositionService"], "setMousePosition");
+      service["adjustMouse"](true, event, mouse);
+
+      await expect(service["mousePositionService"].setMousePosition).toHaveBeenCalled();
+    });
+  });
 });
