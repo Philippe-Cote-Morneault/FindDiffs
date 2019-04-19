@@ -13,6 +13,7 @@ import { SocketSubscriber } from "./socketSubscriber";
 
 // tslint:disable: max-file-line-count
 // tslint:disable: no-any
+// tslint:disable: no-floating-promises
 
 describe("SocketHandlerService", () => {
     let service: SocketHandlerService;
@@ -28,7 +29,7 @@ describe("SocketHandlerService", () => {
     });
 
     describe("emitMessage()", () => {
-        it("Should emit the right message to the server when a new user is connected", async () => {
+        it("Should emit the right message to the server when a new user is connected", () => {
             const msg: ICommonSocketMessage = {data: "", timestamp: new Date()};
 
             const event: Event = Event.NewUser;
@@ -47,7 +48,7 @@ describe("SocketHandlerService", () => {
 
             const eventAuthenticate: Event = Event.Authenticate;
 
-            spyOn(service.socket, "on").and.callFake(async (event: Event) => {
+            spyOn(service.socket, "on").and.callFake((event: Event) => {
                 // fct(msg);
                 expect(event).toEqual(eventAuthenticate);
             });
@@ -72,7 +73,7 @@ describe("SocketHandlerService", () => {
     });
 
     describe("manageAuthenticateEvent()", () => {
-        it("Should not set the session storage", async () => {
+        it("Should not set the session storage", () => {
             const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
 
             // tslint:disable-next-line:no-non-null-assertion
@@ -88,7 +89,7 @@ describe("SocketHandlerService", () => {
             expect(returnValue2).toEqual("");
         });
 
-        it("Should set the session storage", async () => {
+        it("Should set the session storage", () => {
             const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
 
             spyOn(sessionStorage, "getItem").and.callFake(() => {
@@ -106,7 +107,7 @@ describe("SocketHandlerService", () => {
     });
 
     describe("setEventListeners()", () => {
-        it("Should setEventListeners on an event", async () => {
+        it("Should setEventListeners on an event", () => {
             let hasBeenCalled: boolean = false;
             const event: Event = Event.Authenticate;
             const message: ICommonSocketMessage = {
@@ -260,7 +261,7 @@ describe("SocketHandlerService", () => {
             }
         });
 
-        it("Should be false", async () => {
+        it("Should be false", () => {
             let hasBeenCalled: boolean = false;
             // tslint:disable: no-any
             spyOn<any>(service, "isValidSessionStorage").and.returnValue(false);
@@ -340,7 +341,7 @@ describe("SocketHandlerService", () => {
             expect(hasBeenCalled).toEqual(true);
        });
 
-        it("Should be false", async () => {
+        it("Should be false", () => {
             spyOn<any>(service, "isValidSessionStorage").and.returnValue(false);
             let hasBeenCalled: boolean = false;
             spyOn<any>(service, "setEventListener").and.callFake(() => {
@@ -382,7 +383,7 @@ describe("SocketHandlerService", () => {
     });
 
     describe("hasErrorMessage()", () => {
-        it("Should return true", async () => {
+        it("Should return true",  () => {
             const errorResponse: ICommonError = {
                 error_message: "error",
             };
@@ -391,7 +392,7 @@ describe("SocketHandlerService", () => {
             expect(returnValue).toEqual(true);
         });
 
-        it("Should return false", async () => {
+        it("Should return false", () => {
             const errorResponse: Object = {
                 test: "hey",
             };
@@ -402,7 +403,7 @@ describe("SocketHandlerService", () => {
     });
 
     describe("isValidSessionStorage()", () => {
-        it("Should return true but false hahahaha", async () => {
+        it("Should return true", () => {
             spyOn(sessionStorage, "getItem").and.callFake(() => {
                 returnValueSessionStorage = "allo";
 
@@ -416,7 +417,7 @@ describe("SocketHandlerService", () => {
             expect(returnValue).toEqual(true);
         });
 
-        it("Should return false", async () => {
+        it("Should return false", () => {
             // tslint:disable-next-line: no-shadowed-variable
             spyOn(sessionStorage, "getItem").and.callFake(() => {
                 returnValueSessionStorage = null;
