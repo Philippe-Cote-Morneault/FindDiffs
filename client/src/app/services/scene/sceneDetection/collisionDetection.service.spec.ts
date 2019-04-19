@@ -22,7 +22,7 @@ describe("CollisionDetectionService", () => {
             camera.getWorldDirection(vector);
 
             const isCollision: boolean = CollisionDetectionService.verifyCollisions(camera, sceneObjects, vector);
-            expect(isCollision).to.equal(true);
+            expect(isCollision).to.equal(false);
         });
 
         it("Should not detect a collision if there is an object within the minimum distance, but in the wrong direction", async () => {
