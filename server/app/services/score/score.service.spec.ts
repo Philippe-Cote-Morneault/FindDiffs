@@ -200,4 +200,120 @@ describe("ScoreService", () => {
             expect((result.details as INewScoreDetails).place).to.equal(3);
         });
     });
+    describe("validateUpdate()", () => {
+        const gameCardInterface: IGameCard = new GameCard({
+            pov: POVType.Free,
+            title: "hello",
+            resource_id: "1234abcd",
+            best_time_solo: [
+                {name: "thomas", score: 10},
+                {name: "phil", score: 20},
+                {name: "joe", score: 30},
+            ],
+            best_time_online: [
+                {name: "thomas", score: 10},
+                {name: "phil", score: 20},
+                {name: "joe", score: 30},
+            ],
+            creation_date: new Date(),
+        });
+        let findByIdStub: sinon.SinonStub;
+        let saveStub: sinon.SinonStub;
+
+        beforeEach((done: MochaDone) => {
+            saveStub = sinon.stub(GameCard.prototype, "save");
+            findByIdStub = sinon.stub(GameCard, "findById");
+            done();
+        });
+        afterEach((done: MochaDone) => {
+            findByIdStub.restore();
+            saveStub.restore();
+            done();
+        });
+        it("Should throw a UsernameMissing error when the request doesn't have a username", async () => {
+            const req = {};
+            const mockRequest = mockReq(req);
+            mockRequest.params.id = "justARandomId";
+
+            saveStub.resolves();
+            findByIdStub.resolves(gameCardInterface);
+            try {
+            await scoreService.update(mockRequest);
+            } catch (err) {
+                expect(err.message).to.equal(_e(R.ERROR_MISSING_FIELD, [R.USERNAME_]));
+            }
+        });
+        it("Should throw a TimeMissing error when the request doesn't have a time", async () => {
+            const req = {
+                body: {
+                    username: "player1",
+                },
+            };
+            const mockRequest = mockReq(req);
+            mockRequest.params.id = "justARandomId";
+
+            saveStub.resolves();
+            findByIdStub.resolves(gameCardInterface);
+            try {
+            await scoreService.update(mockRequest);
+            } catch (err) {
+                expect(err.message).to.equal(_e(R.ERROR_MISSING_FIELD, [R.TIME_]));
+            }
+        });
+        it("Should throw a NAN error if the time in the request is not a number", async () => {
+            const req = {
+                body: {
+                    username: "player1",
+                    time: "hello",
+                },
+            };
+            const mockRequest = mockReq(req);
+            mockRequest.params.id = "justARandomId";
+
+            saveStub.resolves();
+            findByIdStub.resolves(gameCardInterface);
+            try {
+            await scoreService.update(mockRequest);
+            } catch (err) {
+                expect(err.message).to.equal(_e(R.ERROR_N_A_N, [R.TIME_]));
+            }
+        });
+        it("Should throw a LessThanZero error if the time in the request is less than 0", async () => {
+            const req = {
+                body: {
+                    username: "player1",
+                    time: -5,
+                },
+            };
+            const mockRequest = mockReq(req);
+            mockRequest.params.id = "justARandomId";
+
+            saveStub.resolves();
+            findByIdStub.resolves(gameCardInterface);
+            try {
+            await scoreService.update(mockRequest);
+            } catch (err) {
+                expect(err.message).to.equal(_e(R.ERROR_LESS_ZERO, [R.TIME_]));
+            }
+        });
+        it("Should throw a WrongType error if the type enum passed is not valid", async () => {
+            const req = {
+                body: {
+                    username: "player1",
+                    time: 5,
+                    type: 14,
+                },
+            };
+            const mockRequest = mockReq(req);
+            mockRequest.params.id = "justARandomId";
+
+            saveStub.resolves();
+            findByIdStub.resolves(gameCardInterface);
+            try {
+            await scoreService.update(mockRequest);
+            } catch (err) {
+                expect(err.message).to.equal(_e(R.ERROR_WRONG_TYPE, [R.GAME_TYPE_]));
+            }
+        });
+    });
 });
