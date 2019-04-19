@@ -14,30 +14,32 @@ describe("ObjectHandler", () => {
 
   // tslint:disable:no-any
   // tslint:disable:no-magic-numbers
+  // tslint:disable: no-floating-promises
+
   describe("clickAreAllowed()", () => {
-    it("should return true", async () => {
+    it("should return true", () => {
       const service: ObjectHandler = TestBed.get(ObjectHandler);
       spyOn<any>(service["identificationError"], "getTimeout").and.returnValue(false);
       spyOn<any>(service["game"], "getGameStarted").and.returnValue(true);
 
       const returnValue: boolean = service["clickAreAllowed"]();
 
-      await expect(returnValue).toEqual(true);
+      expect(returnValue).toEqual(true);
     });
 
-    it("should return false", async () => {
+    it("should return false", () => {
       const service: ObjectHandler = TestBed.get(ObjectHandler);
       spyOn<any>(service["identificationError"], "getTimeout").and.returnValue(true);
       spyOn<any>(service["game"], "getGameStarted").and.returnValue(true);
 
       const returnValue: boolean = service["clickAreAllowed"]();
 
-      await expect(returnValue).toEqual(false);
+      expect(returnValue).toEqual(false);
     });
   });
 
   describe("emitDifference()", () => {
-    it("should call the emitDifference function for the geometric scene", async () => {
+    it("should call the emitDifference function for the geometric scene", () => {
       const service: ObjectHandler = TestBed.get(ObjectHandler);
 
       const scenePairId: string = "6546464";
@@ -49,10 +51,10 @@ describe("ObjectHandler", () => {
 
       service["emitDifference"](scenePairId, originalObjectId, modifiedObjectId, gameType);
 
-      await expect(service["socket"].emitMessage).toHaveBeenCalled();
+      expect(service["socket"].emitMessage).toHaveBeenCalled();
     });
 
-    it("should call the emitDifference function for the thematic scene", async () => {
+    it("should call the emitDifference function for the thematic scene", () => {
       const service: ObjectHandler = TestBed.get(ObjectHandler);
 
       const scenePairId: string = "6546464";
@@ -64,7 +66,7 @@ describe("ObjectHandler", () => {
 
       service["emitDifference"](scenePairId, originalObjectId, modifiedObjectId, gameType);
 
-      await expect(service["socket"].emitMessage).toHaveBeenCalled();
+      expect(service["socket"].emitMessage).toHaveBeenCalled();
     });
   });
 
@@ -84,12 +86,12 @@ describe("ObjectHandler", () => {
       spyOn<any>(service["identificationError"], "moveClickError");
 
       await service.clickOnScene(event, true);
-      await expect(service["identificationError"].moveClickError).toHaveBeenCalled();
+      expect(service["identificationError"].moveClickError).toHaveBeenCalled();
     });
   });
 
   describe("adjustMouse()", () => {
-    it("Should call setMousePosition function", async () => {
+    it("Should call setMousePosition function", () => {
       const service: ObjectHandler = TestBed.get(ObjectHandler);
 
       const event: MouseEvent = document.createEvent("MouseEvent");
@@ -105,10 +107,10 @@ describe("ObjectHandler", () => {
       spyOn<any>(service["mousePositionService"], "setMousePosition");
       service["adjustMouse"](false, event, mouse);
 
-      await expect(service["mousePositionService"].setMousePosition).toHaveBeenCalled();
+      expect(service["mousePositionService"].setMousePosition).toHaveBeenCalled();
     });
 
-    it("Should call setMousePosition function", async () => {
+    it("Should call setMousePosition function", () => {
       const service: ObjectHandler = TestBed.get(ObjectHandler);
 
       const event: MouseEvent = document.createEvent("MouseEvent");
@@ -124,18 +126,18 @@ describe("ObjectHandler", () => {
       spyOn<any>(service["mousePositionService"], "setMousePosition");
       service["adjustMouse"](true, event, mouse);
 
-      await expect(service["mousePositionService"].setMousePosition).toHaveBeenCalled();
+      expect(service["mousePositionService"].setMousePosition).toHaveBeenCalled();
     });
   });
 
   describe("emitEvent()", () => {
-    it("Should call emitMessage function", async () => {
+    it("Should call emitMessage function", () => {
       const service: ObjectHandler = TestBed.get(ObjectHandler);
 
       spyOn<any>(service["socket"], "emitMessage");
       service["emitEvent"](undefined);
 
-      await expect(service["socket"].emitMessage).toHaveBeenCalled();
+      expect(service["socket"].emitMessage).toHaveBeenCalled();
     });
   });
 });
