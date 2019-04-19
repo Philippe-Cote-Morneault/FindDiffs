@@ -85,5 +85,52 @@ describe("AuthentificationService", () => {
             socket1.listeners(Event.Authenticate)[0](message, response);
             expect(response.firstCall.args[0].error_message).to.equal(R.ERROR_TOKEN);
         });
+        it("Should send the username of the user that already existed if there was an already existing username", () => {
+            authentificationService["authentifiedUsers"].clear();
+            authentificationService["authentifiedUsers"].set("1234", "player1");
+            authentificationService["activeCleanupTimers"].clear();
+            authentificationService["activeCleanupTimers"].set("1234", setTimeout(() => {}, 1000000));
+
+            const addUsernameStub: sinon.SinonStub = sinon.stub(authentificationService["usernameManager"], "addUsername");
+            const message: ICommonSocketMessage = {
+                data: {
+                    token: "1234",
+                },
+                timestamp: new Date(),
+            };
+            const response: sinon.SinonSpy = sinon.fake();
+
+            socket1.listeners(Event.Authenticate)[0](message, response);
+            expect(response.firstCall.args[0].username).to.equal("player1");
+            addUsernameStub.restore();
+        });
+    });
+
+    describe("newUser", () => {
+        it("Should return an object with error_message as Failed to create", () => {
+            const validateUsernameStub: sinon.SinonStub = sinon.stub(authentificationService["usernameManager"], "validateUsername");
+            validateUsernameStub.returns(false);
+
+            const result: Object = authentificationService["newUser"]("player1", socket1, (newUsername: string) => {});
+
+            expect(result["error_message"]).to.equal("failed to create");
+            validateUsernameStub.restore();
+        });
+        it("Should return the same token as the one created by sendValidationToken if this is a valid username", () => {
+            authentificationService["authentifiedUsers"].set("somerandomtoken", "oldUsername");
+            const validateUsernameStub: sinon.SinonStub = sinon.stub(authentificationService["usernameManager"], "validateUsername");
+            validateUsernameStub.returns(true);
+            const getUsernameStub: sinon.SinonStub = sinon.stub(authentificationService["usernameManager"], "getUsername");
+            getUsernameStub.returns("oldUsername");
+            const addUsernameStub: sinon.SinonStub = sinon.stub(authentificationService["usernameManager"], "addUsername");
+            const sendValidationSpy: sinon.SinonSpy = sinon.spy(authentificationService, "sendValidationToken" as any);
+            const result: Object = authentificationService["newUser"]("player1", socket1, (newUsername: string) => {});
+
+            expect(result["token"]).to.equal(sendValidationSpy.firstCall.returnValue);
+            validateUsernameStub.restore();
+            getUsernameStub.restore();
+            addUsernameStub.restore();
+            sendValidationSpy.restore();
+        });
     });
 });
