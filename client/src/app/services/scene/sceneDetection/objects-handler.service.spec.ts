@@ -67,4 +67,24 @@ describe("ObjectHandler", () => {
       await expect(service["socket"].emitMessage).toHaveBeenCalled();
     });
   });
+
+  describe("clickOnScene()", () => {
+    it("should call the moveClickError function", async () => {
+      const service: ObjectHandler = TestBed.get(ObjectHandler);
+
+      const event: MouseEvent = document.createEvent("MouseEvent");
+      event.initMouseEvent("click", true, true, window, 0, 80, 50, 371, 207, false, false, false, false, 0, null);
+      const originalScene: ElementRef<HTMLElement> = new ElementRef<HTMLElement>(document.createElement("HTMLElement"));
+      const modifiedScene: ElementRef<HTMLElement> = new ElementRef<HTMLElement>(document.createElement("HTMLElement"));
+
+      service.originalGame = originalScene;
+      service.modifiedGame = modifiedScene;
+
+      spyOn<any>(service, "clickAreAllowed").and.returnValue(true);
+      spyOn<any>(service["identificationError"], "moveClickError");
+
+      await service.clickOnScene(event, true);
+      await expect(service["identificationError"].moveClickError).toHaveBeenCalled();
+    });
+  });
 });
