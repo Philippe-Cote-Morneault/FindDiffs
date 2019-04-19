@@ -1,6 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
+import * as sinon from "sinon";
 import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameService } from "./game.service";
@@ -8,6 +9,7 @@ import { GameService } from "./game.service";
 describe("GameService", () => {
     let service: GameService;
     const time: number = 2000;
+    let sin: sinon.SinonStub;
 
     beforeEach(async() => {
         sessionStorage.setItem("user", "player");
@@ -15,6 +17,14 @@ describe("GameService", () => {
             imports: [RouterTestingModule],
         });
         service = TestBed.get(GameService);
+    });
+
+    beforeEach(() => {
+        sin = sinon.stub(Audio.prototype, "play");
+    });
+
+    afterEach(() => {
+        sin.restore();
     });
 
     describe("getGameStarted() and getTimeValues()", async () => {
