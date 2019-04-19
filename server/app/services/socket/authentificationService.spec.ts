@@ -60,7 +60,7 @@ describe("AuthentificationService", () => {
             expect(authentificationService["activeCleanupTimers"].size).to.equal(oldTimeoutCount + 1);
             removeUsernameStub.restore();
         });
-        it("Should", () => {
+        it("Should throw an InvalidId error if the player is not found", () => {
             const removeUsernameStub: sinon. SinonStub = sinon.stub(authentificationService["usernameManager"], "removeUsername");
             removeUsernameStub.returns("player2");
             try {
@@ -68,6 +68,7 @@ describe("AuthentificationService", () => {
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_INVALIDID, ["player2"]));
             }
+            removeUsernameStub.restore();
 
         });
     });
