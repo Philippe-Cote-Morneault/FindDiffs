@@ -74,4 +74,28 @@ describe("GameService", () => {
         });
     });
 
+    describe("differenceFound()", () => {
+        const player1: string = "player1";
+        const player2: string = "player2";
+        const reveal: Object = {};
+        const game: Game = {
+            id: "123fsd",
+            ressource_id: "fdsr324r",
+            players: [player1, player2],
+            start_time: undefined,
+            game_card_id: "13eref43",
+        };
+        const callback = (game: Game, winner: string, score: INewScore) => {};
+        const gameManager: FreePOVGameManager = new FreePOVGameManager(game, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT,
+                                                                       callback);
+
+        it("Should", () => {
+            const sendMessageStub = sinon.stub(gameService["socketHandler"], "sendMessage");
+            gameService["differenceFound"](gameManager, player1, reveal);
+
+            expect(sendMessageStub.calledTwice).to.equal(true);
+            sendMessageStub.restore();
+        });
+    });
+
 });
