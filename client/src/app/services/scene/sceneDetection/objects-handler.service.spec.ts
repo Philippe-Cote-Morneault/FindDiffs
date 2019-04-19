@@ -127,4 +127,15 @@ describe("ObjectHandler", () => {
       await expect(service["mousePositionService"].setMousePosition).toHaveBeenCalled();
     });
   });
+
+  describe("emitEvent()", () => {
+    it("Should call emitMessage function", async () => {
+      const service: ObjectHandler = TestBed.get(ObjectHandler);
+
+      spyOn<any>(service["socket"], "emitMessage");
+      service["emitEvent"](undefined);
+
+      await expect(service["socket"].emitMessage).toHaveBeenCalled();
+    });
+  });
 });
