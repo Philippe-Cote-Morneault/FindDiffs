@@ -3,9 +3,8 @@ import * as http from "http";
 import * as sinon from "sinon";
 import * as socketIo from "socket.io";
 import * as socketIoClient from "socket.io-client";
-import * as Mockito from "ts-mockito";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
-import { R } from "../../strings";
+import { _e, R } from "../../strings";
 import { AuthentificationService } from "./authentificationService";
 import { SocketHandler } from "./socketHandler";
 
@@ -50,13 +49,26 @@ describe("AuthentificationService", () => {
     });
 
     describe("startCleanupTimer()", () => {
-        const socket: SocketIO.Socket = Mockito.mock(socketIo);
+        it("Should add a new cleanup timer if the user is valid", () => {
+            const removeUsernameStub: sinon. SinonStub = sinon.stub(authentificationService["usernameManager"], "removeUsername");
+            removeUsernameStub.returns("player1");
+            authentificationService["authentifiedUsers"].clear();
+            authentificationService["authentifiedUsers"].set("awesomeToken", "player1");
 
-        it("Should have called startCleanupTimer with the right arguments", () => {
-            const spy: sinon.SinonSpy = sinon.spy(authentificationService, "startCleanupTimer");
-            authentificationService.startCleanupTimer(socket);
-            expect(spy.calledOnceWithExactly(socket)).to.equal(true);
-            spy.restore();
+            const oldTimeoutCount: number = authentificationService["activeCleanupTimers"].size;
+            authentificationService.startCleanupTimer(socket1);
+            expect(authentificationService["activeCleanupTimers"].size).to.equal(oldTimeoutCount + 1);
+            removeUsernameStub.restore();
+        });
+        it("Should", () => {
+            const removeUsernameStub: sinon. SinonStub = sinon.stub(authentificationService["usernameManager"], "removeUsername");
+            removeUsernameStub.returns("player2");
+            try {
+                authentificationService.startCleanupTimer(socket1);
+            } catch (err) {
+                expect(err.message).to.equal(_e(R.ERROR_INVALIDID, ["player2"]));
+            }
+
         });
     });
     describe("authenticateUser", () => {
