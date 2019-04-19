@@ -19,6 +19,7 @@ export const R: IString = {
     NOT_ALLOWED: "not-allowed",
     CONTEXT_MENU: "context-menu",
     DIFFERENCE_SOUND_SRC: "../../assets/mario.mp3",
+    ERROR_SOUND_SRC: "../../assets/no.mp3",
 
     GAME_CARD_SIMPLE: "/gameSimple/",
     GAME_CARD_FREE: "/gameFree/",
