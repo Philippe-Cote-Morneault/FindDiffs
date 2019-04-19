@@ -7,7 +7,7 @@ describe("MousePositionService", () => {
 
   beforeEach(() => TestBed.configureTestingModule({}));
   // tslint:disable:no-magic-numbers
-  it("Should call the function at least once", async () => {
+  it("Should call the function at least once", () => {
     const service: MousePositionService = TestBed.get(MousePositionService);
 
     const event: MouseEvent = document.createEvent("MouseEvent");
@@ -30,7 +30,8 @@ describe("MousePositionService", () => {
     const clientHeight: number = 478;
 
     service.setMousePosition(event, mouse, divBoxInformation, clientWidth, clientHeight);
-    await expect(mouse.x.toFixed(2).toString()).toEqual("-0.34");
-    await expect(mouse.y.toFixed(2).toString()).toEqual("0.57");
+    // tslint:disable: no-floating-promises
+    expect(mouse.x.toFixed(2).toString()).toEqual("-0.34");
+    expect(mouse.y.toFixed(2).toString()).toEqual("0.57");
   });
 });
