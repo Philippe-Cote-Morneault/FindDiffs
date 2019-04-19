@@ -105,7 +105,10 @@ export class ModifiedSceneParserService extends AbstractSceneParser {
                     this.sceneObjects.push(element);
                 }
             });
-            scene.add(...v);
+
+            v.forEach((element) => {
+                scene.add(element);
+            });
         });
     }
 
