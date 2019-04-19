@@ -35,4 +35,36 @@ describe("ObjectHandler", () => {
       await expect(returnValue).toEqual(false);
     });
   });
+
+  describe("emitDifference()", () => {
+    it("should call the emitDifference function for the geometric scene", async () => {
+      const service: ObjectHandler = TestBed.get(ObjectHandler);
+
+      const scenePairId: string = "6546464";
+      const originalObjectId: string = "6546565465dd";
+      const modifiedObjectId: string = "asasd334";
+      const gameType: ObjectType = ObjectType.Geometric;
+
+      spyOn<any>(service["socket"], "emitMessage");
+
+      service["emitDifference"](scenePairId, originalObjectId, modifiedObjectId, gameType);
+
+      await expect(service["socket"].emitMessage).toHaveBeenCalled();
+    });
+
+    it("should call the emitDifference function for the thematic scene", async () => {
+      const service: ObjectHandler = TestBed.get(ObjectHandler);
+
+      const scenePairId: string = "6546464";
+      const originalObjectId: string = "6546565465dd";
+      const modifiedObjectId: string = "asasd334";
+      const gameType: ObjectType = ObjectType.Thematic;
+
+      spyOn<any>(service["socket"], "emitMessage");
+
+      service["emitDifference"](scenePairId, originalObjectId, modifiedObjectId, gameType);
+
+      await expect(service["socket"].emitMessage).toHaveBeenCalled();
+    });
+  });
 });
