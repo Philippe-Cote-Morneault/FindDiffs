@@ -15,7 +15,6 @@ describe("SocketHandler", () => {
     let socket1: socketIo.Socket;
     let server: http.Server;
 
-    
     before((done: MochaDone) => {
         const express = require("express");
         server = http.createServer(express);
