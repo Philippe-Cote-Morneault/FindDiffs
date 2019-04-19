@@ -365,4 +365,5 @@ describe("CheatModeService", () => {
             expect(cheatModeService.arrayNotEmpty(array.length)).to.equal(true);
         });
     });
+    // tslint:disable-next-line: max-file-line-count
 });

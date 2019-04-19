@@ -1,6 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
+import * as sinon from "sinon";
 import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
@@ -9,6 +10,7 @@ import { GameFreePOVService } from "./gameFreePOV.service";
 describe("GameFreePOVService", () => {
     let service: GameFreePOVService;
     const time: number = 2000;
+    let sin: sinon.SinonStub;
 
     beforeEach(async() => {
         sessionStorage.setItem("user", "player");
@@ -16,6 +18,14 @@ describe("GameFreePOVService", () => {
             imports: [RouterTestingModule],
         });
         service = TestBed.get(GameFreePOVService);
+    });
+
+    beforeEach(() => {
+        sin = sinon.stub(Audio.prototype, "play");
+    });
+
+    afterEach(() => {
+        sin.restore();
     });
 
     describe("startGame and stopGame", () => {
