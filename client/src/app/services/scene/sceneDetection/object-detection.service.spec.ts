@@ -53,7 +53,7 @@ describe("ObjectDetectionService", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
       const mouseService: MousePositionService = new MousePositionService();
 
-      let mouse: THREE.Vector2 = new THREE.Vector2();
+      const mouse: THREE.Vector2 = new THREE.Vector2();
       const event: MouseEvent = document.createEvent("MouseEvent");
       event.initMouseEvent("click", true, true, window, 0, 0, 0, 371, 207, false, false, false, false, 0, null);
       const divBoxInformation: ClientRect | DOMRect = {
