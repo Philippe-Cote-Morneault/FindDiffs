@@ -60,7 +60,7 @@ export class ObjectHandler {
                                                    this.modifiedGame.nativeElement.clientWidth,
                                                    this.modifiedGame.nativeElement.clientHeight);
 
-    } 
+    }
 
     private emitEvent(modifiedObject: THREE.Object3D | undefined): void {
         if (modifiedObject) {
