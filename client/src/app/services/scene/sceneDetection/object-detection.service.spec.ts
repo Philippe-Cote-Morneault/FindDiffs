@@ -12,8 +12,11 @@ describe("ObjectDetectionService", () => {
   // tslint:disable: max-func-body-length
   // tslint:disable: no-magic-numbers
   // tslint:disable: no-any
+  // tslint:disable: no-floating-promises
+  // tslint:disable: number-literal-format
+
   describe("setCamera()", () => {
-    it("Should call setCamera function", async () => {
+    it("Should call setCamera function", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
       const mouseService: MousePositionService = new MousePositionService();
 
@@ -46,10 +49,10 @@ describe("ObjectDetectionService", () => {
 
       service["setCamera"](mouse, camera, camera);
 
-      await expect(hasSetRaycaster).toEqual(true);
+      expect(hasSetRaycaster).toEqual(true);
     });
 
-    it("Should set the camera to the raycaster", async () => {
+    it("Should set the camera to the raycaster", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
       const mouseService: MousePositionService = new MousePositionService();
 
@@ -82,12 +85,12 @@ describe("ObjectDetectionService", () => {
       service["setCamera"](mouse, camera, camera);
       raycaster.setFromCamera(mouse, camera);
 
-      await expect(hasSetRaycaster).toEqual(true);
+      expect(hasSetRaycaster).toEqual(true);
     });
   });
 
   describe("getParent()", () => {
-    it("Should return the parent of the object3D", async () => {
+    it("Should return the parent of the object3D", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -101,11 +104,11 @@ describe("ObjectDetectionService", () => {
 
       if (obj3D.parent) {
         const parent: any = obj3D.parent;
-        await expect(parent.type).toEqual("Scene");
+        expect(parent.type).toEqual("Scene");
       }
     });
 
-    it("Should call the function getParent", async () => {
+    it("Should call the function getParent", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -133,12 +136,12 @@ describe("ObjectDetectionService", () => {
 
       service["getParent"](cube, scene);
 
-      await expect(counter).toBeGreaterThanOrEqual(1);
+      expect(counter).toBeGreaterThanOrEqual(1);
     });
   });
 
   describe("getParent()", () => {
-    it("Should return the original and the modified object", async () => {
+    it("Should return the original and the modified object", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
       const mouseService: MousePositionService = new MousePositionService();
 
@@ -174,8 +177,8 @@ describe("ObjectDetectionService", () => {
       meshes.push(cube);
 
       const objects: IThreeObject = service.rayCasting(mouse, camera, camera, scene, scene, meshes, meshes);
-      await expect(objects.original).not.toBeNull();
-      await expect(objects.modified).not.toBeNull();
+      expect(objects.original).not.toBeNull();
+      expect(objects.modified).not.toBeNull();
     });
   });
 
