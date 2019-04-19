@@ -10,8 +10,6 @@ import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
 import { GameService } from "./gameService";
 
-
-// tslint:disable-next-line:max-func-body-length
 describe("GameService", () => {
     const gameService: GameService = GameService.getInstance();
     describe("getInstance()", () => {
@@ -65,12 +63,13 @@ describe("GameService", () => {
             start_time: undefined,
             game_card_id: "13eref43",
         };
-        const callback = (game: Game, winner: string, score: INewScore) => {};
+        // tslint:disable-next-line:no-empty
+        const callback: (game: Game, winner: string, score: INewScore) => void = (gameResult: Game, winner: string, score: INewScore) => {};
         const gameManager: FreePOVGameManager = new FreePOVGameManager(game, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT,
                                                                        callback);
 
         it("Should send a message to the socket twice if there are two players in a game", () => {
-            const sendMessageStub = sinon.stub(gameService["socketHandler"], "sendMessage");
+            const sendMessageStub: sinon.SinonStub = sinon.stub(gameService["socketHandler"], "sendMessage");
             gameService["invalidClick"](gameManager, player1);
 
             expect(sendMessageStub.calledTwice).to.equal(true);
@@ -89,12 +88,13 @@ describe("GameService", () => {
             start_time: undefined,
             game_card_id: "13eref43",
         };
-        const callback = (game: Game, winner: string, score: INewScore) => {};
+        // tslint:disable-next-line:no-empty
+        const callback: (game: Game, winner: string, score: INewScore) => void = (gameResult: Game, winner: string, score: INewScore) => {};
         const gameManager: FreePOVGameManager = new FreePOVGameManager(game, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT,
                                                                        callback);
 
         it("Should", () => {
-            const sendMessageStub = sinon.stub(gameService["socketHandler"], "sendMessage");
+            const sendMessageStub: sinon.SinonStub = sinon.stub(gameService["socketHandler"], "sendMessage");
             gameService["differenceFound"](gameManager, player1, reveal);
 
             expect(sendMessageStub.calledTwice).to.equal(true);
@@ -120,17 +120,18 @@ describe("GameService", () => {
             game_card_id: "13eref43",
         };
 
-        const callback = (game: Game, winner: string, score: INewScore) => {};
+        // tslint:disable-next-line:no-empty
+        const callback: (game: Game, winner: string, score: INewScore) => void = (gameResult: Game, winner: string, score: INewScore) => {};
         const gameManager: FreePOVGameManager = new FreePOVGameManager(game, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT,
                                                                        callback);
-        beforeEach((done: MochaDone) => {
+        beforeEach((done: Mocha.Done) => {
             gameService["activePlayers"].clear();
             gameService["activePlayers"].set(player1, gameManager);
             done();
         });
 
         it("Should call playerClick() on the gameManager matching the player that clicked exactly once", () => {
-            const playerClickStub = sinon.stub(gameManager, "playerClick");
+            const playerClickStub: sinon.SinonStub = sinon.stub(gameManager, "playerClick");
 
             gameService["gameClick"](socketMessage, player1);
 
@@ -140,7 +141,7 @@ describe("GameService", () => {
         });
 
         it("Should call playerClick with the message data passed in parameter", () => {
-            const playerClickStub = sinon.stub(gameManager, "playerClick");
+            const playerClickStub: sinon.SinonStub = sinon.stub(gameManager, "playerClick");
 
             gameService["gameClick"](socketMessage, player1);
 
@@ -175,8 +176,9 @@ describe("GameService", () => {
             is_top_score: false,
         };
         it("Should call newBestScore once if the score is a best score", () => {
-            const newBestScoreStub = sinon.stub(gameService, "newBestScore" as any);
-            const sendMessageStub = sinon.stub(gameService["socketHandler"], "sendMessage");
+            // tslint:disable-next-line:no-any
+            const newBestScoreStub: sinon.SinonStub = sinon.stub(gameService, "newBestScore" as any);
+            const sendMessageStub: sinon.SinonStub = sinon.stub(gameService["socketHandler"], "sendMessage");
 
             gameService["endGame"](game, player1, newScoreTop);
 
@@ -185,8 +187,9 @@ describe("GameService", () => {
             newBestScoreStub.restore();
         });
         it("Should call newBestScore with the new score if it is the new top score", () => {
-            const newBestScoreStub = sinon.stub(gameService, "newBestScore" as any);
-            const sendMessageStub = sinon.stub(gameService["socketHandler"], "sendMessage");
+            // tslint:disable-next-line:no-any
+            const newBestScoreStub: sinon.SinonStub = sinon.stub(gameService, "newBestScore" as any);
+            const sendMessageStub: sinon.SinonStub = sinon.stub(gameService["socketHandler"], "sendMessage");
 
             gameService["endGame"](game, player1, newScoreTop);
 
@@ -195,7 +198,7 @@ describe("GameService", () => {
             newBestScoreStub.restore();
         });
         it("Should send a message to the socket 2 times (amount of players in game)", () => {
-            const sendMessageStub = sinon.stub(gameService["socketHandler"], "sendMessage");
+            const sendMessageStub: sinon.SinonStub = sinon.stub(gameService["socketHandler"], "sendMessage");
             gameService["endGame"](game, player1, newScoreNotTop);
 
             expect(sendMessageStub.calledTwice).to.equal(true);
