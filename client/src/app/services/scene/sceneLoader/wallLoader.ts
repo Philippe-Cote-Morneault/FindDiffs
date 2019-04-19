@@ -1,50 +1,66 @@
 import * as THREE from "three";
+import { ICommonWallSettings } from "../../../../../../common/model/scene/objects/wallSettings";
 
 export class WallLoader {
-    private static readonly SCENE_DEPTH_THEMATIC: number = 140;
-    private static readonly SCENE_HEIGHT_THEMATIC: number = 30;
-    private static readonly SCENE_WIDTH_THEMATIC: number = 100;
-    private static readonly SCENE_DEPTH_WIDTH_GEOMETRIC: number = 250;
-    private static readonly SCENE_HEIGHT_GEOMETRIC: number = 125;
-
-    private static readonly WALL_POS_X_THEMATIC: number = 48;
-    private static readonly WALL_POS_Y_THEMATIC: number = 15;
     private static readonly WALL_TOP_POS_Y_THEMATIC: number = 30;
-    private static readonly WALL_POS_Z_THEMATIC: number = 68;
-    private static readonly WALL_POS_Y_GEOMETRIC: number = 63;
-    private static readonly WALL_POS_XZ_GEOMETRIC: number = 125;
-
     private static readonly WALL_DEPTH: number = 1;
 
     public static async loadThematic(scene: THREE.Scene, objects: THREE.Object3D[]): Promise<void> {
-        const geometryD: THREE.BoxGeometry = new THREE.BoxGeometry(this.SCENE_WIDTH_THEMATIC, this.SCENE_HEIGHT_THEMATIC, this.WALL_DEPTH);
-        const geometryW: THREE.BoxGeometry = new THREE.BoxGeometry(this.WALL_DEPTH, this.SCENE_HEIGHT_THEMATIC, this.SCENE_DEPTH_THEMATIC);
-        const geometryH: THREE.BoxGeometry = new THREE.BoxGeometry(this.SCENE_WIDTH_THEMATIC, this.WALL_DEPTH, this.SCENE_DEPTH_THEMATIC);
-        const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0});
 
-        this.addWall(geometryD, material, scene, objects, 0, this.WALL_POS_Y_THEMATIC, -this.WALL_POS_Z_THEMATIC);
-        this.addWall(geometryD, material, scene, objects, 0, this.WALL_POS_Y_THEMATIC, this.WALL_POS_Z_THEMATIC);
-        this.addWall(geometryW, material, scene, objects, this.WALL_POS_X_THEMATIC, this.WALL_POS_Y_THEMATIC, 0);
-        this.addWall(geometryW, material, scene, objects, -this.WALL_POS_X_THEMATIC, this.WALL_POS_Y_THEMATIC, 0);
+        const thematicWallSettings: ICommonWallSettings = {
+            depth: 140,
+            height: 30,
+            width: 100,
+            position: {
+                x: 48,
+                y: 15,
+                z: 68,
+            },
+        };
+
+        const geometryD: THREE.BoxGeometry =
+            new THREE.BoxGeometry(thematicWallSettings.width, thematicWallSettings.height, this.WALL_DEPTH);
+        const geometryW: THREE.BoxGeometry =
+            new THREE.BoxGeometry(this.WALL_DEPTH, thematicWallSettings.height, thematicWallSettings.depth);
+        const geometryH: THREE.BoxGeometry =
+            new THREE.BoxGeometry(thematicWallSettings.width, this.WALL_DEPTH, thematicWallSettings.depth);
+        const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
+
+        this.addWall(geometryD, material, scene, objects, 0, thematicWallSettings.position.y, -thematicWallSettings.position.z);
+        this.addWall(geometryD, material, scene, objects, 0, thematicWallSettings.position.y, thematicWallSettings.position.z);
+        this.addWall(geometryW, material, scene, objects, thematicWallSettings.position.x, thematicWallSettings.position.y, 0);
+        this.addWall(geometryW, material, scene, objects, -thematicWallSettings.position.x, thematicWallSettings.position.y, 0);
         this.addWall(geometryH, material, scene, objects, 0, this.WALL_TOP_POS_Y_THEMATIC, 0);
         this.addWall(geometryH, material, scene, objects, 0, 0, 0);
     }
 
     public static async loadGeometric(scene: THREE.Scene, objects: THREE.Object3D[]): Promise<void> {
-        const geometryD: THREE.BoxGeometry = new THREE.BoxGeometry(this.SCENE_DEPTH_WIDTH_GEOMETRIC,
-                                                                   this.SCENE_HEIGHT_GEOMETRIC, this.WALL_DEPTH);
-        const geometryW: THREE.BoxGeometry = new THREE.BoxGeometry(this.WALL_DEPTH, this.SCENE_HEIGHT_GEOMETRIC,
-                                                                   this.SCENE_DEPTH_WIDTH_GEOMETRIC);
-        const geometryH: THREE.BoxGeometry = new THREE.BoxGeometry(this.SCENE_DEPTH_WIDTH_GEOMETRIC, this.WALL_DEPTH,
-                                                                   this.SCENE_DEPTH_WIDTH_GEOMETRIC);
-        const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0});
 
-        this.addWall(geometryD, material, scene, objects, 0, 0, -this.WALL_POS_XZ_GEOMETRIC);
-        this.addWall(geometryD, material, scene, objects, 0, 0, this.WALL_POS_XZ_GEOMETRIC);
-        this.addWall(geometryW, material, scene, objects, this.WALL_POS_XZ_GEOMETRIC, 0, 0);
-        this.addWall(geometryW, material, scene, objects, -this.WALL_POS_XZ_GEOMETRIC, 0, 0);
-        this.addWall(geometryH, material, scene, objects, 0, this.WALL_POS_Y_GEOMETRIC, 0);
-        this.addWall(geometryH, material, scene, objects, 0, -this.WALL_POS_Y_GEOMETRIC, 0);
+        const geometricWallSettings: ICommonWallSettings = {
+            depth: 250,
+            height: 125,
+            width: 250,
+            position: {
+                x: 125,
+                y: 63,
+                z: 125,
+            },
+        };
+
+        const geometryD: THREE.BoxGeometry =
+            new THREE.BoxGeometry(geometricWallSettings.depth, geometricWallSettings.height, this.WALL_DEPTH);
+        const geometryW: THREE.BoxGeometry =
+            new THREE.BoxGeometry(this.WALL_DEPTH, geometricWallSettings.height, geometricWallSettings.width);
+        const geometryH: THREE.BoxGeometry =
+            new THREE.BoxGeometry(geometricWallSettings.depth, this.WALL_DEPTH, geometricWallSettings.width);
+        const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 });
+
+        this.addWall(geometryD, material, scene, objects, 0, 0, -geometricWallSettings.position.x);
+        this.addWall(geometryD, material, scene, objects, 0, 0, geometricWallSettings.position.z);
+        this.addWall(geometryW, material, scene, objects, geometricWallSettings.position.x, 0, 0);
+        this.addWall(geometryW, material, scene, objects, -geometricWallSettings.position.z, 0, 0);
+        this.addWall(geometryH, material, scene, objects, 0, geometricWallSettings.position.y, 0);
+        this.addWall(geometryH, material, scene, objects, 0, -geometricWallSettings.position.y, 0);
     }
 
     private static addWall(geometry: THREE.BoxGeometry, material: THREE.MeshBasicMaterial,
