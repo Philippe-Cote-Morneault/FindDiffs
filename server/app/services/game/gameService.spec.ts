@@ -1,18 +1,18 @@
 import { expect } from "chai";
-import { GameService } from "./gameService";
-import { ICommonGame } from "../../../../common/communication/webSocket/game";
-import { POVType } from "../../../../common/model/gameCard";
-import { GameManager } from "./gameManager";
 import * as sinon from "sinon";
+import { ICommonGame } from "../../../../common/communication/webSocket/game";
+import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { POVType } from "../../../../common/model/gameCard";
 import { INewScore } from "../../../../common/model/score";
 import { Game } from "../../model/game/game";
-import { FreePOVGameManager } from "./freePOVGameManager";
-import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { _e, R } from "../../strings";
+import { FreePOVGameManager } from "./freePOVGameManager";
+import { GameManager } from "./gameManager";
+import { GameService } from "./gameService";
 
 
 // tslint:disable-next-line:max-func-body-length
-describe.only("GameService", () => {
+describe("GameService", () => {
     const gameService: GameService = GameService.getInstance();
     describe("getInstance()", () => {
         it("Should return a GameService instance", () => {
@@ -153,6 +153,53 @@ describe.only("GameService", () => {
             gameService["activePlayers"].clear();
 
             expect(() => gameService["gameClick"](socketMessage, "randomPlayer")).to.throw((_e(R.ERROR_INVALIDID, ["randomPlayer"])));
+        });
+    });
+
+    describe("endGame", () => {
+        const player1: string = "player1";
+        const player2: string = "player2";
+
+        const game: Game = {
+            id: "123fsd",
+            ressource_id: "fdsr324r",
+            players: [player1, player2],
+            start_time: new Date(),
+            game_card_id: "13eref43",
+        };
+
+        const newScoreTop: INewScore = {
+            is_top_score: true,
+        };
+        const newScoreNotTop: INewScore = {
+            is_top_score: false,
+        };
+        it("Should call newBestScore once if the score is a best score", () => {
+            const newBestScoreStub = sinon.stub(gameService, "newBestScore" as any);
+            const sendMessageStub = sinon.stub(gameService["socketHandler"], "sendMessage");
+
+            gameService["endGame"](game, player1, newScoreTop);
+
+            expect(newBestScoreStub.calledOnce).to.equal(true);
+            sendMessageStub.restore();
+            newBestScoreStub.restore();
+        });
+        it("Should call newBestScore with the new score if it is the new top score", () => {
+            const newBestScoreStub = sinon.stub(gameService, "newBestScore" as any);
+            const sendMessageStub = sinon.stub(gameService["socketHandler"], "sendMessage");
+
+            gameService["endGame"](game, player1, newScoreTop);
+
+            expect(newBestScoreStub.firstCall.args[0]).to.equal(newScoreTop);
+            sendMessageStub.restore();
+            newBestScoreStub.restore();
+        });
+        it("Should send a message to the socket 2 times (amount of players in game)", () => {
+            const sendMessageStub = sinon.stub(gameService["socketHandler"], "sendMessage");
+            gameService["endGame"](game, player1, newScoreNotTop);
+
+            expect(sendMessageStub.calledTwice).to.equal(true);
+            sendMessageStub.restore();
         });
     });
 
