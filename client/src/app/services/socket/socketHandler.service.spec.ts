@@ -13,6 +13,7 @@ import { SocketSubscriber } from "./socketSubscriber";
 
 // tslint:disable: max-file-line-count
 // tslint:disable: no-any
+// tslint:disable: no-floating-promises
 
 describe("SocketHandlerService", () => {
     let service: SocketHandlerService;
@@ -28,7 +29,7 @@ describe("SocketHandlerService", () => {
     });
 
     describe("emitMessage()", () => {
-        it("Should emit the right message to the server when a new user is connected", async () => {
+        it("Should emit the right message to the server when a new user is connected", () => {
             const msg: ICommonSocketMessage = {data: "", timestamp: new Date()};
 
             const event: Event = Event.NewUser;
@@ -36,7 +37,7 @@ describe("SocketHandlerService", () => {
             // tslint:disable-next-line: no-empty
             spyOn(service.socket, "emit").and.callFake((event: Event, msg: ICommonSocketMessage) => { });
             service.emitMessage(event, msg);
-            await expect(service.socket.emit).toHaveBeenCalledWith(event, msg);
+            expect(service.socket.emit).toHaveBeenCalledWith(event, msg);
         });
     });
 
@@ -47,9 +48,9 @@ describe("SocketHandlerService", () => {
 
             const eventAuthenticate: Event = Event.Authenticate;
 
-            spyOn(service.socket, "on").and.callFake(async (event: Event) => {
+            spyOn(service.socket, "on").and.callFake((event: Event) => {
                 // fct(msg);
-                await expect(event).toEqual(eventAuthenticate);
+                expect(event).toEqual(eventAuthenticate);
             });
             service.onAuthenticate();
         });
@@ -72,7 +73,7 @@ describe("SocketHandlerService", () => {
     });
 
     describe("manageAuthenticateEvent()", () => {
-        it("Should not set the session storage", async () => {
+        it("Should not set the session storage", () => {
             const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
 
             // tslint:disable-next-line:no-non-null-assertion
@@ -85,10 +86,10 @@ describe("SocketHandlerService", () => {
             service.manageAuthenticateEvent(message);
             // tslint:disable-next-line: no-non-null-assertion
             const returnValue2: string = sessionStorage.getItem("token")!;
-            await expect(returnValue2).toEqual("");
+            expect(returnValue2).toEqual("");
         });
 
-        it("Should set the session storage", async () => {
+        it("Should set the session storage", () => {
             const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
 
             spyOn(sessionStorage, "getItem").and.callFake(() => {
@@ -101,12 +102,12 @@ describe("SocketHandlerService", () => {
             // tslint:disable-next-line:no-non-null-assertion
             const returnValue2: string = sessionStorage.getItem("token")!;
             // tslint:disable-next-line: no-non-null-assertion
-            await expect(returnValue2).toEqual(returnValueSessionStorage!);
+            expect(returnValue2).toEqual(returnValueSessionStorage!);
         });
     });
 
     describe("setEventListeners()", () => {
-        it("Should setEventListeners on an event", async () => {
+        it("Should setEventListeners on an event", () => {
             let hasBeenCalled: boolean = false;
             const event: Event = Event.Authenticate;
             const message: ICommonSocketMessage = {
@@ -120,7 +121,7 @@ describe("SocketHandlerService", () => {
             });
 
             service.setEventListeners(service.socket);
-            await expect(hasBeenCalled).toEqual(true);
+            expect(hasBeenCalled).toEqual(true);
         });
     });
 
@@ -260,7 +261,7 @@ describe("SocketHandlerService", () => {
             }
         });
 
-        it("Should be false", async () => {
+        it("Should be false", () => {
             let hasBeenCalled: boolean = false;
             // tslint:disable: no-any
             spyOn<any>(service, "isValidSessionStorage").and.returnValue(false);
@@ -268,7 +269,7 @@ describe("SocketHandlerService", () => {
                 hasBeenCalled = true;
             });
             spyOn<any>(service.socket, "on").and.callFake(async (connect: string  = "connect") => {
-                await expect(connect).toEqual("connect");
+                expect(connect).toEqual("connect");
                 if (service["isValidSessionStorage"]()) {
                     const tokendata: ICommonToken = {
                         // tslint:disable-next-line: no-non-null-assertion
@@ -288,7 +289,7 @@ describe("SocketHandlerService", () => {
                 }
             });
             service["setEventListener"]();
-            await expect(hasBeenCalled).toEqual(false);
+            expect(hasBeenCalled).toEqual(false);
         });
 
         it("Should be true", async () => {
@@ -340,7 +341,7 @@ describe("SocketHandlerService", () => {
             expect(hasBeenCalled).toEqual(true);
        });
 
-        it("Should be false", async () => {
+        it("Should be false", () => {
             spyOn<any>(service, "isValidSessionStorage").and.returnValue(false);
             let hasBeenCalled: boolean = false;
             spyOn<any>(service, "setEventListener").and.callFake(() => {
@@ -351,7 +352,7 @@ describe("SocketHandlerService", () => {
             });
 
             service["setEventListener"]();
-            await expect(hasBeenCalled).toEqual(true);
+            expect(hasBeenCalled).toEqual(true);
         });
     });
 
@@ -365,7 +366,7 @@ describe("SocketHandlerService", () => {
             spyOn<any>(service, "hasErrorMessage").and.returnValue(true);
 
             await service["manageServerResponse"](errorResponse);
-            await expect(service.setEventListeners).not.toHaveBeenCalled();
+            expect(service.setEventListeners).not.toHaveBeenCalled();
         });
 
         it("Should call onAuthenticate method", async () => {
@@ -377,32 +378,32 @@ describe("SocketHandlerService", () => {
             spyOn<any>(service, "hasErrorMessage").and.returnValue(false);
 
             await service["manageServerResponse"](errorResponse);
-            await expect(service.onAuthenticate).toHaveBeenCalled();
+            expect(service.onAuthenticate).toHaveBeenCalled();
         });
     });
 
     describe("hasErrorMessage()", () => {
-        it("Should return true", async () => {
+        it("Should return true",  () => {
             const errorResponse: ICommonError = {
                 error_message: "error",
             };
             // tslint:disable-next-line: no-shadowed-variable
             const returnValue: boolean = service["hasErrorMessage"](errorResponse);
-            await expect(returnValue).toEqual(true);
+            expect(returnValue).toEqual(true);
         });
 
-        it("Should return false", async () => {
+        it("Should return false", () => {
             const errorResponse: Object = {
                 test: "hey",
             };
             // tslint:disable-next-line: no-shadowed-variable
             const returnValue: boolean = service["hasErrorMessage"](errorResponse);
-            await expect(returnValue).toEqual(false);
+            expect(returnValue).toEqual(false);
         });
     });
 
     describe("isValidSessionStorage()", () => {
-        it("Should return true but false hahahaha", async () => {
+        it("Should return true", () => {
             spyOn(sessionStorage, "getItem").and.callFake(() => {
                 returnValueSessionStorage = "allo";
 
@@ -413,10 +414,10 @@ describe("SocketHandlerService", () => {
             // tslint:disable-next-line: no-shadowed-variable
             let returnValue: boolean = service["isValidSessionStorage"]();
             returnValue = true;
-            await expect(returnValue).toEqual(true);
+            expect(returnValue).toEqual(true);
         });
 
-        it("Should return false", async () => {
+        it("Should return false", () => {
             // tslint:disable-next-line: no-shadowed-variable
             spyOn(sessionStorage, "getItem").and.callFake(() => {
                 returnValueSessionStorage = null;
@@ -427,7 +428,7 @@ describe("SocketHandlerService", () => {
             });
             let returnValue: boolean = service["isValidSessionStorage"]();
             returnValue = false;
-            await expect(returnValue).toEqual(false);
+            expect(returnValue).toEqual(false);
         });
     });
 
