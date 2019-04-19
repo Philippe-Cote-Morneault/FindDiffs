@@ -7,6 +7,7 @@ import { Event, ICommonSocketMessage } from "../../../../common/communication/we
 import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
+import { _e, R } from "../ressources/strings";
 import { MatchmakingService } from "../services/game/matchmaking.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { ImagePairService } from "../services/image-pair/imagePair.service";
@@ -70,7 +71,7 @@ export class GamesCardViewComponent implements OnInit {
         if (this.isInAdminView) {
             this.deleteGameCard();
         } else {
-            const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
+            const gameUrl: string = (this.isSimplePov()) ? R.GAME_CARD_SIMPLE : R.GAME_CARD_FREE;
             await this.playSoloGame(gameUrl);
         }
     }
@@ -95,7 +96,7 @@ export class GamesCardViewComponent implements OnInit {
                 await this.router.navigateByUrl(gameUrl + this.gameCard.id);
                 this.emitPlayGame(Event.PlaySoloGame);
             } else {
-                alert("This game has been deleted, please try another one.");
+                alert(R.GAME_CARD_DELETED);
             }
         });
     }
@@ -107,7 +108,7 @@ export class GamesCardViewComponent implements OnInit {
                 this.matchmaking.setIsActive(true);
                 this.emitPlayGame(Event.PlayMultiplayerGame);
             } else {
-                alert("This game has been deleted, please try another one.");
+                alert(R.GAME_CARD_DELETED);
             }
         });
     }
@@ -119,7 +120,7 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     public deleteGameCard(): void {
-        if (confirm("Are you sure you want to delete the Game Card called " + this.gameCard.title + "?")) {
+        if (confirm( _e(R.GAME_CARD_CONFIRM_DELETE, [this.gameCard.title]))) {
             this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe(() => {
                 window.location.reload();
             });
@@ -127,7 +128,7 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     public resetBestTimes(): void {
-        if (confirm("Are you sure you want to reset the best times of the Game Card called " + this.gameCard.title + "?")) {
+        if (confirm(_e(R.GAME_CARD_CONFIRM_RESET, [this.gameCard.title]))) {
             this.gamesCardService.resetBestTimes(this.gameCard).subscribe((message: Message) => {
                 if (message.title !== "Error") {
                     window.location.reload();

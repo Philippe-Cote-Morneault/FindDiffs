@@ -39,21 +39,35 @@ export class ObjectHandler {
         if (this.clickAreAllowed()) {
             this.identificationError.moveClickError(event.pageX, event.pageY);
             const mouse: THREE.Vector2 = new THREE.Vector2();
-            isOriginalScene ?
-                this.mousePositionService.setMousePosition(event, mouse, this.originalGame) :
-                this.mousePositionService.setMousePosition(event, mouse, this.modifiedGame);
+            this.adjustMouse(isOriginalScene, event, mouse);
 
             this.detectedObjects = this.objectDetectionService.rayCasting(mouse,
                                                                           this.originalSceneLoader.camera, this.modifiedSceneLoader.camera,
                                                                           this.originalSceneLoader.scene, this.modifiedSceneLoader.scene,
                                                                           this.meshesOriginal, this.meshesModified);
+            this.emitEvent(this.detectedObjects.modified);
+        }
+    }
 
-            if (this.detectedObjects.modified) {
-                this.emitDifference(this.scenePairId, this.detectedObjects.original.userData.id,
-                                    this.detectedObjects.modified.userData.id, this.gameType);
-            } else {
-                this.socket.emitMessage(Event.InvalidClick, null);
-            }
+    private adjustMouse(isOriginalScene: boolean, event: MouseEvent, mouse: THREE.Vector2): void {
+        isOriginalScene ?
+        this.mousePositionService.setMousePosition(event, mouse,
+                                                   this.originalGame.nativeElement.getBoundingClientRect(),
+                                                   this.originalGame.nativeElement.clientWidth,
+                                                   this.originalGame.nativeElement.clientHeight) :
+        this.mousePositionService.setMousePosition(event, mouse,
+                                                   this.modifiedGame.nativeElement.getBoundingClientRect(),
+                                                   this.modifiedGame.nativeElement.clientWidth,
+                                                   this.modifiedGame.nativeElement.clientHeight);
+
+    }
+
+    private emitEvent(modifiedObject: THREE.Object3D | undefined): void {
+        if (modifiedObject) {
+            this.emitDifference(this.scenePairId, this.detectedObjects.original.userData.id,
+                                modifiedObject.userData.id, this.gameType);
+        } else {
+            this.socket.emitMessage(Event.InvalidClick, null);
         }
     }
 

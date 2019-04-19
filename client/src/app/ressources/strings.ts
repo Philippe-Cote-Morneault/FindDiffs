@@ -19,6 +19,13 @@ export const R: IString = {
     NOT_ALLOWED: "not-allowed",
     CONTEXT_MENU: "context-menu",
     DIFFERENCE_SOUND_SRC: "../../assets/mario.mp3",
+    ERROR_SOUND_SRC: "../../assets/no.mp3",
+
+    GAME_CARD_SIMPLE: "/gameSimple/",
+    GAME_CARD_FREE: "/gameFree/",
+    GAME_CARD_DELETED: "This game has been deleted, please try another one.",
+    GAME_CARD_CONFIRM_DELETE: "Are you sure you want to delete the Game Card called %s ?",
+    GAME_CARD_CONFIRM_RESET: "Are you sure you want to reset the best times of the Game Card called %s ?",
 
     CHAT_SOLO: "solo",
     CHAT_ONLINE: "1v1",

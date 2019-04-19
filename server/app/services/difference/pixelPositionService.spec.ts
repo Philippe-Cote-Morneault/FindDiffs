@@ -4,6 +4,8 @@ import * as sinon from "sinon";
 import { ICommonReveal } from "../../../../common/model/reveal";
 import { PixelPositionService } from "./pixelPosition.service";
 
+    // tslint:disable: no-floating-promises
+
 describe("PixelPositionService", () => {
     describe("getInstance()", () => {
         it("Should return a PixelPositionService instance", () => {

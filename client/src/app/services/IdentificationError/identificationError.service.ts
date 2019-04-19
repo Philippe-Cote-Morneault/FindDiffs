@@ -10,7 +10,6 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
     providedIn: "root",
 })
 export class IdentificationError implements SocketSubscriber {
-    private static readonly ERROR_SOUND_SRC: string = "../../assets/no.mp3";
     private static readonly ONE_SECOND: number = 1000;
     private errorMessage: HTMLElement;
     private original: HTMLElement;
@@ -22,7 +21,7 @@ export class IdentificationError implements SocketSubscriber {
     public constructor(private socketService: SocketHandlerService, private game: GameService) {
         this.timeout = false;
         this.errorSound = new Audio;
-        this.errorSound.src = IdentificationError.ERROR_SOUND_SRC;
+        this.errorSound.src = R.ERROR_SOUND_SRC;
         this.errorSound.load();
         this.subscribeToSocket();
     }
