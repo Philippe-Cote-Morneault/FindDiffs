@@ -14,10 +14,10 @@ describe("WallLoader", () => {
             await WallLoader.loadGeometric(scene, sceneObjects);
 
             const finalSizeScene: number = scene.children.length;
-            const finalSizeSceneOnjects: number = sceneObjects.length;
+            const finalSizeSceneObjects: number = sceneObjects.length;
 
             expect(initialSizeScene + 6).to.equal(finalSizeScene);
-            expect(initialSizeSceneObjects + 6).to.equal(finalSizeSceneOnjects);
+            expect(initialSizeSceneObjects + 6).to.equal(finalSizeSceneObjects);
         });
     });
 
@@ -31,10 +31,10 @@ describe("WallLoader", () => {
             await WallLoader.loadThematic(scene, sceneObjects);
 
             const finalSizeScene: number = scene.children.length;
-            const finalSizeSceneOnjects: number = sceneObjects.length;
+            const finalSizeSceneObjects: number = sceneObjects.length;
 
             expect(initialSizeScene + 6).to.equal(finalSizeScene);
-            expect(initialSizeSceneObjects + 6).to.equal(finalSizeSceneOnjects);
+            expect(initialSizeSceneObjects + 6).to.equal(finalSizeSceneObjects);
         });
     });
 });

@@ -43,32 +43,12 @@ describe("SocketHandlerService", () => {
 
     describe("onAutenticate()", () => {
         it("Should authenticate the user", () => {
-            // const message: ICommonSocketMessage = {data: "", timestamp: new Date()};
-            // const msg: ICommonSocketMessage = message;
-
             const eventAuthenticate: Event = Event.Authenticate;
 
             spyOn(service.socket, "on").and.callFake((event: Event) => {
-                // fct(msg);
                 expect(event).toEqual(eventAuthenticate);
             });
             service.onAuthenticate();
-        });
-
-        it("Should authenticate the user", async () => {
-            // const message: ICommonSocketMessage = {
-            //     data: "asdsdfasdf",
-            //     timestamp: new Date(),
-            // };
-
-            // let hasBeenCalled: boolean = false;
-            // spyOn(service, "onAuthenticate").and.callFake(() => {
-            //     // service.manageAuthenticateEvent(message);
-            //     hasBeenCalled = true;
-            // });
-
-            // service.onAuthenticate();
-            // await expect(hasBeenCalled).toEqual(true);
         });
     });
 
@@ -261,7 +241,7 @@ describe("SocketHandlerService", () => {
             }
         });
 
-        it("Should be false", () => {
+        it("Should be true", () => {
             let hasBeenCalled: boolean = false;
             // tslint:disable: no-any
             spyOn<any>(service, "isValidSessionStorage").and.returnValue(false);
@@ -289,7 +269,7 @@ describe("SocketHandlerService", () => {
                 }
             });
             service["setEventListener"]();
-            expect(hasBeenCalled).toEqual(false);
+            expect(hasBeenCalled).toEqual(true);
         });
 
         it("Should be true", async () => {
