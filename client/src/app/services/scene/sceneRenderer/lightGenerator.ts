@@ -19,7 +19,7 @@ export class LightGenerator {
 
     private static generateTopNorthEastLight(dimensions: ICommonSceneDimensions): THREE.PointLight {
         const light: THREE.PointLight = this.createLight();
-       
+
         this.setLightPosition(light, dimensions.x, dimensions.y, dimensions.z);
 
         return light;
@@ -57,12 +57,12 @@ export class LightGenerator {
         );
     }
 
-    private static setLightPosition(light:THREE.PointLight, xDimension: number, yDimension: number, zDimension: number): void {
+    private static setLightPosition(light: THREE.PointLight, xDimension: number, yDimension: number, zDimension: number): void {
         light.position.set(
             xDimension / LightGenerator.DISTANCE_RATIO,
             yDimension,
             zDimension / LightGenerator.DISTANCE_RATIO,
         );
     }
-     
+
 }

@@ -18,7 +18,9 @@ describe("simplePOVGameManager", () => {
         start_time: undefined,
         game_card_id: "13eref43",
     };
-    const callback = (game: Game, winner: string, score: INewScore) => {};
+    // tslint:disable:no-shadowed-variable
+    // tslint:disable:no-empty
+    const callback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => {};
     const gameManager: SimplePOVGameManager = new SimplePOVGameManager(game, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT,
                                                                        callback);
     describe("playerClick()", () => {
@@ -27,7 +29,8 @@ describe("simplePOVGameManager", () => {
                 x: 100,
                 y: 234,
             };
-            const postPixelPositionStub = sinon.stub(gameManager["pixelPositionService"], "postPixelPosition");
+            const postPixelPositionStub: sinon.SinonStub<[string, number, number], Promise<ICommonReveal | null>> =
+            sinon.stub(gameManager["pixelPositionService"], "postPixelPosition");
             const reveal: ICommonReveal = {
                 hit: true,
                 pixels_affected: [{x: 20, y: 23}],
@@ -56,21 +59,21 @@ describe("simplePOVGameManager", () => {
                 x: 100,
                 y: 234,
             };
-            const postPixelPositionStub = sinon.stub(gameManager["pixelPositionService"], "postPixelPosition");
+            const postPixelPositionStub: sinon.SinonStub<[string, number, number], Promise<ICommonReveal | null>> =
+            sinon.stub(gameManager["pixelPositionService"], "postPixelPosition");
             const reveal: ICommonReveal = {
                 hit: true,
                 pixels_affected: [{x: 20, y: 23}],
                 difference_id: 12312,
             };
 
-
-            const successCallback = (data: Object | null) => {};
-            const failureCallback = () => {};
+            const successCallback: (data: Object | null) => void = (data: Object | null) => {};
+            const failureCallback: () => void = () => {};
 
             postPixelPositionStub.returns(Promise.resolve<ICommonReveal>(reveal));
             // tslint:disable-next-line:no-any
             const failureCallbackSpy: sinon.SinonSpy<any[], any> = sinon.spy(failureCallback);
-            gameManager.playerClick(_2dPosition, player2, successCallback, failureCallback)
+            await gameManager.playerClick(_2dPosition, player2, successCallback, failureCallback)
             .then(() => {
                 postPixelPositionStub.restore();
                 expect(failureCallbackSpy.calledOnce).to.equal(false);

@@ -10,12 +10,18 @@ import { ObjectDetectionService } from "./object-detection.service";
 describe("ObjectDetectionService", () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
+  // tslint:disable: max-func-body-length
+  // tslint:disable: no-magic-numbers
+  // tslint:disable: no-any
+  // tslint:disable: no-floating-promises
+  // tslint:disable: number-literal-format
+
   describe("setCamera()", () => {
-    it("Should call setCamera function", async () => {
+    it("Should call setCamera function", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
       const mouseService: MousePositionService = new MousePositionService();
-  
-      let mouse: THREE.Vector2 = new THREE.Vector2();
+
+      const mouse: THREE.Vector2 = new THREE.Vector2();
       const event: MouseEvent = document.createEvent("MouseEvent");
       event.initMouseEvent("click", true, true, window, 0, 0, 0, 371, 207, false, false, false, false, 0, null);
       const divBoxInformation: ClientRect | DOMRect = {
@@ -28,31 +34,30 @@ describe("ObjectDetectionService", () => {
           x: 160,
           y: 105.19999694824219,
         };
-  
+
       const clientWidth: number = 638;
       const clientHeight: number = 478;
-  
+
       mouseService.setMousePosition(event, mouse, divBoxInformation, clientWidth, clientHeight);
-  
-  
-      let raycaster: THREE.Raycaster = new THREE.Raycaster();
+
+      const raycaster: THREE.Raycaster = new THREE.Raycaster();
       let hasSetRaycaster: boolean = false;
       const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(window.screenX, window.screenY);
       spyOn<any>(service, "setCamera").and.callFake(() => {
         raycaster.setFromCamera(mouse, camera);
         hasSetRaycaster = true;
       });
-  
+
       service["setCamera"](mouse, camera, camera);
-  
-      await expect(hasSetRaycaster).toEqual(true);
+
+      expect(hasSetRaycaster).toEqual(true);
     });
-  
-    it("Should set the camera to the raycaster", async () => {
+
+    it("Should set the camera to the raycaster", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
       const mouseService: MousePositionService = new MousePositionService();
-  
-      let mouse: THREE.Vector2 = new THREE.Vector2();
+
+      const mouse: THREE.Vector2 = new THREE.Vector2();
       const event: MouseEvent = document.createEvent("MouseEvent");
       event.initMouseEvent("click", true, true, window, 0, 0, 0, 371, 207, false, false, false, false, 0, null);
       const divBoxInformation: ClientRect | DOMRect = {
@@ -65,55 +70,53 @@ describe("ObjectDetectionService", () => {
           x: 160,
           y: 105.19999694824219,
         };
-  
+
       const clientWidth: number = 638;
       const clientHeight: number = 478;
-  
+
       mouseService.setMousePosition(event, mouse, divBoxInformation, clientWidth, clientHeight);
-  
-  
-      let raycaster: THREE.Raycaster = new THREE.Raycaster();
+
+      const raycaster: THREE.Raycaster = new THREE.Raycaster();
       let hasSetRaycaster: boolean = false;
       const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(window.screenX, window.screenY);
       spyOn<any>(raycaster, "setFromCamera").and.callFake(() => {
         hasSetRaycaster = true;
       });
-  
+
       service["setCamera"](mouse, camera, camera);
       raycaster.setFromCamera(mouse, camera);
-  
-      await expect(hasSetRaycaster).toEqual(true);
+
+      expect(hasSetRaycaster).toEqual(true);
     });
   });
 
   describe("getParent()", () => {
-    it("Should return the parent of the object3D", async () => {
+    it("Should return the parent of the object3D", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
 
       const scene: THREE.Scene = new THREE.Scene();
 
       const geometry: THREE.BoxGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-      var material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-      var cube: THREE.Mesh = new THREE.Mesh( geometry, material );
+      const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+      const cube: THREE.Mesh = new THREE.Mesh( geometry, material );
       scene.add( cube );
 
       const obj3D: THREE.Object3D = service["getParent"](cube, scene);
 
       if (obj3D.parent) {
         const parent: any = obj3D.parent;
-        console.log(parent);
-        await expect(parent.type).toEqual("Scene");
+        expect(parent.type).toEqual("Scene");
       }
     });
 
-    it("Should call the function getParent", async () => {
+    it("Should call the function getParent", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
 
       const scene: THREE.Scene = new THREE.Scene();
 
       const geometry: THREE.BoxGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-      var material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-      var cube: THREE.Mesh = new THREE.Mesh( geometry, material );
+      const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+      const cube: THREE.Mesh = new THREE.Mesh( geometry, material );
       scene.add( cube );
 
       let counter: number = 0;
@@ -127,7 +130,8 @@ describe("ObjectDetectionService", () => {
               obj3D = cube.parent as THREE.Object3D;
               obj3D = service["getParent"](obj3D, scene);
           }
-          return obj3D; 
+
+          return obj3D;
         }
       });
 
@@ -137,13 +141,12 @@ describe("ObjectDetectionService", () => {
     });
   });
 
-
   describe("getParent()", () => {
-    it("Should return the original and the modified object", async () => {
+    it("Should return the original and the modified object", () => {
       const service: ObjectDetectionService = TestBed.get(ObjectDetectionService);
       const mouseService: MousePositionService = new MousePositionService();
-  
-      let mouse: THREE.Vector2 = new THREE.Vector2();
+
+      const mouse: THREE.Vector2 = new THREE.Vector2();
       const event: MouseEvent = document.createEvent("MouseEvent");
       event.initMouseEvent("click", true, true, window, 0, 0, 0, 371, 207, false, false, false, false, 0, null);
       const divBoxInformation: ClientRect | DOMRect = {
@@ -156,27 +159,27 @@ describe("ObjectDetectionService", () => {
           x: 160,
           y: 105.19999694824219,
         };
-  
+
       const clientWidth: number = 638;
       const clientHeight: number = 478;
-  
+
       mouseService.setMousePosition(event, mouse, divBoxInformation, clientWidth, clientHeight);
-  
+
       const camera: THREE.PerspectiveCamera = CameraGenerator.createCamera(window.screenX, window.screenY);
 
       const scene: THREE.Scene = new THREE.Scene();
 
       const geometry: THREE.BoxGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-      var material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-      var cube: THREE.Mesh = new THREE.Mesh( geometry, material );
+      const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+      const cube: THREE.Mesh = new THREE.Mesh( geometry, material );
       scene.add( cube );
 
       const meshes: THREE.Object3D[] = [];
       meshes.push(cube);
 
       const objects: IThreeObject = service.rayCasting(mouse, camera, camera, scene, scene, meshes, meshes);
-      await expect(objects.original).not.toBeNull();
-      await expect(objects.modified).not.toBeNull();
+      expect(objects.original).not.toBeNull();
+      expect(objects.modified).not.toBeNull();
     });
   });
 

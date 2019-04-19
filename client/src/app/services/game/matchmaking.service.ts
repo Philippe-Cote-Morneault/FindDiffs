@@ -52,7 +52,9 @@ export class MatchmakingService implements SocketSubscriber {
     private changeMatchmakingType(message: ICommonSocketMessage): void {
         const gameIDs: string[] = message.data as string[];
         this.gameList.forEach((game: GamesCardViewComponent) => {
-            gameIDs.includes(game.gameCard.resource_id) ? this.changeToJoin(game) : this.changeToCreate(game);
+            if (!game.isInAdminView) {
+                gameIDs.includes(game.gameCard.resource_id) ? this.changeToJoin(game) : this.changeToCreate(game);
+            }
         });
     }
 

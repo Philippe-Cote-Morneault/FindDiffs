@@ -3,7 +3,6 @@ import * as THREE from "three";
 import { ICommonDifferenceFound } from "../../../../../../common/communication/webSocket/differenceFound";
 import { Event, ICommonSocketMessage } from "../../../../../../common/communication/webSocket/socketMessage";
 import { DifferenceType, ICommonReveal3D } from "../../../../../../common/model/reveal";
-import { IdentificationError } from "../../IdentificationError/identificationError.service";
 import { SceneLoaderService } from "../../scene/sceneLoader/sceneLoader.service";
 import { SocketHandlerService } from "../../socket/socketHandler.service";
 import { SocketSubscriber } from "../../socket/socketSubscriber";
@@ -19,10 +18,10 @@ export class ObjectRestorationService implements SocketSubscriber, OnDestroy {
 
     public differenceFound: string[];
 
-    public constructor(public socketService: SocketHandlerService,
-                       public originalSceneLoader: SceneLoaderService,
-                       public modifiedSceneLoader: SceneLoaderService,
-                       public identificationError: IdentificationError) {
+    public constructor(private socketService: SocketHandlerService,
+                       private originalSceneLoader: SceneLoaderService,
+                       private modifiedSceneLoader: SceneLoaderService,
+                       private socket: SocketHandlerService) {
         this.differenceFound = [];
         this.subscribeToSocket();
     }
@@ -72,63 +71,104 @@ export class ObjectRestorationService implements SocketSubscriber, OnDestroy {
 
     public addObject(objectOriginal: string, scene: IThreeScene, isTexture: boolean): void {
         if (this.isANewDifference(objectOriginal) || isTexture) {
-            if (scene.original) {
-                scene.original.children.forEach((element) => {
-                    if (element.userData.id === objectOriginal) {
-                        if (scene.modified) {
-                            scene.modified.add(element.clone());
-                        }
-                    }
-                });
+            if (scene.original && scene.modified) {
+                this.applyAdd(scene.original, scene.modified, objectOriginal);
+                // scene.original.children.forEach((element) => {
+                //     if (element.userData.id === objectOriginal) {
+                //         if (scene.modified) {
+                //             scene.modified.add(element.clone());
+                //         }
+                //     }
+                // });
                 this.addDifference(objectOriginal);
             }
         }
     }
 
+    private applyAdd(originalScene: THREE.Scene, modifiedScene: THREE.Scene, objectId: string): void {
+        originalScene.children.forEach((element) => {
+            if (element.userData.id === objectId) {
+                modifiedScene.add(element.clone());
+            }
+        });
+    }
+
     public removeObject(objectModified: string, scene: IThreeScene): void {
         if (this.isANewDifference(objectModified)) {
             if (scene.modified) {
-                scene.modified.children.forEach((element) => {
-                    if (element.userData.id === objectModified) {
-                        if (scene.modified) {
-                            scene.modified.remove(element);
-                        }
-                    }
-                });
+                this.applyRemoval(scene.modified, objectModified);
+                // scene.modified.children.forEach((element) => {
+                //     if (element.userData.id === objectModified) {
+                //         if (scene.modified) {
+                //             scene.modified.remove(element);
+                //         }
+                //     }
+                // });
             }
             this.addDifference(objectModified);
         }
+    }
+
+    private applyRemoval(modifiedScene: THREE.Scene, objectId: string): void {
+        modifiedScene.children.forEach((element) => {
+            if (element.userData.id === objectId) {
+                modifiedScene.remove(element);
+            }
+        });
     }
 
     public changeColorObject(object: string, scenes: IThreeScene): void {
         if (this.isANewDifference(object)) {
             const originalSceneObject: THREE.Object3D | undefined = this.getOriginalSceneObject(object, scenes);
             if (scenes.modified) {
-                scenes.modified.children.forEach((sceneObject) => {
-                    if (sceneObject.userData.id === object) {
-                        // tslint:disable-next-line:no-any
-                        (sceneObject as any).material.color.setHex((originalSceneObject as any).material.color.getHex());
-                    }
-                });
-                this.addDifference(object);
+                this.applyColorChange(scenes.modified, originalSceneObject, object);
+                // scenes.modified.children.forEach((sceneObject) => {
+                //     if (sceneObject.userData.id === object) {
+                //         // tslint:disable-next-line:no-any
+                //         (sceneObject as any).material.color.setHex((originalSceneObject as any).material.color.getHex());
+                //     }
+                // });
+                // this.addDifference(object);
             }
 
         }
     }
 
-    private getOriginalSceneObject(object: string, scene:  IThreeScene): THREE.Object3D | undefined {
-        let originalSceneObject: THREE.Object3D = new THREE.Object3D;
-        if (scene.original) {
-            scene.original.children.forEach((sceneObject) => {
-                if (sceneObject.userData.id === object) {
-                    originalSceneObject = sceneObject;
-                }
-            });
+    private applyColorChange(modifiedScene: THREE.Scene, originalSceneObject: THREE.Object3D | undefined, objectId: string): void {
+        modifiedScene.children.forEach((sceneObject) => {
+            if (sceneObject.userData.id === objectId) {
+                // tslint:disable-next-line:no-any
+                (sceneObject as any).material.color.setHex((originalSceneObject as any).material.color.getHex());
+            }
+        });
+        this.addDifference(objectId);
+    }
 
-            return originalSceneObject;
+    private getOriginalSceneObject(object: string, scene:  IThreeScene): THREE.Object3D | undefined {
+        // let originalSceneObject: THREE.Object3D = new THREE.Object3D;
+        if (scene.original) {
+            return this.findOriginalObject(scene.original, object);
+            // scene.original.children.forEach((sceneObject) => {
+            //     if (sceneObject.userData.id === object) {
+            //         originalSceneObject = sceneObject;
+            //     }
+            // });
+
+            // return originalSceneObject;
         }
 
         return undefined;
+    }
+
+    private findOriginalObject(originalScene: THREE.Scene, objectId: string): THREE.Object3D {
+        let originalSceneObject: THREE.Object3D = new THREE.Object3D;
+        originalScene.children.forEach((sceneObject) => {
+            if (sceneObject.userData.id === objectId) {
+                originalSceneObject = sceneObject;
+            }
+        });
+
+        return originalSceneObject;
     }
 
     public async changeTextureObject(object: string, scene: IThreeScene): Promise<void> {
@@ -137,7 +177,7 @@ export class ObjectRestorationService implements SocketSubscriber, OnDestroy {
             this.addObject(object, scene, true);
             this.addDifference(object);
         } else {
-            await this.identificationError.showErrorMessage();
+            this.socket.emitMessage(Event.InvalidClick, null);
         }
     }
 

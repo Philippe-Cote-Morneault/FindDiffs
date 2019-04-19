@@ -5,24 +5,36 @@ import { WallLoader } from "./wallLoader";
 describe("WallLoader", () => {
     // tslint:disable:no-magic-numbers
     describe("loadGeometric()", () => {
-        it("Should add 6 walls to the boundingBoxes array, for a geometric scene", async () => {
+        it("Should add 6 walls to the scene and the sceneObjects array, for a geometric scene", async () => {
             const scene: THREE.Scene = new THREE.Scene;
-            const initialSize: number = scene.children.length;
-            await WallLoader.loadGeometric(scene);
-            const finalSize: number = scene.children.length;
+            const sceneObjects: THREE.Object3D[] = new Array<THREE.Object3D>();
+            const initialSizeScene: number = scene.children.length;
+            const initialSizeSceneObjects: number = sceneObjects.length;
 
-            expect(initialSize + 6).to.equal(finalSize);
+            await WallLoader.loadGeometric(scene, sceneObjects);
+
+            const finalSizeScene: number = scene.children.length;
+            const finalSizeSceneOnjects: number = sceneObjects.length;
+
+            expect(initialSizeScene + 6).to.equal(finalSizeScene);
+            expect(initialSizeSceneObjects + 6).to.equal(finalSizeSceneOnjects);
         });
     });
 
     describe("loadThematic()", () => {
-        it("Should add 6 walls to the boundingBoxes array, for a thematic scene", async () => {
+        it("Should add 6 walls to the scene and the sceneObjects array, for a thematic scene", async () => {
             const scene: THREE.Scene = new THREE.Scene;
-            const initialSize: number = scene.children.length;
-            await WallLoader.loadThematic(scene);
-            const finalSize: number = scene.children.length;
+            const sceneObjects: THREE.Object3D[] = new Array<THREE.Object3D>();
+            const initialSizeScene: number = scene.children.length;
+            const initialSizeSceneObjects: number = sceneObjects.length;
 
-            expect(initialSize + 6).to.equal(finalSize);
+            await WallLoader.loadThematic(scene, sceneObjects);
+
+            const finalSizeScene: number = scene.children.length;
+            const finalSizeSceneOnjects: number = sceneObjects.length;
+
+            expect(initialSizeScene + 6).to.equal(finalSizeScene);
+            expect(initialSizeSceneObjects + 6).to.equal(finalSizeSceneOnjects);
         });
     });
 });

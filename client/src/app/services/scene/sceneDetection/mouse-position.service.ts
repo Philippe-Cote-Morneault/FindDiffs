@@ -13,5 +13,6 @@ export class MousePositionService {
         // tslint:disable:no-magic-numbers
         mouse.x = (differenceX / clientWidth) * 2 - 1;
         mouse.y = -(differenceY / clientHeight) * 2 + 1;
+
     }
 }

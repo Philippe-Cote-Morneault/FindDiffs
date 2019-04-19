@@ -4,26 +4,39 @@ import { expect } from "chai";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
 import { INewScore, INewScoreDetails } from "../../../../../common/model/score";
+import { MatchmakingService } from "../game/matchmaking.service";
 import { Chat } from "./chat";
 
 describe("Chat", () => {
     let service: Chat;
     const time: number = 9;
+    let game: MatchmakingService;
     beforeEach(async() => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule],
         });
         service = TestBed.get(Chat);
+        game = TestBed.get(MatchmakingService);
     });
 
-    it("Should return the correct message in chat after InvalidClick Event", () => {
+    it("Should return the correct message in chat after InvalidClick Event in solo", () => {
         const p: HTMLElement = document.createElement("p");
         const container: HTMLElement = document.createElement("div");
         const msg: ICommonSocketMessage = {data: "", timestamp: new Date()};
-
+        game.setIsActive(false);
         service.setContainers(p, container);
         service.notify(Event.InvalidClick, msg);
         expect(p.innerText.slice(time)).to.equal("Error.");
+    });
+
+    it("Should return the correct message in chat after InvalidClick Event in 1v1", () => {
+        const p: HTMLElement = document.createElement("p");
+        const container: HTMLElement = document.createElement("div");
+        const msg: ICommonSocketMessage = {data: "", timestamp: new Date()};
+        game.setIsActive(true);
+        service.setContainers(p, container);
+        service.notify(Event.InvalidClick, msg);
+        expect(p.innerText.slice(time)).to.equal("Error by undefined.");
     });
 
     it("Should return the correct message in chat after BestTime Event", () => {
@@ -47,14 +60,24 @@ describe("Chat", () => {
         expect(p.innerText.slice(time)).to.equal("Bamboozleur is now 1 place in the bests time of the game Bamboozled in 1v1.");
     });
 
-    it("Should return the correct message in chat after DifferenceFound Event", () => {
+    it("Should return the correct message in chat after DifferenceFound Event in solo", () => {
         const p: HTMLElement = document.createElement("p");
         const container: HTMLElement = document.createElement("div");
         const msg: ICommonSocketMessage = {data: "", timestamp: new Date()};
-
+        game.setIsActive(false);
         service.setContainers(p, container);
         service.notify(Event.DifferenceFound, msg);
         expect(p.innerText.slice(time)).to.equal("Difference found.");
+    });
+
+    it("Should return the correct message in chat after DifferenceFound Event in 1v1", () => {
+        const p: HTMLElement = document.createElement("p");
+        const container: HTMLElement = document.createElement("div");
+        const msg: ICommonSocketMessage = {data: "", timestamp: new Date()};
+        game.setIsActive(true);
+        service.setContainers(p, container);
+        service.notify(Event.DifferenceFound, msg);
+        expect(p.innerText.slice(time)).to.equal("Difference found by undefined.");
     });
 
     it("Should return the correct message in chat after UserConnected Event", () => {
