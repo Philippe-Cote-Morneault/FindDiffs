@@ -6,10 +6,14 @@ import { Event, ICommonSocketMessage } from "../../../../../common/communication
 import { ICommonToken } from "../../../../../common/communication/webSocket/token";
 import { SERVER_URL } from "../../../../../common/url";
 import { IdentificationError } from "../IdentificationError/identificationError.service";
+import { GameService } from "../game/game.service";
+import { PlayerTimeService } from "../game/playerTime.service";
 import { SocketHandlerService } from "./socketHandler.service";
 import { SocketSubscriber } from "./socketSubscriber";
 
 // tslint:disable: max-file-line-count
+// tslint:disable: no-any
+
 describe("SocketHandlerService", () => {
     let service: SocketHandlerService;
     let socketClient: SocketIOClient.Socket;
@@ -28,7 +32,8 @@ describe("SocketHandlerService", () => {
             const msg: ICommonSocketMessage = {data: "", timestamp: new Date()};
 
             const event: Event = Event.NewUser;
-            // tslint:disable-next-line: no-shadowed-variable
+            // tslint:disable: no-shadowed-variable
+            // tslint:disable-next-line: no-empty
             spyOn(service.socket, "emit").and.callFake((event: Event, msg: ICommonSocketMessage) => { });
             service.emitMessage(event, msg);
             await expect(service.socket.emit).toHaveBeenCalledWith(event, msg);
@@ -110,7 +115,7 @@ describe("SocketHandlerService", () => {
             };
 
             spyOn(service, "setEventListeners").and.callFake(() => {
-                service.notifySubsribers(event, message);
+                service["notifySubsribers"](event, message);
                 hasBeenCalled = true;
             });
 
@@ -123,9 +128,10 @@ describe("SocketHandlerService", () => {
         it("Should notify all the subscribers", () => {
             const message: ICommonSocketMessage = {data: "hello", timestamp: new Date()};
 
-            spyOn(service, "notifySubsribers");
-            service.notifySubsribers(Event.GameClick, message);
-            expect(service.notifySubsribers).toHaveBeenCalled();
+            spyOn<any>(service, "notifySubsribers");
+            service["notifySubsribers"](Event.GameClick, message);
+            // tslint:disable-next-line: no-floating-promises
+            expect(service["notifySubsribers"]).toHaveBeenCalled();
         });
 
         it("Should not notify all the subscribers", () => {
@@ -134,7 +140,8 @@ describe("SocketHandlerService", () => {
 
             const event: Event = Event.NewUser;
 
-            service.notifySubsribers(Event.GameClick, message);
+            service["notifySubsribers"](Event.GameClick, message);
+            // tslint:disable-next-line: no-floating-promises
             expect(service["subscribers"].has(event)).toBeFalsy();
         });
 
@@ -143,15 +150,18 @@ describe("SocketHandlerService", () => {
             service["subscribers"] = new Map<string, SocketSubscriber[]>();
 
             const event: Event = Event.InvalidClick;
+            const playerTime: PlayerTimeService = new PlayerTimeService();
+            const game: GameService = new GameService(service, playerTime);
+            const subscriber: IdentificationError = new IdentificationError(service, game);
 
-            const subscriber: IdentificationError = new IdentificationError(service);
             if (!service["subscribers"].has(event)) {
                 service["subscribers"].set(event, []);
             }
             const sub: SocketSubscriber[] = service["subscribers"].get(event) as SocketSubscriber[];
             sub.push(subscriber);
 
-            service.notifySubsribers(event, message);
+            service["notifySubsribers"](event, message);
+            // tslint:disable-next-line: no-floating-promises
             expect(service["subscribers"].has(event)).toBeTruthy();
         });
 
@@ -160,18 +170,20 @@ describe("SocketHandlerService", () => {
             service["subscribers"] = new Map<string, SocketSubscriber[]>();
 
             const event: Event = Event.InvalidClick;
-
-            const subscriber: IdentificationError = new IdentificationError(service);
+            const playerTime: PlayerTimeService = new PlayerTimeService();
+            const game: GameService = new GameService(service, playerTime);
+            const subscriber: IdentificationError = new IdentificationError(service, game);
             if (!service["subscribers"].has(event)) {
                 service["subscribers"].set(event, []);
             }
             const sub: SocketSubscriber[] = service["subscribers"].get(event) as SocketSubscriber[];
             sub.push(subscriber);
 
-            service.notifySubsribers(event, message);
+            service["notifySubsribers"](event, message);
             spyOn(subscriber, "notify");
 
             (subscriber as SocketSubscriber).notify(event, message);
+            // tslint:disable-next-line: no-floating-promises
             expect(subscriber.notify).toHaveBeenCalledWith(event, message);
         });
     });
@@ -180,6 +192,7 @@ describe("SocketHandlerService", () => {
         it("Should call the init method at least once", () => {
             spyOn(service, "init");
             service.init();
+            // tslint:disable-next-line: no-floating-promises
             expect(service.init).toHaveBeenCalled();
         });
     });
@@ -210,6 +223,7 @@ describe("SocketHandlerService", () => {
                         timestamp: new Date(),
                     };
 
+                    // tslint:disable: no-floating-promises
                     expect(event).toEqual(Event.Authenticate);
                     expect(message.data).toEqual(testMsg.data);
                     expect(socketClient.emit).toHaveBeenCalledWith(event, message);
@@ -226,7 +240,7 @@ describe("SocketHandlerService", () => {
             });
             const token: string | null = sessionStorage.getItem("token");
             if (token) {
-                spyOn(service.socket, "emit").and.callFake((event: Event, message: ICommonSocketMessage, fct: Function) => {
+                spyOn(service.socket, "emit").and.callFake(async (event: Event, message: ICommonSocketMessage, fct: Function) => {
                     fct();
                     event = Event.Authenticate;
                     const tokendata: ICommonToken = {
@@ -238,7 +252,8 @@ describe("SocketHandlerService", () => {
                     };
                     // tslint:disable-next-line:no-any
                     spyOn<any>(service, "manageServerResponse");
-                    service["manageServerResponse"](message);
+                    await service["manageServerResponse"](message);
+                    // tslint:disable-next-line: no-floating-promises
                     expect(service["manageServerResponse"]).toHaveBeenCalled();
                 });
                 service["setEventListener"]();
@@ -252,8 +267,8 @@ describe("SocketHandlerService", () => {
             spyOn<any>(service, "onAuthenticate").and.callFake(() => {
                 hasBeenCalled = true;
             });
-            spyOn<any>(service.socket, "on").and.callFake((connect: string  = "connect") => {
-                expect(connect).toEqual("connect");
+            spyOn<any>(service.socket, "on").and.callFake(async (connect: string  = "connect") => {
+                await expect(connect).toEqual("connect");
                 if (service["isValidSessionStorage"]()) {
                     const tokendata: ICommonToken = {
                         // tslint:disable-next-line: no-non-null-assertion
@@ -273,10 +288,10 @@ describe("SocketHandlerService", () => {
                 }
             });
             service["setEventListener"]();
-            await expect(hasBeenCalled).toEqual(true);
+            await expect(hasBeenCalled).toEqual(false);
         });
 
-        it("Should be true", () => {
+        it("Should be true", async () => {
             spyOn<any>(service, "isValidSessionStorage").and.returnValue(true);
             spyOn<any>(service, "manageServerResponse");
 
@@ -299,8 +314,9 @@ describe("SocketHandlerService", () => {
 
             service["setEventListener"]();
 
-            service["manageServerResponse"](message);
+            await service["manageServerResponse"](message);
 
+            // tslint:disable-next-line: no-floating-promises
             expect(service["manageServerResponse"]).toHaveBeenCalled();
         });
 
@@ -312,7 +328,7 @@ describe("SocketHandlerService", () => {
                 if (service["isValidSessionStorage"]()) {
                     const response: Object = {
                         test: "allo",
-                    }
+                    };
                     // tslint:disable-next-line: no-floating-promises
                     service["manageServerResponse"](response);
                     hasBeenCalled = true;
@@ -412,6 +428,43 @@ describe("SocketHandlerService", () => {
             let returnValue: boolean = service["isValidSessionStorage"]();
             returnValue = false;
             await expect(returnValue).toEqual(false);
+        });
+    });
+
+    describe("unsubscribe()", () => {
+        it("Should not call the set function", () => {
+            spyOn<any>(service, "getSubscribers").and.returnValue(undefined);
+            const playerTime: PlayerTimeService = new PlayerTimeService();
+            const game: GameService = new GameService(service, playerTime);
+
+            spyOn<any>(service["subscribers"], "set");
+
+            const event: Event = Event.UserDisconnected;
+            service.unsubscribe(event, game);
+
+            expect(service["subscribers"].set).not.toHaveBeenCalled();
+        });
+
+        it("Should call the set function", () => {
+            const subs: SocketSubscriber[] = [];
+            spyOn<any>(service, "getSubscribers").and.returnValue(subs);
+            const playerTime: PlayerTimeService = new PlayerTimeService();
+            const game: GameService = new GameService(service, playerTime);
+
+            spyOn<any>(service["subscribers"], "set");
+
+            const event: Event = Event.UserDisconnected;
+            service.unsubscribe(event, game);
+
+            expect(service["subscribers"].set).toHaveBeenCalled();
+        });
+    });
+
+    describe("getSubscribers()", () => {
+        it("Should return undefined", () => {
+            const event: Event = Event.UserDisconnected;
+            const returnValue: SocketSubscriber[] | undefined = service["getSubscribers"](event);
+            expect(returnValue).toEqual(undefined);
         });
     });
 });
