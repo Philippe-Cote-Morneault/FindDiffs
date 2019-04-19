@@ -16,31 +16,34 @@ describe("ObjectRestorationService", () => {
   });
 
   // tslint:disable: no-any
+  // tslint:disable: no-floating-promises
+  // tslint:disable: number-literal-format
+  // tslint:disable: no-non-null-assertion
 
   describe("isANewDifference()", () => {
-    it("should return true", async () => {
+    it("should return true", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
       const differencesId: string[] = ["1", "2", "3", "4", "5"];
 
       service.differenceFound = differencesId;
       const returnValue: boolean = service["isANewDifference"]("7");
 
-      await expect(returnValue).toEqual(true);
+      expect(returnValue).toEqual(true);
     });
 
-    it("should return false", async () => {
+    it("should return false", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
       const differencesId: string[] = ["1", "2", "3", "4", "5"];
 
       service.differenceFound = differencesId;
       const returnValue: boolean = service["isANewDifference"]("4");
 
-      await expect(returnValue).toEqual(false);
+      expect(returnValue).toEqual(false);
     });
   });
 
   describe("addDifference()", () => {
-    it("Should add the difference", async () => {
+    it("Should add the difference", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
       const differenceFound: string[] = ["1"];
       const differenceId: string = "4";
@@ -48,7 +51,7 @@ describe("ObjectRestorationService", () => {
       service.differenceFound = differenceFound;
       service["addDifference"](differenceId);
 
-      await expect(service.differenceFound.length).toBeGreaterThan(1);
+      expect(service.differenceFound.length).toBeGreaterThan(1);
     });
   });
 
@@ -72,7 +75,7 @@ describe("ObjectRestorationService", () => {
       spyOn<any>(service["socket"], "emitMessage");
 
       await service.changeTextureObject("12312312", commonScenes);
-      await expect(service["socket"].emitMessage).toHaveBeenCalled();
+      expect(service["socket"].emitMessage).toHaveBeenCalled();
     });
 
     it("Should change the texture of the object", async () => {
@@ -94,12 +97,12 @@ describe("ObjectRestorationService", () => {
       spyOn<any>(service, "addDifference");
 
       await service.changeTextureObject("12312312", commonScenes);
-      await expect(service.addDifference).toHaveBeenCalled();
+      expect(service.addDifference).toHaveBeenCalled();
     });
   });
 
   describe("findOriginalObject()", () => {
-    it("Should find the original object from the scene", async () => {
+    it("Should find the original object from the scene", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -115,14 +118,13 @@ describe("ObjectRestorationService", () => {
         modified: scene,
       };
 
-      // tslint:disable: no-non-null-assertion
       service["originalSceneLoader"].scene = commonScenes.original!;
       const returnValue: THREE.Object3D = service["findOriginalObject"](commonScenes.modified!, cube.uuid);
 
-      await expect(returnValue.uuid).toEqual(cube.uuid);
+      expect(returnValue.uuid).toEqual(cube.uuid);
     });
 
-    it("Should find the original object from the scene", async () => {
+    it("Should find the original object from the scene", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -134,20 +136,19 @@ describe("ObjectRestorationService", () => {
       cube.userData.id = cube.uuid;
 
       const commonScenes: IThreeScene = {
-        original: scene, 
+        original: scene,
         modified: scene,
       };
 
-      // tslint:disable: no-non-null-assertion
       service["originalSceneLoader"].scene = commonScenes.original!;
       const returnValue: THREE.Object3D = service["findOriginalObject"](commonScenes.modified!, "6546546");
 
-      await expect(returnValue.uuid).not.toEqual(cube.uuid);
+      expect(returnValue.uuid).not.toEqual(cube.uuid);
     });
   });
 
   describe("getOriginalSceneObject()", () => {
-    it("Should return the original 3D object", async () => {
+    it("Should return the original 3D object", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -163,10 +164,10 @@ describe("ObjectRestorationService", () => {
       };
 
       const obj3D: THREE.Object3D | undefined = service["getOriginalSceneObject"]("12312312", commonScenes);
-      await expect(obj3D).not.toBeUndefined();
+      expect(obj3D).not.toBeUndefined();
     });
 
-    it("Should return undefined", async () => {
+    it("Should return undefined", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -182,11 +183,11 @@ describe("ObjectRestorationService", () => {
       };
 
       const obj3D: THREE.Object3D | undefined = service["getOriginalSceneObject"]("12312312", commonScenes);
-      await expect(obj3D).toBeUndefined();
+      expect(obj3D).toBeUndefined();
     });
 
     // tslint:disable-next-line: max-func-body-length
-    it("Should find the object in the scene", async () => {
+    it("Should find the object in the scene", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -216,12 +217,12 @@ describe("ObjectRestorationService", () => {
       });
 
       const obj3D: THREE.Object3D | undefined = service["getOriginalSceneObject"]("12312312", commonScenes);
-      await expect(objWasFound).toEqual(false);
-      await expect(obj3D).not.toBeUndefined();
+      expect(objWasFound).toEqual(false);
+      expect(obj3D).not.toBeUndefined();
     });
 
     // tslint:disable-next-line: max-func-body-length
-    it("Should find the object in the scene", async () => {
+    it("Should find the object in the scene", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -252,13 +253,13 @@ describe("ObjectRestorationService", () => {
       });
 
       const obj3D: THREE.Object3D | undefined = service["getOriginalSceneObject"](uuid, commonScenes);
-      await expect(objWasFound).toEqual(true);
-      await expect(obj3D).not.toBeUndefined();
+      expect(objWasFound).toEqual(true);
+      expect(obj3D).not.toBeUndefined();
     });
   });
 
   describe("applyColorChange()", () => {
-    it("Should change the color of the object", async () => {
+    it("Should change the color of the object", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -278,10 +279,10 @@ describe("ObjectRestorationService", () => {
       service["applyColorChange"](commonScenes.modified!, originalSceneObject, cube.uuid);
 
       // tslint:disable-next-line: max-line-length
-      await expect((commonScenes.modified!.children[0] as any ).material.color).toEqual((commonScenes.original!.children[0] as any).material.color);
+      expect((commonScenes.modified!.children[0] as any ).material.color).toEqual((commonScenes.original!.children[0] as any).material.color);
     });
 
-    it("Should change the color of the object", async () => {
+    it("Should change the color of the object", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -301,12 +302,12 @@ describe("ObjectRestorationService", () => {
       service["applyColorChange"](commonScenes.modified!, originalSceneObject, "5654654");
 
       // tslint:disable-next-line: max-line-length
-      await expect((commonScenes.modified!.children[0] as any ).material.color).toEqual((commonScenes.original!.children[0] as any).material.color);
+      expect((commonScenes.modified!.children[0] as any ).material.color).toEqual((commonScenes.original!.children[0] as any).material.color);
     });
   });
 
   describe("changeColorObject()", () => {
-    it("Should add a difference", async () => {
+    it("Should add a difference", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       spyOn<any>(service, "isANewDifference").and.returnValue(true);
@@ -326,10 +327,10 @@ describe("ObjectRestorationService", () => {
 
       service.changeColorObject("123465789", commonScenes);
 
-      await expect(service.addDifference).toHaveBeenCalled();
+      expect(service.addDifference).toHaveBeenCalled();
     });
 
-    it("Should not add a difference", async () => {
+    it("Should not add a difference", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       spyOn<any>(service, "isANewDifference").and.returnValue(false);
@@ -349,12 +350,12 @@ describe("ObjectRestorationService", () => {
 
       service.changeColorObject("123465789", commonScenes);
 
-      await expect(service.addDifference).not.toHaveBeenCalled();
+      expect(service.addDifference).not.toHaveBeenCalled();
     });
   });
 
   describe("applyRemoval", () => {
-    it("Should not remove the 3D object", async () => {
+    it("Should not remove the 3D object", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -374,10 +375,10 @@ describe("ObjectRestorationService", () => {
       const numberObjects: number = service["modifiedSceneLoader"].scene.children.length;
       service["applyRemoval"](commonScenes.modified!, "132134654");
 
-      await expect(service["modifiedSceneLoader"].scene.children.length).toEqual(numberObjects);
+      expect(service["modifiedSceneLoader"].scene.children.length).toEqual(numberObjects);
     });
 
-    it("Should remove the 3D object", async () => {
+    it("Should remove the 3D object", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -398,12 +399,12 @@ describe("ObjectRestorationService", () => {
       const numberObjects: number = service["modifiedSceneLoader"].scene.children.length;
       service["applyRemoval"](commonScenes.modified!, cube.userData.id);
 
-      await expect(service["modifiedSceneLoader"].scene.children.length).not.toEqual(numberObjects);
+      expect(service["modifiedSceneLoader"].scene.children.length).not.toEqual(numberObjects);
     });
   });
 
   describe("removeObject()", () => {
-    it("Should add a difference", async () => {
+    it("Should add a difference", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       spyOn<any>(service, "isANewDifference").and.returnValue(true);
@@ -423,10 +424,10 @@ describe("ObjectRestorationService", () => {
 
       service.removeObject("123465789", commonScenes);
 
-      await expect(service.addDifference).toHaveBeenCalled();
+      expect(service.addDifference).toHaveBeenCalled();
     });
 
-    it("Should not add a difference", async () => {
+    it("Should not add a difference", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       spyOn<any>(service, "isANewDifference").and.returnValue(false);
@@ -446,12 +447,12 @@ describe("ObjectRestorationService", () => {
 
       service.removeObject("123465789", commonScenes);
 
-      await expect(service.addDifference).not.toHaveBeenCalled();
+      expect(service.addDifference).not.toHaveBeenCalled();
     });
   });
 
   describe("applyAdd()", () => {
-    it("Should add the object in the scene", async () => {
+    it("Should add the object in the scene", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -470,10 +471,10 @@ describe("ObjectRestorationService", () => {
       service["modifiedSceneLoader"].scene = commonScenes.modified!;
       const numberObjects: number = service["modifiedSceneLoader"].scene.children.length;
       service["applyAdd"](commonScenes.original!, commonScenes.modified!, cube.uuid);
-      await expect(service["modifiedSceneLoader"].scene.children.length).toBeGreaterThan(numberObjects);
+      expect(service["modifiedSceneLoader"].scene.children.length).toBeGreaterThan(numberObjects);
     });
 
-    it("Should not add the object in the scene", async () => {
+    it("Should not add the object in the scene", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const scene: THREE.Scene = new THREE.Scene();
@@ -492,12 +493,12 @@ describe("ObjectRestorationService", () => {
       service["modifiedSceneLoader"].scene = commonScenes.modified!;
       const numberObjects: number = service["modifiedSceneLoader"].scene.children.length;
       service["applyAdd"](commonScenes.original!, commonScenes.modified!, "985456");
-      await expect(service["modifiedSceneLoader"].scene.children.length).not.toBeGreaterThan(numberObjects);
+      expect(service["modifiedSceneLoader"].scene.children.length).not.toBeGreaterThan(numberObjects);
     });
   });
 
   describe("addObject()", () => {
-    it("Should add the difference in the array", async () => {
+    it("Should add the difference in the array", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       spyOn<any>(service, "isANewDifference").and.returnValue(true);
@@ -516,10 +517,10 @@ describe("ObjectRestorationService", () => {
 
       spyOn<any>(service, "addDifference");
       service["addObject"](cube.uuid, commonScenes, true);
-      await expect(service["addDifference"]).toHaveBeenCalled();
+      expect(service["addDifference"]).toHaveBeenCalled();
     });
 
-    it("Should not add the difference in the array", async () => {
+    it("Should not add the difference in the array", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       spyOn<any>(service, "isANewDifference").and.returnValue(false);
@@ -538,10 +539,10 @@ describe("ObjectRestorationService", () => {
 
       spyOn<any>(service, "addDifference");
       service["addObject"](cube.uuid, commonScenes, false);
-      await expect(service["addDifference"]).not.toHaveBeenCalled();
+      expect(service["addDifference"]).not.toHaveBeenCalled();
     });
 
-    it("Should not add the difference in the array", async () => {
+    it("Should not add the difference in the array", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       spyOn<any>(service, "isANewDifference").and.returnValue(true);
@@ -560,7 +561,7 @@ describe("ObjectRestorationService", () => {
 
       spyOn<any>(service, "addDifference");
       service["addObject"](cube.uuid, commonScenes, true);
-      await expect(service["addDifference"]).not.toHaveBeenCalled();
+      expect(service["addDifference"]).not.toHaveBeenCalled();
     });
   });
 
@@ -584,7 +585,7 @@ describe("ObjectRestorationService", () => {
       };
 
       await service.restoreObject(response);
-      await expect(service.addObject).toHaveBeenCalled();
+      expect(service.addObject).toHaveBeenCalled();
     });
 
     it("Should call changeColorObject()", async () => {
@@ -606,7 +607,7 @@ describe("ObjectRestorationService", () => {
       };
 
       await service.restoreObject(response);
-      await expect(service.changeColorObject).toHaveBeenCalled();
+      expect(service.changeColorObject).toHaveBeenCalled();
     });
 
     it("Should call changeTextureObject()", async () => {
@@ -628,7 +629,7 @@ describe("ObjectRestorationService", () => {
       };
 
       await service.restoreObject(response);
-      await expect(service.changeTextureObject).toHaveBeenCalled();
+      expect(service.changeTextureObject).toHaveBeenCalled();
     });
 
     it("Should call removeObject()", async () => {
@@ -650,7 +651,7 @@ describe("ObjectRestorationService", () => {
       };
 
       await service.restoreObject(response);
-      await expect(service.removeObject).toHaveBeenCalled();
+      expect(service.removeObject).toHaveBeenCalled();
     });
 
     it("Should not call any of all modifications functions", async () => {
@@ -675,10 +676,10 @@ describe("ObjectRestorationService", () => {
       };
 
       await service.restoreObject(response);
-      await expect(service.addObject).not.toHaveBeenCalled();
-      await expect(service.changeColorObject).not.toHaveBeenCalled();
-      await expect(service.changeTextureObject).not.toHaveBeenCalled();
-      await expect(service.removeObject).not.toHaveBeenCalled();
+      expect(service.addObject).not.toHaveBeenCalled();
+      expect(service.changeColorObject).not.toHaveBeenCalled();
+      expect(service.changeTextureObject).not.toHaveBeenCalled();
+      expect(service.removeObject).not.toHaveBeenCalled();
 
     });
   });
@@ -693,43 +694,43 @@ describe("ObjectRestorationService", () => {
         timestamp: new Date(),
       };
       await service.notify(Event.GameClick, message);
-      await expect(service.restoreObject).toHaveBeenCalled();
+      expect(service.restoreObject).toHaveBeenCalled();
     });
   });
 
   describe("ngOnDestroy", () => {
-    it("Should call unsubscribe function", async () => {
+    it("Should call unsubscribe function", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       spyOn<any>(service["socketService"], "unsubscribe");
       service.ngOnDestroy();
-      await expect(service["socketService"].unsubscribe).toHaveBeenCalled();
+      expect(service["socketService"].unsubscribe).toHaveBeenCalled();
     });
   });
 
   describe("set", () => {
-    it("Should set original and modified scene loaders", async () => {
+    it("Should set original and modified scene loaders", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const originalSceneLoader: SceneLoaderService = new SceneLoaderService();
       const modifiedSceneLoader: SceneLoaderService = new SceneLoaderService();
 
       service.set(originalSceneLoader, modifiedSceneLoader);
-      await expect(service["originalSceneLoader"]).toEqual(originalSceneLoader);
-      await expect(service["modifiedSceneLoader"]).toEqual(modifiedSceneLoader);
+      expect(service["originalSceneLoader"]).toEqual(originalSceneLoader);
+      expect(service["modifiedSceneLoader"]).toEqual(modifiedSceneLoader);
     });
   });
 
   describe("setContainers", () => {
-    it("Should set original and modified scene loaders", async () => {
+    it("Should set original and modified scene loaders", () => {
       const service: ObjectRestorationService = TestBed.get(ObjectRestorationService);
 
       const originalScene: ElementRef<HTMLElement> = new ElementRef<HTMLElement>(document.createElement("HTMLElement"));
       const modifiedScene: ElementRef<HTMLElement> = new ElementRef<HTMLElement>(document.createElement("HTMLElement"));
 
       service.setContainers(originalScene, modifiedScene);
-      await expect(service.originalScene).toEqual(originalScene);
-      await expect(service.modifiedScene).toEqual(modifiedScene);
+      expect(service.originalScene).toEqual(originalScene);
+      expect(service.modifiedScene).toEqual(modifiedScene);
     });
   });
 // tslint:disable-next-line: max-file-line-count
