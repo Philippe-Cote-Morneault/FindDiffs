@@ -36,7 +36,7 @@ describe("SocketHandlerService", () => {
             // tslint:disable-next-line: no-empty
             spyOn(service.socket, "emit").and.callFake((event: Event, msg: ICommonSocketMessage) => { });
             service.emitMessage(event, msg);
-            await expect(service.socket.emit).toHaveBeenCalledWith(event, msg);
+            expect(service.socket.emit).toHaveBeenCalledWith(event, msg);
         });
     });
 
@@ -49,7 +49,7 @@ describe("SocketHandlerService", () => {
 
             spyOn(service.socket, "on").and.callFake(async (event: Event) => {
                 // fct(msg);
-                await expect(event).toEqual(eventAuthenticate);
+                expect(event).toEqual(eventAuthenticate);
             });
             service.onAuthenticate();
         });
@@ -85,7 +85,7 @@ describe("SocketHandlerService", () => {
             service.manageAuthenticateEvent(message);
             // tslint:disable-next-line: no-non-null-assertion
             const returnValue2: string = sessionStorage.getItem("token")!;
-            await expect(returnValue2).toEqual("");
+            expect(returnValue2).toEqual("");
         });
 
         it("Should set the session storage", async () => {
@@ -101,7 +101,7 @@ describe("SocketHandlerService", () => {
             // tslint:disable-next-line:no-non-null-assertion
             const returnValue2: string = sessionStorage.getItem("token")!;
             // tslint:disable-next-line: no-non-null-assertion
-            await expect(returnValue2).toEqual(returnValueSessionStorage!);
+            expect(returnValue2).toEqual(returnValueSessionStorage!);
         });
     });
 
@@ -120,7 +120,7 @@ describe("SocketHandlerService", () => {
             });
 
             service.setEventListeners(service.socket);
-            await expect(hasBeenCalled).toEqual(true);
+            expect(hasBeenCalled).toEqual(true);
         });
     });
 
@@ -268,7 +268,7 @@ describe("SocketHandlerService", () => {
                 hasBeenCalled = true;
             });
             spyOn<any>(service.socket, "on").and.callFake(async (connect: string  = "connect") => {
-                await expect(connect).toEqual("connect");
+                expect(connect).toEqual("connect");
                 if (service["isValidSessionStorage"]()) {
                     const tokendata: ICommonToken = {
                         // tslint:disable-next-line: no-non-null-assertion
@@ -288,7 +288,7 @@ describe("SocketHandlerService", () => {
                 }
             });
             service["setEventListener"]();
-            await expect(hasBeenCalled).toEqual(false);
+            expect(hasBeenCalled).toEqual(false);
         });
 
         it("Should be true", async () => {
@@ -351,7 +351,7 @@ describe("SocketHandlerService", () => {
             });
 
             service["setEventListener"]();
-            await expect(hasBeenCalled).toEqual(true);
+            expect(hasBeenCalled).toEqual(true);
         });
     });
 
@@ -365,7 +365,7 @@ describe("SocketHandlerService", () => {
             spyOn<any>(service, "hasErrorMessage").and.returnValue(true);
 
             await service["manageServerResponse"](errorResponse);
-            await expect(service.setEventListeners).not.toHaveBeenCalled();
+            expect(service.setEventListeners).not.toHaveBeenCalled();
         });
 
         it("Should call onAuthenticate method", async () => {
@@ -377,7 +377,7 @@ describe("SocketHandlerService", () => {
             spyOn<any>(service, "hasErrorMessage").and.returnValue(false);
 
             await service["manageServerResponse"](errorResponse);
-            await expect(service.onAuthenticate).toHaveBeenCalled();
+            expect(service.onAuthenticate).toHaveBeenCalled();
         });
     });
 
@@ -388,7 +388,7 @@ describe("SocketHandlerService", () => {
             };
             // tslint:disable-next-line: no-shadowed-variable
             const returnValue: boolean = service["hasErrorMessage"](errorResponse);
-            await expect(returnValue).toEqual(true);
+            expect(returnValue).toEqual(true);
         });
 
         it("Should return false", async () => {
@@ -397,7 +397,7 @@ describe("SocketHandlerService", () => {
             };
             // tslint:disable-next-line: no-shadowed-variable
             const returnValue: boolean = service["hasErrorMessage"](errorResponse);
-            await expect(returnValue).toEqual(false);
+            expect(returnValue).toEqual(false);
         });
     });
 
@@ -413,7 +413,7 @@ describe("SocketHandlerService", () => {
             // tslint:disable-next-line: no-shadowed-variable
             let returnValue: boolean = service["isValidSessionStorage"]();
             returnValue = true;
-            await expect(returnValue).toEqual(true);
+            expect(returnValue).toEqual(true);
         });
 
         it("Should return false", async () => {
@@ -427,7 +427,7 @@ describe("SocketHandlerService", () => {
             });
             let returnValue: boolean = service["isValidSessionStorage"]();
             returnValue = false;
-            await expect(returnValue).toEqual(false);
+            expect(returnValue).toEqual(false);
         });
     });
 

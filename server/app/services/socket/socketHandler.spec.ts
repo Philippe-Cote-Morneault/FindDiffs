@@ -15,14 +15,15 @@ describe("SocketHandler", () => {
     let socket1: socketIo.Socket;
     let server: http.Server;
 
-    
-    before((done: MochaDone) => {
-        const express = require("express");
+    before((done: Mocha.Done) => {
+        // tslint:disable:no-any
+        const express: any = require("express");
         server = http.createServer(express);
+        // tslint:disable:no-magic-numbers
         server.listen(3030);
         socketHandler = SocketHandler.getInstance();
         socketHandler["io"] = socketIo(server);
-        socketHandler["io"].on("connect", (socket : socketIo.Socket) => {
+        socketHandler["io"].on("connect", (socket: socketIo.Socket) => {
             socket1 = socket;
             done();
         });
@@ -50,6 +51,7 @@ describe("SocketHandler", () => {
 
     describe("setServer()", () => {
         it("Should return the same instance of SocketHandler after setting a server", () => {
+            // tslint:disable-next-line:no-shadowed-variable
             const server: http.Server = http.createServer();
             expect(SocketHandler.getInstance().setServer(server)).to.equal(socketHandler);
         });
@@ -120,7 +122,8 @@ describe("SocketHandler", () => {
 
     describe("authenticateUser()", () => {
         it("Should call AuthentificationService::authenticateUser() once", () => {
-            const spy = sinon.spy(socketHandler["authentificationService"], "authenticateUser");
+            const spy: sinon.SinonSpy<[socketIo.Socket, (newUsername: string) => void], void> =
+            sinon.spy(socketHandler["authentificationService"], "authenticateUser");
             socketHandler["authenticateUser"](socket1);
             // tslint:disable-next-line:no-unused-expression
             expect(spy.calledOnce).to.be.true;

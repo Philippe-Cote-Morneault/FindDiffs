@@ -32,7 +32,7 @@ describe("SocketHandler", () => {
     let clientSocket: SocketIOClient.Socket;
     let server: http.Server;
 
-    before((done: MochaDone) => {
+    before((done: Mocha.Done) => {
         // tslint:disable:typedef
         const express = require("express");
         server = http.createServer(express);
