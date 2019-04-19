@@ -16,9 +16,11 @@ describe("AuthentificationService", () => {
     let socket1: socketIo.Socket;
     let server: http.Server;
 
-    before((done: MochaDone) => {
-        const express = require("express");
+    before((done: Mocha.Done) => {
+        // tslint:disable-next-line:no-any
+        const express: any = require("express");
         server = http.createServer(express);
+        // tslint:disable-next-line:no-magic-numbers
         server.listen(3030);
         socketHandler = SocketHandler.getInstance();
         socketHandler["io"] = socketIo(server);
@@ -73,6 +75,7 @@ describe("AuthentificationService", () => {
         });
     });
     describe("authenticateUser", () => {
+        // tslint:disable-next-line:no-empty
         const successCallback: (newUsername: string) => void = (newUsername: string) => {};
 
         it("Should set an event listener on the Authenticate event", () => {
@@ -102,7 +105,9 @@ describe("AuthentificationService", () => {
             authentificationService["authentifiedUsers"].clear();
             authentificationService["authentifiedUsers"].set("1234", "player1");
             authentificationService["activeCleanupTimers"].clear();
-            authentificationService["activeCleanupTimers"].set("1234", setTimeout(() => {}, 1000000));
+            const maxTimeout: number = 100000;
+            // tslint:disable-next-line:no-empty
+            authentificationService["activeCleanupTimers"].set("1234", setTimeout(() => {}, maxTimeout));
 
             const addUsernameStub: sinon.SinonStub = sinon.stub(authentificationService["usernameManager"], "addUsername");
             const message: ICommonSocketMessage = {
@@ -124,6 +129,7 @@ describe("AuthentificationService", () => {
             const validateUsernameStub: sinon.SinonStub = sinon.stub(authentificationService["usernameManager"], "validateUsername");
             validateUsernameStub.returns(false);
 
+            // tslint:disable-next-line:no-empty
             const result: Object = authentificationService["newUser"]("player1", socket1, (newUsername: string) => {});
 
             expect(result["error_message"]).to.equal("failed to create");
@@ -136,7 +142,9 @@ describe("AuthentificationService", () => {
             const getUsernameStub: sinon.SinonStub = sinon.stub(authentificationService["usernameManager"], "getUsername");
             getUsernameStub.returns("oldUsername");
             const addUsernameStub: sinon.SinonStub = sinon.stub(authentificationService["usernameManager"], "addUsername");
+            // tslint:disable-next-line:no-any
             const sendValidationSpy: sinon.SinonSpy = sinon.spy(authentificationService, "sendValidationToken" as any);
+            // tslint:disable-next-line:no-empty
             const result: Object = authentificationService["newUser"]("player1", socket1, (newUsername: string) => {});
 
             expect(result["token"]).to.equal(sendValidationSpy.firstCall.returnValue);

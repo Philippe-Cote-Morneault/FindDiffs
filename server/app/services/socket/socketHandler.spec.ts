@@ -142,6 +142,7 @@ describe("SocketHandler", () => {
             socketHandler["authenticateUser"](socket1);
             socketHandler["authentificationService"]["authentifiedUsers"].clear();
             socketHandler["authentificationService"]["authentifiedUsers"].set("myToken", "player1");
+            // tslint:disable-next-line:no-empty
             socket1.listeners(Event.Authenticate)[0](message, (data: Object) => {});
             expect(ioEmitStub.firstCall.args[0]).to.equal(Event.UserConnected);
             ioEmitStub.restore();
