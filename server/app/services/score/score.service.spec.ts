@@ -225,6 +225,19 @@ describe("ScoreService", () => {
             const result: INewScore = scoreService.verifyScore(mockRequest, gameCard);
             expect(result.is_top_score).to.equal(true);
         });
+        it("Should return is_top_score: false when the score is not a top score", () => {
+            const req: Object = {
+                body: {
+                    time: 250000,
+                    type: GameType.Online,
+                    username: "player1",
+                },
+            };
+            // tslint:disable-next-line:no-any
+            const mockRequest: any = mockReq(req);
+            const result: INewScore = scoreService.verifyScore(mockRequest, gameCard);
+            expect(result.is_top_score).to.equal(false);
+        });
         it("Should return the right player username when he gets a new top score", async () => {
             const req: Object = {
                 body: {
