@@ -189,6 +189,7 @@ describe("ScoreService", () => {
             verifyScoreStub.returns(score1);
             try {
             await scoreService.update(mockRequest);
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);
             }
