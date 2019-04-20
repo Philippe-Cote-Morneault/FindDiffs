@@ -51,18 +51,48 @@ describe("ScoreService", () => {
                 expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);
             }
         });
+
+        it("Should return success if the score update worked best time solo", async () => {
+            const req: Object = {
+                body: {
+                    best_time_solo: true,
+                },
+            };
+            // tslint:disable-next-line:no-any
+            const mockRequest: any = mockReq(req);
             mockRequest.params.id = "someRandomId";
-            sinon.stub(GameCard, "findById");
-            (GameCard.findById as sinon.SinonStub).resolves({
+            (GameCard.prototype.save as sinon.SinonStub).resolves();
+            (GameCard.findById as sinon.SinonStub).resolves(new GameCard({
                 pov: POVType.Free,
                 title: "hello",
                 resource_id: "1234abcd",
                 best_time_solo: [],
                 best_time_online: [],
                 creation_date: new Date(),
-            });
+            }));
+
+            const result: string = await scoreService.post(mockRequest);
+            expect(JSON.parse(result).title).to.equal(R.SUCCESS);
+        });
+
+        it("Should return success if the score update worked best time online", async () => {
+            const req: Object = {
+                body: {
+                    best_time_online: true,
+                },
+            };
             // tslint:disable-next-line:no-any
-            const generateScoreStub: sinon.SinonStub = sinon.stub(scoreService, "generateScore" as any);
+            const mockRequest: any = mockReq(req);
+            mockRequest.params.id = "someRandomId";
+            (GameCard.prototype.save as sinon.SinonStub).resolves();
+            (GameCard.findById as sinon.SinonStub).resolves(new GameCard({
+                pov: POVType.Free,
+                title: "hello",
+                resource_id: "1234abcd",
+                best_time_solo: [],
+                best_time_online: [],
+                creation_date: new Date(),
+            }));
 
             const result: string = await scoreService.post(mockRequest);
             expect(JSON.parse(result).title).to.equal(R.SUCCESS);
@@ -188,7 +218,7 @@ describe("ScoreService", () => {
             findByIdStub.resolves();
             verifyScoreStub.returns(score1);
             try {
-            await scoreService.update(mockRequest);
+                await scoreService.update(mockRequest);
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);
@@ -331,7 +361,7 @@ describe("ScoreService", () => {
             saveStub.resolves();
             findByIdStub.resolves(gameCardInterface);
             try {
-            await scoreService.update(mockRequest);
+                await scoreService.update(mockRequest);
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_MISSING_FIELD, [R.USERNAME_]));
@@ -350,7 +380,7 @@ describe("ScoreService", () => {
             saveStub.resolves();
             findByIdStub.resolves(gameCardInterface);
             try {
-            await scoreService.update(mockRequest);
+                await scoreService.update(mockRequest);
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_MISSING_FIELD, [R.TIME_]));
@@ -370,7 +400,7 @@ describe("ScoreService", () => {
             saveStub.resolves();
             findByIdStub.resolves(gameCardInterface);
             try {
-            await scoreService.update(mockRequest);
+                await scoreService.update(mockRequest);
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_N_A_N, [R.TIME_]));
@@ -390,7 +420,7 @@ describe("ScoreService", () => {
             saveStub.resolves();
             findByIdStub.resolves(gameCardInterface);
             try {
-            await scoreService.update(mockRequest);
+                await scoreService.update(mockRequest);
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_LESS_ZERO, [R.TIME_]));
@@ -411,7 +441,7 @@ describe("ScoreService", () => {
             saveStub.resolves();
             findByIdStub.resolves(gameCardInterface);
             try {
-            await scoreService.update(mockRequest);
+                await scoreService.update(mockRequest);
                 throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_WRONG_TYPE, [R.GAME_TYPE_]));
