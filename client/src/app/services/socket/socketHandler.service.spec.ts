@@ -43,32 +43,12 @@ describe("SocketHandlerService", () => {
 
     describe("onAutenticate()", () => {
         it("Should authenticate the user", () => {
-            // const message: ICommonSocketMessage = {data: "", timestamp: new Date()};
-            // const msg: ICommonSocketMessage = message;
-
             const eventAuthenticate: Event = Event.Authenticate;
 
             spyOn(service.socket, "on").and.callFake((event: Event) => {
-                // fct(msg);
                 expect(event).toEqual(eventAuthenticate);
             });
             service.onAuthenticate();
-        });
-
-        it("Should authenticate the user", async () => {
-            // const message: ICommonSocketMessage = {
-            //     data: "asdsdfasdf",
-            //     timestamp: new Date(),
-            // };
-
-            // let hasBeenCalled: boolean = false;
-            // spyOn(service, "onAuthenticate").and.callFake(() => {
-            //     // service.manageAuthenticateEvent(message);
-            //     hasBeenCalled = true;
-            // });
-
-            // service.onAuthenticate();
-            // await expect(hasBeenCalled).toEqual(true);
         });
     });
 

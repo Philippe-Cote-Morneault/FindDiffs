@@ -73,13 +73,6 @@ export class ObjectRestorationService implements SocketSubscriber, OnDestroy {
         if (this.isANewDifference(objectOriginal) || isTexture) {
             if (scene.original && scene.modified) {
                 this.applyAdd(scene.original, scene.modified, objectOriginal);
-                // scene.original.children.forEach((element) => {
-                //     if (element.userData.id === objectOriginal) {
-                //         if (scene.modified) {
-                //             scene.modified.add(element.clone());
-                //         }
-                //     }
-                // });
                 this.addDifference(objectOriginal);
             }
         }
@@ -97,13 +90,6 @@ export class ObjectRestorationService implements SocketSubscriber, OnDestroy {
         if (this.isANewDifference(objectModified)) {
             if (scene.modified) {
                 this.applyRemoval(scene.modified, objectModified);
-                // scene.modified.children.forEach((element) => {
-                //     if (element.userData.id === objectModified) {
-                //         if (scene.modified) {
-                //             scene.modified.remove(element);
-                //         }
-                //     }
-                // });
             }
             this.addDifference(objectModified);
         }
@@ -122,13 +108,6 @@ export class ObjectRestorationService implements SocketSubscriber, OnDestroy {
             const originalSceneObject: THREE.Object3D | undefined = this.getOriginalSceneObject(object, scenes);
             if (scenes.modified) {
                 this.applyColorChange(scenes.modified, originalSceneObject, object);
-                // scenes.modified.children.forEach((sceneObject) => {
-                //     if (sceneObject.userData.id === object) {
-                //         // tslint:disable-next-line:no-any
-                //         (sceneObject as any).material.color.setHex((originalSceneObject as any).material.color.getHex());
-                //     }
-                // });
-                // this.addDifference(object);
             }
 
         }
@@ -145,16 +124,8 @@ export class ObjectRestorationService implements SocketSubscriber, OnDestroy {
     }
 
     private getOriginalSceneObject(object: string, scene:  IThreeScene): THREE.Object3D | undefined {
-        // let originalSceneObject: THREE.Object3D = new THREE.Object3D;
         if (scene.original) {
             return this.findOriginalObject(scene.original, object);
-            // scene.original.children.forEach((sceneObject) => {
-            //     if (sceneObject.userData.id === object) {
-            //         originalSceneObject = sceneObject;
-            //     }
-            // });
-
-            // return originalSceneObject;
         }
 
         return undefined;

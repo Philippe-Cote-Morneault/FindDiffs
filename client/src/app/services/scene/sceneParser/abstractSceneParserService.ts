@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ICommonGeometricScene, ICommonScene, ICommonThematicScene, ObjectType } from "../../../../../../common/model/scene/scene";
+import { ICommonGeometricScene, ICommonScene, ObjectType } from "../../../../../../common/model/scene/scene";
 import { GeometricSceneParser } from "./geometricSceneParser";
 import { GeometricObjectParser } from "./objectParser/geometricObjectParser";
 import { ThematicObjectParser } from "./objectParser/thematicObjectParser";
@@ -21,7 +21,7 @@ export abstract class AbstractSceneParser {
     protected async createScene(): Promise<THREE.Scene> {
         return (this.sceneModel.type === ObjectType.Geometric) ?
             GeometricSceneParser.parseScene(this.sceneModel as ICommonGeometricScene)
-            : ThematicSceneParser.parseScene(this.sceneModel as ICommonThematicScene);
+            : ThematicSceneParser.parseScene();
 
     }
 }

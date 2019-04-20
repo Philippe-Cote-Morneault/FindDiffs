@@ -2,7 +2,6 @@ import { expect } from "chai";
 import { UsernameManager } from "./usernameManager";
 
 describe("usernameManager", () => {
-
     let service: UsernameManager;
     beforeEach(() => {
         service = UsernameManager.getInstance();
