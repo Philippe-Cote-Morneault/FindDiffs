@@ -5,7 +5,9 @@ import { GameType, POVType } from "../../../../common/model/gameCard";
 import { INewScore, INewScoreDetails } from "../../../../common/model/score";
 import { GameCard, IGameCard } from "../../model/schemas/gameCard";
 import { _e, R } from "../../strings";
+import { NoErrorThrownException } from "../../tests/noErrorThrownException";
 import { ScoreService } from "./score.service";
+import { ScoreGenerator } from "./scoreGenerator";
 
 describe("ScoreService", () => {
     const scoreService: ScoreService = new ScoreService();
