@@ -417,6 +417,22 @@ describe("ScoreService", () => {
                 expect(err.message).to.equal(_e(R.ERROR_WRONG_TYPE, [R.GAME_TYPE_]));
             }
         });
+        it("Should throw no error if there are no error with the update validation", async() => {
+            const req: Object = {
+                body: {
+                    username: "player1",
+                    time: 5,
+                    type: GameType.Online,
+                },
+            };
+            // tslint:disable-next-line:no-any
+            const mockRequest: any = mockReq(req);
+            mockRequest.params.id = "justARandomId";
+
+            saveStub.resolves();
+            findByIdStub.resolves(gameCardInterface);
+            await scoreService.update(mockRequest);
+        });
     });
 // tslint:disable-next-line:max-file-line-count
 });
