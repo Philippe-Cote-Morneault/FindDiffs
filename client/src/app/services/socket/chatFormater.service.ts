@@ -12,7 +12,7 @@ import { MatchmakingService } from "../game/matchmaking.service";
 })
 
 export class ChatFormaterService {
-    private static MAX_TWO_DIGITS: number = 10;
+    private static readonly MAX_TWO_DIGITS: number = 10;
 
     public constructor(private matchmaking: MatchmakingService) {}
 
