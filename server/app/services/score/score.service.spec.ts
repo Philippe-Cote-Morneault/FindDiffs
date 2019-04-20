@@ -12,6 +12,16 @@ import { ScoreGenerator } from "./scoreGenerator";
 describe("ScoreService", () => {
     const scoreService: ScoreService = new ScoreService();
     describe("post()", () => {
+        beforeEach(() => {
+            sinon.stub(GameCard, "findById");
+            sinon.stub(ScoreGenerator, "generateScore");
+            sinon.stub(GameCard.prototype, "save");
+        });
+        afterEach(() => {
+            (GameCard.findById as sinon.SinonStub).restore();
+            (ScoreGenerator.generateScore as sinon.SinonStub).restore();
+            (GameCard.prototype.save as sinon.SinonStub).restore();
+        });
         it("Should throw a UNKOWN_ID error if the id of the gameCard is invalid", async () => {
             const req: Object = {};
             // tslint:disable-next-line:no-any
