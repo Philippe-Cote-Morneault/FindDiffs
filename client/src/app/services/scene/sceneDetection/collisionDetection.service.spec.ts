@@ -41,5 +41,26 @@ describe("CollisionDetectionService", () => {
             const isCollision: boolean = CollisionDetectionService.verifyCollisions(camera, sceneObjects, vector);
             expect(isCollision).to.equal(false);
         });
+
+        it("Should detect a distance bigger than 100 if there is no objects detected", async () => {
+            vector.set(0, 0, -1);
+            camera.position.set(104, 2, -50);
+            const raycaster: THREE.Raycaster = new THREE.Raycaster();
+            raycaster.set(camera.position, vector);
+            const intersectedObj: THREE.Intersection[] = raycaster.intersectObjects(sceneObjects, true);
+            const distance: number = CollisionDetectionService["verifyDistance"](intersectedObj);
+            expect(distance).to.greaterThan(100);
+        });
+
+        it("Should detect 255 if there is no objects in sceneObjects", async () => {
+            vector.set(0, -1, 0);
+            camera.position.set(104, 2, -50);
+            const raycaster: THREE.Raycaster = new THREE.Raycaster();
+            raycaster.set(camera.position, vector);
+            const sceneObjects2: THREE.Object3D[] = new Array<THREE.Object3D>();
+            const intersectedObj: THREE.Intersection[] = raycaster.intersectObjects(sceneObjects2, true);
+            const distance: number = CollisionDetectionService["verifyDistance"](intersectedObj);
+            expect(distance).to.equal(255);
+        });
     });
 });
