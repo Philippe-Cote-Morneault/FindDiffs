@@ -24,11 +24,14 @@ describe("ScoreService", () => {
         });
         it("Should throw a UNKOWN_ID error if the id of the gameCard is invalid", async () => {
             const req: Object = {};
+            (GameCard.findById as sinon.SinonStub).rejects();
+
             // tslint:disable-next-line:no-any
             const mockRequest: any = mockReq(req);
             mockRequest.params.id = "notAValidId";
             try {
                 await scoreService.post(mockRequest);
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);
             }
