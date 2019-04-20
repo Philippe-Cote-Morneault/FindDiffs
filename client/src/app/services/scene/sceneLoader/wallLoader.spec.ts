@@ -49,7 +49,7 @@ describe("WallLoader", () => {
             const geometryD: THREE.BoxGeometry =
                 new THREE.BoxGeometry(1, 1, 1);
 
-            await WallLoader["addWall"](geometryD, material, scene, sceneObjects, 0, 0, 0);
+            WallLoader["addWall"](geometryD, material, scene, sceneObjects, 0, 0, 0);
 
             const finalSizeScene: number = scene.children.length;
             const finalSizeSceneObjects: number = sceneObjects.length;
