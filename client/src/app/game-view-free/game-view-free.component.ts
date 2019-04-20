@@ -49,8 +49,8 @@ export class GameViewFreeComponent implements OnInit {
     public gameCard: ICommonGameCard;
     private originalSceneLoader: SceneLoaderService;
     private modifiedSceneLoader: SceneLoaderService;
-    private meshesOriginal: THREE.Object3D[] = [];
-    private meshesModified: THREE.Object3D[] = [];
+    private meshesOriginal: THREE.Object3D[];
+    private meshesModified: THREE.Object3D[];
     public isGameOver: boolean;
     public isSoloGame: boolean;
     public playerTime: string;
@@ -71,6 +71,8 @@ export class GameViewFreeComponent implements OnInit {
                         public socketHandler: SocketHandlerService) {
         this.originalSceneLoader = new SceneLoaderService();
         this.modifiedSceneLoader = new SceneLoaderService();
+        this.meshesOriginal = [];
+        this.meshesModified = [];
 
         this.subscribeToGame();
         this.gameFree.resetTime();
