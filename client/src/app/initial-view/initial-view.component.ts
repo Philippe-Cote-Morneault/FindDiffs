@@ -12,7 +12,7 @@ import { SocketHandlerService } from "../services/socket/socketHandler.service";
     styleUrls: ["./initial-view.component.css"],
 })
 export class InitialViewComponent implements OnInit {
-    private static readonly enterKeyCode: number = 13;
+    private static readonly ENTER_KEYCODE: number = 13;
 
     @ViewChild("usernameInput") private usernameInput: ElementRef;
 
@@ -24,7 +24,7 @@ export class InitialViewComponent implements OnInit {
         // tslint:disable-next-line:no-any
         this.usernameInput.nativeElement.addEventListener("keyup", (event: any) => {
             event.preventDefault();
-            if (event.keyCode === InitialViewComponent.enterKeyCode) {
+            if (event.keyCode === InitialViewComponent.ENTER_KEYCODE) {
               this.verifyUsername();
             }
           });
