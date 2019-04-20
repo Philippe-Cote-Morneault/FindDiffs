@@ -242,7 +242,7 @@ describe("ScoreService", () => {
             const req: Object = {
                 body: {
                     time: 25000,
-                    type: GameType.Online,
+                    type: GameType.Solo,
                     username: "player1",
                 },
             };
@@ -332,6 +332,7 @@ describe("ScoreService", () => {
             findByIdStub.resolves(gameCardInterface);
             try {
             await scoreService.update(mockRequest);
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_MISSING_FIELD, [R.USERNAME_]));
             }
@@ -350,6 +351,7 @@ describe("ScoreService", () => {
             findByIdStub.resolves(gameCardInterface);
             try {
             await scoreService.update(mockRequest);
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_MISSING_FIELD, [R.TIME_]));
             }
@@ -369,6 +371,7 @@ describe("ScoreService", () => {
             findByIdStub.resolves(gameCardInterface);
             try {
             await scoreService.update(mockRequest);
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_N_A_N, [R.TIME_]));
             }
@@ -388,6 +391,7 @@ describe("ScoreService", () => {
             findByIdStub.resolves(gameCardInterface);
             try {
             await scoreService.update(mockRequest);
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_LESS_ZERO, [R.TIME_]));
             }
@@ -408,6 +412,7 @@ describe("ScoreService", () => {
             findByIdStub.resolves(gameCardInterface);
             try {
             await scoreService.update(mockRequest);
+                throw new NoErrorThrownException();
             } catch (err) {
                 expect(err.message).to.equal(_e(R.ERROR_WRONG_TYPE, [R.GAME_TYPE_]));
             }
