@@ -6,6 +6,11 @@ import { ICommonDifferenceFound } from "../../../../../common/communication/webS
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { GameService } from "./game.service";
 
+// tslint:disable-next-line:only-arrow-functions
+async function timeout(ms: number): Promise<Object> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 describe("GameService", () => {
     let service: GameService;
     const time: number = 2000;
@@ -35,10 +40,9 @@ describe("GameService", () => {
             await service.notify(Event.GameStarted, msg);
             expect(service.getGameStarted()).to.equal(true);
             expect(service.getTimeValues()).to.equal("00:00");
-            setTimeout(async() => {
-                await service.notify(Event.GameEnded, msg);
-                expect(service.getTimeValues()).to.equal("00:02");
-                    }, time);
+            await timeout(time);
+            await service.notify(Event.GameEnded, msg);
+            expect(service.getTimeValues()).to.equal("00:02");
         });
 
         it("Should return 00:00 if the event is not supported", async () => {
@@ -46,10 +50,9 @@ describe("GameService", () => {
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.InvalidClick, msg);
             expect(service.getTimeValues()).to.equal("00:00");
-            setTimeout(async() => {
-                await service.notify(Event.GameEnded, msg);
-                expect(service.getTimeValues()).to.equal("00:00");
-                    }, time);
+            await timeout(time);
+            await service.notify(Event.GameEnded, msg);
+            expect(service.getTimeValues()).to.equal("00:00");
         });
     });
 
@@ -86,10 +89,9 @@ describe("GameService", () => {
         it("Should return 00:00 after resettime", async () => {
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.GameStarted, msg);
-            setTimeout(async() => {
-                service.resetTime();
-                expect(service.getTimeValues()).to.equal("00:00");
-                    }, time);
+            await timeout(time);
+            service.resetTime();
+            expect(service.getTimeValues()).to.equal("00:00");
         });
     });
 
@@ -97,9 +99,8 @@ describe("GameService", () => {
         it("Should return true after game started", async () => {
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.GameStarted, msg);
-            setTimeout(async() => {
-                expect(service.getGameStarted()).to.equal(true);
-                    }, time);
+            await timeout(time);
+            expect(service.getGameStarted()).to.equal(true);
         });
         it("Should return false if game hasnt started yet", async () => {
             expect(service.getGameStarted()).to.equal(false);
