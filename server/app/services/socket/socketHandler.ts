@@ -8,8 +8,8 @@ import { UsernameManager } from "./usernameManager";
 
 export class SocketHandler {
     private static instance: SocketHandler;
-    private static CONNECT_EVENT: string = "connect";
-    private static DISCONNECT_EVENT: string = "disconnect";
+    private static readonly CONNECT_EVENT: string = "connect";
+    private static readonly DISCONNECT_EVENT: string = "disconnect";
 
     private io: socketIo.Server;
     private usernameManager: UsernameManager;
