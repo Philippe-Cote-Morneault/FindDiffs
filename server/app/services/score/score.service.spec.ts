@@ -125,6 +125,7 @@ describe("ScoreService", () => {
                 game_type: GameType.Online,
             },
         };
+
         beforeEach((done: Mocha.Done) => {
             saveStub = sinon.stub(GameCard.prototype, "save");
             findByIdStub = sinon.stub(GameCard, "findById");
@@ -152,8 +153,23 @@ describe("ScoreService", () => {
             const result: string = await scoreService.update(mockRequest);
             expect(JSON.parse(result).is_top_score).to.equal(false);
         });
-        it("Should return is_top_score = true if this is a new top score", async () => {
-            const req: Object = {};
+        it("Should return is_top_score = true if this is a new top score online", async () => {
+            const req: Object = {body: {
+                type: GameType.Online,
+            }};
+            // tslint:disable-next-line:no-any
+            const mockRequest: any = mockReq(req);
+
+            saveStub.resolves();
+            findByIdStub.resolves(gameCardInterface);
+            verifyScoreStub.returns(score1);
+            const result: string = await scoreService.update(mockRequest);
+            expect(JSON.parse(result).is_top_score).to.equal(true);
+        });
+        it("Should return is_top_score = true if this is a new top score offline", async () => {
+            const req: Object = {body: {
+                type: GameType.Solo,
+            }};
             // tslint:disable-next-line:no-any
             const mockRequest: any = mockReq(req);
 
