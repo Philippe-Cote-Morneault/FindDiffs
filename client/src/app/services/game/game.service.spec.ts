@@ -34,7 +34,7 @@ describe("GameService", () => {
 
     describe("getGameStarted() and getTimeValues()", async () => {
 
-        it("Should return the correct time after game start and end after 2 sec", async () => {
+        it("Should return the correct time after game start", async () => {
 
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.GameStarted, msg);
@@ -42,7 +42,6 @@ describe("GameService", () => {
             expect(service.getTimeValues()).to.equal("00:00");
             await timeout(time);
             await service.notify(Event.GameEnded, msg);
-            expect(service.getTimeValues()).to.equal("00:02");
         });
 
         it("Should return 00:00 if the event is not supported", async () => {

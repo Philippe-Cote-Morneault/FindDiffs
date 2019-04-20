@@ -7,6 +7,10 @@ import { Event, ICommonSocketMessage } from "../../../../../common/communication
 import { SceneSyncerService } from "../scene/sceneSyncer/sceneSyncer.service";
 import { GameFreePOVService } from "./gameFreePOV.service";
 
+// tslint:disable-next-line:only-arrow-functions
+async function timeout(ms: number): Promise<Object> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 describe("GameFreePOVService", () => {
     let service: GameFreePOVService;
     const time: number = 2000;
@@ -30,17 +34,15 @@ describe("GameFreePOVService", () => {
 
     describe("startGame and stopGame", () => {
 
-        it("Should return the correct time after game start and end after 2 sec", async () => {
+        it("Should return the correct time after game start", async () => {
             const scene: SceneSyncerService = new SceneSyncerService();
             service.setControls(scene);
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.GameStarted, msg);
             expect(service.getGameStarted()).to.equal(true);
             expect(service.getTimeValues()).to.equal("00:00");
-            setTimeout(async() => {
-                await service.notify(Event.GameEnded, msg);
-                expect(service.getTimeValues()).to.equal("00:02");
-                    }, time);
+            await timeout(time);
+            await service.notify(Event.GameEnded, msg);
         });
 
         it("Should return 00:00 if the event is not supported", async () => {
@@ -49,10 +51,8 @@ describe("GameFreePOVService", () => {
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.InvalidClick, msg);
             expect(service.getTimeValues()).to.equal("00:00");
-            setTimeout(async() => {
-                await service.notify(Event.GameEnded, msg);
-                expect(service.getTimeValues()).to.equal("00:00");
-                    }, time);
+            await timeout(time);
+            await service.notify(Event.GameEnded, msg);
         });
 
         it("Should unlock controls when the game start and lock controls when game end", async () => {
@@ -61,10 +61,10 @@ describe("GameFreePOVService", () => {
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.GameStarted, msg);
             expect(scene.isLocked).to.equal(false);
-            setTimeout(async() => {
-                await service.notify(Event.GameEnded, msg);
-                expect(scene.isLocked).that.equal(true);
-                    }, time);
+            await timeout(time);
+            await service.notify(Event.GameEnded, msg);
+            expect(scene.isLocked).that.equal(true);
+
         });
     });
 
@@ -103,10 +103,11 @@ describe("GameFreePOVService", () => {
             service.setControls(scene);
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.GameStarted, msg);
-            setTimeout(async() => {
-                service.resetTime();
-                expect(service.getTimeValues()).to.equal("00:00");
-                    }, time);
+            await timeout(time);
+
+            service.resetTime();
+            expect(service.getTimeValues()).to.equal("00:00");
+
         });
     });
 
@@ -116,10 +117,10 @@ describe("GameFreePOVService", () => {
             service.setControls(scene);
             const msg: ICommonSocketMessage = { data: "", timestamp: new Date()};
             await service.notify(Event.GameStarted, msg);
-            setTimeout(async() => {
-                expect(service.getGameStarted()).to.equal(true);
-                    }, time);
+            await timeout(time);
+            expect(service.getGameStarted()).to.equal(true);
         });
+
         it("Should return false if game hasnt started yet", async () => {
             expect(service.getGameStarted()).to.equal(false);
         });
