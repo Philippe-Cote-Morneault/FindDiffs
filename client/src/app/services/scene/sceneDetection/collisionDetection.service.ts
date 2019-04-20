@@ -12,11 +12,16 @@ export class CollisionDetectionService {
         const raycaster: THREE.Raycaster = new THREE.Raycaster();
         raycaster.set(camera.position, vector);
         const intersectedObj: THREE.Intersection[] = raycaster.intersectObjects(sceneObjects, true);
-        const distance: number = intersectedObj.length === 0 ? CollisionDetectionService.MAX_DISTANCE : intersectedObj[0].distance;
+        const distance: number = CollisionDetectionService.verifyDistance(intersectedObj);
         if (distance > CollisionDetectionService.MIN_DISTANCE_TO_MOVE) {
             return false;
         }
 
         return true;
+    }
+
+    private static verifyDistance(intersectedObj: THREE.Intersection[]): number {
+        return intersectedObj.length === 0 ? CollisionDetectionService.MAX_DISTANCE : intersectedObj[0].distance;
+
     }
 }
