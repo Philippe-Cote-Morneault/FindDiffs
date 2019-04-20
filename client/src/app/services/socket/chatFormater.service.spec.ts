@@ -24,11 +24,11 @@ describe("ChatFormater", () => {
     describe("InvalidClick", () => {
 
         it("Should return the correct string after InvalidClick Event (solo)", () => {
-            const msg: ICommonSocketMessage = {data: "", timestamp: new Date("2019-03-25T12:00:00Z")};
+            const msg: ICommonSocketMessage = {data: "", timestamp: new Date("2019-03-25T12:00:00")};
             game.setIsActive(false);
             const result: string = service.formatMessage(Event.InvalidClick, msg);
 
-            expect(result).to.equal("08:00:00 Error.");
+            expect(result).to.equal("12:00:00 Error.");
         });
 
         it("Should return the correct string after InvalidClick Event (1v1)", () => {
@@ -36,20 +36,20 @@ describe("ChatFormater", () => {
                 player: "Dad",
             };
             game.setIsActive(true);
-            const msg: ICommonSocketMessage = {data: data, timestamp: new Date("2019-03-25T12:00:00Z")};
+            const msg: ICommonSocketMessage = {data: data, timestamp: new Date("2019-03-25T12:00:00")};
             const result: string = service.formatMessage(Event.InvalidClick, msg);
 
-            expect(result).to.equal("08:00:00 Error by Dad.");
+            expect(result).to.equal("12:00:00 Error by Dad.");
         });
     });
     describe("DifferenceFound", () => {
 
         it("Should return the correct string after DifferenceFound Event (solo)", () => {
-            const msg: ICommonSocketMessage = {data: "", timestamp: new Date("2019-03-25T12:00:00Z")};
+            const msg: ICommonSocketMessage = {data: "", timestamp: new Date("2019-03-25T12:00:00")};
             game.setIsActive(false);
             const result: string = service.formatMessage(Event.DifferenceFound, msg);
 
-            expect(result).to.equal("08:00:00 Difference found.");
+            expect(result).to.equal("12:00:00 Difference found.");
         });
 
         it("Should return the correct string after DifferenceFound Event (1v1)", () => {
@@ -59,10 +59,10 @@ describe("ChatFormater", () => {
                 difference_count: 2,
                 reveal: {},
             };
-            const msg: ICommonSocketMessage = {data: data, timestamp: new Date("2019-03-25T12:00:00Z")};
+            const msg: ICommonSocketMessage = {data: data, timestamp: new Date("2019-03-25T12:00:00")};
             const result: string = service.formatMessage(Event.DifferenceFound, msg);
 
-            expect(result).to.equal("08:00:00 Difference found by Dad.");
+            expect(result).to.equal("12:00:00 Difference found by Dad.");
         });
     });
 
