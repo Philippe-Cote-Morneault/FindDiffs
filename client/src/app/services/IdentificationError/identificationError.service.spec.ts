@@ -1,26 +1,47 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { expect } from "chai";
+import * as Sinon from "sinon";
+import { ICommonIdentificationError } from "../../../../../common/communication/webSocket/identificationError";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { IdentificationError } from "./identificationError.service";
 
 describe("IdentificationError", () => {
     let service: IdentificationError;
 
     beforeEach(async() => {
+        sessionStorage.setItem("user", "player");
         TestBed.configureTestingModule({
             imports: [RouterTestingModule],
         });
         service = TestBed.get(IdentificationError);
+
+    });
+
+    beforeEach(() => {
+        Sinon.stub(Audio.prototype, "play");
+    });
+
+    afterEach(() => {
+        (Audio.prototype.play as Sinon.SinonStub).restore();
     });
 
     it("Should return the correct values after the error is shown", async () => {
+        (Audio.prototype.play as Sinon.SinonStub).returns({});
         const p: HTMLElement = document.createElement("p");
         const original: HTMLElement = document.createElement("div");
         const modified: HTMLElement = document.createElement("div");
         const time: number = 2000;
 
         service.setContainers(p, original, modified);
-        await service.notify();
+        const error: ICommonIdentificationError = {
+            player: "player",
+        };
+        const msg: ICommonSocketMessage = {
+            data: error,
+            timestamp: new Date(),
+        };
+        await service.notify(Event.InvalidClick, msg);
 
         expect(original.style.cursor).to.equal("not-allowed");
         expect(modified.style.cursor).to.equal("not-allowed");

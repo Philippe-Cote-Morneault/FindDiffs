@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { ICommonThematicScene } from "../../../../../../common/model/scene/scene";
 import { JSONLoader } from "../sceneLoader/jsonLoader";
 import { TextureLoader } from "../sceneLoader/textureLoader";
 
@@ -15,7 +14,7 @@ export class ThematicSceneParser {
     private static readonly GREY: number = 0xAAAAAA;
     private static readonly AMBIENT_INTENSITY: number = 0.3;
 
-    public static async parseScene(originalScene: ICommonThematicScene): Promise<THREE.Scene> {
+    public static async parseScene(): Promise<THREE.Scene> {
         const scene: THREE.Scene = new THREE.Scene();
         const object: THREE.Object3D = await JSONLoader.load(this.SCENE_MODEL);
         scene.add(object);

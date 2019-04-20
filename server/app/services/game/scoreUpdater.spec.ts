@@ -27,7 +27,7 @@ describe("GameService", () => {
                 ressource_id: "1",
                 players: ["player1", "player2"],
                 start_time: new Date(),
-                differences_found: 0,
+                // amount_differences_found: 0,
                 game_card_id: "1",
             };
             const time: number = 100;

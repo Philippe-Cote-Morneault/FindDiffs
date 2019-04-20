@@ -13,9 +13,11 @@ export class GameCardLoaderService {
     private factoryResolver: ComponentFactoryResolver;
     public simplePOVContainer: ViewContainerRef;
     public freePOVContainer: ViewContainerRef;
+    public gamesList: GamesCardViewComponent[];
 
     public constructor(@Inject(ComponentFactoryResolver) factoryResolver: ComponentFactoryResolver) {
         this.factoryResolver = factoryResolver;
+        this.gamesList = [];
     }
 
     public setContainer(viewContainerRef: ViewContainerRef, pov: POVType): void {
@@ -32,6 +34,7 @@ export class GameCardLoaderService {
             this.simplePOVContainer.createComponent(factory).instance :
             this.freePOVContainer.createComponent(factory).instance;
 
+        this.gamesList.push(component);
         component.gameCard = gameCard;
         component.isInAdminView = isInAdminView;
     }

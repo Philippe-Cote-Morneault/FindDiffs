@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Event } from "../../../../../common/communication/webSocket/socketMessage";
+import { ICommonIdentificationError } from "../../../../../common/communication/webSocket/identificationError";
+import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { R } from "../../ressources/strings";
+import { GameService } from "../game/game.service";
 import { SocketHandlerService } from "../socket/socketHandler.service";
 import { SocketSubscriber } from "../socket/socketSubscriber";
 
@@ -8,7 +10,6 @@ import { SocketSubscriber } from "../socket/socketSubscriber";
     providedIn: "root",
 })
 export class IdentificationError implements SocketSubscriber {
-    private static readonly ERROR_SOUND_SRC: string = "../../assets/no.mp3";
     private static readonly ONE_SECOND: number = 1000;
     private errorMessage: HTMLElement;
     private original: HTMLElement;
@@ -17,10 +18,10 @@ export class IdentificationError implements SocketSubscriber {
     private timeout: boolean;
     private errorSound: HTMLAudioElement;
 
-    public constructor(private socketService: SocketHandlerService ) {
+    public constructor(private socketService: SocketHandlerService, private game: GameService) {
         this.timeout = false;
         this.errorSound = new Audio;
-        this.errorSound.src = IdentificationError.ERROR_SOUND_SRC;
+        this.errorSound.src = R.ERROR_SOUND_SRC;
         this.errorSound.load();
         this.subscribeToSocket();
     }
@@ -35,8 +36,10 @@ export class IdentificationError implements SocketSubscriber {
         this.socketService.subscribe(Event.InvalidClick, this);
     }
 
-    public async notify(): Promise<void> {
-        await this.showErrorMessage();
+    public async notify(event: Event, message: ICommonSocketMessage): Promise<void> {
+        if ((message.data as ICommonIdentificationError).player === this.game.username) {
+            await this.showErrorMessage();
+        }
     }
 
     public async showErrorMessage(): Promise<void> {

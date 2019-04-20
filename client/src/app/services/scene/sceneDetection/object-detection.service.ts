@@ -34,9 +34,11 @@ export class ObjectDetectionService {
   }
 
   private getParent(obj: THREE.Object3D, scene: THREE.Scene): THREE.Object3D {
-    if (obj.parent !== scene as THREE.Object3D) {
-        obj = obj.parent as THREE.Object3D;
-        obj = this.getParent(obj, scene);
+    if (obj) {
+      if (obj.parent !== scene as THREE.Object3D) {
+          obj = obj.parent as THREE.Object3D;
+          obj = this.getParent(obj, scene);
+      }
     }
 
     return obj;

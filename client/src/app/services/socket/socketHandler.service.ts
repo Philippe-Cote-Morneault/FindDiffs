@@ -30,10 +30,11 @@ export class SocketHandlerService {
 
     private setEventListener(): void {
         this.socket.on("connect", () => {
-            const token: string | null = sessionStorage.getItem("token");
-            if (token) {
+            // const token: string | null = sessionStorage.getItem("token");
+            if (this.isValidSessionStorage()) {
                 const tokendata: ICommonToken = {
-                    token: token,
+                    // tslint:disable-next-line: no-non-null-assertion
+                    token: sessionStorage.getItem("token")!,
                 };
                 const message: ICommonSocketMessage = {
                     data: tokendata,
@@ -41,19 +42,31 @@ export class SocketHandlerService {
                 };
 
                 this.socket.emit(Event.Authenticate, message, async (response: Object) => {
-                    if ((response as ICommonError).error_message) {
-                        alert((response as ICommonError).error_message);
-                        sessionStorage.removeItem("token");
-                        await this.router.navigateByUrl("/");
-                        this.onAuthenticate();
-                    } else {
-                        this.setEventListeners(this.socket);
-                    }
+                    await this.manageServerResponse(response);
                 });
             } else {
                 this.onAuthenticate();
             }
         });
+    }
+
+    private isValidSessionStorage(): boolean {
+        return sessionStorage.getItem("token") ? true : false;
+    }
+
+    private async manageServerResponse(response: Object): Promise<void> {
+        if (this.hasErrorMessage(response)) {
+            alert((response as ICommonError).error_message);
+            sessionStorage.removeItem("token");
+            await this.router.navigateByUrl("/");
+            this.onAuthenticate();
+        } else {
+            this.setEventListeners(this.socket);
+        }
+    }
+
+    private hasErrorMessage(response: Object): boolean {
+        return (response as ICommonError).error_message ? true : false;
     }
 
     public subscribe(event: Event, subscriber: SocketSubscriber): void {
@@ -64,10 +77,21 @@ export class SocketHandlerService {
         sub.push(subscriber);
     }
 
+    public unsubscribe(event: Event, subscriber: SocketSubscriber): void {
+        const sub: SocketSubscriber[] | undefined = this.getSubscribers(event);
+        if (sub) {
+            sub.splice( sub.indexOf(subscriber), 1 );
+            this.subscribers.set(event, sub);
+        }
+    }
+
+    private getSubscribers(event: Event): SocketSubscriber[] | undefined {
+        return this.subscribers.get(event);
+    }
+
     private notifySubsribers(event: Event, message: ICommonSocketMessage): void {
         if (this.subscribers.has(event)) {
-            const subscribers: SocketSubscriber[] = this.subscribers.get(event) as SocketSubscriber[];
-            subscribers.forEach((subscriber: SocketSubscriber) => {
+            (this.subscribers.get(event) as SocketSubscriber[]).forEach((subscriber: SocketSubscriber) => {
                 subscriber.notify(event, message);
             });
         }
@@ -77,7 +101,7 @@ export class SocketHandlerService {
         this.socket.emit(event, message);
     }
 
-    private setEventListeners(socket: SocketIOClient.Socket): void {
+    public setEventListeners(socket: SocketIOClient.Socket): void {
         this.onAuthenticate();
         Object.keys(Event).forEach((event: Event) => {
             socket.on(event, (message: ICommonSocketMessage) => {
@@ -88,9 +112,12 @@ export class SocketHandlerService {
 
     public onAuthenticate(): void {
         this.socket.on(Event.Authenticate, (message: ICommonSocketMessage) => {
-            const token: string = (message.data as ICommonToken).token;
-            sessionStorage.setItem("token", token);
-            this.setEventListeners(this.socket);
+            this.manageAuthenticateEvent(message);
         });
+    }
+
+    public manageAuthenticateEvent(message: ICommonSocketMessage): void {
+        sessionStorage.setItem("token", (message.data as ICommonToken).token);
+        this.setEventListeners(this.socket);
     }
 }

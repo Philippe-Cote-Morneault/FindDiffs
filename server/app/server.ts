@@ -5,6 +5,7 @@ import { Application } from "./app";
 import Config from "./config";
 import { IServer } from "./interfaces";
 import { GameService } from "./services/game/gameService";
+import { MatchmakingService } from "./services/game/matchmakingService";
 import { SocketHandler } from "./services/socket/socketHandler";
 import Types from "./types";
 
@@ -22,6 +23,7 @@ export class Server implements IServer {
 
         SocketHandler.getInstance().setServer(this.server);
         GameService.getInstance();
+        MatchmakingService.getInstance();
 
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));

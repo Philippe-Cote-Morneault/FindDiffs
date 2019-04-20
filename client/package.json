@@ -5,8 +5,8 @@
     "ng": "ng",
     "start": "ng serve --open",
     "build": "ng build",
-    "test": "ng test",
-    "coverage": "ng test --code-coverage --sourceMap=true",
+    "test": "ng test --browsers Chrome",
+    "coverage": "ng test --code-coverage --sourceMap=true --browsers Chrome",
     "lint": "ng lint --type-check --format stylish",
     "e2e": "ng e2e"
   },

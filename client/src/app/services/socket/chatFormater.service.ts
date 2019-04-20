@@ -1,15 +1,20 @@
 import { Injectable } from "@angular/core";
+import { ICommonDifferenceFound } from "../../../../../common/communication/webSocket/differenceFound";
+import { ICommonIdentificationError } from "../../../../../common/communication/webSocket/identificationError";
 import { Event, ICommonSocketMessage } from "../../../../../common/communication/webSocket/socketMessage";
 import { ICommonUser } from "../../../../../common/communication/webSocket/user";
 import { INewScore, INewScoreDetails } from "../../../../../common/model/score";
 import { _e, R } from "../../ressources/strings";
+import { MatchmakingService } from "../game/matchmaking.service";
 
 @Injectable({
     providedIn: "root",
 })
 
 export class ChatFormaterService {
-    private static MAX_TWO_DIGITS: number = 10;
+    private static readonly MAX_TWO_DIGITS: number = 10;
+
+    public constructor(private matchmaking: MatchmakingService) {}
 
     public formatMessage(event: Event, message: ICommonSocketMessage): string {
         switch (event) {
@@ -43,11 +48,23 @@ export class ChatFormaterService {
     }
 
     private onDifferenceFound(message: ICommonSocketMessage): string {
-        return this.formatDate(message.timestamp) + R.CHAT_DIFFERENCE_SOLO;
+        let chatMessage: string;
+
+        (!this.matchmaking.getIsActive()) ?
+        chatMessage = this.formatDate(message.timestamp) + R.CHAT_DIFFERENCE_SOLO :
+        chatMessage = this.formatDate(message.timestamp) + _e(R.CHAT_DIFFERENCE_1v1, [(message.data as ICommonDifferenceFound).player]);
+
+        return chatMessage;
     }
 
     private onInvalidClick(message: ICommonSocketMessage): string {
-        return this.formatDate(message.timestamp) + R.CHAT_ERROR_SOLO;
+        let chatMessage: string;
+
+        (!this.matchmaking.getIsActive()) ?
+        chatMessage = this.formatDate(message.timestamp) + R.CHAT_ERROR_SOLO :
+        chatMessage = this.formatDate(message.timestamp) + _e(R.CHAT_ERROR_1v1, [(message.data as ICommonIdentificationError).player]);
+
+        return chatMessage;
     }
 
     private onBestTime(message: ICommonSocketMessage): string {

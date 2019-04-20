@@ -9,13 +9,17 @@ export class SceneSyncerService {
     private static readonly MOVEMENT_SCALE: number = 100;
     // tslint:disable-next-line:no-magic-numbers
     private static readonly CAMERA_MAX_X_ANGLE: number = Math.PI / 2;
+
+    public isLocked: boolean;
+
     private isMousePressed: boolean;
 
     public constructor() {
         this.isMousePressed = false;
     }
-    // tslint:disable-next-line:max-func-body-length
+
     public syncScenesMovement(camera1: THREE.Camera, canvas1: HTMLCanvasElement, camera2: THREE.Camera, canvas2: HTMLCanvasElement): void {
+        this.isLocked = true;
         this.addListeners(camera1, canvas1, camera2, canvas2);
         this.addListeners(camera2, canvas2, camera1, canvas1);
     }
@@ -42,7 +46,7 @@ export class SceneSyncerService {
         });
 
         changedCanvas.addEventListener("mousemove", (event: MouseEvent) => {
-            if (this.isMousePressed) {
+            if (this.isMousePressed && !this.isLocked) {
                this.moveCamera(changedCamera, event);
                this.moveCamera(toChangeCamera, event);
             }

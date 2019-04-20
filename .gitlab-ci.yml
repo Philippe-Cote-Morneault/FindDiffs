@@ -1,6 +1,7 @@
 image: trion/ng-cli-karma
 
 stages:
+    - dependencies
     - lint
     - build
     - test
@@ -10,7 +11,15 @@ cache:
     paths:
         - client/node_modules
         - server/node_modules
-
+dependencies:
+    stage: dependencies
+    script:
+        - cd client && npm ci
+        - cd ..
+        - cd server && npm ci
+    only:
+        - master
+        - develop
 lint:
     stage: lint
     script:
@@ -24,9 +33,9 @@ lint:
 build:
     stage: build
     script:
-        - cd client && npm install && ng build
+        - cd client && ng build
         - cd ..
-        - cd server && npm install && npm run tsc
+        - cd server && npm run tsc
     only:
         - master
         - develop

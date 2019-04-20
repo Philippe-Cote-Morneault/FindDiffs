@@ -1,11 +1,14 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
+import { CREATE_BUTTON, DELETE_BUTTON, PLAY_BUTTON, RESET_BUTTON, SIMPLE_BUTTON } from "../../../../common/buttonName";
 import { Message } from "../../../../common/communication/message";
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
 import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { ICommonGameCard, ICommonScoreEntry, POVType } from "../../../../common/model/gameCard";
 import { ICommonImagePair } from "../../../../common/model/imagePair";
 import { ICommonScene } from "../../../../common/model/scene/scene";
+import { _e, R } from "../ressources/strings";
+import { MatchmakingService } from "../services/game/matchmaking.service";
 import { GamesCardService } from "../services/gameCard/gamesCard.service";
 import { ImagePairService } from "../services/image-pair/imagePair.service";
 import { SceneService } from "../services/scene/scene.service";
@@ -23,6 +26,7 @@ export class GamesCardViewComponent implements OnInit {
     @Input() public gameCard: ICommonGameCard;
     @Input() public isInAdminView: boolean;
     @ViewChild("image") private image: ElementRef;
+    @ViewChild("matchMakingButton") public matchMakingButton: ElementRef;
     public imagePair: ICommonImagePair;
     public scenePair: ICommonScene;
 
@@ -30,22 +34,26 @@ export class GamesCardViewComponent implements OnInit {
     public rightButton: string;
     public simplePOV: string;
 
+    public waitOpponent: boolean;
+
     public constructor(
         private gamesCardService: GamesCardService,
         private sceneService: SceneService,
         private router: Router,
         private socketHandlerService: SocketHandlerService,
-        private imagePairService: ImagePairService) {
-            this.rightButton = "Create";
-            this.leftButton = "Play";
-            this.simplePOV = "Simple";
+        private imagePairService: ImagePairService,
+        public matchmaking: MatchmakingService) {
+            this.rightButton = CREATE_BUTTON;
+            this.leftButton = PLAY_BUTTON;
+            this.simplePOV = SIMPLE_BUTTON;
             this.isInAdminView = false;
+            this.waitOpponent = false;
         }
 
     public ngOnInit(): void {
         if (this.isInAdminView) {
-            this.leftButton = "Delete";
-            this.rightButton = "Reset";
+            this.leftButton = DELETE_BUTTON;
+            this.rightButton = RESET_BUTTON;
         }
 
         if (this.isSimplePov()) {
@@ -63,14 +71,12 @@ export class GamesCardViewComponent implements OnInit {
         if (this.isInAdminView) {
             this.deleteGameCard();
         } else {
-            const gameUrl: string = (this.isSimplePov()) ? "/gameSimple/" : "/gameFree/";
-
-            this.emitPlaySoloGame();
-            await this.router.navigateByUrl(gameUrl + this.gameCard.id);
+            const gameUrl: string = (this.isSimplePov()) ? R.GAME_CARD_SIMPLE : R.GAME_CARD_FREE;
+            await this.playSoloGame(gameUrl);
         }
     }
 
-    private emitPlaySoloGame(): void {
+    private emitPlayGame(event: Event): void {
         const game: ICommonGame = {
             ressource_id: this.gameCard.resource_id,
             game_card_id: this.gameCard.id,
@@ -80,17 +86,41 @@ export class GamesCardViewComponent implements OnInit {
             data: game,
             timestamp: new Date(),
         };
-        this.socketHandlerService.emitMessage(Event.PlaySoloGame, message);
+        this.socketHandlerService.emitMessage(event, message);
     }
 
-    public onRightButtonClick(): void {
-        if (this.isInAdminView) {
-            this.resetBestTimes();
-        }
+    private async playSoloGame(gameUrl: string): Promise<void> {
+        this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+            if ((response as ICommonGameCard).id) {
+                this.matchmaking.setIsActive(false);
+                await this.router.navigateByUrl(gameUrl + this.gameCard.id);
+                this.emitPlayGame(Event.PlaySoloGame);
+            } else {
+                alert(R.GAME_CARD_DELETED);
+            }
+        });
+    }
+
+    private async playMultiplayerGame(): Promise<void> {
+        this.gamesCardService.getGameById(this.gameCard.id).subscribe(async (response: ICommonGameCard | Message) => {
+            if ((response as ICommonGameCard).id) {
+                this.changeMatchmakingType();
+                this.matchmaking.setIsActive(true);
+                this.emitPlayGame(Event.PlayMultiplayerGame);
+            } else {
+                alert(R.GAME_CARD_DELETED);
+            }
+        });
+    }
+
+    public async onRightButtonClick(): Promise<void> {
+        (this.isInAdminView) ?
+        this.resetBestTimes() :
+        this.playMultiplayerGame();
     }
 
     public deleteGameCard(): void {
-        if (confirm("Are you sure you want to delete the Game Card called " + this.gameCard.title + "?")) {
+        if (confirm( _e(R.GAME_CARD_CONFIRM_DELETE, [this.gameCard.title]))) {
             this.gamesCardService.deleteGameCard(this.gameCard.id).subscribe(() => {
                 window.location.reload();
             });
@@ -98,7 +128,7 @@ export class GamesCardViewComponent implements OnInit {
     }
 
     public resetBestTimes(): void {
-        if (confirm("Are you sure you want to reset the best times of the Game Card called " + this.gameCard.title + "?")) {
+        if (confirm(_e(R.GAME_CARD_CONFIRM_RESET, [this.gameCard.title]))) {
             this.gamesCardService.resetBestTimes(this.gameCard).subscribe((message: Message) => {
                 if (message.title !== "Error") {
                     window.location.reload();
@@ -123,5 +153,20 @@ export class GamesCardViewComponent implements OnInit {
             this.scenePair = scenePair;
             this.image.nativeElement.src = `http://localhost:3000/scene/${scenePair.id}/thumbnail`;
         });
+    }
+
+    public onClosed(closed: boolean): void {
+        if (closed) {
+            const message: ICommonSocketMessage = {
+                data: this.gameCard.resource_id,
+                timestamp: new Date(),
+            };
+            this.changeMatchmakingType();
+            this.socketHandlerService.emitMessage(Event.CancelMatchmaking, message);
+        }
+    }
+
+    private changeMatchmakingType(): void {
+        this.waitOpponent = !this.waitOpponent;
     }
 }

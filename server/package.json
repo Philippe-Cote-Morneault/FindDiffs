@@ -4,7 +4,7 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon out/server/app/www.js\" ",
+    "start": "tsc && node out/server/app/www.js",
     "lint": "tslint --project tsconfig.json \"./app/**/*.ts\" --format stylish",
     "test": "mocha",
     "coverage": "nyc mocha",
@@ -27,7 +27,9 @@
     "exclude": [
       "**/I*.ts",
       "**/*.spec.ts",
-      "app/services/interfaces.ts"
+      "app/services/interfaces.ts",
+      "app/services/socket/socketCallback.ts",
+      "app/model/game/game.ts"
     ],
     "require": [
       "ts-node/register"
@@ -47,6 +49,7 @@
     "@types/mongodb": "^3.1.19",
     "@types/mongoose": "^5.3.10",
     "@types/request": "^2.48.1",
+    "@types/socket.io-client": "^1.4.32",
     "@types/sprintf-js": "^1.1.1",
     "@types/uuid": "^3.4.4",
     "aws-sdk": "^2.403.0",
@@ -72,6 +75,7 @@
     "request": "^2.88.0",
     "serve-favicon": "~2.5.0",
     "socket.io": "^1.4.5",
+    "socket.io-client": "^2.2.0",
     "socket.io-mock": "^1.2.3",
     "sprintf-js": "^1.1.2",
     "ts-node": "^7.0.1",

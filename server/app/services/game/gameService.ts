@@ -12,6 +12,7 @@ import { _e, R } from "../../strings";
 import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
+import { MatchmakingService } from "./matchmakingService";
 import { SimplePOVGameManager } from "./simplePOVGameManager";
 
 export class GameService {
@@ -38,49 +39,66 @@ export class GameService {
 
     private subscribeToSocket(): void {
         this.socketHandler.subscribe(Event.PlaySoloGame, (message: ICommonSocketMessage, player: string) => {
-            this.createSoloGame(message, player);
+            this.createGame([player], message.data as ICommonGame, GameManager.SOLO_WINNING_DIFFERENCES_COUNT);
         });
         this.socketHandler.subscribe(Event.ReadyToPlay, (message: ICommonSocketMessage, player: string) => {
-            this.startSoloGame(message, player);
+            this.handlePlayer(message, player);
         });
         this.socketHandler.subscribe(Event.GameClick, (message: ICommonSocketMessage, player: string) => {
             this.gameClick(message, player);
         });
+        this.socketHandler.subscribe(Event.InvalidClick, (message: ICommonSocketMessage, player: string) => {
+            const gameManager: GameManager | undefined = this.activePlayers.get(player);
+            if (gameManager === undefined) {
+                throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
+            }
+            this.invalidClick(gameManager, player);
+        });
     }
 
-    private createSoloGame(message: ICommonSocketMessage, player: string): void {
-        const data: ICommonGame = message.data as ICommonGame;
+    public createGame(players: string[], commonGame: ICommonGame, differenceCount: number): void {
         const newGame: Game = {
             id: uuid.v4(),
-            ressource_id: data.ressource_id,
-            players: [player],
+            ressource_id: commonGame.ressource_id,
+            players: players,
             start_time: undefined,
-            differences_found: 0,
-            game_card_id: data.game_card_id,
+            game_card_id: commonGame.game_card_id,
         };
+
         const endGameCallback: (game: Game, winner: string, score: INewScore) => void = (game: Game, winner: string, score: INewScore) => {
             this.endGame(game, winner, score);
         };
-        const gameManager: GameManager = data.pov === POVType.Simple ?
-            new SimplePOVGameManager(newGame, endGameCallback) :
-            new FreePOVGameManager(newGame, endGameCallback);
+        const gameManager: GameManager = commonGame.pov === POVType.Simple ?
+            new SimplePOVGameManager(newGame, differenceCount, endGameCallback) :
+            new FreePOVGameManager(newGame, differenceCount, endGameCallback);
 
         this.activeGames.push(gameManager);
-        this.activePlayers.set(player, gameManager);
+        players.forEach((player: string) => {
+            this.activePlayers.set(player, gameManager);
+        });
     }
 
-    private startSoloGame(message: ICommonSocketMessage, player: string): void {
+    private handlePlayer(message: ICommonSocketMessage, player: string): void {
         const game: GameManager | undefined = this.activePlayers.get(player);
         if (game === undefined) {
             throw new NotFoundException(_e(R.ERROR_INVALIDID, [player]));
         }
 
+        (game.game.players.length === 1) ?
+        this.startGame(game) :
+        MatchmakingService.getInstance().matchLoadingGame(game, player);
+
+    }
+
+    public startGame(game: GameManager): void {
         game.startGame();
         const socketMessage: ICommonSocketMessage = {
             data: "",
             timestamp: new Date(),
         };
-        this.socketHandler.sendMessage(Event.GameStarted, socketMessage, player);
+        game.game.players.forEach((player: string) => {
+            this.socketHandler.sendMessage(Event.GameStarted, socketMessage, player);
+        });
     }
 
     private endGame(game: Game, winner: string, score: INewScore): void {
@@ -108,7 +126,7 @@ export class GameService {
         if (gameManager === undefined) {
             throw new NotFoundException(_e(R.ERROR_INVALIDID, [clickedPlayer]));
         }
-        gameManager.playerClick(message.data,
+        gameManager.playerClick(message.data, clickedPlayer,
                                 (data: Object | null) => {
                                     this.differenceFound(gameManager, clickedPlayer, data as Object);
         },                      () => {
@@ -117,16 +135,16 @@ export class GameService {
     }
 
     private differenceFound(gameManager: GameManager, clickedPlayer: string, reveal: Object): void {
+        const differenceFound: ICommonDifferenceFound = {
+            player: clickedPlayer,
+            difference_count: gameManager.getAmountDifferencesFound(clickedPlayer),
+            reveal: reveal,
+        };
+        const response: ICommonSocketMessage = {
+            data: differenceFound,
+            timestamp: new Date(),
+        };
         gameManager.game.players.forEach((player: string) => {
-                const differenceFound: ICommonDifferenceFound = {
-                    player: clickedPlayer,
-                    difference_count: gameManager.game.differences_found,
-                    reveal: reveal,
-                };
-                const response: ICommonSocketMessage = {
-                    data: differenceFound,
-                    timestamp: new Date(),
-                };
                 this.socketHandler.sendMessage(Event.DifferenceFound, response, player);
         });
     }
