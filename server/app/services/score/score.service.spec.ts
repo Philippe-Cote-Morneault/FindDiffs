@@ -66,8 +66,32 @@ describe("ScoreService", () => {
 
             const result: string = await scoreService.post(mockRequest);
             expect(JSON.parse(result).title).to.equal(R.SUCCESS);
-            generateScoreStub.restore();
-            (GameCard.findById as sinon.SinonStub).restore();
+        });
+
+        it("Should throw an error if no changes are detected in the post request", async () => {
+            const req: Object = {
+                body: {
+                },
+            };
+            // tslint:disable-next-line:no-any
+            const mockRequest: any = mockReq(req);
+            mockRequest.params.id = "someRandomId";
+            (GameCard.prototype.save as sinon.SinonStub).resolves();
+            (GameCard.findById as sinon.SinonStub).resolves(new GameCard({
+                pov: POVType.Free,
+                title: "hello",
+                resource_id: "1234abcd",
+                best_time_solo: [],
+                best_time_online: [],
+                creation_date: new Date(),
+            }));
+
+            try {
+                await scoreService.post(mockRequest);
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(R.ERROR_NO_CHANGES);
+            }
         });
     });
     describe("update()", () => {
