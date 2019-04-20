@@ -1,11 +1,14 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
+import * as mockito from "ts-mockito";
 import { ICommonGame } from "../../../../common/communication/webSocket/game";
-import { ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
+import { Event, ICommonSocketMessage } from "../../../../common/communication/webSocket/socketMessage";
 import { POVType } from "../../../../common/model/gameCard";
 import { INewScore } from "../../../../common/model/score";
 import { Game } from "../../model/game/game";
 import { _e, R } from "../../strings";
+import { SocketCallback } from "../socket/socketCallback";
+import { SocketHandler } from "../socket/socketHandler";
 import { FreePOVGameManager } from "./freePOVGameManager";
 import { GameManager } from "./gameManager";
 import { GameService } from "./gameService";
@@ -93,7 +96,7 @@ describe("GameService", () => {
         const gameManager: FreePOVGameManager = new FreePOVGameManager(game, GameManager.MULTIPLAYER_WINNING_DIFFERENCES_COUNT,
                                                                        callback);
 
-        it("Should", () => {
+        it("Should send a message to both players when a difference is found", () => {
             const sendMessageStub: sinon.SinonStub = sinon.stub(gameService["socketHandler"], "sendMessage");
             gameService["differenceFound"](gameManager, player1, reveal);
 
@@ -129,7 +132,6 @@ describe("GameService", () => {
             gameService["activePlayers"].set(player1, gameManager);
             done();
         });
-
         it("Should call playerClick() on the gameManager matching the player that clicked exactly once", () => {
             const playerClickStub: sinon.SinonStub = sinon.stub(gameManager, "playerClick");
 
@@ -139,7 +141,6 @@ describe("GameService", () => {
 
             playerClickStub.restore();
         });
-
         it("Should call playerClick with the message data passed in parameter", () => {
             const playerClickStub: sinon.SinonStub = sinon.stub(gameManager, "playerClick");
 
@@ -149,7 +150,6 @@ describe("GameService", () => {
 
             playerClickStub.restore();
         });
-
         it("Should throw an invalidId error if the player that clicked is not in the activePlayers map", () => {
             gameService["activePlayers"].clear();
 
@@ -157,6 +157,74 @@ describe("GameService", () => {
         });
     });
 
+    describe("subscribeToSocket", () => {
+        const socketHandler: SocketHandler = SocketHandler.getInstance();
+        const oldSubscribers: Map<string, SocketCallback[]> = socketHandler["subscribers"];
+        before((done: Mocha.Done) => {
+            socketHandler["subscribers"].clear();
+            gameService["subscribeToSocket"]();
+            done();
+        });
+        after((done: Mocha.Done) => {
+            socketHandler["subscribers"] = oldSubscribers;
+            done();
+        });
+
+        it("Should call createGame() with the parameters passed in SocketHandler", () => {
+            const message: ICommonSocketMessage = {
+                data: {
+                    ressource_id: "1234abcd",
+                    game_card_id: "abcd1234",
+                    pov: POVType.Free,
+                },
+                timestamp: new Date(),
+            };
+            const createGameStub: sinon.SinonStub = sinon.stub(gameService, "createGame");
+            (socketHandler["subscribers"].get(Event.PlaySoloGame) as SocketCallback[])[0](message, "player1");
+
+            expect(createGameStub.calledOnce).to.equal(true);
+            expect(createGameStub.firstCall.args[0]).to.deep.equal(["player1"]);
+            expect(createGameStub.firstCall.args[1]).to.equal(message.data);
+            // tslint:disable-next-line:no-magic-numbers
+            expect(createGameStub.firstCall.args[2]).to.equal(GameManager.SOLO_WINNING_DIFFERENCES_COUNT);
+            createGameStub.restore();
+        });
+        it("Should call handlerPlayer() when the socketHandler emits the ReadyToPlay event", () => {
+            const message: ICommonSocketMessage = {
+                data: {
+                    test: "this is a test string",
+                },
+                timestamp: new Date(),
+            };
+            // tslint:disable-next-line:no-any
+            const handlePlayerStub: sinon.SinonStub = sinon.stub(gameService, "handlePlayer" as any);
+            (socketHandler["subscribers"].get(Event.ReadyToPlay) as SocketCallback[])[0](message, "player1");
+
+            expect(handlePlayerStub.calledOnce).to.equal(true);
+            expect(handlePlayerStub.firstCall.args[0]).to.equal(message);
+            expect(handlePlayerStub.firstCall.args[1]).to.equal("player1");
+            handlePlayerStub.restore();
+        });
+        it("Should call invalidClick() when the socketHandler emits the InvalidClick event", () => {
+            const message: ICommonSocketMessage = {
+                data: {
+                    test: "this is a test string",
+                },
+                timestamp: new Date(),
+            };
+            // tslint:disable-next-line:no-any
+            const invalidClickStub: sinon.SinonStub = sinon.stub(gameService, "invalidClick" as any);
+            const gameManagerMock: FreePOVGameManager = mockito.mock(FreePOVGameManager);
+            gameService["activePlayers"].set("player1", gameManagerMock);
+            (socketHandler["subscribers"].get(Event.InvalidClick) as SocketCallback[])[0](message, "player1");
+
+            expect(invalidClickStub.calledOnce).to.equal(true);
+            expect(invalidClickStub.firstCall.args[0]).to.equal(gameManagerMock);
+            expect(invalidClickStub.firstCall.args[1]).to.equal("player1");
+            gameService["activePlayers"].delete("player1");
+            invalidClickStub.restore();
+        });
+    });
     describe("endGame", () => {
         const player1: string = "player1";
         const player2: string = "player2";
