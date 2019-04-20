@@ -36,10 +36,21 @@ describe("ScoreService", () => {
                 expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);
             }
         });
-        it("Should return success if the score update worked", async () => {
+
+        it("Should throw a UNKOWN_ID error if the id of the gameCard is invalid but database returns an invalid entry", async () => {
             const req: Object = {};
+
+            (GameCard.findById as sinon.SinonStub).resolves(undefined);
             // tslint:disable-next-line:no-any
             const mockRequest: any = mockReq(req);
+            mockRequest.params.id = "notAValidId";
+            try {
+                await scoreService.post(mockRequest);
+                throw new NoErrorThrownException();
+            } catch (err) {
+                expect(err.message).to.equal(R.ERROR_UNKNOWN_ID);
+            }
+        });
             mockRequest.params.id = "someRandomId";
             sinon.stub(GameCard, "findById");
             (GameCard.findById as sinon.SinonStub).resolves({
