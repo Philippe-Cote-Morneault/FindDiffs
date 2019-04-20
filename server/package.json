@@ -27,7 +27,9 @@
     "exclude": [
       "**/I*.ts",
       "**/*.spec.ts",
-      "app/services/interfaces.ts"
+      "app/services/interfaces.ts",
+      "app/services/socket/socketCallback.ts",
+      "app/model/game/game.ts"
     ],
     "require": [
       "ts-node/register"
