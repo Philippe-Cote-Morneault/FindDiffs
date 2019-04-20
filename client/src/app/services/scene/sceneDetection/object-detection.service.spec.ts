@@ -6,6 +6,7 @@ import { IThreeObject } from "./IThreeObject";
 import { MousePositionService } from "./mouse-position.service";
 import { ObjectDetectionService } from "./object-detection.service";
 
+// tslint:disable
 describe("ObjectDetectionService", () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 

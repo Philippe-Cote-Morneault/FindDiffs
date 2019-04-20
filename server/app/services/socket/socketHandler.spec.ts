@@ -8,6 +8,7 @@ import { SocketCallback } from "./socketCallback";
 import { SocketHandler } from "./socketHandler";
 import { UsernameManager } from "./usernameManager";
 
+// tslint:disable-next-line:max-func-body-length
 describe("SocketHandler", () => {
     let socketHandler: SocketHandler;
     const usernameManager: UsernameManager = UsernameManager.getInstance();
@@ -128,6 +129,23 @@ describe("SocketHandler", () => {
             // tslint:disable-next-line:no-unused-expression
             expect(spy.calledOnce).to.be.true;
             spy.restore();
+        });
+        it("Should emit a UserConnect event when the user is authentified", () => {
+            const ioEmitStub: sinon.SinonStub = sinon.stub(socketHandler["io"], "emit");
+            const message: ICommonSocketMessage = {
+                data: {
+                    token: "myToken",
+                },
+                timestamp: new Date(),
+            };
+
+            socketHandler["authenticateUser"](socket1);
+            socketHandler["authentificationService"]["authentifiedUsers"].clear();
+            socketHandler["authentificationService"]["authentifiedUsers"].set("myToken", "player1");
+            // tslint:disable-next-line:no-empty
+            socket1.listeners(Event.Authenticate)[0](message, (data: Object) => {});
+            expect(ioEmitStub.firstCall.args[0]).to.equal(Event.UserConnected);
+            ioEmitStub.restore();
         });
     });
 });
